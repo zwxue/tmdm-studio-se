@@ -14,7 +14,6 @@ package com.amalto.workbench.editors;
 
 import java.lang.reflect.InvocationTargetException;
 import java.net.URLEncoder;
-import java.rmi.RemoteException;
 import java.rmi.ServerException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -26,6 +25,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import javax.xml.ws.WebServiceException;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -73,7 +74,7 @@ import com.amalto.workbench.utils.UserInfo;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.XtentisException;
 import com.amalto.workbench.webservices.WSConceptRevisionMap;
-import com.amalto.workbench.webservices.WSConceptRevisionMapMapEntry;
+import com.amalto.workbench.webservices.WSConceptRevisionMap.MapEntry;
 import com.amalto.workbench.webservices.WSDataCluster;
 import com.amalto.workbench.webservices.WSDataClusterPK;
 import com.amalto.workbench.webservices.WSDataModel;
@@ -84,7 +85,7 @@ import com.amalto.workbench.webservices.WSGetDataCluster;
 import com.amalto.workbench.webservices.WSGetDataModel;
 import com.amalto.workbench.webservices.WSGetItemPKsByCriteria;
 import com.amalto.workbench.webservices.WSGetItemPKsByFullCriteria;
-import com.amalto.workbench.webservices.WSItemPKsByCriteriaResponseResults;
+import com.amalto.workbench.webservices.WSItemPKsByCriteriaResponse.Results;
 import com.amalto.workbench.webservices.WSUniverse;
 import com.amalto.workbench.webservices.WSUniversePK;
 import com.amalto.workbench.webservices.XtentisPort;
@@ -387,45 +388,43 @@ public class DataClusterComposite extends Composite implements IPagingListener {
             String clusterName = URLEncoder.encode(getXObject().toString(), "utf-8");//$NON-NLS-1$
             WSDataClusterPK clusterPk = new WSDataClusterPK(clusterName);
             // @temp yguo, get item with taskid or get taskid by specify wsitempk.
-            WSItemPKsByCriteriaResponseResults[] results = port.getItemPKsByFullCriteria(
+            List<Results> results = port.getItemPKsByFullCriteria(
                     new WSGetItemPKsByFullCriteria(new WSGetItemPKsByCriteria(clusterPk, concept, search, keys, from, to, start,
                             limit), useFTSearch)).getResults();
 
-            if (showResultInfo && (results.length == 1)) {
+            if (showResultInfo && (results.size() == 1)) {
                 MessageDialog.openInformation(this.getSite().getShell(), Messages.DataClusterBrowserMainPage_24,
                         Messages.DataClusterBrowserMainPage_25);
                 return new LineItem[0];
             }
-            if (results.length == 1) {
+            if (results.size() == 1) {
                 return new LineItem[0];
             }
             int totalSize = 0;
             List<LineItem> ress = new ArrayList<LineItem>();
-            for (int i = 0; i < results.length; i++) {
+            for (int i = 0; i < results.size(); i++) {
+                Results result = results.get(i);
                 if (i == 0) {
-                    totalSize = Integer.parseInt(Util.parse(results[i].getWsItemPK().getConceptName()).getDocumentElement()
+                    totalSize = Integer.parseInt(Util.parse(result.getWsItemPK().getConceptName()).getDocumentElement()
                             .getTextContent());
                     continue;
                 }
-                ress.add(new LineItem(results[i].getDate(), results[i].getWsItemPK().getConceptName(), results[i].getWsItemPK()
-                        .getIds(), results[i].getTaskId()));
+                ress.add(new LineItem(result.getDate(), result.getWsItemPK().getConceptName(), result.getWsItemPK().getIds()
+                        .toArray(new String[0]), result.getTaskId()));
             }
             pageToolBar.setTotalsize(totalSize);
             pageToolBar.refreshUI();
             return ress.toArray(new LineItem[ress.size()]);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-			if ((e.getLocalizedMessage() != null)
-					&& e.getLocalizedMessage().contains("10000")) { //$NON-NLS-1$
-				MessageDialog.openError(this.getSite().getShell(),
-						Messages.DataClusterBrowserMainPage_26,
-						Messages.DataClusterBrowserMainPage_27);
-			} else if (!Util.handleConnectionException(this.getSite().getShell(), e, Messages.DataClusterBrowserMainPage_28)) {
-				MessageDialog.openError(this.getSite().getShell(),
-						Messages.DataClusterBrowserMainPage_28,
-						e.getLocalizedMessage());
-			}
-            
+            if ((e.getLocalizedMessage() != null) && e.getLocalizedMessage().contains("10000")) { //$NON-NLS-1$
+                MessageDialog.openError(this.getSite().getShell(), Messages.DataClusterBrowserMainPage_26,
+                        Messages.DataClusterBrowserMainPage_27);
+            } else if (!Util.handleConnectionException(this.getSite().getShell(), e, Messages.DataClusterBrowserMainPage_28)) {
+                MessageDialog.openError(this.getSite().getShell(), Messages.DataClusterBrowserMainPage_28,
+                        e.getLocalizedMessage());
+            }
+
             return null;
         } finally {
             try {
@@ -587,7 +586,6 @@ public class DataClusterComposite extends Composite implements IPagingListener {
 
             // add by myli; fix the bug:0013077: if the data is too much, just get the entities from the model instead
             // of from the container.
-            String[] concepts;
 
             String clusterName = URLEncoder.encode(cluster.getName(), "utf-8");//$NON-NLS-1$
 
@@ -598,17 +596,16 @@ public class DataClusterComposite extends Composite implements IPagingListener {
                     .getConceptsInDataClusterWithRevisions(new WSGetConceptsInDataClusterWithRevisions(new WSDataClusterPK(
                             clusterName), new WSUniversePK(currentUniverseName)));
             if (conceptsRevisionMap != null) {
-                WSConceptRevisionMapMapEntry[] wsConceptRevisionMapMapEntries = conceptsRevisionMap.getMapEntry();
+                List<MapEntry> wsConceptRevisionMapMapEntries = conceptsRevisionMap.getMapEntry();
 
-                concepts = new String[wsConceptRevisionMapMapEntries.length];
-                for (int i = 0; i < wsConceptRevisionMapMapEntries.length; i++) {
-                    WSConceptRevisionMapMapEntry entry = wsConceptRevisionMapMapEntries[i];
+                List<String> concepts = new ArrayList<String>();
+                for (MapEntry entry : wsConceptRevisionMapMapEntries) {
                     String concept = entry.getConcept();
                     String revision = entry.getRevision();
                     if (revision == null || revision.equals("")) { //$NON-NLS-1$
                         revision = "HEAD";//$NON-NLS-1$
                     }
-                    concepts[i] = concept + " " + "[" + revision + "]";//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
+                    concepts.add(concept + " " + "[" + revision + "]");//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
                 }
                 conceptCombo.removeAll();
                 conceptCombo.add("*");//$NON-NLS-1$
@@ -628,11 +625,11 @@ public class DataClusterComposite extends Composite implements IPagingListener {
             log.error(e.getMessage(), e);
             MessageDialog.openError(getSite().getShell(), Messages._Error, Messages.DataClusterBrowser_dataContainerError);
             return false;
-        } catch (RemoteException e) {
+        } catch (WebServiceException e) {
             log.error(e.getMessage(), e);
-			if (!Util.handleConnectionException(getSite().getShell(), e, null)) {
-				MessageDialog.openError(getSite().getShell(), Messages._Error, Messages.DataClusterBrowser_connectionError);			
-			}
+            if (!Util.handleConnectionException(getSite().getShell(), e, null)) {
+                MessageDialog.openError(getSite().getShell(), Messages._Error, Messages.DataClusterBrowser_connectionError);
+            }
             return false;
         } catch (Exception e) {
             log.error(e.getMessage(), e);
@@ -646,11 +643,10 @@ public class DataClusterComposite extends Composite implements IPagingListener {
 
     /**
      * @param clusterName
-     * @throws RemoteException
      * @throws XtentisException
      * @throws Exception
      */
-    private boolean doSelectDataModelForEntityRecords(String clusterName) throws RemoteException, XtentisException, Exception {
+    private boolean doSelectDataModelForEntityRecords(String clusterName) throws XtentisException, Exception {
         // if (false) {
         // Modified by hbhong,to fix bug 21784|
         TreeParent treeParent = (TreeParent) getAdapter(TreeParent.class);

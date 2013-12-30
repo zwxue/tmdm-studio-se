@@ -12,7 +12,7 @@
 // ============================================================================
 package com.amalto.workbench.actions;
 
-import java.util.Collections;
+import java.util.ArrayList;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -26,8 +26,6 @@ import org.eclipse.jface.window.Window;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Event;
-import org.eclipse.ui.IEditorPart;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.xsd.XSDAnnotation;
 import org.eclipse.xsd.XSDComponent;
 import org.w3c.dom.Element;
@@ -123,7 +121,7 @@ public class XSDSetAnnotationForeignKeyAction extends UndoAction {
         if (fk == null) {
             struc.setForeignKeyNotSep(null);
             struc.setFKFilter(null);
-            struc.setForeignKeyInfos(Collections.EMPTY_LIST);
+            struc.setForeignKeyInfos(new ArrayList());
             struc.setRetrieveFKinfos(null);
             struc.setFKIntegrity(null);
             struc.setFKIntegrityOverride(null);
@@ -131,8 +129,8 @@ public class XSDSetAnnotationForeignKeyAction extends UndoAction {
     }
 
     protected SimpleXpathInputDialog getNewSimpleXpathInputDlg(String foreignKey) {
-        return new SimpleXpathInputDialog(page, Messages.SetForeignKey,
-                Messages.EnterXpathForeignKey, foreignKey, new SelectionAdapter() {
+        return new SimpleXpathInputDialog(page, Messages.SetForeignKey, Messages.EnterXpathForeignKey, foreignKey,
+                new SelectionAdapter() {
 
                     @Override
                     public void widgetSelected(SelectionEvent e) {
@@ -142,6 +140,7 @@ public class XSDSetAnnotationForeignKeyAction extends UndoAction {
 
         );
     }
+
     @Override
     public void runWithEvent(Event event) {
         super.runWithEvent(event);

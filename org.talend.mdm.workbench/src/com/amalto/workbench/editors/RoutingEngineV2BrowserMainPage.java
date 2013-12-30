@@ -14,7 +14,6 @@ package com.amalto.workbench.editors;
 
 import java.io.StringWriter;
 import java.lang.reflect.InvocationTargetException;
-import java.rmi.RemoteException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
@@ -95,7 +94,7 @@ import com.amalto.workbench.webservices.WSRoutingOrderV2;
 import com.amalto.workbench.webservices.WSRoutingOrderV2PK;
 import com.amalto.workbench.webservices.WSRoutingOrderV2SearchCriteriaWithPaging;
 import com.amalto.workbench.webservices.WSRoutingOrderV2Status;
-import com.amalto.workbench.webservices.WSServicesListItem;
+import com.amalto.workbench.webservices.WSServicesList.Item;
 import com.amalto.workbench.webservices.WSString;
 import com.amalto.workbench.webservices.XtentisPort;
 import com.amalto.workbench.widgets.CalendarSelectWidget;
@@ -331,12 +330,12 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
             serviceCombo.add(BLANK);
             // WSServicesListItem[] servicesList = Util.getPort(getXObject()).getServicesList(new
             // WSGetServicesList("en")).getItem();
-            WSServicesListItem[] servicesList = getPort().getServicesList(new WSGetServicesList("en")).getItem(); //$NON-NLS-1$
+            List<Item> servicesList = getPort().getServicesList(new WSGetServicesList("en")).getItem(); //$NON-NLS-1$
 
-            if ((servicesList != null) && (servicesList.length > 0)) {
-                String[] services = new String[servicesList.length];
-                for (int i = 0; i < servicesList.length; i++) {
-                    services[i] = servicesList[i].getJndiName().replaceFirst("amalto/local/service/", BLANK);//$NON-NLS-1$ 
+            if ((servicesList != null) && (servicesList.size() > 0)) {
+                String[] services = new String[servicesList.size()];
+                for (int i = 0; i < servicesList.size(); i++) {
+                    services[i] = servicesList.get(i).getJndiName().replaceFirst("amalto/local/service/", BLANK);//$NON-NLS-1$ 
                 }
                 Arrays.sort(services);
                 for (String service : services) {
@@ -533,22 +532,22 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
     protected void refreshData() {
         try {
             WSRoutingEngineV2Status status = getServerRoutingStatus();
-            statusLabel.setText(status.getValue());
+            statusLabel.setText(status.value());
 
             idText.setFocus();
 
         } catch (Exception e) {
-			updateButtons();
-			log.error(e.getMessage(), e);
-			if (!Util.handleConnectionException(this.getSite().getShell(),e,Messages.RoutingEngineV2BrowserMainPage_ErrorRefreshingPage))
-				MessageDialog.openError(
-								this.getSite().getShell(),
-								Messages.RoutingEngineV2BrowserMainPage_ErrorRefreshingPage,
-								Messages.bind(Messages.RoutingEngineV2BrowserMainPage_ErrorRefreshingPageXX,e.getLocalizedMessage()));
+            updateButtons();
+            log.error(e.getMessage(), e);
+            if (!Util.handleConnectionException(this.getSite().getShell(), e,
+                    Messages.RoutingEngineV2BrowserMainPage_ErrorRefreshingPage)) {
+                MessageDialog.openError(this.getSite().getShell(), Messages.RoutingEngineV2BrowserMainPage_ErrorRefreshingPage,
+                        Messages.bind(Messages.RoutingEngineV2BrowserMainPage_ErrorRefreshingPageXX, e.getLocalizedMessage()));
+            }
         }
     }
 
-    protected WSRoutingEngineV2Status getServerRoutingStatus() throws RemoteException {
+    protected WSRoutingEngineV2Status getServerRoutingStatus() throws XtentisException {
         XtentisPort port = getPort();
         WSRoutingEngineV2Status status = port.routingEngineV2Action(new WSRoutingEngineV2Action(
                 WSRoutingEngineV2ActionCode.STATUS));
@@ -561,8 +560,8 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
             startButton.setEnabled(status != WSRoutingEngineV2Status.RUNNING);
             suspendButton.setEnabled(status != WSRoutingEngineV2Status.SUSPENDED);
             stopButton.setEnabled(status != WSRoutingEngineV2Status.STOPPED);
-            statusLabel.setText(status.getValue());
-        } catch (RemoteException e) {
+            statusLabel.setText(status.value());
+        } catch (XtentisException e) {
             startButton.setEnabled(true);
             suspendButton.setEnabled(false);
             stopButton.setEnabled(false);
@@ -734,7 +733,7 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
 
             int start = pageToolBar.getStart();
             int limit = pageToolBar.getLimit();
-            WSRoutingOrderV2[] wsRoutingOrder = port
+            List<WSRoutingOrderV2> wsRoutingOrder = port
                     .getRoutingOrderV2ByCriteriaWithPaging(
                             new WSGetRoutingOrderV2ByCriteriaWithPaging(
                                     new WSRoutingOrderV2SearchCriteriaWithPaging(
@@ -752,18 +751,18 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
                                             "*".equals(idText.getText()) || BLANK.equals(idText.getText()) ? null : idText.getText(),//$NON-NLS-1$
                                             serviceJNDI, null, null, start, limit, true))).getWsRoutingOrder();
 
-            if (wsRoutingOrder.length == 1) {
+            if (wsRoutingOrder.size() == 1) {
                 MessageDialog.openInformation(this.getSite().getShell(), Messages.RoutingEngineV2BrowserMainPage_Info,
                         Messages.RoutingEngineV2BrowserMainPage_SorryNoResult);
                 return new WSRoutingOrderV2[0];
             }
 
-            int totalSize = Integer.parseInt(wsRoutingOrder[0].getName());
+            int totalSize = Integer.parseInt(wsRoutingOrder.get(0).getName());
 
             pageToolBar.setTotalsize(totalSize);
             pageToolBar.refreshUI();
 
-            WSRoutingOrderV2[] resultOrderV2s = new WSRoutingOrderV2[wsRoutingOrder.length - 1];
+            WSRoutingOrderV2[] resultOrderV2s = new WSRoutingOrderV2[wsRoutingOrder.size() - 1];
             System.arraycopy(wsRoutingOrder, 1, resultOrderV2s, 0, resultOrderV2s.length);
 
             return resultOrderV2s;
@@ -772,7 +771,7 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
             if ((e.getLocalizedMessage() != null) && e.getLocalizedMessage().contains("10000")) {
                 MessageDialog.openError(this.getSite().getShell(), Messages.RoutingEngineV2BrowserMainPage_TooManyResults,
                         Messages.RoutingEngineV2BrowserMainPage_ErrorMsg1);
-            } else if(!Util.handleConnectionException(this.getSite().getShell(), e, null)) {
+            } else if (!Util.handleConnectionException(this.getSite().getShell(), e, null)) {
                 MessageDialog.openError(this.getSite().getShell(), Messages.ErrorTitle1, e.getLocalizedMessage());
             }
             return null;
@@ -963,10 +962,11 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
                     monitor.done();
                 } catch (Exception e) {
                     log.error(e.getMessage(), e);
-					if (!Util.handleConnectionException(shell, e,Messages.RoutingEngineV2BrowserMainPage_ErrorDel)) {
+                    if (!Util.handleConnectionException(shell, e, Messages.RoutingEngineV2BrowserMainPage_ErrorDel)) {
                         MessageDialog.openError(shell, Messages.RoutingEngineV2BrowserMainPage_ErrorDel,
                                 Messages.RoutingEngineV2BrowserMainPage_WarningMsg1 + e.getLocalizedMessage());
-                    }                }// try
+                    }
+                }// try
 
             }// run
         }// class DeleteItemsWithProgress
@@ -1109,7 +1109,7 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
                         monitor.worked(1);
                     } catch (Exception e) {
                         log.error(e.getMessage(), e);
-                        if(!Util.handleConnectionException(shell, e, Messages.RoutingEngineV2BrowserMainPage_ErrorExecuting)) {
+                        if (!Util.handleConnectionException(shell, e, Messages.RoutingEngineV2BrowserMainPage_ErrorExecuting)) {
                             MessageDialog.openError(shell, Messages.RoutingEngineV2BrowserMainPage_ErrorExecuting,
                                     Messages.bind(Messages.RoutingEngineV2BrowserMainPage_ErrorMsg6, e.getLocalizedMessage()));
                         }
@@ -1242,7 +1242,7 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
             }
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            if(!Util.handleConnectionException(this.getSite().getShell(), e, null)) {
+            if (!Util.handleConnectionException(this.getSite().getShell(), e, null)) {
                 MessageDialog.openError(this.getSite().getShell(), Messages._Error,
                         Messages.bind(Messages.RoutingEngineV2BrowserMainPage_ErrorMsg7, e.getLocalizedMessage()));
             }
@@ -1255,11 +1255,11 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
             port.routingEngineV2Action(new WSRoutingEngineV2Action(WSRoutingEngineV2ActionCode.STOP));
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            if(!Util.handleConnectionException(this.getSite().getShell(), e, null)) {
+            if (!Util.handleConnectionException(this.getSite().getShell(), e, null)) {
                 MessageDialog.openError(this.getSite().getShell(), Messages._Error,
                         Messages.bind(Messages.RoutingEngineV2BrowserMainPage_ErrorMsg8, e.getLocalizedMessage()));
             }
-       }
+        }
     }
 
     private void suspendSubscriptionEngine() {
@@ -1268,7 +1268,7 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
             port.routingEngineV2Action(new WSRoutingEngineV2Action(WSRoutingEngineV2ActionCode.SUSPEND));
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            if(!Util.handleConnectionException(this.getSite().getShell(), e, null)) {
+            if (!Util.handleConnectionException(this.getSite().getShell(), e, null)) {
                 MessageDialog.openError(this.getSite().getShell(), Messages._Error,
                         Messages.bind(Messages.RoutingEngineV2BrowserMainPage_ErrorMsg9, e.getLocalizedMessage()));
             }

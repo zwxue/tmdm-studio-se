@@ -14,7 +14,6 @@ package com.amalto.workbench.detailtabs.sections.handlers;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 import org.apache.commons.lang.NullArgumentException;
@@ -35,7 +34,8 @@ public abstract class ListContentsCommitHandler<T extends ListContentsAnnotation
 
         for (String eachSubmittedSimpleAnnoInfoValue : getCommitedObj().getInfos()) {
             if (eachSubmittedSimpleAnnoInfoValue == null || "".equals(eachSubmittedSimpleAnnoInfoValue.trim())) {//$NON-NLS-1$
-                throw new CommitValidationException(Messages.bind(Messages.ListContentsCommitHandler_ExceptionInfo, getMsgHeader()));
+                throw new CommitValidationException(Messages.bind(Messages.ListContentsCommitHandler_ExceptionInfo,
+                        getMsgHeader()));
             }
         }
 
@@ -54,8 +54,9 @@ public abstract class ListContentsCommitHandler<T extends ListContentsAnnotation
 
         for (String eachOriginalInfo : getOriginalAnnoInfos()) {
 
-            if (curInfoList.contains(eachOriginalInfo))
+            if (curInfoList.contains(eachOriginalInfo)) {
                 continue;
+            }
 
             results.add(eachOriginalInfo);
         }
@@ -76,8 +77,9 @@ public abstract class ListContentsCommitHandler<T extends ListContentsAnnotation
 
         for (String eachCurInfo : getCommitedObj().getInfos()) {
 
-            if (originalInfos.contains(eachCurInfo))
+            if (originalInfos.contains(eachCurInfo)) {
                 continue;
+            }
 
             results.add(eachCurInfo);
         }
@@ -98,14 +100,15 @@ public abstract class ListContentsCommitHandler<T extends ListContentsAnnotation
     }
 
     protected void doUpdateFKAnnotationStructure(XSDAnnotationsStructure xsdAnnoStruct) {
-        if (xsdAnnoStruct == null)
+        if (xsdAnnoStruct == null) {
             throw new NullArgumentException(null);
+        }
 
         String fk = xsdAnnoStruct.getForeignKey();
         if (fk == null || fk.trim().isEmpty()) {
             xsdAnnoStruct.setForeignKeyNotSep(null);
             xsdAnnoStruct.setFKFilter(null);
-            xsdAnnoStruct.setForeignKeyInfos(Collections.EMPTY_LIST);
+            xsdAnnoStruct.setForeignKeyInfos(new ArrayList());
             xsdAnnoStruct.setRetrieveFKinfos(null);
             xsdAnnoStruct.setFKIntegrity(null);
             xsdAnnoStruct.setFKIntegrityOverride(null);

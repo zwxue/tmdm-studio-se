@@ -14,7 +14,6 @@ package com.amalto.workbench.editors;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -57,6 +56,7 @@ public class XObjectRevisionBrowser extends FormEditor {
      * 
      * @see org.eclipse.ui.forms.editor.FormEditor#addPages()
      */
+    @Override
     protected void addPages() {
         try {
 
@@ -64,21 +64,26 @@ public class XObjectRevisionBrowser extends FormEditor {
 
             TreeObject xobject = (TreeObject) ((XObjectBrowserInput) this.getEditorInput()).getModel();
 
-            if (xobject.isXObject())
+            if (xobject.isXObject()) {
                 return;
+            }
 
-            if (Util.hasUniverse(xobject))
+            if (Util.hasUniverse(xobject)) {
                 addPage(new BrowseRevisionMainPage(this));
-            else
-                MessageDialog.openError(this.getSite().getShell(), Messages._Error, Messages.bind(Messages.XObjectRevisionBrowser_ErrorMsg, IConstants.TALEND, xobject.getType()));
+            } else {
+                MessageDialog.openError(this.getSite().getShell(), Messages._Error,
+                        Messages.bind(Messages.XObjectRevisionBrowser_ErrorMsg, IConstants.TALEND, xobject.getType()));
+            }
 
             // switch
         } catch (PartInitException e) {
-            MessageDialog.openError(this.getSite().getShell(), Messages._Error, Messages.bind(Messages.XObjectRevisionBrowser_ErrorMsg1, e.getLocalizedMessage()));
+            MessageDialog.openError(this.getSite().getShell(), Messages._Error,
+                    Messages.bind(Messages.XObjectRevisionBrowser_ErrorMsg1, e.getLocalizedMessage()));
         }
     }
 
     // Overloaded - Fixes issues with getEditor()
+    @Override
     public int addPage(IFormPage page) throws PartInitException {
         formPages.add(page);
         return super.addPage(page);
@@ -89,17 +94,20 @@ public class XObjectRevisionBrowser extends FormEditor {
      * 
      * @see org.eclipse.ui.ISaveablePart#doSave(org.eclipse.core.runtime.IProgressMonitor)
      */
+    @Override
     public void doSave(IProgressMonitor monitor) {
         // NO saving on browsers
         // System.out.println("doSave");
         try {
             this.saveInProgress = true;
             int numPages = formPages.size();
-            monitor.beginTask(Messages.bind(Messages.XObjectRevisionBrowser_Saving, this.getEditorInput().getName()), numPages + 1);
+            monitor.beginTask(Messages.bind(Messages.XObjectRevisionBrowser_Saving, this.getEditorInput().getName()),
+                    numPages + 1);
             for (int i = 0; i < numPages; i++) {
                 if ((formPages.get(i)) instanceof AFormPage) {
-                    if (!((AFormPage) (formPages.get(i))).beforeDoSave())
+                    if (!((AFormPage) (formPages.get(i))).beforeDoSave()) {
                         return;
+                    }
                 }
                 (formPages.get(i)).doSave(monitor);
                 monitor.worked(1);
@@ -108,20 +116,19 @@ public class XObjectRevisionBrowser extends FormEditor {
                     return;
                 }
                 TreeObject xobject = (TreeObject) ((XObjectBrowserInput) this.getEditorInput()).getModel();
-                if (!xobject.isXObject())
+                if (!xobject.isXObject()) {
                     return;
+                }
 
                 // Access to server and get port
 
                 XtentisPort port = Util.getPort(new URL(xobject.getEndpointAddress()), xobject.getUniverse(),
                         xobject.getUsername(), xobject.getPassword());
                 List<WSUniverse> universes = ((BrowseRevisionMainPage) formPages.get(i)).getUniverses();
-                for (WSUniverse wsUniverse : universes)
+                for (WSUniverse wsUniverse : universes) {
                     port.putUniverse(new WSPutUniverse(wsUniverse));
+                }
             }
-        } catch (RemoteException e) {
-            log.error(e.getMessage(), e);
-
         } catch (MalformedURLException e) {
             log.error(e.getMessage(), e);
         } catch (XtentisException e) {
@@ -136,10 +143,12 @@ public class XObjectRevisionBrowser extends FormEditor {
      * 
      * @see org.eclipse.ui.ISaveablePart#isSaveAsAllowed()
      */
+    @Override
     public boolean isSaveAsAllowed() {
         return false;
     }
 
+    @Override
     public void doSaveAs() {
     }
 
@@ -149,6 +158,7 @@ public class XObjectRevisionBrowser extends FormEditor {
         setContentDescription("");//$NON-NLS-1$
     }
 
+    @Override
     public void dispose() {
         // save space
         TreeObject xobject = (TreeObject) ((XObjectBrowserInput) this.getEditorInput()).getModel();
@@ -164,6 +174,7 @@ public class XObjectRevisionBrowser extends FormEditor {
         return initialXObject;
     }
 
+    @Override
     protected void pageChange(int newPageIndex) {
         super.pageChange(newPageIndex);
         AFormPage page = (AFormPage) formPages.get(newPageIndex);
@@ -174,30 +185,31 @@ public class XObjectRevisionBrowser extends FormEditor {
     public Image getTitleImage() {
         TreeObject object = (TreeObject) ((XObjectBrowserInput) this.getEditorInput()).getModel();
 
-        if (object.getType() == TreeObject._SERVER_)
+        if (object.getType() == TreeObject._SERVER_) {
             return ImageCache.getCreatedImage(EImage.TALEND_PICTO_SMALL.getPath());
-        else if (object.getType() == TreeObject.DATA_CLUSTER)
+        } else if (object.getType() == TreeObject.DATA_CLUSTER) {
             return ImageCache.getCreatedImage(EImage.DATA_CLUSTER.getPath());
-        else if (object.getType() == TreeObject.DATA_MODEL)
+        } else if (object.getType() == TreeObject.DATA_MODEL) {
             return ImageCache.getCreatedImage(EImage.DATA_MODEL.getPath());
-        else if (object.getType() == TreeObject.MENU)
+        } else if (object.getType() == TreeObject.MENU) {
             return ImageCache.getCreatedImage(EImage.MENU.getPath());
-        else if (object.getType() == TreeObject.TRANSFORMER)
+        } else if (object.getType() == TreeObject.TRANSFORMER) {
             return ImageCache.getCreatedImage(EImage.TRANSFORMER.getPath());
-        else if (object.getType() == TreeObject.ROLE)
+        } else if (object.getType() == TreeObject.ROLE) {
             return ImageCache.getCreatedImage(EImage.ROLE.getPath());
-        else if (object.getType() == TreeObject.STORED_PROCEDURE)
+        } else if (object.getType() == TreeObject.STORED_PROCEDURE) {
             return ImageCache.getCreatedImage(EImage.STORED_PROCEDURE.getPath());
-        else if (object.getType() == TreeObject.ROUTING_RULE)
+        } else if (object.getType() == TreeObject.ROUTING_RULE) {
             return ImageCache.getCreatedImage(EImage.ROUTING_RULE.getPath());
-        else if (object.getType() == TreeObject.VIEW)
+        } else if (object.getType() == TreeObject.VIEW) {
             return ImageCache.getCreatedImage(EImage.VIEW.getPath());
-        else if (object.getType() == TreeObject.DOCUMENT)
+        } else if (object.getType() == TreeObject.DOCUMENT) {
             return ImageCache.getCreatedImage(EImage.DOCUMENTS.getPath());
-        else if (object.getType() == TreeObject.SUBSCRIPTION_ENGINE)
+        } else if (object.getType() == TreeObject.SUBSCRIPTION_ENGINE) {
             return ImageCache.getCreatedImage(EImage.SUBSCRIPTION_ENGINE.getPath());
-        else if (object.getType() == TreeObject.SYNCHRONIZATIONPLAN)
+        } else if (object.getType() == TreeObject.SYNCHRONIZATIONPLAN) {
             return ImageCache.getCreatedImage(EImage.SYNCHRONIZATIONPLAN.getPath());
+        }
 
         return ImageCache.getCreatedImage(EImage.ERROR.getPath());
     }

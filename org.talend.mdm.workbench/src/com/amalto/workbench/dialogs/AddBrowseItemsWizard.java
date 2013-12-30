@@ -13,7 +13,6 @@
 package com.amalto.workbench.dialogs;
 
 import java.net.URL;
-import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -23,6 +22,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
+
+import javax.xml.ws.WebServiceException;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -74,9 +75,8 @@ import com.amalto.workbench.webservices.WSGetView;
 import com.amalto.workbench.webservices.WSPutRole;
 import com.amalto.workbench.webservices.WSPutView;
 import com.amalto.workbench.webservices.WSRole;
+import com.amalto.workbench.webservices.WSRole.Specification.Instance;
 import com.amalto.workbench.webservices.WSRolePK;
-import com.amalto.workbench.webservices.WSRoleSpecification;
-import com.amalto.workbench.webservices.WSRoleSpecificationInstance;
 import com.amalto.workbench.webservices.WSView;
 import com.amalto.workbench.webservices.WSViewPK;
 import com.amalto.workbench.webservices.XtentisPort;
@@ -155,7 +155,7 @@ public class AddBrowseItemsWizard extends Wizard {
         return port;
     }
 
-    protected void newBrowseItemView(String browseItem) throws RemoteException {
+    protected void newBrowseItemView(String browseItem) {
         for (XSDElementDeclaration decl : declList) {
             String fullName = BROWSE_ITEMS + decl.getName();
             if (fullName.equals(browseItem)) {
@@ -188,9 +188,7 @@ public class AddBrowseItemsWizard extends Wizard {
         }
     }
 
-    private TreeObject createNewTreeObject(XSDElementDeclaration decl, String browseItem) throws RemoteException {
-        XtentisPort port = getXtentisPort();
-
+    private TreeObject createNewTreeObject(XSDElementDeclaration decl, String browseItem) {
         WSView view = new WSView();
         view.setIsTransformerActive(new WSBoolean(false));
         view.setTransformerPK("");//$NON-NLS-1$
@@ -208,16 +206,15 @@ public class AddBrowseItemsWizard extends Wizard {
             }
 
         }
-        view.setSearchableBusinessElements(keys.toArray(new String[] {}));
-        view.setViewableBusinessElements(keys.toArray(new String[] {}));
+        view.getSearchableBusinessElements().addAll(keys);
+        view.getViewableBusinessElements().addAll(keys);
 
         StringBuffer desc = new StringBuffer();
         LinkedHashMap<String, String> labels = new LinkedHashMap<String, String>();
         if (decl.getAnnotation() != null) {
             labels = new XSDAnnotationsStructure(decl.getAnnotation()).getLabels();
         }
-        if (labels.size() == 0)
-         {
+        if (labels.size() == 0) {
             labels.put("EN", decl.getName());//$NON-NLS-1$
         }
         for (String lan : labels.keySet()) {
@@ -245,7 +242,7 @@ public class AddBrowseItemsWizard extends Wizard {
         return obj;
     }
 
-    private boolean refreshEditorContent(TreeObject obj) throws RemoteException {
+    private boolean refreshEditorContent(TreeObject obj) {
 
         IEditorInput xobjectEditorinput = new XObjectEditorInput(obj, obj.getDisplayName());
 
@@ -264,7 +261,7 @@ public class AddBrowseItemsWizard extends Wizard {
         return false;
     }
 
-    protected void modifyRolesWithAttachedBrowseItem(String browseItem, List<Line> roles) throws RemoteException {
+    protected void modifyRolesWithAttachedBrowseItem(String browseItem, List<Line> roles) {
         for (Line line : roles) {
             List<KeyValue> keyValues = line.keyValues;
             String roleName = keyValues.get(0).value;
@@ -272,16 +269,12 @@ public class AddBrowseItemsWizard extends Wizard {
             WSGetRole getRole = new WSGetRole();
             getRole.setWsRolePK(new WSRolePK(roleName));
             WSRole role = port.getRole(getRole);
-            for (WSRoleSpecification spec : role.getSpecification()) {
+            for (WSRole.Specification spec : role.getSpecification()) {
                 if (spec.getObjectType().equals("View")) {//$NON-NLS-1$
-                    WSRoleSpecificationInstance[] specInstance = spec.getInstance();
-                    WSRoleSpecificationInstance newInstance = new WSRoleSpecificationInstance();
+                    Instance newInstance = new Instance();
                     newInstance.setInstanceName(browseItem);
                     newInstance.setWritable(keyValues.get(1).value.equals("Read Only") ? false : true);//$NON-NLS-1$
-                    WSRoleSpecificationInstance[] newSpecInstance = new WSRoleSpecificationInstance[specInstance.length + 1];
-                    System.arraycopy(specInstance, 0, newSpecInstance, 0, specInstance.length);
-                    newSpecInstance[specInstance.length] = newInstance;
-                    spec.setInstance(newSpecInstance);
+                    spec.getInstance().add(newInstance);
                     break;
                 }
             }
@@ -299,10 +292,10 @@ public class AddBrowseItemsWizard extends Wizard {
             try {
                 newBrowseItemView(browse);
                 modifyRolesWithAttachedBrowseItem(browse, roles);
-            } catch (RemoteException e) {
-            	if(!Util.handleConnectionException(page, e, null)){
+            } catch (WebServiceException e) {
+                if (!Util.handleConnectionException(page, e, null)) {
                     MessageDialog.openError(page.getSite().getShell(), Messages._Error,
-                        Messages.bind(Messages.ErrorOccuredSaveView, e.getLocalizedMessage()));
+                            Messages.bind(Messages.ErrorOccuredSaveView, e.getLocalizedMessage()));
                 }
                 return false;
             }
@@ -540,7 +533,7 @@ public class AddBrowseItemsWizard extends Wizard {
 
     /**
      * DOC hbhong Comment method "getAllRoleNames".
-     *
+     * 
      * @return
      */
     protected List<String> getAllRoleNames() {

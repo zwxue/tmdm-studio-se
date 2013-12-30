@@ -28,6 +28,7 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Event;
+
 import com.amalto.workbench.dialogs.MDMXSDSchemaEntryDialog;
 import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.image.EImage;
@@ -40,7 +41,7 @@ import com.amalto.workbench.utils.WorkbenchClipboard;
 import com.amalto.workbench.views.ServerView;
 import com.amalto.workbench.webservices.WSBoolean;
 import com.amalto.workbench.webservices.WSConceptRevisionMap;
-import com.amalto.workbench.webservices.WSConceptRevisionMapMapEntry;
+import com.amalto.workbench.webservices.WSConceptRevisionMap.MapEntry;
 import com.amalto.workbench.webservices.WSDataCluster;
 import com.amalto.workbench.webservices.WSDataClusterPK;
 import com.amalto.workbench.webservices.WSDataModel;
@@ -69,7 +70,7 @@ import com.amalto.workbench.webservices.WSGetTransformerV2;
 import com.amalto.workbench.webservices.WSGetUniverse;
 import com.amalto.workbench.webservices.WSGetView;
 import com.amalto.workbench.webservices.WSItem;
-import com.amalto.workbench.webservices.WSItemPKsByCriteriaResponseResults;
+import com.amalto.workbench.webservices.WSItemPKsByCriteriaResponse.Results;
 import com.amalto.workbench.webservices.WSMenu;
 import com.amalto.workbench.webservices.WSMenuPK;
 import com.amalto.workbench.webservices.WSPutDataCluster;
@@ -123,7 +124,7 @@ public class PasteXObjectAction extends Action {
     private void setDetails() {
         setImageDescriptor(ImageCache.getImage(EImage.PASTE.getPath()));
         setText(Messages._Paste);
-        setToolTipText(Messages.bind(Messages.PasteXObjectAction_ActionTip, IConstants.TALEND ));
+        setToolTipText(Messages.bind(Messages.PasteXObjectAction_ActionTip, IConstants.TALEND));
     }
 
     public void setXtentisPort(TreeObject remoteTreeObject) {
@@ -168,12 +169,11 @@ public class PasteXObjectAction extends Action {
                         WSDataModelPK newKey = latestValue != null ? (WSDataModelPK) latestValue : new WSDataModelPK(key.getPk());
                         if (destPort.existsDataModel(
                                 new WSExistsDataModel(latestValue != null ? (WSDataModelPK) latestValue : (WSDataModelPK) xobject
-                                        .getWsKey())).is_true()) {
-                            InputDialog id = new InputDialog(
-                                    view.getSite().getShell(),
-                                    Messages.bind(Messages.PasteXObjectAction_DialogTitle2, key.getPk()),
-                                    Messages.bind(Messages.PasteXObjectAction_MsgContent, (latestValue != null ? newKey.getPk() : key.getPk())),
-                                    "CopyOf"//$NON-NLS-1$
+                                        .getWsKey())).isTrue()) {
+                            InputDialog id = new InputDialog(view.getSite().getShell(), Messages.bind(
+                                    Messages.PasteXObjectAction_DialogTitle2, key.getPk()),
+                                    Messages.bind(Messages.PasteXObjectAction_MsgContent, (latestValue != null ? newKey.getPk()
+                                            : key.getPk())), "CopyOf"//$NON-NLS-1$
                                             + (selected.getEndpointAddress().equals(xobject.getEndpointAddress()) ? "" : xobject//$NON-NLS-1$
                                                     .getEndpointAddress().split(":")[0] + " ") + key.getPk(),//$NON-NLS-1$//$NON-NLS-2$
                                     new IInputValidator() {
@@ -216,12 +216,11 @@ public class PasteXObjectAction extends Action {
                         WSViewPK newKey = latestValue != null ? (WSViewPK) latestValue : new WSViewPK(key.getPk());
                         if (destPort.existsView(
                                 new WSExistsView(latestValue != null ? (WSViewPK) latestValue : (WSViewPK) xobject.getWsKey()))
-                                .is_true()) {
-                            InputDialog id = new InputDialog(
-                                    view.getSite().getShell(),
-                                    Messages.bind(Messages.PasteXObjectAction_DialogTitle2, key.getPk()),
-                                    Messages.bind(Messages.PasteXObjectAction_MsgContent2, (latestValue != null ? newKey.getPk() : key.getPk())),
-                                    "CopyOf"//$NON-NLS-1$
+                                .isTrue()) {
+                            InputDialog id = new InputDialog(view.getSite().getShell(), Messages.bind(
+                                    Messages.PasteXObjectAction_DialogTitle2, key.getPk()),
+                                    Messages.bind(Messages.PasteXObjectAction_MsgContent2, (latestValue != null ? newKey.getPk()
+                                            : key.getPk())), "CopyOf"//$NON-NLS-1$
                                             + (selected.getEndpointAddress().equals(xobject.getEndpointAddress()) ? "" : xobject//$NON-NLS-1$
                                                     .getEndpointAddress().split(":")[0] + " ") + key.getPk(),//$NON-NLS-1$//$NON-NLS-2$
                                     new IInputValidator() {
@@ -268,12 +267,11 @@ public class PasteXObjectAction extends Action {
                                 key.getPk());
                         if (destPort.existsDataCluster(
                                 new WSExistsDataCluster(latestValue != null ? (WSDataClusterPK) latestValue
-                                        : (WSDataClusterPK) xobject.getWsKey())).is_true()) {
-                            InputDialog id = new InputDialog(
-                                    view.getSite().getShell(),
-                                    Messages.bind(Messages.PasteXObjectAction_DialogTitle2, key.getPk()),
-                                    Messages.bind(Messages.PasteXObjectAction_MsgContent3, (latestValue != null ? newKey.getPk() : key.getPk())),
-                                    "CopyOf"//$NON-NLS-1$
+                                        : (WSDataClusterPK) xobject.getWsKey())).isTrue()) {
+                            InputDialog id = new InputDialog(view.getSite().getShell(), Messages.bind(
+                                    Messages.PasteXObjectAction_DialogTitle2, key.getPk()),
+                                    Messages.bind(Messages.PasteXObjectAction_MsgContent3, (latestValue != null ? newKey.getPk()
+                                            : key.getPk())), "CopyOf"//$NON-NLS-1$
                                             + (selected.getEndpointAddress().equals(xobject.getEndpointAddress()) ? "" : xobject//$NON-NLS-1$
                                                     .getEndpointAddress().split(":")[0] + " ") + key.getPk(),//$NON-NLS-1$//$NON-NLS-2$
                                     new IInputValidator() {
@@ -318,12 +316,11 @@ public class PasteXObjectAction extends Action {
                                 : new WSStoredProcedurePK(key.getPk());
                         if (destPort.existsStoredProcedure(
                                 new WSExistsStoredProcedure(latestValue != null ? (WSStoredProcedurePK) latestValue
-                                        : (WSStoredProcedurePK) xobject.getWsKey())).is_true()) {
-                            InputDialog id = new InputDialog(
-                                    view.getSite().getShell(),
-                                    Messages.bind(Messages.PasteXObjectAction_DialogTitle2, key.getPk()),
-                                    Messages.bind(Messages.PasteXObjectAction_MsgContent4, (latestValue != null ? newKey.getPk() : key.getPk())),
-                                    "CopyOf"//$NON-NLS-1$
+                                        : (WSStoredProcedurePK) xobject.getWsKey())).isTrue()) {
+                            InputDialog id = new InputDialog(view.getSite().getShell(), Messages.bind(
+                                    Messages.PasteXObjectAction_DialogTitle2, key.getPk()),
+                                    Messages.bind(Messages.PasteXObjectAction_MsgContent4, (latestValue != null ? newKey.getPk()
+                                            : key.getPk())), "CopyOf"//$NON-NLS-1$
                                             + (selected.getEndpointAddress().equals(xobject.getEndpointAddress()) ? "" : xobject//$NON-NLS-1$
                                                     .getEndpointAddress().split(":")[0] + " ") + key.getPk(),//$NON-NLS-1$//$NON-NLS-2$
                                     new IInputValidator() {
@@ -352,7 +349,7 @@ public class PasteXObjectAction extends Action {
                                 .getStoredProcedure(new WSGetStoredProcedure(key));
                         WSStoredProcedure newStoredProcedure = new WSStoredProcedure(newKey.getPk(),
                                 originalStoredProcedure.getDescription(), originalStoredProcedure.getProcedure(),
-                                originalStoredProcedure.getRefreshCache());
+                                originalStoredProcedure.isRefreshCache());
                         // write the new model
                         destPort.putStoredProcedure(new WSPutStoredProcedure(newStoredProcedure));
                         TreeObject newObj = new TreeObject(newKey.getPk(), parent != null ? parent.getServerRoot()
@@ -368,12 +365,11 @@ public class PasteXObjectAction extends Action {
                         WSRolePK newKey = latestValue != null ? (WSRolePK) latestValue : new WSRolePK(key.getPk());
                         if (destPort.existsRole(
                                 new WSExistsRole(latestValue != null ? (WSRolePK) latestValue : (WSRolePK) xobject.getWsKey()))
-                                .is_true()) {
-                            InputDialog id = new InputDialog(
-                                    view.getSite().getShell(),
-                                    Messages.bind(Messages.PasteXObjectAction_DialogTitle2, key.getPk()),
-                                    Messages.bind(Messages.PasteXObjectAction_MsgContent5, (latestValue != null ? newKey.getPk() : key.getPk())),
-                                    "CopyOf"//$NON-NLS-1$
+                                .isTrue()) {
+                            InputDialog id = new InputDialog(view.getSite().getShell(), Messages.bind(
+                                    Messages.PasteXObjectAction_DialogTitle2, key.getPk()),
+                                    Messages.bind(Messages.PasteXObjectAction_MsgContent5, (latestValue != null ? newKey.getPk()
+                                            : key.getPk())), "CopyOf"//$NON-NLS-1$
                                             + (selected.getEndpointAddress().equals(xobject.getEndpointAddress()) ? "" : xobject//$NON-NLS-1$
                                                     .getEndpointAddress().split(":")[0] + " ") + key.getPk(),//$NON-NLS-1$//$NON-NLS-2$
                                     new IInputValidator() {
@@ -417,12 +413,11 @@ public class PasteXObjectAction extends Action {
                                 key.getPk());
                         if (destPort.existsRoutingRule(
                                 new WSExistsRoutingRule(latestValue != null ? (WSRoutingRulePK) latestValue
-                                        : (WSRoutingRulePK) xobject.getWsKey())).is_true()) {
-                            InputDialog id = new InputDialog(
-                                    view.getSite().getShell(),
-                                    Messages.bind(Messages.PasteXObjectAction_DialogTitle2, key.getPk()),
-                                    Messages.bind(Messages.PasteXObjectAction_MsgContent6, (latestValue != null ? newKey.getPk() : key.getPk())),
-                                    "CopyOf"//$NON-NLS-1$
+                                        : (WSRoutingRulePK) xobject.getWsKey())).isTrue()) {
+                            InputDialog id = new InputDialog(view.getSite().getShell(), Messages.bind(
+                                    Messages.PasteXObjectAction_DialogTitle2, key.getPk()),
+                                    Messages.bind(Messages.PasteXObjectAction_MsgContent6, (latestValue != null ? newKey.getPk()
+                                            : key.getPk())), "CopyOf"//$NON-NLS-1$
                                             + (selected.getEndpointAddress().equals(xobject.getEndpointAddress()) ? "" : xobject//$NON-NLS-1$
                                                     .getEndpointAddress().split(":")[0] + " ") + key.getPk(),//$NON-NLS-1$//$NON-NLS-2$
                                     new IInputValidator() {
@@ -452,7 +447,7 @@ public class PasteXObjectAction extends Action {
                                 originalRoutingRule.isSynchronous(), originalRoutingRule.getConcept(),
                                 originalRoutingRule.getServiceJNDI(), originalRoutingRule.getParameters(),
                                 originalRoutingRule.getWsRoutingRuleExpressions(), originalRoutingRule.getCondition(),
-                                originalRoutingRule.getDeactive());
+                                originalRoutingRule.isDeactive());
                         // write the new model
                         destPort.putRoutingRule(new WSPutRoutingRule(newRoutingRule));
                         TreeObject newObj = new TreeObject(newKey.getPk(), parent != null ? parent.getServerRoot()
@@ -469,12 +464,11 @@ public class PasteXObjectAction extends Action {
                                 key.getPk());
                         if (destPort.existsTransformerV2(
                                 new WSExistsTransformerV2(latestValue != null ? (WSTransformerV2PK) latestValue
-                                        : (WSTransformerV2PK) xobject.getWsKey())).is_true()) {
-                            InputDialog id = new InputDialog(
-                                    view.getSite().getShell(),
-                                    Messages.bind(Messages.PasteXObjectAction_DialogTitle2, key.getPk()),
-                                    Messages.bind(Messages.PasteXObjectAction_MsgContent7, (latestValue != null ? newKey.getPk() : key.getPk())),
-                                    "CopyOf"//$NON-NLS-1$
+                                        : (WSTransformerV2PK) xobject.getWsKey())).isTrue()) {
+                            InputDialog id = new InputDialog(view.getSite().getShell(), Messages.bind(
+                                    Messages.PasteXObjectAction_DialogTitle2, key.getPk()),
+                                    Messages.bind(Messages.PasteXObjectAction_MsgContent7, (latestValue != null ? newKey.getPk()
+                                            : key.getPk())), "CopyOf"//$NON-NLS-1$
                                             + (selected.getEndpointAddress().equals(xobject.getEndpointAddress()) ? "" : xobject//$NON-NLS-1$
                                                     .getEndpointAddress().split(":")[0] + " ") + key.getPk(),//$NON-NLS-1$//$NON-NLS-2$
                                     new IInputValidator() {
@@ -517,12 +511,11 @@ public class PasteXObjectAction extends Action {
                         WSMenuPK newKey = latestValue != null ? (WSMenuPK) latestValue : new WSMenuPK(key.getPk());
                         if (destPort.existsMenu(
                                 new WSExistsMenu(latestValue != null ? (WSMenuPK) latestValue : (WSMenuPK) xobject.getWsKey()))
-                                .is_true()) {
-                            InputDialog id = new InputDialog(
-                                    view.getSite().getShell(),
-                                    Messages.bind(Messages.PasteXObjectAction_DialogTitle2, key.getPk()),
-                                    Messages.bind(Messages.PasteXObjectAction_MsgContent8, (latestValue != null ? newKey.getPk() : key.getPk())),
-                                    "CopyOf"//$NON-NLS-1$
+                                .isTrue()) {
+                            InputDialog id = new InputDialog(view.getSite().getShell(), Messages.bind(
+                                    Messages.PasteXObjectAction_DialogTitle2, key.getPk()),
+                                    Messages.bind(Messages.PasteXObjectAction_MsgContent8, (latestValue != null ? newKey.getPk()
+                                            : key.getPk())), "CopyOf"//$NON-NLS-1$
                                             + (selected.getEndpointAddress().equals(xobject.getEndpointAddress()) ? "" : xobject//$NON-NLS-1$
                                                     .getEndpointAddress().split(":")[0] + " ") + key.getPk(),//$NON-NLS-1$//$NON-NLS-2$
                                     new IInputValidator() {
@@ -565,12 +558,11 @@ public class PasteXObjectAction extends Action {
                         WSUniversePK newKey = latestValue != null ? (WSUniversePK) latestValue : new WSUniversePK(key.getPk());
                         if (destPort.existsUniverse(
                                 new WSExistsUniverse(latestValue != null ? (WSUniversePK) latestValue : (WSUniversePK) xobject
-                                        .getWsKey())).is_true()) {
-                            InputDialog id = new InputDialog(
-                                    view.getSite().getShell(),
-                                    Messages.bind(Messages.PasteXObjectAction_DialogTitle2, key.getPk()),
-                                    Messages.bind(Messages.PasteXObjectAction_MsgContent9, (latestValue != null ? newKey.getPk() : key.getPk())),
-                                    "CopyOf"//$NON-NLS-1$
+                                        .getWsKey())).isTrue()) {
+                            InputDialog id = new InputDialog(view.getSite().getShell(), Messages.bind(
+                                    Messages.PasteXObjectAction_DialogTitle2, key.getPk()),
+                                    Messages.bind(Messages.PasteXObjectAction_MsgContent9, (latestValue != null ? newKey.getPk()
+                                            : key.getPk())), "CopyOf"//$NON-NLS-1$
                                             + (selected.getEndpointAddress().equals(xobject.getEndpointAddress()) ? "" : xobject//$NON-NLS-1$
                                                     .getEndpointAddress().split(":")[0] + " ") + key.getPk(),//$NON-NLS-1$//$NON-NLS-2$
                                     new IInputValidator() {
@@ -616,16 +608,13 @@ public class PasteXObjectAction extends Action {
                                 : new WSSynchronizationPlanPK(key.getPk());
                         if (destPort.existsSynchronizationPlan(
                                 new WSExistsSynchronizationPlan(latestValue != null ? (WSSynchronizationPlanPK) latestValue
-                                        : (WSSynchronizationPlanPK) xobject.getWsKey())).is_true()) {
-                            InputDialog id = new InputDialog(
-                                    view.getSite().getShell(),
-                                    Messages.PasteXObjectAction_DialogTitle2 + key.getPk(),
-                                    Messages.PasteXObjectAction_MsgContent10
-                                            + (latestValue != null ? newKey.getPk() : key.getPk())
-                                            + Messages.PasteXObjectAction_MsgContent10t,
-                                    "CopyOf"//$NON-NLS-1$
-                                            + (selected.getEndpointAddress().equals(xobject.getEndpointAddress()) ? "" : xobject//$NON-NLS-1$
-                                                    .getEndpointAddress().split(":")[0] + " ") + key.getPk(),//$NON-NLS-1$//$NON-NLS-2$
+                                        : (WSSynchronizationPlanPK) xobject.getWsKey())).isTrue()) {
+                            InputDialog id = new InputDialog(view.getSite().getShell(), Messages.PasteXObjectAction_DialogTitle2
+                                    + key.getPk(), Messages.PasteXObjectAction_MsgContent10
+                                    + (latestValue != null ? newKey.getPk() : key.getPk())
+                                    + Messages.PasteXObjectAction_MsgContent10t, "CopyOf"//$NON-NLS-1$
+                                    + (selected.getEndpointAddress().equals(xobject.getEndpointAddress()) ? "" : xobject//$NON-NLS-1$
+                                            .getEndpointAddress().split(":")[0] + " ") + key.getPk(),//$NON-NLS-1$//$NON-NLS-2$
                                     new IInputValidator() {
 
                                         public String isValid(String newText) {
@@ -683,9 +672,9 @@ public class PasteXObjectAction extends Action {
 
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            if(!Util.handleConnectionException(view, e, null)){
+            if (!Util.handleConnectionException(view, e, null)) {
                 MessageDialog.openError(view.getSite().getShell(), Messages._Error,
-                    Messages.PasteXObjectAction_ErrorMsg + e.getLocalizedMessage());
+                        Messages.PasteXObjectAction_ErrorMsg + e.getLocalizedMessage());
             }
         } finally {
             keyTrackMap.clear();
@@ -716,7 +705,7 @@ public class PasteXObjectAction extends Action {
         switch (xobjectType) {
         case TreeObject.DATA_CLUSTER:
             try {
-                WSItemPKsByCriteriaResponseResults[] results = destPort.getItemPKsByCriteria(
+                List<Results> results = destPort.getItemPKsByCriteria(
                         new WSGetItemPKsByCriteria(new WSDataClusterPK(oldXObjectPk), null, null, null, (long) -1, (long) -1, 0,
                                 Integer.MAX_VALUE)).getResults();
 
@@ -725,9 +714,9 @@ public class PasteXObjectAction extends Action {
                         .getConceptsInDataClusterWithRevisions(new WSGetConceptsInDataClusterWithRevisions(new WSDataClusterPK(
                                 oldXObjectPk), new WSUniversePK(revisionID)));
                 if (concepts != null) {
-                    WSConceptRevisionMapMapEntry[] wsConceptRevisionMapMapEntries = concepts.getMapEntry();
+                    List<MapEntry> wsConceptRevisionMapMapEntries = concepts.getMapEntry();
 
-                    for (WSConceptRevisionMapMapEntry entry : wsConceptRevisionMapMapEntries) {
+                    for (MapEntry entry : wsConceptRevisionMapMapEntries) {
                         conceptList.add(entry.getConcept());
                     }
                 }
@@ -741,24 +730,25 @@ public class PasteXObjectAction extends Action {
                 dlg.open();
 
                 if (dlg.getReturnCode() == Window.OK) {
-                    for (WSItemPKsByCriteriaResponseResults result : results) {
+                    for (Results result : results) {
                         if (dlg.getMDMDataModelUrls().contains(result.getWsItemPK().getConceptName())) {
-                        	WSItem item=destPort.getItem(new WSGetItem(result.getWsItemPK()));
-                        	//item.setWsDataClusterPK(new WSDataClusterPK(newXObjectPk));
-//                            WSSynchronizationGetItemXML getItemXML = new WSSynchronizationGetItemXML(revisionID,
-//                                    result.getWsItemPK());
-//                            WSString xmlForm = destPort.synchronizationGetItemXML(getItemXML);
-//                            Document doc = Util.parse(xmlForm.getValue());
-//                            NodeList clusterNameList = Util.getNodeList(doc, "/ii/c");//$NON-NLS-1$
-//                            for (int i = 0; i < clusterNameList.getLength(); i++) {
-//                                Node node = clusterNameList.item(i);
-//                                node.setTextContent(newXObjectPk);
-//                            }
-//
-//                            WSSynchronizationPutItemXML putItemXML = new WSSynchronizationPutItemXML(revisionID,
-//                                    Util.nodeToString(doc));
-//                            destPort.synchronizationPutItemXML(putItemXML);
-                        	destPort.putItem(new WSPutItem(new WSDataClusterPK(newXObjectPk), item.getContent(), new WSDataModelPK(item.getDataModelName()), false));
+                            WSItem item = destPort.getItem(new WSGetItem(result.getWsItemPK()));
+                            // item.setWsDataClusterPK(new WSDataClusterPK(newXObjectPk));
+                            // WSSynchronizationGetItemXML getItemXML = new WSSynchronizationGetItemXML(revisionID,
+                            // result.getWsItemPK());
+                            // WSString xmlForm = destPort.synchronizationGetItemXML(getItemXML);
+                            // Document doc = Util.parse(xmlForm.getValue());
+                            //                            NodeList clusterNameList = Util.getNodeList(doc, "/ii/c");//$NON-NLS-1$
+                            // for (int i = 0; i < clusterNameList.getLength(); i++) {
+                            // Node node = clusterNameList.item(i);
+                            // node.setTextContent(newXObjectPk);
+                            // }
+                            //
+                            // WSSynchronizationPutItemXML putItemXML = new WSSynchronizationPutItemXML(revisionID,
+                            // Util.nodeToString(doc));
+                            // destPort.synchronizationPutItemXML(putItemXML);
+                            destPort.putItem(new WSPutItem(new WSDataClusterPK(newXObjectPk), item.getContent(),
+                                    new WSDataModelPK(item.getDataModelName()), false));
                         }
                     }
                 }

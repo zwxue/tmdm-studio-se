@@ -133,8 +133,7 @@ public class ViewBrowserMainPage extends AMainPage implements IXObjectModelListe
                 }
 
                 public Object[] getElements(Object inputElement) {
-                    return ((WSView) inputElement).getWhereConditions() == null ? new WSWhereCondition[0]
-                            : ((WSView) inputElement).getWhereConditions();
+                    return ((WSView) inputElement).getWhereConditions().toArray();
                 }
             });
             wcListViewer.setLabelProvider(new ILabelProvider() {
@@ -146,49 +145,53 @@ public class ViewBrowserMainPage extends AMainPage implements IXObjectModelListe
                 public String getText(Object element) {
                     WSWhereCondition wc = (WSWhereCondition) element;
                     String text = wc.getLeftPath() + " ";//$NON-NLS-1$
-                    if (wc.getOperator().equals(WSWhereOperator.CONTAINS))
+                    if (wc.getOperator().equals(WSWhereOperator.CONTAINS)) {
                         text += "Contains";//$NON-NLS-1$
-                    else if (wc.getOperator().equals(WSWhereOperator.CONTAINS_TEXT_OF))
+                    } else if (wc.getOperator().equals(WSWhereOperator.CONTAINS_TEXT_OF)) {
                         text += "Contains Text Of";//$NON-NLS-1$
-                    else if (wc.getOperator().equals(WSWhereOperator.EQUALS))
+                    } else if (wc.getOperator().equals(WSWhereOperator.EQUALS)) {
                         text += "=";//$NON-NLS-1$
-                    else if (wc.getOperator().equals(WSWhereOperator.GREATER_THAN))
+                    } else if (wc.getOperator().equals(WSWhereOperator.GREATER_THAN)) {
                         text += ">";//$NON-NLS-1$
-                    else if (wc.getOperator().equals(WSWhereOperator.GREATER_THAN_OR_EQUAL))
+                    } else if (wc.getOperator().equals(WSWhereOperator.GREATER_THAN_OR_EQUAL)) {
                         text += ">=";//$NON-NLS-1$
-                    else if (wc.getOperator().equals(WSWhereOperator.JOIN))
+                    } else if (wc.getOperator().equals(WSWhereOperator.JOIN)) {
                         text += "Joins With";//$NON-NLS-1$
-                    else if (wc.getOperator().equals(WSWhereOperator.LOWER_THAN))
+                    } else if (wc.getOperator().equals(WSWhereOperator.LOWER_THAN)) {
                         text += "<";//$NON-NLS-1$
-                    else if (wc.getOperator().equals(WSWhereOperator.LOWER_THAN_OR_EQUAL))
+                    } else if (wc.getOperator().equals(WSWhereOperator.LOWER_THAN_OR_EQUAL)) {
                         text += "<=";//$NON-NLS-1$
-                    else if (wc.getOperator().equals(WSWhereOperator.NOT_EQUALS))
+                    } else if (wc.getOperator().equals(WSWhereOperator.NOT_EQUALS)) {
                         text += "!=";//$NON-NLS-1$
-                    else if (wc.getOperator().equals(WSWhereOperator.STARTSWITH))
+                    } else if (wc.getOperator().equals(WSWhereOperator.STARTSWITH)) {
                         text += "Starts With";//$NON-NLS-1$
-                    else if (wc.getOperator().equals(WSWhereOperator.STRICTCONTAINS))
+                    } else if (wc.getOperator().equals(WSWhereOperator.STRICTCONTAINS)) {
                         text += "Strict Contains";//$NON-NLS-1$
-                    else if (wc.getOperator().equals(WSWhereOperator.EMPTY_NULL))
+                    } else if (wc.getOperator().equals(WSWhereOperator.EMPTY_NULL)) {
                         text += "Is Empty Or Null";//$NON-NLS-1$
+                    }
                     text += " ";//$NON-NLS-1$
-                    if (!wc.getOperator().equals(WSWhereOperator.JOIN))
+                    if (!wc.getOperator().equals(WSWhereOperator.JOIN)) {
                         text += "\"";//$NON-NLS-1$
+                    }
                     text += wc.getRightValueOrPath();
-                    if (!wc.getOperator().equals(WSWhereOperator.JOIN))
+                    if (!wc.getOperator().equals(WSWhereOperator.JOIN)) {
                         text += "\"";//$NON-NLS-1$
+                    }
                     text += " ";//$NON-NLS-1$
-                    if (wc.getStringPredicate().equals(WSStringPredicate.AND))
+                    if (wc.getStringPredicate().equals(WSStringPredicate.AND)) {
                         text += "[and]";//$NON-NLS-1$
-                    else if (wc.getStringPredicate().equals(WSStringPredicate.EXACTLY))
+                    } else if (wc.getStringPredicate().equals(WSStringPredicate.EXACTLY)) {
                         text += "[exactly]";//$NON-NLS-1$
-                    else if (wc.getStringPredicate().equals(WSStringPredicate.NONE))
+                    } else if (wc.getStringPredicate().equals(WSStringPredicate.NONE)) {
                         text += "";//$NON-NLS-1$
-                    else if (wc.getStringPredicate().equals(WSStringPredicate.NOT))
+                    } else if (wc.getStringPredicate().equals(WSStringPredicate.NOT)) {
                         text += "[not]";//$NON-NLS-1$
-                    else if (wc.getStringPredicate().equals(WSStringPredicate.OR))
+                    } else if (wc.getStringPredicate().equals(WSStringPredicate.OR)) {
                         text += "[or]";//$NON-NLS-1$
-                    else if (wc.getStringPredicate().equals(WSStringPredicate.STRICTAND))
+                    } else if (wc.getStringPredicate().equals(WSStringPredicate.STRICTAND)) {
                         text += "[strict and]";//$NON-NLS-1$
+                    }
                     return text;
                 }
 
@@ -265,7 +268,8 @@ public class ViewBrowserMainPage extends AMainPage implements IXObjectModelListe
                         MessageDialog.openError(
                                 ViewBrowserMainPage.this.getSite().getShell(),
                                 Messages._Error,
-                                Messages.bind(Messages.ViewBrowserMainPage_ErrorMsg, e.getClass().getName(), e.getLocalizedMessage()));
+                                Messages.bind(Messages.ViewBrowserMainPage_ErrorMsg, e.getClass().getName(),
+                                        e.getLocalizedMessage()));
                     }
                 }
             });
@@ -282,8 +286,9 @@ public class ViewBrowserMainPage extends AMainPage implements IXObjectModelListe
     protected void refreshData() {
         try {
 
-            if (viewableBEsList.isDisposed() || searchableBEsList.isDisposed() || wcListViewer.getList().isDisposed())
+            if (viewableBEsList.isDisposed() || searchableBEsList.isDisposed() || wcListViewer.getList().isDisposed()) {
                 return;
+            }
 
             WSView view = null;
             if (getXObject().getWsObject() == null) { // then fetch from server
@@ -294,18 +299,18 @@ public class ViewBrowserMainPage extends AMainPage implements IXObjectModelListe
                 view = (WSView) getXObject().getWsObject();
             }
 
-            String paths[] = view.getViewableBusinessElements();
+            java.util.List<String> paths = view.getViewableBusinessElements();
             // Fill the vbe List
             viewableBEsList.removeAll();
-            for (int i = 0; i < paths.length; i++) {
-                viewableBEsList.add(paths[i]);
+            for (String path : paths) {
+                viewableBEsList.add(path);
             }
 
             paths = view.getSearchableBusinessElements();
             searchableBEsList.removeAll();
             if (paths != null) {
-                for (int i = 0; i < paths.length; i++) {
-                    searchableBEsList.add(paths[i]);
+                for (String path : paths) {
+                    searchableBEsList.add(path);
                 }
             }
 
@@ -313,14 +318,13 @@ public class ViewBrowserMainPage extends AMainPage implements IXObjectModelListe
             wcListViewer.refresh();
 
             dataClusterCombo.removeAll();
-            WSDataClusterPK[] dataClusterPKs = getDataClusterPKs();
-            if ((dataClusterPKs == null) || (dataClusterPKs.length == 0)) {
-                MessageDialog
-                        .openError(this.getSite().getShell(), Messages._Error, Messages.ViewBrowserMainPage_ErrorMsg1);
+            java.util.List<WSDataClusterPK> dataClusterPKs = getDataClusterPKs();
+            if ((dataClusterPKs == null) || (dataClusterPKs.size() == 0)) {
+                MessageDialog.openError(this.getSite().getShell(), Messages._Error, Messages.ViewBrowserMainPage_ErrorMsg1);
                 return;
             }
-            for (int i = 0; i < dataClusterPKs.length; i++) {
-                dataClusterCombo.add(dataClusterPKs[i].getPk());
+            for (WSDataClusterPK pk : dataClusterPKs) {
+                dataClusterCombo.add(pk.getPk());
             }
             dataClusterCombo.select(0);
 
@@ -330,14 +334,14 @@ public class ViewBrowserMainPage extends AMainPage implements IXObjectModelListe
 
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            if(!Util.handleConnectionException(this.getSite().getShell(), e, Messages.ViewBrowserMainPage_ErrorTitle2)) {
+            if (!Util.handleConnectionException(this.getSite().getShell(), e, Messages.ViewBrowserMainPage_ErrorTitle2)) {
                 MessageDialog.openError(this.getSite().getShell(), Messages.ViewBrowserMainPage_ErrorTitle2,
                         Messages.bind(Messages.ViewBrowserMainPage_ErrorMsg2, e.getLocalizedMessage()));
             }
         }
     }
 
-    protected WSDataClusterPK[] getDataClusterPKs() throws MalformedURLException, XtentisException {
+    protected java.util.List<WSDataClusterPK> getDataClusterPKs() throws MalformedURLException, XtentisException {
         return Util.getAllDataClusterPKs(new URL(getXObject().getEndpointAddress()), getXObject().getUniverse(), getXObject()
                 .getUsername(), getXObject().getPassword());
     }
@@ -394,23 +398,24 @@ public class ViewBrowserMainPage extends AMainPage implements IXObjectModelListe
             XtentisPort port = getPort();
 
             boolean matchAllWords = this.matchAllWords.getSelection();
-			String[] results = port.quickSearch(
+            java.util.List<String> results = port.quickSearch(
                     new WSQuickSearch(new WSDataClusterPK(dataClusterCombo.getText()), getViewPK(), (""//$NON-NLS-1$
                             .equals(searchText.getText()) ? "*" : searchText.getText()), 10, // max Items//$NON-NLS-1$
                             0, // skip
                             Integer.MAX_VALUE, // spell threshold
-                            matchAllWords,
-                            null, null)).getStrings();
+                            matchAllWords, null, null)).getStrings();
 
-            resultsLabel.setText(Messages.bind(Messages.ViewBrowserMainPage_Results, results.length));
-            return results;
+            resultsLabel.setText(Messages.bind(Messages.ViewBrowserMainPage_Results, results.size()));
+            return results.toArray(new String[0]);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            if ((e.getLocalizedMessage() != null) && e.getLocalizedMessage().contains("10000"))//$NON-NLS-1$
+            if ((e.getLocalizedMessage() != null) && e.getLocalizedMessage().contains("10000")) {
                 MessageDialog.openError(this.getSite().getShell(), Messages.ViewBrowserMainPage_ErrorTitle4,
                         Messages.ViewBrowserMainPage_ErrorMsg4);
-            else if(!Util.handleConnectionException(this.getSite().getShell(), e, Messages.ViewBrowserMainPage_ErrorTitle5))
-                MessageDialog.openError(this.getSite().getShell(), Messages.ViewBrowserMainPage_ErrorTitle5, e.getLocalizedMessage());
+            } else if (!Util.handleConnectionException(this.getSite().getShell(), e, Messages.ViewBrowserMainPage_ErrorTitle5)) {
+                MessageDialog.openError(this.getSite().getShell(), Messages.ViewBrowserMainPage_ErrorTitle5,
+                        e.getLocalizedMessage());
+            }
             return null;
         } finally {
             try {
@@ -452,8 +457,9 @@ public class ViewBrowserMainPage extends AMainPage implements IXObjectModelListe
                 d.addListener(new Listener() {
 
                     public void handleEvent(Event event) {
-                        if (event.button == DOMViewDialog.BUTTON_CLOSE) // what else?
+                        if (event.button == DOMViewDialog.BUTTON_CLOSE) {
                             d.close();
+                        }
                     }
                 });
                 d.setBlockOnOpen(true);
@@ -497,8 +503,9 @@ public class ViewBrowserMainPage extends AMainPage implements IXObjectModelListe
             xml = emptyTags.matcher(xml).replaceAll("[$1]");//$NON-NLS-1$
             xml = openingTags.matcher(xml).replaceAll("[$1: ");//$NON-NLS-1$
             xml = closingTags.matcher(xml).replaceAll("]");//$NON-NLS-1$
-            if (xml.length() >= 150)
+            if (xml.length() >= 150) {
                 return xml.substring(0, 150) + "...";//$NON-NLS-1$
+            }
             return xml;
         }
 

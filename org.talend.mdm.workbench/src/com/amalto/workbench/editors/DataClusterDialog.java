@@ -13,9 +13,11 @@
 package com.amalto.workbench.editors;
 
 import java.net.URL;
-import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+
+import javax.xml.ws.WebServiceException;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -61,10 +63,9 @@ import com.amalto.workbench.webservices.WSItemPK;
 import com.amalto.workbench.webservices.WSRegexDataClusterPKs;
 import com.amalto.workbench.webservices.XtentisPort;
 
-
 /**
  * created by liusongbo on 2013-1-24
- *
+ * 
  */
 public class DataClusterDialog extends Dialog {
 
@@ -218,9 +219,9 @@ public class DataClusterDialog extends Dialog {
                 TreeObject dataContainer = (TreeObject) ssel.getFirstElement();
                 boolean refreshed = clusterComposite.changeToDataContainer(dataContainer);
 
-                if (refreshed)
+                if (refreshed) {
                     changeWidgetColor(defaultColor);
-                else {
+                } else {
                     changeWidgetColor(greyColor);
                     containerComboViewer.setInput(dataContainers);
                 }
@@ -256,10 +257,10 @@ public class DataClusterDialog extends Dialog {
         try {
             final XtentisPort port = Util.getPort(model);
             final WSItem wsItem = port.getItem(new WSGetItem(new WSItemPK((WSDataClusterPK) model.getWsKey(), lineItem
-                    .getConcept().trim(), lineItem.getIds())));
+                    .getConcept().trim(), Arrays.asList(lineItem.getIds()))));
             recordContent = Util.formatXsdSource(wsItem.getContent());
             textViewer.setText(recordContent);
-        } catch (RemoteException e) {
+        } catch (WebServiceException e) {
             log.error(e.getMessage(), e);
         } catch (XtentisException e) {
             log.error(e.getMessage(), e);
@@ -286,15 +287,13 @@ public class DataClusterDialog extends Dialog {
         String serverName = serverDef.getName();
         String endpointaddress = serverDef.getUrl();
 
-
         boolean canConnect = checkConnection(endpointaddress, username, password, universe);
         if (!canConnect) {
-            MessageDialog.openError(site.getShell(), Messages.DataClusterDialog_7,
-                    Messages.DataClusterDialog_8);
+            MessageDialog.openError(site.getShell(), Messages.DataClusterDialog_7, Messages.DataClusterDialog_8);
             return false;
         }
 
-        WSDataClusterPK[] xdcPKs = null;
+        List<WSDataClusterPK> xdcPKs = null;
         try {
             XtentisPort port = Util.getPort(new URL(endpointaddress), universe, username, password);
             TreeParent serverRoot = new TreeParent(serverName, null, TreeObject._SERVER_, endpointaddress,
@@ -302,15 +301,16 @@ public class DataClusterDialog extends Dialog {
                             : universe + "/") + username + ":" + (password == null ? "" : password));//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
 
             xdcPKs = port.getDataClusterPKs(new WSRegexDataClusterPKs("")).getWsDataClusterPKs();//$NON-NLS-1$
-            for (int i = 0; i < xdcPKs.length; i++) {
-                String name = xdcPKs[i].getPk();
+            for (WSDataClusterPK pk : xdcPKs) {
+                String name = pk.getPk();
                 if (!("CACHE".equals(name))) { //$NON-NLS-1$
                     WSDataCluster wsObject = null;
                     boolean retriveWSObject = false;
                     try {
-                        if (retriveWSObject)
-                            wsObject = port.getDataCluster(new WSGetDataCluster(xdcPKs[i]));
-                        TreeObject obj = new TreeObject(name, serverRoot, TreeObject.DATA_CLUSTER, xdcPKs[i], wsObject);
+                        if (retriveWSObject) {
+                            wsObject = port.getDataCluster(new WSGetDataCluster(pk));
+                        }
+                        TreeObject obj = new TreeObject(name, serverRoot, TreeObject.DATA_CLUSTER, pk, wsObject);
                         dataContainers.add(obj);
                     } catch (Exception e) {
                         log.error(e.getMessage(), e);

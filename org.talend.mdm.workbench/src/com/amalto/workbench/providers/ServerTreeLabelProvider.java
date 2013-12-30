@@ -121,7 +121,7 @@ public class ServerTreeLabelProvider extends ColumnLabelProvider implements ICol
                 } catch (Exception e) {
                 }
 
-                if (ws != null && ws.getDeactive() != null && ws.getDeactive().booleanValue()) {
+                if (ws != null && ws.isDeactive() != null && ws.isDeactive()) {
                     img = OverlayImageProvider.getImageWithStatus(img, EXObjectStatus.DEACTIVE);
                 }
             }

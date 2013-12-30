@@ -13,8 +13,10 @@
 package com.amalto.workbench.editors;
 
 import java.io.IOException;
-import java.rmi.RemoteException;
 import java.util.Arrays;
+import java.util.List;
+
+import javax.xml.ws.WebServiceException;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -55,7 +57,6 @@ import com.amalto.workbench.webservices.WSPutVersioningSystemConfiguration;
 import com.amalto.workbench.webservices.WSServiceGetDocument;
 import com.amalto.workbench.webservices.WSServicePutConfiguration;
 import com.amalto.workbench.webservices.WSServicesList;
-import com.amalto.workbench.webservices.WSServicesListItem;
 import com.amalto.workbench.webservices.WSString;
 import com.amalto.workbench.webservices.WSVersioningSystemConfiguration;
 import com.amalto.workbench.webservices.XtentisPort;
@@ -93,15 +94,11 @@ public class ServiceConfigrationMainPage extends AMainPageV2 {
 
     protected void setForConfigureContent(String serviceName) {
 
-        try {
-            if (serviceName != null && !"".equals(serviceName)) {//$NON-NLS-1$
-                document = port.getServiceDocument(new WSString(serviceName.trim()));
-                String documentConfigure = ServiceConfigrationMainPage.formartXml(document.getConfigure());
-                serviceConfigurationsText.setText(documentConfigure);
-                errorLabel.setText("");//$NON-NLS-1$
-            }
-        } catch (RemoteException e1) {
-            log.error(e1.getMessage(), e1);
+        if (serviceName != null && !"".equals(serviceName)) {//$NON-NLS-1$
+            document = port.getServiceDocument(new WSString(serviceName.trim()));
+            String documentConfigure = ServiceConfigrationMainPage.formartXml(document.getConfigure());
+            serviceConfigurationsText.setText(documentConfigure);
+            errorLabel.setText("");//$NON-NLS-1$
         }
 
     }
@@ -110,22 +107,26 @@ public class ServiceConfigrationMainPage extends AMainPageV2 {
         try {
             port = Util.getPort(getXObject());
             WSServicesList list = port.getServicesList(new WSGetServicesList(""));//$NON-NLS-1$
-            WSServicesListItem[] items = list.getItem();
+            List<WSServicesList.Item> items = list.getItem();
             if (items != null) {
-                String[] sortedList = new String[items.length];
-                for (int i = 0; i < items.length; i++) {
-                    sortedList[i] = items[i].getJndiName();
+                String[] sortedList = new String[items.size()];
+                for (int i = 0; i < items.size(); i++) {
+                    sortedList[i] = items.get(i).getJndiName();
                 }
                 Arrays.sort(sortedList);
                 for (int i = 0; i < sortedList.length; i++) {
                     WSServiceGetDocument doc = port.getServiceDocument(new WSString(sortedList[i].trim()));
-                    if (doc.getConfigureSchema() == null || doc.getConfigureSchema().length() == 0)
+                    if (doc.getConfigureSchema() == null || doc.getConfigureSchema().length() == 0) {
                         continue;
+                    }
                     serviceNameCombo.add(sortedList[i]);
                 }
             }
         } catch (Exception e) {
-            log.error(e.getMessage(), e);
+            if (!Util.handleConnectionException(getSite().getShell(), e, Messages.EditXObjectAction_ErrorMsg2)) {
+                MessageDialog.openError(getSite().getShell(), Messages._Error,
+                        Messages.bind(Messages.EditXObjectAction_ErrorMsg2, e.getLocalizedMessage()));
+            }
         }
 
     }
@@ -134,7 +135,7 @@ public class ServiceConfigrationMainPage extends AMainPageV2 {
         try {
             WSServiceGetDocument doc = getServiceDocument(serviceNameCombo.getText());
             return doc.getDefaultConfig();
-        } catch (RemoteException e) {
+        } catch (WebServiceException e) {
             log.error(e.getMessage(), e);
         }
         return null;
@@ -144,13 +145,13 @@ public class ServiceConfigrationMainPage extends AMainPageV2 {
         try {
             WSServiceGetDocument doc = getServiceDocument(serviceNameCombo.getText());
             return doc.getDescription();
-        } catch (RemoteException e) {
+        } catch (WebServiceException e) {
             log.error(e.getMessage(), e);
         }
         return null;
     }
 
-    protected WSServiceGetDocument getServiceDocument(String jndiName) throws RemoteException {
+    protected WSServiceGetDocument getServiceDocument(String jndiName) {
 
         // return port.getServiceDocument(new WSString(serviceNameCombo.getText().trim()));
         return port.getServiceDocument(new WSString(jndiName.trim()));
@@ -195,8 +196,9 @@ public class ServiceConfigrationMainPage extends AMainPageV2 {
             };
 
             public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
-                if (serviceNameCombo.getText().trim().length() == 0)
+                if (serviceNameCombo.getText().trim().length() == 0) {
                     return;
+                }
                 String doc = "";//$NON-NLS-1$
                 String desc = "";//$NON-NLS-1$
 
@@ -242,14 +244,16 @@ public class ServiceConfigrationMainPage extends AMainPageV2 {
         serviceConfigurationsText.addModifyListener(new ModifyListener() {
 
             public void modifyText(ModifyEvent e) {
-                if (isRefreshing())
+                if (isRefreshing()) {
                     return;
+                }
                 markDirtyWithoutCommit();
             }
         });
         checkButton = toolkit.createButton(serviceGroup, Messages.ServiceConfigrationMainPage_9, SWT.NONE);
         checkButton.addSelectionListener(new SelectionAdapter() {
 
+            @Override
             public void widgetSelected(SelectionEvent e) {
 
                 String msg = getContentsCheckResult();
@@ -345,29 +349,28 @@ public class ServiceConfigrationMainPage extends AMainPageV2 {
 
     protected String getContentsCheckResult() {
 
-        if (serviceNameCombo.getText().trim().length() == 0)
+        if (serviceNameCombo.getText().trim().length() == 0) {
             return CHECKMSG_NOSELECTION;
+        }
 
         WSCheckServiceConfigResponse result;
-        try {
-            result = port.checkServiceConfiguration(new WSCheckServiceConfigRequest(serviceNameCombo.getText().trim(),
-                    serviceConfigurationsText.getText()));
 
-            if (result.getCheckResult()) {
-                return CHECKMSG_SUCCESSFULCONN;
-            } else {
-                return CHECKMSG_ERRORCONN;
-            }
-        } catch (RemoteException e) {
-            log.error(e.getMessage(), e);
-            return e.getLocalizedMessage();
+        result = port.checkServiceConfiguration(new WSCheckServiceConfigRequest(serviceNameCombo.getText().trim(),
+                serviceConfigurationsText.getText()));
+
+        if (result.isCheckResult()) {
+            return CHECKMSG_SUCCESSFULCONN;
+        } else {
+            return CHECKMSG_ERRORCONN;
         }
+
     }
 
     private String checkValidXML() {
 
-        if (serviceConfigurationsText == null)
+        if (serviceConfigurationsText == null) {
             return null;
+        }
 
         StringInputStream inStream = null;
 
@@ -377,12 +380,13 @@ public class ServiceConfigrationMainPage extends AMainPageV2 {
         } catch (Exception e) {
             return e.getMessage();
         } finally {
-            if (inStream != null)
+            if (inStream != null) {
                 try {
                     inStream.close();
                 } catch (IOException e) {
 
                 }
+            }
         }
 
         return null;

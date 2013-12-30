@@ -12,7 +12,6 @@
 // ============================================================================
 package com.amalto.workbench.dialogs;
 
-import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -145,6 +144,7 @@ public class DOMViewDialog extends Dialog implements IKeyWordProvider {
         setShellStyle(getShellStyle() | SWT.RESIZE | SWT.MAX);
     }
 
+    @Override
     protected Control createDialogArea(Composite parent) {
 
         try {
@@ -184,8 +184,9 @@ public class DOMViewDialog extends Dialog implements IKeyWordProvider {
                         if (node == null) {
                             try {
 
-                                if (sourceViewer == null || sourceViewer.getDocument() == null)
+                                if (sourceViewer == null || sourceViewer.getDocument() == null) {
                                     return;
+                                }
                                 node = Util.parse(sourceViewer.getText());
 
                             } catch (Exception ex) {
@@ -250,8 +251,9 @@ public class DOMViewDialog extends Dialog implements IKeyWordProvider {
             tiSource.setControl(sourceViewer.getControl());
 
             tabFolder.setSelection(firstTab);
-            if (firstTab == SOURCE_VIEWER)
+            if (firstTab == SOURCE_VIEWER) {
                 node = null; // force refresh of tree
+            }
 
             return composite;
         } catch (Exception e) {
@@ -282,8 +284,9 @@ public class DOMViewDialog extends Dialog implements IKeyWordProvider {
     private Map<String, String[]> keyWordMap = new HashMap<String, String[]>();
 
     private void updateKeyMap(String dataModelName) {
-        if (dataModelName == null || port == null)
+        if (dataModelName == null || port == null) {
             return;
+        }
         if (keyWordMap.get(dataModelName) == null) {
             WSGetDataModel wsGetModel = new WSGetDataModel(new WSDataModelPK(dataModelName));
             try {
@@ -298,8 +301,6 @@ public class DOMViewDialog extends Dialog implements IKeyWordProvider {
                         keyWordMap.put(dataModelName, keys);
                     }
                 }
-            } catch (RemoteException ex) {
-                log.error(ex.getMessage(), ex);
             } catch (Exception ex) {
                 log.error(ex.getMessage(), ex);
             }
@@ -341,6 +342,7 @@ public class DOMViewDialog extends Dialog implements IKeyWordProvider {
         }
     }
 
+    @Override
     protected void createButtonsForButtonBar(Composite parent) {
 
         if (!editable) {
@@ -355,6 +357,7 @@ public class DOMViewDialog extends Dialog implements IKeyWordProvider {
             dataModelCombo.select(-1);
             dataModelCombo.addSelectionListener(new SelectionAdapter() {
 
+                @Override
                 public void widgetSelected(SelectionEvent e) {
                     String dataModelName = dataModelCombo.getText();
                     updateKeyMap(dataModelName);
@@ -377,6 +380,7 @@ public class DOMViewDialog extends Dialog implements IKeyWordProvider {
         }
     }
 
+    @Override
     protected void buttonPressed(int buttonId) {
         this.buttonPressed = buttonId;
 
@@ -445,8 +449,9 @@ public class DOMViewDialog extends Dialog implements IKeyWordProvider {
         }
 
         public Object[] getChildren(Object parent) {
-            if (parent instanceof Document)
+            if (parent instanceof Document) {
                 return new Object[] { ((Document) parent).getDocumentElement() };
+            }
 
             if (parent instanceof Element) {
                 Element e = (Element) parent;
@@ -459,23 +464,27 @@ public class DOMViewDialog extends Dialog implements IKeyWordProvider {
                 // Sub-Elements
                 NodeList nl = ((Element) parent).getChildNodes();
                 for (int i = 0; i < nl.getLength(); i++) {
-                    if (nl.item(i) instanceof Element)
+                    if (nl.item(i) instanceof Element) {
                         list.add(nl.item(i));
+                    }
                 }
-                if (list.size() == 0)
+                if (list.size() == 0) {
                     return null;
-                else
+                } else {
                     return list.toArray(new Node[list.size()]);
+                }
             }
 
             return null;
         }
 
         public boolean hasChildren(Object parent) {
-            if (parent instanceof Document)
+            if (parent instanceof Document) {
                 return true;
-            if (parent instanceof Element)
+            }
+            if (parent instanceof Element) {
                 return (((Element) parent).getChildNodes().getLength() + ((Element) parent).getAttributes().getLength()) > 1;
+            }
             return false;
         }
 
@@ -489,24 +498,28 @@ public class DOMViewDialog extends Dialog implements IKeyWordProvider {
      */
     class DOMTreeLabelProvider extends LabelProvider {
 
+        @Override
         public String getText(Object obj) {
             if (obj instanceof Node) {
                 Node e = (Node) obj;
-                if (e.getChildNodes().getLength() > 1)
+                if (e.getChildNodes().getLength() > 1) {
                     return e.getLocalName();
-                else
+                } else {
                     return e.getLocalName() + ": " + e.getTextContent();//$NON-NLS-1$
+                }
             }
             return "?? " + obj.getClass().getName() + " : " + obj.toString();//$NON-NLS-1$//$NON-NLS-2$
 
         }
 
+        @Override
         public Image getImage(Object obj) {
             if (obj instanceof Element) {
-                if (((Element) obj).getChildNodes().getLength() > 1)
+                if (((Element) obj).getChildNodes().getLength() > 1) {
                     return PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_FOLDER);
-                else
+                } else {
                     return PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_ELEMENT);
+                }
             } else if (obj instanceof Node) {
                 return ImageCache.getImage("icons/attribute.gif").createImage();//$NON-NLS-1$
             }

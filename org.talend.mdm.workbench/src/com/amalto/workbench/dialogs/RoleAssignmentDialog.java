@@ -12,7 +12,6 @@
 // ============================================================================
 package com.amalto.workbench.dialogs;
 
-import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -40,9 +39,8 @@ import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.webservices.WSGetRole;
 import com.amalto.workbench.webservices.WSPutRole;
 import com.amalto.workbench.webservices.WSRole;
+import com.amalto.workbench.webservices.WSRole.Specification.Instance;
 import com.amalto.workbench.webservices.WSRolePK;
-import com.amalto.workbench.webservices.WSRoleSpecification;
-import com.amalto.workbench.webservices.WSRoleSpecificationInstance;
 import com.amalto.workbench.webservices.XtentisPort;
 import com.amalto.workbench.widgets.ComplexTableViewer;
 import com.amalto.workbench.widgets.ComplexTableViewerColumn;
@@ -82,6 +80,7 @@ public class RoleAssignmentDialog extends Dialog {
         this.outBuffer = outBuffer;
     }
 
+    @Override
     protected Control createDialogArea(Composite parent) {
         Composite composite = (Composite) super.createDialogArea(parent);
         parent.getShell().setText(this.title);
@@ -106,26 +105,28 @@ public class RoleAssignmentDialog extends Dialog {
             }
         });
 
-        if(Util.IsEnterPrise()){
-	        Label infoLabel = new Label(composite, SWT.NONE);
-	        infoLabel.setText(Messages.RoleAssignmentDialog_RoleAccessDefinition);
-	        ComplexTableViewerColumn ruleColumn = roleConfigurationColumns[0];
-	        ruleColumn.setColumnWidth(250);
-	        // List<String> roles=Util.getCachedXObjectsNameSet(page.getXObject(), TreeObject.ROLE);
-	        List<String> roles = Util.getChildren(root.getServerRoot(), TreeObject.ROLE);
-	        ruleColumn.setComboValues(roles.toArray(new String[] {}));
-	        ComplexTableViewerColumn acsColumn = roleConfigurationColumns[1];
-	        acsColumn.setColumnWidth(250);
-	        acsColumn.setComboValues(new String[] { Messages.RoleAssignmentDialog_ReadOnly, Messages.RoleAssignmentDialog_ReadWrite });
-	        FormToolkit toolkit = WidgetFactory.getWidgetFactory();
-	        complexTableViewer = new ComplexTableViewer(Arrays.asList(roleConfigurationColumns), toolkit, composite);
-	        complexTableViewer.setKeyColumns(new ComplexTableViewerColumn[] { roleConfigurationColumns[0] });
-	        complexTableViewer.create();
-	        complexTableViewer.getViewer().setInput(new ArrayList<Line>());
+        if (Util.IsEnterPrise()) {
+            Label infoLabel = new Label(composite, SWT.NONE);
+            infoLabel.setText(Messages.RoleAssignmentDialog_RoleAccessDefinition);
+            ComplexTableViewerColumn ruleColumn = roleConfigurationColumns[0];
+            ruleColumn.setColumnWidth(250);
+            // List<String> roles=Util.getCachedXObjectsNameSet(page.getXObject(), TreeObject.ROLE);
+            List<String> roles = Util.getChildren(root.getServerRoot(), TreeObject.ROLE);
+            ruleColumn.setComboValues(roles.toArray(new String[] {}));
+            ComplexTableViewerColumn acsColumn = roleConfigurationColumns[1];
+            acsColumn.setColumnWidth(250);
+            acsColumn.setComboValues(new String[] { Messages.RoleAssignmentDialog_ReadOnly,
+                    Messages.RoleAssignmentDialog_ReadWrite });
+            FormToolkit toolkit = WidgetFactory.getWidgetFactory();
+            complexTableViewer = new ComplexTableViewer(Arrays.asList(roleConfigurationColumns), toolkit, composite);
+            complexTableViewer.setKeyColumns(new ComplexTableViewerColumn[] { roleConfigurationColumns[0] });
+            complexTableViewer.create();
+            complexTableViewer.getViewer().setInput(new ArrayList<Line>());
         }
         return composite;
     }
 
+    @Override
     protected Control createButtonBar(Composite parent) {
         Control bar = super.createButtonBar(parent);
         this.getButton(IDialogConstants.OK_ID).setEnabled(false);
@@ -136,38 +137,37 @@ public class RoleAssignmentDialog extends Dialog {
     protected void okPressed() {
         // no close let Action Handler handle it
         outBuffer.append(instanceNameText.getText().trim());
-        if(Util.IsEnterPrise()){
-	        List<Line> inputs = (List<Line>) complexTableViewer.getViewer().getInput();
-	        List<RoleEntry> list = roleEntries.get();
-	        RoleEntry entry = new RoleEntry(inputs, instanceNameText.getText().trim(), typeName);
-	        list.add(entry);
+        if (Util.IsEnterPrise()) {
+            List<Line> inputs = (List<Line>) complexTableViewer.getViewer().getInput();
+            List<RoleEntry> list = roleEntries.get();
+            RoleEntry entry = new RoleEntry(inputs, instanceNameText.getText().trim(), typeName);
+            list.add(entry);
         }
         super.okPressed();
     }
 
-    public static void doSave(XtentisPort port, String ObjectName, String type) throws RemoteException {
-        if (roleEntries == null)
+    public static void doSave(XtentisPort port, String ObjectName, String type) {
+        if (roleEntries == null) {
             return;
+        }
         List<RoleEntry> list = roleEntries.get();
         for (RoleEntry entry : list) {
-            if (!entry.getInstanceName().equalsIgnoreCase(ObjectName) || entry.getType() != type)
+            if (!entry.getInstanceName().equalsIgnoreCase(ObjectName) || entry.getType() != type) {
                 continue;
+            }
             for (Line line : entry.getInputList()) {
                 List<KeyValue> keyValues = line.keyValues;
                 String roleName = keyValues.get(0).value;
                 WSGetRole getRole = new WSGetRole();
                 getRole.setWsRolePK(new WSRolePK(roleName));
                 WSRole role = port.getRole(getRole);
-                for (WSRoleSpecification spec : role.getSpecification()) {
+                for (WSRole.Specification spec : role.getSpecification()) {
                     if (spec.getObjectType().equals(entry.getType())) {
-                        WSRoleSpecificationInstance[] specInstance = spec.getInstance();
-                        WSRoleSpecificationInstance newInstance = new WSRoleSpecificationInstance();
+                        Instance newInstance = new Instance();
                         newInstance.setInstanceName(ObjectName);
-                        newInstance.setWritable(keyValues.get(1).value.equals(Messages.RoleAssignmentDialog_ReadOnly) ? false : true);
-                        WSRoleSpecificationInstance[] newSpecInstance = new WSRoleSpecificationInstance[specInstance.length + 1];
-                        System.arraycopy(specInstance, 0, newSpecInstance, 0, specInstance.length);
-                        newSpecInstance[specInstance.length] = newInstance;
-                        spec.setInstance(newSpecInstance);
+                        newInstance.setWritable(keyValues.get(1).value.equals(Messages.RoleAssignmentDialog_ReadOnly) ? false
+                                : true);
+                        spec.getInstance().add(newInstance);
                         break;
                     }
                 }

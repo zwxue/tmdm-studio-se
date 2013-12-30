@@ -12,8 +12,6 @@
 // ============================================================================
 package com.amalto.workbench.widgets.xmleditor.infoholder;
 
-import java.rmi.RemoteException;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -32,12 +30,7 @@ public class MDMServerInfoHolder extends ExternalInfoHolder<WSMDMConfig> {
 
     @Override
     public WSMDMConfig getExternalInfo() {
-        try {
-            return port.getMDMConfiguration();
-        } catch (RemoteException e) {
-            log.error(e.getMessage(), e);
-            return null;
-        }
+        return port.getMDMConfiguration();
     }
 
     @Override

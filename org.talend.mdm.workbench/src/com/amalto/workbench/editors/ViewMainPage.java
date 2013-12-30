@@ -13,7 +13,6 @@
 package com.amalto.workbench.editors;
 
 import java.lang.reflect.InvocationTargetException;
-import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -117,7 +116,8 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener {
     // private TisTableViewer conditionViewer;
 
     public ViewMainPage(FormEditor editor) {
-        super(editor, ViewMainPage.class.getName(), Messages.ViewMainPage_View + ((XObjectEditorInput) editor.getEditorInput()).getName()
+        super(editor, ViewMainPage.class.getName(), Messages.ViewMainPage_View
+                + ((XObjectEditorInput) editor.getEditorInput()).getName()
                 + Util.getRevision((TreeObject) ((XObjectEditorInput) editor.getEditorInput()).getModel()));
         // this.treeParent = this.getXObject().getParent();
         Object model = ((XObjectEditorInput) editor.getEditorInput()).getModel();
@@ -125,7 +125,7 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener {
 
     }
 
-    protected void initProcessCombo() throws RemoteException, XtentisException {
+    protected void initProcessCombo() throws XtentisException {
         java.util.List<String> pList = new ArrayList<String>();
         WSTransformerPKArray array = Util.getPort(getXObject()).getTransformerPKs(new WSGetTransformerPKs("")); //$NON-NLS-1$
         if (array != null && array.getWsTransformerPK() != null) {
@@ -133,13 +133,15 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener {
                 pList.add(pk.getPk());
             }
         }
-        cboProcessList.setItems((String[]) pList.toArray(new String[pList.size()]));
+        cboProcessList.setItems(pList.toArray(new String[pList.size()]));
     }
 
+    @Override
     protected void createCharacteristicsContent(FormToolkit toolkit, Composite charComposite) {
 
         try {
-            desAntionComposite = new DescAnnotationComposite(Messages.ViewMainPage_Description, " ...", toolkit, charComposite, (AMainPageV2) this, //$NON-NLS-1$
+            desAntionComposite = new DescAnnotationComposite(Messages.ViewMainPage_Description,
+                    " ...", toolkit, charComposite, this, //$NON-NLS-1$
                     false);
             Composite comp = toolkit.createComposite(charComposite);
             GridLayout layout = new GridLayout(2, false);
@@ -248,11 +250,13 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener {
         return new TisTableViewer(columns, toolkit, parent);
     }
 
+    @Override
     protected void refreshData() {
         try {
 
-            if (this.comitting)
+            if (this.comitting) {
                 return;
+            }
 
             this.refreshing = true;
 
@@ -260,7 +264,7 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener {
 
             desAntionComposite.setText(wsObject.getDescription() == null ? "" : wsObject.getDescription());//$NON-NLS-1$
 
-            btnRunProcess.setSelection(wsObject.getIsTransformerActive().is_true());
+            btnRunProcess.setSelection(wsObject.getIsTransformerActive().isTrue());
             if (btnRunProcess.getSelection()) {
                 cboProcessList.setEnabled(true);
                 cboProcessList.setText(wsObject.getTransformerPK());
@@ -270,7 +274,7 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener {
             }
 
             java.util.List<Line> vlines = new ArrayList<Line>();
-            String[] vis = wsObject.getViewableBusinessElements();
+            java.util.List<String> vis = wsObject.getViewableBusinessElements();
             if (vis != null) {
                 for (String vi : vis) {
                     String strings[] = new String[] { vi };
@@ -281,7 +285,7 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener {
             viewableViewer.getViewer().setInput(vlines);
 
             java.util.List<Line> slines = new ArrayList<Line>();
-            String[] ses = wsObject.getSearchableBusinessElements();
+            java.util.List<String> ses = wsObject.getSearchableBusinessElements();
             if (ses != null) {
                 for (String se : ses) {
                     String strings[] = new String[] { se };
@@ -320,50 +324,44 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener {
             }
         } catch (XtentisException e) {
             log.error(e.getMessage(), e);
-        } catch (RemoteException e) {
-            log.error(e.getMessage(), e);
         }
         return wsObject;
     }
 
+    @Override
     protected void commit() {
         try {
 
-            if (this.refreshing)
+            if (this.refreshing) {
                 return;
+            }
 
             this.comitting = true;
-
-            WSView wsObject = (WSView) getWsViewObject();
+            WSView wsObject = getWsViewObject();
             wsObject.setDescription(desAntionComposite.getText());
             wsObject.setIsTransformerActive(new WSBoolean(btnRunProcess.getSelection()));
             wsObject.setTransformerPK(cboProcessList.getText());
             java.util.List<Line> vlines = (java.util.List<Line>) viewableViewer.getViewer().getInput();
-            String[] vvs = new String[vlines.size()];
-            for (int j = 0; j < vlines.size(); j++) {
-                Line item = vlines.get(j);
-                vvs[j] = item.keyValues.get(0).value;
+            wsObject.getViewableBusinessElements().clear();
+            for (Line item : vlines) {
+                wsObject.getViewableBusinessElements().add(item.keyValues.get(0).value);
             }
-            wsObject.setViewableBusinessElements(vvs);
 
             java.util.List<Line> slines = (java.util.List<Line>) searchableViewer.getViewer().getInput();
-            String[] svs = new String[slines.size()];
-
-            for (int j = 0; j < slines.size(); j++) {
-                Line item = slines.get(j);
-                svs[j] = item.keyValues.get(0).value;
+            wsObject.getSearchableBusinessElements().clear();
+            for (Line item : slines) {
+                wsObject.getSearchableBusinessElements().add(item.keyValues.get(0).value);
             }
-            wsObject.setSearchableBusinessElements(svs);
 
             java.util.List<Line> lines = (java.util.List<Line>) conditionViewer.getViewer().getInput();
             java.util.List<WSWhereCondition> wclist = new ArrayList<WSWhereCondition>();
+            wsObject.getWhereConditions().clear();
             for (Line item : lines) {
                 String[] values = new String[] { item.keyValues.get(0).value, item.keyValues.get(1).value,
                         item.keyValues.get(2).value, item.keyValues.get(3).value };
                 WSWhereCondition wc = Util.convertLine(values);
-                wclist.add(wc);
+                wsObject.getWhereConditions().add(wc);
             }
-            wsObject.setWhereConditions(wclist.toArray(new WSWhereCondition[wclist.size()]));
 
             this.comitting = false;
 
@@ -378,11 +376,11 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener {
         return Util.getDataModel(this.getXObject(), null, concept);
     }
 
-    protected WSConceptKey getBusinessConceptKey(WSGetBusinessConceptKey businessConcepKey) throws RemoteException,
-            XtentisException {
+    protected WSConceptKey getBusinessConceptKey(WSGetBusinessConceptKey businessConcepKey) throws XtentisException {
         return Util.getPort(getXObject()).getBusinessConceptKey(businessConcepKey);
     }
 
+    @Override
     public void doSave(IProgressMonitor monitor) {
         super.doSave(monitor);
         if (this.viewName != null && this.viewName.length() > 0) {
@@ -390,8 +388,9 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener {
                 // lastDataModelName=XpathSelectDialog.getDataModelName();
                 String concept = viewName.replaceAll("Browse_items_", "").replaceAll("#.*", "");//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$
                 java.util.List<String> avaiList = getAvailableDataModel();
-                if (avaiList.size() > 0)
+                if (avaiList.size() > 0) {
                     lastDataModelName = avaiList.get(0);
+                }
                 if (concept != null && concept.length() > 0 && lastDataModelName != null && lastDataModelName.length() > 0) {
                     // if(concept!=null&&concept.length()>0&&lastDataModelName!=null&&lastDataModelName.length()>0){
 
@@ -403,8 +402,6 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener {
                     WSConceptKey wsConceptKey = null;
                     try {
                         wsConceptKey = getBusinessConceptKey(wsGetBusinessConceptKey);
-                    } catch (RemoteException e) {
-                        log.error(e.getMessage(), e);
                     } catch (XtentisException e) {
                         log.error(e.getMessage(), e);
                     }
@@ -418,17 +415,17 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener {
                             viewableList.add(item.keyValues.get(0).value);
                         }
 
-                        String[] keys = wsConceptKey.getFields();
-                        for (int i = 0; i < keys.length; i++) {
-                            if (".".equals(wsConceptKey.getSelector()))//$NON-NLS-1$
-                                keys[i] = "/" + concept + "/" + keys[i];//$NON-NLS-1$//$NON-NLS-2$
-                            else
-                                keys[i] = wsConceptKey.getSelector() + keys[i];
+                        java.util.List<String> keys = wsConceptKey.getFields();
+                        for (int i = 0; i < keys.size(); i++) {
+                            if (".".equals(wsConceptKey.getSelector())) {
+                                keys.set(i, "/" + concept + "/" + keys.get(i));//$NON-NLS-1$//$NON-NLS-2$
+                            } else {
+                                keys.set(i, wsConceptKey.getSelector() + keys.get(i));
+                            }
                         }
 
-                        String[] ids = wsConceptKey.getFields();
-                        for (int i = 0; i < ids.length; i++) {
-                            String id = ids[i];
+                        java.util.List<String> ids = wsConceptKey.getFields();
+                        for (String id : ids) {
 
                             // need to care about more case
                             if (id.startsWith("/")) {//$NON-NLS-1$
@@ -473,6 +470,7 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener {
 
     }
 
+    @Override
     protected void createActions() {
     }
 
@@ -480,15 +478,18 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener {
         markDirtyWithoutCommit();
     }
 
+    @Override
     public void dispose() {
         super.dispose();
         windowTarget.dispose();
     }
 
     // description text listener
+    @Override
     public void modifyText(ModifyEvent e) {
-        if (this.refreshing)
+        if (this.refreshing) {
             return;
+        }
         super.modifyText(e);
     }
 
@@ -510,17 +511,19 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener {
 
         public void dragSetData(DragSourceEvent event) {
             Control control = ((DragSource) event.widget).getControl();
-            if ((control instanceof List))
+            if ((control instanceof List)) {
                 if (TextTransfer.getInstance().isSupportedType(event.dataType)) {
                     this.selected = ((List) control).getSelectionIndex();
                     event.data = ((List) control).getSelection()[0];
                 }
+            }
         }
 
         public void dragStart(DragSourceEvent event) {
             Control control = ((DragSource) event.widget).getControl();
-            if ((control instanceof List))
+            if ((control instanceof List)) {
                 event.doit = (((List) control).getItemCount() > 0);
+            }
         }
     }
 
@@ -528,12 +531,13 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener {
 
         public void dragEnter(DropTargetEvent event) {
             // priority to copy
-            if ((event.operations & DND.DROP_COPY) == DND.DROP_COPY)
+            if ((event.operations & DND.DROP_COPY) == DND.DROP_COPY) {
                 event.detail = DND.DROP_COPY;
-            else if ((event.operations & DND.DROP_MOVE) == DND.DROP_MOVE)
+            } else if ((event.operations & DND.DROP_MOVE) == DND.DROP_MOVE) {
                 event.detail = DND.DROP_MOVE;
-            else
+            } else {
                 event.detail = DND.DROP_NONE;
+            }
         }
 
         public void dragLeave(DropTargetEvent event) {
@@ -547,12 +551,14 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener {
 
         public void drop(DropTargetEvent event) {
             Control control = ((DropTarget) event.widget).getControl();
-            if ((control instanceof List) && ((event.operations & DND.DROP_COPY) == DND.DROP_COPY))
-                if (TextTransfer.getInstance().isSupportedType(event.currentDataType))
+            if ((control instanceof List) && ((event.operations & DND.DROP_COPY) == DND.DROP_COPY)) {
+                if (TextTransfer.getInstance().isSupportedType(event.currentDataType)) {
                     if (!Arrays.asList(((List) control).getItems()).contains(event.data)) {
                         ((List) control).add((String) event.data);
                         ViewMainPage.this.markDirtyWithoutCommit();
                     }
+                }
+            }
         }
 
         public void dropAccept(DropTargetEvent event) {
@@ -603,18 +609,20 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener {
     }
 
     public boolean equals(WSWhereCondition wcObj, WSWhereCondition obj) {
-        if (wcObj.getLeftPath().equals(obj.getLeftPath()) && wcObj.getOperator().getValue().equals(obj.getOperator().getValue())
+        if (wcObj.getLeftPath().equals(obj.getLeftPath()) && wcObj.getOperator().value().equals(obj.getOperator().value())
                 && wcObj.getRightValueOrPath().equals(obj.getRightValueOrPath())
-                && wcObj.getStringPredicate().getValue().equals(obj.getStringPredicate().getValue()))
+                && wcObj.getStringPredicate().value().equals(obj.getStringPredicate().value())) {
             return true;
-        else
+        } else {
             return false;
+        }
     }
 
     @Override
     public boolean beforeDoSave() {
         if (desAntionComposite.getText().trim().equals("")) {//$NON-NLS-1$en
-            MessageDialog.openError(this.getSite().getShell(), Messages.ViewMainPage_ErrorSaving, Messages.ViewMainPage_DescriptionCannotbeEmpty);
+            MessageDialog.openError(this.getSite().getShell(), Messages.ViewMainPage_ErrorSaving,
+                    Messages.ViewMainPage_DescriptionCannotbeEmpty);
             return false;
         }
         java.util.List<Line> input = (java.util.List<Line>) viewableViewer.getViewer().getInput();

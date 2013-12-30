@@ -14,7 +14,6 @@ package com.amalto.workbench.providers;
 
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
-import java.rmi.RemoteException;
 import java.util.List;
 
 import org.apache.commons.logging.Log;
@@ -64,7 +63,7 @@ import com.amalto.workbench.webservices.WSStoredProcedurePK;
 import com.amalto.workbench.webservices.WSTransformerV2;
 import com.amalto.workbench.webservices.WSTransformerV2PK;
 import com.amalto.workbench.webservices.WSUniverse;
-import com.amalto.workbench.webservices.WSUniverseXtentisObjectsRevisionIDs;
+import com.amalto.workbench.webservices.WSUniverse.XtentisObjectsRevisionIDs;
 import com.amalto.workbench.webservices.WSVersion;
 import com.amalto.workbench.webservices.WSView;
 import com.amalto.workbench.webservices.WSViewPK;
@@ -119,7 +118,8 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
             if (password == null || password.length() == 0) {
                 throw new Exception(Messages.XtentisServerObjectsRetriever_0);
             }
-            monitor.beginTask(Messages.bind(Messages.XtentisServerObjectsRetriever_1, IConstants.TALEND), Messages.XtentisServerObjectsRetriever_3.equals(username) ? 12 : 9);
+            monitor.beginTask(Messages.bind(Messages.XtentisServerObjectsRetriever_1, IConstants.TALEND),
+                    Messages.XtentisServerObjectsRetriever_3.equals(username) ? 12 : 9);
             // server
             serverRoot = new TreeParent(serverName, null, TreeObject._SERVER_, endpointaddress, ("".equals(universe) ? ""//$NON-NLS-1$//$NON-NLS-2$
                     : universe + "/") + username + ":" + (password == null ? "" : password));//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
@@ -138,7 +138,7 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
 
             // fetch version info
             try {
-                WSVersion version = port.getComponentVersion(new WSGetComponentVersion(WSComponent.DataManager, null));
+                WSVersion version = port.getComponentVersion(new WSGetComponentVersion(WSComponent.DATA_MANAGER, null));
                 String versionStr = version.getMajor() + "." + version.getMinor() + "." + version.getRevision() + "_" //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
                         + version.getBuild();
                 log.info("Server version = " + versionStr); //$NON-NLS-1$
@@ -146,8 +146,9 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
                 log.error(e.getMessage(), e);
             }
 
-            if (monitor.isCanceled())
+            if (monitor.isCanceled()) {
                 throw new InterruptedException(Messages.XtentisServerObjectsRetriever_6);
+            }
 
             monitor.subTask(Messages.XtentisServerObjectsRetriever_7);
             UserInfo user = new UserInfo();
@@ -163,7 +164,7 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
             // Data Models
             TreeParent models = new TreeParent(EXtentisObjects.DataMODEL.getDisplayName(), serverRoot, TreeObject.DATA_MODEL,
                     null, null);
-            WSDataModelPK[] xdmPKs = null;
+            List<WSDataModelPK> xdmPKs = null;
             try {
                 xdmPKs = port.getDataModelPKs(new WSRegexDataModelPKs("")).getWsDataModelPKs(); //$NON-NLS-1$
             } catch (Exception e) {
@@ -172,25 +173,27 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
             }
             if (xdmPKs != null) {
                 monitor.subTask(Messages.XtentisServerObjectsRetriever_8);
-                for (int i = 0; i < xdmPKs.length; i++) {
-                    String name = xdmPKs[i].getPk();
+                for (WSDataModelPK pk : xdmPKs) {
+                    String name = pk.getPk();
                     if (!name.startsWith("XMLSCHEMA")) {//$NON-NLS-1$
                         WSDataModel wsobj = null;
-                        if (retriveWSObject)
-                            wsobj = port.getDataModel(new WSGetDataModel(xdmPKs[i]));
-                        TreeObject obj = new TreeObject(name, serverRoot, TreeObject.DATA_MODEL, xdmPKs[i], wsobj);
+                        if (retriveWSObject) {
+                            wsobj = port.getDataModel(new WSGetDataModel(pk));
+                        }
+                        TreeObject obj = new TreeObject(name, serverRoot, TreeObject.DATA_MODEL, pk, wsobj);
                         models.addChild(obj);
                     }
                 }
             }
             monitor.worked(1);
-            if (monitor.isCanceled())
+            if (monitor.isCanceled()) {
                 throw new InterruptedException(Messages.XtentisServerObjectsRetriever_9);
+            }
 
             // DataClusters
             TreeParent dataClusters = new TreeParent(EXtentisObjects.DataCluster.getDisplayName(), serverRoot,
                     TreeObject.DATA_CLUSTER, null, null);
-            WSDataClusterPK[] xdcPKs = null;
+            List<WSDataClusterPK> xdcPKs = null;
             try {
                 xdcPKs = port.getDataClusterPKs(new WSRegexDataClusterPKs("")).getWsDataClusterPKs();//$NON-NLS-1$
             } catch (Exception e) {
@@ -198,14 +201,15 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
             }
             if (xdcPKs != null) {
                 monitor.subTask(Messages.XtentisServerObjectsRetriever_10);
-                for (int i = 0; i < xdcPKs.length; i++) {
-                    String name = xdcPKs[i].getPk();
+                for (WSDataClusterPK pk : xdcPKs) {
+                    String name = pk.getPk();
                     if (!("CACHE".equals(name))) { // FIXME: Hardcoded CACHE//$NON-NLS-1$
                         WSDataCluster wsObject = null;
                         try {
-                            if (retriveWSObject)
-                                wsObject = port.getDataCluster(new WSGetDataCluster(xdcPKs[i]));
-                            TreeObject obj = new TreeObject(name, serverRoot, TreeObject.DATA_CLUSTER, xdcPKs[i], wsObject);
+                            if (retriveWSObject) {
+                                wsObject = port.getDataCluster(new WSGetDataCluster(pk));
+                            }
+                            TreeObject obj = new TreeObject(name, serverRoot, TreeObject.DATA_CLUSTER, pk, wsObject);
                             dataClusters.addChild(obj);
                         } catch (Exception e) {
                             log.error(e.getMessage(), e);
@@ -214,8 +218,9 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
                 }
             }
             monitor.worked(1);
-            if (monitor.isCanceled())
+            if (monitor.isCanceled()) {
                 throw new InterruptedException(Messages.XtentisServerObjectsRetriever_11);
+            }
             // event management
             TreeParent eventManagement = new TreeParent(EXtentisObjects.EventManagement.getDisplayName(), serverRoot,
                     TreeObject.EVENT_MANAGEMENT, null, null);
@@ -226,7 +231,7 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
             eventManagement.addChild(engine);
 
             // transformer
-            WSTransformerV2PK[] transformerPKs = null;
+            List<WSTransformerV2PK> transformerPKs = null;
             try {
                 transformerPKs = port.getTransformerV2PKs(new WSGetTransformerV2PKs("")).getWsTransformerV2PK();//$NON-NLS-1$
             } catch (Exception e) {
@@ -238,11 +243,12 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
             eventManagement.addChild(transformers);
             if (transformerPKs != null) {
                 monitor.subTask(Messages.XtentisServerObjectsRetriever_12);
-                for (int i = 0; i < transformerPKs.length; i++) {
-                    String id = transformerPKs[i].getPk();
+                for (WSTransformerV2PK pk : transformerPKs) {
+                    String id = pk.getPk();
                     WSTransformerV2 wsobject = null;
-                    if (retriveWSObject)
-                        wsobject = port.getTransformerV2(new WSGetTransformerV2(transformerPKs[i]));
+                    if (retriveWSObject) {
+                        wsobject = port.getTransformerV2(new WSGetTransformerV2(pk));
+                    }
                     TreeObject obj = new TreeObject(id, serverRoot, TreeObject.TRANSFORMER, new WSTransformerV2PK(id), wsobject);
                     transformers.addChild(obj);
                 }
@@ -250,7 +256,7 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
             monitor.worked(1);
 
             // routing rule
-            WSRoutingRulePK[] routingRulePKs = null;
+            List<WSRoutingRulePK> routingRulePKs = null;
             try {
                 routingRulePKs = port.getRoutingRulePKs(new WSGetRoutingRulePKs("")).getWsRoutingRulePKs();//$NON-NLS-1$
             } catch (Exception e) {
@@ -261,11 +267,12 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
             eventManagement.addChild(rules);
             if (routingRulePKs != null) {
                 monitor.subTask(Messages.XtentisServerObjectsRetriever_13);
-                for (int i = 0; i < routingRulePKs.length; i++) {
-                    String id = routingRulePKs[i].getPk();
+                for (WSRoutingRulePK pk : routingRulePKs) {
+                    String id = pk.getPk();
                     WSRoutingRule wsobject = null;
-                    if (retriveWSObject)
-                        wsobject = port.getRoutingRule(new WSGetRoutingRule(routingRulePKs[i]));
+                    if (retriveWSObject) {
+                        wsobject = port.getRoutingRule(new WSGetRoutingRule(pk));
+                    }
                     TreeObject obj = new TreeObject(id, serverRoot, TreeObject.ROUTING_RULE, new WSRoutingRulePK(id), wsobject);
                     rules.addChild(obj);
                 }
@@ -277,7 +284,7 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
 
             // Views
             TreeParent views = new TreeParent(EXtentisObjects.View.getDisplayName(), serverRoot, TreeObject.VIEW, null, null);
-            WSViewPK[] viewPKs = null;
+            List<WSViewPK> viewPKs = null;
             try {
                 viewPKs = port.getViewPKs((new WSGetViewPKs(""))).getWsViewPK();//$NON-NLS-1$
             } catch (Exception e) {
@@ -286,23 +293,25 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
             }
             if (viewPKs != null) {
                 monitor.subTask(Messages.XtentisServerObjectsRetriever_14);
-                for (int i = 0; i < viewPKs.length; i++) {
-                    String name = viewPKs[i].getPk();
+                for (WSViewPK pk : viewPKs) {
+                    String name = pk.getPk();
                     WSView wsobject = null;
-                    if (retriveWSObject)
-                        wsobject = port.getView(new WSGetView(viewPKs[i]));
+                    if (retriveWSObject) {
+                        wsobject = port.getView(new WSGetView(pk));
+                    }
                     TreeObject obj = new TreeObject(name, serverRoot, TreeObject.VIEW, new WSViewPK(name), wsobject);
                     views.addChild(obj);
                 }
             }
             monitor.worked(1);
-            if (monitor.isCanceled())
+            if (monitor.isCanceled()) {
                 throw new InterruptedException(Messages.XtentisServerObjectsRetriever_15);
+            }
 
             // Stored Procedures
             TreeParent storedProcedures = new TreeParent(EXtentisObjects.StoredProcedure.getDisplayName(), serverRoot,
                     TreeObject.STORED_PROCEDURE, null, null);
-            WSStoredProcedurePK[] spk = null;
+            List<WSStoredProcedurePK> spk = null;
             try {
                 spk = port.getStoredProcedurePKs(new WSRegexStoredProcedure("")).getWsStoredProcedurePK();//$NON-NLS-1$
             } catch (Exception e) {
@@ -311,30 +320,33 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
             }
             if (spk != null) {
                 monitor.subTask(Messages.XtentisServerObjectsRetriever_16);
-                for (int i = 0; i < spk.length; i++) {
-                    String name = spk[i].getPk();
+                for (WSStoredProcedurePK pk : spk) {
+                    String name = pk.getPk();
                     WSStoredProcedure wsobject = null;
-                    if (retriveWSObject)
-                        wsobject = port.getStoredProcedure(new WSGetStoredProcedure(spk[i]));
+                    if (retriveWSObject) {
+                        wsobject = port.getStoredProcedure(new WSGetStoredProcedure(pk));
+                    }
                     TreeObject obj = new TreeObject(name, serverRoot, TreeObject.STORED_PROCEDURE, new WSStoredProcedurePK(name),
                             wsobject);
                     storedProcedures.addChild(obj);
                 }
             }
             monitor.worked(1);
-            if (monitor.isCanceled())
+            if (monitor.isCanceled()) {
                 throw new InterruptedException(Messages.XtentisServerObjectsRetriever_17);
+            }
 
             // Service Configuration
             TreeObject serviceConfiguration = new TreeObject(EXtentisObjects.ServiceConfiguration.getDisplayName(), serverRoot,
                     TreeObject.SERVICE_CONFIGURATION, null, null);
             // serviceConfiguration.setXObject(false);
             monitor.worked(1);
-            if (monitor.isCanceled())
+            if (monitor.isCanceled()) {
                 throw new InterruptedException(Messages.XtentisServerObjectsRetriever_18);
+            }
 
             // Menus
-            WSMenuPK[] menuPKs = null;
+            List<WSMenuPK> menuPKs = null;
             boolean hasMenus = true;
             try {
                 menuPKs = port.getMenuPKs(new WSGetMenuPKs("*")).getWsMenuPK();//$NON-NLS-1$
@@ -348,12 +360,13 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
                 menus = new TreeParent(EXtentisObjects.Menu.getDisplayName(), serverRoot, TreeObject.MENU, null, null);
                 if (menuPKs != null) {
                     monitor.subTask(Messages.XtentisServerObjectsRetriever_19);
-                    for (int i = 0; i < menuPKs.length; i++) {
-                        String id = menuPKs[i].getPk();
+                    for (WSMenuPK pk : menuPKs) {
+                        String id = pk.getPk();
                         WSMenu wsobject = null;
                         try {
-                            if (retriveWSObject)
-                                wsobject = port.getMenu(new WSGetMenu(menuPKs[i]));
+                            if (retriveWSObject) {
+                                wsobject = port.getMenu(new WSGetMenu(pk));
+                            }
                             TreeObject obj = new TreeObject(id, serverRoot, TreeObject.MENU, new WSMenuPK(id), wsobject);
                             menus.addChild(obj);
                         } catch (Exception e) {
@@ -363,8 +376,9 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
                 }
                 monitor.worked(1);
 
-                if (monitor.isCanceled())
+                if (monitor.isCanceled()) {
                     throw new InterruptedException(Messages.XtentisServerObjectsRetriever_20);
+                }
             }
             // move Job from EE to CE.
 
@@ -381,8 +395,9 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
             // serverRoot.addChild(workflow);
             // serverRoot.addChild(resources);
 
-            if (hasMenus)
+            if (hasMenus) {
                 serverRoot.addChild(menus);
+            }
 
             // available models
             List<IAvailableModel> availablemodels = AvailableModelUtil.getAvailableModels();
@@ -395,11 +410,12 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
 
             monitor.done();
         } catch (Exception e) {
-            if (monitor.isCanceled())
+            if (monitor.isCanceled()) {
                 throw new InterruptedException(Messages.XtentisServerObjectsRetriever_21);
+            }
 
             log.error(e.getMessage(), e);
-            throw new InvocationTargetException(new RemoteException(e.getLocalizedMessage(),e));
+            throw new InvocationTargetException(e);
         }
     }// run
 
@@ -409,10 +425,11 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
      * @param universe
      */
     private void addRevision(WSUniverse universe) {
-        if (universe == null)
+        if (universe == null) {
             return;
+        }
         if (Util.IsEnterPrise()) {
-            WSUniverseXtentisObjectsRevisionIDs[] ids = universe.getXtentisObjectsRevisionIDs();
+            List<XtentisObjectsRevisionIDs> ids = universe.getXtentisObjectsRevisionIDs();
             for (TreeObject node : serverRoot.getChildren()) {
                 if (node.getType() == TreeObject.EVENT_MANAGEMENT) {
                     resetDisplayName((TreeParent) node, ids);
@@ -423,7 +440,7 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
                     continue;
                 }
                 boolean isSet = false;
-                for (WSUniverseXtentisObjectsRevisionIDs id : ids) {
+                for (WSUniverse.XtentisObjectsRevisionIDs id : ids) {
                     if (id.getXtentisObjectName().equals(object.getName())) {
                         if (id.getRevisionID() != null && id.getRevisionID().length() > 0) {
                             node.setDisplayName(node.getDisplayName() + " ["//$NON-NLS-1$
@@ -452,14 +469,14 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
         return serverRoot;
     }
 
-    private void resetDisplayName(TreeParent parent, WSUniverseXtentisObjectsRevisionIDs[] ids) {
+    private void resetDisplayName(TreeParent parent, List<XtentisObjectsRevisionIDs> ids) {
         for (TreeObject node : parent.getChildren()) {
             EXtentisObjects object = EXtentisObjects.getXtentisObjexts().get(String.valueOf(node.getType()));
             if (object == null || !object.isRevision()) {
                 continue;
             }
             boolean isSet = false;
-            for (WSUniverseXtentisObjectsRevisionIDs id : ids) {
+            for (WSUniverse.XtentisObjectsRevisionIDs id : ids) {
                 if (id.getXtentisObjectName().equals(object.getName())) {
                     if (id.getRevisionID() != null && id.getRevisionID().length() > 0) {
                         node.setDisplayName(node.getDisplayName() + " ["//$NON-NLS-1$

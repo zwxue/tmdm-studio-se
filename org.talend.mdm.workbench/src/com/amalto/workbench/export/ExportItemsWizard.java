@@ -77,7 +77,7 @@ import com.amalto.workbench.webservices.WSGetTransformerV2;
 import com.amalto.workbench.webservices.WSGetUniverse;
 import com.amalto.workbench.webservices.WSGetView;
 import com.amalto.workbench.webservices.WSItem;
-import com.amalto.workbench.webservices.WSItemPKsByCriteriaResponseResults;
+import com.amalto.workbench.webservices.WSItemPKsByCriteriaResponse.Results;
 import com.amalto.workbench.webservices.WSMenu;
 import com.amalto.workbench.webservices.WSMenuPK;
 import com.amalto.workbench.webservices.WSRole;
@@ -659,12 +659,12 @@ public class ExportItemsWizard extends Wizard {
         String encodedID = null;
         try {
             List<String> items1 = new ArrayList<String>();
-            WSItemPKsByCriteriaResponseResults[] results = port.getItemPKsByCriteria(
+            List<Results> results = port.getItemPKsByCriteria(
                     new WSGetItemPKsByCriteria(pk, null, null, null, (long) -1, (long) -1, 0, Integer.MAX_VALUE)).getResults();
             if (results == null) {
                 return null;
             }
-            for (WSItemPKsByCriteriaResponseResults item : results) {
+            for (Results item : results) {
                 if (item.getWsItemPK().getIds() == null) {
                     continue;
                 }

@@ -12,6 +12,8 @@
 // ============================================================================
 package com.amalto.workbench.availablemodel;
 
+import java.util.List;
+
 import org.eclipse.core.runtime.IProgressMonitor;
 
 import com.amalto.workbench.i18n.Messages;
@@ -27,19 +29,22 @@ import com.amalto.workbench.webservices.XtentisPort;
  */
 public class JobAvailableModel extends AbstractAvailableModel {
 
+    @Override
     public void addTreeObjects(XtentisPort port, IProgressMonitor monitor, TreeParent serverRoot) {
         monitor.subTask(Messages.JobAvailableModel_LoadingJobs);
         // MDM Job
 
         TreeParent jobs = serverRoot.findServerFolder(TreeObject.JOB_REGISTRY);
-        if (jobs == null)
+        if (jobs == null) {
             jobs = new TreeParent(EXtentisObjects.JobRegistry.getDisplayName(), serverRoot, TreeObject.JOB_REGISTRY, null, null);
-        TreeParent deployedJob = new TreeParent(Messages.JobAvailableModel_DeployedJobs, serverRoot, TreeObject.BUILT_IN_CATEGORY_FOLDER, null, null);
+        }
+        TreeParent deployedJob = new TreeParent(Messages.JobAvailableModel_DeployedJobs, serverRoot,
+                TreeObject.BUILT_IN_CATEGORY_FOLDER, null, null);
         try {
-            WSMDMJob[] jobPKs = port.getMDMJob(new WSMDMNULL()).getWsMDMJob();
+            List<WSMDMJob> jobPKs = port.getMDMJob(new WSMDMNULL()).getWsMDMJob();
             if (jobPKs != null) {
-                for (int i = 0; i < jobPKs.length; i++) {
-                    String name = jobPKs[i].getJobName() + "_" + jobPKs[i].getJobVersion() + jobPKs[i].getSuffix();//$NON-NLS-1$
+                for (WSMDMJob jobPK : jobPKs) {
+                    String name = jobPK.getJobName() + "_" + jobPK.getJobVersion() + jobPK.getSuffix();//$NON-NLS-1$
                     TreeObject obj = new TreeObject(name, serverRoot, TreeObject.JOB, name, null);
                     deployedJob.addChild(obj);
                 }

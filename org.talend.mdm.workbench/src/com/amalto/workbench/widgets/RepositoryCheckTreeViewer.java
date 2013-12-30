@@ -51,7 +51,7 @@ import com.amalto.workbench.providers.ServerTreeContentProvider;
 import com.amalto.workbench.providers.ServerTreeLabelProvider;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.views.ServerView;
-import com.amalto.workbench.webservices.WSVersioningUniverseVersionsTagStructure;
+import com.amalto.workbench.webservices.WSVersioningUniverseVersions;
 
 /**
  * @author achen DOC achen class global comment. Detailled comment
@@ -92,7 +92,7 @@ public class RepositoryCheckTreeViewer {
 
     protected IDoubleClickListener tagsViewerDoubleClickListener;
 
-    private ArrayList<WSVersioningUniverseVersionsTagStructure> hisEntries;
+    private List<WSVersioningUniverseVersions.TagStructure> hisEntries;
 
     public RepositoryCheckTreeViewer(IStructuredSelection selection, String defaultTagText, boolean isTagEditable) {
         this.selection = selection;
@@ -452,7 +452,7 @@ public class RepositoryCheckTreeViewer {
         this.tagsViewerDoubleClickListener = tagsViewerDoubleClickListener;
     }
 
-    public void setHisEntries(ArrayList<WSVersioningUniverseVersionsTagStructure> hisEntries) {
+    public void setHisEntries(List<WSVersioningUniverseVersions.TagStructure> hisEntries) {
 
         this.hisEntries = hisEntries;
 
@@ -470,7 +470,7 @@ public class RepositoryCheckTreeViewer {
 
     }
 
-    public void refreshHistoryTable(ArrayList<WSVersioningUniverseVersionsTagStructure> hisEntries) {
+    public void refreshHistoryTable(List<WSVersioningUniverseVersions.TagStructure> hisEntries) {
         this.vwidget.refreshData(hisEntries);
     }
 
@@ -486,6 +486,7 @@ public class RepositoryCheckTreeViewer {
      */
     protected class CheckboxRepositoryView extends ServerView {
 
+        @Override
         protected TreeViewer createTreeViewer(Composite parent) {
             return new CheckboxRepositoryTreeViewer(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL);
         }

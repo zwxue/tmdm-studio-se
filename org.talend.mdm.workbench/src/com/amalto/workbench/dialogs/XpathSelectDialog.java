@@ -13,7 +13,6 @@
 package com.amalto.workbench.dialogs;
 
 import java.awt.Panel;
-import java.rmi.RemoteException;
 import java.util.List;
 
 import org.apache.commons.logging.Log;
@@ -147,14 +146,14 @@ public class XpathSelectDialog extends Dialog {
     }
 
     public boolean isLock() {
-		return lock;
-	}
+        return lock;
+    }
 
-	public void setLock(boolean lock) {
-		this.lock = lock;
-	}
+    public void setLock(boolean lock) {
+        this.lock = lock;
+    }
 
-	public String getEntityName() {
+    public String getEntityName() {
 
         if (xpath == null || "".equals(xpath)) {
             return "";//$NON-NLS-1$
@@ -338,12 +337,9 @@ public class XpathSelectDialog extends Dialog {
             xsd = MDMRepositoryViewExtensionService.getDataModelXsd(pObject, filter, dataModelName);
             provideViwerContent(xsd, filter);
         } else {
+           
             try {
-                wsDataModel = port.getDataModel(new WSGetDataModel(new WSDataModelPK(dataModelName)));
-            } catch (RemoteException e2) {
-                log.error(e2.getMessage(), e2);
-            }
-            try {
+             wsDataModel = port.getDataModel(new WSGetDataModel(new WSDataModelPK(dataModelName)));
                 // XSDSchema xsdSchema = Util.getXSDSchema(wsDataModel.getXsdSchema());
                 schema = wsDataModel.getXsdSchema();// Util.nodeToString(xsdSchema.getDocument());
                 xsd = Util.createXsdSchema(schema, pObject);

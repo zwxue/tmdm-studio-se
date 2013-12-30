@@ -13,7 +13,6 @@
 package com.amalto.workbench.editors;
 
 import java.lang.reflect.InvocationTargetException;
-import java.rmi.RemoteException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -120,13 +119,11 @@ import com.amalto.workbench.webservices.WSGetBackgroundJob;
 import com.amalto.workbench.webservices.WSGetTransformerPluginV2Details;
 import com.amalto.workbench.webservices.WSGetTransformerPluginV2SList;
 import com.amalto.workbench.webservices.WSPipeline;
-import com.amalto.workbench.webservices.WSPipelineTypedContentEntry;
+import com.amalto.workbench.webservices.WSPipeline.TypedContentEntry;
 import com.amalto.workbench.webservices.WSTransformerContext;
-import com.amalto.workbench.webservices.WSTransformerContextPipeline;
-import com.amalto.workbench.webservices.WSTransformerContextPipelinePipelineItem;
 import com.amalto.workbench.webservices.WSTransformerPluginV2Details;
 import com.amalto.workbench.webservices.WSTransformerPluginV2SList;
-import com.amalto.workbench.webservices.WSTransformerPluginV2SListItem;
+import com.amalto.workbench.webservices.WSTransformerPluginV2SList.Item;
 import com.amalto.workbench.webservices.WSTransformerPluginV2VariableDescriptor;
 import com.amalto.workbench.webservices.WSTransformerProcessStep;
 import com.amalto.workbench.webservices.WSTransformerV2;
@@ -246,14 +243,14 @@ public class TransformerMainPage extends AMainPageV2 {
         this.cacheList = cacheList;
     }
 
-    protected void initPlugin() throws RemoteException {
+    protected void initPlugin() {
         WSTransformerPluginV2SList list = port.getTransformerPluginV2SList(new WSGetTransformerPluginV2SList("EN"));//$NON-NLS-1$
 
-        WSTransformerPluginV2SListItem[] items = list.getItem();
+        java.util.List<Item> items = list.getItem();
 
         if (items != null) {
-            for (int i = 0; i < items.length; i++) {
-                pluginDescriptions.put(items[i].getJndiName(), items[i].getDescription());
+            for (Item item : items) {
+                pluginDescriptions.put(item.getJndiName(), item.getDescription());
             }
             // get the sorted list and feed the combo
             Set<String> jndis = pluginDescriptions.keySet();
@@ -283,23 +280,22 @@ public class TransformerMainPage extends AMainPageV2 {
     public void execute() {
         try {
             port = getPort();
-            if (port == null)
+            if (port == null) {
                 return;
-            WSTransformerContextPipelinePipelineItem[] items = new WSTransformerContextPipelinePipelineItem[cacheList.size()];
-            int i = 0;
+            }
+            java.util.List<WSTransformerContext.Pipeline.PipelineItem> items = new ArrayList<WSTransformerContext.Pipeline.PipelineItem>();
             for (Line line : cacheList) {
                 String variableName = line.keyValues.get(0).value;
                 String contentType = line.keyValues.get(1).value;
                 String value = line.keyValues.get(2).value;
 
-                items[i] = new WSTransformerContextPipelinePipelineItem(variableName, new WSTypedContent(null, new WSByteArray(
-                        value.getBytes("utf-8")), contentType)); //$NON-NLS-1$
-                i++;
-            }
+                items.add(new WSTransformerContext.Pipeline.PipelineItem(variableName, new WSTypedContent(null, new WSByteArray(
+                        value.getBytes("utf-8")), contentType))); //$NON-NLS-1$
 
+            }
             final WSBackgroundJobPK jobPK = port.executeTransformerV2AsJob(new WSExecuteTransformerV2AsJob(
-                    new WSTransformerContext(new WSTransformerV2PK(transformer.getName()),
-                            new WSTransformerContextPipeline(items), null)));
+                    new WSTransformerContext(new WSTransformerV2PK(transformer.getName()), new WSTransformerContext.Pipeline(
+                            items), null)));
 
             IRunnableWithProgress progress = new IRunnableWithProgress() {
 
@@ -352,9 +348,9 @@ public class TransformerMainPage extends AMainPageV2 {
                         // Auto sorts the entries
                         final TreeMap pipeline = new TreeMap<String, WSExtractedContent>();
                         WSPipeline wsPipeline = job.getPipeline();
-                        WSPipelineTypedContentEntry[] entries = wsPipeline.getTypedContentEntry();
-                        for (int i = 0; i < entries.length; i++) {
-                            pipeline.put(entries[i].getOutput(), entries[i].getWsExtractedContent());
+                        java.util.List<TypedContentEntry> entries = wsPipeline.getTypedContentEntry();
+                        for (TypedContentEntry entry : entries) {
+                            pipeline.put(entry.getOutput(), entry.getWsExtractedContent());
                         }
                         getSite().getShell().getDisplay().asyncExec(new Runnable() {
 
@@ -363,7 +359,7 @@ public class TransformerMainPage extends AMainPageV2 {
                                     /*
                                      * ProcessResultsPage page = new ProcessResultsPage(editor,pipeline);
                                      * parent.editor.addPage(page); parent.editor.setActivePage(page.getId());
-                                     *
+                                     * 
                                      * parent.editor.getEditorSite().getShell()
                                      */
                                     // Shell shell = new Shell(SWT.DIALOG_TRIM | SWT.RESIZE | SWT.MAX | SWT.MIN);
@@ -426,8 +422,9 @@ public class TransformerMainPage extends AMainPageV2 {
             desAntionComposite.getTextWidget().addModifyListener(new ModifyListener() {
 
                 public void modifyText(ModifyEvent e) {
-                    if (refreshing)
+                    if (refreshing) {
                         return;
+                    }
                     TransformerMainPage.this.comitting = true;
                     transformer.setDescription(desAntionComposite.getText());
                     TransformerMainPage.this.comitting = false;
@@ -555,13 +552,12 @@ public class TransformerMainPage extends AMainPageV2 {
                         TransformerMainPage.this.stepsList.add(val, index - 1);
                         TransformerMainPage.this.stepsList.select(index - 1);
                         WSTransformerV2 wsTransformer = transformer;// (WSTransformerV2)getXObject().getWsObject();
-                        ArrayList<WSTransformerProcessStep> list = new ArrayList<WSTransformerProcessStep>(Arrays
-                                .asList(wsTransformer.getProcessSteps()));
+                        java.util.List<WSTransformerProcessStep> list = wsTransformer.getProcessSteps();
                         WSTransformerProcessStep spec = list.get(index);
                         list.remove(index);
                         list.add(index - 1, spec);
                         performSelect(index - 1);
-                        wsTransformer.setProcessSteps(list.toArray(new WSTransformerProcessStep[list.size()]));
+
                         TransformerMainPage.this.comitting = false;
                         TransformerMainPage.this.stepsList.forceFocus();
                         markDirtyWithoutCommit();
@@ -587,12 +583,10 @@ public class TransformerMainPage extends AMainPageV2 {
                         TransformerMainPage.this.stepsList.add(val, index + 1);
                         TransformerMainPage.this.stepsList.select(index + 1);
                         WSTransformerV2 wsTransformer = transformer;// (WSTransformerV2)getXObject().getWsObject();
-                        ArrayList<WSTransformerProcessStep> list = new ArrayList<WSTransformerProcessStep>(Arrays
-                                .asList(wsTransformer.getProcessSteps()));
+                        java.util.List<WSTransformerProcessStep> list = wsTransformer.getProcessSteps();
                         WSTransformerProcessStep spec = list.get(index);
                         list.remove(index);
                         list.add(index + 1, spec);
-                        wsTransformer.setProcessSteps(list.toArray(new WSTransformerProcessStep[list.size()]));
                         TransformerMainPage.this.comitting = false;
                         TransformerMainPage.this.stepsList.forceFocus();
                         markDirtyWithoutCommit();
@@ -636,8 +630,10 @@ public class TransformerMainPage extends AMainPageV2 {
                 public void widgetSelected(SelectionEvent e) {
                     WidgetUtils.enable(specsComposite, !disabledButton.getSelection());
                     markDirtyWithoutCommit();
-                    if (stepsList.getSelectionIndex() >= 0)
-                        transformer.getProcessSteps()[stepsList.getSelectionIndex()].setDisabled(disabledButton.getSelection());
+                    if (stepsList.getSelectionIndex() >= 0) {
+                        transformer.getProcessSteps().get(stepsList.getSelectionIndex())
+                                .setDisabled(disabledButton.getSelection());
+                    }
                 }
             });
             stepLabel = toolkit.createLabel(specsComposite, "", SWT.NULL); //$NON-NLS-1$
@@ -714,9 +710,9 @@ public class TransformerMainPage extends AMainPageV2 {
     protected void executeProcess(final FormToolkit toolkit) {
         try {
             // check if we have a step to perfom
-            WSTransformerProcessStep[] steps = // ((WSTransformerV2)getXObject().getWsObject())
+            java.util.List<WSTransformerProcessStep> steps = // ((WSTransformerV2)getXObject().getWsObject())
             transformer.getProcessSteps();
-            if ((steps == null) || (steps.length == 0)) {
+            if ((steps == null) || (steps.size() == 0)) {
                 MessageDialog.openError(TransformerMainPage.this.getSite().getShell(), Messages.TransformerMainPage_ErrorTitle1,
                         Messages.TransformerMainPage_ErrorMsg1);
                 return;
@@ -794,8 +790,9 @@ public class TransformerMainPage extends AMainPageV2 {
 
     protected void performAdd() {
         try {
-            if (stepText.getText().trim().length() == 0)
+            if (stepText.getText().trim().length() == 0) {
                 return;
+            }
             TransformerMainPage.this.comitting = true;
 
             TransformerMainPage.this.stepsList.add(
@@ -804,14 +801,10 @@ public class TransformerMainPage extends AMainPageV2 {
 
             );
             WSTransformerV2 wsTransformer = transformer;//
-            ArrayList<WSTransformerProcessStep> list = new ArrayList<WSTransformerProcessStep>();
-            if (wsTransformer.getProcessSteps() != null) {
-                list = new ArrayList<WSTransformerProcessStep>(Arrays.asList(wsTransformer.getProcessSteps()));
-            }
-            list.add(new WSTransformerProcessStep("", TransformerMainPage.this.stepText.getText(), "", //$NON-NLS-1$ //$NON-NLS-2$
-                    new WSTransformerVariablesMapping[0], new WSTransformerVariablesMapping[0], false));
 
-            wsTransformer.setProcessSteps(list.toArray(new WSTransformerProcessStep[list.size()]));
+            wsTransformer.getProcessSteps().add(new WSTransformerProcessStep("", TransformerMainPage.this.stepText.getText(), "", //$NON-NLS-1$ //$NON-NLS-2$
+                    new ArrayList(), new ArrayList(), false));
+
             TransformerMainPage.this.comitting = false;
             int index = TransformerMainPage.this.stepsList.getItemCount() - 1;
             TransformerMainPage.this.stepsList.select(index);
@@ -836,9 +829,9 @@ public class TransformerMainPage extends AMainPageV2 {
         }
         TransformerMainPage.this.refreshing = true;
 
-        stepLabel.setText(transformer.getProcessSteps()[index].getDescription());
+        stepLabel.setText(transformer.getProcessSteps().get(index).getDescription());
 
-        String jndi = transformer.getProcessSteps()[index].getPluginJNDI().replaceAll(TRANSFORMER_PLUGIN, ""); //$NON-NLS-1$
+        String jndi = transformer.getProcessSteps().get(index).getPluginJNDI().replaceAll(TRANSFORMER_PLUGIN, ""); //$NON-NLS-1$
         pluginsCombo.setText(jndi);
         currentPluginName = jndi;
         pluginDescription.setText(pluginDescriptions.get(jndi) == null ? "" : pluginDescriptions.get(jndi)); //$NON-NLS-1$
@@ -846,14 +839,15 @@ public class TransformerMainPage extends AMainPageV2 {
 
         refreshParameterEditor();
 
-        String content = transformer.getProcessSteps()[index].getParameters();
-        if (btnAutoIndent.getSelection())
+        String content = transformer.getProcessSteps().get(index).getParameters();
+        if (btnAutoIndent.getSelection()) {
             content = XmlUtil.formatXmlSource(content);
+        }
 
         parameterEditor.setContent(content);
 
-        stepWidget.setProcessStep(transformer.getProcessSteps()[index], index);
-        disabledButton.setSelection(transformer.getProcessSteps()[index].getDisabled());
+        stepWidget.setProcessStep(transformer.getProcessSteps().get(index), index);
+        disabledButton.setSelection(transformer.getProcessSteps().get(index).isDisabled());
         WidgetUtils.enable(specsComposite, !disabledButton.getSelection());
 
         refreshOpenXSLTBtnState();
@@ -931,11 +925,8 @@ public class TransformerMainPage extends AMainPageV2 {
         TransformerMainPage.this.stepsList.forceFocus();
 
         // commit as we go
-        ArrayList<WSTransformerProcessStep> list = new ArrayList<WSTransformerProcessStep>(Arrays.asList(wsTransformer
-                .getProcessSteps()));
-        list.remove(index);
+        wsTransformer.getProcessSteps().remove(index);
         currentPlugin = stepsList.getSelectionIndex();
-        wsTransformer.setProcessSteps(list.toArray(new WSTransformerProcessStep[list.size()]));
         TransformerMainPage.this.comitting = false;
         markDirtyWithoutCommit();
     }
@@ -956,13 +947,14 @@ public class TransformerMainPage extends AMainPageV2 {
                     Messages.TransformerMainPage_InputDialogTitle, stepName, new IInputValidator() {
 
                         public String isValid(String newText) {
-                            if ((newText == null) || newText.length() == 0)
+                            if ((newText == null) || newText.length() == 0) {
                                 return Messages.TransformerMainPage_NameCannotbeEmpty;
+                            }
                             return null;
                         }
                     });
             if (id.open() == Window.OK) {
-                transformer.getProcessSteps()[stepsList.getSelectionIndex()].setDescription(id.getValue());
+                transformer.getProcessSteps().get(stepsList.getSelectionIndex()).setDescription(id.getValue());
                 refreshData();
                 markDirtyWithoutCommit();
             }
@@ -992,16 +984,20 @@ public class TransformerMainPage extends AMainPageV2 {
             TableViewer viewer = (TableViewer) view;
             IStructuredSelection selections = (IStructuredSelection) viewer.getSelection();
             java.util.List list = Arrays.asList(selections.toArray());
-            if (list.size() == 0)
+            if (list.size() == 0) {
                 return;
+            }
             java.util.List<WSTransformerVariablesMapping> items = (java.util.List<WSTransformerVariablesMapping>) viewer
                     .getInput();
             items.removeAll(list);
 
-            if (view == stepWidget.inputViewer)
-                stepWidget.processStep.setInputMappings(items.toArray(new WSTransformerVariablesMapping[items.size()]));
-            else
-                stepWidget.processStep.setOutputMappings(items.toArray(new WSTransformerVariablesMapping[items.size()]));
+            if (view == stepWidget.inputViewer) {
+                stepWidget.processStep.getInputMappings().clear();
+                stepWidget.processStep.getInputMappings().addAll(items);
+            } else {
+                stepWidget.processStep.getOutputMappings().clear();
+                stepWidget.processStep.getOutputMappings().addAll(items);
+            }
             // refresh
             viewer.refresh();
             // mark for update
@@ -1012,8 +1008,9 @@ public class TransformerMainPage extends AMainPageV2 {
     @Override
     protected void refreshData() {
         try {
-            if (this.comitting)
+            if (this.comitting) {
                 return;
+            }
 
             this.refreshing = true;
 
@@ -1023,10 +1020,10 @@ public class TransformerMainPage extends AMainPageV2 {
                     wsTransformer.getDescription() == null ? "" : wsTransformer.getDescription()); //$NON-NLS-1$
 
             stepsList.removeAll();
-            WSTransformerProcessStep[] specs = wsTransformer.getProcessSteps();
+            java.util.List<WSTransformerProcessStep> specs = wsTransformer.getProcessSteps();
             if (specs != null) {
-                for (int i = 0; i < specs.length; i++) {
-                    stepsList.add(specs[i].getDescription());
+                for (WSTransformerProcessStep step : specs) {
+                    stepsList.add(step.getDescription());
                 }
             }
 
@@ -1087,8 +1084,7 @@ public class TransformerMainPage extends AMainPageV2 {
             boolean has = false;
 
             WSTransformerProcessStep processStep = stepWidget.getProcessStep();
-            WSTransformerVariablesMapping[] outputMappings = processStep.getOutputMappings();
-            for (WSTransformerVariablesMapping map : outputMappings) {
+            for (WSTransformerVariablesMapping map : processStep.getOutputMappings()) {
                 if ("output_report".equals(map.getPipelineVariable())) {//$NON-NLS-1$
                     has = true;
                     break;
@@ -1163,12 +1159,13 @@ public class TransformerMainPage extends AMainPageV2 {
             // reset the available variables
             availableVariables.clear();
             for (int i = 0; i <= index; i++) {
-                if (transformer.getProcessSteps()[i].getDisabled())
+                if (transformer.getProcessSteps().get(i).isDisabled()) {
                     continue;
-                for (WSTransformerVariablesMapping mapping : transformer.getProcessSteps()[i].getInputMappings()) {
+                }
+                for (WSTransformerVariablesMapping mapping : transformer.getProcessSteps().get(i).getInputMappings()) {
                     availableVariables.add(mapping.getPipelineVariable() == null ? DEFAULT_VAR : mapping.getPipelineVariable());
                 }
-                for (WSTransformerVariablesMapping mapping : transformer.getProcessSteps()[i].getOutputMappings()) {
+                for (WSTransformerVariablesMapping mapping : transformer.getProcessSteps().get(i).getOutputMappings()) {
                     availableVariables.add(mapping.getPipelineVariable() == null ? DEFAULT_VAR : mapping.getPipelineVariable());
                 }
             }
@@ -1203,8 +1200,9 @@ public class TransformerMainPage extends AMainPageV2 {
                 }
 
                 public Object[] getElements(Object inputElement) {
-                    if (inputElement == null)
+                    if (inputElement == null) {
                         return null;
+                    }
                     java.util.List<WSTransformerVariablesMapping> lines = (java.util.List<WSTransformerVariablesMapping>) inputElement;
                     return lines.toArray(new WSTransformerVariablesMapping[lines.size()]);
                 }
@@ -1314,26 +1312,32 @@ public class TransformerMainPage extends AMainPageV2 {
 
                 @Override
                 public void widgetSelected(SelectionEvent e) {
-                    if (inputParams.getText().length() == 0)
+                    if (inputParams.getText().length() == 0) {
                         return;
+                    }
                     java.util.List<WSTransformerVariablesMapping> items = (java.util.List<WSTransformerVariablesMapping>) inputViewer
                             .getInput();
-                    if (isExist(items, inputParams.getText()))
+                    if (isExist(items, inputParams.getText())) {
                         return;
+                    }
 
                     WSTransformerVariablesMapping line = new WSTransformerVariablesMapping();
-                    if (inputVariables.getText().trim().length() > 0)
+                    if (inputVariables.getText().trim().length() > 0) {
                         line.setPipelineVariable(inputVariables.getText());
-                    else
+                    } else {
                         line.setPipelineVariable(DEFAULT_VAR);
-                    if (inputParams.getText().trim().length() > 0)
+                    }
+                    if (inputParams.getText().trim().length() > 0) {
                         line.setPluginVariable(inputParams.getText());
+                    }
 
                     items.add(line);
-                    processStep.setInputMappings(items.toArray(new WSTransformerVariablesMapping[items.size()]));
+                    processStep.getInputMappings().clear();
+                    processStep.getInputMappings().addAll(items);
                     inputViewer.refresh();
-                    if (line.getPipelineVariable() != null)
+                    if (line.getPipelineVariable() != null) {
                         availableVariables.add(line.getPipelineVariable());
+                    }
                     outputVariables.setItems(availableVariables.toArray(new String[availableVariables.size()]));
                     markDirtyWithoutCommit();
                 }
@@ -1368,26 +1372,32 @@ public class TransformerMainPage extends AMainPageV2 {
 
                 @Override
                 public void widgetSelected(SelectionEvent e) {
-                    if (outputParams.getText().length() == 0)
+                    if (outputParams.getText().length() == 0) {
                         return;
+                    }
                     java.util.List<WSTransformerVariablesMapping> items = (java.util.List<WSTransformerVariablesMapping>) outputViewer
                             .getInput();
-                    if (isExist(items, outputParams.getText()))
+                    if (isExist(items, outputParams.getText())) {
                         return;
+                    }
 
                     WSTransformerVariablesMapping line = new WSTransformerVariablesMapping();
-                    if (outputVariables.getText().length() > 0)
+                    if (outputVariables.getText().length() > 0) {
                         line.setPipelineVariable(outputVariables.getText());
-                    else
+                    } else {
                         line.setPipelineVariable(DEFAULT_VAR);
+                    }
 
-                    if (outputParams.getText().trim().length() > 0)
+                    if (outputParams.getText().trim().length() > 0) {
                         line.setPluginVariable(outputParams.getText());
+                    }
                     items.add(line);
-                    processStep.setOutputMappings(items.toArray(new WSTransformerVariablesMapping[items.size()]));
+                    processStep.getOutputMappings().clear();
+                    processStep.getOutputMappings().addAll(items);
                     outputViewer.refresh();
-                    if (line.getPipelineVariable() != null)
+                    if (line.getPipelineVariable() != null) {
                         availableVariables.add(line.getPipelineVariable());
+                    }
                     outputVariables.setItems(availableVariables.toArray(new String[availableVariables.size()]));
                     markDirtyWithoutCommit();
                 }
@@ -1425,9 +1435,10 @@ public class TransformerMainPage extends AMainPageV2 {
                 public void widgetSelected(SelectionEvent e) {
                     refreshCombo();
                     if (stepsList.getSelectionIndex() >= 0
-                            && stepsList.getSelectionIndex() < transformer.getProcessSteps().length)
-                        transformer.getProcessSteps()[stepsList.getSelectionIndex()].setPluginJNDI(TRANSFORMER_PLUGIN
-                                + pluginsCombo.getText());
+                            && stepsList.getSelectionIndex() < transformer.getProcessSteps().size()) {
+                        transformer.getProcessSteps().get(stepsList.getSelectionIndex())
+                                .setPluginJNDI(TRANSFORMER_PLUGIN + pluginsCombo.getText());
+                    }
                     inputViewer.setInput(new ArrayList<WSTransformerVariablesMapping>());
                     outputViewer.setInput(new ArrayList<WSTransformerVariablesMapping>());
                     String jndi = pluginsCombo.getText();
@@ -1460,8 +1471,9 @@ public class TransformerMainPage extends AMainPageV2 {
                         String jndi;
 
                         jndi = pluginsCombo.getText();
-                        if (jndi.length() == 0)
+                        if (jndi.length() == 0) {
                             return;
+                        }
 
                         WSTransformerPluginV2Details details = getWsTransformerPluginV2Details(jndi);
                         final PluginDetailsDialog dialog = new PluginDetailsDialog(getSite().getShell(),
@@ -1481,10 +1493,10 @@ public class TransformerMainPage extends AMainPageV2 {
                         String jndi;
 
                         jndi = pluginsCombo.getText();
-                        if(!Util.handleConnectionException(getSite().getShell(), ex, null)) {
-                        	MessageDialog.openError(getSite().getShell(), Messages.TransformerMainPage_ErrorDialogTitle + jndi,
+                        if (!Util.handleConnectionException(getSite().getShell(), ex, null)) {
+                            MessageDialog.openError(getSite().getShell(), Messages.TransformerMainPage_ErrorDialogTitle + jndi,
                                     Messages.bind(Messages.TransformerMainPage_ErrorMsg2, jndi));
-                            }
+                        }
                         return;
                     }
                 }
@@ -1566,7 +1578,7 @@ public class TransformerMainPage extends AMainPageV2 {
 
     }
 
-    protected WSTransformerPluginV2Details getWsTransformerPluginV2Details(String jndi) throws RemoteException {
+    protected WSTransformerPluginV2Details getWsTransformerPluginV2Details(String jndi) {
         WSTransformerPluginV2Details details = port.getTransformerPluginV2Details(new WSGetTransformerPluginV2Details(jndi
                 .contains("/") ? jndi //$NON-NLS-1$
                 : TRANSFORMER_PLUGIN + jndi, "en")); //$NON-NLS-1$
@@ -1583,14 +1595,16 @@ public class TransformerMainPage extends AMainPageV2 {
 
     private void commitParameters(String parameter) {
 
-        if (refreshing)
+        if (refreshing) {
             return;
-        if (TransformerMainPage.this.stepsList.getSelectionIndex() == -1)
+        }
+        if (TransformerMainPage.this.stepsList.getSelectionIndex() == -1) {
             return;
+        }
         // commit as we go
         TransformerMainPage.this.comitting = true;
         // ((WSTransformerV2)getXObject().getWsObject())
-        transformer.getProcessSteps()[stepsList.getSelectionIndex()].setParameters(parameter);
+        transformer.getProcessSteps().get(stepsList.getSelectionIndex()).setParameters(parameter);
         TransformerMainPage.this.comitting = false;
         markDirtyWithoutCommit();
 
@@ -1598,8 +1612,9 @@ public class TransformerMainPage extends AMainPageV2 {
 
     private void refreshAutoIndentTooltip() {
 
-        if (btnAutoIndent == null)
+        if (btnAutoIndent == null) {
             return;
+        }
 
         btnAutoIndent.setToolTipText(btnAutoIndent.getSelection() ? TOOLTIP_AUTOINDENT_ENABLE : TOOLTIP_AUTOINDENT_DISABLE);
     }
@@ -1615,7 +1630,7 @@ public class TransformerMainPage extends AMainPageV2 {
 
         public void refreshPageContent(String xsltContent) {
             if (xsltContent != null) {
-                transformer.getProcessSteps()[currentPlugin].setParameters(xsltContent);
+                transformer.getProcessSteps().get(currentPlugin).setParameters(xsltContent);
                 if (!parameterEditor.isDisposed()) {
                     parameterEditor.setContent(xsltContent);
                 }

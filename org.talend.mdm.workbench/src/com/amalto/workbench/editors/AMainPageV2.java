@@ -12,6 +12,7 @@
 // ============================================================================
 package com.amalto.workbench.editors;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Observable;
 import java.util.Observer;
@@ -104,6 +105,7 @@ public abstract class AMainPageV2 extends AFormPage implements ModifyListener, O
     public void update(Observable o, Object arg) {
     }
 
+    @Override
     protected void createFormContent(IManagedForm managedForm) {
         super.createFormContent(managedForm);
         try {
@@ -161,16 +163,15 @@ public abstract class AMainPageV2 extends AFormPage implements ModifyListener, O
 
     }// createFormContent
 
-
-
     protected void initCoditionsColumns() {
         ComplexTableViewerColumn operatorColumn;
-        if (isCompositeView)
+        if (isCompositeView) {
             operatorColumn = new ComplexTableViewerColumn("Operator", false, "", "", "", ComplexTableViewerColumn.COMBO_STYLE,//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$
                     IConstants.COMPOSITE_VIEW_CONDITION_OPERATORS, 0);
-        else
+        } else {
             operatorColumn = new ComplexTableViewerColumn("Operator", false, "", "", "", ComplexTableViewerColumn.COMBO_STYLE,//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$
                     IConstants.VIEW_CONDITION_OPERATORS, 0);
+        }
         conditionsColumns = new ComplexTableViewerColumn[] {
                 new ComplexTableViewerColumn("XPath", false, "newXPath", "newXPath", "", ComplexTableViewerColumn.XPATH_STYLE,//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$
                         new String[] {}, 0),
@@ -209,11 +210,13 @@ public abstract class AMainPageV2 extends AFormPage implements ModifyListener, O
 
         // Layout the components
         Section newSection = newSectionPart.getSection();
-        if (title != null)
+        if (title != null) {
             newSection.setText(title);
+        }
         newSection.setLayoutData(new TableWrapData(TableWrapData.FILL_GRAB));
         newSection.addExpansionListener(new ExpansionAdapter() {
 
+            @Override
             public void expansionStateChanged(ExpansionEvent e) {
                 AMainPageV2.this.getManagedForm().getForm().reflow(true);
             }
@@ -287,17 +290,19 @@ public abstract class AMainPageV2 extends AFormPage implements ModifyListener, O
 
         public void dragSetData(DragSourceEvent event) {
             Control control = ((DragSource) event.widget).getControl();
-            if ((control instanceof List))
+            if ((control instanceof List)) {
                 if (TextTransfer.getInstance().isSupportedType(event.dataType)) {
                     this.selected = ((List) control).getSelectionIndex();
                     event.data = ((List) control).getSelection()[0];
                 }
+            }
         }
 
         public void dragStart(DragSourceEvent event) {
             Control control = ((DragSource) event.widget).getControl();
-            if ((control instanceof List))
+            if ((control instanceof List)) {
                 event.doit = (((List) control).getItemCount() > 0);
+            }
         }
     }
 
@@ -305,12 +310,13 @@ public abstract class AMainPageV2 extends AFormPage implements ModifyListener, O
 
         public void dragEnter(DropTargetEvent event) {
             // priority to copy
-            if ((event.operations & DND.DROP_COPY) == DND.DROP_COPY)
+            if ((event.operations & DND.DROP_COPY) == DND.DROP_COPY) {
                 event.detail = DND.DROP_COPY;
-            else if ((event.operations & DND.DROP_MOVE) == DND.DROP_MOVE)
+            } else if ((event.operations & DND.DROP_MOVE) == DND.DROP_MOVE) {
                 event.detail = DND.DROP_MOVE;
-            else
+            } else {
                 event.detail = DND.DROP_NONE;
+            }
         }
 
         public void dragLeave(DropTargetEvent event) {
@@ -324,12 +330,14 @@ public abstract class AMainPageV2 extends AFormPage implements ModifyListener, O
 
         public void drop(DropTargetEvent event) {
             Control control = ((DropTarget) event.widget).getControl();
-            if ((control instanceof List) && ((event.operations & DND.DROP_COPY) == DND.DROP_COPY))
-                if (TextTransfer.getInstance().isSupportedType(event.currentDataType))
+            if ((control instanceof List) && ((event.operations & DND.DROP_COPY) == DND.DROP_COPY)) {
+                if (TextTransfer.getInstance().isSupportedType(event.currentDataType)) {
                     if (!Arrays.asList(((List) control).getItems()).contains(event.data)) {
                         ((List) control).add((String) event.data);
                         markDirty();
                     }
+                }
+            }
         }
 
         public void dropAccept(DropTargetEvent event) {
@@ -348,4 +356,9 @@ public abstract class AMainPageV2 extends AFormPage implements ModifyListener, O
         return port;
     }
 
+    protected java.util.List<String> getRegex() {
+        java.util.List<String> regex = new ArrayList<String>();
+        regex.add(".*"); //$NON-NLS-1$
+        return regex;
+    }
 }

@@ -13,16 +13,18 @@
 package com.amalto.workbench.editors;
 
 import java.lang.reflect.InvocationTargetException;
-import java.rmi.RemoteException;
 import java.rmi.ServerException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+
+import javax.xml.ws.WebServiceException;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -286,15 +288,15 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                     return;
                 }
                 final WSItem wsItem = port.getItem(new WSGetItem(new WSItemPK((WSDataClusterPK) getXObject().getWsKey(), li
-                        .getConcept().trim(), li.getIds())));
+                        .getConcept().trim(), Arrays.asList(li.getIds()))));
                 String xml = Util.formatXsdSource(wsItem.getContent());
 
-                WSDataModelPK[] dmPKs = port.getDataModelPKs(new WSRegexDataModelPKs("*")).getWsDataModelPKs();//$NON-NLS-1$
+                List<WSDataModelPK> dmPKs = port.getDataModelPKs(new WSRegexDataModelPKs("*")).getWsDataModelPKs();//$NON-NLS-1$
                 ArrayList<String> dataModels = new ArrayList<String>();
                 if (dmPKs != null) {
-                    for (int i = 0; i < dmPKs.length; i++) {
-                        if (!"XMLSCHEMA---".equals(dmPKs[i].getPk())) { //$NON-NLS-1$
-                            dataModels.add(dmPKs[i].getPk());
+                    for (WSDataModelPK pk : dmPKs) {
+                        if (!"XMLSCHEMA---".equals(pk.getPk())) { //$NON-NLS-1$
+                            dataModels.add(pk.getPk());
                         }
                     }
                 }
@@ -308,7 +310,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                             // attempt to save
                             try {
                                 // check the item is modified by others?
-                                boolean isModified = port.isItemModifiedByOther(new WSIsItemModifiedByOther(wsItem)).is_true();
+                                boolean isModified = port.isItemModifiedByOther(new WSIsItemModifiedByOther(wsItem)).isTrue();
                                 WSPutItem putItem = new WSPutItem((WSDataClusterPK) getXObject().getWsKey(), d.getXML(),
                                         "".equals(d //$NON-NLS-1$
                                                 .getDataModelName()) ? null : new WSDataModelPK(d.getDataModelName()), false);
@@ -332,9 +334,9 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                                 }
                             } catch (Exception e) {
                                 log.error(e.getMessage(), e);
-                                if(!Util.handleConnectionException(shell, e, Messages.DataClusterBrowserMainPage_33)){
-                                	 MessageDialog.openError(shell, Messages.DataClusterBrowserMainPage_33,
-                                             Messages.bind(Messages.DataClusterBrowserMainPage_34, e.getLocalizedMessage()));
+                                if (!Util.handleConnectionException(shell, e, Messages.DataClusterBrowserMainPage_33)) {
+                                    MessageDialog.openError(shell, Messages.DataClusterBrowserMainPage_33,
+                                            Messages.bind(Messages.DataClusterBrowserMainPage_34, e.getLocalizedMessage()));
                                 }
                                 return;
                             }
@@ -395,7 +397,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                     WSItemPK wsItemPK = new WSItemPK();
                     wsItemPK.setWsDataClusterPK((WSDataClusterPK) getXObject().getWsKey());
                     wsItemPK.setConceptName(li.getConcept());
-                    wsItemPK.setIds(li.getIds());
+                    wsItemPK.getIds().addAll(Arrays.asList(li.getIds()));
                     wsUpdateMetadataItem.setWsItemPK(wsItemPK);
                     wsUpdateMetadataItem.setTaskId(input.getValue());
                     port.updateItemMetadata(wsUpdateMetadataItem);
@@ -404,11 +406,11 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                 }
             } catch (Exception e) {
                 log.error(e.getMessage(), e);
-				if (!Util.handleConnectionException(shell, e, Messages.DataClusterBrowserMainPage_41)) {
-					MessageDialog.openError(shell, Messages.DataClusterBrowserMainPage_41,
-	                        Messages.bind(Messages.DataClusterBrowserMainPage_42, e.getLocalizedMessage()));
-	                
-				}
+                if (!Util.handleConnectionException(shell, e, Messages.DataClusterBrowserMainPage_41)) {
+                    MessageDialog.openError(shell, Messages.DataClusterBrowserMainPage_41,
+                            Messages.bind(Messages.DataClusterBrowserMainPage_42, e.getLocalizedMessage()));
+
+                }
                 return;
             }
         }
@@ -454,13 +456,13 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 
                 // left
                 WSItemPK leftWSItemPK = new WSItemPK((WSDataClusterPK) getXObject().getWsKey(), leftLineItem.getConcept().trim(),
-                        leftLineItem.getIds());
+                        Arrays.asList(leftLineItem.getIds()));
                 WSItem leftWSItem = Util.getPort(getXObject()).getItem(new WSGetItem(leftWSItemPK));
                 String leftItemXmlContent = leftWSItem.getContent();
 
                 // right
                 WSItemPK rightWSItemPK = new WSItemPK((WSDataClusterPK) getXObject().getWsKey(), rightLineItem.getConcept()
-                        .trim(), rightLineItem.getIds());
+                        .trim(), Arrays.asList(rightLineItem.getIds()));
                 WSItem rightWSItem = Util.getPort(getXObject()).getItem(new WSGetItem(rightWSItemPK));
                 String rightItemXmlContent = rightWSItem.getContent();
 
@@ -475,8 +477,8 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 
             } catch (Exception e) {
                 log.error(e.getMessage(), e);
-				if (!Util.handleConnectionException(shell, e, null)) {
-                	MessageDialog.openError(shell, Messages._Error,
+                if (!Util.handleConnectionException(shell, e, null)) {
+                    MessageDialog.openError(shell, Messages._Error,
                             Messages.bind(Messages.DataClusterBrowserMainPage_48, e.getLocalizedMessage()));
                 }
             }
@@ -518,8 +520,8 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                 LineItem li = (LineItem) selection.getFirstElement();
 
                 WSItem wsItem = Util.getPort(getXObject()).getItem(
-                        new WSGetItem(
-                                new WSItemPK((WSDataClusterPK) getXObject().getWsKey(), li.getConcept().trim(), li.getIds())));
+                        new WSGetItem(new WSItemPK((WSDataClusterPK) getXObject().getWsKey(), li.getConcept().trim(), Arrays
+                                .asList(li.getIds()))));
 
                 String xml = wsItem.getContent();
                 WSString svnContent = null;
@@ -543,9 +545,9 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 
             } catch (Exception e) {
                 log.error(e.getMessage(), e);
-                if(!Util.handleConnectionException(shell, e, null)) {
+                if (!Util.handleConnectionException(shell, e, null)) {
                     MessageDialog.openError(shell, Messages._Error,
-                        Messages.bind(Messages.DataClusterBrowserMainPage_59, e.getLocalizedMessage()));
+                            Messages.bind(Messages.DataClusterBrowserMainPage_59, e.getLocalizedMessage()));
                 }
             }
         }
@@ -671,7 +673,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                             return;
                         }
                         WSItemPK itempk = new WSItemPK((WSDataClusterPK) xObject.getWsKey(), lineItem.getConcept(),
-                                lineItem.getIds());
+                                Arrays.asList(lineItem.getIds()));
                         port.deleteItemWithReport(new WSDeleteItemWithReport(itempk,
                                 "genericUI", "LOGIC_DELETE", partPath, getXObject().getUsername(), false, true, false));//$NON-NLS-1$ //$NON-NLS-2$
 
@@ -684,9 +686,9 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                     monitor.done();
                 } catch (Exception e) {
                     log.error(e.getMessage(), e);
-                    if(!Util.handleConnectionException(shell, e, null)) {
+                    if (!Util.handleConnectionException(shell, e, null)) {
                         MessageDialog.openError(shell, Messages.DataClusterBrowserMainPage_78,
-                            Messages.bind(Messages.DataClusterBrowserMainPage_79, e.getLocalizedMessage()));
+                                Messages.bind(Messages.DataClusterBrowserMainPage_79, e.getLocalizedMessage()));
                     }
                 }// try
 
@@ -780,7 +782,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                 List<LineItem> orderItems = new LinkedList<LineItem>();
                 try {
                     WSStringArray concepts = port.getConceptsInDataCluster(param);
-                    if (concepts == null || concepts.getStrings() == null || concepts.getStrings().length == 0) {
+                    if (concepts == null || concepts.getStrings() == null || concepts.getStrings().isEmpty()) {
                         orderItems.addAll(lineItems);
                     } else {
                         Map<String, List<LineItem>> orderMap = new LinkedHashMap<String, List<LineItem>>();
@@ -804,7 +806,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                         }
                         orderItems.addAll(otherItems);
                     }
-                } catch (RemoteException e) {
+                } catch (WebServiceException e) {
                     log.error(e.getMessage(), e);
                 }
                 return orderItems;
@@ -827,7 +829,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                             return;
                         }
                         WSItemPK itempk = new WSItemPK((WSDataClusterPK) getXObject().getWsKey(), lineItem.getConcept(),
-                                lineItem.getIds());
+                                Arrays.asList(lineItem.getIds()));
                         port.deleteItemWithReport(new WSDeleteItemWithReport(itempk,
                                 "genericUI", "PHYSICAL_DELETE", null, getXObject().getUsername(), false, true, false));//$NON-NLS-1$ //$NON-NLS-2$
                         monitor.worked(1);
@@ -841,9 +843,9 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                                 Messages.bind(Messages.DataClusterBrowserMainPage_referedRecord, constraintMsg));
                     } else {
                         log.error(e.getMessage(), e);
-                        if(!Util.handleConnectionException(shell, e, null)) {
+                        if (!Util.handleConnectionException(shell, e, null)) {
                             MessageDialog.openError(shell, Messages.DataClusterBrowserMainPage_96,
-                                Messages.bind(Messages.DataClusterBrowserMainPage_97, e.getLocalizedMessage()));
+                                    Messages.bind(Messages.DataClusterBrowserMainPage_97, e.getLocalizedMessage()));
                         }
                     }
                 }// try
@@ -896,13 +898,13 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 
                 String xml = "<NewItem><NewElement></NewElement></NewItem>"; //$NON-NLS-1$
 
-                WSDataModelPK[] dmPKs = Util.getPort(getXObject()).getDataModelPKs(new WSRegexDataModelPKs("*")) //$NON-NLS-1$
+                List<WSDataModelPK> dmPKs = Util.getPort(getXObject()).getDataModelPKs(new WSRegexDataModelPKs("*")) //$NON-NLS-1$
                         .getWsDataModelPKs();
                 ArrayList<String> dataModels = new ArrayList<String>();
                 if (dmPKs != null) {
-                    for (int i = 0; i < dmPKs.length; i++) {
-                        if (!"XMLSCHEMA---".equals(dmPKs[i].getPk())) { //$NON-NLS-1$
-                            dataModels.add(dmPKs[i].getPk());
+                    for (WSDataModelPK pk : dmPKs) {
+                        if (!"XMLSCHEMA---".equals(pk.getPk())) { //$NON-NLS-1$
+                            dataModels.add(pk.getPk());
                         }
                     }
                 }
@@ -945,9 +947,9 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 
             } catch (Exception e) {
                 log.error(e.getMessage(), e);
-                if(!Util.handleConnectionException(shell, e, null)) {
+                if (!Util.handleConnectionException(shell, e, null)) {
                     MessageDialog.openError(shell, Messages._Error,
-                        Messages.bind(Messages.DataClusterBrowserMainPage_103, e.getLocalizedMessage()));
+                            Messages.bind(Messages.DataClusterBrowserMainPage_103, e.getLocalizedMessage()));
                 }
             }
         }
@@ -1063,12 +1065,12 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                     }
                     try {
                         port.routeItemV2(new WSRouteItemV2(new WSItemPK((WSDataClusterPK) getXObject().getWsKey(), lineItem
-                                .getConcept(), lineItem.getIds())));
+                                .getConcept(), Arrays.asList(lineItem.getIds()))));
                     } catch (Exception e) {
                         log.error(e.getMessage(), e);
-                        if(!Util.handleConnectionException(shell, e, null)) {
+                        if (!Util.handleConnectionException(shell, e, null)) {
                             MessageDialog.openError(shell, Messages.DataClusterBrowserMainPage_127,
-                                Messages.bind(Messages.DataClusterBrowserMainPage_128, itemID));
+                                    Messages.bind(Messages.DataClusterBrowserMainPage_128, itemID));
                         }
                     }// try
                     monitor.worked(1);

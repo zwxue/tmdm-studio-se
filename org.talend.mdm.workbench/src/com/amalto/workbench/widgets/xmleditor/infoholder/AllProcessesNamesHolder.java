@@ -30,21 +30,24 @@ class AllProcessesNamesHolder extends ExternalInfoHolder<String[]> {
     @Override
     public String[] getExternalInfo() {
 
-        if (port == null)
+        if (port == null) {
             return new String[0];
+        }
 
-        WSTransformerV2PK[] transformerPKs = null;
+        List<WSTransformerV2PK> transformerPKs = null;
         try {
             transformerPKs = port.getTransformerV2PKs(new WSGetTransformerV2PKs("")).getWsTransformerV2PK();//$NON-NLS-1$
         } catch (Exception e) {
             return new String[0];
         }
         List<String> processes = new ArrayList<String>();
-        if (transformerPKs != null)
+        if (transformerPKs != null) {
             for (WSTransformerV2PK pk : transformerPKs) {
-                if (pk.getPk() != null && pk.getPk().length() > 0)
+                if (pk.getPk() != null && pk.getPk().length() > 0) {
                     processes.add(pk.getPk());
+                }
             }
+        }
 
         return processes.toArray(new String[0]);
     }

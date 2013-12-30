@@ -39,12 +39,14 @@ public class AllJobInfoHolder extends ExternalInfoHolder<JobInfo[]> {
         List<JobInfo> results = new ArrayList<JobInfo>();
 
         try {
-            WSMDMJob[] jobPKs = port.getMDMJob(new WSMDMNULL()).getWsMDMJob();
-            if (jobPKs == null)
+            List<WSMDMJob> jobPKs = port.getMDMJob(new WSMDMNULL()).getWsMDMJob();
+            if (jobPKs == null) {
                 return new JobInfo[0];
+            }
 
-            for (WSMDMJob eacJobPK : jobPKs)
+            for (WSMDMJob eacJobPK : jobPKs) {
                 results.add(new JobInfo(eacJobPK.getJobName(), eacJobPK.getJobVersion(), eacJobPK.getSuffix()));
+            }
 
         } catch (Exception e) {
             log.error(e.getMessage(), e);

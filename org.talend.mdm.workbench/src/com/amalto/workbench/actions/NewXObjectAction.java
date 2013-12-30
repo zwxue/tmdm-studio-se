@@ -15,6 +15,7 @@ package com.amalto.workbench.actions;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -65,33 +66,25 @@ import com.amalto.workbench.webservices.WSGetObjectsForSynchronizationPlans;
 import com.amalto.workbench.webservices.WSGetObjectsForUniverses;
 import com.amalto.workbench.webservices.WSMenu;
 import com.amalto.workbench.webservices.WSMenuEntry;
-import com.amalto.workbench.webservices.WSMenuMenuEntriesDescriptions;
 import com.amalto.workbench.webservices.WSMenuPK;
 import com.amalto.workbench.webservices.WSPutDataModel;
 import com.amalto.workbench.webservices.WSRegexDataModelPKs;
 import com.amalto.workbench.webservices.WSRole;
 import com.amalto.workbench.webservices.WSRolePK;
 import com.amalto.workbench.webservices.WSRoutingRule;
-import com.amalto.workbench.webservices.WSRoutingRuleExpression;
 import com.amalto.workbench.webservices.WSRoutingRulePK;
 import com.amalto.workbench.webservices.WSStoredProcedure;
 import com.amalto.workbench.webservices.WSStoredProcedurePK;
 import com.amalto.workbench.webservices.WSSynchronizationPlan;
-import com.amalto.workbench.webservices.WSSynchronizationPlanItemsSynchronizations;
 import com.amalto.workbench.webservices.WSSynchronizationPlanPK;
-import com.amalto.workbench.webservices.WSSynchronizationPlanXtentisObjectsSynchronizations;
-import com.amalto.workbench.webservices.WSSynchronizationPlanXtentisObjectsSynchronizationsSynchronizations;
 import com.amalto.workbench.webservices.WSTransformerProcessStep;
 import com.amalto.workbench.webservices.WSTransformerV2;
 import com.amalto.workbench.webservices.WSTransformerV2PK;
 import com.amalto.workbench.webservices.WSTransformerVariablesMapping;
 import com.amalto.workbench.webservices.WSUniverse;
-import com.amalto.workbench.webservices.WSUniverseItemsRevisionIDs;
 import com.amalto.workbench.webservices.WSUniversePK;
-import com.amalto.workbench.webservices.WSUniverseXtentisObjectsRevisionIDs;
 import com.amalto.workbench.webservices.WSView;
 import com.amalto.workbench.webservices.WSViewPK;
-import com.amalto.workbench.webservices.WSWhereCondition;
 import com.amalto.workbench.webservices.XtentisPort;
 
 public class NewXObjectAction extends Action {
@@ -114,10 +107,13 @@ public class NewXObjectAction extends Action {
     public void run() {
         try {
             super.run();
+
             ISelection selection = view.getViewer().getSelection();
             TreeObject xobject = (TreeObject) ((IStructuredSelection) selection).getFirstElement();
             xobject = LocalTreeObjectRepository.getInstance().registerNewTreeObject(xobject);
             TreeParent xfolder = (xobject.isXObject()) ? xobject.getParent() : (TreeParent) xobject;
+
+            List<String> regex = Collections.singletonList(".*"); //$NON-NLS-1$
 
             // get New Key
             Object key = null;
@@ -182,17 +178,13 @@ public class NewXObjectAction extends Action {
             // validator)
             switch (xfolder.getType()) {
             case TreeObject.TRANSFORMER:
-                ViewInputDialog vid = new ViewInputDialog(
-                        view.getSite(),
-                        xfolder,
-                        view.getSite().getShell(),
-                        title,// "New "+IConstants.TALEND+" Object Instance",
-                        Messages.NewXObjectAction_DialogTip,
-                        "Smart_view_", new IInputValidator() {//$NON-NLS-1$
+                ViewInputDialog vid = new ViewInputDialog(view.getSite(), xfolder, view.getSite().getShell(), title,// "New "+IConstants.TALEND+" Object Instance",
+                        Messages.NewXObjectAction_DialogTip, "Smart_view_", new IInputValidator() {//$NON-NLS-1$
 
                             public String isValid(String newText) {
-                                if ((newText == null) || "".equals(newText))//$NON-NLS-1$
+                                if ((newText == null) || "".equals(newText)) {
                                     return Messages.NewXObjectAction_NameCannotBeEmpty;
+                                }
                                 // yyun: bug 16141: the empty charactors inside the string isn't permitted
                                 // if (!Pattern.matches("\\w*(\\s*|#|\\w+)+\\w+", newText)) {
                                 if (!Pattern.matches("\\w*(#|\\w*)+\\w+#*", newText)) {//$NON-NLS-1$
@@ -205,21 +197,21 @@ public class NewXObjectAction extends Action {
                 vid.create();
                 // vid.getShell().setSize(new Point(500,270));
                 vid.setBlockOnOpen(true);
-                if (vid.open() == Window.CANCEL)
+                if (vid.open() == Window.CANCEL) {
                     return;
+                }
                 key = vid.getValue();
                 break;
 
             case TreeObject.VIEW:
 
-                ViewInputDialog tid = new ViewInputDialog(view.getSite(),
-                        xfolder, view.getSite()
-                                .getShell(), title,// "New "+IConstants.TALEND+" Object Instance",
+                ViewInputDialog tid = new ViewInputDialog(view.getSite(), xfolder, view.getSite().getShell(), title,// "New "+IConstants.TALEND+" Object Instance",
                         Messages.NewXObjectAction_EnterNameForInstance, "Browse_items_", new IInputValidator() {//$NON-NLS-1$
 
                             public String isValid(String newText) {
-                                if ((newText == null) || "".equals(newText))//$NON-NLS-1$
+                                if ((newText == null) || "".equals(newText)) {
                                     return Messages.NewXObjectAction_NameCannotBeEmpty;
+                                }
                                 // yyun: bug 16141: the empty charactors inside the string isn't permitted
                                 // if (!Pattern.matches("\\w*(\\s*|#|\\w+)+\\w+#*", newText)) {
                                 if (!Pattern.matches("\\w*(#|\\w*)+\\w+#*", newText)) {//$NON-NLS-1$
@@ -232,29 +224,32 @@ public class NewXObjectAction extends Action {
                 tid.create();
                 tid.getShell().setSize(new Point(600, 180));
                 tid.setBlockOnOpen(true);
-                if (tid.open() == Window.CANCEL)
+                if (tid.open() == Window.CANCEL) {
                     return;
+                }
                 key = tid.getValue();
                 break;
             case TreeObject.DATA_CLUSTER:
                 StringBuffer clsBuf = new StringBuffer();
-                RoleAssignmentDialog dialog = new RoleAssignmentDialog(view.getSite().getShell(), xfolder, title, Messages.NewXObjectAction_DataCluster,
-                        clsBuf);
+                RoleAssignmentDialog dialog = new RoleAssignmentDialog(view.getSite().getShell(), xfolder, title,
+                        Messages.NewXObjectAction_DataCluster, clsBuf);
                 dialog.setBlockOnOpen(true);
                 if (dialog.open() == Window.OK) {
                     key = clsBuf.toString();
-                } else
+                } else {
                     return;
+                }
                 break;
             case TreeObject.DATA_MODEL:
                 StringBuffer mlBuf = new StringBuffer();
-                RoleAssignmentDialog dlg = new RoleAssignmentDialog(view.getSite().getShell(), xfolder, title, Messages.NewXObjectAction_DataModel,
-                        mlBuf);
+                RoleAssignmentDialog dlg = new RoleAssignmentDialog(view.getSite().getShell(), xfolder, title,
+                        Messages.NewXObjectAction_DataModel, mlBuf);
                 dlg.setBlockOnOpen(true);
                 if (dlg.open() == Window.OK) {
                     key = mlBuf.toString();
-                } else
+                } else {
                     return;
+                }
                 break;
             case TreeObject.SOURCE:
             case TreeObject.CUSTOM_TYPE:
@@ -275,8 +270,9 @@ public class NewXObjectAction extends Action {
                         Messages.NewXObjectAction_EnterNameForInstance, null, new IInputValidator() {
 
                             public String isValid(String newText) {
-                                if ((newText == null) || "".equals(newText))//$NON-NLS-1$
+                                if ((newText == null) || "".equals(newText)) {
                                     return Messages.NewXObjectAction_NameCannotBeEmpty;
+                                }
                                 // yyun: bug 16141: the empty charactors inside the string isn't permitted
                                 // if (!Pattern.matches("\\w*(\\s*|#|\\.|\\w+)+\\w+", newText)) {
                                 if (!Pattern.matches("\\w*(#|\\.|\\w*)+\\w+", newText)) {//$NON-NLS-1$
@@ -286,8 +282,9 @@ public class NewXObjectAction extends Action {
                             };
                         });
                 id1.setBlockOnOpen(true);
-                if (id1.open() == Window.CANCEL)
+                if (id1.open() == Window.CANCEL) {
                     return;
+                }
                 key = id1.getValue();
                 break;
             default:
@@ -305,12 +302,12 @@ public class NewXObjectAction extends Action {
 
             case TreeObject.DATA_MODEL: {
                 // check if already exists
-                if (port.existsDataModel(new WSExistsDataModel(new WSDataModelPK((String) key))).is_true()) {
+                if (port.existsDataModel(new WSExistsDataModel(new WSDataModelPK((String) key))).isTrue()) {
                     MessageDialog.openError(this.view.getSite().getShell(), Messages.NewXObjectAction_ErrorCreatingInstance,
-                            Messages.bind(Messages.NewXObjectAction_ErrorMsg, (String) key));
+                            Messages.bind(Messages.NewXObjectAction_ErrorMsg, key));
                     return;
                 }
-                WSDataModelPK[] dataModelPKs = port.getDataModelPKs(new WSRegexDataModelPKs("*")).getWsDataModelPKs(); //$NON-NLS-1$
+                List<WSDataModelPK> dataModelPKs = port.getDataModelPKs(new WSRegexDataModelPKs("*")).getWsDataModelPKs(); //$NON-NLS-1$
                 for (WSDataModelPK dataModel : dataModelPKs) {
                     String pk = dataModel.getPk();
                     if (pk.equalsIgnoreCase((String) key)) {
@@ -334,41 +331,39 @@ public class NewXObjectAction extends Action {
 
             case TreeObject.VIEW: {
                 // check if already exists
-                if (port.existsView(new WSExistsView(new WSViewPK((String) key))).is_true()) {
+                if (port.existsView(new WSExistsView(new WSViewPK((String) key))).isTrue()) {
                     MessageDialog.openError(this.view.getSite().getShell(), Messages.NewXObjectAction_ErrorCreatingInstance,
-                            Messages.bind(Messages.NewXObjectAction_ErrorMsg2, (String) key));
+                            Messages.bind(Messages.NewXObjectAction_ErrorMsg2, key));
                     return;
                 }
                 // add
-                WSDataModelPK[] dataModelPKs = Util.getAllDataModelPKs(new URL(xobject.getEndpointAddress()),
+                List<WSDataModelPK> dataModelPKs = Util.getAllDataModelPKs(new URL(xobject.getEndpointAddress()),
                         xobject.getUniverse(), xobject.getUsername(), xobject.getPassword());
                 String firstDataModel = null;
-                for (int i = 0; i < dataModelPKs.length; i++) {
-                    if (dataModelPKs[i].getPk().indexOf("XMLSCHEMA--") == -1) {//$NON-NLS-1$
-                        firstDataModel = dataModelPKs[i].getPk();
+                for (WSDataModelPK dataModelPK : dataModelPKs) {
+                    if (dataModelPK.getPk().indexOf("XMLSCHEMA--") == -1) {//$NON-NLS-1$
+                        firstDataModel = dataModelPK.getPk();
                         break;
                     }
                 }
                 if (firstDataModel == null) {
-                    MessageDialog.openError(view.getSite().getShell(), Messages._Error,
-                            Messages.NewXObjectAction_ErrorMsg3);
+                    MessageDialog.openError(view.getSite().getShell(), Messages._Error, Messages.NewXObjectAction_ErrorMsg3);
                     return;
                 }
-                WSDataClusterPK[] dataClusterPKs = Util.getAllDataClusterPKs(new URL(xobject.getEndpointAddress()),
+                List<WSDataClusterPK> dataClusterPKs = Util.getAllDataClusterPKs(new URL(xobject.getEndpointAddress()),
                         xobject.getUniverse(), xobject.getUsername(), xobject.getPassword());
                 String firstItemCluster = null;
-                for (int i = 0; i < dataClusterPKs.length; i++) {
-                    if (!dataClusterPKs[i].getPk().equals("CACHE")) { // FIXME: hardcoded CACHE//$NON-NLS-1$
-                        firstItemCluster = dataClusterPKs[i].getPk();
+                for (WSDataClusterPK dataClusterPK : dataClusterPKs) {
+                    if (!dataClusterPK.getPk().equals("CACHE")) { // FIXME: hardcoded CACHE//$NON-NLS-1$
+                        firstItemCluster = dataClusterPK.getPk();
                         break;
                     }
                 }
                 if (firstItemCluster == null) {
-                    MessageDialog.openError(view.getSite().getShell(), Messages._Error,
-                            Messages.NewXObjectAction_ErrorMsg4);
+                    MessageDialog.openError(view.getSite().getShell(), Messages._Error, Messages.NewXObjectAction_ErrorMsg4);
                     return;
                 }
-                WSView wsview = new WSView((String) key, "", new String[] {}, new WSWhereCondition[0], new String[] {}, null,//$NON-NLS-1$
+                WSView wsview = new WSView((String) key, "", new ArrayList(), new ArrayList(), new ArrayList(), null,//$NON-NLS-1$
                         new WSBoolean(false));
                 // port.putView(new WSPutView(view));
                 newInstance = new TreeObject((String) key, xfolder.getServerRoot(), TreeObject.VIEW, new WSViewPK((String) key),
@@ -378,13 +373,13 @@ public class NewXObjectAction extends Action {
 
             case TreeObject.DATA_CLUSTER: {
                 // check if already exists
-                if (port.existsDataCluster(new WSExistsDataCluster(new WSDataClusterPK((String) key))).is_true()) {
+                if (port.existsDataCluster(new WSExistsDataCluster(new WSDataClusterPK((String) key))).isTrue()) {
                     MessageDialog.openError(this.view.getSite().getShell(), Messages.NewXObjectAction_ErrorCreatingInstance,
-                            Messages.bind(Messages.NewXObjectAction_ErrorMsg5, (String) key));
+                            Messages.bind(Messages.NewXObjectAction_ErrorMsg5, key));
                     return;
                 }
                 // add
-                WSDataCluster dc = new WSDataCluster((String) key, "", "" // vocabulary//$NON-NLS-1$//$NON-NLS-2$
+                WSDataCluster dc = new WSDataCluster((String) key, "", ""//$NON-NLS-1$//$NON-NLS-2$
                 );
                 newInstance = new TreeObject((String) key, xfolder.getServerRoot(), TreeObject.DATA_CLUSTER, new WSDataClusterPK(
                         (String) key), dc);
@@ -393,9 +388,9 @@ public class NewXObjectAction extends Action {
 
             case TreeObject.STORED_PROCEDURE: {
                 // check if already exists
-                if (port.existsStoredProcedure(new WSExistsStoredProcedure(new WSStoredProcedurePK((String) key))).is_true()) {
+                if (port.existsStoredProcedure(new WSExistsStoredProcedure(new WSStoredProcedurePK((String) key))).isTrue()) {
                     MessageDialog.openError(this.view.getSite().getShell(), Messages.NewXObjectAction_ErrorCreatingInstance,
-                            Messages.bind(Messages.NewXObjectAction_ErrorMsg6, (String) key));
+                            Messages.bind(Messages.NewXObjectAction_ErrorMsg6, key));
                     return;
                 }
                 // add
@@ -407,9 +402,9 @@ public class NewXObjectAction extends Action {
 
             case TreeObject.ROLE: {
                 // check if already exists
-                if (port.existsRole(new WSExistsRole(new WSRolePK((String) key))).is_true()) {
+                if (port.existsRole(new WSExistsRole(new WSRolePK((String) key))).isTrue()) {
                     MessageDialog.openError(this.view.getSite().getShell(), Messages.NewXObjectAction_ErrorCreatingInstance,
-                            Messages.bind(Messages.NewXObjectAction_ErrorMsg7, (String) key));
+                            Messages.bind(Messages.NewXObjectAction_ErrorMsg7, key));
                     return;
                 }
                 // add
@@ -422,14 +417,14 @@ public class NewXObjectAction extends Action {
 
             case TreeObject.ROUTING_RULE: {
                 // check if already exists
-                if (port.existsRoutingRule(new WSExistsRoutingRule(new WSRoutingRulePK((String) key))).is_true()) {
+                if (port.existsRoutingRule(new WSExistsRoutingRule(new WSRoutingRulePK((String) key))).isTrue()) {
                     MessageDialog.openError(this.view.getSite().getShell(), Messages.NewXObjectAction_ErrorCreatingInstance,
-                            Messages.bind(Messages.NewXObjectAction_ErrorMsg8, (String) key));
+                            Messages.bind(Messages.NewXObjectAction_ErrorMsg8, key));
                     return;
                 }
                 // add
                 WSRoutingRule routingRule = new WSRoutingRule((String) key, "", false, "*", "", "",//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$
-                        new WSRoutingRuleExpression[0], null, false);
+                        new ArrayList(), null, false);
                 newInstance = new TreeObject((String) key, xfolder.getServerRoot(), TreeObject.ROUTING_RULE, new WSRoutingRulePK(
                         (String) key), routingRule);
                 break;
@@ -437,9 +432,9 @@ public class NewXObjectAction extends Action {
 
             case TreeObject.TRANSFORMER: {
                 // check if already exists
-                if (port.existsTransformerV2(new WSExistsTransformerV2(new WSTransformerV2PK((String) key))).is_true()) {
+                if (port.existsTransformerV2(new WSExistsTransformerV2(new WSTransformerV2PK((String) key))).isTrue()) {
                     MessageDialog.openError(this.view.getSite().getShell(), Messages.NewXObjectAction_ErrorCreatingInstance,
-                            Messages.bind(Messages.NewXObjectAction_ErrorMsg9, (String) key));
+                            Messages.bind(Messages.NewXObjectAction_ErrorMsg9, key));
                     return;
                 }
                 // add
@@ -469,10 +464,9 @@ public class NewXObjectAction extends Action {
 
                     ArrayList<WSTransformerProcessStep> list = new ArrayList<WSTransformerProcessStep>();
                     WSTransformerProcessStep step = new WSTransformerProcessStep(TRANSFORMER_PLUGIN, "Stylesheet", parameters,//$NON-NLS-1$
-                            inItems.toArray(new WSTransformerVariablesMapping[inItems.size()]),
-                            outItems.toArray(new WSTransformerVariablesMapping[outItems.size()]), false);
+                            inItems, outItems, false);
                     list.add(step);
-                    transformer.setProcessSteps(list.toArray(new WSTransformerProcessStep[list.size()]));
+                    transformer.getProcessSteps().addAll(list);
                 }
                 newInstance = new TreeObject((String) key, xfolder.getServerRoot(), TreeObject.TRANSFORMER,
                         new WSTransformerV2PK((String) key), transformer);
@@ -481,35 +475,37 @@ public class NewXObjectAction extends Action {
 
             case TreeObject.MENU: {
                 // check if already exists
-                if (port.existsMenu(new WSExistsMenu(new WSMenuPK((String) key))).is_true()) {
+                if (port.existsMenu(new WSExistsMenu(new WSMenuPK((String) key))).isTrue()) {
                     MessageDialog.openError(this.view.getSite().getShell(), Messages.NewXObjectAction_ErrorCreatingInstance,
-                            Messages.bind(Messages.NewXObjectAction_ErrorMsg10, (String) key));
+                            Messages.bind(Messages.NewXObjectAction_ErrorMsg10, key));
                     return;
                 }
                 // add
-                WSMenu menu = new WSMenu((String) key, "", new WSMenuEntry[] { new WSMenuEntry((String) key,//$NON-NLS-1$
-                        new WSMenuMenuEntriesDescriptions[] { new WSMenuMenuEntriesDescriptions("en", (String) key) }, null,//$NON-NLS-1$
-                        null, null, null) });
+                List<WSMenuEntry> menuEntries = new ArrayList<WSMenuEntry>();
+                List<WSMenuEntry.Descriptions> descriptions = new ArrayList<WSMenuEntry.Descriptions>();
+                descriptions.add(new WSMenuEntry.Descriptions("en", (String) key));//$NON-NLS-1$
+                menuEntries.add(new WSMenuEntry((String) key, descriptions, null, null, null, null));
+                WSMenu menu = new WSMenu((String) key, "", menuEntries);
                 newInstance = new TreeObject((String) key, xfolder.getServerRoot(), TreeObject.MENU, new WSMenuPK((String) key),
                         menu);
                 break;
             }
             case TreeObject.UNIVERSE: {
                 // check if already exists
-                if (port.existsUniverse(new WSExistsUniverse(new WSUniversePK((String) key))).is_true()) {
-                    MessageDialog.openError(this.view.getSite().getShell(), Messages.NewXObjectAction_ErrorCreatingInstance, Messages.bind(Messages.NewXObjectAction_ErrorMsg11, (String) key
-                            ));
+                if (port.existsUniverse(new WSExistsUniverse(new WSUniversePK((String) key))).isTrue()) {
+                    MessageDialog.openError(this.view.getSite().getShell(), Messages.NewXObjectAction_ErrorCreatingInstance,
+                            Messages.bind(Messages.NewXObjectAction_ErrorMsg11, key));
                     return;
                 }
                 // add
-                List<WSUniverseXtentisObjectsRevisionIDs> objectsId = new ArrayList<WSUniverseXtentisObjectsRevisionIDs>();
-                for (String object : port.getObjectsForUniverses(new WSGetObjectsForUniverses(new String[] { ".*" }))//$NON-NLS-1$
-                        .getStrings()) {// IConstants.XTENTISOBJECTS){
-                    objectsId.add(new WSUniverseXtentisObjectsRevisionIDs(object, ""));//$NON-NLS-1$
+                List<WSUniverse.XtentisObjectsRevisionIDs> objectsId = new ArrayList<WSUniverse.XtentisObjectsRevisionIDs>();
+
+                for (String object : port.getObjectsForUniverses(new WSGetObjectsForUniverses(regex)).getStrings()) {// IConstants.XTENTISOBJECTS){
+                    objectsId.add(new WSUniverse.XtentisObjectsRevisionIDs(object, ""));//$NON-NLS-1$
                 }
                 WSUniverse universe = new WSUniverse((String) key, "",//$NON-NLS-1$
-                        objectsId.toArray(new WSUniverseXtentisObjectsRevisionIDs[objectsId.size()]), "",//$NON-NLS-1$
-                        new WSUniverseItemsRevisionIDs[] {});
+                        objectsId, "",//$NON-NLS-1$
+                        new ArrayList<WSUniverse.ItemsRevisionIDs>());
                 newInstance = new TreeObject((String) key, xfolder.getServerRoot(), TreeObject.UNIVERSE, new WSUniversePK(
                         (String) key), universe);
                 break;
@@ -517,32 +513,31 @@ public class NewXObjectAction extends Action {
             case TreeObject.SYNCHRONIZATIONPLAN: {
                 // check if already exists
                 if (port.existsSynchronizationPlan(new WSExistsSynchronizationPlan(new WSSynchronizationPlanPK((String) key)))
-                        .is_true()) {
+                        .isTrue()) {
                     MessageDialog.openError(this.view.getSite().getShell(), Messages.NewXObjectAction_ErrorCreatingInstance,
-                            Messages.bind(Messages.NewXObjectAction_ErrorMsg12, (String) key));
+                            Messages.bind(Messages.NewXObjectAction_ErrorMsg12, key));
                     return;
                 }
                 // add
-                List<WSSynchronizationPlanXtentisObjectsSynchronizations> objectsId = new ArrayList<WSSynchronizationPlanXtentisObjectsSynchronizations>();
-                for (String object : port.getObjectsForSynchronizationPlans(
-                        new WSGetObjectsForSynchronizationPlans(new String[] { ".*" })).getStrings()) {// IConstants.XTENTISOBJECTS){//$NON-NLS-1$
-                    objectsId.add(new WSSynchronizationPlanXtentisObjectsSynchronizations(object,
-                            new WSSynchronizationPlanXtentisObjectsSynchronizationsSynchronizations[0]));
+                List<WSSynchronizationPlan.XtentisObjectsSynchronizations> objectsId = new ArrayList<WSSynchronizationPlan.XtentisObjectsSynchronizations>();
+                for (String object : port.getObjectsForSynchronizationPlans(new WSGetObjectsForSynchronizationPlans(regex))
+                        .getStrings()) {// IConstants.XTENTISOBJECTS){
+                    objectsId.add(new WSSynchronizationPlan.XtentisObjectsSynchronizations(object, new ArrayList()));
                 }
                 Calendar calendar = Calendar.getInstance();
                 calendar.setTimeInMillis(0);
                 WSSynchronizationPlan synchronizationPlan = new WSSynchronizationPlan((String) key, "", "", "", "", "", "", "",//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$//$NON-NLS-5$//$NON-NLS-6$//$NON-NLS-7$
-                        "", "", objectsId.toArray(new WSSynchronizationPlanXtentisObjectsSynchronizations[objectsId.size()]),//$NON-NLS-1$//$NON-NLS-2$
-                        new WSSynchronizationPlanItemsSynchronizations[] {});
+                        "", "", objectsId,//$NON-NLS-1$//$NON-NLS-2$
+                        new ArrayList());
                 newInstance = new TreeObject((String) key, xfolder.getServerRoot(), TreeObject.SYNCHRONIZATIONPLAN,
                         new WSSynchronizationPlanPK((String) key), synchronizationPlan);
                 break;
             }
             case TreeObject.CUSTOM_TYPE: {
                 // check if already exists
-                if (port.existsUniverse(new WSExistsUniverse(new WSUniversePK((String) key))).is_true()) {
+                if (port.existsUniverse(new WSExistsUniverse(new WSUniversePK((String) key))).isTrue()) {
                     MessageDialog.openError(this.view.getSite().getShell(), Messages.NewXObjectAction_ErrorCreatingInstance,
-                            Messages.bind(Messages.NewXObjectAction_ErrorMsg13, (String) key));
+                            Messages.bind(Messages.NewXObjectAction_ErrorMsg13, key));
                     return;
                 }
                 // add
@@ -566,16 +561,18 @@ public class NewXObjectAction extends Action {
                 /*
                  * make the new page dirty
                  */
-                if (editpart.getSelectedPage() instanceof AMainPage)
+                if (editpart.getSelectedPage() instanceof AMainPage) {
                     ((AMainPage) editpart.getSelectedPage()).markDirty();
-                if (editpart.getSelectedPage() instanceof AMainPageV2)
+                }
+                if (editpart.getSelectedPage() instanceof AMainPageV2) {
                     ((AMainPageV2) editpart.getSelectedPage()).markDirty();
+                }
             }
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            if(!Util.handleConnectionException(view, e, null)){
+            if (!Util.handleConnectionException(view, e, null)) {
                 MessageDialog.openError(view.getSite().getShell(), Messages._Error,
-                    Messages.bind(Messages.NewXObjectAction_ErrorMsg14, IConstants.TALEND, e.getLocalizedMessage()));
+                        Messages.bind(Messages.NewXObjectAction_ErrorMsg14, IConstants.TALEND, e.getLocalizedMessage()));
             }
         }
     }

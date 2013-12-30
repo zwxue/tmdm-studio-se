@@ -15,6 +15,7 @@ package com.amalto.workbench.dialogs;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Set;
 
 import org.apache.commons.logging.Log;
@@ -58,7 +59,7 @@ import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.utils.HttpClientUtil;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.webservices.WSMenuEntry;
-import com.amalto.workbench.webservices.WSMenuMenuEntriesDescriptions;
+import com.amalto.workbench.webservices.WSMenuEntry.Descriptions;
 import com.amalto.workbench.widgets.FileSelectWidget;
 
 public class MenuEntryDialog extends Dialog {
@@ -96,6 +97,7 @@ public class MenuEntryDialog extends Dialog {
     private final boolean isLocal;
 
     private TreeObject treeObject;
+
     /**
      * @param parentShell
      */
@@ -109,10 +111,10 @@ public class MenuEntryDialog extends Dialog {
         this.isLocal = isLocal;
         this.treeObject = treeObject;
         // feed the descritions hashmap used by the labels Table
-        WSMenuMenuEntriesDescriptions[] descriptions = wsMenuEntry.getDescriptions();
+        List<Descriptions> descriptions = wsMenuEntry.getDescriptions();
         if (descriptions != null) {
-            for (int i = 0; i < descriptions.length; i++) {
-                descriptionsMap.put(descriptions[i].getLanguage().toLowerCase(), descriptions[i].getLabel());
+            for (Descriptions description : descriptions) {
+                descriptionsMap.put(description.getLanguage().toLowerCase(), description.getLabel());
             }
         }
     }
@@ -128,14 +130,15 @@ public class MenuEntryDialog extends Dialog {
         this.isLocal = isLocal;
         this.treeObject = treeObject;
         // feed the descritions hashmap used by the labels Table
-        WSMenuMenuEntriesDescriptions[] descriptions = wsMenuEntry.getDescriptions();
+        List<Descriptions> descriptions = wsMenuEntry.getDescriptions();
         if (descriptions != null) {
-            for (int i = 0; i < descriptions.length; i++) {
-                descriptionsMap.put(descriptions[i].getLanguage().toLowerCase(), descriptions[i].getLabel());
+            for (Descriptions description : descriptions) {
+                descriptionsMap.put(description.getLanguage().toLowerCase(), description.getLabel());
             }
         }
     }
 
+    @Override
     protected Control createDialogArea(Composite parent) {
 
         // Should not really be here but well,....

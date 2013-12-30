@@ -49,6 +49,7 @@ public abstract class AMainPage extends AFormPage implements ModifyListener {
         super(editor, id, title);
     }
 
+    @Override
     protected void createFormContent(IManagedForm managedForm) {
         super.createFormContent(managedForm);
 
@@ -74,6 +75,7 @@ public abstract class AMainPage extends AFormPage implements ModifyListener {
 
             firstSection.addExpansionListener(new ExpansionAdapter() {
 
+                @Override
                 public void expansionStateChanged(ExpansionEvent e) {
                     form.reflow(true);
                 }
@@ -102,8 +104,6 @@ public abstract class AMainPage extends AFormPage implements ModifyListener {
         }
 
     }// createFormContent
-
-
 
     /**
      * The composite containing the actual characteristics form By default its layout is GridLayout of 2 columns
@@ -134,11 +134,13 @@ public abstract class AMainPage extends AFormPage implements ModifyListener {
 
         // Layout the components
         Section newSection = newSectionPart.getSection();
-        if (title != null)
+        if (title != null) {
             newSection.setText(title);
+        }
         newSection.setLayoutData(new TableWrapData(TableWrapData.FILL_GRAB));
         newSection.addExpansionListener(new ExpansionAdapter() {
 
+            @Override
             public void expansionStateChanged(ExpansionEvent e) {
                 AMainPage.this.getManagedForm().getForm().reflow(true);
             }
@@ -193,12 +195,7 @@ public abstract class AMainPage extends AFormPage implements ModifyListener {
         }
     }
 
-    protected XtentisPort getPort() {
-        try {
-            return Util.getPort(getXObject());
-        } catch (XtentisException e) {
-            log.error(e.getMessage(), e);
-        }
-        return null;
+    protected XtentisPort getPort() throws XtentisException {
+        return Util.getPort(getXObject());
     }
 }

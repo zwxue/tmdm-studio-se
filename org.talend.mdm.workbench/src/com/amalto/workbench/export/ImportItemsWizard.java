@@ -37,7 +37,6 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
@@ -228,11 +227,10 @@ public class ImportItemsWizard extends Wizard {
         }
 
         final Object[] objs = getCheckedObjects();
-        IRunnableWithProgress iRunnableWithProgress = new IRunnableWithProgress(){
+        IRunnableWithProgress iRunnableWithProgress = new IRunnableWithProgress() {
 
-			public void run(IProgressMonitor monitor)
-					throws InvocationTargetException, InterruptedException {
-				try {
+            public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
+                try {
                     doImport(objs, monitor);
                     // run initMDM to call backend migration task
                     if (port != null) {
@@ -247,14 +245,14 @@ public class ImportItemsWizard extends Wizard {
                         ZipToFile.deleteDirectory(new File(importFolder));
                     }
                 }
-			}
-        	
+            }
+
         };
         try {
-			new ProgressMonitorDialog(getShell()).run(true, true, iRunnableWithProgress);
-		} catch (Exception e) {
-			log.error(e.getMessage(), e);
-		}
+            new ProgressMonitorDialog(getShell()).run(true, true, iRunnableWithProgress);
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+        }
         return true;
     }
 
@@ -595,8 +593,9 @@ public class ImportItemsWizard extends Wizard {
         if (selectedObjs.length > 0 && selectedObjs[0] instanceof TreeObject) {
             objs = Arrays.asList(selectedObjs).toArray(new TreeObject[0]);
         }
-        if (objs == null || objs.length == 0)
+        if (objs == null || objs.length == 0) {
             return;
+        }
         monitor.beginTask(Messages.ImportItemsWizard_16, IProgressMonitor.UNKNOWN);
         Reader reader = null;
         // sort the objs for first import data_model.
@@ -642,7 +641,7 @@ public class ImportItemsWizard extends Wizard {
                         reader = new InputStreamReader(new FileInputStream(importFolder + "/" + subItem), "UTF-8");//$NON-NLS-1$//$NON-NLS-2$
                         WSDataCluster model = new WSDataCluster();
                         model = (WSDataCluster) Unmarshaller.unmarshal(WSDataCluster.class, reader);
-                        if (port.existsDataCluster(new WSExistsDataCluster(new WSDataClusterPK(model.getName()))).is_true()) {
+                        if (port.existsDataCluster(new WSExistsDataCluster(new WSDataClusterPK(model.getName()))).isTrue()) {
                             if (!isOverrideAll) {
                                 int result = isOveride(model.getName(), TreeObject.DATACONTAINER);
                                 if (result == IDialogConstants.CANCEL_ID) {
@@ -686,7 +685,7 @@ public class ImportItemsWizard extends Wizard {
                         reader = new InputStreamReader(new FileInputStream(importFolder + "/" + subItem), "UTF-8");//$NON-NLS-1$//$NON-NLS-2$
                         WSDataModel model = new WSDataModel();
                         model = (WSDataModel) Unmarshaller.unmarshal(WSDataModel.class, reader);
-                        if (port.existsDataModel(new WSExistsDataModel(new WSDataModelPK(model.getName()))).is_true()) {
+                        if (port.existsDataModel(new WSExistsDataModel(new WSDataModelPK(model.getName()))).isTrue()) {
                             if (!isOverrideAll) {
                                 int result = isOveride(model.getName(), TreeObject.DATAMODEL_);
                                 if (result == IDialogConstants.CANCEL_ID) {
@@ -725,7 +724,7 @@ public class ImportItemsWizard extends Wizard {
                         reader = new InputStreamReader(new FileInputStream(importFolder + "/" + subItem), "UTF-8");//$NON-NLS-1$//$NON-NLS-2$
                         WSMenu memu = new WSMenu();
                         memu = (WSMenu) Unmarshaller.unmarshal(WSMenu.class, reader);
-                        if (port.existsMenu(new WSExistsMenu(new WSMenuPK(memu.getName()))).is_true()) {
+                        if (port.existsMenu(new WSExistsMenu(new WSMenuPK(memu.getName()))).isTrue()) {
                             if (!isOverrideAll) {
                                 int result = isOveride(memu.getName(), TreeObject.MENU_);
                                 if (result == IDialogConstants.CANCEL_ID) {
@@ -765,7 +764,7 @@ public class ImportItemsWizard extends Wizard {
                             reader = new InputStreamReader(new FileInputStream(importFolder + "/" + subItem), "UTF-8");//$NON-NLS-1$//$NON-NLS-2$
                             WSRole role = new WSRole();
                             role = (WSRole) Unmarshaller.unmarshal(WSRole.class, reader);
-                            if (port.existsRole(new WSExistsRole(new WSRolePK(role.getName()))).is_true()) {
+                            if (port.existsRole(new WSExistsRole(new WSRolePK(role.getName()))).isTrue()) {
                                 if (!isOverrideAll) {
                                     int result = isOveride(role.getName(), TreeObject.ROLE_);
                                     if (result == IDialogConstants.CANCEL_ID) {
@@ -813,7 +812,7 @@ public class ImportItemsWizard extends Wizard {
                                 }
                             }
                         }
-                        if (port.existsRoutingRule(new WSExistsRoutingRule(new WSRoutingRulePK(routingRule.getName()))).is_true()) {
+                        if (port.existsRoutingRule(new WSExistsRoutingRule(new WSRoutingRulePK(routingRule.getName()))).isTrue()) {
                             if (!isOverrideAll) {
                                 int result = isOveride(routingRule.getName(), TreeObject.ROUTINGRULE_);
                                 if (result == IDialogConstants.CANCEL_ID) {
@@ -852,11 +851,11 @@ public class ImportItemsWizard extends Wizard {
                         reader = new InputStreamReader(new FileInputStream(importFolder + "/" + subItem), "UTF-8");//$NON-NLS-1$//$NON-NLS-2$
                         WSStoredProcedure model = new WSStoredProcedure();
                         model = (WSStoredProcedure) Unmarshaller.unmarshal(WSStoredProcedure.class, reader);
-                        if (model.getRefreshCache() == null) {
+                        if (model.isRefreshCache() == null) {
                             model.setRefreshCache(false);
                         }
                         if (port.existsStoredProcedure(new WSExistsStoredProcedure(new WSStoredProcedurePK(model.getName())))
-                                .is_true()) {
+                                .isTrue()) {
                             if (!isOverrideAll) {
                                 int result = isOveride(model.getName(), TreeObject.STOREDPROCEDURE_);
                                 if (result == IDialogConstants.CANCEL_ID) {
@@ -898,7 +897,7 @@ public class ImportItemsWizard extends Wizard {
                             WSSynchronizationPlan model = new WSSynchronizationPlan();
                             model = (WSSynchronizationPlan) Unmarshaller.unmarshal(WSSynchronizationPlan.class, reader);
                             if (port.existsSynchronizationPlan(
-                                    new WSExistsSynchronizationPlan(new WSSynchronizationPlanPK(model.getName()))).is_true()) {
+                                    new WSExistsSynchronizationPlan(new WSSynchronizationPlanPK(model.getName()))).isTrue()) {
                                 if (!isOverrideAll) {
                                     int result = isOveride(model.getName(), TreeObject.SYNCHRONIZATIONPLAN_);
                                     if (result == IDialogConstants.CANCEL_ID) {
@@ -955,7 +954,7 @@ public class ImportItemsWizard extends Wizard {
                             WSTransformerV2 model = new WSTransformerV2();
                             model = (WSTransformerV2) Unmarshaller.unmarshal(WSTransformerV2.class, reader);
                             if (port.existsTransformerV2(new WSExistsTransformerV2(new WSTransformerV2PK(model.getName())))
-                                    .is_true()) {
+                                    .isTrue()) {
                                 if (!isOverrideAll) {
                                     int result = isOveride(model.getName(), TreeObject.TRANSFORMER_);
                                     if (result == IDialogConstants.CANCEL_ID) {
@@ -976,7 +975,7 @@ public class ImportItemsWizard extends Wizard {
 
                             WSTransformer model = new WSTransformer();
                             model = (WSTransformer) Unmarshaller.unmarshal(WSTransformer.class, reader);
-                            if (port.existsTransformer(new WSExistsTransformer(new WSTransformerPK(model.getName()))).is_true()) {
+                            if (port.existsTransformer(new WSExistsTransformer(new WSTransformerPK(model.getName()))).isTrue()) {
                                 if (!isOverrideAll) {
                                     int result = isOveride(model.getName(), TreeObject.TRANSFORMER_);
                                     if (result == IDialogConstants.CANCEL_ID) {
@@ -1019,7 +1018,7 @@ public class ImportItemsWizard extends Wizard {
                             reader = new InputStreamReader(new FileInputStream(importFolder + "/" + subItem), "UTF-8");//$NON-NLS-1$//$NON-NLS-2$
                             WSUniverse model = new WSUniverse();
                             model = (WSUniverse) Unmarshaller.unmarshal(WSUniverse.class, reader);
-                            if (port.existsUniverse(new WSExistsUniverse(new WSUniversePK(model.getName()))).is_true()) {
+                            if (port.existsUniverse(new WSExistsUniverse(new WSUniversePK(model.getName()))).isTrue()) {
                                 if (!isOverrideAll) {
                                     int result = isOveride(model.getName(), TreeObject.UNIVERSE_);
                                     if (result == IDialogConstants.CANCEL_ID) {
@@ -1081,7 +1080,7 @@ public class ImportItemsWizard extends Wizard {
                                 }
                             }
                         }
-                        if (port.existsView(new WSExistsView(new WSViewPK(model.getName()))).is_true()) {
+                        if (port.existsView(new WSExistsView(new WSViewPK(model.getName()))).isTrue()) {
                             if (!isOverrideAll) {
                                 int result = isOveride(model.getName(), TreeObject.VIEW_);
                                 if (result == IDialogConstants.CANCEL_ID) {
@@ -1305,7 +1304,7 @@ public class ImportItemsWizard extends Wizard {
                 }
 
                 public void widgetSelected(SelectionEvent e) {
-                	exchangeImport();
+                    exchangeImport();
                 }
 
             });
@@ -1344,17 +1343,17 @@ public class ImportItemsWizard extends Wizard {
         }
 
     }
-    
-	protected void exchangeImport() {
-		ImportExchangeOptionsDialog dlg = getExchangeOptionsDialog();
-		dlg.setBlockOnOpen(true);
-		if (dlg.open() == Window.OK) {
-			zip.getText().setText(zipFileRepository.toString());
-			parse();
-			checkUpExchangeImport(false);
-		}
-	}
-    
+
+    protected void exchangeImport() {
+        ImportExchangeOptionsDialog dlg = getExchangeOptionsDialog();
+        dlg.setBlockOnOpen(true);
+        if (dlg.open() == Window.OK) {
+            zip.getText().setText(zipFileRepository.toString());
+            parse();
+            checkUpExchangeImport(false);
+        }
+    }
+
     protected Composite initItemTreeViewer(Composite composite) {
         Composite returnComposite = treeViewer.createItemList(composite);
         treeViewer.getViewer().setInput(null);

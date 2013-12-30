@@ -12,21 +12,11 @@
 // ============================================================================
 package com.amalto.workbench.dialogs;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.net.URL;
-import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.dom4j.Document;
-import org.dom4j.DocumentException;
-import org.dom4j.DocumentHelper;
-import org.dom4j.Element;
-import org.dom4j.io.SAXReader;
-import org.dom4j.io.XMLWriter;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -52,7 +42,6 @@ import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.utils.MDMServerDef;
 import com.amalto.workbench.utils.MDMServerHelper;
-import com.amalto.workbench.utils.PasswordUtil;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.webservices.WSGetUniversePKs;
 import com.amalto.workbench.webservices.WSUniversePK;
@@ -195,32 +184,37 @@ public class LoginDialog extends Dialog {
         if (Util.IsEnterPrise()) {
 
             String name = getName();
-            if (name.length() == 0)
+            if (name.length() == 0) {
                 return;
+            }
             String url = getServer();
-            if (url.length() == 0)
+            if (url.length() == 0) {
                 return;
+            }
             String user = getUsernameText();
-            if (user.length() == 0)
+            if (user.length() == 0) {
                 return;
+            }
             String password = getPasswordText();
-            if (password.length() == 0)
+            if (password.length() == 0) {
                 return;
+            }
 
             try {
                 XtentisPort port = Util.getPort(new URL(url), null, user, password);
-                WSUniversePK[] universePKs = port.getUniversePKs(new WSGetUniversePKs("*")).getWsUniversePK();//$NON-NLS-1$
+                List<WSUniversePK> universePKs = port.getUniversePKs(new WSGetUniversePKs("*")).getWsUniversePK();//$NON-NLS-1$
                 universeCombo.removeAll();
                 universeCombo.add(""); //$NON-NLS-1$
-                if (universePKs != null && universePKs.length > 0) {
-                    for (int i = 0; i < universePKs.length; i++) {
-                        String universe = universePKs[i].getPk();
+                if (universePKs != null && universePKs.size() > 0) {
+                    for (WSUniversePK universePK : universePKs) {
+                        String universe = universePK.getPk();
                         universeCombo.add(universe);
                     }
                 }
             } catch (Exception e) {
-                if (log.isDebugEnabled())
+                if (log.isDebugEnabled()) {
                     log.debug(e.getMessage(), e);
+                }
                 universeCombo.removeAll();
             }
         }
@@ -249,7 +243,7 @@ public class LoginDialog extends Dialog {
 
         if (server != null) {
             if ((!isUpdateServerLocation())
-                    ||( isUpdateServerLocation() && (!server.getName().equalsIgnoreCase(selectedServerDef.getName())))) {
+                    || (isUpdateServerLocation() && (!server.getName().equalsIgnoreCase(selectedServerDef.getName())))) {
                 MessageDialog.openError(null, Messages._Error, Messages.LoginDialog_ServerNameAlreadyExist);
                 isOK = false;
                 return;
@@ -299,8 +293,9 @@ public class LoginDialog extends Dialog {
     }
 
     public String getUniverse() {
-        if (Util.IsEnterPrise())
+        if (Util.IsEnterPrise()) {
             return universeCombo.getText().trim();
+        }
         return "";//$NON-NLS-1$
     }
 }
@@ -326,8 +321,9 @@ class MDMServerLabelProvider implements ILabelProvider {
 
     public String getText(Object element) {
 
-        if (!(element instanceof MDMServerDef))
+        if (!(element instanceof MDMServerDef)) {
             return "";//$NON-NLS-1$
+        }
 
         return ((MDMServerDef) element).getName();
     }

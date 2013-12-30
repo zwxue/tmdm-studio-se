@@ -40,6 +40,7 @@ import com.amalto.workbench.utils.JobInfo;
 import com.amalto.workbench.utils.LocalTreeObjectRepository;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.views.ServerView;
+import com.amalto.workbench.webservices.WSMDMJob;
 import com.amalto.workbench.webservices.WSMDMJobArray;
 import com.amalto.workbench.webservices.WSMDMNULL;
 import com.amalto.workbench.webservices.XtentisPort;
@@ -58,14 +59,16 @@ public class ImportTISJobAction extends Action {
         setToolTipText(Messages.ImportTISJobAction_Text);
     }
 
+    @Override
     public void run() {
         if (this.server != null) { // called from ServerView
             ISelection selection = server.getViewer().getSelection();
             xobject = (TreeParent) ((IStructuredSelection) selection).getFirstElement();
         }
 
-        if (xobject.getType() != TreeObject.JOB_REGISTRY)
+        if (xobject.getType() != TreeObject.JOB_REGISTRY) {
             return;
+        }
         try {
             // Access to server and get port
             XtentisPort port = Util.getPort(new URL(xobject.getEndpointAddress()), xobject.getUniverse(), xobject.getUsername(),
@@ -78,18 +81,21 @@ public class ImportTISJobAction extends Action {
             boolean exist = false;
             if (name != null) {
                 JobInfo info = getJobInfo(name);
-                if (info == null)
+                if (info == null) {
                     return;
+                }
                 WSMDMJobArray array = port.getMDMJob(new WSMDMNULL());
                 exist = checkExist(array, info);
                 if (exist) {
                     recover = MessageDialog.openConfirm(this.server.getSite().getShell(), Messages.ImportTISJobAction_Confirm,
                             Messages.ImportTISJobAction_ConfirmInfo + System.getProperty("line.separator") //$NON-NLS-1$
                                     + Messages.ImportTISJobAction_ConfirmInfoA);
-                    if (!recover)
+                    if (!recover) {
                         return;
-                    else
-                        MessageDialog.openInformation(this.server.getSite().getShell(), Messages.ImportTISJobAction_Information, Messages.ImportTISJobAction_InformationMsg);
+                    } else {
+                        MessageDialog.openInformation(this.server.getSite().getShell(), Messages.ImportTISJobAction_Information,
+                                Messages.ImportTISJobAction_InformationMsg);
+                    }
                 }
 
                 String fileName = info.getJobname() + "_" + info.getJobversion() + info.getSuffix(); //$NON-NLS-1$
@@ -101,8 +107,9 @@ public class ImportTISJobAction extends Action {
 
                 // parse file to get jobinfo
                 TreeObject jobFolder = xobject.findObject(TreeObject.BUILT_IN_CATEGORY_FOLDER, "Deployed Jobs");//$NON-NLS-1$
-                if (jobFolder == null)
+                if (jobFolder == null) {
                     jobFolder = new TreeParent("Deployed Jobs", xobject.getServerRoot(), TreeObject.CATEGORY_FOLDER, null, null);//$NON-NLS-1$ 
+                }
 
                 TreeObject obj = new TreeObject(
                 // fileDialog.getFileName(),
@@ -207,15 +214,16 @@ public class ImportTISJobAction extends Action {
 
     // if the Job exist, return true,else return false
     public boolean checkExist(WSMDMJobArray array, JobInfo jobInfo) {
-        for (int i = 0; i < array.getWsMDMJob().length; i++) {
-            if (array.getWsMDMJob()[i].getJobName().equals(jobInfo.getJobname())
-                    && array.getWsMDMJob()[i].getJobVersion().equals(jobInfo.getJobversion())
-                    && array.getWsMDMJob()[i].getSuffix().equals(jobInfo.getSuffix()))
+        for (WSMDMJob job : array.getWsMDMJob()) {
+            if (job.getJobName().equals(jobInfo.getJobname()) && job.getJobVersion().equals(jobInfo.getJobversion())
+                    && job.getSuffix().equals(jobInfo.getSuffix())) {
                 return true;
+            }
         }
         return false;
     }
 
+    @Override
     public void runWithEvent(Event event) {
         super.runWithEvent(event);
     }

@@ -26,10 +26,10 @@ import java.io.OutputStream;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.net.Authenticator;
+import java.net.ConnectException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
-import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Enumeration;
@@ -54,11 +54,12 @@ import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.rpc.Stub;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
+import javax.xml.ws.BindingProvider;
+import javax.xml.ws.WebServiceException;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.ObjectUtils;
@@ -95,8 +96,8 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.xsd.XSDAnnotation;
 import org.eclipse.xsd.XSDComplexTypeContent;
@@ -126,6 +127,7 @@ import org.eclipse.xsd.impl.XSDSchemaImpl;
 import org.eclipse.xsd.util.XSDConstants;
 import org.eclipse.xsd.util.XSDSchemaLocator;
 import org.osgi.framework.Bundle;
+import org.talend.core.GlobalServiceRegister;
 import org.talend.mdm.commmon.util.core.EUUIDCustomType;
 import org.talend.mdm.commmon.util.core.ICoreConstants;
 import org.talend.mdm.commmon.util.webapp.XSystemObjects;
@@ -149,6 +151,7 @@ import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.models.TreeObjectTransfer;
 import com.amalto.workbench.models.TreeParent;
+import com.amalto.workbench.service.IWebServiceHook;
 import com.amalto.workbench.service.MissingJarService;
 import com.amalto.workbench.service.MissingJarsException;
 import com.amalto.workbench.webservices.WSComponent;
@@ -167,17 +170,15 @@ import com.amalto.workbench.webservices.WSRoutingRuleOperator;
 import com.amalto.workbench.webservices.WSStringPredicate;
 import com.amalto.workbench.webservices.WSUniverse;
 import com.amalto.workbench.webservices.WSUniversePK;
-import com.amalto.workbench.webservices.WSUniverseXtentisObjectsRevisionIDs;
 import com.amalto.workbench.webservices.WSVersion;
 import com.amalto.workbench.webservices.WSViewPK;
 import com.amalto.workbench.webservices.WSWhereCondition;
 import com.amalto.workbench.webservices.WSWhereOperator;
 import com.amalto.workbench.webservices.XtentisPort;
 import com.amalto.workbench.webservices.XtentisService;
-import com.amalto.workbench.webservices.XtentisService_Impl;
 import com.sun.org.apache.xpath.internal.XPathAPI;
 import com.sun.org.apache.xpath.internal.objects.XObject;
-import com.sun.xml.rpc.client.dii.CallPropertyConstants;
+import com.sun.xml.internal.ws.wsdl.parser.InaccessibleWSDLException;
 
 /**
  * @author bgrieder
@@ -346,6 +347,8 @@ public class Util {
 
     public static String default_endpoint_address = "http://localhost:8180/talend/TalendPort";//$NON-NLS-1$
 
+    private static IWebServiceHook webServceHook;
+
     /*********************************************************************
      * WEB SERVICES
      *********************************************************************/
@@ -383,48 +386,82 @@ public class Util {
         }
         try {
 
-            SSLContext context = SSLContextProvider.getContext();
+            SSLContext sslContext = SSLContextProvider.getContext();
             HttpsURLConnection.setDefaultHostnameVerifier(SSLContextProvider.getHostnameVerifier());
-            HttpsURLConnection.setDefaultSSLSocketFactory(context.getSocketFactory());
-            // prepare the Web Services Stub
-            XtentisService service;
-            Bundle bundle = Platform.getBundle(ENTERPRISE_ID);
-            if (bundle != null) {
-                Class<?> cls = bundle.loadClass("org.talend.mdm.workbench.enterprice.webservices.XtentisServiceImpl"); //$NON-NLS-1$
-                service = (XtentisService) cls.newInstance();
+            HttpsURLConnection.setDefaultSSLSocketFactory(sslContext.getSocketFactory());
+            XtentisService service = new XtentisService(url);
+
+            XtentisPort port = service.getXtentisPort();
+
+            BindingProvider stub = (BindingProvider) port;
+
+            // Do not maintain session via cookies
+            stub.getRequestContext().put(BindingProvider.SESSION_MAINTAIN_PROPERTY, false);
+
+            Map<String, Object> context = stub.getRequestContext();
+            // // dynamic set endpointAddress
+            // context.put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, endpointAddress);
+
+            // authentication
+            if (universe == null || universe.trim().length() == 0) {
+                context.put(BindingProvider.USERNAME_PROPERTY, username);
             } else {
-                service = new XtentisService_Impl();
+                context.put(BindingProvider.USERNAME_PROPERTY, universe + '/' + username);
             }
 
-            Stub stub = (Stub) service.getXtentisPort();
-            stub._setProperty(CallPropertyConstants.HOSTNAME_VERIFICATION_PROPERTY, "true"); //$NON-NLS-1$
-            stub._setProperty(Stub.ENDPOINT_ADDRESS_PROPERTY, url.toString());
-            if (username != null) {
-                if (universe != null) {
-                    stub._setProperty(Stub.USERNAME_PROPERTY, universe + "/" + username);//$NON-NLS-1$
-                } else {
-                    stub._setProperty(Stub.USERNAME_PROPERTY, username);
-                }
-
-            }
-            if (password != null) {
-                stub._setProperty(Stub.PASSWORD_PROPERTY, password);
+            context.put(BindingProvider.PASSWORD_PROPERTY, password);
+            IWebServiceHook wsHook = getWebServiceHook();
+            if (wsHook != null) {
+                wsHook.preRequestSendingHook(stub, username);
             }
 
-            // Attempt to reset the JDK Authenticator before a web service call is made.
-            // However due to JDK Authenticator bad design, it does not prevent any other code or thread to change it.
-            // FIXME Rely on different SOAP stack to be able to use different HTTP implementation such the Apache
-            // HttpClient.
             Authenticator.setDefault(null);
+            return port;
+        } catch (WebServiceException e) {
+            Throwable throwable = analyseWebServiceException(e);
+            String message = throwable.getMessage();
+            if (message == null) {
+                message = ""; //$NON-NLS-1$
+            }
+            log.error(message, throwable);
 
-            return (XtentisPort) stub;
-        } catch (Exception e) {
-            log.error(e.getMessage(), e);
-            throw new XtentisException(Messages.Util_3 + url + Messages.Util_4 + e.getLocalizedMessage());
+            throw new XtentisException(Messages.bind(Messages.UnableAccessEndpoint, url, message), throwable);
         }
     }
 
-    public static WSDataModelPK[] getAllDataModelPKs(URL url, String universe, String username, String password)
+    public static XtentisException convertWebServiceException(WebServiceException wsEx) {
+        Throwable throwable = analyseWebServiceException(wsEx);
+        if (throwable != null) {
+            String message = throwable.getMessage();
+            if (message == null) {
+                message = ""; //$NON-NLS-1$
+            }
+            return new XtentisException(message, throwable);
+        }
+        return null;
+    }
+
+    public static Throwable analyseWebServiceException(WebServiceException wsEx) {
+
+        if (wsEx instanceof InaccessibleWSDLException) {
+            InaccessibleWSDLException ex = (InaccessibleWSDLException) wsEx;
+            for (Throwable throwable : ex.getErrors()) {
+
+                return throwable;
+            }
+        }
+
+        return wsEx;
+    }
+
+    private static IWebServiceHook getWebServiceHook() {
+        if (webServceHook == null) {
+            webServceHook = (IWebServiceHook) GlobalServiceRegister.getDefault().getService(IWebServiceHook.class);
+        }
+        return webServceHook;
+    }
+
+    public static List<WSDataModelPK> getAllDataModelPKs(URL url, String universe, String username, String password)
             throws XtentisException {
         try {
             XtentisPort port = Util.getPort(url, universe, username, password);
@@ -435,7 +472,7 @@ public class Util {
         }
     }
 
-    public static WSDataClusterPK[] getAllDataClusterPKs(URL url, String universe, String username, String password)
+    public static List<WSDataClusterPK> getAllDataClusterPKs(URL url, String universe, String username, String password)
             throws XtentisException {
         try {
             XtentisPort port = Util.getPort(url, universe, username, password);
@@ -446,7 +483,7 @@ public class Util {
         }
     }
 
-    public static WSViewPK[] getAllViewPKs(URL url, String universe, String username, String password, String regex)
+    public static List<WSViewPK> getAllViewPKs(URL url, String universe, String username, String password, String regex)
             throws XtentisException {
         try {
             if ((regex == null) || ("".equals(regex))) {
@@ -487,7 +524,7 @@ public class Util {
 
     /**
      * Join an array of strings into a single string using a separator
-     *
+     * 
      * @param strings
      * @param separator
      * @return a single string or null
@@ -504,9 +541,21 @@ public class Util {
         return res;
     }
 
+    public static String joinStrings(List<String> strings, String separator) {
+        if (strings == null) {
+            return null;
+        }
+        StringBuffer res = new StringBuffer();
+        for (String str : strings) {
+            res.append((res.length() > 0) ? separator : "");//$NON-NLS-1$
+            res.append(str);
+        }
+        return res.toString();
+    }
+
     /**
      * Returns the first part - eg. the concept - from the path
-     *
+     * 
      * @param path
      * @return the concept Name
      */
@@ -524,7 +573,7 @@ public class Util {
 
     /**
      * get the concept name from the child elment
-     *
+     * 
      * @param child
      * @return
      */
@@ -541,7 +590,7 @@ public class Util {
 
     /**
      * Generates an xml string from a node (not pretty formatted)
-     *
+     * 
      * @param n the node
      * @return the xml string
      * @throws Exception
@@ -557,7 +606,7 @@ public class Util {
 
     /**
      * Get a nodelist from an xPath
-     *
+     * 
      * @throws Exception
      */
     public static NodeList getNodeList(Document d, String xPath) throws Exception {
@@ -566,7 +615,7 @@ public class Util {
 
     /**
      * Get a nodelist from an xPath
-     *
+     * 
      * @throws Exception
      */
     public static NodeList getNodeList(Node contextNode, String xPath) throws Exception {
@@ -575,7 +624,7 @@ public class Util {
 
     /**
      * Get a nodelist from an xPath
-     *
+     * 
      * @throws Exception
      */
     public static NodeList getNodeList(Node contextNode, String xPath, String namespace, String prefix) throws Exception {
@@ -589,7 +638,7 @@ public class Util {
 
     /**
      * Returns a namespaced root element of a document Useful to create a namespace holder element
-     *
+     * 
      * @param namespace
      * @return the root Element
      */
@@ -739,12 +788,12 @@ public class Util {
 
     /**
      * Find elementDeclarations that use any types derived from a named type.
-     *
+     * 
      * <p>
      * This shows one way to query the schema for elementDeclarations and then how to find specific kinds of
      * typeDefinitions.
      * </p>
-     *
+     * 
      * @param objList collection set to search for elemDecls
      * @param localName for the type used
      * @return Boolean indicate any XSDElementDeclarations is found or not
@@ -877,7 +926,7 @@ public class Util {
 
     /**
      * set the list with foreign concept name of in the element
-     *
+     * 
      * @author ymli
      * @param list
      * @param element
@@ -954,7 +1003,7 @@ public class Util {
 
     /**
      * set the list with all the foreign concepty name in the parent
-     *
+     * 
      * @author ymli
      * @param list
      * @param parent
@@ -975,7 +1024,7 @@ public class Util {
 
     /**
      * set the list with foreign concept names in the schema
-     *
+     * 
      * @author ymli
      * @param list
      * @param schema
@@ -994,7 +1043,7 @@ public class Util {
 
     /**
      * the all the typeDefinition in the schema
-     *
+     * 
      * @author ymli
      * @param schema
      * @return
@@ -1334,7 +1383,7 @@ public class Util {
 
     /**
      * update reference to newType
-     *
+     * 
      * @param elem
      * @param newType
      * @param provider
@@ -1557,7 +1606,7 @@ public class Util {
 
     /**
      * Clipboard support
-     *
+     * 
      * @return the Clipboard
      */
     public static Clipboard getClipboard() {
@@ -1569,7 +1618,7 @@ public class Util {
 
     public static Version getVersion(TreeObject xobject) throws XtentisException {
         try {
-            WSVersion version = getPort(xobject).getComponentVersion(new WSGetComponentVersion(WSComponent.DataManager, null));
+            WSVersion version = getPort(xobject).getComponentVersion(new WSGetComponentVersion(WSComponent.DATA_MANAGER, null));
             return new Version(version.getMajor(), version.getMinor(), version.getRevision(), version.getBuild());
         } catch (XtentisException e) {
             throw (e);
@@ -2402,13 +2451,13 @@ public class Util {
     // key is the objectname, value is revisionids
     public static Map<String, List<String>> getUniverseMap(XtentisPort port) {
         Map<String, List<String>> map = new HashMap<String, List<String>>();
-        WSUniversePK[] universePKs = null;
+        List<WSUniversePK> universePKs = null;
         // boolean hasUniverses = true;
         try {
             universePKs = port.getUniversePKs(new WSGetUniversePKs("*")).getWsUniversePK();//$NON-NLS-1$
             for (WSUniversePK pk : universePKs) {
                 WSUniverse universe = port.getUniverse(new WSGetUniverse(pk));
-                for (WSUniverseXtentisObjectsRevisionIDs id : universe.getXtentisObjectsRevisionIDs()) {
+                for (WSUniverse.XtentisObjectsRevisionIDs id : universe.getXtentisObjectsRevisionIDs()) {
                     if (map.get(id.getXtentisObjectName()) == null) {
                         map.put(id.getXtentisObjectName(), new ArrayList<String>());
                     }
@@ -2426,13 +2475,13 @@ public class Util {
     // key is the universename, value is revisionids
     public static Map<String, List<String>> getUniverseMap2(XtentisPort port) {
         Map<String, List<String>> map = new HashMap<String, List<String>>();
-        WSUniversePK[] universePKs = null;
+        List<WSUniversePK> universePKs = null;
         // boolean hasUniverses = true;
         try {
             universePKs = port.getUniversePKs(new WSGetUniversePKs("*")).getWsUniversePK();//$NON-NLS-1$
             for (WSUniversePK pk : universePKs) {
                 WSUniverse universe = port.getUniverse(new WSGetUniverse(pk));
-                for (WSUniverseXtentisObjectsRevisionIDs id : universe.getXtentisObjectsRevisionIDs()) {
+                for (WSUniverse.XtentisObjectsRevisionIDs id : universe.getXtentisObjectsRevisionIDs()) {
                     String name = universe.getName();
                     if (map.get(name) == null) {
                         map.put(name, new ArrayList<String>());
@@ -2449,14 +2498,14 @@ public class Util {
     public static List<String> getUniverseBYRevisionID(XtentisPort port, String revisionID, String objectName1) {
         List<String> list = new ArrayList<String>();
         String objectName = objectName1;
-        WSUniversePK[] universePKs = null;
+        List<WSUniversePK> universePKs = null;
         objectName = EXtentisObjects.getXtentisObjectName(objectName1);
         if (objectName != null) {
             try {
                 universePKs = port.getUniversePKs(new WSGetUniversePKs("*")).getWsUniversePK();//$NON-NLS-1$
                 for (WSUniversePK pk : universePKs) {
                     WSUniverse universe = port.getUniverse(new WSGetUniverse(pk));
-                    for (WSUniverseXtentisObjectsRevisionIDs id : universe.getXtentisObjectsRevisionIDs()) {
+                    for (WSUniverse.XtentisObjectsRevisionIDs id : universe.getXtentisObjectsRevisionIDs()) {
                         if (id.getXtentisObjectName().equals(objectName) && id.getRevisionID().equals(revisionID)) {
                             list.add(universe.getName());
                         }
@@ -2473,7 +2522,7 @@ public class Util {
     public static List<WSUniverse> getWSUniverseBYRevisionID(XtentisPort port, String revisionID, String objectName1) {
         List<WSUniverse> list = new ArrayList<WSUniverse>();
         String objectName = objectName1;
-        WSUniversePK[] universePKs = null;
+        List<WSUniversePK> universePKs = null;
         if (objectName1.equals("Transformer")) { //$NON-NLS-1$
             objectName = "Transformer V2";//$NON-NLS-1$
         }
@@ -2481,7 +2530,7 @@ public class Util {
             universePKs = port.getUniversePKs(new WSGetUniversePKs("*")).getWsUniversePK();//$NON-NLS-1$
             for (WSUniversePK pk : universePKs) {
                 WSUniverse universe = port.getUniverse(new WSGetUniverse(pk));
-                for (WSUniverseXtentisObjectsRevisionIDs id : universe.getXtentisObjectsRevisionIDs()) {
+                for (WSUniverse.XtentisObjectsRevisionIDs id : universe.getXtentisObjectsRevisionIDs()) {
                     if (id.getXtentisObjectName().equals(objectName) && id.getRevisionID().equals(revisionID)) {
                         list.add(universe);
                     }
@@ -2655,16 +2704,14 @@ public class Util {
             operator = WSRoutingRuleOperator.IS_NOT_NULL;
         }
         wc.setWsOperator(operator);
-        wc.setValue(values[2]);
-        wc.setName(values[3]);
+        wc.setValue((values[2]));
+        wc.setName((values[3]));
         return wc;
     }
 
     public static WSWhereCondition convertLine(String[] values) {
         WSWhereCondition wc = new WSWhereCondition();
-
         wc.setLeftPath(values[0]);
-
         WSWhereOperator operator = null;
         if (values[1].equals("Contains")) { //$NON-NLS-1$
             operator = WSWhereOperator.CONTAINS;
@@ -2761,7 +2808,7 @@ public class Util {
 
     /**
      * get all complex types's complextype children
-     *
+     * 
      * @param complexTypeDefinition
      * @return
      */
@@ -2926,7 +2973,7 @@ public class Util {
 
     /**
      * Returns and XSDSchema Object from an xsd
-     *
+     * 
      * @param schema
      * @return
      * @throws Exception
@@ -3095,7 +3142,7 @@ public class Util {
             int minor = Integer.parseInt(match.group(2));
             int rev = match.group(4) != null && !match.group(4).equals("") ? Integer.parseInt(match.group(4)) : 0;//$NON-NLS-1$
             XtentisPort port = Util.getPort(new URL(url), universe, username, password);
-            WSVersion wsVersion = port.getComponentVersion(new WSGetComponentVersion(WSComponent.DataManager, null));
+            WSVersion wsVersion = port.getComponentVersion(new WSGetComponentVersion(WSComponent.DATA_MANAGER, null));
             versionComp += Messages.Util_47 + wsVersion.getMajor() + Messages.Util_48 + wsVersion.getMinor() + Messages.Util_49
                     + wsVersion.getRevision();
             if (major != wsVersion.getMajor() || minor != wsVersion.getMinor()) {
@@ -3175,10 +3222,6 @@ public class Util {
         WSDataModel wsDataModel = null;
         try {
             wsDataModel = port.getDataModel(new WSGetDataModel(new WSDataModelPK(dataModelName)));
-        } catch (RemoteException e2) {
-            log.error(e2.getMessage(), e2);
-        }
-        try {
             String schema = wsDataModel.getXsdSchema();
             return Util.createXsdSchema(schema, dataModelFolder);
         } catch (Exception e1) {
@@ -3209,7 +3252,7 @@ public class Util {
 
     /**
      * Replace the source string by the parameters
-     *
+     * 
      * @param sourceString the source string with parameters,like : "This is {0} examples for {1}"
      * @param parameters the parameters used to do the replacement, the key is the index of the parameter, the value is
      * the content;
@@ -3268,57 +3311,64 @@ public class Util {
     }
 
     // connection refuse or ssl error
-	private static String CONNECT_FAIL = "http.client.failed";//$NON-NLS-1$
-	// 401
-	private static String UNAUTHORIZE = "http.client.unauthorized";//$NON-NLS-1$
-	// 404
-	private static String NOT_FOUND = "http.not.found";//$NON-NLS-1$
-    
-    
-	public static boolean handleConnectionException(IWorkbenchPart part, Throwable t,
-			String title) {
-		return handleConnectionException(part.getSite().getShell(), t, title);
-	}
-	
-	public static boolean handleConnectionException(final Shell shell, Throwable t,
-			String title) {
-		if (null == t) {
-			return false;
-		}
-		if (t instanceof com.sun.xml.rpc.client.ClientTransportException) {
-			String key = ((com.sun.xml.rpc.client.ClientTransportException) t).getKey();
-			if (null == title)
-				title = Messages.ConnectFailedTitle; 
-			String message = null;
-			if (CONNECT_FAIL.equals(key)) {
-				message = Messages.ConnectFailed;
-			} else if (UNAUTHORIZE.equals(key)) {
-				message = Messages.ConnectUnauthorized;
-			} else if (NOT_FOUND.equals(key)) {
-				message = Messages.ConnectNotFound;
-			} else {
-				return false;
-			}
-			if (null == Display.getCurrent()) {
-				final String fTitle = title;
-				final String fMessage = message;
-				Display.getDefault().syncExec(new Runnable() {
-					public void run() {
-						MessageDialog.openWarning(shell, fTitle, fMessage);
-					}
-				});
-			} else {
-				MessageDialog.openWarning(shell, title, message);
-			}
-			return true;
-		}
-		if (t instanceof RemoteException) {
-			return handleConnectionException(shell, t.getCause(), title);
-		}
-		return false;
-	}
-    
-    
+    private static String CONNECT_FAIL = "http.client.failed";//$NON-NLS-1$
+
+    // 401
+    private static String UNAUTHORIZE = "http.client.unauthorized";//$NON-NLS-1$
+
+    // 404
+    private static String NOT_FOUND = "http.not.found";//$NON-NLS-1$
+
+    public static boolean handleConnectionException(IWorkbenchPart part, Throwable t, String title) {
+        return handleConnectionException(part.getSite().getShell(), t, title);
+    }
+
+    public static boolean handleConnectionException(final Shell shell, Throwable t, String title) {
+        if (null == t) {
+            return false;
+        }
+        String message = null;
+        if (t instanceof com.sun.xml.rpc.client.ClientTransportException) {
+            String key = ((com.sun.xml.rpc.client.ClientTransportException) t).getKey();
+            if (null == title) {
+                title = Messages.ConnectFailedTitle;
+            }
+
+            if (CONNECT_FAIL.equals(key)) {
+                message = Messages.ConnectFailed;
+            } else if (UNAUTHORIZE.equals(key)) {
+                message = Messages.ConnectUnauthorized;
+            } else if (NOT_FOUND.equals(key)) {
+                message = Messages.ConnectNotFound;
+            } else {
+                return false;
+            }
+
+            return true;
+        } else if (t instanceof ConnectException) {
+            message = t.getLocalizedMessage();
+        }
+        if (t instanceof XtentisException) {
+            return handleConnectionException(shell, t.getCause(), title);
+        }
+        if (message != null) {
+            if (null == Display.getCurrent()) {
+                final String fTitle = title;
+                final String fMessage = message;
+                Display.getDefault().syncExec(new Runnable() {
+
+                    public void run() {
+                        MessageDialog.openWarning(shell, fTitle, fMessage);
+                    }
+                });
+            } else {
+                MessageDialog.openWarning(shell, title, message);
+            }
+            return true;
+        }
+        return false;
+    }
+
     public static List<String> getAllCustomTypeNames(XSDSchema schema) {
 
         List<String> customTypeNames = new ArrayList<String>();
@@ -3524,7 +3574,7 @@ public class Util {
     /**
      * DOC hbhong Comment method "unZipFile". same with unZipFile(String zipfile, String unzipdir) method except having
      * a progressMonitor
-     *
+     * 
      * @param zipfile
      * @param unzipdir
      * @param totalProgress

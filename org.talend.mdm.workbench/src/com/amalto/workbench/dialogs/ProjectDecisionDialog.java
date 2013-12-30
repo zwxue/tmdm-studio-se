@@ -13,6 +13,7 @@
 package com.amalto.workbench.dialogs;
 
 import java.net.URL;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -70,6 +71,7 @@ public class ProjectDecisionDialog extends Dialog {
         this.title = title;
     }
 
+    @Override
     protected Control createDialogArea(Composite parent) {
 
         // Should not really be here but well,....
@@ -91,15 +93,16 @@ public class ProjectDecisionDialog extends Dialog {
             if (m.matches()) {
                 dataClusterName = m.group(1);
                 dataModelName = m.group(2);
-                if (m.groupCount() >= 4)
+                if (m.groupCount() >= 4) {
                     doOverwrite = (!"false".equals(m.group(3)));//$NON-NLS-1$
+                }
             }
 
             XtentisPort port = Util.getPort(new URL(transformerObject.getEndpointAddress()), transformerObject.getUniverse(),
                     transformerObject.getUsername(), transformerObject.getPassword());
 
             // Grab the available Clusters
-            WSDataClusterPK[] dcpks = port.getDataClusterPKs(new WSRegexDataClusterPKs(".*")).getWsDataClusterPKs();//$NON-NLS-1$
+            List<WSDataClusterPK> dcpks = port.getDataClusterPKs(new WSRegexDataClusterPKs(".*")).getWsDataClusterPKs();//$NON-NLS-1$
 
             Label dataClustersLabel = new Label(composite, SWT.NULL);
             dataClustersLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
@@ -109,16 +112,19 @@ public class ProjectDecisionDialog extends Dialog {
             dataClustersCombo.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
             int dataClusterSelect = -1;
             if (dcpks != null) {
-                for (int i = 0; i < dcpks.length; i++) {
-                    dataClustersCombo.add(dcpks[i].getPk());
-                    if (dcpks[i].getPk().equals(dataClusterName))
+                int i = 0;
+                for (WSDataClusterPK pk : dcpks) {
+                    dataClustersCombo.add(pk.getPk());
+                    if (pk.getPk().equals(dataClusterName)) {
                         dataClusterSelect = i;
+                    }
+                    i++;
                 }
             }
             dataClustersCombo.select(dataClusterSelect);
 
             // Grab the available Models
-            WSDataModelPK[] dmpks = port.getDataModelPKs(new WSRegexDataModelPKs(".*")).getWsDataModelPKs();//$NON-NLS-1$
+            List<WSDataModelPK> dmpks = port.getDataModelPKs(new WSRegexDataModelPKs(".*")).getWsDataModelPKs();//$NON-NLS-1$
 
             Label dataModelsLabel = new Label(composite, SWT.NULL);
             dataModelsLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
@@ -128,10 +134,13 @@ public class ProjectDecisionDialog extends Dialog {
             dataModelsCombo.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
             int dataModelSelect = -1;
             if (dmpks != null) {
-                for (int i = 0; i < dmpks.length; i++) {
-                    dataModelsCombo.add(dmpks[i].getPk());
-                    if (dmpks[i].getPk().equals(dataModelName))
+                int i = 0;
+                for (WSDataModelPK pk : dmpks) {
+                    dataModelsCombo.add(pk.getPk());
+                    if (pk.getPk().equals(dataModelName)) {
                         dataModelSelect = i;
+                    }
+                    i++;
                 }
             }
             dataModelsCombo.select(dataModelSelect);
@@ -146,15 +155,16 @@ public class ProjectDecisionDialog extends Dialog {
             overwriteButton.setSelection(doOverwrite);
 
         } catch (Exception e) {
-        	if(!Util.handleConnectionException(this.getShell(), e, null)){
+            if (!Util.handleConnectionException(this.getShell(), e, null)) {
                 MessageDialog.openError(ProjectDecisionDialog.this.getShell(), Messages.ProjectDecisionDialog_ErrorTitle,
-                    Messages.bind(Messages.ProjectDecisionDialog_ErrorMsg, e.getMessage()));
+                        Messages.bind(Messages.ProjectDecisionDialog_ErrorMsg, e.getMessage()));
             }
         }
 
         return composite;
     }
 
+    @Override
     protected void createButtonsForButtonBar(Composite parent) {
         super.createButtonsForButtonBar(parent);
         getButton(IDialogConstants.OK_ID).addSelectionListener(this.caller);
@@ -180,14 +190,16 @@ public class ProjectDecisionDialog extends Dialog {
      ***************************************************************************************************/
 
     public String getDataClusterName() {
-        if (dataClustersCombo.getSelectionIndex() == -1)
+        if (dataClustersCombo.getSelectionIndex() == -1) {
             return null;
+        }
         return dataClustersCombo.getItem(dataClustersCombo.getSelectionIndex());
     }
 
     public String getDataModelName() {
-        if (dataModelsCombo.getSelectionIndex() == -1)
+        if (dataModelsCombo.getSelectionIndex() == -1) {
             return null;
+        }
         return dataModelsCombo.getItem(dataModelsCombo.getSelectionIndex());
     }
 

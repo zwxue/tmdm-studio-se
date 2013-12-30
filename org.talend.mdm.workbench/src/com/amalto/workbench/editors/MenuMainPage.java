@@ -14,9 +14,7 @@ package com.amalto.workbench.editors;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
-import java.util.Set;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -71,7 +69,7 @@ import com.amalto.workbench.providers.XObjectEditorInput;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.webservices.WSMenu;
 import com.amalto.workbench.webservices.WSMenuEntry;
-import com.amalto.workbench.webservices.WSMenuMenuEntriesDescriptions;
+import com.amalto.workbench.webservices.WSMenuEntry.Descriptions;
 
 public class MenuMainPage extends AMainPageV2 {
 
@@ -101,13 +99,15 @@ public class MenuMainPage extends AMainPageV2 {
 
     public MenuMainPage(FormEditor editor) {
 
-        super(editor, MenuMainPage.class.getName(), Messages.MenuMainPage_Menu + ((XObjectEditorInput) editor.getEditorInput()).getName()
+        super(editor, MenuMainPage.class.getName(), Messages.MenuMainPage_Menu
+                + ((XObjectEditorInput) editor.getEditorInput()).getName()
                 + Util.getRevision((TreeObject) ((XObjectEditorInput) editor.getEditorInput()).getModel()));
         treeObject = (TreeObject) ((XObjectEditorInput) editor.getEditorInput()).getModel();
         uripre = treeObject.getEndpointIpAddress();
 
     }
 
+    @Override
     protected void createCharacteristicsContent(FormToolkit toolkit, Composite mainComposite) {
 
         try {
@@ -120,8 +120,9 @@ public class MenuMainPage extends AMainPageV2 {
             descriptionText.addModifyListener(new ModifyListener() {
 
                 public void modifyText(ModifyEvent e) {
-                    if (refreshing)
+                    if (refreshing) {
                         return;
+                    }
 
                     markDirtyWithoutCommit();
                 }
@@ -149,9 +150,9 @@ public class MenuMainPage extends AMainPageV2 {
                     if (parentElement instanceof TreeEntry) {
                         WSMenuEntry wsEntry = ((TreeEntry) parentElement).getWsMenuEntry();
                         if (wsEntry.getSubMenus() != null) {
-                            TreeEntry[] children = new TreeEntry[wsEntry.getSubMenus().length];
-                            for (int i = 0; i < wsEntry.getSubMenus().length; i++) {
-                                children[i] = new TreeEntry((TreeEntry) parentElement, wsEntry.getSubMenus()[i]);
+                            TreeEntry[] children = new TreeEntry[wsEntry.getSubMenus().size()];
+                            for (int i = 0; i < wsEntry.getSubMenus().size(); i++) {
+                                children[i] = new TreeEntry((TreeEntry) parentElement, wsEntry.getSubMenus().get(i));
                             }
                             return children;
                         }
@@ -159,11 +160,11 @@ public class MenuMainPage extends AMainPageV2 {
                     }
 
                     if (parentElement instanceof WSMenu) { // the root
-                        WSMenuEntry[] menuEntries = ((WSMenu) parentElement).getMenuEntries();
+                        java.util.List<WSMenuEntry> menuEntries = ((WSMenu) parentElement).getMenuEntries();
                         if (menuEntries != null) {
-                            TreeEntry[] children = new TreeEntry[menuEntries.length];
-                            for (int i = 0; i < menuEntries.length; i++) {
-                                children[i] = new TreeEntry(null, menuEntries[i]);
+                            TreeEntry[] children = new TreeEntry[menuEntries.size()];
+                            for (int i = 0; i < menuEntries.size(); i++) {
+                                children[i] = new TreeEntry(null, menuEntries.get(i));
                             }
                             return children;
                         }
@@ -193,14 +194,15 @@ public class MenuMainPage extends AMainPageV2 {
                 @Override
                 public String getText(Object element) {
                     WSMenuEntry wsMenuEntry = ((TreeEntry) element).getWsMenuEntry();
-                    String label = wsMenuEntry.getId() + " - ";//$NON-NLS-1$
-                    for (int j = 0; j < wsMenuEntry.getDescriptions().length; j++) {
-                        label += "[" + wsMenuEntry.getDescriptions()[j].getLanguage() + ": "//$NON-NLS-1$//$NON-NLS-2$
-                                + wsMenuEntry.getDescriptions()[j].getLabel() + "] ";//$NON-NLS-1$
+                    StringBuffer label = new StringBuffer(wsMenuEntry.getId() + " - ");//$NON-NLS-1$
+                    for (Descriptions description : wsMenuEntry.getDescriptions()) {
+                        label.append("[").append(description.getLanguage()).append(": ")//$NON-NLS-1$//$NON-NLS-2$
+                                .append(description.getLabel()).append("] ");//$NON-NLS-1$
                     }
-                    if (label.length() > 200)
-                        label = label.substring(0, 197) + "..."; //$NON-NLS-1$
-                    return label;
+                    if (label.length() > 200) {
+                        return label.substring(0, 197) + "..."; //$NON-NLS-1$
+                    }
+                    return label.toString();
                 }
 
                 @Override
@@ -246,11 +248,13 @@ public class MenuMainPage extends AMainPageV2 {
 
     }// createCharacteristicsContent
 
+    @Override
     protected void refreshData() {
         try {
             // System.out.println("refreshData() ");
-            if (this.comitting)
+            if (this.comitting) {
                 return;
+            }
 
             this.refreshing = true;
 
@@ -266,11 +270,13 @@ public class MenuMainPage extends AMainPageV2 {
         }
     }
 
+    @Override
     protected void commit() {
         try {
             // System.out.println("commit() ROLE\n"+role.toString());
-            if (this.refreshing)
+            if (this.refreshing) {
                 return;
+            }
 
             this.comitting = true;
 
@@ -287,6 +293,7 @@ public class MenuMainPage extends AMainPageV2 {
         }
     }
 
+    @Override
     protected void createActions() {
     }
 
@@ -296,6 +303,7 @@ public class MenuMainPage extends AMainPageV2 {
      * private void fillContextMenu(IMenuManager manager) { }
      */
 
+    @Override
     public void dispose() {
         super.dispose();
         windowTarget.dispose();
@@ -348,14 +356,14 @@ public class MenuMainPage extends AMainPageV2 {
             if (dlg.getReturnCode() == Window.OK) {
                 String id = dlg.getIdText().getText();
                 if ("".equals(id)) {//$NON-NLS-1$
-                    MessageDialog.openError(viewer.getControl().getShell(), Messages._Error, Messages.MenuMainPage_IDCannotbeEmpty);
+                    MessageDialog.openError(viewer.getControl().getShell(), Messages._Error,
+                            Messages.MenuMainPage_IDCannotbeEmpty);
                     return;
                 }
                 LinkedHashMap<String, String> descriptions = ((LinkedHashMap<String, String>) dlg.getDescriptionsTableViewer()
                         .getInput());
                 if (descriptions.size() == 0) {
-                    MessageDialog.openError(viewer.getControl().getShell(), Messages._Error,
-                            Messages.MenuMainPage_ErrorMsg);
+                    MessageDialog.openError(viewer.getControl().getShell(), Messages._Error, Messages.MenuMainPage_ErrorMsg);
                     return;
                 }
                 treeEntry.getWsMenuEntry().setId(id);
@@ -365,17 +373,13 @@ public class MenuMainPage extends AMainPageV2 {
                         "".equals(dlg.getApplicationNameText().getText()) ? null : dlg.getApplicationNameText().getText());//$NON-NLS-1$
                 treeEntry.getWsMenuEntry().setIcon(
                         "".equals(dlg.getIconPathText().getText()) ? null : dlg.getIconPathText().getText());//$NON-NLS-1$
-                WSMenuMenuEntriesDescriptions[] wsDescriptions = new WSMenuMenuEntriesDescriptions[descriptions.size()];
-                Set<String> isoCodes = descriptions.keySet();
-                int i = 0;
-                for (Iterator iter = isoCodes.iterator(); iter.hasNext();) {
-                    String isoCode = (String) iter.next();
-                    wsDescriptions[i] = new WSMenuMenuEntriesDescriptions();
-                    wsDescriptions[i].setLanguage(isoCode.toUpperCase());
-                    wsDescriptions[i].setLabel(descriptions.get(isoCode));
-                    i++;
+                treeEntry.getWsMenuEntry().getDescriptions().clear();
+                for (String isoCode : descriptions.keySet()) {
+                    WSMenuEntry.Descriptions wsDescription = new WSMenuEntry.Descriptions();
+                    wsDescription.setLanguage(isoCode.toUpperCase());
+                    wsDescription.setLabel(descriptions.get(isoCode));
+                    treeEntry.getWsMenuEntry().getDescriptions().add(wsDescription);
                 }
-                treeEntry.getWsMenuEntry().setDescriptions(wsDescriptions);
                 viewer.setExpandedState(treeEntry, true);
                 viewer.refresh(treeEntry, true);
                 markDirtyWithoutCommit();
@@ -405,13 +409,14 @@ public class MenuMainPage extends AMainPageV2 {
             setToolTipText(Messages.MenuMainPage_EditThisMenuEntry);
         }
 
+        @Override
         public void run() {
             try {
                 super.run();
                 // if attribute, edit parent else edit this one
                 dlg = new MenuEntryDialog(treeEntry.getWsMenuEntry(), new MenuEntryDialogSelectionListener(viewer, treeEntry),
-                        this.viewer.getControl().getShell(), Messages.MenuMainPage_EditTheMenuEntry + treeEntry.getWsMenuEntry().getId(), false,
-                        uripre, isLocalInput(), treeObject);
+                        this.viewer.getControl().getShell(), Messages.MenuMainPage_EditTheMenuEntry
+                                + treeEntry.getWsMenuEntry().getId(), false, uripre, isLocalInput(), treeObject);
                 dlg.setBlockOnOpen(true);
                 dlg.open();
 
@@ -420,10 +425,12 @@ public class MenuMainPage extends AMainPageV2 {
                 MessageDialog.openError(
                         viewer.getControl().getShell(),
                         Messages._Error,
-                        Messages.bind(Messages.MenuMainPage_ErrorMsg1, treeEntry.getWsMenuEntry().getId(), e.getLocalizedMessage()));
+                        Messages.bind(Messages.MenuMainPage_ErrorMsg1, treeEntry.getWsMenuEntry().getId(),
+                                e.getLocalizedMessage()));
             }
         }
 
+        @Override
         public void runWithEvent(Event event) {
             super.runWithEvent(event);
         }
@@ -447,20 +454,21 @@ public class MenuMainPage extends AMainPageV2 {
             this.location = location;
             String label = "";//$NON-NLS-1$
             TreeEntry currentEntry = (TreeEntry) ((IStructuredSelection) viewer.getSelection()).getFirstElement();
+            WSMenuEntry wsMenuEntry = new WSMenuEntry("", null, "", "", "", null); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
             switch (location) {
             case LOCATION_UNDER:
                 position = 0;
-                treeEntry = new TreeEntry(currentEntry, new WSMenuEntry("", null, "", "", "", null));//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$
+                treeEntry = new TreeEntry(currentEntry, wsMenuEntry);
                 label = Messages.MenuMainPage_LaelText + currentEntry.getWsMenuEntry().getId();
                 break;
             case LOCATION_BEFORE:
                 position = findSubMenuPosition(currentEntry);
-                treeEntry = new TreeEntry(currentEntry.getParentTreeEntry(), new WSMenuEntry("", null, "", "", "", null));//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$
+                treeEntry = new TreeEntry(currentEntry.getParentTreeEntry(), wsMenuEntry);
                 label = Messages.MenuMainPage_LaelText1;
                 break;
             case LOCATION_AFTER:
                 position = findSubMenuPosition(currentEntry);
-                treeEntry = new TreeEntry(currentEntry.getParentTreeEntry(), new WSMenuEntry("", null, "", "", "", null)); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+                treeEntry = new TreeEntry(currentEntry.getParentTreeEntry(), wsMenuEntry);
                 label = Messages.MenuMainPage_AddAMenuEntryAfter;
                 break;
             }
@@ -469,6 +477,7 @@ public class MenuMainPage extends AMainPageV2 {
             setToolTipText(Messages.MenuMainPage_AddAMenuEntry);
         }
 
+        @Override
         public void run() {
             try {
                 super.run();
@@ -483,11 +492,12 @@ public class MenuMainPage extends AMainPageV2 {
                 }
             } catch (Exception e) {
                 log.error(e.getMessage(), e);
-                MessageDialog.openError(viewer.getControl().getShell(), Messages._Error, Messages.bind(Messages.ErrorMsg1
-                        , e.getLocalizedMessage()));
+                MessageDialog.openError(viewer.getControl().getShell(), Messages._Error,
+                        Messages.bind(Messages.ErrorMsg1, e.getLocalizedMessage()));
             }
         }
 
+        @Override
         public void runWithEvent(Event event) {
             super.runWithEvent(event);
         }
@@ -496,8 +506,8 @@ public class MenuMainPage extends AMainPageV2 {
             // find the position
             if (entry.getParentTreeEntry() == null) { // top level
                 WSMenu menu = ((WSMenu) viewer.getInput());
-                for (int i = 0; i < menu.getMenuEntries().length; i++) {
-                    if (menu.getMenuEntries()[i].equals(entry.getWsMenuEntry())) {
+                for (int i = 0; i < menu.getMenuEntries().size(); i++) {
+                    if (menu.getMenuEntries().get(i).equals(entry.getWsMenuEntry())) {
                         position = i;
                         break;
                     }
@@ -505,8 +515,8 @@ public class MenuMainPage extends AMainPageV2 {
                 return position;
             }
             // sub menu of a menu entry
-            for (int i = 0; i < entry.getParentTreeEntry().getWsMenuEntry().getSubMenus().length; i++) {
-                if (entry.getParentTreeEntry().getWsMenuEntry().getSubMenus()[i].equals(entry.getWsMenuEntry())) {
+            for (int i = 0; i < entry.getParentTreeEntry().getWsMenuEntry().getSubMenus().size(); i++) {
+                if (entry.getParentTreeEntry().getWsMenuEntry().getSubMenus().get(i).equals(entry.getWsMenuEntry())) {
                     position = i;
                     break;
                 }
@@ -518,14 +528,17 @@ public class MenuMainPage extends AMainPageV2 {
             ArrayList<WSMenuEntry> list = new ArrayList<WSMenuEntry>();
             if (entry.getParentTreeEntry() == null) { // top level
                 WSMenu menu = ((WSMenu) viewer.getInput());
-                for (int i = 0; i < menu.getMenuEntries().length; i++) {
-                    if ((position == i) && (location != LOCATION_AFTER))
+                for (int i = 0; i < menu.getMenuEntries().size(); i++) {
+                    if ((position == i) && (location != LOCATION_AFTER)) {
                         list.add(entry.getWsMenuEntry());
-                    list.add(menu.getMenuEntries()[i]);
-                    if ((position == i) && (location == LOCATION_AFTER))
+                    }
+                    list.add(menu.getMenuEntries().get(i));
+                    if ((position == i) && (location == LOCATION_AFTER)) {
                         list.add(entry.getWsMenuEntry());
+                    }
                 }
-                menu.setMenuEntries(list.toArray(new WSMenuEntry[list.size()]));
+                menu.getMenuEntries().clear();
+                menu.getMenuEntries().addAll(list);
                 viewer.setExpandedState(menu, true);
                 viewer.refresh(menu, true);
                 log.info(Messages.MenuMainPage_There);
@@ -534,21 +547,25 @@ public class MenuMainPage extends AMainPageV2 {
 
             // sub menu of a menu entry
             WSMenuEntry wsParent = entry.getParentTreeEntry().getWsMenuEntry();
-            if ((wsParent.getSubMenus() == null) || (wsParent.getSubMenus().length == 0)) { // no submenus yet
+            if ((wsParent.getSubMenus() == null) || (wsParent.getSubMenus().size() == 0)) { // no submenus yet
                 log.info(Messages.MenuMainPage_here);
-                wsParent.setSubMenus(new WSMenuEntry[] { entry.getWsMenuEntry() });
+                wsParent.getSubMenus().clear();
+                wsParent.getSubMenus().add(entry.getWsMenuEntry());
                 viewer.setExpandedState(entry.getParentTreeEntry(), true);
                 viewer.refresh(entry.getParentTreeEntry(), true);
                 return;
             }
-            for (int i = 0; i < wsParent.getSubMenus().length; i++) {
-                if ((position == i) && (location != LOCATION_AFTER))
+            for (int i = 0; i < wsParent.getSubMenus().size(); i++) {
+                if ((position == i) && (location != LOCATION_AFTER)) {
                     list.add(entry.getWsMenuEntry());
-                list.add(wsParent.getSubMenus()[i]);
-                if ((position == i) && (location != LOCATION_BEFORE))
+                }
+                list.add(wsParent.getSubMenus().get(i));
+                if ((position == i) && (location != LOCATION_BEFORE)) {
                     list.add(entry.getWsMenuEntry());
+                }
             }
-            wsParent.setSubMenus(list.toArray(new WSMenuEntry[list.size()]));
+            wsParent.getSubMenus().clear();
+            wsParent.getSubMenus().addAll(list);
             viewer.setExpandedState(entry.getParentTreeEntry(), true);
             viewer.refresh(entry.getParentTreeEntry(), true);
         }
@@ -571,25 +588,27 @@ public class MenuMainPage extends AMainPageV2 {
             setToolTipText(Messages.MenuMainPage_DelMenuEntry);
         }
 
+        @Override
         public void run() {
             try {
                 if (treeEntry.getParentTreeEntry() == null) { // top level menu
                     WSMenu menu = ((WSMenu) viewer.getInput());
-                    if (menu.getMenuEntries().length == 1) {
+                    if (menu.getMenuEntries().size() == 1) {
                         MessageDialog.openWarning(MenuMainPage.this.getSite().getShell(), Messages.MenuMainPage_MenuEntryWarning,
                                 Messages.MenuMainPage_ErrorMsg2);
                         return;
                     }
                     ArrayList<WSMenuEntry> subMenus = new ArrayList(Arrays.asList(menu.getMenuEntries()));
                     subMenus.remove(treeEntry.getWsMenuEntry());
-                    menu.setMenuEntries(subMenus.toArray(new WSMenuEntry[subMenus.size()]));
+                    menu.getMenuEntries().clear();
+                    menu.getMenuEntries().addAll(subMenus);
                 } else {
                     // sub Menu Entry of a sub menu
                     ArrayList<WSMenuEntry> subMenus = new ArrayList(Arrays.asList(treeEntry.getParentTreeEntry().getWsMenuEntry()
                             .getSubMenus()));
                     subMenus.remove(treeEntry.getWsMenuEntry());
-                    treeEntry.getParentTreeEntry().getWsMenuEntry()
-                            .setSubMenus(subMenus.toArray(new WSMenuEntry[subMenus.size()]));
+                    treeEntry.getParentTreeEntry().getWsMenuEntry().getSubMenus().clear();
+                    treeEntry.getParentTreeEntry().getWsMenuEntry().getSubMenus().addAll(subMenus);
                 }
                 // refresh the viewer
                 if (treeEntry.getParentTreeEntry() != null) {
@@ -604,10 +623,12 @@ public class MenuMainPage extends AMainPageV2 {
                 MessageDialog.openError(
                         viewer.getControl().getShell(),
                         Messages._Error,
-                        Messages.bind(Messages.MenuMainPage_ErrorMsg3, treeEntry.getWsMenuEntry().getId(), e.getLocalizedMessage()));
+                        Messages.bind(Messages.MenuMainPage_ErrorMsg3, treeEntry.getWsMenuEntry().getId(),
+                                e.getLocalizedMessage()));
             }
         }
 
+        @Override
         public void runWithEvent(Event event) {
             super.runWithEvent(event);
         }
@@ -631,17 +652,19 @@ public class MenuMainPage extends AMainPageV2 {
 
         public void dragSetData(DragSourceEvent event) {
             Control control = ((DragSource) event.widget).getControl();
-            if ((control instanceof List))
+            if ((control instanceof List)) {
                 if (TextTransfer.getInstance().isSupportedType(event.dataType)) {
                     this.selected = ((List) control).getSelectionIndex();
                     event.data = ((List) control).getSelection()[0];
                 }
+            }
         }
 
         public void dragStart(DragSourceEvent event) {
             Control control = ((DragSource) event.widget).getControl();
-            if ((control instanceof List))
+            if ((control instanceof List)) {
                 event.doit = (((List) control).getItemCount() > 0);
+            }
         }
     }
 
@@ -649,12 +672,13 @@ public class MenuMainPage extends AMainPageV2 {
 
         public void dragEnter(DropTargetEvent event) {
             // priority to copy
-            if ((event.operations & DND.DROP_COPY) == DND.DROP_COPY)
+            if ((event.operations & DND.DROP_COPY) == DND.DROP_COPY) {
                 event.detail = DND.DROP_COPY;
-            else if ((event.operations & DND.DROP_MOVE) == DND.DROP_MOVE)
+            } else if ((event.operations & DND.DROP_MOVE) == DND.DROP_MOVE) {
                 event.detail = DND.DROP_MOVE;
-            else
+            } else {
                 event.detail = DND.DROP_NONE;
+            }
         }
 
         public void dragLeave(DropTargetEvent event) {
@@ -668,12 +692,14 @@ public class MenuMainPage extends AMainPageV2 {
 
         public void drop(DropTargetEvent event) {
             Control control = ((DropTarget) event.widget).getControl();
-            if ((control instanceof List) && ((event.operations & DND.DROP_COPY) == DND.DROP_COPY))
-                if (TextTransfer.getInstance().isSupportedType(event.currentDataType))
+            if ((control instanceof List) && ((event.operations & DND.DROP_COPY) == DND.DROP_COPY)) {
+                if (TextTransfer.getInstance().isSupportedType(event.currentDataType)) {
                     if (!Arrays.asList(((List) control).getItems()).contains(event.data)) {
                         ((List) control).add((String) event.data);
                         MenuMainPage.this.markDirtyWithoutCommit();
                     }
+                }
+            }
         }
 
         public void dropAccept(DropTargetEvent event) {

@@ -13,7 +13,6 @@
 package com.amalto.workbench.dialogs;
 
 import java.awt.Panel;
-import java.rmi.RemoteException;
 import java.util.List;
 
 import org.apache.commons.logging.Log;
@@ -134,8 +133,9 @@ public class ResourceSelectDialog extends Dialog {
         this.parent = parent;
         this.site = site;
         this.isMulti = isMulti;
-        if (dataModelName != null)
+        if (dataModelName != null) {
             this.dataModelName = dataModelName;// default dataModel
+        }
     }
 
     private String getXpath(StructuredSelection sel) {
@@ -147,23 +147,26 @@ public class ResourceSelectDialog extends Dialog {
         for (int i = 0; i < items.length; i++) {
             item = items[i];
             XSDConcreteComponent component = (XSDConcreteComponent) item.getData();
-            if (!(component instanceof XSDParticle) && !(component instanceof XSDElementDeclaration))
+            if (!(component instanceof XSDParticle) && !(component instanceof XSDElementDeclaration)) {
                 continue;
+            }
             do {
                 component = (XSDConcreteComponent) item.getData();
                 if (component instanceof XSDParticle) {
-                    if (((XSDParticle) component).getTerm() instanceof XSDElementDeclaration)
+                    if (((XSDParticle) component).getTerm() instanceof XSDElementDeclaration) {
                         path = "/" + ((XSDElementDeclaration) ((XSDParticle) component).getTerm()).getName() + path;//$NON-NLS-1$
+                    }
                 } else if (component instanceof XSDElementDeclaration) {
                     path = ((XSDElementDeclaration) component).getName() + path;
                 }
                 item = item.getParentItem();
 
             } while (item != null);
-            if (i == 0)
+            if (i == 0) {
                 totalXpath = path;
-            else
+            } else {
                 totalXpath += "&" + path;//$NON-NLS-1$
+            }
             path = "";//$NON-NLS-1$
         }// for(i=0
         if (context != null && conceptName != null) {
@@ -184,6 +187,7 @@ public class ResourceSelectDialog extends Dialog {
         return totalXpath;
     }
 
+    @Override
     protected Control createDialogArea(Composite parent) {
         parent.getShell().setText(this.title);
         Composite composite = (Composite) super.createDialogArea(parent);
@@ -277,10 +281,11 @@ public class ResourceSelectDialog extends Dialog {
             domViewer = new TreeViewer(parent, SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER);
         }
         int index = avaiList.indexOf(dataModelName);
-        if (index < 0)
+        if (index < 0) {
             dataModelCombo.select(0);
-        else
+        } else {
             dataModelCombo.select(index);
+        }
 
         changeDomTree(tree);
 
@@ -298,11 +303,13 @@ public class ResourceSelectDialog extends Dialog {
         domViewer.setLabelProvider(new ServerTreeLabelProvider());
         domViewer.setSorter(new ViewerSorter() {
 
+            @Override
             public int category(Object element) {
                 if (element instanceof TreeParent) {
                     TreeParent category = (TreeParent) element;
-                    if (category.getType() == TreeObject.CATEGORY_FOLDER)
+                    if (category.getType() == TreeObject.CATEGORY_FOLDER) {
                         return -1;
+                    }
                 }
                 return 0;
             }
@@ -319,8 +326,9 @@ public class ResourceSelectDialog extends Dialog {
 
     private void changeDomTree(final TreeParent pObject) {
         String modelDisplay = dataModelCombo.getText();
-        if (modelDisplay.length() == 0)
+        if (modelDisplay.length() == 0) {
             return;
+        }
         this.dataModelName = modelDisplay;
         // this.selectedDataModelName = modelDisplay;
         // xobject = pObject.findObject(TreeObject.DATA_MODEL, modelDisplay);
@@ -335,10 +343,6 @@ public class ResourceSelectDialog extends Dialog {
         WSDataModel wsDataModel = null;
         try {
             wsDataModel = port.getDataModel(new WSGetDataModel(new WSDataModelPK(dataModelName)));
-        } catch (RemoteException e2) {
-            log.error(e2.getMessage(), e2);
-        }
-        try {
             // XSDSchema xsdSchema = Util.getXSDSchema(wsDataModel.getXsdSchema());
             String schema = wsDataModel.getXsdSchema();// Util.nodeToString(xsdSchema.getDocument());
             XSDSchema xsd = Util.createXsdSchema(schema, pObject);
@@ -360,14 +364,15 @@ public class ResourceSelectDialog extends Dialog {
 
             public void selectionChanged(SelectionChangedEvent e) {
                 StructuredSelection sel = (StructuredSelection) e.getSelection();
-                if (isXpath.getSelection())
+                if (isXpath.getSelection()) {
                     xpath = getXpath(sel);
-                else {
+                } else {
                     TreeObject selectNode = (TreeObject) sel.getFirstElement();
-                    if (selectNode != null)
+                    if (selectNode != null) {
                         xpath = selectNode.getDisplayName();
-                    else
+                    } else {
                         xpath = "";//$NON-NLS-1$
+                    }
                 }
                 sel.getFirstElement();
                 xpathText.setText(xpath);
@@ -377,24 +382,28 @@ public class ResourceSelectDialog extends Dialog {
         domViewer.getControl().setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true));
         domViewer.setSorter(new ViewerSorter() {
 
+            @Override
             public int category(Object element) {
                 // we want facets before Base TypeDefinitions in
                 // SimpleTypeDefinition
-                if (element instanceof XSDFacet)
+                if (element instanceof XSDFacet) {
                     return 100;
+                }
                 // unique keys after element declarations and before other keys
                 if (element instanceof XSDIdentityConstraintDefinition) {
                     XSDIdentityConstraintDefinition icd = (XSDIdentityConstraintDefinition) element;
-                    if (icd.getIdentityConstraintCategory().equals(XSDIdentityConstraintCategory.UNIQUE_LITERAL))
+                    if (icd.getIdentityConstraintCategory().equals(XSDIdentityConstraintCategory.UNIQUE_LITERAL)) {
                         return 300;
-                    else if (icd.getIdentityConstraintCategory().equals(XSDIdentityConstraintCategory.KEY_LITERAL))
+                    } else if (icd.getIdentityConstraintCategory().equals(XSDIdentityConstraintCategory.KEY_LITERAL)) {
                         return 301;
-                    else
+                    } else {
                         return 302;
+                    }
                 }
                 return 200;
             }
 
+            @Override
             public int compare(Viewer theViewer, Object e1, Object e2) {
                 int cat1 = category(e1);
                 int cat2 = category(e2);
@@ -404,6 +413,7 @@ public class ResourceSelectDialog extends Dialog {
         domViewer.setInput(site);
     }
 
+    @Override
     protected Control createButtonBar(Composite parent) {
         Control btnBar = super.createButtonBar(parent);
         getButton(IDialogConstants.OK_ID).setText(Messages.ResourceSelectDialog_OK);

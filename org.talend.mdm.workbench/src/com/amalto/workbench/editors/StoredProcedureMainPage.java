@@ -15,6 +15,7 @@ package com.amalto.workbench.editors;
 import java.net.URL;
 import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.regex.Matcher;
@@ -258,8 +259,8 @@ public class StoredProcedureMainPage extends AMainPage implements ITextListener 
 
         Document doc = new Document(wsStoredProcedure.getProcedure());
         procedureViewer.setDocument(doc);
-        refreshCacheBtn.setSelection(wsStoredProcedure.getRefreshCache() != null
-                && wsStoredProcedure.getRefreshCache().booleanValue() ? true : false);
+        refreshCacheBtn.setSelection(wsStoredProcedure.isRefreshCache() != null && wsStoredProcedure.isRefreshCache() ? true
+                : false);
 
         initDataClusterCombo();
         this.refreshing = false;
@@ -267,7 +268,7 @@ public class StoredProcedureMainPage extends AMainPage implements ITextListener 
 
     protected void initDataClusterCombo() {
         dataClusterCombo.removeAll();
-        WSDataClusterPK[] dataClusterPKs;
+        List<WSDataClusterPK> dataClusterPKs;
         try {
             dataClusterPKs = Util.getAllDataClusterPKs(new URL(getXObject().getEndpointAddress()), getXObject().getUniverse(),
                     getXObject().getUsername(), getXObject().getPassword());
@@ -280,15 +281,15 @@ public class StoredProcedureMainPage extends AMainPage implements ITextListener 
             this.refreshing = false;
             return;
         }
-        if ((dataClusterPKs == null) || (dataClusterPKs.length == 0)
-                || ((dataClusterPKs.length == 1) && ("CACHE".equals(dataClusterPKs[0].getPk())))) {//$NON-NLS-1$
+        if ((dataClusterPKs == null) || (dataClusterPKs.size() == 0)
+                || ((dataClusterPKs.size() == 1) && ("CACHE".equals(dataClusterPKs.get(0).getPk())))) {//$NON-NLS-1$
             MessageDialog.openError(this.getSite().getShell(), Messages._Error, Messages.StoredProcedureMainPage_14);
             return;
         }
         dataClusterCombo.add("[ALL]");//$NON-NLS-1$
-        for (int i = 0; i < dataClusterPKs.length; i++) {
-            if (!"CACHE".equals(dataClusterPKs[i].getPk())) {
-                dataClusterCombo.add(dataClusterPKs[i].getPk());
+        for (int i = 0; i < dataClusterPKs.size(); i++) {
+            if (!"CACHE".equals(dataClusterPKs.get(i).getPk())) {
+                dataClusterCombo.add(dataClusterPKs.get(i).getPk());
             }
         }
     }
@@ -398,10 +399,9 @@ public class StoredProcedureMainPage extends AMainPage implements ITextListener 
                         WSStoredProcedure wsStoredProcedure = (WSStoredProcedure) (getXObject().getWsObject());
                         port.putStoredProcedure(new WSPutStoredProcedure(wsStoredProcedure));
                         WSStringArray array = port.executeStoredProcedure(new WSExecuteStoredProcedure(new WSStoredProcedurePK(
-                                wsStoredProcedure.getName()), null, dcpk, currentParameters.toArray(new String[currentParameters
-                                .size()])));
-                        String[] results = array.getStrings();
-                        resultsLabel.setText(Messages.StoredProcedureMainPage_15 + results.length
+                                wsStoredProcedure.getName()), null, dcpk, currentParameters));
+                        List<String> results = array.getStrings();
+                        resultsLabel.setText(Messages.StoredProcedureMainPage_15 + results.size()
                                 + Messages.StoredProcedureMainPage_16);
                         resultsViewer.setInput(results);
                     }

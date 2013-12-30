@@ -13,7 +13,6 @@
 package com.amalto.workbench.utils;
 
 import java.net.URL;
-import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -78,9 +77,8 @@ import com.amalto.workbench.webservices.WSPutTransformerV2;
 import com.amalto.workbench.webservices.WSPutUniverse;
 import com.amalto.workbench.webservices.WSPutView;
 import com.amalto.workbench.webservices.WSRole;
+import com.amalto.workbench.webservices.WSRole.Specification.Instance;
 import com.amalto.workbench.webservices.WSRolePK;
-import com.amalto.workbench.webservices.WSRoleSpecification;
-import com.amalto.workbench.webservices.WSRoleSpecificationInstance;
 import com.amalto.workbench.webservices.WSRoutingRule;
 import com.amalto.workbench.webservices.WSRoutingRulePK;
 import com.amalto.workbench.webservices.WSStoredProcedure;
@@ -91,7 +89,6 @@ import com.amalto.workbench.webservices.WSTransformerV2;
 import com.amalto.workbench.webservices.WSTransformerV2PK;
 import com.amalto.workbench.webservices.WSUniverse;
 import com.amalto.workbench.webservices.WSUniversePK;
-import com.amalto.workbench.webservices.WSUniverseXtentisObjectsRevisionIDs;
 import com.amalto.workbench.webservices.WSView;
 import com.amalto.workbench.webservices.WSViewPK;
 import com.amalto.workbench.webservices.XtentisPort;
@@ -112,10 +109,11 @@ public class TreeObjectUtil {
         case TreeObject.DATA_MODEL: {
             WSDataModelPK key = (WSDataModelPK) object.getWsKey();
             WSDataModelPK newKey = new WSDataModelPK(key.getPk());
-            if (destPort.existsDataModel(new WSExistsDataModel((WSDataModelPK) object.getWsKey())).is_true()) {
+            if (destPort.existsDataModel(new WSExistsDataModel((WSDataModelPK) object.getWsKey())).isTrue()) {
                 String newName = getNewName(view.getSite().getShell(), key.getPk(), destPort, object.getType());
-                if (newName == null)
+                if (newName == null) {
                     return false;
+                }
                 newKey = new WSDataModelPK(newName);
             }
             // fetch the copied model
@@ -135,10 +133,11 @@ public class TreeObjectUtil {
         case TreeObject.VIEW: {
             WSViewPK key = (WSViewPK) object.getWsKey();
             WSViewPK newKey = new WSViewPK(key.getPk());
-            if (destPort.existsView(new WSExistsView((WSViewPK) object.getWsKey())).is_true()) {
+            if (destPort.existsView(new WSExistsView((WSViewPK) object.getWsKey())).isTrue()) {
                 String newName = getNewName(view.getSite().getShell(), key.getPk(), destPort, object.getType());
-                if (newName == null)
+                if (newName == null) {
                     return false;
+                }
                 newKey = new WSViewPK(newName);
             }
             // fetch the copied model
@@ -159,10 +158,11 @@ public class TreeObjectUtil {
         case TreeObject.DATA_CLUSTER: {
             WSDataClusterPK key = (WSDataClusterPK) object.getWsKey();
             WSDataClusterPK newKey = new WSDataClusterPK(key.getPk());
-            if (destPort.existsDataCluster(new WSExistsDataCluster((WSDataClusterPK) object.getWsKey())).is_true()) {
+            if (destPort.existsDataCluster(new WSExistsDataCluster((WSDataClusterPK) object.getWsKey())).isTrue()) {
                 String newName = getNewName(view.getSite().getShell(), key.getPk(), destPort, object.getType());
-                if (newName == null)
+                if (newName == null) {
                     return false;
+                }
                 newKey = new WSDataClusterPK(newName);
             }
             // fetch the copied model
@@ -182,10 +182,11 @@ public class TreeObjectUtil {
         case TreeObject.STORED_PROCEDURE: {
             WSStoredProcedurePK key = (WSStoredProcedurePK) object.getWsKey();
             WSStoredProcedurePK newKey = new WSStoredProcedurePK(key.getPk());
-            if (destPort.existsStoredProcedure(new WSExistsStoredProcedure((WSStoredProcedurePK) object.getWsKey())).is_true()) {
+            if (destPort.existsStoredProcedure(new WSExistsStoredProcedure((WSStoredProcedurePK) object.getWsKey())).isTrue()) {
                 String newName = getNewName(view.getSite().getShell(), key.getPk(), destPort, object.getType());
-                if (newName == null)
+                if (newName == null) {
                     return false;
+                }
                 newKey = new WSStoredProcedurePK(newName);
             }
             // fetch the copied model
@@ -194,7 +195,7 @@ public class TreeObjectUtil {
             WSStoredProcedure originalStoredProcedure = originalPort.getStoredProcedure(new WSGetStoredProcedure(key));
             WSStoredProcedure newStoredProcedure = new WSStoredProcedure(newKey.getPk(),
                     originalStoredProcedure.getDescription(), originalStoredProcedure.getProcedure(),
-                    originalStoredProcedure.getRefreshCache());
+                    originalStoredProcedure.isRefreshCache());
             // write the new model
             destPort.putStoredProcedure(new WSPutStoredProcedure(newStoredProcedure));
             TreeObject newObj = new TreeObject(newKey.getPk(), parent != null ? parent.getServerRoot() : object.getServerRoot(),
@@ -206,10 +207,11 @@ public class TreeObjectUtil {
         case TreeObject.ROLE: {
             WSRolePK key = (WSRolePK) object.getWsKey();
             WSRolePK newKey = new WSRolePK(key.getPk());
-            if (destPort.existsRole(new WSExistsRole((WSRolePK) object.getWsKey())).is_true()) {
+            if (destPort.existsRole(new WSExistsRole((WSRolePK) object.getWsKey())).isTrue()) {
                 String newName = getNewName(view.getSite().getShell(), key.getPk(), destPort, object.getType());
-                if (newName == null)
+                if (newName == null) {
                     return false;
+                }
                 newKey = new WSRolePK(newName);
             }
             // fetch the copied model
@@ -228,10 +230,11 @@ public class TreeObjectUtil {
         case TreeObject.ROUTING_RULE: {
             WSRoutingRulePK key = (WSRoutingRulePK) object.getWsKey();
             WSRoutingRulePK newKey = new WSRoutingRulePK(key.getPk());
-            if (destPort.existsRoutingRule(new WSExistsRoutingRule((WSRoutingRulePK) object.getWsKey())).is_true()) {
+            if (destPort.existsRoutingRule(new WSExistsRoutingRule((WSRoutingRulePK) object.getWsKey())).isTrue()) {
                 String newName = getNewName(view.getSite().getShell(), key.getPk(), destPort, object.getType());
-                if (newName == null)
+                if (newName == null) {
                     return false;
+                }
                 newKey = new WSRoutingRulePK(newName);
             }
             // fetch the copied model
@@ -241,7 +244,7 @@ public class TreeObjectUtil {
             WSRoutingRule newRoutingRule = new WSRoutingRule(newKey.getPk(), originalRoutingRule.getDescription(),
                     originalRoutingRule.isSynchronous(), originalRoutingRule.getConcept(), originalRoutingRule.getServiceJNDI(),
                     originalRoutingRule.getParameters(), originalRoutingRule.getWsRoutingRuleExpressions(),
-                    originalRoutingRule.getCondition(), originalRoutingRule.getDeactive());
+                    originalRoutingRule.getCondition(), originalRoutingRule.isDeactive());
             // write the new model
             destPort.putRoutingRule(new WSPutRoutingRule(newRoutingRule));
             TreeObject newObj = new TreeObject(newKey.getPk(), parent != null ? parent.getServerRoot() : object.getServerRoot(),
@@ -253,10 +256,11 @@ public class TreeObjectUtil {
         case TreeObject.TRANSFORMER: {
             WSTransformerV2PK key = (WSTransformerV2PK) object.getWsKey();
             WSTransformerV2PK newKey = new WSTransformerV2PK(key.getPk());
-            if (destPort.existsTransformerV2(new WSExistsTransformerV2((WSTransformerV2PK) object.getWsKey())).is_true()) {
+            if (destPort.existsTransformerV2(new WSExistsTransformerV2((WSTransformerV2PK) object.getWsKey())).isTrue()) {
                 String newName = getNewName(view.getSite().getShell(), key.getPk(), destPort, object.getType());
-                if (newName == null)
+                if (newName == null) {
                     return false;
+                }
                 newKey = new WSTransformerV2PK(newName);
             }
             // fetch the copied model
@@ -276,10 +280,11 @@ public class TreeObjectUtil {
         case TreeObject.MENU: {
             WSMenuPK key = (WSMenuPK) object.getWsKey();
             WSMenuPK newKey = new WSMenuPK(key.getPk());
-            if (destPort.existsMenu(new WSExistsMenu((WSMenuPK) object.getWsKey())).is_true()) {
+            if (destPort.existsMenu(new WSExistsMenu((WSMenuPK) object.getWsKey())).isTrue()) {
                 String newName = getNewName(view.getSite().getShell(), key.getPk(), destPort, object.getType());
-                if (newName == null)
+                if (newName == null) {
                     return false;
+                }
                 newKey = new WSMenuPK(newName);
             }
             // fetch the copied model
@@ -298,10 +303,11 @@ public class TreeObjectUtil {
         case TreeObject.UNIVERSE: {
             WSUniversePK key = (WSUniversePK) object.getWsKey();
             WSUniversePK newKey = new WSUniversePK(key.getPk());
-            if (destPort.existsUniverse(new WSExistsUniverse((WSUniversePK) object.getWsKey())).is_true()) {
+            if (destPort.existsUniverse(new WSExistsUniverse((WSUniversePK) object.getWsKey())).isTrue()) {
                 String newName = getNewName(view.getSite().getShell(), key.getPk(), destPort, object.getType());
-                if (newName == null)
+                if (newName == null) {
                     return false;
+                }
                 newKey = new WSUniversePK(newName);
             }
             // fetch the copied model
@@ -324,10 +330,11 @@ public class TreeObjectUtil {
             WSSynchronizationPlanPK key = (WSSynchronizationPlanPK) object.getWsKey();
             WSSynchronizationPlanPK newKey = new WSSynchronizationPlanPK(key.getPk());
             if (destPort.existsSynchronizationPlan(new WSExistsSynchronizationPlan((WSSynchronizationPlanPK) object.getWsKey()))
-                    .is_true()) {
+                    .isTrue()) {
                 String newName = getNewName(view.getSite().getShell(), key.getPk(), destPort, object.getType());
-                if (newName == null)
+                if (newName == null) {
                     return false;
+                }
                 newKey = new WSSynchronizationPlanPK(newName);
             }
             // fetch the copied model
@@ -361,50 +368,55 @@ public class TreeObjectUtil {
 
     private static String getNewName(Shell shell, String displayName, final XtentisPort destPort, final int type) {
         InputDialog id;
-        id = new InputDialog(shell, Messages.TreeObjectUtil_Rename, Messages.TreeObjectUtil_PleaseEnterNewName, displayName, new IInputValidator() {
+        id = new InputDialog(shell, Messages.TreeObjectUtil_Rename, Messages.TreeObjectUtil_PleaseEnterNewName, displayName,
+                new IInputValidator() {
 
-            public String isValid(String newText) {
-                if ((newText == null) || "".equals(newText))//$NON-NLS-1$
-                    return Messages.TreeObjectUtil_NameCannotbeEmpty;
+                    public String isValid(String newText) {
+                        if ((newText == null) || "".equals(newText)) {
+                            return Messages.TreeObjectUtil_NameCannotbeEmpty;
+                        }
 
-                if (Pattern.compile("^\\s+\\w+\\s*").matcher(newText).matches()//$NON-NLS-1$
-                        || newText.trim().replaceAll("\\s", "").length() != newText.trim().length())//$NON-NLS-1$//$NON-NLS-2$
-                    return Messages.TreeObjectUtil_NameCannotContainEmpty;
+                        if (Pattern.compile("^\\s+\\w+\\s*").matcher(newText).matches()//$NON-NLS-1$
+                                || newText.trim().replaceAll("\\s", "").length() != newText.trim().length()) {
+                            return Messages.TreeObjectUtil_NameCannotContainEmpty;
+                        }
 
-                newText = newText.trim();
-                try {
-                    if ((type == TreeObject.DATA_MODEL && destPort.existsDataModel(
-                            new WSExistsDataModel(new WSDataModelPK(newText))).is_true())
-                            || (type == TreeObject.VIEW && destPort.existsView(new WSExistsView(new WSViewPK(newText))).is_true())
-                            || (type == TreeObject.DATA_CLUSTER && destPort.existsDataCluster(
-                                    new WSExistsDataCluster(new WSDataClusterPK(newText))).is_true())
-                            || (type == TreeObject.STORED_PROCEDURE && destPort.existsStoredProcedure(
-                                    new WSExistsStoredProcedure(new WSStoredProcedurePK(newText))).is_true())
-                            || (type == TreeObject.ROUTING_RULE && destPort.existsRoutingRule(
-                                    new WSExistsRoutingRule(new WSRoutingRulePK(newText))).is_true())
-                            || (type == TreeObject.TRANSFORMER && destPort.existsTransformerV2(
-                                    new WSExistsTransformerV2(new WSTransformerV2PK(newText))).is_true())
-                            || (type == TreeObject.MENU && destPort.existsMenu(new WSExistsMenu(new WSMenuPK(newText))).is_true()))
-                        return Messages.TreeObjectUtil_NameAlreadyExist;
-                    if (Util.IsEnterPrise()
-                            && ((type == TreeObject.ROLE && destPort.existsRole(new WSExistsRole(new WSRolePK(newText)))
-                                    .is_true())
-                                    || (type == TreeObject.UNIVERSE && destPort.existsUniverse(
-                                            new WSExistsUniverse(new WSUniversePK(newText))).is_true()) || (type == TreeObject.SYNCHRONIZATIONPLAN && destPort
-                                    .existsSynchronizationPlan(
-                                            new WSExistsSynchronizationPlan(new WSSynchronizationPlanPK(newText))).is_true())))
-                        return Messages.TreeObjectUtil_NameAlreadyExist;
-                } catch (RemoteException e) {
-                    log.error(e.getMessage(), e);
-                }
-                return null;
-            };
-        });
+                        newText = newText.trim();
+                        if ((type == TreeObject.DATA_MODEL && destPort.existsDataModel(
+                                new WSExistsDataModel(new WSDataModelPK(newText))).isTrue())
+                                || (type == TreeObject.VIEW && destPort.existsView(new WSExistsView(new WSViewPK(newText)))
+                                        .isTrue())
+                                || (type == TreeObject.DATA_CLUSTER && destPort.existsDataCluster(
+                                        new WSExistsDataCluster(new WSDataClusterPK(newText))).isTrue())
+                                || (type == TreeObject.STORED_PROCEDURE && destPort.existsStoredProcedure(
+                                        new WSExistsStoredProcedure(new WSStoredProcedurePK(newText))).isTrue())
+                                || (type == TreeObject.ROUTING_RULE && destPort.existsRoutingRule(
+                                        new WSExistsRoutingRule(new WSRoutingRulePK(newText))).isTrue())
+                                || (type == TreeObject.TRANSFORMER && destPort.existsTransformerV2(
+                                        new WSExistsTransformerV2(new WSTransformerV2PK(newText))).isTrue())
+                                || (type == TreeObject.MENU && destPort.existsMenu(new WSExistsMenu(new WSMenuPK(newText)))
+                                        .isTrue())) {
+                            return Messages.TreeObjectUtil_NameAlreadyExist;
+                        }
+                        if (Util.IsEnterPrise()
+                                && ((type == TreeObject.ROLE && destPort.existsRole(new WSExistsRole(new WSRolePK(newText)))
+                                        .isTrue())
+                                        || (type == TreeObject.UNIVERSE && destPort.existsUniverse(
+                                                new WSExistsUniverse(new WSUniversePK(newText))).isTrue()) || (type == TreeObject.SYNCHRONIZATIONPLAN && destPort
+                                        .existsSynchronizationPlan(
+                                                new WSExistsSynchronizationPlan(new WSSynchronizationPlanPK(newText))).isTrue()))) {
+                            return Messages.TreeObjectUtil_NameAlreadyExist;
+                        }
+
+                        return null;
+                    };
+                });
         id.setBlockOnOpen(true);
-        if (id.open() == Window.OK)
+        if (id.open() == Window.OK) {
             return id.getValue().trim();
-        else
+        } else {
             return null;
+        }
 
     }
 
@@ -474,31 +486,32 @@ public class TreeObjectUtil {
         view.getViewer().refresh();
     }
 
-    public static void deleteSpecificationFromAttachedRole(XtentisPort port, String displayName, String objectType)
-            throws RemoteException {
+    public static void deleteSpecificationFromAttachedRole(XtentisPort port, String displayName, String objectType) {
         if (Util.IsEnterPrise()) {
             String revision = retrieveRevisionID(port, objectType);
-            WSRolePK[] pks = port.getRolePKs(new WSGetRolePKs(".*")).getWsRolePK();//$NON-NLS-1$
-            if (pks == null)
+            List<WSRolePK> pks = port.getRolePKs(new WSGetRolePKs(".*")).getWsRolePK();//$NON-NLS-1$
+            if (pks == null) {
                 return;
+            }
             for (WSRolePK pk : pks) {
                 WSGetRole getRole = new WSGetRole();
                 getRole.setWsRolePK(new WSRolePK(pk.getPk()));
                 WSRole role = port.getRole(getRole);
-                for (WSRoleSpecification spec : role.getSpecification()) {
+                for (WSRole.Specification spec : role.getSpecification()) {
                     if (spec.getObjectType().equals(objectType)) {
-                        WSRoleSpecificationInstance[] specInstance = spec.getInstance();
-                        List<WSRoleSpecificationInstance> newSpecInstanceLst = new ArrayList<WSRoleSpecificationInstance>();
-                        for (WSRoleSpecificationInstance specIns : specInstance) {
+                        List<Instance> specInstance = spec.getInstance();
+                        List<Instance> newSpecInstanceLst = new ArrayList<Instance>();
+                        for (Instance specIns : specInstance) {
                             if (!specIns.getInstanceName().equals(displayName)) {
                                 newSpecInstanceLst.add(specIns);
                             }
                         }
-                        if (newSpecInstanceLst.size() < specInstance.length) {
+                        if (newSpecInstanceLst.size() < specInstance.size()) {
                             String revisionForRole = retrieveRevisionID(port, "Role");//$NON-NLS-1$
-                            if (revisionForRole == null || revision == null || !revisionForRole.equals(revision))
+                            if (revisionForRole == null || revision == null || !revisionForRole.equals(revision)) {
                                 break;
-                            spec.setInstance(newSpecInstanceLst.toArray(new WSRoleSpecificationInstance[] {}));
+                            }
+                            spec.getInstance().addAll(newSpecInstanceLst);
                             WSPutRole putRole = new WSPutRole();
                             putRole.setWsRole(role);
                             port.putRole(putRole);
@@ -517,40 +530,41 @@ public class TreeObjectUtil {
      * @param port
      * @param xtentisName
      * @return
-     * @throws RemoteException
      */
-    private static String retrieveRevisionID(XtentisPort port, String xtentisName) throws RemoteException {
+    private static String retrieveRevisionID(XtentisPort port, String xtentisName) {
         WSUniverse wUuniverse = port.getCurrentUniverse(new WSGetCurrentUniverse());
-        WSUniverseXtentisObjectsRevisionIDs[] ids = wUuniverse.getXtentisObjectsRevisionIDs();
-        for (WSUniverseXtentisObjectsRevisionIDs id : ids) {
+        List<WSUniverse.XtentisObjectsRevisionIDs> ids = wUuniverse.getXtentisObjectsRevisionIDs();
+        for (WSUniverse.XtentisObjectsRevisionIDs id : ids) {
             if (id.getXtentisObjectName().equals(xtentisName) && Util.IsEnterPrise()) {
                 return id.getRevisionID().replaceAll("\\[", "").replaceAll("\\]", "");//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$
             }
         }
-        if (wUuniverse.getName().equals("[HEAD]"))//$NON-NLS-1$
+        if (wUuniverse.getName().equals("[HEAD]")) {
             return wUuniverse.getName();
+        }
         return null;
     }
 
     private static void newTreeObject(TreeObject newObj, TreeParent parent) {
-        if (parent != null)
+        if (parent != null) {
             parent.addChild(newObj);
-        // else
-        // {
-        // if (selected instanceof TreeParent)
-        // {
-        // if (((TreeParent)selected).findObject(newObj.getType(), newObj.getDisplayName()) == null)
-        // {
-        // ((TreeParent)selected).addChild(newObj);
-        // }
-        // }
-        // else
-        // {
-        // if(selected.getParent().findObject(newObj.getType(), newObj.getDisplayName()) == null)
-        // {
-        // selected.getParent().addChild(newObj);
-        // }
-        // }
-        // }
+            // else
+            // {
+            // if (selected instanceof TreeParent)
+            // {
+            // if (((TreeParent)selected).findObject(newObj.getType(), newObj.getDisplayName()) == null)
+            // {
+            // ((TreeParent)selected).addChild(newObj);
+            // }
+            // }
+            // else
+            // {
+            // if(selected.getParent().findObject(newObj.getType(), newObj.getDisplayName()) == null)
+            // {
+            // selected.getParent().addChild(newObj);
+            // }
+            // }
+            // }
+        }
     }
 }

@@ -12,7 +12,7 @@
 // ============================================================================
 package com.amalto.workbench.widgets;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.IDoubleClickListener;
@@ -32,7 +32,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
 import com.amalto.workbench.i18n.Messages;
-import com.amalto.workbench.webservices.WSVersioningUniverseVersionsTagStructure;
+import com.amalto.workbench.webservices.WSVersioningUniverseVersions.TagStructure;
 
 /**
  * @author Starkey
@@ -58,7 +58,7 @@ public class VersionTagWidget {
 
     public VersionTagWidget(Composite parent, String resourcesName, String defaultTagText, boolean isTagEditable,
             SelectionListener tagSelectionListener, SelectionListener restoreSelectionListener,
-            IDoubleClickListener tagsViewerDoubleClickListener, ArrayList<WSVersioningUniverseVersionsTagStructure> hisEntries) {
+            IDoubleClickListener tagsViewerDoubleClickListener, List<TagStructure> hisEntries) {
         composite = new Composite(parent, SWT.FILL);
         GridLayout layout = new GridLayout();
         layout.numColumns = 1;
@@ -74,8 +74,9 @@ public class VersionTagWidget {
 
         tagText = new Text(tagGroup, SWT.BORDER);
         tagText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
-        if (defaultTagText == null)
+        if (defaultTagText == null) {
             defaultTagText = "";//$NON-NLS-1$
+        }
         tagText.setText(defaultTagText);
         tagText.setEditable(isTagEditable);
 
@@ -109,7 +110,7 @@ public class VersionTagWidget {
         tagsViewer.setLabelProvider(new ITableLabelProvider() {
 
             public String getColumnText(Object element, int columnIndex) {
-                WSVersioningUniverseVersionsTagStructure entry = (WSVersioningUniverseVersionsTagStructure) element;
+                TagStructure entry = (TagStructure) element;
                 return entry.getTagName() + " - " + entry.getLastComment() + "  [" + entry.getLastDate() + " "//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
                         + entry.getLastAuthor() + "]";//$NON-NLS-1$
             }
@@ -141,10 +142,10 @@ public class VersionTagWidget {
         refreshData(hisEntries);
     }
 
-    public void refreshData(ArrayList<WSVersioningUniverseVersionsTagStructure> hisEntries) {
+    public void refreshData(List<TagStructure> hisEntries) {
 
         if (hisEntries != null && hisEntries.size() > 0) {
-            tagsViewer.setInput(hisEntries.toArray(new WSVersioningUniverseVersionsTagStructure[hisEntries.size()]));
+            tagsViewer.setInput(hisEntries.toArray(new TagStructure[hisEntries.size()]));
             tagsViewer.setSelection(new StructuredSelection(hisEntries.get(0)));
             restoreGroup.setEnabled(true);
         }

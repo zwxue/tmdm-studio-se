@@ -13,6 +13,8 @@
 package com.amalto.workbench.editors;
 
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -424,28 +426,28 @@ public class ItemsTrashBrowserMainPage extends AMainPage implements IXObjectMode
 
             String search = searchText.getText();
 
-            WSDroppedItemPK[] results = null;
+            List<WSDroppedItemPK> results = null;
             if (search != null && search.length() > 0) {
                 results = port.findAllDroppedItemsPKs(new WSFindAllDroppedItemsPKs(search)).getWsDroppedItemPK();
             }
 
-            if ((results == null) || (results.length == 0)) {
+            if ((results == null) || (results.isEmpty())) {
                 if (showResultInfo) {
                     MessageDialog.openInformation(this.getSite().getShell(), Messages.ItemsTrashBrowserMainPage_15,
                             Messages.ItemsTrashBrowserMainPage_16);
                     return new LineItem[0];
                 }
             } else {
-                LineItem[] res = new LineItem[results.length];
-                for (int i = 0; i < results.length; i++) {
-                    WSDroppedItemPK wsDroppedItemPK = results[i];
+                LineItem[] res = new LineItem[results.size()];
+                for (int i = 0; i < results.size(); i++) {
+                    WSDroppedItemPK wsDroppedItemPK = results.get(i);
                     WSItemPK refWSItemPK = wsDroppedItemPK.getWsItemPK();
 
                     String revison = wsDroppedItemPK.getRevisionId();
                     // if(revison==null||revison.equals(""))revison="head";
 
-                    res[i] = new LineItem(refWSItemPK.getWsDataClusterPK().getPk(), refWSItemPK.getConceptName(),
-                            refWSItemPK.getIds(), revison, wsDroppedItemPK.getPartPath());
+                    res[i] = new LineItem(refWSItemPK.getWsDataClusterPK().getPk(), refWSItemPK.getConceptName(), refWSItemPK
+                            .getIds().toArray(new String[0]), revison, wsDroppedItemPK.getPartPath());
                 }
                 return res;
             }
@@ -457,8 +459,9 @@ public class ItemsTrashBrowserMainPage extends AMainPage implements IXObjectMode
                 MessageDialog.openError(this.getSite().getShell(), Messages.ItemsTrashBrowserMainPage_17,
                         Messages.ItemsTrashBrowserMainPage_18);
             } else {
-            	if(!Util.handleConnectionException(this, e, null)){
-                     MessageDialog.openError(this.getSite().getShell(), Messages.ItemsTrashBrowserMainPage_19, e.getLocalizedMessage());
+                if (!Util.handleConnectionException(this, e, null)) {
+                    MessageDialog.openError(this.getSite().getShell(), Messages.ItemsTrashBrowserMainPage_19,
+                            e.getLocalizedMessage());
                 }
             }
             return null;
@@ -501,7 +504,7 @@ public class ItemsTrashBrowserMainPage extends AMainPage implements IXObjectMode
 
                 WSDroppedItem wsDroppedItem = Util.getPort(getXObject()).loadDroppedItem(
                         new WSLoadDroppedItem(new WSDroppedItemPK(new WSItemPK(new WSDataClusterPK(li.getDataCluster()), li
-                                .getConcept(), li.getIds()), li.getPartPath(), li.getRevision())
+                                .getConcept(), Arrays.asList(li.getIds())), li.getPartPath(), li.getRevision())
 
                         ));
 
@@ -585,7 +588,7 @@ public class ItemsTrashBrowserMainPage extends AMainPage implements IXObjectMode
                 }
 
                 WSDroppedItemPK wsDroppedItemPK = new WSDroppedItemPK(new WSItemPK(new WSDataClusterPK(li.getDataCluster()),
-                        li.getConcept(), li.getIds()), li.getPartPath(), li.getRevision());
+                        li.getConcept(), Arrays.asList(li.getIds())), li.getPartPath(), li.getRevision());
 
                 Util.getPort(getXObject()).recoverDroppedItem(new WSRecoverDroppedItem(wsDroppedItemPK));
 
@@ -595,8 +598,9 @@ public class ItemsTrashBrowserMainPage extends AMainPage implements IXObjectMode
                 ItemsTrashBrowserMainPage.this.resultsViewer.setInput(getResults(false));
 
             } catch (Exception e) {
-            	if(!Util.handleConnectionException(shell, e, null)) {
-                    MessageDialog.openError(shell, Messages._Error, Messages.ItemsTrashBrowserMainPage_29 + e.getLocalizedMessage());
+                if (!Util.handleConnectionException(shell, e, null)) {
+                    MessageDialog.openError(shell, Messages._Error,
+                            Messages.ItemsTrashBrowserMainPage_29 + e.getLocalizedMessage());
                 }
             }
         }
@@ -646,7 +650,7 @@ public class ItemsTrashBrowserMainPage extends AMainPage implements IXObjectMode
                 }
 
                 WSDroppedItemPK wsDroppedItemPK = new WSDroppedItemPK(new WSItemPK(new WSDataClusterPK(li.getDataCluster()),
-                        li.getConcept(), li.getIds()), li.getPartPath(), li.getRevision());
+                        li.getConcept(), Arrays.asList(li.getIds())), li.getPartPath(), li.getRevision());
                 // run
                 Util.getPort(getXObject()).removeDroppedItem(new WSRemoveDroppedItem(wsDroppedItemPK));
                 // refresh the search
@@ -654,8 +658,9 @@ public class ItemsTrashBrowserMainPage extends AMainPage implements IXObjectMode
 
             } catch (Exception e) {
                 log.error(e.getMessage(), e);
-                if(!Util.handleConnectionException(shell, e, null)) {
-                    MessageDialog.openError(shell, Messages._Error, Messages.ItemsTrashBrowserMainPage_35 + e.getLocalizedMessage());
+                if (!Util.handleConnectionException(shell, e, null)) {
+                    MessageDialog.openError(shell, Messages._Error,
+                            Messages.ItemsTrashBrowserMainPage_35 + e.getLocalizedMessage());
                 }
             }
         }

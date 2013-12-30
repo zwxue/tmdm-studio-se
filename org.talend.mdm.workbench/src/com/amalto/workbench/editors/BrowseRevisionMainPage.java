@@ -45,7 +45,7 @@ import com.amalto.workbench.utils.IConstants;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.XtentisException;
 import com.amalto.workbench.webservices.WSUniverse;
-import com.amalto.workbench.webservices.WSUniverseXtentisObjectsRevisionIDs;
+import com.amalto.workbench.webservices.WSUniverse.XtentisObjectsRevisionIDs;
 import com.amalto.workbench.webservices.XtentisPort;
 
 public class BrowseRevisionMainPage extends AMainPageV2 {// implements Observer
@@ -115,8 +115,9 @@ public class BrowseRevisionMainPage extends AMainPageV2 {// implements Observer
                         if (!"".equals(revisionIDList.getSelection()[0])) {//$NON-NLS-1$
                             int index = BrowseRevisionMainPage.this.getXObject().getDisplayName().indexOf("[");//$NON-NLS-1$
                             String objectName = "";//$NON-NLS-1$
-                            if (index > 0)
+                            if (index > 0) {
                                 objectName = BrowseRevisionMainPage.this.getXObject().getDisplayName().substring(0, index - 1);
+                            }
                             List<String> universes = Util.getUniverseBYRevisionID(port, revisionIDList.getSelection()[0],
                                     objectName);
                             universeList.setItems(universes.toArray(new String[universes.size()]));
@@ -188,8 +189,9 @@ public class BrowseRevisionMainPage extends AMainPageV2 {// implements Observer
     protected void commit() {
 
         try {
-            if (this.refreshing)
+            if (this.refreshing) {
                 return;
+            }
             this.comitting = true;
 
             XtentisPort port;
@@ -202,15 +204,17 @@ public class BrowseRevisionMainPage extends AMainPageV2 {// implements Observer
                 if (!"".equals(revisionID)) {//$NON-NLS-1$
                     int index = BrowseRevisionMainPage.this.getXObject().getDisplayName().indexOf("[");//$NON-NLS-1$
                     String objectName = "";//$NON-NLS-1$
-                    if (index > 0)
+                    if (index > 0) {
                         objectName = BrowseRevisionMainPage.this.getXObject().getDisplayName().substring(0, index - 1);
+                    }
 
                     universes = Util.getWSUniverseBYRevisionID(port, revisionID, objectName);
                     for (WSUniverse universe : universes) {
-                        WSUniverseXtentisObjectsRevisionIDs[] rids = universe.getXtentisObjectsRevisionIDs();
-                        for (int j = 0; j < rids.length; j++) {
-                            if (rids[j].getXtentisObjectName().equals(objectName))
-                                rids[j].setRevisionID("");//$NON-NLS-1$
+                        List<XtentisObjectsRevisionIDs> rids = universe.getXtentisObjectsRevisionIDs();
+                        for (XtentisObjectsRevisionIDs id : rids) {
+                            if (id.getXtentisObjectName().equals(objectName)) {
+                                id.setRevisionID("");//$NON-NLS-1$
+                            }
                         }
                     }
                 }
@@ -230,8 +234,9 @@ public class BrowseRevisionMainPage extends AMainPageV2 {// implements Observer
 
     @Override
     protected void refreshData() {
-        if (comitting)
+        if (comitting) {
             return;
+        }
 
         BrowseRevisionMainPage.this.refreshing = true;
         try {
@@ -241,8 +246,9 @@ public class BrowseRevisionMainPage extends AMainPageV2 {// implements Observer
             List<String> revisions;
             String name = EXtentisObjects.getXtentisObjectName(displayname);
             revisions = map.get(name.trim());
-            if (revisions != null && revisions.contains(""))//$NON-NLS-1$
+            if (revisions != null && revisions.contains("")) {
                 revisions.remove("");//$NON-NLS-1$
+            }
             if (revisions != null) {
                 revisionIDList.setItems(revisions.toArray(new String[revisions.size()]));
             }
@@ -253,8 +259,9 @@ public class BrowseRevisionMainPage extends AMainPageV2 {// implements Observer
             refreshing = false;
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            if(!Util.handleConnectionException(this.getSite().getShell(), e, Messages.BrowseRevisionMainPage_ErrorRefreshingPage)){
-            	MessageDialog.openError(this.getSite().getShell(), Messages.BrowseRevisionMainPage_ErrorRefreshingPage,
+            if (!Util
+                    .handleConnectionException(this.getSite().getShell(), e, Messages.BrowseRevisionMainPage_ErrorRefreshingPage)) {
+                MessageDialog.openError(this.getSite().getShell(), Messages.BrowseRevisionMainPage_ErrorRefreshingPage,
                         Messages.bind(Messages.BrowseRevisionMainPage_ErrorRefreshingPageX, e.getLocalizedMessage()));
             }
         }
@@ -263,7 +270,6 @@ public class BrowseRevisionMainPage extends AMainPageV2 {// implements Observer
 
     @Override
     protected void createActions() {
-        
 
     }
 

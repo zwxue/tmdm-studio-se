@@ -13,10 +13,10 @@
 package com.amalto.workbench.editors;
 
 import java.awt.event.TextEvent;
-import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.logging.Log;
@@ -50,7 +50,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.editor.FormEditor;
@@ -78,7 +77,6 @@ import com.amalto.workbench.webservices.WSRoutingRule;
 import com.amalto.workbench.webservices.WSRoutingRuleExpression;
 import com.amalto.workbench.webservices.WSServiceGetDocument;
 import com.amalto.workbench.webservices.WSServicesList;
-import com.amalto.workbench.webservices.WSServicesListItem;
 import com.amalto.workbench.webservices.WSString;
 import com.amalto.workbench.webservices.XtentisPort;
 import com.amalto.workbench.widgets.ComplexTableViewerColumn;
@@ -160,8 +158,10 @@ public class RoutingRuleMainPage extends AMainPageV2 {
     }
 
     public RoutingRuleMainPage(FormEditor editor) {
-        super(editor, RoutingRuleMainPage.class.getName(), Messages.bind(Messages.triggerLabel, ((XObjectEditorInput) editor.getEditorInput()).getName()
-                + Util.getRevision((TreeObject) ((XObjectEditorInput) editor.getEditorInput()).getModel())));
+        super(editor, RoutingRuleMainPage.class.getName(), Messages.bind(
+                Messages.triggerLabel,
+                ((XObjectEditorInput) editor.getEditorInput()).getName()
+                        + Util.getRevision((TreeObject) ((XObjectEditorInput) editor.getEditorInput()).getModel())));
         // get Version information
         try {
 
@@ -208,6 +208,7 @@ public class RoutingRuleMainPage extends AMainPageV2 {
 
     }
 
+    @Override
     protected void createCharacteristicsContent(FormToolkit toolkit, Composite charComposite) {
 
         try {
@@ -220,8 +221,9 @@ public class RoutingRuleMainPage extends AMainPageV2 {
             descriptionText.addModifyListener(new ModifyListener() {
 
                 public void modifyText(ModifyEvent e) {
-                    if (refreshing)
+                    if (refreshing) {
                         return;
+                    }
                     markDirtyWithoutCommit();
                 }
             });
@@ -244,8 +246,9 @@ public class RoutingRuleMainPage extends AMainPageV2 {
             objectTypeText.addModifyListener(new ModifyListener() {
 
                 public void modifyText(ModifyEvent e) {
-                    if (refreshing)
+                    if (refreshing) {
                         return;
+                    }
                     markDirtyWithoutCommit();
                 }
             });
@@ -325,15 +328,18 @@ public class RoutingRuleMainPage extends AMainPageV2 {
             serviceNameCombo.addModifyListener(new ModifyListener() {
 
                 public void modifyText(ModifyEvent e) {
-                    if (refreshing)
+                    if (refreshing) {
                         return;
+                    }
                     String serviceName = serviceNameCombo.getText();
                     String helpPara = ""; //$NON-NLS-1$
-                    if (!"".equals(serviceName) && !serviceName.equals(null)) //$NON-NLS-1$
-                        if (EInputTemplate.getXtentisObjexts().get(serviceName) != null)
+                    if (!"".equals(serviceName) && !serviceName.equals(null)) {
+                        if (EInputTemplate.getXtentisObjexts().get(serviceName) != null) {
                             helpPara = EInputTemplate.getXtentisObjexts().get(serviceName).getContent();
-                        else
+                        } else {
                             helpPara = ""; //$NON-NLS-1$
+                        }
+                    }
                     // serviceParametersText.setText(XmlUtil.formatXmlSource(helpPara));
                     refreshParameterEditor(serviceName);
 
@@ -356,8 +362,9 @@ public class RoutingRuleMainPage extends AMainPageV2 {
                 };
 
                 public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
-                    if (serviceNameCombo.getText().trim().length() == 0)
+                    if (serviceNameCombo.getText().trim().length() == 0) {
                         return;
+                    }
                     String doc = "";//$NON-NLS-1$
                     String desc = "";//$NON-NLS-1$
                     // WSRoutingRule wsObject = (WSRoutingRule) (getXObject().getWsObject());
@@ -469,8 +476,9 @@ public class RoutingRuleMainPage extends AMainPageV2 {
 
                 public void modifyText(ModifyEvent e) {
 
-                    if (!refreshing)
+                    if (!refreshing) {
                         markDirtyWithoutCommit();
+                    }
                 }
 
             });
@@ -504,16 +512,18 @@ public class RoutingRuleMainPage extends AMainPageV2 {
      * @return
      */
     protected XpathSelectDialog getNewXpathDlg() {
-        return new XpathSelectDialog(getSite().getShell(), treeParent, Messages.selectEntityLabel, getSite(), false, dataModelName);
+        return new XpathSelectDialog(getSite().getShell(), treeParent, Messages.selectEntityLabel, getSite(), false,
+                dataModelName);
     }
 
-    protected WSServiceGetDocument getServiceDocument(String jndiName) throws RemoteException {
+    protected WSServiceGetDocument getServiceDocument(String jndiName) {
         XtentisPort port = getPort();
         if (port != null) {
             return port.getServiceDocument(new WSString(jndiName));
         }
         return null;
     }
+
     protected TisTableViewer getNewTisTableViewer(FormToolkit toolkit, Composite routingExpressionsGroup) {
         return new TisTableViewer(Arrays.asList(conditionsColumns), toolkit, routingExpressionsGroup);
     }
@@ -522,15 +532,14 @@ public class RoutingRuleMainPage extends AMainPageV2 {
      * DOC hbhong Comment method "initServiceNameCombo".
      * 
      * @throws XtentisException
-     * @throws RemoteException
      */
-    protected void initServiceNameCombo() throws RemoteException, XtentisException {
+    protected void initServiceNameCombo() throws XtentisException {
         WSServicesList list = Util.getPort(getXObject()).getServicesList(new WSGetServicesList(""));//$NON-NLS-1$
-        WSServicesListItem[] items = list.getItem();
+        List<WSServicesList.Item> items = list.getItem();
         if (items != null) {
-            String[] sortedList = new String[items.length];
-            for (int i = 0; i < items.length; i++) {
-                sortedList[i] = items[i].getJndiName();
+            String[] sortedList = new String[items.size()];
+            for (int i = 0; i < items.size(); i++) {
+                sortedList[i] = items.get(i).getJndiName();
             }
             Arrays.sort(sortedList);
             for (int i = 0; i < sortedList.length; i++) {
@@ -542,12 +551,13 @@ public class RoutingRuleMainPage extends AMainPageV2 {
 
     private void addSourceServiceParameterEditorPage(String serviceName) {
 
-        if ("callprocess".equals(serviceName))//$NON-NLS-1$
+        if ("callprocess".equals(serviceName)) {
             serviceParametersEditor.addPage(new ExtensibleContentEditorPageDescription("Source", Integer.MAX_VALUE,//$NON-NLS-1$
                     new TriggerCallProcessSourcePageCreator(), false));
-        else
+        } else {
             serviceParametersEditor.addPage(new ExtensibleContentEditorPageDescription("Source", Integer.MAX_VALUE,//$NON-NLS-1$
                     new ExtensibleTextContentEditorPageCreator(), false));
+        }
     }
 
     private void initConditionProposal() {
@@ -556,11 +566,12 @@ public class RoutingRuleMainPage extends AMainPageV2 {
         java.util.List<String> proposals = new ArrayList<String>();
         for (Line line : lines) {
             String value = line.keyValues.get(3).value;
-            if (value != null && value.trim().length() > 0)
+            if (value != null && value.trim().length() > 0) {
                 proposals.add(value);
+            }
         }
-        adapter = WidgetUtils.addContentProposal(conditionText, (String[]) proposals.toArray(new String[proposals.size()]),
-                new char[] { ' ', '(' });
+        adapter = WidgetUtils.addContentProposal(conditionText, proposals.toArray(new String[proposals.size()]), new char[] {
+                ' ', '(' });
         adapter.setPopupSize(new Point(120, 100));
 
     }
@@ -590,19 +601,22 @@ public class RoutingRuleMainPage extends AMainPageV2 {
         }
     }
 
+    @Override
     protected void refreshData() {
         try {
 
-            if (this.comitting)
+            if (this.comitting) {
                 return;
+            }
 
             this.refreshing = true;
 
             WSRoutingRule wsRoutingRule = (WSRoutingRule) (getXObject().getWsObject());
             descriptionText.setText(wsRoutingRule.getDescription());
             isSynchronousButton.setSelection(wsRoutingRule.isSynchronous());
-            if (wsRoutingRule.getDeactive() != null)
-                deactiveButton.setSelection(wsRoutingRule.getDeactive());
+            if (wsRoutingRule.isDeactive() != null) {
+                deactiveButton.setSelection(wsRoutingRule.isDeactive());
+            }
             // serviceNameText.setText(wsRoutingRule.getServiceJNDI().replaceFirst("amalto/local/service/", ""));
             serviceNameCombo.setText(wsRoutingRule.getServiceJNDI().replaceFirst("amalto/local/service/", ""));//$NON-NLS-1$//$NON-NLS-2$
             // serviceParametersText.setText(wsRoutingRule.getParameters() == null ? "" :
@@ -623,8 +637,9 @@ public class RoutingRuleMainPage extends AMainPageV2 {
             }
             conditionViewer.getViewer().setInput(lines);
 
-            if (wsRoutingRule.getCondition() != null)
+            if (wsRoutingRule.getCondition() != null) {
                 conditionText.setText(wsRoutingRule.getCondition());
+            }
             this.refreshing = false;
             if (objectTypeText.getText().length() > 0 && !objectTypeText.getText().equals("*")) {//$NON-NLS-1$
                 conditionViewer.setConceptName(objectTypeText.getText());
@@ -634,16 +649,17 @@ public class RoutingRuleMainPage extends AMainPageV2 {
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             MessageDialog.openError(this.getSite().getShell(), Messages.errorMsgLabel,
-                    Messages.bind(Messages.errorMsgLabelX, e.getLocalizedMessage())); 
+                    Messages.bind(Messages.errorMsgLabelX, e.getLocalizedMessage()));
         }
     }
 
+    @Override
     protected void commit() {
         try {
 
-            if (this.refreshing)
+            if (this.refreshing) {
                 return;
-
+            }
             this.comitting = true;
 
             WSRoutingRule ws = (WSRoutingRule) (getXObject().getWsObject());
@@ -668,7 +684,8 @@ public class RoutingRuleMainPage extends AMainPageV2 {
                 WSRoutingRuleExpression wc = Util.convertLineRoute(values);
                 wclist.add(wc);
             }
-            ws.setWsRoutingRuleExpressions(wclist.toArray(new WSRoutingRuleExpression[wclist.size()]));
+            ws.getWsRoutingRuleExpressions().clear();
+            ws.getWsRoutingRuleExpressions().addAll(wclist);
 
             // WsRoutingRuleExpressions refreshed by viewer
             ws.setCondition(conditionText.getText());
@@ -678,7 +695,7 @@ public class RoutingRuleMainPage extends AMainPageV2 {
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             MessageDialog.openError(this.getSite().getShell(), Messages.errorCommitLabel,
-                    Messages.bind(Messages.errorCommitLabelX, e.getLocalizedMessage())); 
+                    Messages.bind(Messages.errorCommitLabelX, e.getLocalizedMessage()));
         }
     }
 
@@ -691,6 +708,7 @@ public class RoutingRuleMainPage extends AMainPageV2 {
         markDirtyWithoutCommit();
     }
 
+    @Override
     public void dispose() {
         super.dispose();
 
@@ -720,17 +738,19 @@ public class RoutingRuleMainPage extends AMainPageV2 {
 
         public void dragSetData(DragSourceEvent event) {
             Control control = ((DragSource) event.widget).getControl();
-            if ((control instanceof List))
+            if ((control instanceof org.eclipse.swt.widgets.List)) {
                 if (TextTransfer.getInstance().isSupportedType(event.dataType)) {
-                    this.selected = ((List) control).getSelectionIndex();
-                    event.data = ((List) control).getSelection()[0];
+                    this.selected = ((org.eclipse.swt.widgets.List) control).getSelectionIndex();
+                    event.data = ((org.eclipse.swt.widgets.List) control).getSelection()[0];
                 }
+            }
         }
 
         public void dragStart(DragSourceEvent event) {
             Control control = ((DragSource) event.widget).getControl();
-            if ((control instanceof List))
-                event.doit = (((List) control).getItemCount() > 0);
+            if ((control instanceof org.eclipse.swt.widgets.List)) {
+                event.doit = (((org.eclipse.swt.widgets.List) control).getItemCount() > 0);
+            }
         }
     }
 
@@ -738,12 +758,13 @@ public class RoutingRuleMainPage extends AMainPageV2 {
 
         public void dragEnter(DropTargetEvent event) {
             // priority to copy
-            if ((event.operations & DND.DROP_COPY) == DND.DROP_COPY)
+            if ((event.operations & DND.DROP_COPY) == DND.DROP_COPY) {
                 event.detail = DND.DROP_COPY;
-            else if ((event.operations & DND.DROP_MOVE) == DND.DROP_MOVE)
+            } else if ((event.operations & DND.DROP_MOVE) == DND.DROP_MOVE) {
                 event.detail = DND.DROP_MOVE;
-            else
+            } else {
                 event.detail = DND.DROP_NONE;
+            }
         }
 
         public void dragLeave(DropTargetEvent event) {
@@ -757,12 +778,14 @@ public class RoutingRuleMainPage extends AMainPageV2 {
 
         public void drop(DropTargetEvent event) {
             Control control = ((DropTarget) event.widget).getControl();
-            if ((control instanceof List) && ((event.operations & DND.DROP_COPY) == DND.DROP_COPY))
-                if (TextTransfer.getInstance().isSupportedType(event.currentDataType))
-                    if (!Arrays.asList(((List) control).getItems()).contains(event.data)) {
-                        ((List) control).add((String) event.data);
+            if ((control instanceof List) && ((event.operations & DND.DROP_COPY) == DND.DROP_COPY)) {
+                if (TextTransfer.getInstance().isSupportedType(event.currentDataType)) {
+                    if (!Arrays.asList(((org.eclipse.swt.widgets.List) control).getItems()).contains(event.data)) {
+                        ((List) control).add(event.data);
                         RoutingRuleMainPage.this.markDirtyWithoutCommit();
                     }
+                }
+            }
         }
 
         public void dropAccept(DropTargetEvent event) {
@@ -811,8 +834,9 @@ public class RoutingRuleMainPage extends AMainPageV2 {
         if (serviceNameCombo.getText() == null || serviceNameCombo.getText().length() == 0) {
             MessageDialog.openError(this.getSite().getShell(), Messages.errorSaveTitleLabel, Messages.errorSaveMsgLabel);
             return false;
-        } else
+        } else {
             return true;
+        }
     }
 
     @Override
@@ -835,8 +859,9 @@ public class RoutingRuleMainPage extends AMainPageV2 {
 
         public void onXMLDocumentChanged(ExtensibleContentEditorPage source, ExtensibleEditorContent newCotent) {
 
-            if (refreshing)
+            if (refreshing) {
                 return;
+            }
             markDirtyWithoutCommit();
 
         }

@@ -1,61 +1,136 @@
-// ============================================================================
-//
-// Copyright (C) 2006-2013 Talend Inc. - www.talend.com
-//
-// This source code is available under agreement available at
-// %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
-//
-// You should have received a copy of the agreement
-// along with this program; if not, write to Talend SA
-// 9 rue Pages 92150 Suresnes, France
-//
-// ============================================================================
+
 package com.amalto.workbench.webservices;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlType;
+
+
 /**
- * created by HHB on 2013-7-18 Detailled comment
+ * <p>Java class for WSDigest complex type.
+ * 
+ * <p>The following schema fragment specifies the expected content contained within this class.
+ * 
+ * <pre>
+ * &lt;complexType name="WSDigest">
+ *   &lt;complexContent>
+ *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
+ *       &lt;sequence>
+ *         &lt;element name="wsDigestKey" type="{urn-com-amalto-xtentis-webservice}WSDigestKey"/>
+ *         &lt;element name="digestValue" type="{http://www.w3.org/2001/XMLSchema}string"/>
+ *         &lt;element name="timeStamp" type="{http://www.w3.org/2001/XMLSchema}long"/>
+ *       &lt;/sequence>
+ *     &lt;/restriction>
+ *   &lt;/complexContent>
+ * &lt;/complexType>
+ * </pre>
+ * 
  * 
  */
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlType(name = "WSDigest", propOrder = {
+    "wsDigestKey",
+    "digestValue",
+    "timeStamp"
+})
 public class WSDigest {
-    
-    protected WSDigestKey wsDigestKey; 
 
+    @XmlElement(required = true)
+    protected WSDigestKey wsDigestKey;
+    @XmlElement(required = true, nillable = true)
     protected String digestValue;
+    @XmlElement(required = true, type = Long.class, nillable = true)
+    protected Long timeStamp;
 
-    protected long timeStamp;
-    
+    /**
+     * Default no-arg constructor
+     * 
+     */
     public WSDigest() {
-        
-    }
-
-    public WSDigest(WSDigestKey wsDigestKey,String digestValue, long timeStamp) {
         super();
+    }
+
+    /**
+     * Fully-initialising value constructor
+     * 
+     */
+    public WSDigest(final WSDigestKey wsDigestKey, final String digestValue, final Long timeStamp) {
         this.wsDigestKey = wsDigestKey;
         this.digestValue = digestValue;
         this.timeStamp = timeStamp;
     }
 
+    /**
+     * Gets the value of the wsDigestKey property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link WSDigestKey }
+     *     
+     */
     public WSDigestKey getWsDigestKey() {
-        return this.wsDigestKey;
+        return wsDigestKey;
     }
 
-    public void setWsDigestKey(WSDigestKey wsDigestKey) {
-        this.wsDigestKey = wsDigestKey;
+    /**
+     * Sets the value of the wsDigestKey property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link WSDigestKey }
+     *     
+     */
+    public void setWsDigestKey(WSDigestKey value) {
+        this.wsDigestKey = value;
     }
 
+    /**
+     * Gets the value of the digestValue property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
     public String getDigestValue() {
-        return this.digestValue;
+        return digestValue;
     }
 
-    public void setDigestValue(String digestValue) {
-        this.digestValue = digestValue;
+    /**
+     * Sets the value of the digestValue property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setDigestValue(String value) {
+        this.digestValue = value;
     }
 
-    public long getTimeStamp() {
-        return this.timeStamp;
+    /**
+     * Gets the value of the timeStamp property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Long }
+     *     
+     */
+    public Long getTimeStamp() {
+        return timeStamp;
     }
 
-    public void setTimeStamp(long timeStamp) {
-        this.timeStamp = timeStamp;
+    /**
+     * Sets the value of the timeStamp property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Long }
+     *     
+     */
+    public void setTimeStamp(Long value) {
+        this.timeStamp = value;
     }
+
 }

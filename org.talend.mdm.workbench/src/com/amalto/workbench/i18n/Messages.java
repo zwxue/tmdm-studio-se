@@ -2079,7 +2079,7 @@ public class Messages extends NLS {
 
     public static String Util_29;
 
-    public static String Util_3;
+    public static String UnableAccessEndpoint;
 
     public static String Util_30;
 
@@ -2100,8 +2100,6 @@ public class Messages extends NLS {
     public static String Util_38;
 
     public static String Util_39;
-
-    public static String Util_4;
 
     public static String Util_40;
 
@@ -3166,29 +3164,29 @@ public class Messages extends NLS {
     public static String noKeystoreFile_error;
 
     public static String import_schema_failed;
-    
+
     public static String no_schema_available;
-    
+
     public static String invalid_schema;
-    
+
     public static String conflict_apply_all;
-    
+
     public static String conflict_messages;
-    
+
     public static String conflicts_occur;
-    
+
     public static String conflict_overwrite;
-    
+
     public static String conflict_ignore;
-    
+
     public static String ConnectFailedTitle;
-    
+
     public static String ConnectFailed;
-    
+
     public static String ConnectNotFound;
-    
+
     public static String ConnectUnauthorized;
-    
+
     // //////////////////////////////////////////////////////////////////////////
     //
     // Constructor

@@ -12,7 +12,6 @@
 // ============================================================================
 package com.amalto.workbench.widgets.xmleditor.infoholder;
 
-import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,17 +35,15 @@ public class AllWorkflowInfoHolder extends ExternalInfoHolder<WorkflowInfo[]> {
         List<WorkflowInfo> results = new ArrayList<WorkflowInfo>();
 
         WSWorkflowProcessDefinitionUUIDArray array;
-        try {
-            array = port.workflowGetProcessDefinitions(new WSWorkflowGetProcessDefinitions(".*"));//$NON-NLS-1$
-        } catch (RemoteException e) {
+        array = port.workflowGetProcessDefinitions(new WSWorkflowGetProcessDefinitions(".*"));//$NON-NLS-1$
+
+        if (array == null || array.getWsWorkflowProcessDefinitions() == null) {
             return new WorkflowInfo[0];
         }
 
-        if (array == null || array.getWsWorkflowProcessDefinitions() == null)
-            return new WorkflowInfo[0];
-
-        for (WSWorkflowProcessDefinitionUUID id : array.getWsWorkflowProcessDefinitions())
+        for (WSWorkflowProcessDefinitionUUID id : array.getWsWorkflowProcessDefinitions()) {
             results.add(new WorkflowInfo(id.getProcessName(), id.getProcessVersion()));
+        }
 
         return results.toArray(new WorkflowInfo[0]);
     }
