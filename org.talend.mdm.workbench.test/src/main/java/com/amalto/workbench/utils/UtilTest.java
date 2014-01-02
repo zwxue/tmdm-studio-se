@@ -301,7 +301,7 @@ public class UtilTest {
         String[] values = { "Entity/Id", "Contains", "value", "name" }; //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
         WSRoutingRuleExpression wr = Util.convertLineRoute(values);
         assertEquals(wr.getXpath(), "Entity/Id"); //$NON-NLS-1$
-        assertEquals(wr.getWsOperator().getValue(), "CONTAINS"); //$NON-NLS-1$
+        assertEquals(wr.getWsOperator().value(), "CONTAINS"); //$NON-NLS-1$
         assertEquals(wr.getValue(), "value"); //$NON-NLS-1$
         assertEquals(wr.getName(), "name"); //$NON-NLS-1$
     }
@@ -311,9 +311,9 @@ public class UtilTest {
         String[] values = { "Entity/Id", "Contains", "id1", "Or" }; //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
         WSWhereCondition wc = Util.convertLine(values);
         assertEquals(wc.getLeftPath(), "Entity/Id"); //$NON-NLS-1$
-        assertEquals(wc.getOperator().getValue(), "CONTAINS"); //$NON-NLS-1$
+        assertEquals(wc.getOperator().value(), "CONTAINS"); //$NON-NLS-1$
         assertEquals(wc.getRightValueOrPath(), "id1"); //$NON-NLS-1$
-        assertEquals(wc.getStringPredicate().getValue(), "OR"); //$NON-NLS-1$
+        assertEquals(wc.getStringPredicate().value(), "OR"); //$NON-NLS-1$
     }
 
     @Test

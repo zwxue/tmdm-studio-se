@@ -12,14 +12,14 @@
 // ============================================================================
 package org.talend.mdm.repository.utils;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.mockito.Mockito.when;
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
 
 import java.lang.reflect.Constructor;
+import java.util.ArrayList;
+import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.junit.Rule;
@@ -28,7 +28,6 @@ import org.mockito.Mockito;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.rule.PowerMockRule;
-import org.powermock.reflect.Whitebox;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
 import org.talend.mdm.repository.model.mdmserverobject.MdmserverobjectFactory;
 import org.talend.mdm.repository.model.mdmserverobject.WSMenuE;
@@ -36,12 +35,11 @@ import org.talend.mdm.repository.model.mdmserverobject.WSMenuEntryE;
 import org.talend.mdm.repository.model.mdmserverobject.WSMenuMenuEntriesDescriptionsE;
 
 import com.amalto.workbench.models.TreeObject;
-import com.amalto.workbench.webservices.WSDataModel;
 import com.amalto.workbench.webservices.WSMenu;
 import com.amalto.workbench.webservices.WSMenuEntry;
-import com.amalto.workbench.webservices.WSMenuMenuEntriesDescriptions;
+import com.amalto.workbench.webservices.WSMenuEntry.Descriptions;
 
-@PrepareForTest({ Bean2EObjUtil.class, System.class, IOUtil.class })
+@PrepareForTest({ Bean2EObjUtil.class, System.class, IOUtil.class, EMFClassUtil.class, Logger.class })
 public class Bean2EObjUtilTest {
 
     @Rule
@@ -65,7 +63,7 @@ public class Bean2EObjUtilTest {
 
     /**
      * Test method for {@link Bean2EObjUtil#registerClassMap(java.lang.Class)}.
-     * 
+     *
      * @throws Exception
      */
     @Test
@@ -74,18 +72,7 @@ public class Bean2EObjUtilTest {
         Bean2EObjUtil spyUtil = PowerMockito.spy(util);
         spyUtil.registerClassMap(WSMenu.class);
 
-        PowerMockito.verifyPrivate(spyUtil, Mockito.times(1)).invoke("guessEClassByClassName", Mockito.any(Class.class));
-    }
-
-    @Test
-    public void testGuessEClassByClassName() throws Exception {
-        Bean2EObjUtil util = Bean2EObjUtil.getInstance();
-        Bean2EObjUtil spyUtil = PowerMockito.spy(util);
-
-        Class<?> clazz = WSDataModel.class;
-        Object eClass = Whitebox.invokeMethod(spyUtil, "guessEClassByClassName", clazz);
-        PowerMockito.verifyPrivate(spyUtil).invoke("guessEClassByClassName", clazz);
-        assertNotNull(eClass);
+        PowerMockito.verifyPrivate(spyUtil, Mockito.times(1)).invoke("guessEclass", Mockito.any(Class.class));
     }
 
     /**
@@ -105,10 +92,10 @@ public class Bean2EObjUtilTest {
         assertEquals(menu.getName(), menuE.getName());
         assertEquals(menu.getDescription(), menuE.getDescription());
         //
-        WSMenuEntry[] menuEntries = menu.getMenuEntries();
+        List<WSMenuEntry> menuEntries = menu.getMenuEntries();
         EList<WSMenuEntryE> menuEntriesE = menuE.getMenuEntries();
-        for (int i = 0; i < menuEntries.length; i++) {
-            checkMenuEntry(menuEntries[i], menuEntriesE.get(i));
+        for (int i = 0; i < menuEntries.size(); i++) {
+            checkMenuEntry(menuEntries.get(i), menuEntriesE.get(i));
         }
     }
 
@@ -116,25 +103,27 @@ public class Bean2EObjUtilTest {
         menu.setDescription("this is a description"); //$NON-NLS-1$
         menu.setName("menuA"); //$NON-NLS-1$
         //
-        WSMenuEntry[] menuEntries = new WSMenuEntry[2];
-        menuEntries[0] = new WSMenuEntry();
-        menuEntries[0].setApplication("application A"); //$NON-NLS-1$
-        menuEntries[0].setContext("contextA"); //$NON-NLS-1$
-        menuEntries[0].setIcon("icon A"); //$NON-NLS-1$
-        menuEntries[0].setId("id A"); //$NON-NLS-1$
+        List<WSMenuEntry> menuEntries = new ArrayList<WSMenuEntry>();
+        WSMenuEntry menuEntry = new WSMenuEntry();
+        menuEntry.setApplication("application A"); //$NON-NLS-1$
+        menuEntry.setContext("contextA"); //$NON-NLS-1$
+        menuEntry.setIcon("icon A"); //$NON-NLS-1$
+        menuEntry.setId("id A"); //$NON-NLS-1$
+
+        Descriptions ds = new Descriptions();
+        ds.setLabel("label A"); //$NON-NLS-1$
+        ds.setLanguage("En"); //$NON-NLS-1$
+        menuEntry.getDescriptions().add(ds);
+        menuEntries.add(menuEntry);
         //
-        menuEntries[1] = new WSMenuEntry();
-        menuEntries[1].setApplication("application B"); //$NON-NLS-1$
-        menuEntries[1].setContext("contextB"); //$NON-NLS-1$
-        menuEntries[1].setIcon("icon B"); //$NON-NLS-1$
-        menuEntries[1].setId("id B"); //$NON-NLS-1$
+        menuEntry = new WSMenuEntry();
+        menuEntry.setApplication("application B"); //$NON-NLS-1$
+        menuEntry.setContext("contextB"); //$NON-NLS-1$
+        menuEntry.setIcon("icon B"); //$NON-NLS-1$
+        menuEntry.setId("id B"); //$NON-NLS-1$
+        menuEntries.add(menuEntry);
         //
-        WSMenuMenuEntriesDescriptions[] ds = new WSMenuMenuEntriesDescriptions[1];
-        ds[0] = new WSMenuMenuEntriesDescriptions();
-        ds[0].setLabel("label A"); //$NON-NLS-1$
-        ds[0].setLanguage("En"); //$NON-NLS-1$
-        menuEntries[0].setDescriptions(ds);
-        menu.setMenuEntries(menuEntries);
+        menu.getMenuEntries().add(menuEntry);
     }
 
     private void checkMenuEntry(WSMenuEntry entry, WSMenuEntryE entryE) {
@@ -142,15 +131,16 @@ public class Bean2EObjUtilTest {
         assertEquals(entry.getContext(), entryE.getContext());
         assertEquals(entry.getIcon(), entryE.getIcon());
         assertEquals(entry.getId(), entryE.getId());
-        WSMenuMenuEntriesDescriptions[] ds = entry.getDescriptions();
+        List<Descriptions> ds = entry.getDescriptions();
         EList<WSMenuMenuEntriesDescriptionsE> des = entryE.getDescriptions();
-        if (ds != null)
-            for (int i = 0; i < ds.length; i++) {
-                checkDesc(ds[i], des.get(i));
+        if (ds != null) {
+            for (int i = 0; i < ds.size(); i++) {
+                checkDesc(ds.get(i), des.get(i));
             }
+        }
     }
 
-    private void checkDesc(WSMenuMenuEntriesDescriptions ds, WSMenuMenuEntriesDescriptionsE des) {
+    private void checkDesc(Descriptions ds, WSMenuMenuEntriesDescriptionsE des) {
         assertEquals(ds.getLabel(), des.getLabel());
         assertEquals(ds.getLanguage(), des.getLanguage());
     }
@@ -168,10 +158,10 @@ public class Bean2EObjUtilTest {
         //
         assertEquals(menu.getName(), menuE.getName());
         assertEquals(menu.getDescription(), menuE.getDescription());
-        WSMenuEntry[] menuEntries = menu.getMenuEntries();
+        List<WSMenuEntry> menuEntries = menu.getMenuEntries();
         EList<WSMenuEntryE> menuEntriesE = menuE.getMenuEntries();
-        for (int i = 0; i < menuEntries.length; i++) {
-            checkMenuEntry(menuEntries[i], menuEntriesE.get(i));
+        for (int i = 0; i < menuEntries.size(); i++) {
+            checkMenuEntry(menuEntries.get(i), menuEntriesE.get(i));
         }
     }
 

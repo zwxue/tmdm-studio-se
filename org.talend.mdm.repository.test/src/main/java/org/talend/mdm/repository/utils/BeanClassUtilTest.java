@@ -1,10 +1,6 @@
 package org.talend.mdm.repository.utils;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 import java.io.InputStream;
 import java.lang.reflect.Field;
@@ -63,7 +59,7 @@ public class BeanClassUtilTest {
 
         bClassUtil.refactorClassStructure(cls);
 
-        Map<Field, Method[]> fieldMap = bClassUtil.findFieldMap(cls);
+        Map<Object, Method[]> fieldMap = bClassUtil.findFieldMap(cls);
         assertNotNull(fieldMap);
         assertTrue(fieldMap.size() > 0);
 
@@ -73,8 +69,9 @@ public class BeanClassUtilTest {
 
         // verify the field
         List<Field> flist = Arrays.asList(cls.getFields());
-        if (!(flist.containsAll(fieldMap.keySet()) && fieldMap.keySet().containsAll(flist)))
+        if (!(flist.containsAll(fieldMap.keySet()) && fieldMap.keySet().containsAll(flist))) {
             fail("the field is inconsistent");
+        }
 
         // verify the method
         List<Method> mapList = new ArrayList<Method>();
@@ -82,14 +79,15 @@ public class BeanClassUtilTest {
             mapList.addAll(Arrays.asList(it.next()));
         }
         List<Method> asList = Arrays.asList(cls.getDeclaredMethods());
-        if (!(asList.containsAll(mapList) && mapList.containsAll(asList)))
+        if (!(asList.containsAll(mapList) && mapList.containsAll(asList))) {
             fail("the method is inconsistent");
+        }
     }
 
     private void verifyBaseTypeClass(Class<BaseTypeClass> cls) {
         bClassUtil.refactorClassStructure(cls);
 
-        Map<Field, Method[]> fieldMap = bClassUtil.findFieldMap(cls);
+        Map<Object, Method[]> fieldMap = bClassUtil.findFieldMap(cls);
         assertNotNull(fieldMap);
         assertTrue(fieldMap.size() > 0);
 
@@ -99,8 +97,9 @@ public class BeanClassUtilTest {
 
         // verify the field
         List<Field> flist = Arrays.asList(cls.getFields());
-        if (!(flist.containsAll(fieldMap.keySet()) && fieldMap.keySet().containsAll(flist)))
+        if (!(flist.containsAll(fieldMap.keySet()) && fieldMap.keySet().containsAll(flist))) {
             fail("the field is inconsistent");
+        }
 
         // verify the method
         List<Method> asList = Arrays.asList(cls.getDeclaredMethods());
@@ -108,8 +107,9 @@ public class BeanClassUtilTest {
         for (Iterator<Method[]> it = fieldMap.values().iterator(); it.hasNext();) {
             mapList.addAll(Arrays.asList(it.next()));
         }
-        if (!(asList.containsAll(mapList) && mapList.containsAll(asList)))
+        if (!(asList.containsAll(mapList) && mapList.containsAll(asList))) {
             fail(" the method is inconsistent");
+        }
     }
 
     @Test
@@ -121,8 +121,9 @@ public class BeanClassUtilTest {
         for (int i = 0; i < fields.length; i++) {
             if (!fields[i].getType().getName().equals("boolean")) {
                 String getMethod = Whitebox.invokeMethod(spy, "calGetMethodName", fields[i]);
-                if (!getMethod.startsWith(prefix))
+                if (!getMethod.startsWith(prefix)) {
                     fail("there exists method that's not started with " + prefix);
+                }
             }
         }
 
@@ -130,8 +131,9 @@ public class BeanClassUtilTest {
         for (int i = 0; i < fields.length; i++) {
             if (!fields[i].getType().getName().equals("boolean")) {
                 String getMethod = Whitebox.invokeMethod(spy, "calGetMethodName", fields[i]);
-                if (!getMethod.startsWith(prefix))
+                if (!getMethod.startsWith(prefix)) {
                     fail("there exists method that's not started with " + prefix);
+                }
             }
         }
     }
@@ -145,15 +147,17 @@ public class BeanClassUtilTest {
         Field[] fields = BaseTypeClass.class.getFields();
         for (int i = 0; i < fields.length; i++) {
             String getMethod = Whitebox.invokeMethod(spy, "calSetMethodName", fields[i]);
-            if (!getMethod.startsWith(prefix))
+            if (!getMethod.startsWith(prefix)) {
                 fail("method name is not started with " + prefix);
+            }
         }
 
         fields = ObjectClass.class.getFields();
         for (int i = 0; i < fields.length; i++) {
             String getMethod = Whitebox.invokeMethod(spy, "calSetMethodName", fields[i]);
-            if (!getMethod.startsWith(prefix))
+            if (!getMethod.startsWith(prefix)) {
                 fail("method name is not started with " + prefix);
+            }
         }
     }
 
@@ -162,44 +166,44 @@ public class BeanClassUtilTest {
         Field field = null;
 
         field = BaseTypeArrayClass.class.getField("intA");
-        assertTrue(bClassUtil.isColletionField(field));
+        assertTrue(bClassUtil.isCollectionField(field));
 
         field = BaseTypeArrayClass.class.getField("longA");
-        assertTrue(bClassUtil.isColletionField(field));
+        assertTrue(bClassUtil.isCollectionField(field));
 
         field = BaseTypeArrayClass.class.getField("floatA");
-        assertTrue(bClassUtil.isColletionField(field));
+        assertTrue(bClassUtil.isCollectionField(field));
 
         field = BaseTypeArrayClass.class.getField("doubleA");
-        assertTrue(bClassUtil.isColletionField(field));
+        assertTrue(bClassUtil.isCollectionField(field));
 
         field = BaseTypeArrayClass.class.getField("intA");
-        assertTrue(bClassUtil.isColletionField(field));
+        assertTrue(bClassUtil.isCollectionField(field));
 
         field = BaseTypeArrayClass.class.getField("charA");
-        assertTrue(bClassUtil.isColletionField(field));
+        assertTrue(bClassUtil.isCollectionField(field));
 
         field = BaseTypeArrayClass.class.getField("byteA");
-        assertTrue(bClassUtil.isColletionField(field));
+        assertTrue(bClassUtil.isCollectionField(field));
 
         field = BaseTypeArrayClass.class.getField("booleanA");
-        assertTrue(bClassUtil.isColletionField(field));
+        assertTrue(bClassUtil.isCollectionField(field));
 
         field = ObjectArrayClass.class.getField("objA");
-        assertTrue(bClassUtil.isColletionField(field));
+        assertTrue(bClassUtil.isCollectionField(field));
         field = ObjectArrayClass.class.getField("beanClassUtilA");
-        assertTrue(bClassUtil.isColletionField(field));
+        assertTrue(bClassUtil.isCollectionField(field));
         field = ObjectArrayClass.class.getField("swtA");
-        assertTrue(bClassUtil.isColletionField(field));
+        assertTrue(bClassUtil.isCollectionField(field));
         field = ObjectArrayClass.class.getField("collectA");
-        assertTrue(bClassUtil.isColletionField(field));
+        assertTrue(bClassUtil.isCollectionField(field));
         field = ObjectArrayClass.class.getField("inputStreamA");
-        assertTrue(bClassUtil.isColletionField(field));
+        assertTrue(bClassUtil.isCollectionField(field));
         field = ObjectArrayClass.class.getField("clazzA");
-        assertTrue(bClassUtil.isColletionField(field));
+        assertTrue(bClassUtil.isCollectionField(field));
 
         field = ObjectArrayClass.class.getField("stringAA");
-        assertTrue(bClassUtil.isColletionField(field));
+        assertTrue(bClassUtil.isCollectionField(field));
     }
 
     @Test

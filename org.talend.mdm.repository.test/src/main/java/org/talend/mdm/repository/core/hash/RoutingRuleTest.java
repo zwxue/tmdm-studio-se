@@ -12,8 +12,12 @@
 // ============================================================================
 package org.talend.mdm.repository.core.hash;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.junit.Before;
 import org.junit.Test;
 import org.talend.mdm.commmon.util.hash.IHashValueCalculator;
 import org.talend.mdm.repository.core.hash.routingrule.EObjRoutingRuleHVCalculator;
@@ -32,6 +36,21 @@ import com.amalto.workbench.webservices.WSRoutingRuleOperator;
  */
 public class RoutingRuleTest {
 
+    private List<String> operators;
+
+    @Before
+    public void initOperators() {
+        if (operators == null) {
+            operators = new ArrayList<String>();
+        }
+
+        operators.clear();
+        WSRoutingRuleOperator[] values = WSRoutingRuleOperator.values();
+        for (WSRoutingRuleOperator operator : values) {
+            operators.add(operator.name());
+        }
+    }
+
     private WSRoutingRule initWSObject() {
         WSRoutingRule rule = new WSRoutingRule();
         rule.setName("ruleNameA"); //$NON-NLS-1$
@@ -42,27 +61,17 @@ public class RoutingRuleTest {
         rule.setParameters("parameters"); //$NON-NLS-1$
         rule.setServiceJNDI("serviceJNDI"); //$NON-NLS-1$
         rule.setSynchronous(false);
-        //
-        WSRoutingRuleExpression e1 = new WSRoutingRuleExpression();
-        e1.setName("expression1"); //$NON-NLS-1$
-        e1.setValue("value1"); //$NON-NLS-1$
-        e1.setXpath("xpath"); //$NON-NLS-1$
-        //
-        WSRoutingRuleOperator o1 = new WSRoutingRuleOperator();
-        o1.setValue("opA"); //$NON-NLS-1$
-        e1.setWsOperator(o1);
-        //
-        WSRoutingRuleExpression e2 = new WSRoutingRuleExpression();
-        e2.setName("expression2"); //$NON-NLS-1$
-        e2.setValue("value2"); //$NON-NLS-1$
-        e2.setXpath("xpath2"); //$NON-NLS-1$
-        //
-        WSRoutingRuleOperator o2 = new WSRoutingRuleOperator();
-        o2.setValue("opB"); //$NON-NLS-1$
-        e2.setWsOperator(o2);
-        WSRoutingRuleExpression[] ex = new WSRoutingRuleExpression[] { e1, e2 };
-        rule.setWsRoutingRuleExpressions(ex);
-        //
+
+        for (int i = 0; i < operators.size(); i++) {
+            WSRoutingRuleExpression exp = new WSRoutingRuleExpression();
+            exp.setName("expression" + i); //$NON-NLS-1$
+            exp.setValue("value" + i); //$NON-NLS-1$
+            exp.setXpath("xpath" + i); //$NON-NLS-1$
+            WSRoutingRuleOperator o1 = WSRoutingRuleOperator.valueOf(operators.get(i));
+            exp.setWsOperator(o1);
+
+            rule.getWsRoutingRuleExpressions().add(exp);
+        }
 
         return rule;
     }
@@ -77,27 +86,20 @@ public class RoutingRuleTest {
         rule.setParameters("parameters"); //$NON-NLS-1$
         rule.setServiceJNDI("serviceJNDI"); //$NON-NLS-1$
         rule.setSynchronous(false);
-        //
-        WSRoutingRuleExpressionE e1 = MdmserverobjectFactory.eINSTANCE.createWSRoutingRuleExpressionE();
-        e1.setName("expression1"); //$NON-NLS-1$
-        e1.setValue("value1"); //$NON-NLS-1$
-        e1.setXpath("xpath"); //$NON-NLS-1$
-        //
-        WSRoutingRuleOperatorE o1 = MdmserverobjectFactory.eINSTANCE.createWSRoutingRuleOperatorE();
-        o1.setValue("opA"); //$NON-NLS-1$
-        e1.setWsOperator(o1);
-        //
-        WSRoutingRuleExpressionE e2 = MdmserverobjectFactory.eINSTANCE.createWSRoutingRuleExpressionE();
-        e2.setName("expression2"); //$NON-NLS-1$
-        e2.setValue("value2"); //$NON-NLS-1$
-        e2.setXpath("xpath2"); //$NON-NLS-1$
-        //
-        WSRoutingRuleOperatorE o2 = MdmserverobjectFactory.eINSTANCE.createWSRoutingRuleOperatorE();
-        o2.setValue("opB"); //$NON-NLS-1$
-        e2.setWsOperator(o2);
 
-        rule.getWsRoutingRuleExpressions().add(e1);
-        rule.getWsRoutingRuleExpressions().add(e2);
+        for (int i = 0; i < operators.size(); i++) {
+            WSRoutingRuleExpressionE exp = MdmserverobjectFactory.eINSTANCE.createWSRoutingRuleExpressionE();
+            exp.setName("expression" + i); //$NON-NLS-1$
+            exp.setValue("value" + i); //$NON-NLS-1$
+            exp.setXpath("xpath" + i); //$NON-NLS-1$
+            //
+            WSRoutingRuleOperatorE o1 = MdmserverobjectFactory.eINSTANCE.createWSRoutingRuleOperatorE();
+            o1.setValue(operators.get(i));
+            exp.setWsOperator(o1);
+
+            rule.getWsRoutingRuleExpressions().add(exp);
+        }
+
         return rule;
     }
 

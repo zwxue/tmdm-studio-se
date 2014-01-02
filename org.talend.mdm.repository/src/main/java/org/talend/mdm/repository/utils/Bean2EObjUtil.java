@@ -64,12 +64,16 @@ public class Bean2EObjUtil {
             return;
         }
         EClass eCls;
-        eCls = emfClassUtil.guessEClassByClassName(cls);
+        eCls = guessEclass(cls);
         if (eCls != null) {
             classMap.put(cls, eCls);
             beanClassUtil.refactorClassStructure(cls);
             guessField(cls, eCls);
         }
+    }
+
+    private EClass guessEclass(Class cls) {
+        return emfClassUtil.guessEClassByClassName(cls);
     }
 
     private void guessField(Class cls, EClass eCls) {
