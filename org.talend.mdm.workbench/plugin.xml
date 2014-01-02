@@ -516,34 +516,6 @@
             context="MDM"
             language="java"
             message="Required for using this component."
-            name="jaxb-api.jar"
-            required="true">
-      </libraryNeeded>
-            <libraryNeeded
-            context="MDM"
-            language="java"
-            message="Required for using this component."
-            name="jaxb-impl.jar"
-            required="true">
-      </libraryNeeded>
-            <libraryNeeded
-            context="MDM"
-            language="java"
-            message="Required for using this component."
-            name="jaxb-libs.jar"
-            required="true">
-      </libraryNeeded>
-            <libraryNeeded
-            context="MDM"
-            language="java"
-            message="Required for using this component."
-            name="jaxb-xjc.jar"
-            required="true">
-      </libraryNeeded>
-            <libraryNeeded
-            context="MDM"
-            language="java"
-            message="Required for using this component."
             name="jaxrpc-api.jar"
             required="true">
       </libraryNeeded>
