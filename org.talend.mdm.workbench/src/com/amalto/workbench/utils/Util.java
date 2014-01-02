@@ -3328,8 +3328,8 @@ public class Util {
             return false;
         }
         String message = null;
-        if (t instanceof com.sun.xml.rpc.client.ClientTransportException) {
-            String key = ((com.sun.xml.rpc.client.ClientTransportException) t).getKey();
+        if (t instanceof com.sun.xml.internal.ws.client.ClientTransportException) {
+            String key = ((com.sun.xml.internal.ws.client.ClientTransportException) t).getKey();
             if (null == title) {
                 title = Messages.ConnectFailedTitle;
             }
