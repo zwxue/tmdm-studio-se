@@ -1,6 +1,8 @@
 package com.amalto.workbench.widgets.xmleditor.pagecontent;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
 import org.dom4j.Document;
@@ -9,7 +11,6 @@ import org.dom4j.Node;
 import org.dom4j.dom.DOMDocumentFactory;
 
 import com.amalto.workbench.utils.XmlUtil;
-import com.sun.xml.bind.StringInputStream;
 
 public abstract class ExtensibleXMLEditorPageContent {
 
@@ -19,21 +20,22 @@ public abstract class ExtensibleXMLEditorPageContent {
 
     public void init(String xmlExrepssion) {
 
-        StringInputStream inStream = null;
+        InputStream inStream = null;
 
         try {
-            inStream = new StringInputStream(xmlExrepssion);
+            inStream = new ByteArrayInputStream(xmlExrepssion.getBytes());
             initByXMLExpression(XmlUtil.parse(inStream));
         } catch (Exception e) {
             initToDefault();
         } finally {
 
-            if (inStream != null)
+            if (inStream != null) {
                 try {
                     inStream.close();
                 } catch (IOException e) {
 
                 }
+            }
         }
 
     }
@@ -53,13 +55,15 @@ public abstract class ExtensibleXMLEditorPageContent {
 
     protected String getSingleValueByPath(Node parent, String relativePath, String valueForNull) {
 
-        if (parent == null)
+        if (parent == null) {
             return valueForNull;
+        }
 
         Node node = parent.selectSingleNode("./" + relativePath);//$NON-NLS-1$
 
-        if (node == null)
+        if (node == null) {
             return valueForNull;
+        }
 
         return node.getText();
     }

@@ -12,7 +12,9 @@
 // ============================================================================
 package com.amalto.workbench.editors;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Arrays;
 import java.util.List;
 
@@ -60,7 +62,6 @@ import com.amalto.workbench.webservices.WSServicesList;
 import com.amalto.workbench.webservices.WSString;
 import com.amalto.workbench.webservices.WSVersioningSystemConfiguration;
 import com.amalto.workbench.webservices.XtentisPort;
-import com.sun.xml.bind.StringInputStream;
 
 public class ServiceConfigrationMainPage extends AMainPageV2 {
 
@@ -372,10 +373,11 @@ public class ServiceConfigrationMainPage extends AMainPageV2 {
             return null;
         }
 
-        StringInputStream inStream = null;
+        InputStream inStream = null;
 
         try {
-            inStream = new StringInputStream(serviceConfigurationsText.getText());
+            String xmlTxt = serviceConfigurationsText.getText();
+            inStream = new ByteArrayInputStream(xmlTxt.getBytes());
             XmlUtil.parse(inStream);
         } catch (Exception e) {
             return e.getMessage();
