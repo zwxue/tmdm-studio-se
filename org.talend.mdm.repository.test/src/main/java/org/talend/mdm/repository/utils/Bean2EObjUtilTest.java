@@ -72,7 +72,8 @@ public class Bean2EObjUtilTest {
         Bean2EObjUtil spyUtil = PowerMockito.spy(util);
         spyUtil.registerClassMap(WSMenu.class);
 
-        PowerMockito.verifyPrivate(spyUtil, Mockito.times(1)).invoke("guessEclass", Mockito.any(Class.class));
+        assertNotNull(spyUtil.classMap);
+        assertNotNull(spyUtil.classMap.get(WSMenu.class));
     }
 
     /**
