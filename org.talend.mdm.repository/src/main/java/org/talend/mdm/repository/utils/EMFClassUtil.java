@@ -39,10 +39,6 @@ public class EMFClassUtil {
 
     private void initFixedMap() {
         fixedNamedMap.put("WSMenuEntryDescriptions", "WSMenuMenuEntriesDescriptionsE");
-        fixedNamedMap.put("", "");
-        fixedNamedMap.put("", "");
-        fixedNamedMap.put("", "");
-        fixedNamedMap.put("", "");
     }
 
     private static EMFClassUtil instance = new EMFClassUtil();

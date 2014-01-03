@@ -64,16 +64,12 @@ public class Bean2EObjUtil {
             return;
         }
         EClass eCls;
-        eCls = guessEclass(cls);
+        eCls = emfClassUtil.guessEClassByClassName(cls);
         if (eCls != null) {
             classMap.put(cls, eCls);
             beanClassUtil.refactorClassStructure(cls);
             guessField(cls, eCls);
         }
-    }
-
-    private EClass guessEclass(Class cls) {
-        return emfClassUtil.guessEClassByClassName(cls);
     }
 
     private void guessField(Class cls, EClass eCls) {
@@ -97,7 +93,7 @@ public class Bean2EObjUtil {
                     boolean found = false;
                     for (EStructuralFeature feature : features) {
                         String featureName = feature.getName();
-                        if (fieldName.equals(featureName)) {
+                        if (fieldName.equalsIgnoreCase(featureName)) {
                             fieldMap.put(field, feature);
                             found = true;
                             //                        System.out.println("\t Found Field Map:" + fieldName + "\n\tfield=" + field + "\n\tfeature=" + feature); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
