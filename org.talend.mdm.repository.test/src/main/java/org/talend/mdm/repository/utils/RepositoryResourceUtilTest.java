@@ -261,7 +261,7 @@ public class RepositoryResourceUtilTest {
         verify(mockProperty, times(1)).setVersion(Mockito.anyString());
         verify(mockProperty, times(1)).setAuthor(user);
         verify(mockProperty, times(1)).setLabel(propLabel);
-        verify(repositoryFactory, times(1)).create(Mockito.any(Item.class), Mockito.any(IPath.class), Mockito.any(Boolean.class));
+        verify(repositoryFactory, times(1)).create(Mockito.any(Item.class), Mockito.any(IPath.class));
         verify(mockResourceProvider, times(1)).handleReferenceFile(mockItem);
 
         verify(repositoryFactory, times(1)).unlock(mockItem);
@@ -301,9 +301,9 @@ public class RepositoryResourceUtilTest {
             RepositoryResourceUtil.copyOSFileTOProject(mockIProject, null, desFolder, version, overwrite, progressMonitor);
             fail();
         } catch (Exception e) {
-            if (e instanceof IllegalArgumentException)
+            if (e instanceof IllegalArgumentException) {
                 assertTrue(true);
-            else {
+            } else {
                 assertTrue(false);
             }
         }
@@ -312,9 +312,9 @@ public class RepositoryResourceUtilTest {
             RepositoryResourceUtil.copyOSFileTOProject(mockIProject, path, null, version, overwrite, progressMonitor);
             fail();
         } catch (Exception e) {
-            if (e instanceof IllegalArgumentException)
+            if (e instanceof IllegalArgumentException) {
                 assertTrue(true);
-            else {
+            } else {
                 assertTrue(false);
             }
         }
@@ -576,20 +576,22 @@ public class RepositoryResourceUtilTest {
             RepositoryResourceUtil.removeViewObjectPhysically(null, name, version, path);
             fail("First parameter should not be null.");
         } catch (Exception e) {
-            if (e instanceof IllegalArgumentException)
+            if (e instanceof IllegalArgumentException) {
                 assertTrue(true);
-            else
+            } else {
                 assertTrue("the throwed exception does not match", false);
+            }
         }
 
         try {
             RepositoryResourceUtil.removeViewObjectPhysically(mockType, null, version, path);
             fail("Second parameter should not be null.");
         } catch (Exception e) {
-            if (e instanceof IllegalArgumentException)
+            if (e instanceof IllegalArgumentException) {
                 assertTrue(true);
-            else
+            } else {
                 assertTrue("the throwed exception does not match", false);
+            }
         }
 
         // test method function
