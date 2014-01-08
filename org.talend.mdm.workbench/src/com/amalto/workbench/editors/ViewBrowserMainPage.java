@@ -14,6 +14,7 @@ package com.amalto.workbench.editors;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.regex.Pattern;
 
 import org.apache.commons.logging.Log;
@@ -37,6 +38,8 @@ import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Cursor;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
@@ -69,7 +72,10 @@ import com.amalto.workbench.webservices.WSQuickSearch;
 import com.amalto.workbench.webservices.WSStringPredicate;
 import com.amalto.workbench.webservices.WSView;
 import com.amalto.workbench.webservices.WSViewPK;
+import com.amalto.workbench.webservices.WSViewSearch;
+import com.amalto.workbench.webservices.WSWhereAnd;
 import com.amalto.workbench.webservices.WSWhereCondition;
+import com.amalto.workbench.webservices.WSWhereItem;
 import com.amalto.workbench.webservices.WSWhereOperator;
 import com.amalto.workbench.webservices.XtentisPort;
 
@@ -91,7 +97,11 @@ public class ViewBrowserMainPage extends AMainPage implements IXObjectModelListe
 
     protected Label resultsLabel;
 
-    protected Button matchAllWords;
+    protected Button matchAllWordsBtn;
+
+    private Combo searchItemCombo;
+
+    private final String FULL_TEXT = "Full-Text"; //$NON-NLS-1$
 
     public ViewBrowserMainPage(FormEditor editor) {
         super(editor, ViewBrowserMainPage.class.getName(), Messages.ViewBrowserMainPage_ViewBrowser
@@ -209,18 +219,44 @@ public class ViewBrowserMainPage extends AMainPage implements IXObjectModelListe
                 }
             });
 
+            int columns = 7;
             Composite resultsGroup = this.getNewSectionComposite(Messages.ViewBrowserMainPage_SearchAndResults);
-            resultsGroup.setLayout(new GridLayout(4, false));
+            resultsGroup.setLayout(new GridLayout(columns, false));
 
-            /***
-             * Search Text
-             */
-            Label descriptionLabel = toolkit.createLabel(resultsGroup, Messages.ViewBrowserMainPage_Search, SWT.NULL);
-            descriptionLabel.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1));
+            Composite createComposite = toolkit.createComposite(resultsGroup);
+            GridLayout layout = new GridLayout(2, false);
+            layout.marginWidth = 0;
+            createComposite.setLayout(layout);
+            createComposite.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 2, 1));
 
-            dataClusterCombo = new Combo(resultsGroup, SWT.READ_ONLY | SWT.DROP_DOWN | SWT.SINGLE);
+            Label containerLabel = toolkit.createLabel(createComposite, Messages.ViewBrowserMainPage_Container, SWT.NULL);
+            containerLabel.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1));
+
+            dataClusterCombo = new Combo(createComposite, SWT.READ_ONLY | SWT.DROP_DOWN | SWT.SINGLE);
             dataClusterCombo.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1));
             ((GridData) dataClusterCombo.getLayoutData()).minimumWidth = 100;
+
+            Label emptyLabel = toolkit.createLabel(resultsGroup, "      "); //$NON-NLS-1$
+            emptyLabel.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1));
+
+            Label searchOnLabel = toolkit.createLabel(resultsGroup, Messages.ViewBrowserMainPage_SearchOn, SWT.NULL);
+            searchOnLabel.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1));
+
+            searchItemCombo = new Combo(resultsGroup, SWT.READ_ONLY | SWT.DROP_DOWN | SWT.SINGLE);
+            searchItemCombo.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1));
+            ((GridData) searchItemCombo.getLayoutData()).minimumWidth = 100;
+            searchItemCombo.addSelectionListener(new SelectionAdapter() {
+
+                @Override
+                public void widgetSelected(SelectionEvent e) {
+                    if (FULL_TEXT.equals(searchItemCombo.getText())) {
+                        matchAllWordsBtn.setEnabled(true);
+                    } else {
+                        matchAllWordsBtn.setSelection(false);
+                        matchAllWordsBtn.setEnabled(false);
+                    }
+                }
+            });
 
             searchText = toolkit.createText(resultsGroup, "", SWT.BORDER);//$NON-NLS-1$
             searchText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
@@ -246,15 +282,16 @@ public class ViewBrowserMainPage extends AMainPage implements IXObjectModelListe
                 };
             });
 
-            matchAllWords = toolkit.createButton(resultsGroup, Messages.ViewBrowserMainPage_MatchWholeSentence, SWT.CHECK);
-            matchAllWords.setSelection(true);
+            matchAllWordsBtn = toolkit.createButton(resultsGroup, Messages.ViewBrowserMainPage_MatchWholeSentence, SWT.CHECK);
+            matchAllWordsBtn.setSelection(true);
 
             resultsLabel = toolkit.createLabel(resultsGroup, Messages.ViewBrowserMainPage_Search, SWT.NULL);
-            resultsLabel.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 4, 1));
+            resultsLabel.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, columns - 1, 1));
             resultsLabel.setText("                                          ");//$NON-NLS-1$
+            resultsLabel.setToolTipText("results label here."); //$NON-NLS-1$
 
             resultsViewer = new TableViewer(resultsGroup);
-            resultsViewer.getControl().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 4, 1));
+            resultsViewer.getControl().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, columns, 1));
             ((GridData) resultsViewer.getControl().getLayoutData()).heightHint = 500;
             resultsViewer.setContentProvider(new ArrayContentProvider());
             resultsViewer.setLabelProvider(new XMLTableLabelProvider());
@@ -311,8 +348,11 @@ public class ViewBrowserMainPage extends AMainPage implements IXObjectModelListe
             if (paths != null) {
                 for (String path : paths) {
                     searchableBEsList.add(path);
+                    searchItemCombo.add(path);
                 }
             }
+            searchItemCombo.add(FULL_TEXT);
+            searchItemCombo.setText(FULL_TEXT);
 
             wcListViewer.setInput(view);
             wcListViewer.refresh();
@@ -396,17 +436,46 @@ public class ViewBrowserMainPage extends AMainPage implements IXObjectModelListe
             this.getSite().getShell().setCursor(waitCursor);
 
             XtentisPort port = getPort();
+            java.util.List<String> results = null;
+            int maxItem = 10;
 
-            boolean matchAllWords = this.matchAllWords.getSelection();
-            java.util.List<String> results = port.quickSearch(
-                    new WSQuickSearch(new WSDataClusterPK(dataClusterCombo.getText()), getViewPK(), (""//$NON-NLS-1$
-                            .equals(searchText.getText()) ? "*" : searchText.getText()), 10, // max Items//$NON-NLS-1$
-                            0, // skip
-                            Integer.MAX_VALUE, // spell threshold
-                            matchAllWords, null, null)).getStrings();
+            String search = "".equals(searchText.getText()) ? "*" : searchText.getText(); //$NON-NLS-1$ //$NON-NLS-2$
+            if (FULL_TEXT.equals(searchItemCombo.getText())) {
+                boolean matchAllWords = matchAllWordsBtn.getSelection();
+                results = port.quickSearch(
+                        new WSQuickSearch(new WSDataClusterPK(dataClusterCombo.getText()), getViewPK(), search, maxItem, // max Items
+                        0, // skip
+                        Integer.MAX_VALUE, // spell threshold
+                        matchAllWords, null, null)).getStrings();
 
-            resultsLabel.setText(Messages.bind(Messages.ViewBrowserMainPage_Results, results.size()));
-            return results.toArray(new String[0]);
+            } else {
+                WSView wsview = (WSView) wcListViewer.getInput();
+
+                java.util.List<WSWhereCondition> array = wsview.getWhereConditions();
+                java.util.List<WSWhereItem> conditions = new ArrayList<WSWhereItem>();
+                for (WSWhereCondition condition : array) {
+                    WSWhereItem item = new WSWhereItem(condition, null, null);
+                    conditions.add(item);
+                }
+
+                WSWhereCondition condition = new WSWhereCondition(searchItemCombo.getText(), WSWhereOperator.CONTAINS, search,
+                        WSStringPredicate.AND, true);
+                WSWhereItem item = new WSWhereItem(condition, null, null);
+                conditions.add(item);
+                WSWhereAnd and = new WSWhereAnd(conditions);
+                WSWhereItem wi = new WSWhereItem(null, and, null);
+
+                results = port.viewSearch(
+                        new WSViewSearch(new WSDataClusterPK(dataClusterCombo.getText()), getViewPK(), wi, -1, 0, maxItem, null,
+                                "ascending")).getStrings(); //$NON-NLS-1$
+            }
+
+            resultsLabel.setText(Messages.bind(Messages.ViewBrowserMainPage_Results, results.size() - 1));
+            if (results.size() > 1) {
+                return results.subList(1, results.size()).toArray(new String[0]);
+            }
+
+            return new String[0];
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             if ((e.getLocalizedMessage() != null) && e.getLocalizedMessage().contains("10000")) {

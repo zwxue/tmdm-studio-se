@@ -16,14 +16,14 @@ import org.eclipse.osgi.util.NLS;
 
 /**
  * Default implementation of MessageCore from org.talend.commons plug-in.<br/>
- * 
+ *
  * Developpers can copy this class in their plug-in and change :
  * <ul>
  * <li>the BUNDLE_NAME constant</li>
  * </ul>
- * 
+ *
  * $Id: Messages.java 23594 2009-04-13 10:33:00Z nrousseau $
- * 
+ *
  */
 public class Messages extends NLS {
 
@@ -841,7 +841,11 @@ public class Messages extends NLS {
 
     public static String ViewBrowserMainPage_SearchableElements;
 
+    public static String ViewBrowserMainPage_Container;
+
     public static String ViewBrowserMainPage_Search;
+
+    public static String ViewBrowserMainPage_SearchOn;
 
     public static String ViewBrowserMainPage_SearchAndResults;
 
@@ -916,6 +920,8 @@ public class Messages extends NLS {
     public static String ViewMainPage_RunResultThroughProcess;
 
     public static String ViewMainPage_SearchableBusinessElements;
+
+    public static String ViewMainPage_test;
 
     public static String ViewMainPage_VerifyReport;
 

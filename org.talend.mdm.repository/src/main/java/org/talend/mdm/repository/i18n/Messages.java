@@ -852,6 +852,12 @@ public class Messages extends NLS {
 
     public static String ViewLabelProvider_WebfilterNodeName;
 
+    public static String ViewMainPage_needDeploy;
+
+    public static String ViewMainPage_needSaveAndDeploy;
+
+    public static String ViewMainPage_testView;
+
     public static String UndeployAction;
 
     public static String UndeployMatchRuleAction_label;

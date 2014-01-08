@@ -37,6 +37,7 @@ import org.eclipse.swt.dnd.TextTransfer;
 import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
@@ -51,6 +52,8 @@ import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import com.amalto.workbench.i18n.Messages;
+import com.amalto.workbench.image.EImage;
+import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.Line;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.models.TreeParent;
@@ -140,10 +143,26 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener {
     protected void createCharacteristicsContent(FormToolkit toolkit, Composite charComposite) {
 
         try {
+            Composite descriptionComposite = toolkit.createComposite(charComposite, SWT.NONE);
+            descriptionComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+            descriptionComposite.setLayout(new GridLayout(3, false));
+
             desAntionComposite = new DescAnnotationComposite(Messages.ViewMainPage_Description,
-                    " ...", toolkit, charComposite, this, //$NON-NLS-1$
+                    " ...", toolkit, descriptionComposite, this, //$NON-NLS-1$
                     false);
-            Composite comp = toolkit.createComposite(charComposite);
+
+            Button processButton = toolkit.createButton(descriptionComposite, "", SWT.PUSH);//$NON-NLS-1$
+            processButton.setLayoutData(new GridData(SWT.BEGINNING, SWT.CENTER, false, false, 1, 1));
+            processButton.setImage(ImageCache.getCreatedImage(EImage.RUN_EXC.getPath()));
+            processButton.setToolTipText(Messages.ViewMainPage_test);
+            processButton.addSelectionListener(new SelectionAdapter() {
+
+                @Override
+                public void widgetSelected(SelectionEvent e) {
+                    runTest();
+                }
+            });
+            Composite comp = toolkit.createComposite(descriptionComposite);
             GridLayout layout = new GridLayout(2, false);
             layout.marginWidth = 0;
             layout.marginLeft = 0;
@@ -568,7 +587,7 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener {
 
     /**
      * @author stakey
-     * 
+     *
      */
     class AutoFixProgress implements IRunnableWithProgress {
 
@@ -648,4 +667,8 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener {
         return super.getAdapter(adapter);
     }
     // The ending| bug:21784
+
+    protected void runTest() {
+        //empty
+    }
 }
