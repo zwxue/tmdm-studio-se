@@ -86,6 +86,7 @@ public class EditableComboBoxCellEditor extends CellEditor {
 
         comboBox.addKeyListener(new KeyAdapter() {
 
+            @Override
             public void keyPressed(KeyEvent e) {
                 keyReleaseOccured(e);
             }
@@ -95,10 +96,12 @@ public class EditableComboBoxCellEditor extends CellEditor {
 
         comboBox.addSelectionListener(new SelectionAdapter() {
 
+            @Override
             public void widgetDefaultSelected(SelectionEvent event) {
                 applyEditorValueAndDeactivate();
             }
 
+            @Override
             public void widgetSelected(SelectionEvent event) {
                 value = comboBox.getText();
             }
@@ -115,6 +118,7 @@ public class EditableComboBoxCellEditor extends CellEditor {
 
         comboBox.addFocusListener(new FocusAdapter() {
 
+            @Override
             public void focusLost(FocusEvent e) {
                 EditableComboBoxCellEditor.this.focusLost();
             }
@@ -134,8 +138,9 @@ public class EditableComboBoxCellEditor extends CellEditor {
 
     @Override
     protected void doSetFocus() {
-        if (comboBox != null)
+        if (comboBox != null) {
             comboBox.setFocus();
+        }
     }
 
     @Override
@@ -169,17 +174,20 @@ public class EditableComboBoxCellEditor extends CellEditor {
         deactivate();
     }
 
+    @Override
     protected void focusLost() {
         if (isActivated()) {
             applyEditorValueAndDeactivate();
         }
     }
 
+    @Override
     protected void keyReleaseOccured(KeyEvent keyEvent) {
-        if (keyEvent.character == '\r') { // Return key
-            if (comboBox != null && !comboBox.isDisposed())
+        if (keyEvent.character == SWT.ESC) { // Return key
+            if (comboBox != null && !comboBox.isDisposed()) {
                 fireCancelEditor();
-        } else if (keyEvent.character == '\t') { // tab key
+            }
+        } else if (keyEvent.character == SWT.CR || keyEvent.character == SWT.TAB) { // tab key
             applyEditorValueAndDeactivate();
         }
     }

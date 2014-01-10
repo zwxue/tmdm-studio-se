@@ -337,6 +337,16 @@ public class DataClusterDialog extends Dialog {
         return (MDMServerDef) structuredSelection.getFirstElement();
     }
 
+    @Override
+    protected void okPressed() {
+        recordContent = textViewer.getText().trim();
+        super.okPressed();
+    }
+
+    public Text getText() {
+        return textViewer;
+    }
+
     public String getRecordContent() {
         return recordContent;
     }
