@@ -67,7 +67,7 @@ public class SelectImportedModulesDialog2 extends SelectImportedModulesDialog {
     }
 
     @Override
-    protected URL getSourceURL(String path) {
+    public URL getSourceURL(String path) {
         if (null == path) {
             return null;
         }

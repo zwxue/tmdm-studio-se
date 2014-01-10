@@ -91,8 +91,4 @@ public class RoutingRuleMainPage2 extends RoutingRuleMainPage {
         return RepositoryWebServiceAdapter.getServiceDocument(jndiName);
     }
 
-    @Override
-    protected void refreshServerView() {
-    }
-
 }

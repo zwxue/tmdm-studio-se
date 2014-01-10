@@ -13,17 +13,12 @@
 package org.talend.mdm.workbench.serverexplorer.ui.dialogs;
 
 import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.TitleAreaDialog;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.FocusAdapter;
-import org.eclipse.swt.events.FocusEvent;
-import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -31,7 +26,6 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Group;
@@ -46,12 +40,9 @@ import org.talend.mdm.workbench.serverexplorer.core.ServerDefService;
 import org.talend.mdm.workbench.serverexplorer.i18n.Messages;
 import org.talend.repository.model.IProxyRepositoryFactory;
 
+import com.amalto.workbench.exadapter.ExAdapterManager;
 import com.amalto.workbench.utils.PasswordUtil;
-import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.XtentisException;
-import com.amalto.workbench.webservices.WSGetUniversePKs;
-import com.amalto.workbench.webservices.WSUniversePK;
-import com.amalto.workbench.webservices.XtentisPort;
 
 /**
  * DOC hbhong class global comment. Detailled comment <br/>
@@ -68,8 +59,6 @@ public class ServerDefDialog extends TitleAreaDialog {
     private Text userNameText;
 
     private Text passwordText;
-
-    private Combo universeCombo;
 
     boolean isEnterprise;
 
@@ -89,11 +78,11 @@ public class ServerDefDialog extends TitleAreaDialog {
 
     private String newUserName = null;
 
-    private String newUniverse = ""; //$NON-NLS-1$
-
     private String newUrl = null;
 
     private static final int CHECK_CONNECTION_ID = 1024;
+
+    private IServerDefDialogExAdapter exAdapter;
 
     public MDMServerDef getServerDef() {
         return this.serverDef;
@@ -115,7 +104,8 @@ public class ServerDefDialog extends TitleAreaDialog {
         } else {
             this.serverDef = MdmmetadataFactory.eINSTANCE.createMDMServerDef();
         }
-        isEnterprise = Util.IsEnterPrise();
+        exAdapter = ExAdapterManager.getAdapter(this, IServerDefDialogExAdapter.class);
+
     }
 
     /**
@@ -190,13 +180,10 @@ public class ServerDefDialog extends TitleAreaDialog {
             sharePwdBtn.setToolTipText(Messages.OnlyApplicableShared);
         }
 
-        // check Enterprise
-        if (isEnterprise) {
-            new Label(container, SWT.NONE).setText(Messages.ServerDefDialog_Version);
-
-            universeCombo = new Combo(container, SWT.NONE);
-            universeCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+        if (exAdapter != null) {
+            exAdapter.createDialogArea(container);
         }
+
         // init value
         initValue();
         // init listener
@@ -229,54 +216,11 @@ public class ServerDefDialog extends TitleAreaDialog {
                 newPassword = passwordText.getText().trim();
             }
         });
-        if (isEnterprise) {
-            universeCombo.addModifyListener(new ModifyListener() {
 
-                public void modifyText(ModifyEvent e) {
-                    newUniverse = universeCombo.getText().trim();
-                }
-            });
-
-            FocusListener listener = new FocusAdapter() {
-
-                @Override
-                public void focusGained(FocusEvent e) {
-                    updateUniverseValues();
-                }
-            };
-
-            universeCombo.addFocusListener(listener);
+        if (exAdapter != null) {
+            exAdapter.initListener();
         }
 
-    }
-
-    private void updateUniverseValues() {
-        if (newUserName.equals("") || newPassword.equals("")) { //$NON-NLS-1$ //$NON-NLS-2$
-            return;
-        }
-
-        if (Util.IsEnterPrise()) {
-
-            try {
-                XtentisPort port = Util.getPort(new URL(newUrl), null, newUserName, newPassword);
-                List<WSUniversePK> universePKs = port.getUniversePKs(new WSGetUniversePKs("*")).getWsUniversePK();//$NON-NLS-1$
-                universeCombo.removeAll();
-                universeCombo.add(""); //$NON-NLS-1$
-                if (universePKs != null && universePKs.size() > 0) {
-                    for (WSUniversePK universePK : universePKs) {
-                        String universe = universePK.getPk();
-                        universeCombo.add(universe);
-                    }
-                }
-            } catch (Exception e) {
-                if (log.isDebugEnabled()) {
-                    log.debug(e.getMessage(), e);
-                }
-
-                nameText.setFocus();// transfer focus,preventing recursive handling in this method
-                universeCombo.removeAll();
-            }
-        }
     }
 
     private boolean validateInput() {
@@ -370,8 +314,8 @@ public class ServerDefDialog extends TitleAreaDialog {
             serverDef.setPasswd(encryptedPassword);
             serverDef.setTempPasswd(null);
         }
-        if (Util.IsEnterPrise()) {
-            serverDef.setUniverse(newUniverse);
+        if (exAdapter != null) {
+            exAdapter.updateUI2Model(serverDef);
         }
     }
 
@@ -406,9 +350,8 @@ public class ServerDefDialog extends TitleAreaDialog {
 
         newPassword = passwordText.getText().trim();
 
-        if (Util.IsEnterPrise()) {
-            newUniverse = serverDef.getUniverse();
-            universeCombo.setText(newUniverse);
+        if (exAdapter != null) {
+            exAdapter.initValue(serverDef);
         }
         if (!isUpdateServerDef) {
             sharePwdBtn.setSelection(true);
@@ -425,6 +368,22 @@ public class ServerDefDialog extends TitleAreaDialog {
         createButton(parent, CHECK_CONNECTION_ID, Messages.ServerDefDialog_CheckConnection, false);
         createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL, true);
         createButton(parent, IDialogConstants.CANCEL_ID, IDialogConstants.CANCEL_LABEL, false);
+    }
+
+    public String getNewUserName() {
+        return this.newUserName;
+    }
+
+    public String getNewPassword() {
+        return this.newPassword;
+    }
+
+    public String getNewUrl() {
+        return this.newUrl;
+    }
+
+    public Text getNameText() {
+        return this.nameText;
     }
 
     // /**

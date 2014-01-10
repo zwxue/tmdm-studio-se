@@ -63,7 +63,7 @@ public class MDMExportRepositoryItemsWizard extends ExportItemsWizard {
 
     // do export is need to override ,use the system of TOS to export EMF files
     @Override
-    protected void doexport(Object[] selectedNodes, IProgressMonitor monitor) {
+    public void doexport(Object[] selectedNodes, IProgressMonitor monitor) {
         List<IRepositoryViewObject> objs = new LinkedList<IRepositoryViewObject>();
         for (Object obj : selectedNodes) {
             if (obj instanceof IRepositoryViewObject) {

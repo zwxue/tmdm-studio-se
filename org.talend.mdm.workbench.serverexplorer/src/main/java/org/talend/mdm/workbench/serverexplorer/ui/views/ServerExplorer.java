@@ -52,7 +52,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.Tree;
-import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.part.ViewPart;
 import org.eclipse.ui.progress.UIJob;
@@ -74,10 +73,8 @@ import org.talend.mdm.workbench.serverexplorer.ui.providers.ViewerLabelProvider;
 
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
-import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.service.MissingJarsException;
 import com.amalto.workbench.utils.XtentisException;
-import com.amalto.workbench.views.ServerView;
 
 /**
  * DOC hbhong class global comment. Detailled comment <br/>
@@ -143,8 +140,6 @@ public class ServerExplorer extends ViewPart {
                     name = serverDefItem.getServerDef().getName();
                 }
                 editServerDef();
-                deleteServerDefForSerView(name);
-                synchronizeMDMServerView();
             }
         });
         toolkit.paintBordersFor(tree);
@@ -156,7 +151,6 @@ public class ServerExplorer extends ViewPart {
 
         refreshServerDefs();
 
-        synchronizeMDMServerView();
         reInputPassword();
 
     }
@@ -276,21 +270,6 @@ public class ServerExplorer extends ViewPart {
         }
     }
 
-    private void synchronizeMDMServerView() {
-
-        IWorkbenchPage page = getViewSite().getPage();
-        ServerView serverView = (ServerView) page.findView(ServerView.VIEW_ID);
-
-        if (serverView == null) {
-            return;
-        }
-        if (serverView != null) {
-            serverView.initView();
-            serverView.getViewer().collapseAll();
-            serverView.getViewer().refresh();
-        }
-    }
-
     private MDMServerDefItem getMDMItem(IRepositoryViewObject viewObject) {
         if (viewObject != null) {
             return (MDMServerDefItem) (viewObject.getProperty().getItem());
@@ -326,7 +305,6 @@ public class ServerExplorer extends ViewPart {
                     ServerDefService.updateTempPassword(id, tempPasswd);
                     refreshServerDefs();
                 }
-                synchronizeMDMServerView();
             }
         }
     }
@@ -447,9 +425,7 @@ public class ServerExplorer extends ViewPart {
                 name = serverDefItem.getServerDef().getName();
             }
             editServerDef();
-            deleteServerDefForSerView(name);
 
-            synchronizeMDMServerView();
         }
     }
 
@@ -509,9 +485,7 @@ public class ServerExplorer extends ViewPart {
                     if (result) {
                         refreshServerDefs();
                     }
-                    deleteServerDefForSerView(serverDefItem.getServerDef().getName());
                     //
-                    synchronizeMDMServerView();
                 }
             }
         }
@@ -539,18 +513,6 @@ public class ServerExplorer extends ViewPart {
                 ServerDefService.saveServeDef(serverDefItem);
                 refreshServerDefs();
             }
-        }
-    }
-
-    private void deleteServerDefForSerView(String nameToDel) {
-        ServerView viewPart = (ServerView) getSite().getPage().findView(ServerView.VIEW_ID);
-        if (viewPart != null) {
-            for (TreeObject object : viewPart.getRoot().getChildren()) {
-                if (object.getName().equals(nameToDel)) {
-                    viewPart.getRoot().removeChild(object);
-                }
-            }
-            (viewPart).getViewer().refresh();
         }
     }
 

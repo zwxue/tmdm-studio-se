@@ -12,22 +12,14 @@
 // ============================================================================
 package org.talend.mdm.repository.core.dnd;
 
-import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IFolder;
-import org.eclipse.core.resources.IResource;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.emf.common.util.EList;
-import org.eclipse.emf.common.util.URI;
 import org.eclipse.jface.dialogs.IInputValidator;
 import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -46,11 +38,9 @@ import org.eclipse.ui.navigator.CommonNavigator;
 import org.talend.commons.exception.BusinessException;
 import org.talend.commons.exception.LoginException;
 import org.talend.commons.exception.PersistenceException;
-import org.talend.core.GlobalServiceRegister;
 import org.talend.core.model.properties.FolderType;
 import org.talend.core.model.properties.Item;
 import org.talend.core.model.properties.Property;
-import org.talend.core.model.properties.ReferenceFileItem;
 import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.core.runtime.CoreRuntimePlugin;
@@ -60,7 +50,6 @@ import org.talend.mdm.repository.core.command.ICommand;
 import org.talend.mdm.repository.core.impl.transformerV2.ITransformerV2NodeConsDef;
 import org.talend.mdm.repository.core.impl.view.IViewNodeConstDef;
 import org.talend.mdm.repository.core.service.ContainerCacheService;
-import org.talend.mdm.repository.core.service.ISyncWorkflowService;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
@@ -73,7 +62,7 @@ import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 import org.talend.mdm.repository.utils.ValidateUtil;
 import org.talend.repository.model.IProxyRepositoryFactory;
 
-import com.amalto.workbench.utils.Util;
+import com.amalto.workbench.exadapter.ExAdapterManager;
 
 /**
  * DOC hbhong class global comment. Detailled comment
@@ -81,6 +70,12 @@ import com.amalto.workbench.utils.Util;
 public class RepositoryDropAssistant extends CommonDropAdapterAssistant {
 
     private static Logger log = Logger.getLogger(RepositoryDropAssistant.class);
+
+    private IRepositoryDropAssistantExAdapter exAdapter;
+
+    public RepositoryDropAssistant() {
+        this.exAdapter = ExAdapterManager.getAdapter(this, IRepositoryDropAssistantExAdapter.class);
+    }
 
     @Override
     public IStatus validateDrop(Object target, int operation, TransferData transferType) {
@@ -259,7 +254,7 @@ public class RepositoryDropAssistant extends CommonDropAdapterAssistant {
 
     /**
      * DOC hbhong Comment method "moveViewObj".
-     *
+     * 
      * @param dragViewObj
      * @param dropViewObj
      * @return
@@ -311,41 +306,9 @@ public class RepositoryDropAssistant extends CommonDropAdapterAssistant {
                 IPath path = new Path(pathStr);
                 ERepositoryObjectType type = dropViewObj.getRepositoryObjectType();
                 if (type == IServerObjectRepositoryType.TYPE_WORKFLOW) {
-                    EList refFiles = item.getReferenceResources();
-                    if (!refFiles.isEmpty()) {
-                        ReferenceFileItem refFileItem = (ReferenceFileItem) refFiles.get(0);
-                        byte[] content = refFileItem.getContent().getInnerContent();
-                        IFolder folder = RepositoryResourceUtil.getFolder(type);
-
-                        URI uri = refFileItem.getContent().eResource().getURI();
-                        String fileName = uri.lastSegment();
-
-                        fileName = fileName.replace(name, newName);
-
-                        fileName = fileName.replace("#", "$"); //$NON-NLS-1$ //$NON-NLS-2$
-                        IFile file = folder.getFile(fileName);
-
-                        try {
-                            if (!file.exists()) {
-                                file.create(new ByteArrayInputStream(content), IFile.FORCE, new NullProgressMonitor());
-                            } else {
-                                file.setContents(new ByteArrayInputStream(content), IFile.FORCE, new NullProgressMonitor());
-                            }
-                            file.refreshLocal(IResource.DEPTH_ZERO, new NullProgressMonitor());
-                            if (Util.IsEnterPrise()) {
-                                ISyncWorkflowService service = (ISyncWorkflowService) GlobalServiceRegister.getDefault()
-                                        .getService(ISyncWorkflowService.class);
-                                newName = newName.replace("#", "$"); //$NON-NLS-1$//$NON-NLS-2$
-                                if (service != null) {
-                                    service.updateWorkflowContent(name, newName, file);
-                                }
-                            }
-                            return true;
-                        } catch (CoreException e) {
-                            log.error(e.getMessage(), e);
-                        }
+                    if (exAdapter != null) {
+                        exAdapter.copyWorkflowViewObj(item, name, newName);
                     }
-
                 } else {
                     IProxyRepositoryFactory factory = CoreRuntimePlugin.getInstance().getProxyRepositoryFactory();
                     Item copy = null;
@@ -393,8 +356,9 @@ public class RepositoryDropAssistant extends CommonDropAdapterAssistant {
             newPath = new MDMEditViewProcessPropertyAction().getNewPath(objType, newName, name);
         }
 
-        if (newPath == null)
+        if (newPath == null) {
             newPath = pathStr;
+        }
 
         return newPath;
     }

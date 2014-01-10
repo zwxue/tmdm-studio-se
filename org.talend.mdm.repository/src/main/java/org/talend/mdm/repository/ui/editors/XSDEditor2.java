@@ -13,17 +13,13 @@
 package org.talend.mdm.repository.ui.editors;
 
 import java.util.ArrayList;
-import java.util.EventObject;
 import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.emf.common.command.BasicCommandStack;
-import org.eclipse.emf.common.command.CommandStackListener;
 import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
@@ -40,19 +36,16 @@ import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.command.CommandManager;
 import org.talend.mdm.repository.core.command.ICommand;
 import org.talend.mdm.repository.core.service.DeployService;
-import org.talend.mdm.repository.core.service.IMatchRuleMapInfoService;
 import org.talend.mdm.repository.core.service.IModelValidationService;
 import org.talend.mdm.repository.core.service.IModelValidationService.IModelValidateResult;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
-import org.talend.mdm.repository.model.mdmserverobject.matchrule.MatchRuleMapInfo;
-import org.talend.mdm.repository.utils.RepositoryResourceUtil;
-import org.talend.mdm.repository.utils.ServiceUtil;
 
 import com.amalto.workbench.editors.DataModelMainPage;
 import com.amalto.workbench.editors.xsdeditor.XSDEditor;
 import com.amalto.workbench.editors.xsdeditor.XSDSelectionListener;
+import com.amalto.workbench.exadapter.ExAdapterManager;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.utils.CompositeViewersSelectionProvider;
 import com.amalto.workbench.utils.Util;
@@ -70,11 +63,11 @@ public class XSDEditor2 extends XSDEditor implements ISvnHistory {
 
     private CTabFolder folder;
 
-    private MatchRuleMapInfo mapInfo;
+    private IXSDEditor2ExAdapter exAdapter;
 
-    private EditingDomain editingDomain;
-
-    private CommandStackListener commandStackListener;
+    public XSDEditor2() {
+        exAdapter = ExAdapterManager.getAdapter(this, IXSDEditor2ExAdapter.class);
+    }
 
     @Override
     protected void createPages() {
@@ -192,12 +185,7 @@ public class XSDEditor2 extends XSDEditor implements ISvnHistory {
         Item item = viewObject.getProperty().getItem();
         MDMServerObject serverObject = ((MDMServerObjectItem) item).getMDMServerObject();
         if (isEE()) {
-            IMatchRuleMapInfoService mapInfoService = ServiceUtil.getService(IMatchRuleMapInfoService.class);
-            mapInfoService.saveMatchRuleMapInfo(item);
-            dMainPage.updateSchemaToItem(item);
-            RepositoryResourceUtil.saveItem(item);
-            getMapinfoCommandStack().saveIsDone();
-            firePropertyChange(PROP_DIRTY);
+            exAdapter.doSave(item, dMainPage, monitor);
         }
 
         DeployService deployService = DeployService.getInstance();
@@ -236,12 +224,14 @@ public class XSDEditor2 extends XSDEditor implements ISvnHistory {
         if (type == IGotoMarker.class) {
 
             return dMainPage;
-        } else if (type == MatchRuleMapInfo.class) {
-            return mapInfo;
-        } else if (type == EditingDomain.class) {
-            return editingDomain;
         } else if (type == XSDEditorInput2.class) {
             return getEditorInput();
+        }
+        if (isEE()) {
+            Object adapter = exAdapter.getAdapter(type);
+            if (adapter != null) {
+                return adapter;
+            }
         }
 
         return super.getAdapter(type);
@@ -259,43 +249,22 @@ public class XSDEditor2 extends XSDEditor implements ISvnHistory {
         super.init(site, editorInput);
 
         if (isEE()) {
-            IRepositoryViewEditorInput input = (IRepositoryViewEditorInput) editorInput;
-            Item inputItem = input.getInputItem();
-            IMatchRuleMapInfoService mapInfoService = ServiceUtil.getService(IMatchRuleMapInfoService.class);
-            mapInfo = mapInfoService.loadMatchRuleMapInfo(inputItem);
-            this.editingDomain = mapInfoService.getNewEditingDomain();
-            BasicCommandStack stack = getMapinfoCommandStack();
-            this.commandStackListener = new CommandStackListener() {
-
-                public void commandStackChanged(EventObject event) {
-                    firePropertyChange(PROP_DIRTY);
-                }
-            };
-            stack.addCommandStackListener(commandStackListener);
+            exAdapter.init(editorInput);
         }
     }
 
-    private BasicCommandStack getMapinfoCommandStack() {
-        return (BasicCommandStack) editingDomain.getCommandStack();
+    public void fireDirtyPropChange() {
+        firePropertyChange(PROP_DIRTY);
     }
 
     private boolean isEE() {
-        return Util.IsEnterPrise();
+        return exAdapter != null;
     }
 
     @Override
     public void dispose() {
-        if (isEE() && editingDomain != null) {
-            BasicCommandStack stack = getMapinfoCommandStack();
-            if (commandStackListener != null) {
-                stack.removeCommandStackListener(commandStackListener);
-            }
-            if (isDirty()) {
-
-                while (stack.isSaveNeeded() && stack.canUndo()) {
-                    stack.undo();
-                }
-            }
+        if (isEE()) {
+            exAdapter.dispose();
         }
         super.dispose();
     }
@@ -303,9 +272,8 @@ public class XSDEditor2 extends XSDEditor implements ISvnHistory {
     @Override
     public boolean isDirty() {
         boolean mapInfoDirty = false;
-        if (isEE() && editingDomain != null) {
-            BasicCommandStack stack = getMapinfoCommandStack();
-            mapInfoDirty = stack.isSaveNeeded();
+        if (isEE()) {
+            mapInfoDirty = exAdapter.isDirty();
         }
         return super.isDirty() || mapInfoDirty;
     }

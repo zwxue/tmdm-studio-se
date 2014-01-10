@@ -12,7 +12,6 @@
 // ============================================================================
 package org.talend.mdm.repository.core.service.interactive;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -22,16 +21,14 @@ import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.IServerObjectRepositoryType;
 import org.talend.mdm.repository.core.command.deploy.AbstractDeployCommand;
-import org.talend.mdm.repository.core.service.IMatchRuleMapInfoService;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmproperties.WSDataModelItem;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
-import org.talend.mdm.repository.utils.ServiceUtil;
 
+import com.amalto.workbench.exadapter.ExAdapterManager;
 import com.amalto.workbench.utils.EXtentisObjects;
 import com.amalto.workbench.utils.TreeObjectUtil;
-import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.XtentisException;
 import com.amalto.workbench.webservices.WSDataModel;
 import com.amalto.workbench.webservices.WSDataModelPK;
@@ -55,6 +52,12 @@ public class DataModelInteractiveHandler extends AbstractInteractiveHandler {
     private static final String FILE_EXTENSION = "xsd"; //$NON-NLS-1$
 
     Logger log = Logger.getLogger(DataModelInteractiveHandler.class);
+
+    private IDataModelInteractiveHandlerExAdapter exAdapter;
+
+    public DataModelInteractiveHandler() {
+        this.exAdapter = ExAdapterManager.getAdapter(this, IDataModelInteractiveHandlerExAdapter.class);
+    }
 
     public ERepositoryObjectType getRepositoryObjectType() {
         return IServerObjectRepositoryType.TYPE_DATAMODEL;
@@ -102,35 +105,10 @@ public class DataModelInteractiveHandler extends AbstractInteractiveHandler {
 
     @Override
     public List<IRepositoryViewObject> getAssociatedObjects(IRepositoryViewObject obj) {
-        if (Util.IsEnterPrise()) {
-            IRepositoryViewObject mapInfoObject = convertToMapInfoObject(obj);
-            if (mapInfoObject != null) {
-                ArrayList<IRepositoryViewObject> assosicatedObjs = new ArrayList<IRepositoryViewObject>();
-                assosicatedObjs.add(mapInfoObject);
-                return assosicatedObjs;
-            }
+        if (exAdapter != null) {
+            return exAdapter.getAssociatedObjects(obj);
         }
         return super.getAssociatedObjects(obj);
     }
 
-    IMatchRuleMapInfoService service = null;
-
-    private IMatchRuleMapInfoService getService() {
-        if (service == null) {
-            service = ServiceUtil.getService(IMatchRuleMapInfoService.class);
-        }
-        return service;
-    }
-
-    private IRepositoryViewObject convertToMapInfoObject(IRepositoryViewObject viewObj) {
-
-        if (getService() != null && viewObj != null) {
-            Item item = viewObj.getProperty().getItem();
-            if (item != null) {
-                IRepositoryViewObject matchRuleViewObj = getService().generateWSMatchRuleObject(item);
-                return matchRuleViewObj;
-            }
-        }
-        return null;
-    }
 }

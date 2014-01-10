@@ -2,7 +2,7 @@
 //
 // Talend Community Edition
 //
-// Copyright (C) 2006-2012 Talend ¨C www.talend.com
+// Copyright (C) 2006-2012 Talend ï¿½C www.talend.com
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
@@ -32,7 +32,6 @@ import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.ui.navigator.MDMRepositoryView;
 import org.talend.mdm.repository.ui.wizards.exports.MDMExportRepositoryItemsWizard;
 
-import com.amalto.workbench.export.ExportItemsAction;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 
@@ -42,7 +41,7 @@ import com.amalto.workbench.image.ImageCache;
  */
 public class ExportObjectAction extends AbstractRepositoryAction {
 
-    private static Log log = LogFactory.getLog(ExportItemsAction.class);
+    private static Log log = LogFactory.getLog(ExportObjectAction.class);
 
     private MDMRepositoryView view = null;
 
@@ -56,6 +55,7 @@ public class ExportObjectAction extends AbstractRepositoryAction {
         setImageDescriptor(ImageCache.getImage(EImage.EXPORT.getPath()));
     }
 
+    @Override
     protected void doRun() {
         try {
             ISelection selection = null;
@@ -75,8 +75,7 @@ public class ExportObjectAction extends AbstractRepositoryAction {
         }
     }
 
-
-
+    @Override
     public String getGroupName() {
         return GROUP_EXPORT;
     }

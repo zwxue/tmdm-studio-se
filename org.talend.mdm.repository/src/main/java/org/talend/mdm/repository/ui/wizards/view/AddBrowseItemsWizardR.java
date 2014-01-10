@@ -75,7 +75,7 @@ public class AddBrowseItemsWizardR extends AddBrowseItemsWizard {
     }
 
     @Override
-    protected List<String> getAllRoleNames() {
+    public List<String> getAllRoleNames() {
         return RepositoryQueryService.findAllRoleNames();
     }
 

@@ -109,8 +109,6 @@ public class Messages extends NLS {
 
     public static String ServerDefDialog_UsernameCanNotBeEmpty;
 
-    public static String ServerDefDialog_Version;
-
     public static String ServerExplorer_AddServer;
 
     public static String ServerExplorer_CheckConnection;

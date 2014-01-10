@@ -29,7 +29,7 @@ import org.talend.mdm.repository.ui.navigator.MDMRepositoryLabelProvider;
 import org.talend.mdm.repository.ui.widgets.AbstractNodeCheckTreeViewer;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 
-import com.amalto.workbench.utils.Util;
+import com.amalto.workbench.exadapter.ExAdapterManager;
 import com.amalto.workbench.widgets.FilteredCheckboxTree;
 
 /**
@@ -39,13 +39,16 @@ public class ExportRepositoryObjectCheckTreeViewer extends AbstractNodeCheckTree
 
     /**
      * DOC hbhong RepositoryObjectCheckTreeViewer constructor comment.
-     *
+     * 
      * @param selection
      */
     IRepositoryViewObject[] categoryViewObjects;
 
+    private IExportRepositoryObjectCheckTreeViewerExAdapter exAdapter;
+
     public ExportRepositoryObjectCheckTreeViewer(IStructuredSelection selection) {
         super(selection);
+        this.exAdapter = ExAdapterManager.getAdapter(this, IExportRepositoryObjectCheckTreeViewerExAdapter.class);
     }
 
     @Override
@@ -65,7 +68,6 @@ public class ExportRepositoryObjectCheckTreeViewer extends AbstractNodeCheckTree
                 treeViewer.setInput(viewObjs);
                 return treeViewer;
             }
-
 
             @Override
             protected void refreshCompleted() {
@@ -90,13 +92,8 @@ public class ExportRepositoryObjectCheckTreeViewer extends AbstractNodeCheckTree
         sortedViewObjs.add(getViewObjectByType(IServerObjectRepositoryType.TYPE_SERVICECONFIGURATION));
         sortedViewObjs.add(getViewObjectByType(IServerObjectRepositoryType.TYPE_STOREPROCEDURE));
         sortedViewObjs.add(getViewObjectByType(IServerObjectRepositoryType.TYPE_VIEW));
-        if(Util.IsEnterPrise()){
-            sortedViewObjs.add(getViewObjectByType(IServerObjectRepositoryType.TYPE_CUSTOM_FORM));
-            sortedViewObjs.add(getViewObjectByType(IServerObjectRepositoryType.TYPE_RESOURCE));
-            sortedViewObjs.add(getViewObjectByType(IServerObjectRepositoryType.TYPE_ROLE));
-            sortedViewObjs.add(getViewObjectByType(IServerObjectRepositoryType.TYPE_SYNCHRONIZATIONPLAN));
-            sortedViewObjs.add(getViewObjectByType(IServerObjectRepositoryType.TYPE_UNIVERSE));
-            sortedViewObjs.add(getViewObjectByType(IServerObjectRepositoryType.TYPE_WORKFLOW));
+        if (exAdapter != null) {
+            exAdapter.addSortedViewObjects(sortedViewObjs);
         }
         return sortedViewObjs.toArray(new IRepositoryViewObject[0]);
     }

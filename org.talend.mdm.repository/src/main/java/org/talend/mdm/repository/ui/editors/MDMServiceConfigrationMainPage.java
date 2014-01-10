@@ -118,7 +118,7 @@ public class MDMServiceConfigrationMainPage extends ServiceConfigrationMainPage 
     }
 
     @Override
-    protected void doSaveChanges() {
+    protected void doSaveSVNChanges() {
 
     }
 

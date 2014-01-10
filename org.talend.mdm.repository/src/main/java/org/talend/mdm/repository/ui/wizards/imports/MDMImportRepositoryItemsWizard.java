@@ -55,7 +55,6 @@ import org.eclipse.ui.internal.wizards.datatransfer.ZipLeveledStructureProvider;
 import org.eclipse.ui.progress.UIJob;
 import org.talend.commons.exception.LoginException;
 import org.talend.commons.exception.PersistenceException;
-import org.talend.core.GlobalServiceRegister;
 import org.talend.core.model.properties.Item;
 import org.talend.core.model.properties.ItemState;
 import org.talend.core.model.properties.JobDocumentationItem;
@@ -71,7 +70,6 @@ import org.talend.mdm.repository.core.command.ICommand;
 import org.talend.mdm.repository.core.impl.transformerV2.ITransformerV2NodeConsDef;
 import org.talend.mdm.repository.core.impl.view.IViewNodeConstDef;
 import org.talend.mdm.repository.core.service.ContainerCacheService;
-import org.talend.mdm.repository.core.service.ISyncWorkflowService;
 import org.talend.mdm.repository.core.service.ImportService;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
@@ -96,8 +94,8 @@ import org.talend.repository.imports.ResourcesManagerFactory;
 import org.talend.repository.model.ERepositoryStatus;
 
 import com.amalto.workbench.dialogs.ImportExchangeOptionsDialog;
+import com.amalto.workbench.exadapter.ExAdapterManager;
 import com.amalto.workbench.export.ImportItemsWizard;
-import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.widgets.WidgetFactory;
 
 /**
@@ -117,8 +115,11 @@ public class MDMImportRepositoryItemsWizard extends ImportItemsWizard {
 
     ImportRepositoryObjectCheckTreeViewer checkTreeViewer;
 
+    private IMDMImportRepositoryItemsWizardExAdapter exAdapter;
+
     public MDMImportRepositoryItemsWizard(IStructuredSelection sel) {
         super(sel);
+        this.exAdapter = ExAdapterManager.getAdapter(this, IMDMImportRepositoryItemsWizardExAdapter.class);
     }
 
     @Override
@@ -342,13 +343,8 @@ public class MDMImportRepositoryItemsWizard extends ImportItemsWizard {
                 MDMRepositoryView.show().getCommonViewer().refresh();
             }
         });
-        if (Util.IsEnterPrise()) {
-            // sync workflow object to bonita
-            ISyncWorkflowService syncService = (ISyncWorkflowService) GlobalServiceRegister.getDefault().getService(
-                    ISyncWorkflowService.class);
-            if (syncService != null) {
-                syncService.startSyncWorkflowTask();
-            }
+        if (exAdapter != null) {
+            exAdapter.syncWorkflow();
         }
     }
 

@@ -23,16 +23,10 @@ import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.model.mdmproperties.WSDataModelItem;
 import org.talend.mdm.repository.model.mdmserverobject.WSDataModelE;
-import org.talend.mdm.repository.ui.actions.xsd.XSDDefaultValueRuleActionR;
 import org.talend.mdm.repository.ui.actions.xsd.XSDDeleteConceptActionR;
 import org.talend.mdm.repository.ui.actions.xsd.XSDSetAnnotationFKFilterActionR;
 import org.talend.mdm.repository.ui.actions.xsd.XSDSetAnnotationForeignKeyActionR;
 import org.talend.mdm.repository.ui.actions.xsd.XSDSetAnnotationForeignKeyInfoActionR;
-import org.talend.mdm.repository.ui.actions.xsd.XSDSetAnnotationNoActionR;
-import org.talend.mdm.repository.ui.actions.xsd.XSDSetAnnotationWrapNoActionR;
-import org.talend.mdm.repository.ui.actions.xsd.XSDSetAnnotationWrapWriteActionR;
-import org.talend.mdm.repository.ui.actions.xsd.XSDSetAnnotationWriteActionR;
-import org.talend.mdm.repository.ui.actions.xsd.XSDVisibleRuleActionR;
 import org.talend.mdm.repository.ui.dialogs.SelectImportedModulesDialog2;
 import org.talend.mdm.repository.ui.dialogs.datamodel.DataModelFilterDialogR;
 import org.talend.mdm.repository.ui.navigator.MDMRepositoryView;
@@ -40,16 +34,10 @@ import org.talend.mdm.repository.ui.wizards.view.AddBrowseItemsWizardR;
 import org.talend.mdm.repository.utils.Bean2EObjUtil;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 
-import com.amalto.workbench.actions.XSDDefaultValueRuleAction;
 import com.amalto.workbench.actions.XSDDeleteConceptAction;
 import com.amalto.workbench.actions.XSDSetAnnotationFKFilterAction;
 import com.amalto.workbench.actions.XSDSetAnnotationForeignKeyAction;
 import com.amalto.workbench.actions.XSDSetAnnotationForeignKeyInfoAction;
-import com.amalto.workbench.actions.XSDSetAnnotationNoAction;
-import com.amalto.workbench.actions.XSDSetAnnotationWrapNoAction;
-import com.amalto.workbench.actions.XSDSetAnnotationWrapWriteAction;
-import com.amalto.workbench.actions.XSDSetAnnotationWriteAction;
-import com.amalto.workbench.actions.XSDVisibleRuleAction;
 import com.amalto.workbench.dialogs.AddBrowseItemsWizard;
 import com.amalto.workbench.dialogs.DataModelFilterDialog;
 import com.amalto.workbench.dialogs.SelectImportedModulesDialog;
@@ -100,7 +88,7 @@ public class DataModelMainPage2 extends DataModelMainPage {
     }
 
     //
-    protected Item updateSchemaToItem(Item item) {
+    public Item updateSchemaToItem(Item item) {
         WSDataModelE wsDataModelE = ((WSDataModelItem) item).getWsDataModel();
         WSDataModel wsDataModel = (WSDataModel) xobject.getWsObject();
         wsDataModelE.setXsdSchema(wsDataModel.getXsdSchema());
@@ -124,19 +112,7 @@ public class DataModelMainPage2 extends DataModelMainPage {
         if (adapter == AddBrowseItemsWizard.class) {
             return new AddBrowseItemsWizardR(this);
         }
-        if (adapter == XSDSetAnnotationWriteAction.class) {
-            return new XSDSetAnnotationWriteActionR(this);
-        }
 
-        if (adapter == XSDSetAnnotationNoAction.class) {
-            return new XSDSetAnnotationNoActionR(this, dataModelName);
-        }
-        if (adapter == XSDSetAnnotationWrapWriteAction.class) {
-            return new XSDSetAnnotationWrapWriteActionR(this);
-        }
-        if (adapter == XSDSetAnnotationWrapNoAction.class) {
-            return new XSDSetAnnotationWrapNoActionR(this, dataModelName);
-        }
         if (adapter == XSDSetAnnotationForeignKeyAction.class) {
             return new XSDSetAnnotationForeignKeyActionR(this, dataModelName);
         }
@@ -153,12 +129,7 @@ public class DataModelMainPage2 extends DataModelMainPage {
             return new DataModelFilterDialogR(getSite().getShell(), xobject, dataModelFilter,
                     getSchemaElementNameFilterDesByTreeViewer(targetTreeViewer));
         }
-        if (adapter == XSDDefaultValueRuleAction.class) {
-            return new XSDDefaultValueRuleActionR(this, dataModelName);
-        }
-        if (adapter == XSDVisibleRuleAction.class) {
-            return new XSDVisibleRuleActionR(this, dataModelName);
-        }
+
         return super.getAdapter(adapter);
     }
 

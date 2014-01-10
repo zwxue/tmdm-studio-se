@@ -63,13 +63,6 @@ public class XObjectEditor2 extends XObjectEditor implements ISvnHistory {
 
         this.saveInProgress = true;
         try {
-            // For the XMLEditor(the schema editor for the data model),it should be saved and then just refresh the data
-            // model page and do nothing else if there are some changes.
-            if (xmlEditor != null && this.getCurrentPage() == 1) {
-                xmlEditor.doSave(monitor);
-                ((AFormPage) (formPages.get(0))).refreshPage();
-                return;
-            }
             int numPages = formPages.size();
             monitor.beginTask(Messages.bind(Messages.XObjectEditor2_saving, this.getEditorInput().getName()), numPages + 1);
             for (int i = 0; i < numPages; i++) {
@@ -87,9 +80,7 @@ public class XObjectEditor2 extends XObjectEditor implements ISvnHistory {
             }
 
             boolean saved = saveResourceToRepository();
-            if (xmlEditor != null && saved) {
-                xmlEditor.refresh();
-            }
+
         } catch (Exception e) {
             log.error(e.getMessage(), e);
         } finally {
@@ -229,10 +220,9 @@ public class XObjectEditor2 extends XObjectEditor implements ISvnHistory {
         return editorInput.isReadOnly();
     }
 
-
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see com.amalto.workbench.editors.XObjectEditor#addPages()
      */
     @Override
@@ -257,6 +247,5 @@ public class XObjectEditor2 extends XObjectEditor implements ISvnHistory {
 
         page.showView(MDMPerspective.VIEWID_PROPERTYVIEW);
     }
-
 
 }

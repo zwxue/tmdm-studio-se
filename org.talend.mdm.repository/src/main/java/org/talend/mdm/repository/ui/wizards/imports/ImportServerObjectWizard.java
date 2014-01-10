@@ -19,7 +19,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.InvocationTargetException;
-import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -31,8 +30,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
-
-import javax.xml.ws.WebServiceException;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpEntity;
@@ -59,7 +56,6 @@ import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
@@ -74,7 +70,6 @@ import org.eclipse.ui.progress.UIJob;
 import org.talend.commons.exception.LoginException;
 import org.talend.commons.exception.PersistenceException;
 import org.talend.commons.utils.VersionUtils;
-import org.talend.core.GlobalServiceRegister;
 import org.talend.core.model.properties.ItemState;
 import org.talend.core.model.properties.PropertiesFactory;
 import org.talend.core.model.repository.ERepositoryObjectType;
@@ -85,7 +80,6 @@ import org.talend.mdm.repository.core.IServerObjectRepositoryType;
 import org.talend.mdm.repository.core.command.CommandManager;
 import org.talend.mdm.repository.core.impl.transformerV2.ITransformerV2NodeConsDef;
 import org.talend.mdm.repository.core.impl.view.IViewNodeConstDef;
-import org.talend.mdm.repository.core.service.ISyncWorkflowService;
 import org.talend.mdm.repository.core.service.ImportService;
 import org.talend.mdm.repository.core.service.RepositoryQueryService;
 import org.talend.mdm.repository.extension.RepositoryNodeConfigurationManager;
@@ -105,19 +99,13 @@ import org.talend.mdm.repository.utils.RepositoryTransformUtil;
 import org.talend.mdm.workbench.serverexplorer.ui.dialogs.SelectServerDefDialog;
 import org.talend.repository.model.IProxyRepositoryFactory;
 
+import com.amalto.workbench.exadapter.ExAdapterManager;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.models.TreeParent;
 import com.amalto.workbench.providers.XtentisServerObjectsRetriever;
 import com.amalto.workbench.utils.HttpClientUtil;
 import com.amalto.workbench.utils.Util;
-import com.amalto.workbench.webservices.WSCustomForm;
-import com.amalto.workbench.webservices.WSCustomFormPK;
-import com.amalto.workbench.webservices.WSGetCustomForm;
-import com.amalto.workbench.webservices.WSGetCustomFormPKs;
-import com.amalto.workbench.webservices.WSGetUniversePKs;
-import com.amalto.workbench.webservices.WSUniversePK;
 import com.amalto.workbench.webservices.WSWorkflowProcessDefinitionUUID;
-import com.amalto.workbench.webservices.XtentisPort;
 import com.amalto.workbench.widgets.LabelCombo;
 import com.amalto.workbench.widgets.WidgetFactory;
 
@@ -154,6 +142,7 @@ public class ImportServerObjectWizard extends Wizard {
 
         setNeedsProgressMonitor(true);
         this.commonViewer = commonViewer;
+        exAdapter = ExAdapterManager.getAdapter(this, IImportServerObjectWizardExAdapter.class);
     }
 
     /*
@@ -209,6 +198,8 @@ public class ImportServerObjectWizard extends Wizard {
     Pattern picFileNamePattern = Pattern.compile("(.*?)-(.*)\\.(.*?)"); //$NON-NLS-1$
 
     Pattern picFileVersionPattern = Pattern.compile("(.*)_(\\d+\\.\\d+)"); //$NON-NLS-1$
+
+    private IImportServerObjectWizardExAdapter exAdapter;
 
     /**
      * DOC hbhong Comment method "getFileInfo".
@@ -710,13 +701,9 @@ public class ImportServerObjectWizard extends Wizard {
                     // isOverrideAll = btnOverwrite.getSelection();
                     doImport(selectedObjects, monitor);
                     commonViewer.refresh();
-                    if (Util.IsEnterPrise()) {
+                    if (exAdapter != null) {
                         // sync workflow object to bonita
-                        ISyncWorkflowService syncService = (ISyncWorkflowService) GlobalServiceRegister.getDefault().getService(
-                                ISyncWorkflowService.class);
-                        if (syncService != null) {
-                            syncService.startSyncWorkflowTask();
-                        }
+                        exAdapter.syncWorkflow();
                     }
                     return Status.OK_STATUS;
                 }
@@ -727,39 +714,6 @@ public class ImportServerObjectWizard extends Wizard {
 
     class RetriveProcess implements IRunnableWithProgress {
 
-        private void retrieverCustomForms(TreeParent parent, IProgressMonitor monitor) {
-            try {
-                XtentisPort port = Util.getPort(new URL(serverDef.getUrl()), serverDef.getUniverse(), serverDef.getUser(),
-                        serverDef.getPasswd());
-                // Data Models
-                TreeParent models = new TreeParent(Messages.ImportServerObjectWizard_customForm, parent, TreeObject.CUSTOM_FORM,
-                        null, null);
-                List<WSCustomFormPK> xdmPKs = null;
-
-                xdmPKs = port.getCustomFormPKs(new WSGetCustomFormPKs("")).getWsCustomFormPK(); //$NON-NLS-1$
-
-                if (xdmPKs != null) {
-                    monitor.subTask(Messages.ImportServerObjectWizard_loadCustomForm);
-                    for (WSCustomFormPK xdmPK : xdmPKs) {
-
-                        try {
-                            WSCustomForm wsobj = null;
-                            wsobj = port.getCustomForm(new WSGetCustomForm(xdmPK));
-                            TreeObject obj = new TreeObject(wsobj.getName(), parent, TreeObject.CUSTOM_FORM, xdmPK, wsobj);
-                            models.addChild(obj);
-                        } catch (WebServiceException e) {
-                            log.error(e.getMessage(), e);
-                        }
-                    }
-                }
-                parent.addChild(models);
-
-            } catch (Exception e) {
-                log.error(e.getMessage(), e);
-            }
-
-        }
-
         /*
          * (non-Javadoc)
          * 
@@ -768,14 +722,14 @@ public class ImportServerObjectWizard extends Wizard {
         public void run(IProgressMonitor m) throws InvocationTargetException, InterruptedException {
 
             final XtentisServerObjectsRetriever retriever = new XtentisServerObjectsRetriever(serverDef.getName(),
-                    serverDef.getUrl(), serverDef.getUser(), serverDef.getPasswd(), serverDef.getUniverse(), null);
+                    serverDef.getUrl(), serverDef.getUser(), serverDef.getPasswd(), serverDef.getUniverse());
 
             retriever.setRetriveWSObject(true);
             retriever.run(m);
             serverRoot = retriever.getServerRoot();
             //
-            if (Util.IsEnterPrise()) {
-                retrieverCustomForms((TreeParent) serverRoot, m);
+            if (exAdapter != null) {
+                exAdapter.retrieverCustomForms(serverDef, (TreeParent) serverRoot, m);
             }
             // sort
             sortTreeObjs((TreeParent) serverRoot);
@@ -818,7 +772,7 @@ public class ImportServerObjectWizard extends Wizard {
         getContainer().run(true, false, new ImportProcess());
     }
 
-    private void retriveServerRoot() {
+    public void retriveServerRoot() {
         if (serverDef != null) {
             try {
                 getContainer().run(true, false, new RetriveProcess());
@@ -891,30 +845,8 @@ public class ImportServerObjectWizard extends Wizard {
                         }
                         txtServer.setText(serverDef.getName());
 
-                        String url = serverDef.getUrl();
-                        String user = serverDef.getUser();
-                        String password = serverDef.getPasswd();
-                        if (Util.IsEnterPrise()) {
-                            try {
-                                // get Version
-                                XtentisPort port;
-                                port = Util.getPort(new URL(url), null, user, password);
-                                List<WSUniversePK> universePKs = port.getUniversePKs(new WSGetUniversePKs("*")).getWsUniversePK();//$NON-NLS-1$
-
-                                CCombo universeCombo = comboVersion.getCombo();
-                                universeCombo.removeAll();
-                                universeCombo.add(""); //$NON-NLS-1$
-                                if (universePKs != null && universePKs.size() > 0) {
-                                    for (WSUniversePK universePK : universePKs) {
-                                        String universe = universePK.getPk();
-                                        universeCombo.add(universe);
-                                    }
-                                }
-
-                            } catch (Exception e1) {
-                                log.error(e1.getMessage(), e1);
-                                comboVersion.getCombo().removeAll();
-                            }
+                        if (exAdapter != null) {
+                            exAdapter.refreshUniverseCombo(serverDef);
                         }
                         retriveServerRoot();
                     }
@@ -924,20 +856,8 @@ public class ImportServerObjectWizard extends Wizard {
                     checkCompleted();
                 }
             });
-            if (Util.IsEnterPrise()) {
-                comboVersion = new LabelCombo(toolkit, serverGroup, Messages.Version, SWT.BORDER, 2);
-                comboVersion.getCombo().setEditable(false);
-
-                comboVersion.getCombo().addSelectionListener(new SelectionAdapter() {
-
-                    @Override
-                    public void widgetSelected(SelectionEvent e) {
-                        serverDef.setUniverse(comboVersion.getCombo().getText());
-                        retriveServerRoot();
-                    }
-                });
-
-                toolkit.setBackGround((Composite) comboVersion.getComposite(), serverGroup.getBackground());
+            if (exAdapter != null) {
+                exAdapter.initVersionCombo(serverDef, toolkit, serverGroup);
             }
             // create viewer
             treeViewer = new TreeObjectCheckTreeViewer((TreeParent) serverRoot);
