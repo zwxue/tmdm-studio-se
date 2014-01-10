@@ -857,6 +857,8 @@ public class Messages extends NLS {
 
     public static String ViewBrowserMainPage_ErrorMsg5;
 
+    public static String ViewBrowserMainPage_fullText;
+
     public static String ViewBrowserMainPage_ViewTree;
 
     public static String ViewerWithModules;

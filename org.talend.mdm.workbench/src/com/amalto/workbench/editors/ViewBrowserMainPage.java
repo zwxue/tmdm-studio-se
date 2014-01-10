@@ -101,7 +101,7 @@ public class ViewBrowserMainPage extends AMainPage implements IXObjectModelListe
 
     private Combo searchItemCombo;
 
-    private final String FULL_TEXT = "Full-Text"; //$NON-NLS-1$
+    private final String FULL_TEXT = Messages.ViewBrowserMainPage_fullText;
 
     public ViewBrowserMainPage(FormEditor editor) {
         super(editor, ViewBrowserMainPage.class.getName(), Messages.ViewBrowserMainPage_ViewBrowser
@@ -288,7 +288,6 @@ public class ViewBrowserMainPage extends AMainPage implements IXObjectModelListe
             resultsLabel = toolkit.createLabel(resultsGroup, Messages.ViewBrowserMainPage_Search, SWT.NULL);
             resultsLabel.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, columns - 1, 1));
             resultsLabel.setText("                                          ");//$NON-NLS-1$
-            resultsLabel.setToolTipText("results label here."); //$NON-NLS-1$
 
             resultsViewer = new TableViewer(resultsGroup);
             resultsViewer.getControl().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, columns, 1));
