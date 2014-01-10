@@ -18,19 +18,20 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.PlatformUI;
 
 import com.amalto.workbench.editors.xsdeditor.XSDEditorUtil;
+import com.amalto.workbench.exadapter.ExAdapterManager;
 import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.providers.XObjectEditorInput;
 import com.amalto.workbench.utils.IConstants;
 import com.amalto.workbench.utils.Util;
-import com.amalto.workbench.views.ServerView;
 import com.amalto.workbench.webservices.WSDataCluster;
 import com.amalto.workbench.webservices.WSDataClusterPK;
 import com.amalto.workbench.webservices.WSDataModel;
@@ -38,27 +39,18 @@ import com.amalto.workbench.webservices.WSDataModelPK;
 import com.amalto.workbench.webservices.WSGetDataCluster;
 import com.amalto.workbench.webservices.WSGetDataModel;
 import com.amalto.workbench.webservices.WSGetMenu;
-import com.amalto.workbench.webservices.WSGetRole;
 import com.amalto.workbench.webservices.WSGetRoutingRule;
 import com.amalto.workbench.webservices.WSGetStoredProcedure;
-import com.amalto.workbench.webservices.WSGetSynchronizationPlan;
 import com.amalto.workbench.webservices.WSGetTransformerV2;
-import com.amalto.workbench.webservices.WSGetUniverse;
 import com.amalto.workbench.webservices.WSGetView;
 import com.amalto.workbench.webservices.WSMenu;
 import com.amalto.workbench.webservices.WSMenuPK;
-import com.amalto.workbench.webservices.WSRole;
-import com.amalto.workbench.webservices.WSRolePK;
 import com.amalto.workbench.webservices.WSRoutingRule;
 import com.amalto.workbench.webservices.WSRoutingRulePK;
 import com.amalto.workbench.webservices.WSStoredProcedure;
 import com.amalto.workbench.webservices.WSStoredProcedurePK;
-import com.amalto.workbench.webservices.WSSynchronizationPlan;
-import com.amalto.workbench.webservices.WSSynchronizationPlanPK;
 import com.amalto.workbench.webservices.WSTransformerV2;
 import com.amalto.workbench.webservices.WSTransformerV2PK;
-import com.amalto.workbench.webservices.WSUniverse;
-import com.amalto.workbench.webservices.WSUniversePK;
 import com.amalto.workbench.webservices.WSView;
 import com.amalto.workbench.webservices.WSViewPK;
 import com.amalto.workbench.webservices.XtentisPort;
@@ -67,23 +59,18 @@ public class EditXObjectAction extends Action {
 
     private static Log log = LogFactory.getLog(EditXObjectAction.class);
 
-    private ServerView view = null;
-
     private TreeObject xobject = null;
 
     private IWorkbenchPage page = null;
+
+    private IEditXObjectActionExAdapter exAdapter;
 
     public EditXObjectAction(TreeObject xobject, IWorkbenchPage page) {
         super();
         this.xobject = xobject;
         this.page = page;
         setDetails();
-    }
-
-    public EditXObjectAction(ServerView view) {
-        super();
-        this.view = view;
-        setDetails();
+        this.exAdapter = ExAdapterManager.getAdapter(this, IEditXObjectActionExAdapter.class);
     }
 
     private void setDetails() {
@@ -92,16 +79,14 @@ public class EditXObjectAction extends Action {
         setToolTipText(Messages.bind(Messages.EditXObjectAction_ActionTip, IConstants.TALEND));
     }
 
+    @Override
     public void run() {
         try {
             super.run();
-            if (this.view != null) { // called from ServerView
-                ISelection selection = view.getViewer().getSelection();
-                xobject = (TreeObject) ((IStructuredSelection) selection).getFirstElement();
-            }
 
-            if (xobject == null || !xobject.isXObject())
+            if (xobject == null || !xobject.isXObject()) {
                 return;
+            }
 
             // Access to server and get port
             XtentisPort port = Util.getPort(new URL(xobject.getEndpointAddress()), xobject.getUniverse(), xobject.getUsername(),
@@ -126,10 +111,7 @@ public class EditXObjectAction extends Action {
                         (WSStoredProcedurePK) xobject.getWsKey()));
                 xobject.setWsObject(wsStoredProcedure);
                 break;
-            case TreeObject.ROLE:
-                WSRole wsRole = port.getRole(new WSGetRole((WSRolePK) xobject.getWsKey()));
-                xobject.setWsObject(wsRole);
-                break;
+
             case TreeObject.ROUTING_RULE:
                 WSRoutingRule wsRoutingRule = port.getRoutingRule(new WSGetRoutingRule((WSRoutingRulePK) xobject.getWsKey()));
                 xobject.setWsObject(wsRoutingRule);
@@ -143,16 +125,8 @@ public class EditXObjectAction extends Action {
                 WSMenu wsMenu = port.getMenu(new WSGetMenu((WSMenuPK) xobject.getWsKey()));
                 xobject.setWsObject(wsMenu);
                 break;
-            case TreeObject.UNIVERSE:
-                WSUniverse wsUniverse = port.getUniverse(new WSGetUniverse((WSUniversePK) xobject.getWsKey()));
-                xobject.setWsObject(wsUniverse);
+            case TreeObject.SERVICE_CONFIGURATION:
                 break;
-            case TreeObject.SYNCHRONIZATIONPLAN:
-                WSSynchronizationPlan wsSynchronizationPlan = port.getSynchronizationPlan(new WSGetSynchronizationPlan(
-                        (WSSynchronizationPlanPK) xobject.getWsKey()));
-                xobject.setWsObject(wsSynchronizationPlan);
-                break;
-
             case TreeObject.JOB_REGISTRY:
                 // System.out.println("JOB_REGISTRY "+ xobject.getDisplayName());
                 break;
@@ -162,7 +136,12 @@ public class EditXObjectAction extends Action {
                 xobject.setWsObject(xobject.getDisplayName());
                 break;
 
-            case TreeObject.SERVICE_CONFIGURATION:
+            case TreeObject.ROLE:
+            case TreeObject.UNIVERSE:
+            case TreeObject.SYNCHRONIZATIONPLAN:
+                if (exAdapter != null) {
+                    exAdapter.run(port, xobject);
+                }
                 break;
 
             case TreeObject.RESOURCES:
@@ -173,25 +152,32 @@ public class EditXObjectAction extends Action {
             case TreeObject.PICTURES_RESOURCE:
                 break;
             default:
-                MessageDialog.openError(view.getSite().getShell(), Messages._Error, Messages.bind(Messages.EditXObjectAction_ErrorMsg1, IConstants.TALEND, xobject.getType()));
+                MessageDialog.openError(getShell(), Messages._Error,
+                        Messages.bind(Messages.EditXObjectAction_ErrorMsg1, IConstants.TALEND, xobject.getType()));
                 return;
             }// switch
 
-            if (page == null)
-                this.page = view.getSite().getWorkbenchWindow().getActivePage();
+            if (page == null) {
+                this.page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+            }
 
             this.page.openEditor(new XObjectEditorInput(xobject, xobject.getDisplayName()),
                     "com.amalto.workbench.editors.XObjectEditor"); //$NON-NLS-1$
 
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            if(!Util.handleConnectionException(view.getSite().getShell(), e, Messages.EditXObjectAction_ErrorMsg2)){
-            	MessageDialog.openError(view.getSite().getShell(), Messages._Error,
+            if (!Util.handleConnectionException(getShell(), e, Messages.EditXObjectAction_ErrorMsg2)) {
+                MessageDialog.openError(getShell(), Messages._Error,
                         Messages.bind(Messages.EditXObjectAction_ErrorMsg2, e.getLocalizedMessage()));
             }
         }
     }
 
+    private Shell getShell() {
+        return Display.getDefault().getActiveShell();
+    }
+
+    @Override
     public void runWithEvent(Event event) {
         super.runWithEvent(event);
     }

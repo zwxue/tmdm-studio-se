@@ -46,46 +46,42 @@ public abstract class ExternalInfoHolder<T> {
 
     public static final String INFOID_ALLMDMSERVERINFO = "all mdm server infos";//$NON-NLS-1$
 
-	private static final Map<String, ExternalInfoHolder<?>> cache = new HashMap<String, ExternalInfoHolder<?>>();
+    private static final Map<String, ExternalInfoHolder<?>> cache = new HashMap<String, ExternalInfoHolder<?>>();
 
-	private static final String holderExtension = "org.talend.mdm.workbench.infoholder";
-	
-	protected static Logger log = Logger.getLogger(ExternalInfoHolder.class);
-	
-	private static ExternalInfoHolder<?> getHolderFromExtension(String type) {
-		IExtensionPoint point = Platform.getExtensionRegistry()
-				.getExtensionPoint(holderExtension);
-		if (null == point) {
-			return null;
-		}
-		for (IExtension ext : point.getExtensions()) {
-			IConfigurationElement[] configurationElements = ext
-					.getConfigurationElements();
-			for (IConfigurationElement ce : configurationElements) {
-				String id = ce.getAttribute("type"); //$NON-NLS-1$
-				if (type.equals(id)) {
-					try {
-						return (ExternalInfoHolder<?>) ce
-								.createExecutableExtension("class");
-					} catch (CoreException e) {
-						log.error(e.getMessage());
-					}
-				}
-			}
-		}
-		return null;
-	}
-    
-    public static ExternalInfoHolder<?> getEnternalInfoHolder(String type){
-    	ExternalInfoHolder<?> holder =cache.get(type);
-    	if(null == holder){
-    		holder = getHolderFromExtension(type);
-    		cache.put(type, holder);
-    	}
-    	return holder;
+    private static final String holderExtension = "org.talend.mdm.workbench.infoholder";
+
+    protected static Logger log = Logger.getLogger(ExternalInfoHolder.class);
+
+    private static ExternalInfoHolder<?> getHolderFromExtension(String type) {
+        IExtensionPoint point = Platform.getExtensionRegistry().getExtensionPoint(holderExtension);
+        if (null == point) {
+            return null;
+        }
+        for (IExtension ext : point.getExtensions()) {
+            IConfigurationElement[] configurationElements = ext.getConfigurationElements();
+            for (IConfigurationElement ce : configurationElements) {
+                String id = ce.getAttribute("type"); //$NON-NLS-1$
+                if (type.equals(id)) {
+                    try {
+                        return (ExternalInfoHolder<?>) ce.createExecutableExtension("class");
+                    } catch (CoreException e) {
+                        log.error(e.getMessage());
+                    }
+                }
+            }
+        }
+        return null;
     }
-    
-    
+
+    public static ExternalInfoHolder<?> getEnternalInfoHolder(String type) {
+        ExternalInfoHolder<?> holder = cache.get(type);
+        if (null == holder) {
+            holder = getHolderFromExtension(type);
+            cache.put(type, holder);
+        }
+        return holder;
+    }
+
     public static ExternalInfoHolder<String[]> getAllProcessesNamesHolder(XtentisPort port) {
         return new AllProcessesNamesHolder(port);
     }
@@ -103,7 +99,7 @@ public abstract class ExternalInfoHolder<T> {
     }
 
     public static ExternalInfoHolder<WorkflowInfo[]> getAllWorkflowInfoHolder(XtentisPort port) {
-        return new AllWorkflowInfoHolder(port);
+        return null;
     }
 
     public static ExternalInfoHolder<String[]> getProcessAllCallJobVarsCandidatesHolder(WSTransformerV2 service) {
@@ -111,7 +107,7 @@ public abstract class ExternalInfoHolder<T> {
     }
 
     public static ExternalInfoHolder<String[]> getTriggerAllCallJobVarsCandidatesHolder() {
-    	return (ExternalInfoHolder<String[]>) getEnternalInfoHolder("callJobVariableCandidates");
+        return (ExternalInfoHolder<String[]>) getEnternalInfoHolder("callJobVariableCandidates");
     }
 
     public abstract T getExternalInfo();

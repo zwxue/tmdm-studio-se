@@ -39,10 +39,8 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.forms.editor.IFormPage;
 
-import com.amalto.workbench.actions.SaveXObjectAction;
 import com.amalto.workbench.availablemodel.AvailableModelUtil;
 import com.amalto.workbench.availablemodel.IAvailableModel;
-import com.amalto.workbench.editors.xmleditor.XMLEditor;
 import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
@@ -60,13 +58,11 @@ public class XObjectEditor extends FormEditor implements IXObjectModelListener, 
 
     protected boolean saveInProgress = false;
 
-    protected XMLEditor xmlEditor;
-
     private com.amalto.workbench.editors.XObjectEditor.TdEditorToolBar toolBar;
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see org.eclipse.ui.forms.editor.FormEditor#addPages()
      */
     @Override
@@ -98,9 +94,10 @@ public class XObjectEditor extends FormEditor implements IXObjectModelListener, 
     public void setName(String name) {
         setPartName(name);
     }
+
     /**
      * DOC hbhong Comment method "addPageForXObject".
-     *
+     * 
      * @throws PartInitException
      */
     protected void addPageForXObject(TreeObject xobject) {
@@ -150,7 +147,6 @@ public class XObjectEditor extends FormEditor implements IXObjectModelListener, 
                 try {
                     addPage(new RoutingRuleMainPage(this));
                 } catch (PartInitException e) {
-                    // TODO Auto-generated catch block
                     log.error(e.getMessage(), e);
                 }
                 break;
@@ -158,7 +154,6 @@ public class XObjectEditor extends FormEditor implements IXObjectModelListener, 
                 try {
                     addPage(new TransformerMainPage(this));
                 } catch (PartInitException e) {
-                    // TODO Auto-generated catch block
                     log.error(e.getMessage(), e);
                 }
                 break;
@@ -176,22 +171,20 @@ public class XObjectEditor extends FormEditor implements IXObjectModelListener, 
             }// switch
 
         } catch (PartInitException e) {
-            MessageDialog.openError(this.getSite().getShell(), Messages._Error, Messages.bind(Messages.XObjectEditor_ErrorMsg, e.getLocalizedMessage()));
+            MessageDialog.openError(this.getSite().getShell(), Messages._Error,
+                    Messages.bind(Messages.XObjectEditor_ErrorMsg, e.getLocalizedMessage()));
         }
     }
 
-    // Overloaded - Fixes issues with getEditor()
     @Override
     public int addPage(IFormPage page) throws PartInitException {
-        // ((DataModelMainPage)page).markDirty();
         formPages.add(page);
-        // ((DataModelMainPage)page).markDirty();
         return super.addPage(page);
     }
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see org.eclipse.ui.ISaveablePart#doSave(org.eclipse.core.runtime.IProgressMonitor)
      */
     @Override
@@ -199,13 +192,6 @@ public class XObjectEditor extends FormEditor implements IXObjectModelListener, 
 
         this.saveInProgress = true;
         try {
-            // For the XMLEditor(the schema editor for the data model),it should be saved and then just refresh the data
-            // model page and do nothing else if there are some changes.
-            if (xmlEditor != null && this.getCurrentPage() == 1) {
-                xmlEditor.doSave(monitor);
-                ((AFormPage) (formPages.get(0))).refreshPage();
-                return;
-            }
             int numPages = formPages.size();
             monitor.beginTask(Messages.bind(Messages.XObjectEditor_Saving, this.getEditorInput().getName()), numPages + 1);
             for (int i = 0; i < numPages; i++) {
@@ -221,13 +207,6 @@ public class XObjectEditor extends FormEditor implements IXObjectModelListener, 
                     return;
                 }
             }
-            // if(xmlEditor!=null)xmlEditor.doSave(monitor);
-            // perform the actual save
-            SaveXObjectAction action = new SaveXObjectAction(this);
-            action.run();
-            if (xmlEditor != null && action.getState() == 0) {
-                xmlEditor.refresh();
-            }
         } catch (Exception e) {
             log.error(e.getMessage(), e);
         } finally {
@@ -237,7 +216,7 @@ public class XObjectEditor extends FormEditor implements IXObjectModelListener, 
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see org.eclipse.ui.ISaveablePart#isSaveAsAllowed()
      */
     @Override
@@ -271,41 +250,6 @@ public class XObjectEditor extends FormEditor implements IXObjectModelListener, 
      * Model Listener
      */
     public void handleEvent(int type, TreeObject parent, TreeObject child) {
-        TreeObject xobject = (TreeObject) ((XObjectEditorInput) this.getEditorInput()).getModel();
-        switch (type) {
-        case IXObjectModelListener.DELETE:
-            if (xobject.equals(child)) {
-                this.close(false);
-            }
-            break;
-        case IXObjectModelListener.SAVE:
-            if (saveInProgress) {
-                this.editorDirtyStateChanged();
-            } else {
-                /*
-                 * MessageDialog.openWarning( this.getSite().getShell(), "Warning underlying data changed",
-                 * "The current displayed data may not be in sync with the data persisted on the server." );
-                 */
-                break;
-            }
-        case IXObjectModelListener.UPDATE:
-            if (xobject.equals(child)) {
-                AFormPage activePage = ((AFormPage) getActivePageInstance());
-                if (activePage == null) {
-                    int editPos = pages.indexOf(xmlEditor);
-                    if (editPos >= 1) {
-                        activePage = (AFormPage) pages.get(editPos - 1);
-                    }
-                    xmlEditor.refresh();
-                }
-                // activePage.refreshPage();
-
-                /*
-                 * for (int i = formPages.size()-1; i >=0 ; i--) { ((AFormPage) formPages.get(i)).refreshPage(); }
-                 */
-            }
-        default:
-        }
     }
 
     public TreeObject getInitialXObject() {
@@ -318,13 +262,6 @@ public class XObjectEditor extends FormEditor implements IXObjectModelListener, 
         boolean isdirty = page.isDirty();
         super.pageChange(newPageIndex);
 
-        if (xmlEditor != null) {
-            xmlEditor.refresh();
-            if (xmlEditor.isDirty() || xmlEditor.isModified()) {
-                page.refreshPage();
-                xmlEditor.setModified(false);
-            }
-        }
         linkDirty(page, isdirty);
 
     }
@@ -384,10 +321,6 @@ public class XObjectEditor extends FormEditor implements IXObjectModelListener, 
         return ImageCache.getCreatedImage("icons/error.gif");//$NON-NLS-1$
     }
 
-    public XMLEditor getXmlEditor() {
-        return xmlEditor;
-    }
-
     @Override
     public int getCurrentPage() {
 
@@ -441,7 +374,7 @@ public class XObjectEditor extends FormEditor implements IXObjectModelListener, 
 
     /**
      * DOC bzhou Comment method "getToolBar".
-     *
+     * 
      * @return
      */
     public TdEditorToolBar getToolBar() {
@@ -506,7 +439,7 @@ public class XObjectEditor extends FormEditor implements IXObjectModelListener, 
         }
 
         /**
-         *
+         * 
          * DOC mzhao TdEditorToolBar class global comment. Detailled comment
          */
         private class RefreshSectionAction extends Action {

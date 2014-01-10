@@ -13,19 +13,15 @@
 package com.amalto.workbench.editors;
 
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.jface.action.IToolBarManager;
-import org.eclipse.jface.action.Separator;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.forms.editor.FormPage;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
 
-import com.amalto.workbench.actions.RefreshCurrentEditorAction;
 import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.models.IXObjectModelListener;
 import com.amalto.workbench.models.TreeObject;
@@ -43,28 +39,12 @@ public abstract class AFormPage extends FormPage {
     /**
      * Should be overriden
      */
+    @Override
     protected void createFormContent(IManagedForm managedForm) {
         super.createFormContent(managedForm);
         managedForm.getForm().setText(this.getTitle());
         createActions();
         // add listener to execute System.gc when page is closed
-    }
-
-    @Override
-    public void createPartControl(Composite parent) {
-        
-        super.createPartControl(parent);
-        // contributeToActionBars();
-    }
-
-    private void contributeToActionBars() {
-
-        IActionBars bars = getEditorSite().getActionBars();
-        IToolBarManager toolBarManager = bars.getToolBarManager();
-        if (toolBarManager.find("RefreshCurrentEditorAction") == null) {//$NON-NLS-1$
-            toolBarManager.add(new RefreshCurrentEditorAction());
-            toolBarManager.add(new Separator());
-        }
     }
 
     protected void initReadOnly(ScrolledForm form) {
@@ -82,14 +62,16 @@ public abstract class AFormPage extends FormPage {
             }
         }
     }
+
     /**
      * Called by The main Editor
      * 
      */
     public void refreshPage() {
         this.refreshing = true;
-        if (!this.comitting)
+        if (!this.comitting) {
             refreshData();
+        }
         this.refreshing = false;
     }
 

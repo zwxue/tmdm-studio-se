@@ -59,7 +59,6 @@ import com.amalto.workbench.providers.XPathTreeContentProvider;
 import com.amalto.workbench.providers.XSDTreeLabelProvider;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.XtentisException;
-import com.amalto.workbench.views.ServerView;
 import com.amalto.workbench.webservices.WSDataModel;
 import com.amalto.workbench.webservices.WSDataModelPK;
 import com.amalto.workbench.webservices.WSGetDataModel;
@@ -137,9 +136,7 @@ public class XpathSelectDialog extends Dialog {
         if (dataModelName != null) {
             this.dataModelName = dataModelName;// default dataModel
         }
-        if (this.site == null && this.parent != null) {
-            this.site = ServerView.show().getSite();
-        } else {
+        if (site == null) {
             this.site = MDMRepositoryViewExtensionService.getMDMRepositoryViewSite();
         }
 
@@ -337,9 +334,9 @@ public class XpathSelectDialog extends Dialog {
             xsd = MDMRepositoryViewExtensionService.getDataModelXsd(pObject, filter, dataModelName);
             provideViwerContent(xsd, filter);
         } else {
-           
+
             try {
-             wsDataModel = port.getDataModel(new WSGetDataModel(new WSDataModelPK(dataModelName)));
+                wsDataModel = port.getDataModel(new WSGetDataModel(new WSDataModelPK(dataModelName)));
                 // XSDSchema xsdSchema = Util.getXSDSchema(wsDataModel.getXsdSchema());
                 schema = wsDataModel.getXsdSchema();// Util.nodeToString(xsdSchema.getDocument());
                 xsd = Util.createXsdSchema(schema, pObject);

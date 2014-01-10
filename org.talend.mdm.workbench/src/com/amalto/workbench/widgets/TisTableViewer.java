@@ -52,15 +52,13 @@ import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.KeyValue;
 import com.amalto.workbench.models.Line;
 import com.amalto.workbench.utils.WorkbenchClipboard;
-import com.amalto.workbench.views.ServerView;
 
 /**
- *
+ * 
  * @author achen
- *
+ * 
  */
 public class TisTableViewer extends ComplexTableViewer {
-
 
     static HashMap<String, HashSet<Button>> pastBtns = new HashMap<String, HashSet<Button>>();
 
@@ -361,8 +359,7 @@ public class TisTableViewer extends ComplexTableViewer {
             if (columns.get(i).isText()) {
                 editors[i] = new TextCellEditor(table);
             } else if (columns.get(i).isCombo()) {
-                editors[i] = new ComboBoxCellEditor(table, columns.get(i).getComboValues(),
-                        SWT.READ_ONLY);
+                editors[i] = new ComboBoxCellEditor(table, columns.get(i).getComboValues(), SWT.READ_ONLY);
             } else if (columns.get(i).isXPATH()) {
                 editors[i] = new XpathCellEditor(table);
             } else if (columns.get(i).isMultiMessage()) {
@@ -583,7 +580,8 @@ public class TisTableViewer extends ComplexTableViewer {
     }
 
     protected XpathSelectDialog getNewXpathDlgInstance() {
-        return new XpathSelectDialog(table.getShell(), getCurrentTreeParent(), Messages.SelectMultipleXPaths,
-                ServerView.show().getSite(), true, getDatamodelName());
+        // return new XpathSelectDialog(table.getShell(), getCurrentTreeParent(), Messages.SelectMultipleXPaths,
+        // ServerView.show().getSite(), true, getDatamodelName());
+        return null;
     }
 }

@@ -743,7 +743,7 @@ public class DataClusterComposite extends Composite implements IPagingListener {
             String username = user.getUsername();
 
             final XtentisServerObjectsRetriever retriever = new XtentisServerObjectsRetriever(serverName, url, username,
-                    password, universe, null);
+                    password, universe);
 
             retriever.setRetriveWSObject(true);
 

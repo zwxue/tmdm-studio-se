@@ -39,6 +39,8 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.List;
+import org.eclipse.ui.IWorkbenchPartSite;
+import org.eclipse.ui.PlatformUI;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -49,7 +51,6 @@ import com.amalto.workbench.models.KeyValue;
 import com.amalto.workbench.models.TreeParent;
 import com.amalto.workbench.models.XPathFunc;
 import com.amalto.workbench.utils.WidgetUtils;
-import com.amalto.workbench.views.ServerView;
 
 public class SchematronExpressBuilder {
 
@@ -78,6 +79,7 @@ public class SchematronExpressBuilder {
     String concept;
 
     protected boolean isAbsoluteXPath = false;
+
     // Modified by hbhong,to fix bug 21784, add a treeParent field to receive TreeParent object
     protected TreeParent treeParent;
 
@@ -85,11 +87,13 @@ public class SchematronExpressBuilder {
     protected boolean isSchematron;
 
     private Composite com;
+
     public void setTreeParent(TreeParent treeParent) {
         this.treeParent = treeParent;
     }
+
     // The ending| bug:21784
-    public SchematronExpressBuilder(Composite parent ,String value, String conceptName) {
+    public SchematronExpressBuilder(Composite parent, String value, String conceptName) {
         this(parent, value, conceptName, false, true);
     }
 
@@ -134,10 +138,11 @@ public class SchematronExpressBuilder {
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             DocumentBuilder builder = factory.newDocumentBuilder();
             org.w3c.dom.Document document;
-            if (isSchematron)
+            if (isSchematron) {
                 in = SchematronExpressBuilder.class.getResourceAsStream("XPathFunc.xml");//$NON-NLS-1$
-            else
+            } else {
                 in = SchematronExpressBuilder.class.getResourceAsStream("StandardXPathFunc.xml");//$NON-NLS-1$
+            }
             document = builder.parse(in);
             NodeList list = document.getElementsByTagName("category");//$NON-NLS-1$
             categories = new ArrayList<XPathFunc>();
@@ -176,8 +181,9 @@ public class SchematronExpressBuilder {
                 categories.add(xpathFunc);
             }
         } finally {
-            if (in != null)
+            if (in != null) {
                 in.close();
+            }
         }
     }
 
@@ -292,6 +298,7 @@ public class SchematronExpressBuilder {
         xpathButton.setText("xpath");//$NON-NLS-1$
         xpathButton.addSelectionListener(new SelectionAdapter() {
 
+            @Override
             public void widgetSelected(SelectionEvent e) {
                 XpathSelectDialog dlg = getXPathSelectDialog();
                 dlg.setConceptName(conceptName);
@@ -300,14 +307,15 @@ public class SchematronExpressBuilder {
                 dlg.open();
 
                 if (dlg.getReturnCode() == Window.OK) {
-                    if (getTextWidget().getSelectionText().length() > 0)
+                    if (getTextWidget().getSelectionText().length() > 0) {
                         // getTextWidget().setText(getText().replace(getTextWidget().getSelectionText(),
                         // dlg.getXpath()));
                         getTextWidget().replaceTextRange(getTextWidget().getSelectionRanges()[0],
                                 getTextWidget().getSelectionRanges()[1], dlg.getXpath());
-                    else
+                    } else {
                         // getTextWidget().setText(getText()+dlg.getXpath());
                         insertText(dlg.getXpath());
+                    }
                 }
             }
         });
@@ -351,7 +359,6 @@ public class SchematronExpressBuilder {
         categoryList.addSelectionListener(new SelectionListener() {
 
             public void widgetDefaultSelected(SelectionEvent e) {
-                
 
             }
 
@@ -418,19 +425,22 @@ public class SchematronExpressBuilder {
     public String getText() {
         return sourceViewer.getTextWidget().getText();
     }
-    public SourceViewer getSourceViewer(){
-    	return sourceViewer;
+
+    public SourceViewer getSourceViewer() {
+        return sourceViewer;
     }
 
     protected XpathSelectDialog getXPathSelectDialog() {
-        if (treeParent != null)
-            return new XpathSelectDialog(parent.getShell(), treeParent, Messages
-                    .SchematronExpressBuilder_selectXPath,
-                ServerView.show().getSite(), false, null,
-                isAbsoluteXPath);
-        else
-            return new XpathSelectDialog(parent.getShell(), treeParent, Messages
-                    .SchematronExpressBuilder_selectXPath, null, false, null, isAbsoluteXPath);
+        if (treeParent != null) {
+            IWorkbenchPartSite site = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActivePart()
+                    .getSite();
+
+            return new XpathSelectDialog(parent.getShell(), treeParent, Messages.SchematronExpressBuilder_selectXPath, site,
+                    false, null, isAbsoluteXPath);
+        } else {
+            return new XpathSelectDialog(parent.getShell(), treeParent, Messages.SchematronExpressBuilder_selectXPath, null,
+                    false, null, isAbsoluteXPath);
+        }
 
     }
 }

@@ -17,7 +17,6 @@ import java.io.FileFilter;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -64,6 +63,7 @@ import org.eclipse.xsd.XSDTypeDefinition;
 import org.eclipse.xsd.impl.XSDSchemaImpl;
 import org.w3c.dom.Document;
 
+import com.amalto.workbench.exadapter.ExAdapterManager;
 import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.providers.TypesLabelProvider;
@@ -91,6 +91,8 @@ public class SelectImportedModulesDialog extends Dialog {
     private SchemaTreeContentProvider entityprovider = new SchemaContentProvider();
 
     private DocumentBuilderFactory documentBuilderFactory;
+
+    private ISelectImportedModulesDialogExAdapter exAdapter;
 
     private class TypeContentProvider extends TypesTreeContentProvider {
 
@@ -154,6 +156,7 @@ public class SelectImportedModulesDialog extends Dialog {
         this.shell = parentShell;
         this.treeObject = treeObj;
         this.title = title;
+        this.exAdapter = ExAdapterManager.getAdapter(this, ISelectImportedModulesDialogExAdapter.class);
     }
 
     public void addEntity(XSDSchema xsdSchema) {
@@ -286,37 +289,8 @@ public class SelectImportedModulesDialog extends Dialog {
                 addSchema(url, true);
             }
         });
-        if (Util.IsEnterPrise()) {
-            Button addXSDFromWebSite = new Button(compositeBtn, SWT.PUSH | SWT.FILL);
-            addXSDFromWebSite.setLayoutData(new GridData(SWT.FILL, SWT.NONE, false, false, 1, 1));
-            addXSDFromWebSite.setText(Messages.AddTypesDataModels);
-            addXSDFromWebSite.setToolTipText(Messages.AddFromModelTypes);
-            addXSDFromWebSite.addSelectionListener(new SelectionListener() {
-
-                public void widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent e) {
-                };
-
-                public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
-                    MDMXSDSchemaEntryDialog dlg = new MDMXSDSchemaEntryDialog(shell.getShell(), Messages.SelectXSDSchemaWebSite);
-                    try {
-                        List<String> schemaList = new ArrayList<String>();
-                        resolveSchemaList(schemaList, dlg);
-                    } catch (Exception es) {
-                        log.error(es.getMessage(), es);
-                        return;
-                    }
-
-                    dlg.setBlockOnOpen(true);
-                    dlg.open();
-                    if (dlg.getReturnCode() == Window.OK) {
-                        List<String> urls = dlg.getMDMDataModelUrls();
-                        for (String datamodel : urls) {
-                            URL url = getSourceURL("type:" + datamodel);
-                            addSchema(url, false);
-                        }
-                    }
-                }
-            });
+        if (exAdapter != null) {
+            exAdapter.createDialogArea(compositeBtn);
         }
 
         Button impXSDFromExchange = new Button(compositeBtn, SWT.PUSH | SWT.FILL);
@@ -389,7 +363,7 @@ public class SelectImportedModulesDialog extends Dialog {
         return composite;
     }
 
-    protected void addSchema(java.net.URL url, boolean addEntity) {
+    public void addSchema(java.net.URL url, boolean addEntity) {
         try {
             addContent.clear();
             entityViewer.refresh();
@@ -419,7 +393,7 @@ public class SelectImportedModulesDialog extends Dialog {
 
     private Pattern urlPattern = Pattern.compile(DEFAULT_PROTOCAL);
 
-    protected URL getSourceURL(String path) {
+    public URL getSourceURL(String path) {
         Matcher match = urlPattern.matcher(path);
         if (match.matches()) {
             try {
@@ -442,7 +416,7 @@ public class SelectImportedModulesDialog extends Dialog {
         return XSDSchemaImpl.createSchema(document.getDocumentElement());
     }
 
-    private void resolveSchemaList(List<String> schemaList, MDMXSDSchemaEntryDialog dlg) throws Exception {
+    public void resolveSchemaList(List<String> schemaList, MDMXSDSchemaEntryDialog dlg) throws Exception {
 
         boolean resolved = resolveSchemaList(schemaList);
         if (!resolved) {
@@ -499,5 +473,10 @@ public class SelectImportedModulesDialog extends Dialog {
 
     protected XtentisPort getPort() throws XtentisException {
         return Util.getPort(treeObject);
+    }
+
+    @Override
+    public Shell getShell() {
+        return this.shell;
     }
 }

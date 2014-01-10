@@ -26,8 +26,6 @@ import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TreeViewer;
-import org.eclipse.jface.viewers.Viewer;
-import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -40,17 +38,11 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.TreeItem;
-import org.eclipse.ui.PartInitException;
 
 import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.models.TreeParent;
-import com.amalto.workbench.providers.CheckboxRepositoryTreeViewer;
-import com.amalto.workbench.providers.ServerTreeContentProvider;
-import com.amalto.workbench.providers.ServerTreeLabelProvider;
 import com.amalto.workbench.utils.Util;
-import com.amalto.workbench.views.ServerView;
 import com.amalto.workbench.webservices.WSVersioningUniverseVersions;
 
 /**
@@ -62,9 +54,7 @@ public class RepositoryCheckTreeViewer {
 
     protected FilteredCheckboxTree filteredCheckboxTree;
 
-    protected CheckboxRepositoryView exportItemsTreeView;
-
-    protected ServerView repositoryView = ServerView.show();
+    // protected CheckboxRepositoryView exportItemsTreeView;
 
     Collection<TreeObject> repositoryNodes = new ArrayList<TreeObject>();
 
@@ -219,7 +209,7 @@ public class RepositoryCheckTreeViewer {
     }
 
     protected void setCreatedViewer() {
-        viewer = exportItemsTreeView.getViewer();
+        // viewer = exportItemsTreeView.getViewer();
     }
 
     public void refresh() {
@@ -283,67 +273,63 @@ public class RepositoryCheckTreeViewer {
 
     }
 
-    protected ServerTreeContentProvider contentProvider;
-
     private SelectionListener bunListener;
 
     public void setRoot(TreeParent root) {
-        contentProvider.setRoot(root);
     }
 
     protected void createTreeViewer(Composite itemComposite) {
-        filteredCheckboxTree = new FilteredCheckboxTree(itemComposite, SWT.BORDER | SWT.V_SCROLL | SWT.H_SCROLL | SWT.MULTI) {
 
-            @Override
-            protected CheckboxTreeViewer doCreateTreeViewer(Composite parent, int style) {
-                exportItemsTreeView = new CheckboxRepositoryView();
-                try {
-                    exportItemsTreeView.init(repositoryView.getViewSite());
-                } catch (PartInitException e) {
-                    log.error(e.getMessage(), e);
-                }
-                exportItemsTreeView.createPartControl(parent);
-                contentProvider = new ServerTreeContentProvider(repositoryView.getSite(), serverRoot);
-                exportItemsTreeView.getViewer().setContentProvider(contentProvider);
-                exportItemsTreeView.getViewer().setLabelProvider(new ServerTreeLabelProvider());
-                exportItemsTreeView.getViewer().setInput(repositoryView.getSite());
-                return (CheckboxTreeViewer) exportItemsTreeView.getViewer();
-            }
-
-            @Override
-            protected void refreshCompleted() {
-                getViewer().expandToLevel(3);
-                restoreCheckedElements();
-            }
-
-            @Override
-            protected boolean isNodeCollectable(TreeItem item) {
-                // Object obj = item.getData();
-                // if (obj instanceof RepositoryNode) {
-                // RepositoryNode node = (RepositoryNode) obj;
-                // if (node.getObjectType() == ERepositoryObjectType.METADATA_CONNECTIONS) {
-                // return true;
-                // }
-                // }
-                return false;
-            }
-        };
-        exportItemsTreeView.getViewer().addFilter(new ViewerFilter() {
-
-            @Override
-            public boolean select(Viewer viewer, Object parentElement, Object element) {
-                TreeObject node = (TreeObject) element;
-                return filterRepositoryNode(node);
-            }
-        });
+        // filteredCheckboxTree = new FilteredCheckboxTree(itemComposite, SWT.BORDER | SWT.V_SCROLL | SWT.H_SCROLL |
+        // SWT.MULTI) {
+        //
+        // @Override
+        // protected CheckboxTreeViewer doCreateTreeViewer(Composite parent, int style) {
+        // exportItemsTreeView = new CheckboxRepositoryView();
+        // try {
+        // exportItemsTreeView.init(repositoryView.getViewSite());
+        // } catch (PartInitException e) {
+        // log.error(e.getMessage(), e);
+        // }
+        // exportItemsTreeView.createPartControl(parent);
+        // exportItemsTreeView.getViewer().setInput(repositoryView.getSite());
+        // return (CheckboxTreeViewer) exportItemsTreeView.getViewer();
+        // }
+        //
+        // @Override
+        // protected void refreshCompleted() {
+        // getViewer().expandToLevel(3);
+        // restoreCheckedElements();
+        // }
+        //
+        // @Override
+        // protected boolean isNodeCollectable(TreeItem item) {
+        // // Object obj = item.getData();
+        // // if (obj instanceof RepositoryNode) {
+        // // RepositoryNode node = (RepositoryNode) obj;
+        // // if (node.getObjectType() == ERepositoryObjectType.METADATA_CONNECTIONS) {
+        // // return true;
+        // // }
+        // // }
+        // return false;
+        // }
+        // };
+        // exportItemsTreeView.getViewer().addFilter(new ViewerFilter() {
+        //
+        // @Override
+        // public boolean select(Viewer viewer, Object parentElement, Object element) {
+        // TreeObject node = (TreeObject) element;
+        // return filterRepositoryNode(node);
+        // }
+        // });
     }
 
     public void addCheckStateListener(ICheckStateListener listener) {
-        ((CheckboxTreeViewer) exportItemsTreeView.getViewer()).addCheckStateListener(listener);
+        // ((CheckboxTreeViewer) exportItemsTreeView.getViewer()).addCheckStateListener(listener);
     }
 
     public void removeCheckStateListener(ICheckStateListener listener) {
-        ((CheckboxTreeViewer) exportItemsTreeView.getViewer()).removeCheckStateListener(listener);
+        // ((CheckboxTreeViewer) exportItemsTreeView.getViewer()).removeCheckStateListener(listener);
     }
 
     protected boolean filterRepositoryNode(TreeObject node) {
@@ -480,32 +466,32 @@ public class RepositoryCheckTreeViewer {
 
     }
 
-    /**
-     * 
-     * A repository view with checkbox on the left.
-     */
-    protected class CheckboxRepositoryView extends ServerView {
-
-        @Override
-        protected TreeViewer createTreeViewer(Composite parent) {
-            return new CheckboxRepositoryTreeViewer(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL);
-        }
-
-        /*
-         * (non-Javadoc)
-         * 
-         * @see org.talend.repository.ui.views.RepositoryView#createPartControl(org.eclipse.swt.widgets.Composite)
-         */
-        @Override
-        public void createPartControl(Composite parent) {
-            super.createPartControl(parent);
-
-        }
-
-        @Override
-        public void initView() {
-        }
-    }
+    // /**
+    // *
+    // * A repository view with checkbox on the left.
+    // */
+    // protected class CheckboxRepositoryView extends ServerView {
+    //
+    // @Override
+    // protected TreeViewer createTreeViewer(Composite parent) {
+    // return new CheckboxRepositoryTreeViewer(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL);
+    // }
+    //
+    // /*
+    // * (non-Javadoc)
+    // *
+    // * @see org.talend.repository.ui.views.RepositoryView#createPartControl(org.eclipse.swt.widgets.Composite)
+    // */
+    // @Override
+    // public void createPartControl(Composite parent) {
+    // super.createPartControl(parent);
+    //
+    // }
+    //
+    // @Override
+    // public void initView() {
+    // }
+    // }
 
     public void addButtonSelectionListener(SelectionListener listener) {
         this.bunListener = listener;

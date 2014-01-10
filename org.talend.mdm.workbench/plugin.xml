@@ -9,6 +9,7 @@
 
    <extension
          point="org.eclipse.ui.editors">
+
       <editor
             class="com.amalto.workbench.editors.XObjectEditor"
             default="false"
@@ -21,13 +22,6 @@
             icon="icons/appli_16x16.gif"
             id="com.amalto.workbench.editors.XObjectBrowser"
             name="com.amalto.workbench.editors.XObjectBrowser"/>
-      <editor
-            class="com.amalto.workbench.editors.XObjectRevisionBrowser"
-            default="false"
-            icon="icons/appli_16x16.gif"
-            id="com.amalto.workbench.editors.XObjectRevisionBrowser"
-            name="com.amalto.workbench.editors.XObjectRevisionBrowser">
-      </editor>
       <editor
             class="com.amalto.workbench.editors.xsdeditor.XSDEditor"
             default="false"

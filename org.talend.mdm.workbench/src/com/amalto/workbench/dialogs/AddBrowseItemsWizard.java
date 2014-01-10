@@ -47,7 +47,6 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
@@ -60,8 +59,8 @@ import org.eclipse.xsd.XSDIdentityConstraintDefinition;
 import org.eclipse.xsd.XSDXPathDefinition;
 
 import com.amalto.workbench.editors.DataModelMainPage;
+import com.amalto.workbench.exadapter.ExAdapterManager;
 import com.amalto.workbench.i18n.Messages;
-import com.amalto.workbench.models.KeyValue;
 import com.amalto.workbench.models.Line;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.models.TreeParent;
@@ -70,19 +69,13 @@ import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.XSDAnnotationsStructure;
 import com.amalto.workbench.webservices.WSBoolean;
 import com.amalto.workbench.webservices.WSDeleteView;
-import com.amalto.workbench.webservices.WSGetRole;
 import com.amalto.workbench.webservices.WSGetView;
-import com.amalto.workbench.webservices.WSPutRole;
 import com.amalto.workbench.webservices.WSPutView;
-import com.amalto.workbench.webservices.WSRole;
-import com.amalto.workbench.webservices.WSRole.Specification.Instance;
-import com.amalto.workbench.webservices.WSRolePK;
 import com.amalto.workbench.webservices.WSView;
 import com.amalto.workbench.webservices.WSViewPK;
 import com.amalto.workbench.webservices.XtentisPort;
 import com.amalto.workbench.widgets.ComplexTableViewer;
 import com.amalto.workbench.widgets.ComplexTableViewerColumn;
-import com.amalto.workbench.widgets.WidgetFactory;
 
 public class AddBrowseItemsWizard extends Wizard {
 
@@ -106,6 +99,8 @@ public class AddBrowseItemsWizard extends Wizard {
 
     private ConfigureRolePage configureRolePage;
 
+    private IAddBrowseItemsWizardExAdapter exAdapter;
+
     public AddBrowseItemsWizard(DataModelMainPage launchPage, List<XSDElementDeclaration> list) {
         this(launchPage);
         setDeclarations(list);
@@ -115,6 +110,7 @@ public class AddBrowseItemsWizard extends Wizard {
         super();
         setWindowTitle(Messages.GenerateBrowseViews);
         page = launchPage;
+        this.exAdapter = ExAdapterManager.getAdapter(this, IAddBrowseItemsWizardExAdapter.class);
     }
 
     public void setDeclarations(List<XSDElementDeclaration> list) {
@@ -262,26 +258,26 @@ public class AddBrowseItemsWizard extends Wizard {
     }
 
     protected void modifyRolesWithAttachedBrowseItem(String browseItem, List<Line> roles) {
-        for (Line line : roles) {
-            List<KeyValue> keyValues = line.keyValues;
-            String roleName = keyValues.get(0).value;
-            XtentisPort port = getXtentisPort();
-            WSGetRole getRole = new WSGetRole();
-            getRole.setWsRolePK(new WSRolePK(roleName));
-            WSRole role = port.getRole(getRole);
-            for (WSRole.Specification spec : role.getSpecification()) {
-                if (spec.getObjectType().equals("View")) {//$NON-NLS-1$
-                    Instance newInstance = new Instance();
-                    newInstance.setInstanceName(browseItem);
-                    newInstance.setWritable(keyValues.get(1).value.equals("Read Only") ? false : true);//$NON-NLS-1$
-                    spec.getInstance().add(newInstance);
-                    break;
-                }
-            }
-            WSPutRole wrap = new WSPutRole();
-            wrap.setWsRole(role);
-            port.putRole(wrap);
-        }
+        // for (Line line : roles) {
+        // List<KeyValue> keyValues = line.keyValues;
+        // String roleName = keyValues.get(0).value;
+        // XtentisPort port = getXtentisPort();
+        // WSGetRole getRole = new WSGetRole();
+        // getRole.setWsRolePK(new WSRolePK(roleName));
+        // WSRole role = port.getRole(getRole);
+        // for (WSRole.Specification spec : role.getSpecification()) {
+        //                if (spec.getObjectType().equals("View")) {//$NON-NLS-1$
+        // Instance newInstance = new Instance();
+        // newInstance.setInstanceName(browseItem);
+        //                    newInstance.setWritable(keyValues.get(1).value.equals("Read Only") ? false : true);//$NON-NLS-1$
+        // spec.getInstance().add(newInstance);
+        // break;
+        // }
+        // }
+        // WSPutRole wrap = new WSPutRole();
+        // wrap.setWsRole(role);
+        // port.putRole(wrap);
+        // }
     }
 
     private boolean saveConfiguration() {
@@ -304,7 +300,7 @@ public class AddBrowseItemsWizard extends Wizard {
         return true;
     }
 
-    class ConfigureRolePage extends WizardPage {
+    public class ConfigureRolePage extends WizardPage {
 
         private TableViewer browseViewer;
 
@@ -446,52 +442,39 @@ public class AddBrowseItemsWizard extends Wizard {
                     } else if (selection.size() == 1) {
 
                         XSDElementDeclaration decl = (XSDElementDeclaration) selection.getFirstElement();
+
                         refreshRoleView(BROWSE_ITEMS + decl.getName());
+
                         UpdateComplexViewButton(true);
                     }
+                }
+
+                private void UpdateComplexViewButton(final boolean b) {
+                    if (exAdapter != null) {
+                        exAdapter.UpdateComplexViewButton(b);
+                    }
+
                 }
             });
             browseViewer.setInput(declList);
             browseViewer.setColumnProperties(new String[] { INSTANCE_NAME });
             browseViewer.refresh();
-            if (Util.IsEnterPrise()) {
-                Label infoLabel = new Label(composite, SWT.NONE);
-                infoLabel.setText(Messages.RoleAccessDefinition);
-                ComplexTableViewerColumn ruleColumn = roleConfigurationColumns[0];
-                ruleColumn.setColumnWidth(250);
-                // List<String> roles=Util.getCachedXObjectsNameSet(page.getXObject(), TreeObject.ROLE);
-                List<String> roles = getAllRoleNames();
-                ruleColumn.setComboValues(roles.toArray(new String[] {}));
-                ComplexTableViewerColumn acsColumn = roleConfigurationColumns[1];
-                acsColumn.setColumnWidth(250);
-                acsColumn.setComboValues(new String[] { Messages.ReadOnly, Messages.ReadAndWrite });
-                complexTableViewer = new ComplexTableViewer(Arrays.asList(roleConfigurationColumns),
-                        WidgetFactory.getWidgetFactory(), composite);
-                complexTableViewer.setKeyColumns(new ComplexTableViewerColumn[] { roleConfigurationColumns[0] });
-                complexTableViewer.create();
-                complexTableViewer.getViewer().setInput(new ArrayList<Line>());
-
-                UpdateComplexViewButton(false);
+            if (exAdapter != null) {
+                exAdapter.createRoleControl(composite);
             }
             setControl(composite);
         }
 
-        private void UpdateComplexViewButton(boolean enabled) {
-            if (complexTableViewer != null) {
-                complexTableViewer.getAddButton().setEnabled(enabled);
-                complexTableViewer.getUpButton().setEnabled(enabled);
-                complexTableViewer.getDownButton().setEnabled(enabled);
-                complexTableViewer.getDeleteButton().setEnabled(enabled);
+        /**
+         * DOC HHB Comment method "refreshRoleView".
+         * 
+         * @param string
+         */
+        protected void refreshRoleView(String browseItem) {
+            if (exAdapter != null) {
+                exAdapter.refreshRoleView(browseItem);
             }
-        }
 
-        private void refreshRoleView(String browseItem) {
-            if (complexTableViewer != null) {
-                List<Line> roles = browseItemToRoles.get(browseItem);
-                if (roles != null) {
-                    complexTableViewer.getViewer().setInput(roles);
-                }
-            }
         }
 
         private boolean isCommitMultiChanges = false;
@@ -505,9 +488,8 @@ public class AddBrowseItemsWizard extends Wizard {
             selectedMultiViews = selectObjs;
             multiChanges.clear();
             //
-            if (complexTableViewer != null) {
-                complexTableViewer.getViewer().setInput(multiChanges);
-                complexTableViewer.getViewer().refresh();
+            if (exAdapter != null) {
+                exAdapter.refreshRoleView(multiChanges);
             }
         }
 
@@ -515,7 +497,7 @@ public class AddBrowseItemsWizard extends Wizard {
             if (isCommitMultiChanges && selectedMultiViews != null && multiChanges.size() > 0) {
                 for (Object obj : selectedMultiViews) {
                     XSDElementDeclaration decl = (XSDElementDeclaration) obj;
-                    String browseItem = BROWSE_ITEMS + decl.getName();
+                    String browseItem = AddBrowseItemsWizard.BROWSE_ITEMS + decl.getName();
                     for (Line line : multiChanges) {
                         List<Line> lines = browseItemToRoles.get(browseItem);
                         Line newLine = line.clone();
@@ -536,7 +518,15 @@ public class AddBrowseItemsWizard extends Wizard {
      * 
      * @return
      */
-    protected List<String> getAllRoleNames() {
+    public List<String> getAllRoleNames() {
         return Util.getChildren(page.getXObject().getServerRoot(), TreeObject.ROLE);
+    }
+
+    public static ComplexTableViewerColumn[] getRoleConfigurationColumns() {
+        return roleConfigurationColumns;
+    }
+
+    public Map<String, List<Line>> getBrowseItemToRoles() {
+        return this.browseItemToRoles;
     }
 }

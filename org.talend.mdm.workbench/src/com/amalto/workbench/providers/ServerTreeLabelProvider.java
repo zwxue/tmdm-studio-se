@@ -23,17 +23,14 @@ import org.eclipse.swt.widgets.Display;
 import org.talend.core.GlobalServiceRegister;
 import org.talend.mdm.commmon.util.webapp.XSystemObjects;
 
-import com.amalto.workbench.actions.AServerViewAction;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.image.OverlayImageProvider;
 import com.amalto.workbench.models.TreeObject;
-import com.amalto.workbench.models.TreeParent;
 import com.amalto.workbench.service.bridge.ITransformService;
 import com.amalto.workbench.utils.EXObjectStatus;
 import com.amalto.workbench.utils.FontUtils;
 import com.amalto.workbench.utils.Util;
-import com.amalto.workbench.views.ServerView;
 import com.amalto.workbench.webservices.WSGetRoutingRule;
 import com.amalto.workbench.webservices.WSRoutingRule;
 import com.amalto.workbench.webservices.WSRoutingRulePK;
@@ -48,18 +45,6 @@ public class ServerTreeLabelProvider extends ColumnLabelProvider implements ICol
 
     @Override
     public String getText(Object obj) {
-        if (obj instanceof TreeObject) {
-            if (((TreeObject) obj).getType() == TreeObject._ACTION_) {
-                Class<?> actionClass = (Class<?>) ((TreeObject) obj).getWsKey();
-                try {
-                    AServerViewAction action = (AServerViewAction) actionClass.newInstance();
-                    return action.getText();
-                } catch (Exception ex) {
-                    return "ERROR...";//$NON-NLS-1$
-                }
-            }
-        }
-
         String label = obj.toString();
 
         if (obj instanceof TreeObject) {
@@ -173,8 +158,7 @@ public class ServerTreeLabelProvider extends ColumnLabelProvider implements ICol
         if (XSystemObjects.isExist(tb.getType(), tb.getDisplayName())) {
             return color;
         } else if (tb.getType() == TreeObject._SERVER_) {
-            // TODO remove ServerView dependency
-            return ServerView.isServerPending((TreeParent) tb) ? color : null;
+            return null;
         } else {
             return null;
         }

@@ -66,7 +66,6 @@ import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.forms.widgets.FormToolkit;
-import org.talend.mdm.commmon.util.core.ICoreConstants;
 
 import com.amalto.workbench.availablemodel.AvailableModelUtil;
 import com.amalto.workbench.availablemodel.IAvailableModel;
@@ -97,10 +96,8 @@ import com.amalto.workbench.webservices.WSPutItem;
 import com.amalto.workbench.webservices.WSPutItemWithReport;
 import com.amalto.workbench.webservices.WSRegexDataModelPKs;
 import com.amalto.workbench.webservices.WSRouteItemV2;
-import com.amalto.workbench.webservices.WSString;
 import com.amalto.workbench.webservices.WSStringArray;
 import com.amalto.workbench.webservices.WSUpdateMetadataItem;
-import com.amalto.workbench.webservices.WSVersioningGetItemContent;
 import com.amalto.workbench.webservices.XtentisPort;
 
 public class DataClusterBrowserMainPage extends AMainPage implements IXObjectModelListener {
@@ -480,74 +477,6 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                 if (!Util.handleConnectionException(shell, e, null)) {
                     MessageDialog.openError(shell, Messages._Error,
                             Messages.bind(Messages.DataClusterBrowserMainPage_48, e.getLocalizedMessage()));
-                }
-            }
-        }
-    }
-
-    /***************************************************************
-     * Compare item with svn TODO 1.object compare 2. item/object save
-     ***************************************************************/
-    public class CompareItemWithLatestRevisionAction extends Action {
-
-        protected Shell shell = null;
-
-        protected Viewer viewer;
-
-        public CompareItemWithLatestRevisionAction(Shell shell, Viewer viewer) {
-            super();
-            this.shell = shell;
-            this.viewer = viewer;
-            setImageDescriptor(ImageCache.getImage(EImage.SYNCH.getPath()));
-            setText(Messages.DataClusterBrowserMainPage_49);
-            setToolTipText(Messages.DataClusterBrowserMainPage_50);
-        }
-
-        @Override
-        public void run() {
-            try {
-                super.run();
-
-                IStructuredSelection selection = ((IStructuredSelection) viewer.getSelection());
-                int selectSize = selection.size();
-                if (selectSize == 0) {
-                    MessageDialog.openWarning(null, Messages.Warning, Messages.DataClusterBrowserMainPage_52);
-                    return;
-                } else if (selectSize > 1) {
-                    MessageDialog.openWarning(null, Messages.Warning, Messages.DataClusterBrowserMainPage_54);
-                    return;
-                }
-                LineItem li = (LineItem) selection.getFirstElement();
-
-                WSItem wsItem = Util.getPort(getXObject()).getItem(
-                        new WSGetItem(new WSItemPK((WSDataClusterPK) getXObject().getWsKey(), li.getConcept().trim(), Arrays
-                                .asList(li.getIds()))));
-
-                String xml = wsItem.getContent();
-                WSString svnContent = null;
-                try {
-                    svnContent = Util.getPort(getXObject()).versioningGetItemContent(
-                            new WSVersioningGetItemContent(ICoreConstants.DEFAULT_SVN, new WSItemPK(wsItem.getWsDataClusterPK(),
-                                    wsItem.getConceptName(), wsItem.getIds()), "-1"));//$NON-NLS-1$
-                } catch (Exception e) {
-                    MessageDialog.openWarning(null, Messages.Warning, e.getLocalizedMessage());
-                    return;
-                }
-
-                String itemcontent = Util.getItemContent(svnContent.getValue());
-                if (itemcontent != null) {
-                    CompareHeadInfo compareHeadInfo = new CompareHeadInfo(getXObject());
-                    compareHeadInfo.setItem(true);
-                    compareHeadInfo.setDataModelName(wsItem.getDataModelName());
-                    CompareManager.getInstance().compareTwoStream(xml, itemcontent, true, compareHeadInfo,
-                            Messages.DataClusterBrowserMainPage_56, Messages.DataClusterBrowserMainPage_57, true, false);
-                }
-
-            } catch (Exception e) {
-                log.error(e.getMessage(), e);
-                if (!Util.handleConnectionException(shell, e, null)) {
-                    MessageDialog.openError(shell, Messages._Error,
-                            Messages.bind(Messages.DataClusterBrowserMainPage_59, e.getLocalizedMessage()));
                 }
             }
         }
@@ -1208,7 +1137,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
             String username = user.getUsername();
 
             final XtentisServerObjectsRetriever retriever = new XtentisServerObjectsRetriever(serverName, url, username,
-                    password, universe, null);
+                    password, universe);
 
             retriever.setRetriveWSObject(true);
 

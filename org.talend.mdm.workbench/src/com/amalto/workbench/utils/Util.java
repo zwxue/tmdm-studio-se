@@ -160,16 +160,12 @@ import com.amalto.workbench.webservices.WSDataModel;
 import com.amalto.workbench.webservices.WSDataModelPK;
 import com.amalto.workbench.webservices.WSGetComponentVersion;
 import com.amalto.workbench.webservices.WSGetDataModel;
-import com.amalto.workbench.webservices.WSGetUniverse;
-import com.amalto.workbench.webservices.WSGetUniversePKs;
 import com.amalto.workbench.webservices.WSGetViewPKs;
 import com.amalto.workbench.webservices.WSRegexDataClusterPKs;
 import com.amalto.workbench.webservices.WSRegexDataModelPKs;
 import com.amalto.workbench.webservices.WSRoutingRuleExpression;
 import com.amalto.workbench.webservices.WSRoutingRuleOperator;
 import com.amalto.workbench.webservices.WSStringPredicate;
-import com.amalto.workbench.webservices.WSUniverse;
-import com.amalto.workbench.webservices.WSUniversePK;
 import com.amalto.workbench.webservices.WSVersion;
 import com.amalto.workbench.webservices.WSViewPK;
 import com.amalto.workbench.webservices.WSWhereCondition;
@@ -2446,100 +2442,6 @@ public class Util {
             }
             ;
         }
-    }
-
-    // key is the objectname, value is revisionids
-    public static Map<String, List<String>> getUniverseMap(XtentisPort port) {
-        Map<String, List<String>> map = new HashMap<String, List<String>>();
-        List<WSUniversePK> universePKs = null;
-        // boolean hasUniverses = true;
-        try {
-            universePKs = port.getUniversePKs(new WSGetUniversePKs("*")).getWsUniversePK();//$NON-NLS-1$
-            for (WSUniversePK pk : universePKs) {
-                WSUniverse universe = port.getUniverse(new WSGetUniverse(pk));
-                for (WSUniverse.XtentisObjectsRevisionIDs id : universe.getXtentisObjectsRevisionIDs()) {
-                    if (map.get(id.getXtentisObjectName()) == null) {
-                        map.put(id.getXtentisObjectName(), new ArrayList<String>());
-                    }
-                    if (!map.get(id.getXtentisObjectName()).contains(id.getRevisionID())) {
-                        map.get(id.getXtentisObjectName()).add(id.getRevisionID());
-                    }
-                }
-            }
-        } catch (Exception e) {
-            log.error(e.getMessage(), e);
-        }
-        return map;
-    }
-
-    // key is the universename, value is revisionids
-    public static Map<String, List<String>> getUniverseMap2(XtentisPort port) {
-        Map<String, List<String>> map = new HashMap<String, List<String>>();
-        List<WSUniversePK> universePKs = null;
-        // boolean hasUniverses = true;
-        try {
-            universePKs = port.getUniversePKs(new WSGetUniversePKs("*")).getWsUniversePK();//$NON-NLS-1$
-            for (WSUniversePK pk : universePKs) {
-                WSUniverse universe = port.getUniverse(new WSGetUniverse(pk));
-                for (WSUniverse.XtentisObjectsRevisionIDs id : universe.getXtentisObjectsRevisionIDs()) {
-                    String name = universe.getName();
-                    if (map.get(name) == null) {
-                        map.put(name, new ArrayList<String>());
-                    }
-                    map.get(name).add(id.getRevisionID());
-                }
-            }
-        } catch (Exception e) {
-            log.error(e.getMessage(), e);
-        }
-        return map;
-    }
-
-    public static List<String> getUniverseBYRevisionID(XtentisPort port, String revisionID, String objectName1) {
-        List<String> list = new ArrayList<String>();
-        String objectName = objectName1;
-        List<WSUniversePK> universePKs = null;
-        objectName = EXtentisObjects.getXtentisObjectName(objectName1);
-        if (objectName != null) {
-            try {
-                universePKs = port.getUniversePKs(new WSGetUniversePKs("*")).getWsUniversePK();//$NON-NLS-1$
-                for (WSUniversePK pk : universePKs) {
-                    WSUniverse universe = port.getUniverse(new WSGetUniverse(pk));
-                    for (WSUniverse.XtentisObjectsRevisionIDs id : universe.getXtentisObjectsRevisionIDs()) {
-                        if (id.getXtentisObjectName().equals(objectName) && id.getRevisionID().equals(revisionID)) {
-                            list.add(universe.getName());
-                        }
-
-                    }
-                }
-            } catch (Exception e) {
-                log.error(e.getMessage(), e);
-            }
-        }
-        return list;
-    }
-
-    public static List<WSUniverse> getWSUniverseBYRevisionID(XtentisPort port, String revisionID, String objectName1) {
-        List<WSUniverse> list = new ArrayList<WSUniverse>();
-        String objectName = objectName1;
-        List<WSUniversePK> universePKs = null;
-        if (objectName1.equals("Transformer")) { //$NON-NLS-1$
-            objectName = "Transformer V2";//$NON-NLS-1$
-        }
-        try {
-            universePKs = port.getUniversePKs(new WSGetUniversePKs("*")).getWsUniversePK();//$NON-NLS-1$
-            for (WSUniversePK pk : universePKs) {
-                WSUniverse universe = port.getUniverse(new WSGetUniverse(pk));
-                for (WSUniverse.XtentisObjectsRevisionIDs id : universe.getXtentisObjectsRevisionIDs()) {
-                    if (id.getXtentisObjectName().equals(objectName) && id.getRevisionID().equals(revisionID)) {
-                        list.add(universe);
-                    }
-                }
-            }
-        } catch (Exception e) {
-            log.error(e.getMessage(), e);
-        }
-        return list;
     }
 
     public static boolean hasUniverse(TreeObject xobject) {

@@ -27,12 +27,6 @@ import java.util.regex.Pattern;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.auth.AuthScope;
-import org.apache.http.auth.UsernamePasswordCredentials;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -53,6 +47,7 @@ import org.eclipse.swt.widgets.Listener;
 import org.exolab.castor.xml.Marshaller;
 import org.talend.mdm.commmon.util.workbench.ZipToFile;
 
+import com.amalto.workbench.exadapter.ExAdapterManager;
 import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.utils.HttpClientUtil;
@@ -69,29 +64,20 @@ import com.amalto.workbench.webservices.WSGetDataModel;
 import com.amalto.workbench.webservices.WSGetItem;
 import com.amalto.workbench.webservices.WSGetItemPKsByCriteria;
 import com.amalto.workbench.webservices.WSGetMenu;
-import com.amalto.workbench.webservices.WSGetRole;
 import com.amalto.workbench.webservices.WSGetRoutingRule;
 import com.amalto.workbench.webservices.WSGetStoredProcedure;
-import com.amalto.workbench.webservices.WSGetSynchronizationPlan;
 import com.amalto.workbench.webservices.WSGetTransformerV2;
-import com.amalto.workbench.webservices.WSGetUniverse;
 import com.amalto.workbench.webservices.WSGetView;
 import com.amalto.workbench.webservices.WSItem;
 import com.amalto.workbench.webservices.WSItemPKsByCriteriaResponse.Results;
 import com.amalto.workbench.webservices.WSMenu;
 import com.amalto.workbench.webservices.WSMenuPK;
-import com.amalto.workbench.webservices.WSRole;
-import com.amalto.workbench.webservices.WSRolePK;
 import com.amalto.workbench.webservices.WSRoutingRule;
 import com.amalto.workbench.webservices.WSRoutingRulePK;
 import com.amalto.workbench.webservices.WSStoredProcedure;
 import com.amalto.workbench.webservices.WSStoredProcedurePK;
-import com.amalto.workbench.webservices.WSSynchronizationPlan;
-import com.amalto.workbench.webservices.WSSynchronizationPlanPK;
 import com.amalto.workbench.webservices.WSTransformerV2;
 import com.amalto.workbench.webservices.WSTransformerV2PK;
-import com.amalto.workbench.webservices.WSUniverse;
-import com.amalto.workbench.webservices.WSUniversePK;
 import com.amalto.workbench.webservices.WSView;
 import com.amalto.workbench.webservices.WSViewPK;
 import com.amalto.workbench.webservices.XtentisPort;
@@ -189,7 +175,7 @@ public class ExportItemsWizard extends Wizard {
         treeViewer = new RepositoryCheckTreeViewer(sel);
     }
 
-    protected void doexport(Object[] selectedObjs, IProgressMonitor monitor) {
+    public void doexport(Object[] selectedObjs, IProgressMonitor monitor) {
         TreeObject[] objs = null;
         if (selectedObjs.length > 0 && selectedObjs[0] instanceof TreeObject) {
             objs = Arrays.asList(selectedObjs).toArray(new TreeObject[0]);
@@ -211,6 +197,7 @@ public class ExportItemsWizard extends Wizard {
 
                 StringWriter sw;
                 ArrayList<String> items;
+                String encodedID = null;
                 switch (obj.getType()) {
 
                 case TreeObject.DATA_CLUSTER:
@@ -220,7 +207,7 @@ public class ExportItemsWizard extends Wizard {
                     // dataclusters
 
                     WSDataClusterPK pk = (WSDataClusterPK) obj.getWsKey();
-                    String encodedID = null;
+
                     try {
                         WSDataCluster cluster = port.getDataCluster(new WSGetDataCluster(pk));
                         // Marshal
@@ -309,30 +296,7 @@ public class ExportItemsWizard extends Wizard {
                     }
                     monitor.worked(1);
                     break;
-                case TreeObject.ROLE:
-                    if (Util.IsEnterPrise()) {
-                        monitor.subTask(Messages.ExportItemsWizard_9);
-                        // ExportItem exportItem=new ExportItem();
 
-                        items = new ArrayList<String>();
-
-                        // role
-                        try {
-                            WSRole role = port.getRole(new WSGetRole((WSRolePK) obj.getWsKey()));
-                            // Marshal
-                            sw = new StringWriter();
-                            Marshaller.marshal(role, sw);
-                            encodedID = URLEncoder.encode(role.getName(), "UTF-8");//$NON-NLS-1$
-                            writeString(sw.toString(), TreeObject.ROLE_ + "/" + encodedID);//$NON-NLS-1$
-                            items.add(TreeObject.ROLE_ + "/" + encodedID);//$NON-NLS-1$
-
-                            obj.setItems(items.toArray(new String[items.size()]));
-                            exports.add(obj);
-                        } catch (Exception e) {
-                        }
-                        monitor.worked(1);
-                    }
-                    break;
                 case TreeObject.ROUTING_RULE:
                     monitor.subTask(Messages.ExportItemsWizard_10);
                     // ExportItem exportItem=new ExportItem();
@@ -374,29 +338,7 @@ public class ExportItemsWizard extends Wizard {
                     }
                     monitor.worked(1);
                     break;
-                case TreeObject.SYNCHRONIZATIONPLAN:
-                    if (Util.IsEnterPrise()) {
-                        monitor.subTask(Messages.ExportItemsWizard_12);
 
-                        items = new ArrayList<String>();
-                        // Synchronizationplan
-                        try {
-                            WSSynchronizationPlan SynchronizationPlan = port.getSynchronizationPlan(new WSGetSynchronizationPlan(
-                                    (WSSynchronizationPlanPK) obj.getWsKey()));
-                            // Marshal
-                            sw = new StringWriter();
-                            Marshaller.marshal(SynchronizationPlan, sw);
-                            encodedID = URLEncoder.encode(SynchronizationPlan.getName(), "UTF-8");//$NON-NLS-1$
-                            writeString(sw.toString(), TreeObject.SYNCHRONIZATIONPLAN_ + "/" + encodedID);//$NON-NLS-1$
-                            items.add(TreeObject.SYNCHRONIZATIONPLAN_ + "/" + encodedID);//$NON-NLS-1$
-
-                            obj.setItems(items.toArray(new String[items.size()]));
-                            exports.add(obj);
-                        } catch (Exception e) {
-                        }
-                        monitor.worked(1);
-                    }
-                    break;
                 case TreeObject.TRANSFORMER:
                     monitor.subTask(Messages.ExportItemsWizard_13);
 
@@ -419,28 +361,7 @@ public class ExportItemsWizard extends Wizard {
                     }
                     monitor.worked(1);
                     break;
-                case TreeObject.UNIVERSE:
-                    if (Util.IsEnterPrise()) {
-                        monitor.subTask(Messages.ExportItemsWizard_14);
 
-                        items = new ArrayList<String>();
-                        // universe
-                        try {
-                            WSUniverse universe = port.getUniverse(new WSGetUniverse((WSUniversePK) obj.getWsKey()));
-                            // Marshal
-                            sw = new StringWriter();
-                            Marshaller.marshal(universe, sw);
-                            encodedID = URLEncoder.encode(universe.getName(), "UTF-8");//$NON-NLS-1$
-                            writeString(sw.toString(), TreeObject.UNIVERSE_ + "/" + encodedID);//$NON-NLS-1$
-                            items.add(TreeObject.UNIVERSE_ + "/" + encodedID);//$NON-NLS-1$
-
-                            obj.setItems(items.toArray(new String[items.size()]));
-                            exports.add(obj);
-                        } catch (Exception e) {
-                        }
-                        monitor.worked(1);
-                    }
-                    break;
                 case TreeObject.VIEW:
                     monitor.subTask(Messages.ExportItemsWizard_15);
 
@@ -461,31 +382,15 @@ public class ExportItemsWizard extends Wizard {
                     }
                     monitor.worked(1);
                     break;
-                // add by ymli;fix the bug:0012771
-                case TreeObject.WORKFLOW_PROCESS:
-                    monitor.subTask(Messages.ExportItemsWizard_16);
-                    items = new ArrayList<String>();
-                    String workflowURL = obj.getEndpointIpAddress() + TreeObject.BARFILE_URI + obj.getDisplayName();
-                    try {
-                        DefaultHttpClient httpclient = new DefaultHttpClient();
-                        httpclient.getCredentialsProvider().setCredentials(
-                                new AuthScope(obj.getEndpointHost(), Integer.valueOf(obj.getEndpointPort())),
-                                new UsernamePasswordCredentials(obj.getUsername(), obj.getPassword()));
-                        HttpGet httpget = new HttpGet(workflowURL);
-                        // System.out.println("executing request" + httpget.getRequestLine());
-                        HttpResponse response = httpclient.execute(httpget);
-                        HttpEntity entity = response.getEntity();
-                        // entity.getContent();
-                        encodedID = URLEncoder.encode(obj.getDisplayName(), "UTF-8");//$NON-NLS-1$
-                        String filename = TreeObject.BARFILE_PATH + encodedID + ".bar";//$NON-NLS-1$
-                        writeInputStream(entity.getContent(), filename);
-                        items.add(filename);
-                        obj.setItems(items.toArray(new String[items.size()]));
-                        exports.add(obj);
-                    } catch (Exception e) {
-                        monitor.worked(1);
+
+                default:
+                    IExportItemsWizardAdapter exAdapter = ExAdapterManager.getAdapter(this, IExportItemsWizardAdapter.class);
+                    if (exAdapter != null) {
+                        exAdapter.doexport(port, obj.getType(), exports, obj, monitor);
                     }
+                    break;
                 }
+
             }
             // store the content xml
             eps.setItems(exports.toArray(new TreeObject[exports.size()]));
@@ -511,7 +416,7 @@ public class ExportItemsWizard extends Wizard {
     }
 
     // add by ymli;fix the bug:0012771
-    private void writeInputStream(InputStream inputSteam, String filename) {
+    public void writeInputStream(InputStream inputSteam, String filename) {
         try {
             File f = new File(exportFolder + "/" + filename);//$NON-NLS-1$
             if (!f.getParentFile().getParentFile().exists()) {
@@ -531,7 +436,7 @@ public class ExportItemsWizard extends Wizard {
         }
     }
 
-    protected void writeString(String outputStr, String filename) {
+    public void writeString(String outputStr, String filename) {
         try {
             File f = new File(exportFolder + "/" + filename);//$NON-NLS-1$
             if (!f.getParentFile().getParentFile().exists()) {

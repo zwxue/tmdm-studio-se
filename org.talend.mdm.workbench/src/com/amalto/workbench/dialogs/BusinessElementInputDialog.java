@@ -26,7 +26,6 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -35,8 +34,8 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
+import com.amalto.workbench.exadapter.ExAdapterManager;
 import com.amalto.workbench.i18n.Messages;
-import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.XSDUtil;
 
 public class BusinessElementInputDialog extends Dialog {
@@ -50,8 +49,6 @@ public class BusinessElementInputDialog extends Dialog {
     private Text maxOccursText = null;
 
     private Collection<String> elementDeclarations = null;
-
-    protected Button checkBox;
 
     private Label msgLabel = null;
 
@@ -83,6 +80,8 @@ public class BusinessElementInputDialog extends Dialog {
     // fix TMDM-3726
     private boolean isPK = false;
 
+    private IBusinessElementInputDialogExAdapter exAdapter;
+
     public boolean isPK() {
         return isPK;
     }
@@ -113,6 +112,7 @@ public class BusinessElementInputDialog extends Dialog {
         this.maxOccurs = maxOccurs;
         this.isNew = isNew;
         this.isPK = isPK;
+        this.exAdapter = ExAdapterManager.getAdapter(this, IBusinessElementInputDialogExAdapter.class);
     }
 
     @Override
@@ -189,21 +189,8 @@ public class BusinessElementInputDialog extends Dialog {
         maxOccursText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
         maxOccursText.setText(getMaxOccurs() == -1 ? "" : "" + getMaxOccurs());//$NON-NLS-1$//$NON-NLS-2$
 
-        if (isNew && Util.IsEnterPrise()) {
-            checkBox = new Button(composite, SWT.CHECK);
-            checkBox.setLayoutData(new GridData(SWT.LEFT, SWT.FILL, false, true, 2, 1));
-            checkBox.addSelectionListener(new SelectionListener() {
-
-                public void widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent e) {
-                };
-
-                public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
-                    inherit = checkBox.getSelection();
-                };
-            });
-
-            checkBox.setSelection(inherit);
-            checkBox.setText(Messages.BusinessElementInputDialog_CheckboxText);
+        if (isNew && exAdapter != null) {
+            exAdapter.crateDialogArea(composite);
         }
         // check pk can't edit Maximum/Minimum
         minOccursText.setEditable(!isPK);
@@ -242,8 +229,7 @@ public class BusinessElementInputDialog extends Dialog {
         elementName = elementNameText.getText().trim();
         refName = refCombo.getText();
         if (((elementName == null) || ("".equals(elementName))) && ((refName == null) || "".equals(refName))) {//$NON-NLS-1$//$NON-NLS-2$
-            MessageDialog.openError(this.getShell(), Messages._Error,
-                    Messages.BusinessElementInputDialog_NameCannotbeEmptyIfXX);
+            MessageDialog.openError(this.getShell(), Messages._Error, Messages.BusinessElementInputDialog_NameCannotbeEmptyIfXX);
             setReturnCode(-1);
             elementNameText.setFocus();
             return;
@@ -287,8 +273,9 @@ public class BusinessElementInputDialog extends Dialog {
                 maxOccursText.setFocus();
                 return;
             }
-            if ((maxOccurs < minOccurs) || (maxOccurs <= 0))
+            if ((maxOccurs < minOccurs) || (maxOccurs <= 0)) {
                 maxOccurs = -1;
+            }
         }
 
         setReturnCode(OK);

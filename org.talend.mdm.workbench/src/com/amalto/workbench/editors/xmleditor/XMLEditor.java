@@ -24,7 +24,6 @@ import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.editors.text.TextEditor;
 
-import com.amalto.workbench.actions.SaveXObjectAction;
 import com.amalto.workbench.editors.DataModelMainPage;
 import com.amalto.workbench.editors.XObjectEditor;
 import com.amalto.workbench.models.TreeObject;
@@ -60,6 +59,7 @@ public class XMLEditor extends TextEditor {
         setDocumentProvider(new XMLDocumentProvider());
     }
 
+    @Override
     public void createPartControl(Composite parent) {
         super.createPartControl(parent);
         // initializeKeyPress((SourceViewer)getSourceViewer());
@@ -69,6 +69,7 @@ public class XMLEditor extends TextEditor {
      * @deprecated
      * @param viewer
      */
+    @Deprecated
     private void initializeKeyPress(final SourceViewer viewer) {
         StyledText styledText = viewer.getTextWidget();
         styledText.addKeyListener(new KeyListener() {
@@ -86,6 +87,7 @@ public class XMLEditor extends TextEditor {
         });
     }
 
+    @Override
     public void dispose() {
         colorManager.dispose();
         super.dispose();
@@ -98,13 +100,13 @@ public class XMLEditor extends TextEditor {
 
     @Override
     public boolean isEditorInputModifiable() {
-        
+
         return true;
     }
 
     @Override
     public boolean isSaveOnCloseNeeded() {
-        
+
         return true;
     }
 
@@ -118,12 +120,11 @@ public class XMLEditor extends TextEditor {
         DataModelMainPage page = (DataModelMainPage) editor.formPages.get(0);
         page.setXsdSchema(null);
         int ret = page.save(schema);
-        if (ret != 0)
+        if (ret != 0) {
             return;
+        }
         setModified(true);
-        SaveXObjectAction action = new SaveXObjectAction(editor);
-        action.run();
-        state = action.getState();
+
         super.doSave(progressMonitor);
     }
 

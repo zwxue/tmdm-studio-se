@@ -42,10 +42,9 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.forms.widgets.FormToolkit;
-import org.talend.mdm.commmon.util.core.ICoreConstants;
-import org.w3c.dom.Node;
 
 import com.amalto.workbench.dialogs.PluginDetailsDialog;
+import com.amalto.workbench.exadapter.ExAdapterManager;
 import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
@@ -55,12 +54,10 @@ import com.amalto.workbench.utils.XmlUtil;
 import com.amalto.workbench.webservices.WSCheckServiceConfigRequest;
 import com.amalto.workbench.webservices.WSCheckServiceConfigResponse;
 import com.amalto.workbench.webservices.WSGetServicesList;
-import com.amalto.workbench.webservices.WSPutVersioningSystemConfiguration;
 import com.amalto.workbench.webservices.WSServiceGetDocument;
 import com.amalto.workbench.webservices.WSServicePutConfiguration;
 import com.amalto.workbench.webservices.WSServicesList;
 import com.amalto.workbench.webservices.WSString;
-import com.amalto.workbench.webservices.WSVersioningSystemConfiguration;
 import com.amalto.workbench.webservices.XtentisPort;
 
 public class ServiceConfigrationMainPage extends AMainPageV2 {
@@ -89,8 +86,11 @@ public class ServiceConfigrationMainPage extends AMainPageV2 {
 
     protected static final String CHECKMSG_ERRORCONN = Messages.ServiceConfigrationMainPage_2;
 
+    private IServiceConfigrationMainPageExAdapter exAdapter;
+
     public ServiceConfigrationMainPage(FormEditor editor) {
         super(editor, ServiceConfigrationMainPage.class.getName(), ((XObjectEditorInput) editor.getEditorInput()).getName());
+        this.exAdapter = ExAdapterManager.getAdapter(this, IServiceConfigrationMainPageExAdapter.class);
     }
 
     protected void setForConfigureContent(String serviceName) {
@@ -283,18 +283,9 @@ public class ServiceConfigrationMainPage extends AMainPageV2 {
         return doc;
     }
 
-    protected void doSaveChanges() {
-
-        try {
-            if (!"".equalsIgnoreCase(ws.getJndiName()) && !"".equalsIgnoreCase(ws.getConfiguration())) {//$NON-NLS-1$//$NON-NLS-2$
-                port.putServiceConfiguration(ws);
-                // there maybe several svn settings, so we need to put it on VersionSystem
-                if (serviceNameCombo.getText().equalsIgnoreCase("svn")) {//$NON-NLS-1$
-                    port.putVersioningSystemConfiguration(getDefaultSvn(serviceConfigurationsText.getText()));
-                }
-            }
-        } catch (Exception e1) {
-            log.error(e1.getMessage(), e1);
+    protected void doSaveSVNChanges() {
+        if (exAdapter != null) {
+            exAdapter.doSaveSVNChange(port, ws, serviceNameCombo.getText(), serviceConfigurationsText.getText());
         }
 
     }
@@ -304,20 +295,7 @@ public class ServiceConfigrationMainPage extends AMainPageV2 {
                 + serviceNameCombo.getText());
         ws.setConfiguration(serviceConfigurationsText.getText());
 
-        doSaveChanges();
-    }
-
-    private WSPutVersioningSystemConfiguration getDefaultSvn(String svnConfig) throws Exception {
-        Node e = Util.parse(svnConfig).getDocumentElement();
-        String jndi = serviceNameCombo.getText().contains("/") ? serviceNameCombo.getText() : "amalto/local/service/"//$NON-NLS-1$//$NON-NLS-2$
-                + serviceNameCombo.getText();
-        String url = Util.getFirstTextNode(e, "./url");//$NON-NLS-1$
-        String username = Util.getFirstTextNode(e, "./username");//$NON-NLS-1$
-        String password = Util.getFirstTextNode(e, "./password");//$NON-NLS-1$
-        String autocommit = Util.getFirstTextNode(e, "./autocommit");//$NON-NLS-1$
-        WSPutVersioningSystemConfiguration conf = new WSPutVersioningSystemConfiguration(new WSVersioningSystemConfiguration(
-                ICoreConstants.DEFAULT_SVN, ICoreConstants.DEFAULT_SVN, url, username, password, autocommit, jndi));
-        return conf;
+        doSaveSVNChanges();
     }
 
     @Override

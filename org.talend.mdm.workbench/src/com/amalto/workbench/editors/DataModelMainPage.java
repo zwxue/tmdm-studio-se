@@ -159,7 +159,6 @@ import com.amalto.workbench.actions.XSDChangeBaseTypeAction;
 import com.amalto.workbench.actions.XSDChangeToComplexTypeAction;
 import com.amalto.workbench.actions.XSDChangeToSimpleTypeAction;
 import com.amalto.workbench.actions.XSDCopyConceptAction;
-import com.amalto.workbench.actions.XSDDefaultValueRuleAction;
 import com.amalto.workbench.actions.XSDDeleteAttributeAction;
 import com.amalto.workbench.actions.XSDDeleteConceptAction;
 import com.amalto.workbench.actions.XSDDeleteConceptWrapAction;
@@ -193,20 +192,15 @@ import com.amalto.workbench.actions.XSDSetAnnotationFKFilterAction;
 import com.amalto.workbench.actions.XSDSetAnnotationForeignKeyAction;
 import com.amalto.workbench.actions.XSDSetAnnotationForeignKeyInfoAction;
 import com.amalto.workbench.actions.XSDSetAnnotationLabelAction;
-import com.amalto.workbench.actions.XSDSetAnnotationNoAction;
 import com.amalto.workbench.actions.XSDSetAnnotationPrimaryKeyInfoAction;
-import com.amalto.workbench.actions.XSDSetAnnotationWrapNoAction;
-import com.amalto.workbench.actions.XSDSetAnnotationWrapWriteAction;
-import com.amalto.workbench.actions.XSDSetAnnotationWriteAction;
 import com.amalto.workbench.actions.XSDSetFacetMessageAction;
 import com.amalto.workbench.actions.XSDSkipToFKAction;
-import com.amalto.workbench.actions.XSDVisibleRuleAction;
 import com.amalto.workbench.availablemodel.AvailableModelUtil;
 import com.amalto.workbench.availablemodel.IAvailableModel;
 import com.amalto.workbench.dialogs.DataModelFilterDialog;
 import com.amalto.workbench.dialogs.ErrorExceptionDialog;
-import com.amalto.workbench.dialogs.RoleAssignmentDialog;
 import com.amalto.workbench.dialogs.SelectImportedModulesDialog;
+import com.amalto.workbench.exadapter.ExAdapterManager;
 import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
@@ -308,13 +302,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener, IGo
 
     private XSDSkipToFKAction skipToFKAction = null;
 
-    private XSDVisibleRuleAction visibleRuleAction;
-
-    private XSDDefaultValueRuleAction defaultValueRuleAction;
-
     private XSDSetAnnotationFKFilterAction setAnnotationFKFilterAction = null;
-
-    private XSDSetAnnotationWrapWriteAction setAnnotationWrapWriteAction = null;
 
     private XSDSetAnnotationForeignKeyInfoAction setAnnotationForeignKeyInfoAction = null;
 
@@ -325,12 +313,6 @@ public class DataModelMainPage extends EditorPart implements ModifyListener, IGo
     private XSDSetAnnotationLabelAction setAnnotationLabelAction = null;
 
     private XSDSetAnnotationDescriptionsAction setAnnotationDescriptionsAction = null;
-
-    private XSDSetAnnotationNoAction setAnnotationNoAction = null;
-
-    private XSDSetAnnotationWrapNoAction setAnnotationWrapNoAction = null;
-
-    private XSDSetAnnotationWriteAction setAnnotationWriteAction = null;
 
     private XSDAnnotationLookupFieldsAction setAnnotationLookupFieldsAction = null;
 
@@ -411,6 +393,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener, IGo
         this.datamodel = (WSDataModel) obj.getWsObject();
         modelName = datamodel.getName();
         dataModelName = modelName;
+        exAdapter = ExAdapterManager.getAdapter(this, IDataModelMainPageExAdapter.class);
     }
 
     public void setDirty(final boolean dirty) {
@@ -1073,7 +1056,10 @@ public class DataModelMainPage extends EditorPart implements ModifyListener, IGo
         XtentisPort port = Util.getPort(new URL(xobject.getEndpointAddress()), xobject.getUniverse(), xobject.getUsername(),
                 xobject.getPassword());
         port.putDataModel(new WSPutDataModel(wsObject));
-        RoleAssignmentDialog.doSave(port, wsObject.getName(), Messages.DataModelText);
+        if (exAdapter != null) {
+            exAdapter.doSave(port, wsObject.getName(), Messages.DataModelText);
+        }
+
     }
 
     protected void commit() {
@@ -1111,14 +1097,9 @@ public class DataModelMainPage extends EditorPart implements ModifyListener, IGo
         this.setAnnotationDescriptionsAction = new XSDSetAnnotationDescriptionsAction(this);
         this.setAnnotationForeignKeyAction = (XSDSetAnnotationForeignKeyAction) getAdapter(XSDSetAnnotationForeignKeyAction.class);
         this.skipToFKAction = new XSDSkipToFKAction(this);
-        visibleRuleAction = (XSDVisibleRuleAction) getAdapter(XSDVisibleRuleAction.class);
-        defaultValueRuleAction = (XSDDefaultValueRuleAction) getAdapter(XSDDefaultValueRuleAction.class);
+
         this.setAnnotationFKFilterAction = (XSDSetAnnotationFKFilterAction) getAdapter(XSDSetAnnotationFKFilterAction.class);
         this.setAnnotationForeignKeyInfoAction = (XSDSetAnnotationForeignKeyInfoAction) getAdapter(XSDSetAnnotationForeignKeyInfoAction.class);
-        this.setAnnotationWriteAction = (XSDSetAnnotationWriteAction) getAdapter(XSDSetAnnotationWriteAction.class);
-        this.setAnnotationWrapWriteAction = (XSDSetAnnotationWrapWriteAction) getAdapter(XSDSetAnnotationWrapWriteAction.class);
-        this.setAnnotationNoAction = (XSDSetAnnotationNoAction) getAdapter(XSDSetAnnotationNoAction.class);
-        this.setAnnotationWrapNoAction = (XSDSetAnnotationWrapNoAction) getAdapter(XSDSetAnnotationWrapNoAction.class);
 
         this.setAnnotationDisplayFomatAction = new XSDSetAnnotaionDisplayFormatAction(this);
         this.setAnnotationLookupFieldsAction = new XSDAnnotationLookupFieldsAction(this);
@@ -1139,6 +1120,9 @@ public class DataModelMainPage extends EditorPart implements ModifyListener, IGo
         deleteConceptWrapAction.regisDelAction(null, deleteElementAction);
         deleteConceptWrapAction.regisDelAction(XSDComplexTypeDefinitionImpl.class, deleteTypeDefinition);
         deleteConceptWrapAction.regisDelAction(XSDSimpleTypeDefinitionImpl.class, deleteTypeDefinition);
+        if (exAdapter != null) {
+            exAdapter.createActions();
+        }
     }
 
     protected void createNewBrowseItemViewAction() {
@@ -1345,10 +1329,8 @@ public class DataModelMainPage extends EditorPart implements ModifyListener, IGo
                     manager.add(newBrowseItemAction);
                 }
             }
-            if (Util.IsEnterPrise() && obj instanceof XSDComplexTypeDefinition && selectedObjs.length == 1) {
-                manager.add(new Separator());
-                manager.add(setAnnotationWriteAction);
-                manager.add(setAnnotationNoAction);
+            if (exAdapter != null && obj instanceof XSDComplexTypeDefinition && selectedObjs.length == 1) {
+                exAdapter.fillContextMenu(manager);
             }
         }
         manager.add(new Separator());
@@ -1593,15 +1575,10 @@ public class DataModelMainPage extends EditorPart implements ModifyListener, IGo
 
         }
 
-        // add by ymli. fix bug 0009771
-        if (Util.IsEnterPrise()) {
-            if (selectedObjs.length > 1 && setAnnotationWrapWriteAction.checkInWriteType(selectedObjs)) {
-                manager.add(new Separator());
-                manager.add(setAnnotationWrapWriteAction);
-                // fix bug 0016982: Set role with no access, and Set the workflow access menu actions action are gone
-                manager.add(setAnnotationWrapNoAction);
-            }
+        if (exAdapter != null) {
+            exAdapter.fillContextMenu(manager, selectedObjs);
         }
+
         // available models
         java.util.List<IAvailableModel> availablemodels = AvailableModelUtil.getAvailableModels(isLocalInput());
         for (int i = 0; i < availablemodels.size(); i++) {
@@ -1660,36 +1637,8 @@ public class DataModelMainPage extends EditorPart implements ModifyListener, IGo
             manager.add(setAnnotationForeignKeyInfoAction);
 
         }
-
-        if (Util.IsEnterPrise()) {
-            manager.add(new Separator());
-            manager.add(setAnnotationWriteAction);
-            // fix bug 0016982: Set role with no access, and Set the workflow access menu actions action are gone
-            manager.add(setAnnotationNoAction);
-
-            if (obj instanceof XSDParticle) {
-                XSDAnnotationsStructure struc = getStructureByActiveItem();
-                manager.add(visibleRuleAction);
-                if (struc != null) {
-
-                    if (struc.getVisibleRule() != null) {
-                        XSDVisibleRuleAction deleteVisibleRuleAction = new XSDVisibleRuleAction(this, dataModelName, true);
-                        manager.add(deleteVisibleRuleAction);
-                    }
-                }
-                // fix bug TMDM-3141: the defaultValueRule entry of UUID/AUTO_INCREMENT field should be readOnly
-                boolean enabled = !isAutoGeneratedType((XSDParticle) obj);
-                manager.add(defaultValueRuleAction);
-                defaultValueRuleAction.setEnabled(enabled);
-                if (struc != null) {
-                    if (struc.getDefaultValueRule() != null) {
-                        XSDDefaultValueRuleAction deleteDefaultRuleAction = new XSDDefaultValueRuleAction(this, dataModelName,
-                                true);
-                        manager.add(deleteDefaultRuleAction);
-                        deleteDefaultRuleAction.setEnabled(enabled);
-                    }
-                }
-            }
+        if (exAdapter != null) {
+            exAdapter.setAnnotationActions(obj, manager);
         }
         // available models
         java.util.List<IAvailableModel> availablemodels = AvailableModelUtil.getAvailableModels(isLocalInput());
@@ -1709,7 +1658,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener, IGo
      * @param obj
      * @return
      */
-    private boolean isAutoGeneratedType(XSDParticle obj) {
+    public boolean isAutoGeneratedType(XSDParticle obj) {
         XSDTerm xsdTerm = obj.getTerm();
         if (xsdTerm != null && xsdTerm instanceof XSDElementDeclaration) {
             XSDElementDeclaration element = (XSDElementDeclaration) xsdTerm;
@@ -1733,18 +1682,10 @@ public class DataModelMainPage extends EditorPart implements ModifyListener, IGo
             manager.add(setAnnotationDescriptionsAction);
             manager.add(setAnnotationLabelAction);
         }
-        if (Util.IsEnterPrise()) {
-            manager.add(new Separator());
-            manager.add(setAnnotationWriteAction);
-            // fix bug 0016982: Set role with no access, and Set the workflow access menu actions action are gone
-            manager.add(setAnnotationNoAction);
-            if (obj instanceof XSDParticle) {
-                manager.add(visibleRuleAction);
-                manager.add(defaultValueRuleAction);
-                // fix bug TMDM-3141: the defaultValueRule entry of UUID/AUTO_INCREMENT field should be readOnly
-                defaultValueRuleAction.setEnabled(!isAutoGeneratedType((XSDParticle) obj));
-            }
+        if (exAdapter != null) {
+            exAdapter.setAnnotationActions2(obj, manager);
         }
+
         // available models
         java.util.List<IAvailableModel> availablemodels = AvailableModelUtil.getAvailableModels(isLocalInput());
         for (int i = 0; i < availablemodels.size(); i++) {
@@ -2231,8 +2172,8 @@ public class DataModelMainPage extends EditorPart implements ModifyListener, IGo
         createSortByLabelToolItem(parentToolBar, viewer);
         createFiltUniqueElementToolItem(parentToolBar, viewer);
 
-        if (Util.IsEnterPrise()) {
-            createFilterToolItem(parentToolBar, viewer);
+        if (exAdapter != null) {
+            exAdapter.createFilterToolItem(parentToolBar, viewer);
         }
 
     }
@@ -2247,36 +2188,9 @@ public class DataModelMainPage extends EditorPart implements ModifyListener, IGo
 
         createSortByLabelToolItem(parentToolBar, typesViewer);
 
-        if (Util.IsEnterPrise()) {
-            createFilterToolItem(parentToolBar, typesViewer);
+        if (exAdapter != null) {
+            exAdapter.createFilterToolItem(parentToolBar, typesViewer);
         }
-    }
-
-    private ToolItem createFilterToolItem(ToolBar parentToolBar, final TreeViewer tTreeViewer) {
-
-        ToolItem filterToolItem = new ToolItem(parentToolBar, SWT.PUSH);
-        filterToolItem.setImage(ImageCache.getCreatedImage(EImage.FILTER_PS.getPath()));
-        filterToolItem.setToolTipText(Messages.FilterText);
-        filterToolItem.setEnabled(!isReadOnly());
-
-        filterToolItem.addSelectionListener(new SelectionAdapter() {
-
-            @Override
-            public void widgetSelected(SelectionEvent e) {
-                targetTreeViewer = tTreeViewer;
-                dataModelFilter = new DataModelFilter("", false, false, false, true);//$NON-NLS-1$
-                DataModelFilterDialog dataModelFilterDialog = (DataModelFilterDialog) getAdapter(DataModelFilterDialog.class);
-
-                if (dataModelFilterDialog.open() == Dialog.OK) {
-                    getSchemaRoleFilterFromTreeViewer(targetTreeViewer).setDataModelFilter(dataModelFilter);
-                    getSchemaTopElementNameFilterFromTreeViewer(targetTreeViewer).setNameFilterDes(
-                            getSchemaElementNameFilterDesByTreeViewer(targetTreeViewer));
-                    targetTreeViewer.refresh();
-                }
-            }
-        });
-
-        return null;
     }
 
     private ToolItem createExpandToolItem(ToolBar parentToolBar, final TreeViewer targetTreeViewer) {
@@ -2427,19 +2341,11 @@ public class DataModelMainPage extends EditorPart implements ModifyListener, IGo
         return (SchemaRoleAccessFilter) getTreeViewerFilter(viewer, SchemaRoleAccessFilter.class);
     }
 
-    private SchemaRoleAccessFilter getSchemaRoleFilterFromTreeViewer(TreeViewer targetViewer) {
-        return (SchemaRoleAccessFilter) getTreeViewerFilter(targetViewer, SchemaRoleAccessFilter.class);
-    }
-
-    private SchemaNameFilter getSchemaTopElementNameFilterFromTreeViewer(TreeViewer targetViewer) {
-        return (SchemaNameFilter) getTreeViewerFilter(targetViewer, SchemaNameFilter.class);
-    }
-
     private SchemaUniqueElementFilter getSchemaUniqueElementFilterFromSchemaTree() {
         return (SchemaUniqueElementFilter) getTreeViewerFilter(viewer, SchemaUniqueElementFilter.class);
     }
 
-    private ViewerFilter getTreeViewerFilter(TreeViewer viewer, Class<? extends ViewerFilter> filterType) {
+    public ViewerFilter getTreeViewerFilter(TreeViewer viewer, Class<? extends ViewerFilter> filterType) {
 
         if (viewer == null || filterType == null) {
             return null;
@@ -2454,7 +2360,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener, IGo
         return null;
     }
 
-    protected SchemaElementNameFilterDes getSchemaElementNameFilterDesByTreeViewer(TreeViewer targetViewer) {
+    public SchemaElementNameFilterDes getSchemaElementNameFilterDesByTreeViewer(TreeViewer targetViewer) {
 
         if (typesViewer.equals(targetViewer)) {
             return typeElementNameFilterDes;
@@ -2718,14 +2624,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener, IGo
             case 106:
                 setAnnotationDescriptionsAction.run();
                 break;
-            case 107:
-                setAnnotationWriteAction.run();
-                break;
-            case 108:
-                if (Util.IsEnterPrise()) {
-                    setAnnotationNoAction.run();
-                }
-                break;
+
             case 110:
                 setFacetMsgAction.run();
                 break;
@@ -2738,12 +2637,13 @@ public class DataModelMainPage extends EditorPart implements ModifyListener, IGo
             case 115:
                 setAnnotationPrimaryKeyInfoAction.run();
                 break;
+            case 107:
+            case 108:
             case 116:
-                visibleRuleAction.run();
-                break;
             case 117:
-                defaultValueRuleAction.run();
-                break;
+                if (exAdapter != null) {
+                    exAdapter.doubleClick(elem);
+                }
             case 121:
                 setAnnotationFKIntegrity.run();
                 break;
@@ -3019,18 +2919,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener, IGo
         if (adapter == TreeParent.class) {
             return Util.getServerTreeParent(getXObject());
         }
-        if (adapter == XSDSetAnnotationWriteAction.class) {
-            return new XSDSetAnnotationWriteAction(this);
-        }
-        if (adapter == XSDSetAnnotationNoAction.class) {
-            return new XSDSetAnnotationNoAction(this, dataModelName);
-        }
-        if (adapter == XSDSetAnnotationWrapWriteAction.class) {
-            return new XSDSetAnnotationWrapWriteAction(this);
-        }
-        if (adapter == XSDSetAnnotationWrapNoAction.class) {
-            return new XSDSetAnnotationWrapNoAction(this, dataModelName);
-        }
+
         if (adapter == XSDSetAnnotationForeignKeyAction.class) {
             return new XSDSetAnnotationForeignKeyAction(this, dataModelName);
         }
@@ -3046,12 +2935,6 @@ public class DataModelMainPage extends EditorPart implements ModifyListener, IGo
         if (adapter == DataModelFilterDialog.class) {
             return new DataModelFilterDialog(getSite().getShell(), xobject, dataModelFilter,
                     getSchemaElementNameFilterDesByTreeViewer(targetTreeViewer));
-        }
-        if (adapter == XSDDefaultValueRuleAction.class) {
-            return new XSDDefaultValueRuleAction(this, dataModelName);
-        }
-        if (adapter == XSDVisibleRuleAction.class) {
-            return new XSDVisibleRuleAction(this, dataModelName);
         }
         return super.getAdapter(adapter);
     }
@@ -3101,7 +2984,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener, IGo
         return false;
     }
 
-    private boolean isReadOnly() {
+    public boolean isReadOnly() {
         Object readOnly = getEditorInput().getAdapter(Boolean.class);
         return ((Boolean) readOnly).booleanValue();
     }
@@ -3123,6 +3006,8 @@ public class DataModelMainPage extends EditorPart implements ModifyListener, IGo
 
     // to mark the error is caused by Type
     private static final int MSG_GROUP_TYPE = 4;
+
+    private IDataModelMainPageExAdapter exAdapter;
 
     /*
      * (non-Javadoc)
@@ -3218,6 +3103,26 @@ public class DataModelMainPage extends EditorPart implements ModifyListener, IGo
         System.arraycopy(oldPathData, 0, returnPath, 0, length);
         returnPath[length] = newData;
         return returnPath;
+    }
+
+    public DataModelFilter getDataModelFilter() {
+        return this.dataModelFilter;
+    }
+
+    public void setDataModelFilter(DataModelFilter dataModelFilter) {
+        this.dataModelFilter = dataModelFilter;
+    }
+
+    public TreeViewer getTargetTreeViewer() {
+        return this.targetTreeViewer;
+    }
+
+    public void setTargetTreeViewer(TreeViewer targetTreeViewer) {
+        this.targetTreeViewer = targetTreeViewer;
+    }
+
+    public String getDataModelName() {
+        return this.dataModelName;
     }
 
 }

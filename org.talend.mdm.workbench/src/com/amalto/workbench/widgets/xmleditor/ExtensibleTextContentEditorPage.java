@@ -2,14 +2,12 @@ package com.amalto.workbench.widgets.xmleditor;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.Document;
 import org.eclipse.jface.text.ITextListener;
 import org.eclipse.jface.text.TextEvent;
 import org.eclipse.jface.text.TextViewer;
 import org.eclipse.jface.text.source.SourceViewer;
 import org.eclipse.jface.text.source.VerticalRuler;
-import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.DropTarget;
@@ -20,12 +18,9 @@ import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 
-import com.amalto.workbench.dialogs.ResourceSelectDialog;
-import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.models.TreeObjectTransfer;
 import com.amalto.workbench.utils.WidgetUtils;
-import com.amalto.workbench.views.ServerView;
 import com.amalto.workbench.widgets.xmleditor.infoholder.ExternalInfoHolder;
 
 public class ExtensibleTextContentEditorPage extends ExtensibleContentEditorPage {
@@ -46,8 +41,9 @@ public class ExtensibleTextContentEditorPage extends ExtensibleContentEditorPage
     @Override
     public void refresh() {
 
-        if (getCurrentContent().equals(getContent().getContent()))
+        if (getCurrentContent().equals(getContent().getContent())) {
             return;
+        }
 
         textViewer.setDocument(new Document(getContent().getContent()));
 
@@ -61,8 +57,9 @@ public class ExtensibleTextContentEditorPage extends ExtensibleContentEditorPage
     @Override
     public void clearExternalResources() {
 
-        if (textViewer.getUndoManager() != null)
+        if (textViewer.getUndoManager() != null) {
             textViewer.getUndoManager().disconnect();
+        }
     }
 
     @Override
@@ -85,25 +82,31 @@ public class ExtensibleTextContentEditorPage extends ExtensibleContentEditorPage
         dropTarget.setTransfer(new TreeObjectTransfer[] { TreeObjectTransfer.getInstance() });
         dropTarget.addDropListener(new DropTargetAdapter() {
 
+            @Override
             public void dragEnter(DropTargetEvent event) {
             }
 
+            @Override
             public void dragLeave(DropTargetEvent event) {
             }
 
+            @Override
             public void dragOver(DropTargetEvent event) {
                 event.feedback |= DND.FEEDBACK_EXPAND | DND.FEEDBACK_SCROLL;
             }
 
+            @Override
             public void drop(DropTargetEvent event) {
 
-                if (event.data instanceof TreeObject[])
-                    if (((TreeObject[]) event.data)[0].getType() == TreeObject.TRANSFORMER)
+                if (event.data instanceof TreeObject[]) {
+                    if (((TreeObject[]) event.data)[0].getType() == TreeObject.TRANSFORMER) {
                         textViewer.getTextWidget().setText(textViewer.getTextWidget().getText().replace("?", "")//$NON-NLS-1$//$NON-NLS-2$
                                 + ((TreeObject[]) event.data)[0].getDisplayName());
-                    else
+                    } else {
                         textViewer.getTextWidget().setText(
                                 textViewer.getTextWidget().getText() + ((TreeObject[]) event.data)[0].getDisplayName());
+                    }
+                }
 
             }
         });
@@ -125,33 +128,36 @@ public class ExtensibleTextContentEditorPage extends ExtensibleContentEditorPage
         return new KeyListener() {
 
             public void keyReleased(KeyEvent event) {
-                if (textViewer.getDocument() == null)
+                if (textViewer.getDocument() == null) {
                     return;
+                }
                 int start = textViewer.getSelectedRange().x;
                 int end = textViewer.getSelectedRange().y;
                 int length = textViewer.getDocument().get().length();
 
-                if (event.stateMask != SWT.CTRL || event.keyCode != 17)
+                if (event.stateMask != SWT.CTRL || event.keyCode != 17) {
                     return;
-
-                try {
-                    ResourceSelectDialog dialog = new ResourceSelectDialog(getShell(), null, Messages.ExtensibleTextXX_DialogTitle, ServerView
-                            .show().getSite());
-                    dialog.setBlockOnOpen(true);
-                    dialog.open();
-                    if (dialog.getReturnCode() == Window.OK) {
-                        String xpath = dialog.getXpath();
-                        String textHead = textViewer.getDocument().get(0, start);
-                        String textEnd = textViewer.getDocument().get(start + end, length - start - end);
-                        textViewer.setDocument(new Document(textHead + xpath + textEnd));
-                        textViewer.setSelectedRange(start, xpath.length());
-
-                        getContent().setContent(getCurrentContent());
-                        notifyOnXMLDocumentChanged();
-                    }
-                } catch (BadLocationException e) {
-                    log.error(e.getMessage(), e);
                 }
+
+                // try {
+                // ResourceSelectDialog dialog = new ResourceSelectDialog(getShell(), null,
+                // Messages.ExtensibleTextXX_DialogTitle, ServerView
+                // .show().getSite());
+                // dialog.setBlockOnOpen(true);
+                // dialog.open();
+                // if (dialog.getReturnCode() == Window.OK) {
+                // String xpath = dialog.getXpath();
+                // String textHead = textViewer.getDocument().get(0, start);
+                // String textEnd = textViewer.getDocument().get(start + end, length - start - end);
+                // textViewer.setDocument(new Document(textHead + xpath + textEnd));
+                // textViewer.setSelectedRange(start, xpath.length());
+                //
+                // getContent().setContent(getCurrentContent());
+                // notifyOnXMLDocumentChanged();
+                // }
+                // } catch (BadLocationException e) {
+                // log.error(e.getMessage(), e);
+                // }
             }
 
             public void keyPressed(KeyEvent event) {
@@ -163,8 +169,9 @@ public class ExtensibleTextContentEditorPage extends ExtensibleContentEditorPage
 
     private String getCurrentContent() {
 
-        if (textViewer.getDocument() == null || textViewer.getDocument().get() == null)
+        if (textViewer.getDocument() == null || textViewer.getDocument().get() == null) {
             return "";//$NON-NLS-1$
+        }
 
         return textViewer.getDocument().get().trim();
     }

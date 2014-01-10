@@ -39,26 +39,20 @@ import org.dom4j.io.SAXReader;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ITreeViewerListener;
 import org.eclipse.jface.viewers.TreeExpansionEvent;
-import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
-import org.eclipse.swt.widgets.Widget;
 import org.talend.mdm.commmon.util.core.ICoreConstants;
 import org.talend.mdm.commmon.util.webapp.XSystemObjects;
 
 import com.amalto.workbench.i18n.Messages;
-import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.IXObjectModelListener;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.models.TreeParent;
-import com.amalto.workbench.views.ServerView;
 import com.amalto.workbench.webservices.WSCategoryData;
 import com.amalto.workbench.webservices.XtentisPort;
 
 public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeViewerListener {
 
     private static Log log = LogFactory.getLog(LocalTreeObjectRepository.class);
-
-    private ServerView view;
 
     private boolean internalCheck = false;
 
@@ -133,8 +127,7 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
         }
     }
 
-    public void startUp(ServerView vw, String ur, String user, String pwd) {
-        view = vw;
+    public void startUp(String ur, String user, String pwd) {
         XtentisPort port = null;
         Document doc = null;
         SAXReader saxReader = new SAXReader();
@@ -470,10 +463,6 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
 
             synchronizeWithElem(treeObj, root, true);
         }
-        if (view != null) {
-            view.getViewer().refresh(false);
-        }
-
     }
 
     private String getXPathForTreeObject(TreeObject theObj) {
@@ -1036,28 +1025,28 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
     }
 
     private void setTreeNodeImage(TreeExpansionEvent event, boolean expand) {
-        Object elem = event.getElement();
-        Widget item = view.getViewer().testFindItem(event.getElement());
-        if (view == null) {
-            return;
-        }
-        if (item == null || (item != itemFocus && itemFocus != null)) {
-            item = itemFocus;
-        }
-        if (elem instanceof TreeParent && item != null) {
-            TreeParent parent = (TreeParent) elem;
-            if (parent.getType() == TreeObject.CATEGORY_FOLDER) {
-                ((TreeItem) item).setImage(expand ? ImageCache.getCreatedImage("icons/folder_open.gif") : ImageCache//$NON-NLS-1$
-                        .getCreatedImage("icons/folder.gif"));//$NON-NLS-1$
-
-                Element elemCategory = locateCategoryElement(parent);
-                if (elemCategory != null) {
-                    elemCategory.attribute(EXPAND_NAME).setValue(expand ? EXPAND_VALUE : COLLAPSE_VALUE);
-                    saveDocument(parent);
-                }
-
-            }
-        }
+        // Object elem = event.getElement();
+        // Widget item = view.getViewer().testFindItem(event.getElement());
+        // if (view == null) {
+        // return;
+        // }
+        // if (item == null || (item != itemFocus && itemFocus != null)) {
+        // item = itemFocus;
+        // }
+        // if (elem instanceof TreeParent && item != null) {
+        // TreeParent parent = (TreeParent) elem;
+        // if (parent.getType() == TreeObject.CATEGORY_FOLDER) {
+        //                ((TreeItem) item).setImage(expand ? ImageCache.getCreatedImage("icons/folder_open.gif") : ImageCache//$NON-NLS-1$
+        //                        .getCreatedImage("icons/folder.gif"));//$NON-NLS-1$
+        //
+        // Element elemCategory = locateCategoryElement(parent);
+        // if (elemCategory != null) {
+        // elemCategory.attribute(EXPAND_NAME).setValue(expand ? EXPAND_VALUE : COLLAPSE_VALUE);
+        // saveDocument(parent);
+        // }
+        //
+        // }
+        // }
     }
 
     public boolean getCategoryExpandState(TreeParent category) {
@@ -1104,47 +1093,48 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
         return equalTermsWithTreeObject(theObj.getParent(), otherObj.getParent());
     }
 
-    public void refreshCategoryStateWithinModel(TreeParent model) {
-        Element elemCategory = null;
-        for (TreeObject xobj : model.getChildren()) {
-            if (xobj instanceof TreeParent) {
-                refreshCategoryStateWithinModel((TreeParent) xobj);
-            } else {
-                continue;
-            }
-
-            elemCategory = locateCategoryElement((TreeParent) xobj);
-            if (elemCategory == null) {
-                continue;
-            }
-            Attribute attr = elemCategory.attribute(EXPAND_NAME);
-            if (attr != null) {
-                String value = attr.getValue();
-                Tree tree = (Tree) view.getViewer().getControl();
-                ArrayList<TreeItem> list = new ArrayList<TreeItem>();
-                getTreeItemFromTreeObject(tree.getItems(), xobj, list);
-                itemFocus = list.isEmpty() ? null : list.get(0);
-                if (itemFocus == null) {
-                    return;
-                }
-                TreeExpansionEvent event = new TreeExpansionEvent(view.getViewer(), xobj);
-                if (value.equals(EXPAND_VALUE)) {
-                    // set the category to be closed if it is empty
-                    if (elemCategory.elements().isEmpty()) {
-                        itemFocus.setExpanded(false);
-                        treeCollapsed(event);
-                    } else {
-                        itemFocus.setExpanded(true);
-                        treeExpanded(event);
-                    }
-                } else {
-                    itemFocus.setExpanded(false);
-                    treeCollapsed(event);
-                }
-                itemFocus = null;
-            }
-        }
-    }
+    //
+    // public void refreshCategoryStateWithinModel(TreeParent model) {
+    // Element elemCategory = null;
+    // for (TreeObject xobj : model.getChildren()) {
+    // if (xobj instanceof TreeParent) {
+    // refreshCategoryStateWithinModel((TreeParent) xobj);
+    // } else {
+    // continue;
+    // }
+    //
+    // elemCategory = locateCategoryElement((TreeParent) xobj);
+    // if (elemCategory == null) {
+    // continue;
+    // }
+    // Attribute attr = elemCategory.attribute(EXPAND_NAME);
+    // if (attr != null) {
+    // String value = attr.getValue();
+    // Tree tree = (Tree) view.getViewer().getControl();
+    // ArrayList<TreeItem> list = new ArrayList<TreeItem>();
+    // getTreeItemFromTreeObject(tree.getItems(), xobj, list);
+    // itemFocus = list.isEmpty() ? null : list.get(0);
+    // if (itemFocus == null) {
+    // return;
+    // }
+    // TreeExpansionEvent event = new TreeExpansionEvent(view.getViewer(), xobj);
+    // if (value.equals(EXPAND_VALUE)) {
+    // // set the category to be closed if it is empty
+    // if (elemCategory.elements().isEmpty()) {
+    // itemFocus.setExpanded(false);
+    // treeCollapsed(event);
+    // } else {
+    // itemFocus.setExpanded(true);
+    // treeExpanded(event);
+    // }
+    // } else {
+    // itemFocus.setExpanded(false);
+    // treeCollapsed(event);
+    // }
+    // itemFocus = null;
+    // }
+    // }
+    // }
 
     public void resetAllCategoryState(TreeParent root) {
         for (TreeObject xobj : root.getChildren()) {
