@@ -65,7 +65,7 @@ import com.amalto.workbench.webservices.XtentisPort;
 
 /**
  * created by liusongbo on 2013-1-24
- * 
+ *
  */
 public class DataClusterDialog extends Dialog {
 
@@ -335,6 +335,16 @@ public class DataClusterDialog extends Dialog {
     private MDMServerDef getSelectedMdmServerDef() {
         IStructuredSelection structuredSelection = (IStructuredSelection) serverComboViewer.getSelection();
         return (MDMServerDef) structuredSelection.getFirstElement();
+    }
+
+    @Override
+    protected void okPressed() {
+        recordContent = textViewer.getText().trim();
+        super.okPressed();
+    }
+
+    public Text getText() {
+        return textViewer;
     }
 
     public String getRecordContent() {
