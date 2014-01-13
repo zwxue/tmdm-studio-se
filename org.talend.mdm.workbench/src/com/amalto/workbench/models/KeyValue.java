@@ -32,14 +32,20 @@ public class KeyValue {
             return key.equals(other.key) && value.equals(other.value);
         }
         if (key != null && value == null) {
+            if (other.value != null) {
+                return false;
+            }
             return key.equals(other.key);
         }
 
         if (key == null && value != null) {
+            if (other.key != null) {
+                return false;
+            }
             return value.equals(other.value);
         }
 
-        return true;
+        return other.key == null && other.value == null;
     }
 
     @Override
