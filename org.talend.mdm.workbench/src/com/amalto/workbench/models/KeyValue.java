@@ -22,16 +22,27 @@ public class KeyValue {
         this.key = key;
         this.value = value;
     }
+    @Override
     public boolean equals(Object obj) {
         if (obj == null || !(obj instanceof KeyValue)) {
             return false;
         }
         KeyValue other=(KeyValue) obj;
-        if (key != null && value != null)
+        if (key != null && value != null) {
             return key.equals(other.key) && value.equals(other.value);
-        return false;
+        }
+        if (key != null && value == null) {
+            return key.equals(other.key);
+        }
+
+        if (key == null && value != null) {
+            return value.equals(other.value);
+        }
+
+        return true;
     }
 
+    @Override
     public String toString() {
       return "key["+key+"] value["+value+"]";   //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
     }
