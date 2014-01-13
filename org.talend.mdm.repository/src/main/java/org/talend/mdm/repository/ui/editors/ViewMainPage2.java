@@ -121,7 +121,11 @@ public class ViewMainPage2 extends ViewMainPage {
         XObjectEditorInput2 input = (XObjectEditorInput2) getEditor().getEditorInput();
         Item item = input.getInputItem();
         MDMServerObject serverObject = ((MDMServerObjectItem) item).getMDMServerObject();
-        MDMServerDef lastServerDef = serverObject.getLastServerDef().getDecryptedServerDef();
+
+        MDMServerDef lastServerDef = serverObject.getLastServerDef();
+        if (lastServerDef != null) {
+            lastServerDef = lastServerDef.getDecryptedServerDef();
+        }
 
         return lastServerDef;
     }

@@ -219,7 +219,7 @@ public class ViewBrowserMainPage extends AMainPage implements IXObjectModelListe
                 }
             });
 
-            int columns = 7;
+            int columns = 6;
             Composite resultsGroup = this.getNewSectionComposite(Messages.ViewBrowserMainPage_SearchAndResults);
             resultsGroup.setLayout(new GridLayout(columns, false));
 
@@ -236,11 +236,10 @@ public class ViewBrowserMainPage extends AMainPage implements IXObjectModelListe
             dataClusterCombo.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1));
             ((GridData) dataClusterCombo.getLayoutData()).minimumWidth = 100;
 
-            Label emptyLabel = toolkit.createLabel(resultsGroup, "      "); //$NON-NLS-1$
-            emptyLabel.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1));
-
             Label searchOnLabel = toolkit.createLabel(resultsGroup, Messages.ViewBrowserMainPage_SearchOn, SWT.NULL);
-            searchOnLabel.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1));
+            GridData layoutData = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
+            layoutData.horizontalIndent = 30;
+            searchOnLabel.setLayoutData(layoutData);
 
             searchItemCombo = new Combo(resultsGroup, SWT.READ_ONLY | SWT.DROP_DOWN | SWT.SINGLE);
             searchItemCombo.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1));
@@ -284,10 +283,7 @@ public class ViewBrowserMainPage extends AMainPage implements IXObjectModelListe
 
             matchAllWordsBtn = toolkit.createButton(resultsGroup, Messages.ViewBrowserMainPage_MatchWholeSentence, SWT.CHECK);
             matchAllWordsBtn.setSelection(true);
-
-            resultsLabel = toolkit.createLabel(resultsGroup, Messages.ViewBrowserMainPage_Search, SWT.NULL);
-            resultsLabel.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, columns - 1, 1));
-            resultsLabel.setText("                                          ");//$NON-NLS-1$
+            matchAllWordsBtn.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, columns, 1));
 
             resultsViewer = new TableViewer(resultsGroup);
             resultsViewer.getControl().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, columns, 1));
