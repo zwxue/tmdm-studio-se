@@ -14,9 +14,18 @@ package org.talend.mdm.repository.utils;
 
 import static org.junit.Assert.*;
 
+import org.junit.Rule;
 import org.junit.Test;
+import org.mockito.Mockito;
+import org.powermock.api.mockito.PowerMockito;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.rule.PowerMockRule;
 
+@PrepareForTest({ ValidateUtil.class })
 public class ValidateUtilTest {
+
+    @Rule
+    public PowerMockRule rule = new PowerMockRule();
 
     String str = "aaaaabbbbbccccc"; //$NON-NLS-1$
 
@@ -135,6 +144,32 @@ public class ValidateUtilTest {
 
         assertFalse(match1);
 
+    }
+
+    @Test
+    public void testMatchSmartViewRegex() throws Exception {
+        PowerMockito.mockStatic(ValidateUtil.class);
+
+        PowerMockito.doCallRealMethod().when(ValidateUtil.class, "matchSmartViewRegex", Mockito.anyString());
+        Mockito.when(ValidateUtil.matchViewProcessRegex(Mockito.anyString())).thenReturn(true);
+
+        String smartViewProcess = "Smart_view_a";
+        boolean matchSmartViewRegex = ValidateUtil.matchSmartViewRegex(smartViewProcess);
+        assertTrue(matchSmartViewRegex);
+        PowerMockito.verifyStatic(Mockito.atLeastOnce());
+        ValidateUtil.matchViewProcessRegex(Mockito.anyString());
+
+        smartViewProcess = "Smart_view_a#b";
+        matchSmartViewRegex = ValidateUtil.matchSmartViewRegex(smartViewProcess);
+        assertTrue(matchSmartViewRegex);
+        PowerMockito.verifyStatic(Mockito.atLeastOnce());
+        ValidateUtil.matchViewProcessRegex(Mockito.anyString());
+
+        smartViewProcess = "Smart_view_a#b#c";
+        matchSmartViewRegex = ValidateUtil.matchSmartViewRegex(smartViewProcess);
+        assertFalse(matchSmartViewRegex);
+        PowerMockito.verifyStatic(Mockito.times(2));
+        ValidateUtil.matchViewProcessRegex(Mockito.anyString());
     }
 
     @Test
