@@ -254,7 +254,7 @@ public class RepositoryDropAssistant extends CommonDropAdapterAssistant {
 
     /**
      * DOC hbhong Comment method "moveViewObj".
-     * 
+     *
      * @param dragViewObj
      * @param dropViewObj
      * @return
@@ -371,8 +371,18 @@ public class RepositoryDropAssistant extends CommonDropAdapterAssistant {
                         if (newText == null || newText.trim().length() == 0) {
                             return Messages.Common_nameCanNotBeEmpty;
                         }
-                        if (type.equals(IServerObjectRepositoryType.TYPE_TRANSFORMERV2)
-                                || type.equals(IServerObjectRepositoryType.TYPE_VIEW)) {
+                        if (type.equals(IServerObjectRepositoryType.TYPE_TRANSFORMERV2)) {
+                            if (newText.startsWith(ITransformerV2NodeConsDef.PREFIX_SMARTVIEW_UPPER)) {
+                                if (!ValidateUtil.matchSmartViewRegex(newText)) {
+                                    return Messages.Common_nameInvalid;
+                                }
+                            }
+
+                            if (!ValidateUtil.matchViewProcessRegex(newText)) {
+                                return Messages.Common_nameInvalid;
+                            }
+                        }
+                        if (type.equals(IServerObjectRepositoryType.TYPE_VIEW)) {
                             if (!ValidateUtil.matchViewProcessRegex(newText)) {
                                 return Messages.Common_nameInvalid;
                             }

@@ -74,7 +74,7 @@ public class InputProcessNamePage extends WizardPage implements ITransformerV2No
 
     /**
      * Create the wizard.
-     * 
+     *
      * @param selectType
      */
     public InputProcessNamePage(IWorkbenchPartSite site, int selectType) {
@@ -87,6 +87,7 @@ public class InputProcessNamePage extends WizardPage implements ITransformerV2No
 
     protected SelectionListener selectionListener = new SelectionAdapter() {
 
+        @Override
         public void widgetSelected(SelectionEvent e) {
             setEntityLabelEnable();
             updateProcessNameLabel();
@@ -132,7 +133,7 @@ public class InputProcessNamePage extends WizardPage implements ITransformerV2No
 
     /**
      * Create contents of the wizard.
-     * 
+     *
      * @param parent
      */
     public void createControl(Composite parent) {
@@ -292,8 +293,9 @@ public class InputProcessNamePage extends WizardPage implements ITransformerV2No
     }
 
     private IProcessTypeComposite getProcessTypeComposite(int processType, int defaultProcessType) {
-        if (typeComposite == null)
+        if (typeComposite == null) {
             return null;
+        }
         switch (processType) {
         case NewProcessWizard.BEFORE_TYPE:
             if (beforeProcessComposite == null) {
@@ -372,16 +374,25 @@ public class InputProcessNamePage extends WizardPage implements ITransformerV2No
     }
 
     private boolean validateProcessName() {
-        if (processNameLabel == null)
+        if (processNameLabel == null) {
             return false;
+        }
         String name = processNameLabel.getText().trim();
         String errorMsg = null;
         boolean result = false;
         boolean nameEnabled = nameText.isEnabled();
         if (nameEnabled && nameText.getText().trim().length() == 0) {
             errorMsg = Messages.Common_nameCanNotBeEmpty;
-        } else if (!nameEnabled && optionPartVisible && optionNameText.getText().trim().length() == 0) {
-            errorMsg = Messages.Common_nameCanNotBeEmpty;
+        } else if (optionPartVisible) {
+            if (!nameEnabled && optionNameText.getText().trim().length() == 0) {
+                errorMsg = Messages.Common_nameCanNotBeEmpty;
+            }
+
+            if (name.startsWith(ITransformerV2NodeConsDef.PREFIX_SMARTVIEW_UPPER)) {
+                if (!ValidateUtil.matchSmartViewRegex(name)) {
+                    errorMsg = Messages.Common_nameInvalid;
+                }
+            }
         } else if (!ValidateUtil.matchViewProcessRegex(name)) {
             errorMsg = Messages.Common_nameInvalid;
         } else if (RepositoryResourceUtil.isExistByName(IServerObjectRepositoryType.TYPE_TRANSFORMERV2, name)) {
@@ -402,8 +413,9 @@ public class InputProcessNamePage extends WizardPage implements ITransformerV2No
     }
 
     private void updateProcessNameLabel() {
-        if (curProcessTypeComposite == null || selectEntityBun == null)
+        if (curProcessTypeComposite == null || selectEntityBun == null) {
             return;
+        }
         String prefix = curProcessTypeComposite.getProcessPrefix();
         int type = curProcessTypeComposite.getCurrentProcessType();
         if (type == TYPE_WELCOMEACTION) {
@@ -411,11 +423,15 @@ public class InputProcessNamePage extends WizardPage implements ITransformerV2No
         } else if (type == TYPE_ENTITYACTION) {
             prefix += nameText.getText();
             if (!optionNameText.getText().isEmpty())
+             {
                 prefix += "#" + optionNameText.getText(); //$NON-NLS-1$
+            }
         } else if (type == TYPE_SMARTVIEW) {
             prefix += nameText.getText();
             if (!optionNameText.getText().isEmpty())
+             {
                 prefix += "#" + optionNameText.getText(); //$NON-NLS-1$
+            }
         } else {
             prefix += nameText.getText();
         }

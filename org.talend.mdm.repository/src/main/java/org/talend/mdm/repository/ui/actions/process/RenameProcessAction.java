@@ -248,6 +248,12 @@ public class RenameProcessAction extends AbstractRepositoryAction implements ITr
                         return Messages.Common_nameCanNotBeEmpty;
                     }
 
+                    if (newText.startsWith(ITransformerV2NodeConsDef.PREFIX_SMARTVIEW_UPPER)) {
+                        if (!ValidateUtil.matchSmartViewRegex(newText)) {
+                            return Messages.Common_nameInvalid;
+                        }
+                    }
+
                     if (!ValidateUtil.matchViewProcessRegex(newText)) {
                         return Messages.Common_nameInvalid;
                     }
@@ -274,5 +280,4 @@ public class RenameProcessAction extends AbstractRepositoryAction implements ITr
         }
         return false;
     }
-
 }
