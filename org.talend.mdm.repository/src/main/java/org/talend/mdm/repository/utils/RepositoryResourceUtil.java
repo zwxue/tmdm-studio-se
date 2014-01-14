@@ -106,6 +106,7 @@ import org.talend.repository.model.IRepositoryNode.ENodeType;
 import org.talend.repository.model.IRepositoryNode.EProperties;
 import org.talend.repository.model.RepositoryNode;
 
+import com.amalto.workbench.exadapter.ExAdapterManager;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.XtentisException;
 import com.amalto.workbench.webservices.WSConceptKey;
@@ -130,7 +131,12 @@ public class RepositoryResourceUtil {
 
     static XmiResourceManager resourceManager = new XmiResourceManager();
 
+    private static IRepositoryResourceUtilExAdapter exAdapter;
+
     private static final String DIVIDE = "/"; //$NON-NLS-1$
+    static {
+        exAdapter = ExAdapterManager.getAdapter(new RepositoryResourceUtil(), IRepositoryResourceUtilExAdapter.class);
+    }
 
     public static boolean checkServerConnection(Shell shell, final MDMServerDef serverDef) {
         try {
@@ -1058,11 +1064,10 @@ public class RepositoryResourceUtil {
                         }
                     }
 
-                    if (RepositoryWorkflowUtil.isWorkflowEditorFromBPM(ref.getEditor(false))) {
-                        IRepositoryViewObject workflowViewObject = RepositoryWorkflowUtil.getWorkflowViewObject(ref
-                                .getEditor(false));
-                        if (isIdEquals(viewObj, workflowViewObject)) {
-                            return ref;
+                    if (exAdapter != null) {
+                        IEditorReference wfEditor = exAdapter.getOpenedWFEditor(viewObj, ref);
+                        if (wfEditor != null) {
+                            return wfEditor;
                         }
                     }
 
@@ -1081,7 +1086,7 @@ public class RepositoryResourceUtil {
         return null;
     }
 
-    private static boolean isIdEquals(IRepositoryViewObject objA, IRepositoryViewObject objB) {
+    public static boolean isIdEquals(IRepositoryViewObject objA, IRepositoryViewObject objB) {
         if (objA != null && objB != null && objA.getId().equals(objB.getId())) {
             return true;
         }
@@ -1231,7 +1236,7 @@ public class RepositoryResourceUtil {
         if (aServerDef == null && bServerDef == null) {
             return true;
         }
-        
+
         if (aServerDef != null && bServerDef != null) {
             if (aServerDef.getName().equals(bServerDef.getName())) {
                 return true;

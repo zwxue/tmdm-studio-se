@@ -41,16 +41,12 @@ import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IActionBars;
-import org.eclipse.ui.IEditorInput;
-import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IMemento;
-import org.eclipse.ui.IPartListener;
 import org.eclipse.ui.IPartListener2;
 import org.eclipse.ui.IPerspectiveDescriptor;
 import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.IWorkbenchPage;
-import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchPartReference;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PerspectiveAdapter;
@@ -62,18 +58,12 @@ import org.eclipse.ui.navigator.CommonViewer;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
 import org.eclipse.ui.views.properties.tabbed.ITabbedPropertySheetPageContributor;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
-import org.talend.commons.exception.LoginException;
 import org.talend.commons.exception.PersistenceException;
 import org.talend.core.model.general.Project;
-import org.talend.core.model.properties.Item;
-import org.talend.core.model.properties.Property;
 import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.core.repository.model.IRepositoryFactory;
 import org.talend.core.repository.model.ProxyRepositoryFactory;
-import org.talend.core.runtime.CoreRuntimePlugin;
-import org.talend.dataprofiler.core.ui.editor.matchrule.MatchRuleItemEditorInput;
-import org.talend.designer.core.ui.editor.ProcessEditorInput;
 import org.talend.mdm.repository.core.AbstractRepositoryAction;
 import org.talend.mdm.repository.core.IServerObjectRepositoryType;
 import org.talend.mdm.repository.core.command.CommandManager;
@@ -86,15 +76,12 @@ import org.talend.mdm.repository.ui.actions.ImportObjectAction;
 import org.talend.mdm.repository.ui.actions.ImportServerObjectAction;
 import org.talend.mdm.repository.ui.actions.RefreshViewAction;
 import org.talend.mdm.repository.ui.dialogs.SwitchPerspectiveDialog;
-import org.talend.mdm.repository.ui.editors.IRepositoryViewEditorInput;
 import org.talend.mdm.repository.ui.preferences.PreferenceConstants;
 import org.talend.mdm.repository.ui.starting.ShowWelcomeEditor;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
-import org.talend.mdm.repository.utils.RepositoryWorkflowUtil;
 import org.talend.repository.ProjectManager;
-import org.talend.repository.model.ERepositoryStatus;
-import org.talend.repository.model.IProxyRepositoryFactory;
 
+import com.amalto.workbench.exadapter.ExAdapterManager;
 import com.amalto.workbench.views.MDMPerspective;
 
 /**
@@ -120,10 +107,6 @@ public class MDMRepositoryView extends CommonNavigator implements ITabbedPropert
     private static final Log log = LogFactory.getLog(MDMRepositoryView.class);
 
     public static final String VIEW_ID = "org.talend.mdm.repository.ui.navigator.MDMRepositoryView"; //$NON-NLS-1$
-
-    private static final String EDITOR_ID_WORKFLOW_CUSTOMFORM = "org.bonitasoft.studio.diagram.form.custom.part.CustomFormDiagram"; //$NON-NLS-1$
-
-    private static final String EDITOR_ID_WORKFLOW_CUSTOMFORM_EX = "org.bonitasoft.studio.diagram.form.custom.ex.part.FormDiagramEditorEx"; //$NON-NLS-1$
 
     @Override
     public void createPartControl(Composite aParent) {
@@ -292,8 +275,6 @@ public class MDMRepositoryView extends CommonNavigator implements ITabbedPropert
         return systemFolder;
     }
 
-    IProxyRepositoryFactory factory = CoreRuntimePlugin.getInstance().getProxyRepositoryFactory();
-
     public static MDMRepositoryView show() {
         IViewPart part = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().findView(VIEW_ID);
         if (part == null) {
@@ -404,131 +385,7 @@ public class MDMRepositoryView extends CommonNavigator implements ITabbedPropert
 
     private static boolean first = true;
 
-    IPartListener editorListener = new IPartListener() {
-
-        public void partActivated(IWorkbenchPart part) {
-            if (part instanceof IEditorPart) {
-                IEditorInput input = ((IEditorPart) part).getEditorInput();
-                if (input != null && input instanceof IRepositoryViewEditorInput) {
-
-                    IRepositoryViewEditorInput repositoryViewEditorInput = (IRepositoryViewEditorInput) input;
-                    final String id = repositoryViewEditorInput.getViewObject().getId();
-                    final IRepositoryViewObject viewObject = ContainerCacheService.get(id);
-
-                    refreshViewObject(viewObject);
-                }
-
-                String partId = part.getSite().getId();
-                if (partId.equals(EDITOR_ID_WORKFLOW_CUSTOMFORM) || partId.equals(EDITOR_ID_WORKFLOW_CUSTOMFORM_EX)) {
-                    switchToPerspective(IPerspectiveConstants.PERSPECTIVE_ID_FORM);
-                } else if (RepositoryWorkflowUtil.isWorkflowEditor((IEditorPart) part)) {
-                    switchToPerspective(IPerspectiveConstants.PERSPECTIVE_ID_WORKFLOW);
-                }
-            }
-        }
-
-        public void partBroughtToTop(IWorkbenchPart part) {
-        }
-
-        public void partClosed(IWorkbenchPart part) {
-            if (part instanceof IEditorPart) {
-                IEditorInput input = ((IEditorPart) part).getEditorInput();
-                if (input != null) {
-                    Item item = null;
-                    if (input instanceof IRepositoryViewEditorInput) {
-                        item = ((IRepositoryViewEditorInput) input).getInputItem();
-                    } else if (input instanceof ProcessEditorInput) {
-                        item = ((ProcessEditorInput) input).getItem();
-                    } else if (input instanceof MatchRuleItemEditorInput) {
-                        item = ((MatchRuleItemEditorInput) input).getItem();
-                    }
-
-                    if (item == null) {
-                        if (RepositoryWorkflowUtil.isWorkflowEditorFromBPM((IEditorPart) part)) {
-                            IRepositoryViewObject workflowViewObject = RepositoryWorkflowUtil
-                                    .getWorkflowViewObject((IEditorPart) part);
-                            if (workflowViewObject != null) {
-                                item = workflowViewObject.getProperty().getItem();
-                            }
-                        }
-                    }
-
-                    if (item != null) {
-                        try {
-                            if (ERepositoryStatus.LOCK_BY_USER != factory.getStatus(item)) {
-                                return;
-                            }
-                            factory.unlock(item);
-                            Property property = item.getProperty();
-                            final String id = property.getId();
-
-                            Display.getDefault().asyncExec(new Runnable() {
-
-                                public void run() {
-                                    if (!getCommonViewer().getTree().isDisposed()) {
-                                        final IRepositoryViewObject viewObject = ContainerCacheService.get(id);
-                                        if (viewObject != null) {
-                                            getCommonViewer().refresh(viewObject);
-                                        }
-                                    }
-                                }
-                            });
-
-                        } catch (PersistenceException e) {
-                            log.error(e.getMessage(), e);
-                        } catch (LoginException e) {
-                            log.error(e.getMessage(), e);
-                        }
-                    }
-                }
-            }
-        }
-
-        public void partDeactivated(IWorkbenchPart part) {
-        }
-
-        public void partOpened(final IWorkbenchPart part) {
-            if (part instanceof IEditorPart) {
-                if (RepositoryWorkflowUtil.isWorkflowEditorFromBPM((IEditorPart) part)) {
-                    refreshLockState((IEditorPart) part);
-                }
-            }
-        }
-
-        private void refreshLockState(IEditorPart workflowEditorPart) {
-            IRepositoryViewObject workflowViewObject = RepositoryWorkflowUtil.getWorkflowViewObject(workflowEditorPart);
-            if (workflowViewObject != null) {
-                lock(workflowViewObject);
-
-                refreshViewObject(workflowViewObject);
-            }
-        }
-
-        private void lock(IRepositoryViewObject workflowViewObject) {
-            try {
-                Item item = workflowViewObject.getProperty().getItem();
-                item = RepositoryResourceUtil.assertItem(item);
-                factory.isEditableAndLockIfPossible(item);
-            } catch (Exception e) {
-                log.error(e.getMessage(), e);
-            }
-        }
-
-        private void refreshViewObject(final IRepositoryViewObject viewObject) {
-            Display.getDefault().asyncExec(new Runnable() {
-
-                public void run() {
-                    if (!getCommonViewer().getTree().isDisposed()) {
-                        if (viewObject != null) {
-                            getCommonViewer().refresh(viewObject);
-                        }
-                    }
-                }
-            });
-        }
-    };
-
-    private void switchToPerspective(String perspectiveId) {
+    public void switchToPerspective(String perspectiveId) {
         if (currentPerspective == null || (perspectiveId != null && !perspectiveId.equals(currentPerspective.getId()))) {
             IPerspectiveDescriptor perspective = WorkbenchPlugin.getDefault().getPerspectiveRegistry()
                     .findPerspectiveWithId(perspectiveId);
@@ -540,14 +397,19 @@ public class MDMRepositoryView extends CommonNavigator implements ITabbedPropert
 
     private DeployAllAction deployAll;
 
-    private void registerEditorListener() {
+    private IMDMRepositoryViewExAdapter exAdapter;
 
-        this.getSite().getPage().addPartListener(editorListener);
+    private void registerEditorListener() {
+        if (exAdapter != null) {
+            exAdapter.registerWFEditorListener();
+        }
         this.getSite().getPage().addPartListener(partListener);
     }
 
     private void unRegisterEditorListener() {
-        this.getSite().getPage().removePartListener(editorListener);
+        if (exAdapter != null) {
+            exAdapter.unregisterWFEditorListener();
+        }
         this.getSite().getPage().removePartListener(partListener);
     }
 
@@ -555,6 +417,7 @@ public class MDMRepositoryView extends CommonNavigator implements ITabbedPropert
     public void init(IViewSite aSite, IMemento aMemento) throws PartInitException {
         super.init(aSite, aMemento);
         CommandManager.getInstance().restoreState(aMemento);
+        this.exAdapter = ExAdapterManager.getAdapter(this, IMDMRepositoryViewExAdapter.class);
     }
 
     @Override
