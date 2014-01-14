@@ -350,14 +350,7 @@
             products="MDM"
             type="MDM.Menu">
       </repositoryNode>
-      <repositoryNode
-            class="org.talend.mdm.repository.core.nodes.RoleRepositoryNode"
-            folder="MDM/role"
-            isResouce="true"
-            label="Role"
-            products="MDM"
-            type="MDM.Role">
-      </repositoryNode>
+
       <!--
       <repositoryNode
             class="org.talend.mdm.repository.core.nodes.CategoryRepositoryNode"
@@ -392,22 +385,7 @@
             products="MDM"
             type="MDM.StoredProcedure">
       </repositoryNode>
-      <repositoryNode
-            class="org.talend.mdm.repository.core.nodes.UniverseRepositoryNode"
-            folder="MDM/version"
-            isResouce="true"
-            label="Version"
-            products="MDM"
-            type="MDM.Universe">
-      </repositoryNode>
-      <repositoryNode
-            class="org.talend.mdm.repository.core.nodes.SynchronizationPlanRepositoryNode"
-            folder="MDM/synchronizationplan"
-            isResouce="true"
-            label="Synchronization Plan"
-            products="MDM"
-            type="MDM.SynchronizationPlan">
-      </repositoryNode>
+
       <repositoryNode
             class="org.talend.mdm.repository.core.nodes.ViewRepositoryNode"
             folder="MDM/view"
@@ -416,14 +394,7 @@
             products="MDM"
             type="MDM.View">
       </repositoryNode>
-      <repositoryNode
-            class="org.talend.mdm.repository.core.nodes.WorkflowDeployRepositoryNode"
-            folder="MDM/workflow"
-            isResouce="true"
-            label="Workflow"
-            products="MDM"
-            type="MDM.Workflow">
-      </repositoryNode>
+    
       <repositoryNode
             class="org.talend.mdm.repository.core.nodes.TransformerV2RepositoryNode"
             folder="MDM/transformerV2"
@@ -466,22 +437,7 @@
             products="MDM"
             type="MDM.ServiceConfiguration">
       </repositoryNode>
-      <repositoryNode
-            class="org.talend.mdm.repository.core.nodes.ResourceRepositoryNode"
-            folder="MDM/resource"
-            isResouce="true"
-            label="Resource"
-            products="MDM"
-            type="MDM.Resource">
-      </repositoryNode>
-      <repositoryNode
-            class="org.talend.mdm.repository.core.nodes.CustomFormRepositoryNode"
-            folder="MDM/customForm"
-            isResouce="true"
-            label="Custom Layout"
-            products="MDM"
-            type="MDM.CustomForm">
-      </repositoryNode>
+
       <repositoryNode
             class="org.talend.mdm.repository.core.nodes.RecycleBinRepositoryNode"
             folder="MDM/RecycleBin"
@@ -490,13 +446,7 @@
             products="MDM"
             type="MDM.RecycleBin">
       </repositoryNode>
-      <repositoryNode
-            folder="mapinfo"
-            isResouce="false"
-            label="MatchRule MapInfo"
-            products="MDM"
-            type="MDM.MatchRuleMapInfo">
-      </repositoryNode>
+
    </extension>
    <extension
          point="org.talend.mdm.repository.repositoryConfiguration">
