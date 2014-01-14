@@ -17,7 +17,7 @@ import java.util.regex.Pattern;
 public class ValidateUtil {
 
     public static boolean matchCommonRegex(String newText) {
-        String regex = "\\w*(-|\\w*)+\\w+";//$NON-NLS-1$        
+        String regex = "\\w*(-|\\w*)+\\w+";//$NON-NLS-1$
         String tailRegex = ".*\\w+";//$NON-NLS-1$
 
         return matches(regex, tailRegex, newText);
@@ -31,10 +31,18 @@ public class ValidateUtil {
     }
 
     public static boolean matchViewProcessRegex(String newText) {
-        String regex = "\\w*(#|\\.|\\w*)+(#|\\w+)";//$NON-NLS-1$        
+        String regex = "\\w*(#|\\.|\\w*)+(#|\\w+)";//$NON-NLS-1$
         String tailRegex = ".*(#|\\w+)";//$NON-NLS-1$
 
         return matches(regex, tailRegex, newText);
+    }
+
+    public static boolean matchSmartViewRegex(String newText) {
+        if (newText.indexOf("#") != newText.lastIndexOf("#")) { //$NON-NLS-1$//$NON-NLS-2$
+            return false;
+        }
+
+        return matchViewProcessRegex(newText);
     }
 
     public static boolean matchRoleRegex(String newText) {

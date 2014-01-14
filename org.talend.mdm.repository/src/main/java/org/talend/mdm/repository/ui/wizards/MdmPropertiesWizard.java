@@ -37,6 +37,7 @@ import org.talend.core.runtime.CoreRuntimePlugin;
 import org.talend.mdm.repository.core.IServerObjectRepositoryType;
 import org.talend.mdm.repository.core.command.CommandManager;
 import org.talend.mdm.repository.core.command.ICommand;
+import org.talend.mdm.repository.core.impl.transformerV2.ITransformerV2NodeConsDef;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.model.mdmproperties.WSResourceItem;
@@ -56,7 +57,7 @@ public class MdmPropertiesWizard extends PropertiesWizard {
 
     /**
      * DOC achen MdmPropertiesWizard constructor comment.
-     * 
+     *
      * @param repositoryViewObject
      * @param path
      * @param useLastVersion
@@ -121,7 +122,7 @@ public class MdmPropertiesWizard extends PropertiesWizard {
 
     /**
      * DOC HHB Comment method "afterSave".
-     * 
+     *
      * @param object
      * @param oldVersion
      */
@@ -200,9 +201,17 @@ public class MdmPropertiesWizard extends PropertiesWizard {
                         errorMsg = Messages.Common_nameIsUsed;
                     } else {
                         ERepositoryObjectType objectType = object.getRepositoryObjectType();
-                        if (objectType.equals(IServerObjectRepositoryType.TYPE_VIEW)
-                                || objectType.equals(IServerObjectRepositoryType.TYPE_TRANSFORMERV2)) {
+                        if (objectType.equals(IServerObjectRepositoryType.TYPE_VIEW)) {
                             if (!ValidateUtil.matchViewProcessRegex(newText)) {
+                                errorMsg = Messages.Common_nameInvalid;
+                            }
+                        } else if (objectType.equals(IServerObjectRepositoryType.TYPE_TRANSFORMERV2)) {
+                            if (newText.startsWith(ITransformerV2NodeConsDef.PREFIX_SMARTVIEW_UPPER)) {
+                                if (!ValidateUtil.matchSmartViewRegex(newText)) {
+                                    errorMsg = Messages.Common_nameInvalid;
+                                }
+                            }
+                            if (errorMsg == null && !ValidateUtil.matchViewProcessRegex(newText)) {
                                 errorMsg = Messages.Common_nameInvalid;
                             }
                         } else if (objectType.equals(IServerObjectRepositoryType.TYPE_CUSTOM_FORM)) {
@@ -245,7 +254,7 @@ public class MdmPropertiesWizard extends PropertiesWizard {
 
     /**
      * DOC HHB Comment method "canEditObjectName".
-     * 
+     *
      * @return
      */
     protected boolean canEditObjectName() {
