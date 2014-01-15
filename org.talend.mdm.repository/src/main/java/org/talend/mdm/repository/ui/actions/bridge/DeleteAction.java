@@ -49,7 +49,7 @@ public class DeleteAction extends AbstractBridgeRepositoryAction {
     protected void doRun() {
 
         super.doRun();
-        commonViewer.refresh();
+
         List<IRepositoryNode> remainNodes = getRemainNodes();
         if (!remainNodes.isEmpty()) {
             for (IRepositoryNode node : remainNodes) {
@@ -62,6 +62,7 @@ public class DeleteAction extends AbstractBridgeRepositoryAction {
 
             }
         }
+        commonViewer.refresh();
     }
 
     private List<IRepositoryNode> getRemainNodes() {
