@@ -12,6 +12,8 @@
 // ============================================================================
 package org.talend.mdm.repository.core.service.interactive;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.rmi.RemoteException;
 
 import org.apache.log4j.Logger;
@@ -76,7 +78,14 @@ public class ResourceInteractiveHandler extends AbstractInteractiveHandler {
         String url = "/imageserver/secure/ImageUploadServlet";//$NON-NLS-1$
         if (deleteFile) {
             if (imageCatalog != null) {
-                String uri = "upload/" + imageCatalog + '/' + name;//$NON-NLS-1$
+                String encodedName = name;
+                try {
+                    encodedName = URLEncoder.encode(name, "utf-8"); //$NON-NLS-1$
+                } catch (UnsupportedEncodingException e) {
+                    log.error(e.getMessage(), e);
+                }
+
+                String uri = "upload/" + imageCatalog + '/' + encodedName;//$NON-NLS-1$
                 url = "/imageserver/secure/ImageDeleteServlet?uri=" + uri;//$NON-NLS-1$
             } else {
                 return false;
