@@ -72,7 +72,6 @@ public class ObjectFactory {
     private final static QName _WSDropItem_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSDropItem");
     private final static QName _WSTransformerPluginV2SList_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSTransformerPluginV2sList");
     private final static QName _WSFindAllDroppedItemsPKs_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSFindAllDroppedItemsPKs");
-    private final static QName _WSConnectorInteraction_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSConnectorInteraction");
     private final static QName _WSDataClusterPKArray_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSDataClusterPKArray");
     private final static QName _WSPutUniverse_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSPutUniverse");
     private final static QName _WSMDMJob_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSMDMJob");
@@ -228,7 +227,6 @@ public class ObjectFactory {
     private final static QName _WSGetUniverse_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSGetUniverse");
     private final static QName _WSPutTransformer_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSPutTransformer");
     private final static QName _WSMDMJobArray_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSMDMJobArray");
-    private final static QName _WSConnectorInteractionResponse_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSConnectorInteractionResponse");
     private final static QName _WSGetRoutingOrderV2PKsByCriteria_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSGetRoutingOrderV2PKsByCriteria");
     private final static QName _WSViewArray_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSViewArray");
     private final static QName _WSTransformerPluginV2PutConfiguration_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSTransformerPluginV2PutConfiguration");
@@ -697,14 +695,6 @@ public class ObjectFactory {
      */
     public WSInt createWSInt() {
         return new WSInt();
-    }
-
-    /**
-     * Create an instance of {@link WSBase64KeyValue }
-     * 
-     */
-    public WSBase64KeyValue createWSBase64KeyValue() {
-        return new WSBase64KeyValue();
     }
 
     /**
@@ -1404,14 +1394,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link WSConnectorInteractionResponse }
-     * 
-     */
-    public WSConnectorInteractionResponse createWSConnectorInteractionResponse() {
-        return new WSConnectorInteractionResponse();
-    }
-
-    /**
      * Create an instance of {@link WSTransformerV2PKArray }
      * 
      */
@@ -1857,14 +1839,6 @@ public class ObjectFactory {
      */
     public WSTransformerPK createWSTransformerPK() {
         return new WSTransformerPK();
-    }
-
-    /**
-     * Create an instance of {@link WSConnectorInteraction }
-     * 
-     */
-    public WSConnectorInteraction createWSConnectorInteraction() {
-        return new WSConnectorInteraction();
     }
 
     /**
@@ -2673,15 +2647,6 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "urn-com-amalto-xtentis-webservice", name = "WSFindAllDroppedItemsPKs")
     public JAXBElement<WSFindAllDroppedItemsPKs> createWSFindAllDroppedItemsPKs(WSFindAllDroppedItemsPKs value) {
         return new JAXBElement<WSFindAllDroppedItemsPKs>(_WSFindAllDroppedItemsPKs_QNAME, WSFindAllDroppedItemsPKs.class, null, value);
-    }
-
-    /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link WSConnectorInteraction }{@code >}}
-     * 
-     */
-    @XmlElementDecl(namespace = "urn-com-amalto-xtentis-webservice", name = "WSConnectorInteraction")
-    public JAXBElement<WSConnectorInteraction> createWSConnectorInteraction(WSConnectorInteraction value) {
-        return new JAXBElement<WSConnectorInteraction>(_WSConnectorInteraction_QNAME, WSConnectorInteraction.class, null, value);
     }
 
     /**
@@ -4077,15 +4042,6 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "urn-com-amalto-xtentis-webservice", name = "WSMDMJobArray")
     public JAXBElement<WSMDMJobArray> createWSMDMJobArray(WSMDMJobArray value) {
         return new JAXBElement<WSMDMJobArray>(_WSMDMJobArray_QNAME, WSMDMJobArray.class, null, value);
-    }
-
-    /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link WSConnectorInteractionResponse }{@code >}}
-     * 
-     */
-    @XmlElementDecl(namespace = "urn-com-amalto-xtentis-webservice", name = "WSConnectorInteractionResponse")
-    public JAXBElement<WSConnectorInteractionResponse> createWSConnectorInteractionResponse(WSConnectorInteractionResponse value) {
-        return new JAXBElement<WSConnectorInteractionResponse>(_WSConnectorInteractionResponse_QNAME, WSConnectorInteractionResponse.class, null, value);
     }
 
     /**

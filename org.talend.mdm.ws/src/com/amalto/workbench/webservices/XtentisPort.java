@@ -608,13 +608,6 @@ public interface XtentisPort {
         WSRecoverDroppedItem wsRecoverDroppedItem
     );
 
-    @WebResult(name = "WSConnectorInteractionResponse", targetNamespace = "urn-com-amalto-xtentis-webservice", partName = "wsConnectorInteractionResponse")
-    @WebMethod
-    public WSConnectorInteractionResponse connectorInteraction(
-        @WebParam(partName = "wsConnectorInteraction", name = "WSConnectorInteraction", targetNamespace = "urn-com-amalto-xtentis-webservice")
-        WSConnectorInteraction wsConnectorInteraction
-    );
-
     @WebResult(name = "WSString", targetNamespace = "urn-com-amalto-xtentis-webservice", partName = "dummy")
     @WebMethod
     public WSString ping(
