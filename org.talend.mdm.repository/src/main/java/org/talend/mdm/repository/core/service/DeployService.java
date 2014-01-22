@@ -34,7 +34,6 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.internal.Workbench;
 import org.eclipse.ui.progress.IProgressService;
 import org.talend.core.GlobalServiceRegister;
 import org.talend.core.model.properties.Item;
@@ -427,7 +426,7 @@ public class DeployService {
         //
         try {
             IProgressService progressService = null;
-            if (Workbench.getInstance() != null) {
+            if (PlatformUI.getWorkbench() != null) {
                 progressService = PlatformUI.getWorkbench().getProgressService();
             } else {
                 progressService = ConsoleProgressService.getInstance();

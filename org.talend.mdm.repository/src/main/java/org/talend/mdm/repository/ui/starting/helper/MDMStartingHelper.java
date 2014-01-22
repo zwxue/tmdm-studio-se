@@ -19,7 +19,6 @@ import java.util.Properties;
 
 import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.FileLocator;
-import org.eclipse.ui.internal.intro.impl.html.IIntroHTMLConstants;
 import org.eclipse.ui.internal.intro.impl.model.IntroContentProvider;
 import org.eclipse.ui.internal.intro.impl.model.loader.ContentProviderManager;
 import org.eclipse.ui.internal.intro.impl.model.loader.IntroContentParser;
@@ -27,7 +26,6 @@ import org.eclipse.ui.internal.intro.impl.model.util.ModelUtil;
 import org.eclipse.ui.intro.config.IIntroContentProviderSite;
 import org.eclipse.ui.intro.config.IIntroXHTMLContentProvider;
 import org.osgi.framework.Bundle;
-import org.talend.commons.exception.PersistenceException;
 import org.talend.mdm.repository.i18n.MessagesE;
 import org.talend.mdm.repository.plugin.RepositoryPlugin;
 import org.talend.mdm.repository.ui.starting.MDMStartingConstants;
@@ -37,20 +35,24 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 public class MDMStartingHelper {
+
     private static Logger log = Logger.getLogger(MDMStartingHelper.class);
-    
+
     private static MDMStartingHelper helper = null;
+
     private Bundle bundle;
-    
-    private MDMStartingHelper(){}
-    
+
+    private MDMStartingHelper() {
+    }
+
     public static MDMStartingHelper getHelper() {
-        if(helper == null)
+        if (helper == null) {
             helper = new MDMStartingHelper();
-        
+        }
+
         return helper;
     }
-    
+
     public String getHtmlContent() throws IOException {
         String externalFileName = getExternalFileName();
 
@@ -58,7 +60,7 @@ public class MDMStartingHelper {
 
         return htmlContent;
     }
-    
+
     private String getExternalFileName() throws IOException {
         String htmlResource = "resources/welcomepage/mdm-welcomepage.html";//$NON-NLS-1$
 
@@ -71,8 +73,9 @@ public class MDMStartingHelper {
             String prefix = "file:/";//$NON-NLS-1$
             String fileProtocol = "file:///";//$NON-NLS-1$
             if (externalFormFileUrl.startsWith(prefix)) {
-                if (!externalFormFileUrl.startsWith(fileProtocol))
+                if (!externalFormFileUrl.startsWith(fileProtocol)) {
                     externalFormFileUrl = fileProtocol + externalFormFileUrl.substring(prefix.length());
+                }
             }
 
             return externalFormFileUrl;
@@ -80,18 +83,20 @@ public class MDMStartingHelper {
 
         return null;
     }
-    
+
     private Bundle getRepositoryBundle() {
-        if(bundle == null)
+        if (bundle == null) {
             bundle = RepositoryPlugin.getDefault().getBundle();
-        
+        }
+
         return bundle;
     }
 
     @SuppressWarnings("restriction")
     private String resolveHtmlContent(String externalFileName) {
-        if (externalFileName == null)
+        if (externalFileName == null) {
             return "";//$NON-NLS-1$
+        }
 
         String content = "";//$NON-NLS-1$
         IntroContentParser parser = new IntroContentParser(externalFileName);
@@ -105,7 +110,7 @@ public class MDMStartingHelper {
 
         return content;
     }
-    
+
     private void resolveInternationalization(Document dom) {
         NodeList internationals = dom.getElementsByTagNameNS("*", //$NON-NLS-1$
                 MDMStartingConstants.KEY_INTERNATIONAL);
@@ -117,7 +122,7 @@ public class MDMStartingHelper {
             internationalElement.getParentNode().replaceChild(dom.createTextNode(nodeName), internationalElement);
         }
     }
-    
+
     private void resolveImagePath(Document dom) {
         String imagePath = getImagePath();
         NodeList elements = dom.getElementsByTagNameNS("*", "img");//$NON-NLS-1$//$NON-NLS-2$
@@ -130,24 +135,25 @@ public class MDMStartingHelper {
             }
         }
     }
-    
+
     private String getImagePath() {
         File file = null;
         try {
             File bundleFile = FileLocator.getBundleFile(getRepositoryBundle());
             String resourceFolder = "icons/server_export.png";//$NON-NLS-1$
-            file = new File(bundleFile, resourceFolder );
+            file = new File(bundleFile, resourceFolder);
         } catch (IOException e) {
             log.error("resolve bundle file error.", e);//$NON-NLS-1$
         }
-        
+
         return file.getAbsolutePath();
     }
-    
+
     public static Node[] getArray(NodeList nodeList) {
         Node nodes[] = new Node[nodeList.getLength()];
-        for (int i = 0; i < nodeList.getLength(); i++)
+        for (int i = 0; i < nodeList.getLength(); i++) {
             nodes[i] = nodeList.item(i);
+        }
 
         return nodes;
     }
@@ -168,22 +174,24 @@ public class MDMStartingHelper {
             // retrieve it, otherwise load the class.
             IIntroXHTMLContentProvider providerClass = (IIntroXHTMLContentProvider) ContentProviderManager.getInst()
                     .getContentProvider(provider);
-            if (providerClass == null)
+            if (providerClass == null) {
                 // content provider never created before, create it.
                 providerClass = (IIntroXHTMLContentProvider) ContentProviderManager.getInst().createContentProvider(provider,
                         site);
+            }
 
             if (providerClass != null) {
                 // create a div with the same id as the contentProvider, pass it
                 // as the parent to create the specialized content, and then
                 // replace the contentProvider element with this div.
                 Properties att = new Properties();
-                att.setProperty(IIntroHTMLConstants.ATTRIBUTE_ID, provider.getId());
+                att.setProperty("id", provider.getId()); //$NON-NLS-1$
                 Element contentDiv = ModelUtil.createElement(dom, ModelUtil.TAG_DIV, att);
                 providerClass.createContent(provider.getId(), contentDiv);
 
                 if (contentDiv.getChildNodes().getLength() != 0) {
-                    if (MDMStartingConstants.OPTION_NAME.equals(provider.getId()) || MDMStartingConstants.PRODUCT_NAME.equals(provider.getId())) {
+                    if (MDMStartingConstants.OPTION_NAME.equals(provider.getId())
+                            || MDMStartingConstants.PRODUCT_NAME.equals(provider.getId())) {
                         contentProviderElement.getParentNode().replaceChild(contentDiv.getFirstChild(), contentProviderElement);
                     } else {
                         contentProviderElement.getParentNode().replaceChild(contentDiv, contentProviderElement);
@@ -196,7 +204,7 @@ public class MDMStartingHelper {
                 // alt text. We can load XHTML content here.
             }
         }
-        
+
         return dom;
     }
 }

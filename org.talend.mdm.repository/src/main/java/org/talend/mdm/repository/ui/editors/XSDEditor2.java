@@ -18,6 +18,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.swt.custom.CTabFolder;
@@ -27,7 +28,6 @@ import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.IPropertyListener;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.ide.IGotoMarker;
-import org.eclipse.wst.xsd.ui.internal.adapters.XSDSchemaAdapter;
 import org.eclipse.xsd.XSDDiagnostic;
 import org.eclipse.xsd.XSDSchema;
 import org.talend.core.GlobalServiceRegister;
@@ -136,7 +136,7 @@ public class XSDEditor2 extends XSDEditor implements ISvnHistory {
 
     private void activePage(IFile xsdFile) {
         if (model != null) {
-            Notifier target = ((XSDSchemaAdapter) model).getTarget();
+            Notifier target = ((Adapter) model).getTarget();
             XSDSchema xs = (XSDSchema) target;
             xs.validate();
             EList<XSDDiagnostic> diagnostics = xs.getAllDiagnostics();

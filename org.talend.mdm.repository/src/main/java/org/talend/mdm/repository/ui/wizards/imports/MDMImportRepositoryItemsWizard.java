@@ -45,9 +45,6 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.forms.widgets.FormToolkit;
-import org.eclipse.ui.internal.ide.IDEWorkbenchMessages;
-import org.eclipse.ui.internal.wizards.datatransfer.ArchiveFileManipulations;
-import org.eclipse.ui.internal.wizards.datatransfer.DataTransferMessages;
 import org.eclipse.ui.internal.wizards.datatransfer.TarException;
 import org.eclipse.ui.internal.wizards.datatransfer.TarFile;
 import org.eclipse.ui.internal.wizards.datatransfer.TarLeveledStructureProvider;
@@ -84,6 +81,7 @@ import org.talend.mdm.repository.ui.dialogs.importexchange.ImportExchangeOptions
 import org.talend.mdm.repository.ui.dialogs.lock.LockedObjectDialog;
 import org.talend.mdm.repository.ui.navigator.MDMRepositoryView;
 import org.talend.mdm.repository.ui.wizards.imports.viewer.ImportRepositoryObjectCheckTreeViewer;
+import org.talend.mdm.repository.utils.IOUtil;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 import org.talend.mdm.repository.utils.RepositoryTransformUtil;
 import org.talend.repository.RepositoryWorkUnit;
@@ -385,10 +383,10 @@ public class MDMImportRepositoryItemsWizard extends ImportItemsWizard {
         String importPath = importFromArchieve ? zipFilePath : importFolder;
         final Collection<ItemRecord> items = new ArrayList<ItemRecord>();
 
-        monitor.beginTask(DataTransferMessages.WizardProjectsImportPage_SearchingMessage, 100);
+        monitor.beginTask(Messages.MDMImportRepositoryItemsWizard_searchProject, 100);
         File directory = new File(importPath);
         monitor.worked(10);
-        if (importFromArchieve && ArchiveFileManipulations.isTarFile(importPath)) {
+        if (importFromArchieve && IOUtil.isTarFile(importPath)) {
             TarFile sourceTarFile = getSpecifiedTarSourceFile(importPath);
             if (sourceTarFile == null) {
                 return;
@@ -399,7 +397,7 @@ public class MDMImportRepositoryItemsWizard extends ImportItemsWizard {
             if (!manager.collectPath2Object(provider.getRoot())) {
                 return;
             }
-        } else if (importFromArchieve && ArchiveFileManipulations.isZipFile(importPath)) {
+        } else if (importFromArchieve && IOUtil.isZipFile(importPath)) {
             ZipFile sourceFile = getSpecifiedZipSourceFile(importPath);
             if (sourceFile == null) {
                 return;
@@ -503,9 +501,9 @@ public class MDMImportRepositoryItemsWizard extends ImportItemsWizard {
         try {
             return new ZipFile(fileName);
         } catch (ZipException e) {
-            displayErrorDialog(DataTransferMessages.ZipImport_badFormat);
+            displayErrorDialog(Messages.MDMImportRepositoryItemsWizard_badFormat);
         } catch (IOException e) {
-            displayErrorDialog(DataTransferMessages.ZipImport_couldNotRead);
+            displayErrorDialog(Messages.MDMImportRepositoryItemsWizard_canNotRead);
         }
 
         zip.getText().setFocus();
@@ -520,9 +518,9 @@ public class MDMImportRepositoryItemsWizard extends ImportItemsWizard {
         try {
             return new TarFile(fileName);
         } catch (TarException e) {
-            displayErrorDialog(DataTransferMessages.TarImport_badFormat);
+            displayErrorDialog(Messages.MDMImportRepositoryItemsWizard_badFormat);
         } catch (IOException e) {
-            displayErrorDialog(DataTransferMessages.ZipImport_couldNotRead);
+            displayErrorDialog(Messages.MDMImportRepositoryItemsWizard_canNotRead);
         }
 
         zip.getText().setFocus();
@@ -534,7 +532,7 @@ public class MDMImportRepositoryItemsWizard extends ImportItemsWizard {
     }
 
     protected String getErrorDialogTitle() {
-        return IDEWorkbenchMessages.WizardExportPage_internalErrorTitle;
+        return Messages.MDMImportRepositoryItemsWizard_internalError;
     }
 
     @Override

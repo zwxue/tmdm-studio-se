@@ -13,8 +13,12 @@
 package org.talend.mdm.repository.utils;
 
 import java.io.File;
+import java.io.IOException;
+import java.util.zip.ZipFile;
 
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.ui.internal.wizards.datatransfer.TarException;
+import org.eclipse.ui.internal.wizards.datatransfer.TarFile;
 
 /**
  * DOC hbhong class global comment. Detailled comment
@@ -65,5 +69,65 @@ public class IOUtil {
     public static boolean isExist(String path) {
         assert (path != null);
         return new File(path).exists();
+    }
+
+    /**
+     * Determine whether the file with the given filename is in .tar.gz or .tar format.
+     * 
+     * @param fileName file to test
+     * @return true if the file is in tar format
+     */
+    public static boolean isTarFile(String fileName) {
+        if (fileName.length() == 0) {
+            return false;
+        }
+
+        TarFile tarFile = null;
+        try {
+            tarFile = new TarFile(fileName);
+        } catch (TarException tarException) {
+            return false;
+        } catch (IOException ioException) {
+            return false;
+        } finally {
+            if (tarFile != null) {
+                try {
+                    tarFile.close();
+                } catch (IOException e) {
+                    // ignore
+                }
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Determine whether the file with the given filename is in .zip or .jar format.
+     * 
+     * @param fileName file to test
+     * @return true if the file is in tar format
+     */
+    public static boolean isZipFile(String fileName) {
+        if (fileName.length() == 0) {
+            return false;
+        }
+
+        ZipFile zipFile = null;
+        try {
+            zipFile = new ZipFile(fileName);
+        } catch (IOException ioException) {
+            return false;
+        } finally {
+            if (zipFile != null) {
+                try {
+                    zipFile.close();
+                } catch (IOException e) {
+                    // ignore
+                }
+            }
+        }
+
+        return true;
     }
 }

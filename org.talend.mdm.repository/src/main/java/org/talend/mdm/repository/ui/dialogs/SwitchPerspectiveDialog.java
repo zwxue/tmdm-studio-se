@@ -26,7 +26,6 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IPerspectiveDescriptor;
 import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.internal.WorkbenchPlugin;
 import org.talend.mdm.repository.i18n.Messages;
 
 /**
@@ -108,7 +107,7 @@ public class SwitchPerspectiveDialog extends MessageDialog {
      * DOC HHB Comment method "doSwitch".
      */
     private void doSwitch() {
-        IPerspectiveDescriptor perspective = WorkbenchPlugin.getDefault().getPerspectiveRegistry()
+        IPerspectiveDescriptor perspective = PlatformUI.getWorkbench().getPerspectiveRegistry()
                 .findPerspectiveWithId(perspectiveId);
         if (perspective != null) {
             PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().setPerspective(perspective);
