@@ -49,7 +49,6 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.internal.wizards.datatransfer.DataTransferMessages;
 import org.eclipse.ui.internal.wizards.datatransfer.WizardFileSystemResourceExportPage1;
 import org.talend.commons.exception.PersistenceException;
 import org.talend.commons.ui.runtime.exception.ExceptionHandler;
@@ -222,7 +221,8 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
     public DeployOnMDMExportWizardPage(IStructuredSelection selection) {
         this("publishOnSpagoExportPage1", selection, null); //$NON-NLS-1$
         setDescription(Messages.DeployOnMDMExportWizard_publishJob);
-        setTitle(DataTransferMessages.ArchiveExport_exportTitle);
+        setTitle(Messages.DeployOnMDMExportWizardPage_exportTitle);
+
     }
 
     /**
@@ -344,14 +344,14 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
      */
     protected boolean ensureTargetFileIsValid(File targetFile) {
         if (targetFile.exists() && targetFile.isDirectory()) {
-            displayErrorDialog(DataTransferMessages.ZipExport_mustBeFile);
+            displayErrorDialog(Messages.DeployOnMDMExportWizardPage_mustBeFile);
             giveFocusToDestination();
             return false;
         }
 
         if (targetFile.exists()) {
             if (!targetFile.canWrite()) {
-                displayErrorDialog(DataTransferMessages.ZipExport_alreadyExistsError);
+                displayErrorDialog(Messages.DeployOnMDMExportWizardPage_alreadyExistsError);
                 giveFocusToDestination();
                 return false;
             }
@@ -959,7 +959,7 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
      */
     @Override
     protected String getDestinationLabel() {
-        return DataTransferMessages.ArchiveExport_destinationLabel;
+        return ""; //$NON-NLS-1$
     }
 
     /**

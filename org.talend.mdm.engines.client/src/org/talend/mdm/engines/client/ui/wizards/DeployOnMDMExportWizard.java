@@ -23,16 +23,16 @@ import org.eclipse.ui.IExportWizard;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
-import org.eclipse.ui.internal.ide.IDEWorkbenchPlugin;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.talend.core.model.properties.SpagoBiServer;
+import org.talend.mdm.engines.client.Activator;
 import org.talend.mdm.engines.client.i18n.Messages;
 
 /**
  * Publish SpagoBI export wizard. <br/>
- *
+ * 
  * $Id: DeployOnMDMExportWizard.java 1 2007-04-27 11:30:00 cantoine
- *
+ * 
  */
 public class DeployOnMDMExportWizard extends Wizard implements IExportWizard {
 
@@ -84,7 +84,7 @@ public class DeployOnMDMExportWizard extends Wizard implements IExportWizard {
         }
 
         setWindowTitle(Messages.DeployOnMDMExportWizard_publishJob);
-        setDefaultPageImageDescriptor(IDEWorkbenchPlugin.getIDEImageDescriptor("wizban/exportzip_wiz.png"));//$NON-NLS-1$
+        setDefaultPageImageDescriptor(Activator.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "icons/exportzip_wiz.png"));//$NON-NLS-1$
         setNeedsProgressMonitor(true);
     }
 

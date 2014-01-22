@@ -49,6 +49,8 @@ public class Messages extends NLS {
 
     public static String DeployOnMDMExportWizard_publishJob;
 
+    public static String DeployOnMDMExportWizardPage_alreadyExistsError;
+
     public static String DeployOnMDMExportWizardPage_prepareDeployJob;
 
     public static String DeployOnMDMExportWizardPage_publishJob;
@@ -85,6 +87,8 @@ public class Messages extends NLS {
 
     public static String DeployOnMDMExportWizardPage_exporting;
 
+    public static String DeployOnMDMExportWizardPage_exportTitle;
+
     public static String DeployOnMDMExportWizardPage_exportType;
 
     public static String DeployOnMDMExportWizardPage_ExportType;
@@ -96,6 +100,8 @@ public class Messages extends NLS {
     public static String DeployOnMDMExportWizardPage_Pacakging;
 
     public static String DeployOnMDMExportWizardPage_jobCompileError;
+
+    public static String DeployOnMDMExportWizardPage_mustBeFile;
 
     public static String MDMPreferencePage_technicalStatusLabel;
 
