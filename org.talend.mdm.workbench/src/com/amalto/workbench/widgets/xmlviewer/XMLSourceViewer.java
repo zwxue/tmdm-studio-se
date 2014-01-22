@@ -39,7 +39,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.handlers.IHandlerActivation;
 import org.eclipse.ui.handlers.IHandlerService;
-import org.eclipse.ui.internal.editors.text.EditorsPlugin;
 import org.eclipse.ui.texteditor.AbstractDecoratedTextEditorPreferenceConstants;
 import org.eclipse.ui.texteditor.AnnotationPreference;
 import org.eclipse.ui.texteditor.ITextEditorActionDefinitionIds;
@@ -142,7 +141,9 @@ public class XMLSourceViewer extends ProjectionViewer {
 
     private MarkerAnnotationPreferences getAnnotationPreferences() {
         if (fAnnotationPreferences == null) {
-            fAnnotationPreferences = EditorsPlugin.getDefault().getMarkerAnnotationPreferences();
+            fAnnotationPreferences = new MarkerAnnotationPreferences();
+            // force init
+            fAnnotationPreferences.getAnnotationPreferences();
         }
         return fAnnotationPreferences;
     }
@@ -208,7 +209,6 @@ public class XMLSourceViewer extends ProjectionViewer {
         }
     }
 
-
     private void initAnnotationModel() {
         annotationModel = new ProjectionAnnotationModel();
     }
@@ -264,10 +264,12 @@ public class XMLSourceViewer extends ProjectionViewer {
     protected void configureSourceViewerDecorationSupport(SourceViewerDecorationSupport support) {
 
         Iterator e = getAnnotationPreferences().getAnnotationPreferences().iterator();
-        while (e.hasNext())
+        while (e.hasNext()) {
             support.setAnnotationPreference((AnnotationPreference) e.next());
-        // support.setAnnotationPainterPreferenceKeys(DefaultMarkerAnnotationAccess.UNKNOWN, UNKNOWN_INDICATION_COLOR,
-        // UNKNOWN_INDICATION, UNKNOWN_INDICATION_IN_OVERVIEW_RULER, 0);
+            // support.setAnnotationPainterPreferenceKeys(DefaultMarkerAnnotationAccess.UNKNOWN,
+            // UNKNOWN_INDICATION_COLOR,
+            // UNKNOWN_INDICATION, UNKNOWN_INDICATION_IN_OVERVIEW_RULER, 0);
+        }
 
         support.setCursorLinePainterPreferenceKeys(CURRENT_LINE, CURRENT_LINE_COLOR);
         support.setMarginPainterPreferenceKeys(PRINT_MARGIN, PRINT_MARGIN_COLOR, PRINT_MARGIN_COLUMN);
@@ -305,8 +307,9 @@ public class XMLSourceViewer extends ProjectionViewer {
      */
     protected void activateHandlers() {
         // if handler service is null, return
-        if (handlerService == null)
+        if (handlerService == null) {
             return;
+        }
 
         // activate handlers if it is not active
         Iterator<String> i = handlers.keySet().iterator();
@@ -324,8 +327,9 @@ public class XMLSourceViewer extends ProjectionViewer {
     @Override
     protected void handleDispose() {
         if (handlerService != null) {
-            for (IHandlerActivation activation : handlerActivations.values())
+            for (IHandlerActivation activation : handlerActivations.values()) {
                 handlerService.deactivateHandler(activation);
+            }
         }
 
         super.handleDispose();
@@ -373,8 +377,9 @@ public class XMLSourceViewer extends ProjectionViewer {
     //
     protected final String getFontPropertyPreferenceKey() {
         String symbolicFontName = getSymbolicFontName();
-        if (symbolicFontName != null)
+        if (symbolicFontName != null) {
             return symbolicFontName;
+        }
         return JFaceResources.TEXT_FONT;
     }
 
@@ -383,8 +388,9 @@ public class XMLSourceViewer extends ProjectionViewer {
     }
 
     private String getSymbolicFontName() {
-        if (getConfigurationElement() != null)
+        if (getConfigurationElement() != null) {
             return getConfigurationElement().getAttribute("symbolicFontName"); //$NON-NLS-1$
+        }
         return null;
     }
 

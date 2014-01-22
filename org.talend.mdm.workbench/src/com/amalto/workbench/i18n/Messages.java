@@ -2029,6 +2029,8 @@ public class Messages extends NLS {
 
     public static String FileSelectWidget_ToolTip;
 
+    public static String FilteredCheckboxTree_typeFilterText;
+
     public static String FilterText;
 
     public static String ExceptionInfo;

@@ -42,7 +42,6 @@ import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IPropertyListener;
@@ -50,8 +49,6 @@ import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.internal.views.properties.tabbed.view.TabbedPropertyComposite;
-import org.eclipse.ui.internal.views.properties.tabbed.view.TabbedPropertyTitle;
 import org.eclipse.ui.part.EditorPart;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
@@ -654,7 +651,6 @@ public class XSDEditor extends InternalXSDMultiPageEditor implements IServerObje
         return super.getContributorId();
     }
 
-    @SuppressWarnings("rawtypes")
     @Override
     public Object getAdapter(Class type) {
         if (type == IPropertySheetPage.class) {
@@ -665,16 +661,10 @@ public class XSDEditor extends InternalXSDMultiPageEditor implements IServerObje
             return new TabbedPropertySheetPage(this) {
 
                 @Override
-                protected void refreshTitleBar() {
-                    TabbedPropertyTitle title = ((TabbedPropertyComposite) getControl()).getTitle();
-                    if (getCurrentTab() == null) {
-                        title.setTitle(null, null);
-                        return;
-                    }
-                    String text = registry.getLabelProvider().getText(currentSelection);
-                    Image image = registry.getLabelProvider().getImage(currentSelection);
-                    String label = isReadOnly() ? NLS.bind(Messages.XSDEditor_SheetPageTitle, text) : text;
-                    title.setTitle(label, image);
+                public String getTitleText(ISelection selection) {
+                    String text = super.getTitleText(selection);
+                    text = isReadOnly() ? NLS.bind(Messages.XSDEditor_SheetPageTitle, text) : text;
+                    return text;
                 }
             };
         }

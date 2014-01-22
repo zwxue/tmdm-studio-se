@@ -101,7 +101,6 @@ import org.eclipse.ui.part.DrillDownAdapter;
 import org.eclipse.ui.part.EditorPart;
 import org.eclipse.ui.part.MultiPageEditorPart;
 import org.eclipse.ui.part.MultiPageEditorSite;
-import org.eclipse.wst.xsd.ui.internal.adt.editor.CommonMultiPageEditor;
 import org.eclipse.xsd.XSDAnnotation;
 import org.eclipse.xsd.XSDAttributeDeclaration;
 import org.eclipse.xsd.XSDAttributeUse;
@@ -200,6 +199,7 @@ import com.amalto.workbench.availablemodel.IAvailableModel;
 import com.amalto.workbench.dialogs.DataModelFilterDialog;
 import com.amalto.workbench.dialogs.ErrorExceptionDialog;
 import com.amalto.workbench.dialogs.SelectImportedModulesDialog;
+import com.amalto.workbench.editors.xsdeditor.XSDEditor;
 import com.amalto.workbench.exadapter.ExAdapterManager;
 import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.image.EImage;
@@ -3023,13 +3023,13 @@ public class DataModelMainPage extends EditorPart implements ModifyListener, IGo
             String type = marker.getType();
 
             if (type.equals(MARKER_XSD_ERR) || activePage == 1) {
-                ((CommonMultiPageEditor) part).gotoMarker(marker);
+                ((XSDEditor) part).gotoMarker(marker);
                 return;
             } else if (type.equals(MARKER_DATA_MODEL)) {
                 boolean openInSource = marker.getAttribute(OPEN_IN_SOURCE, false);
                 if (openInSource) {
                     marker.setAttribute(OPEN_IN_SOURCE, false);
-                    ((CommonMultiPageEditor) part).gotoMarker(marker);
+                    ((XSDEditor) part).gotoMarker(marker);
                     return;
                 }
 

@@ -20,7 +20,7 @@ import org.eclipse.jface.text.source.ISharedTextColors;
 import org.eclipse.jface.text.source.IVerticalRuler;
 import org.eclipse.jface.text.source.OverviewRuler;
 import org.eclipse.jface.text.source.VerticalRuler;
-import org.eclipse.ui.internal.editors.text.EditorsPlugin;
+import org.eclipse.ui.editors.text.EditorsUI;
 import org.eclipse.ui.texteditor.AnnotationPreference;
 import org.eclipse.ui.texteditor.DefaultMarkerAnnotationAccess;
 import org.eclipse.ui.texteditor.MarkerAnnotationPreferences;
@@ -55,14 +55,17 @@ public class XMLSourceViewerHelper {
     }
 
     public IAnnotationAccess getAnnotationAccess() {
-        if (fAnnotationAccess == null)
+        if (fAnnotationAccess == null) {
             fAnnotationAccess = createAnnotationAccess();
-        return (IAnnotationAccess) fAnnotationAccess;
+        }
+        return fAnnotationAccess;
     }
 
     private MarkerAnnotationPreferences getAnnotationPreferences() {
         if (fAnnotationPreferences == null) {
-            fAnnotationPreferences = EditorsPlugin.getDefault().getMarkerAnnotationPreferences();
+            fAnnotationPreferences = new MarkerAnnotationPreferences();
+            // force init
+            fAnnotationPreferences.getAnnotationPreferences();
         }
         return fAnnotationPreferences;
     }
@@ -73,13 +76,14 @@ public class XMLSourceViewerHelper {
         Iterator e = getAnnotationPreferences().getAnnotationPreferences().iterator();
         while (e.hasNext()) {
             AnnotationPreference preference = (AnnotationPreference) e.next();
-            if (preference.contributesToHeader())
+            if (preference.contributesToHeader()) {
                 ruler.addHeaderAnnotationType(preference.getAnnotationType());
+            }
         }
         return ruler;
     }
 
     public ISharedTextColors getSharedColors() {
-        return EditorsPlugin.getDefault().getSharedTextColors();
+        return EditorsUI.getSharedTextColors();
     }
 }

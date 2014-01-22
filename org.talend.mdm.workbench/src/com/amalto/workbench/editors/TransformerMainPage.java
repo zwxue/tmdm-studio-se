@@ -30,6 +30,7 @@ import org.apache.commons.logging.LogFactory;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.jface.dialogs.IInputValidator;
 import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -88,7 +89,7 @@ import org.eclipse.ui.forms.AbstractFormPart;
 import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
-import org.eclipse.wst.xsl.ui.internal.XSLUIPlugin;
+import org.eclipse.ui.preferences.ScopedPreferenceStore;
 
 import com.amalto.workbench.dialogs.PluginDetailsDialog;
 import com.amalto.workbench.dialogs.ProcessResultsDialog;
@@ -674,7 +675,8 @@ public class TransformerMainPage extends AMainPageV2 {
                     refreshEnableState(false);
 
                     try {
-                        IPreferenceStore preference = XSLUIPlugin.getDefault().getPreferenceStore();
+
+                        IPreferenceStore preference = new ScopedPreferenceStore(new InstanceScope(), "org.eclipse.wst.xsl.ui"); //$NON-NLS-1$
                         String charSet = preference.getString("outputCodeset"); //$NON-NLS-1$
                         String xslcontent = parameterEditor.getContent().getContent();
                         IFile file = FileProvider.createdTempFile(xslcontent, getXSLTFileName(), charSet);

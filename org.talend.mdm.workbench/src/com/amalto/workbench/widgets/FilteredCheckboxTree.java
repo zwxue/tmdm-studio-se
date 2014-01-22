@@ -12,9 +12,7 @@
 // ============================================================================
 package com.amalto.workbench.widgets;
 
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -26,15 +24,8 @@ import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.resource.JFaceResources;
-import org.eclipse.jface.viewers.AbstractTreeViewer;
 import org.eclipse.jface.viewers.CheckboxTreeViewer;
-import org.eclipse.jface.viewers.IContentProvider;
-import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.ITreeContentProvider;
-import org.eclipse.jface.viewers.StructuredViewer;
-import org.eclipse.jface.viewers.Viewer;
-import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.accessibility.AccessibleAdapter;
 import org.eclipse.swt.accessibility.AccessibleEvent;
@@ -60,10 +51,11 @@ import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.ui.IWorkbenchPreferenceConstants;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.ContainerCheckedTreeViewer;
-import org.eclipse.ui.internal.WorkbenchMessages;
-import org.eclipse.ui.internal.misc.StringMatcher;
+import org.eclipse.ui.dialogs.PatternFilter;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.eclipse.ui.progress.WorkbenchJob;
+
+import com.amalto.workbench.i18n.Messages;
 
 /**
  * Modification from eclipse built-in class FilteredTree. A simple control that provides a text widget and a tree
@@ -207,7 +199,7 @@ public class FilteredCheckboxTree extends Composite {
         patternFilter = filter;
         showFilterControls = PlatformUI.getPreferenceStore().getBoolean(IWorkbenchPreferenceConstants.SHOW_FILTERED_TEXTS);
         createControl(parent, treeStyle);
-        setInitialText(WorkbenchMessages.FilteredTree_FilterMessage);
+        setInitialText(Messages.FilteredCheckboxTree_typeFilterText);
         createRefreshJob();
         setFont(parent.getFont());
     }
@@ -289,9 +281,7 @@ public class FilteredCheckboxTree extends Composite {
                 refreshJob.cancel();
             }
         });
-        if (treeViewer instanceof NotifyingTreeViewer) {
-            patternFilter.setUseCache(true);
-        }
+
         treeViewer.addFilter(patternFilter);
         return treeViewer.getControl();
     }
@@ -306,7 +296,7 @@ public class FilteredCheckboxTree extends Composite {
      * @since 3.3
      */
     protected CheckboxTreeViewer doCreateTreeViewer(Composite parent, int style) {
-        return new NotifyingTreeViewer(parent, style);
+        return new ContainerCheckedTreeViewer(parent, style);
     }
 
     /**
@@ -317,7 +307,7 @@ public class FilteredCheckboxTree extends Composite {
      */
     private TreeItem getFirstMatchingItem(TreeItem[] items) {
         for (TreeItem treeItem : items) {
-            if (patternFilter.isLeafMatch(treeViewer, treeItem.getData())
+            if (patternFilter.isElementVisible(treeViewer, treeItem.getData())
                     && patternFilter.isElementSelectable(treeItem.getData())) {
                 return treeItem;
             }
@@ -709,7 +699,7 @@ public class FilteredCheckboxTree extends Composite {
                 }
             };
 
-            clearTextAction.setToolTipText(WorkbenchMessages.FilteredTree_ClearToolTip);
+            clearTextAction.setToolTipText("");
             clearTextAction.setImageDescriptor(JFaceResources.getImageRegistry().getDescriptor(CLEAR_ICON));
             clearTextAction.setDisabledImageDescriptor(JFaceResources.getImageRegistry().getDescriptor(DCLEAR_ICON));
 
@@ -833,401 +823,11 @@ public class FilteredCheckboxTree extends Composite {
                 filter.setPattern(filterText);
             }
 
-            if (filter.isElementVisible(tree.getViewer(), element) && filter.isLeafMatch(tree.getViewer(), element)) {
+            if (filter.isElementVisible(tree.getViewer(), element)) {
                 return JFaceResources.getFontRegistry().getBold(JFaceResources.DIALOG_FONT);
             }
         }
         return null;
-    }
-
-    /**
-     * Custom tree viewer subclass that clears the caches in patternFilter on any change to the tree. See bug 187200.
-     * 
-     * @since 3.3
-     * 
-     */
-    class NotifyingTreeViewer extends ContainerCheckedTreeViewer {
-
-        /**
-         * @param parent
-         * @param style
-         */
-        public NotifyingTreeViewer(Composite parent, int style) {
-            super(parent, style);
-        }
-
-        @Override
-        public void add(Object parentElementOrTreePath, Object childElement) {
-            getPatternFilter().clearCaches();
-            super.add(parentElementOrTreePath, childElement);
-        }
-
-        @Override
-        public void add(Object parentElementOrTreePath, Object[] childElements) {
-            getPatternFilter().clearCaches();
-            super.add(parentElementOrTreePath, childElements);
-        }
-
-        @Override
-        protected void inputChanged(Object input, Object oldInput) {
-            getPatternFilter().clearCaches();
-            super.inputChanged(input, oldInput);
-        }
-
-        @Override
-        public void insert(Object parentElementOrTreePath, Object element, int position) {
-            getPatternFilter().clearCaches();
-            super.insert(parentElementOrTreePath, element, position);
-        }
-
-        @Override
-        public void refresh() {
-            getPatternFilter().clearCaches();
-            super.refresh();
-        }
-
-        @Override
-        public void refresh(boolean updateLabels) {
-            getPatternFilter().clearCaches();
-            super.refresh(updateLabels);
-        }
-
-        @Override
-        public void refresh(Object element) {
-            getPatternFilter().clearCaches();
-            super.refresh(element);
-        }
-
-        @Override
-        public void refresh(Object element, boolean updateLabels) {
-            getPatternFilter().clearCaches();
-            super.refresh(element, updateLabels);
-        }
-
-        @Override
-        public void remove(Object elementsOrTreePaths) {
-            getPatternFilter().clearCaches();
-            super.remove(elementsOrTreePaths);
-        }
-
-        @Override
-        public void remove(Object parent, Object[] elements) {
-            getPatternFilter().clearCaches();
-            super.remove(parent, elements);
-        }
-
-        @Override
-        public void remove(Object[] elementsOrTreePaths) {
-            getPatternFilter().clearCaches();
-            super.remove(elementsOrTreePaths);
-        }
-
-        @Override
-        public void replace(Object parentElementOrTreePath, int index, Object element) {
-            getPatternFilter().clearCaches();
-            super.replace(parentElementOrTreePath, index, element);
-        }
-
-        @Override
-        public void setChildCount(Object elementOrTreePath, int count) {
-            getPatternFilter().clearCaches();
-            super.setChildCount(elementOrTreePath, count);
-        }
-
-        @Override
-        public void setContentProvider(IContentProvider provider) {
-            getPatternFilter().clearCaches();
-            super.setContentProvider(provider);
-        }
-
-        @Override
-        public void setHasChildren(Object elementOrTreePath, boolean hasChildren) {
-            getPatternFilter().clearCaches();
-            super.setHasChildren(elementOrTreePath, hasChildren);
-        }
-
-    }
-
-    /**
-     * 
-     * DOC hcw FilteredCheckboxTree class global comment. Detailled comment
-     */
-    static class PatternFilter extends ViewerFilter {
-
-        /*
-         * Cache of filtered elements in the tree
-         */
-        private Map cache = new HashMap();
-
-        /*
-         * Maps parent elements to TRUE or FALSE
-         */
-        private Map foundAnyCache = new HashMap();
-
-        private boolean useCache = false;
-
-        /**
-         * Whether to include a leading wildcard for all provided patterns. A trailing wildcard is always included.
-         */
-        private boolean includeLeadingWildcard = false;
-
-        /**
-         * The string pattern matcher used for this pattern filter.
-         */
-        private StringMatcher matcher;
-
-        private boolean useEarlyReturnIfMatcherIsNull = true;
-
-        private final static Object[] EMPTY = new Object[0];
-
-        /*
-         * (non-Javadoc)
-         * 
-         * @see org.eclipse.jface.viewers.ViewerFilter#filter(org.eclipse.jface.viewers.Viewer, java.lang.Object,
-         * java.lang.Object[])
-         */
-        @Override
-        public final Object[] filter(Viewer viewer, Object parent, Object[] elements) {
-            // we don't want to optimize if we've extended the filter ... this
-            // needs to be addressed in 3.4
-            // https://bugs.eclipse.org/bugs/show_bug.cgi?id=186404
-            if (matcher == null && useEarlyReturnIfMatcherIsNull) {
-                return elements;
-            }
-
-            if (!useCache) {
-                return super.filter(viewer, parent, elements);
-            }
-
-            Object[] filtered = (Object[]) cache.get(parent);
-            if (filtered == null) {
-                Boolean foundAny = (Boolean) foundAnyCache.get(parent);
-                if (foundAny != null && !foundAny.booleanValue()) {
-                    filtered = EMPTY;
-                } else {
-                    filtered = super.filter(viewer, parent, elements);
-                }
-                cache.put(parent, filtered);
-            }
-            return filtered;
-        }
-
-        /**
-         * Returns true if any of the elements makes it through the filter. This method uses caching if enabled; the
-         * computation is done in computeAnyVisible.
-         * 
-         * @param viewer
-         * @param parent
-         * @param elements the elements (must not be an empty array)
-         * @return true if any of the elements makes it through the filter.
-         */
-        private boolean isAnyVisible(Viewer viewer, Object parent, Object[] elements) {
-            if (matcher == null) {
-                return true;
-            }
-
-            if (!useCache) {
-                return computeAnyVisible(viewer, elements);
-            }
-
-            Object[] filtered = (Object[]) cache.get(parent);
-            if (filtered != null) {
-                return filtered.length > 0;
-            }
-            Boolean foundAny = (Boolean) foundAnyCache.get(parent);
-            if (foundAny == null) {
-                foundAny = computeAnyVisible(viewer, elements) ? Boolean.TRUE : Boolean.FALSE;
-                foundAnyCache.put(parent, foundAny);
-            }
-            return foundAny.booleanValue();
-        }
-
-        /**
-         * Returns true if any of the elements makes it through the filter.
-         * 
-         * @param viewer
-         * @param elements
-         * @return
-         */
-        private boolean computeAnyVisible(Viewer viewer, Object[] elements) {
-            boolean elementFound = false;
-            for (int i = 0; i < elements.length && !elementFound; i++) {
-                Object element = elements[i];
-                elementFound = isElementVisible(viewer, element);
-            }
-            return elementFound;
-        }
-
-        /*
-         * (non-Javadoc)
-         * 
-         * @see org.eclipse.jface.viewers.ViewerFilter#select(org.eclipse.jface.viewers.Viewer, java.lang.Object,
-         * java.lang.Object)
-         */
-        @Override
-        public final boolean select(Viewer viewer, Object parentElement, Object element) {
-            return isElementVisible(viewer, element);
-        }
-
-        /**
-         * Sets whether a leading wildcard should be attached to each pattern string.
-         * 
-         * @param includeLeadingWildcard Whether a leading wildcard should be added.
-         */
-        public final void setIncludeLeadingWildcard(final boolean includeLeadingWildcard) {
-            this.includeLeadingWildcard = includeLeadingWildcard;
-        }
-
-        /**
-         * The pattern string for which this filter should select elements in the viewer.
-         * 
-         * @param patternString
-         */
-        public void setPattern(String patternString) {
-            // these 2 strings allow the PatternFilter to be extended in
-            // 3.3 - https://bugs.eclipse.org/bugs/show_bug.cgi?id=186404
-            if ("org.eclipse.ui.keys.optimization.true".equals(patternString)) { //$NON-NLS-1$
-                useEarlyReturnIfMatcherIsNull = true;
-                return;
-            } else if ("org.eclipse.ui.keys.optimization.false".equals(patternString)) { //$NON-NLS-1$
-                useEarlyReturnIfMatcherIsNull = false;
-                return;
-            }
-            clearCaches();
-            if (patternString == null || patternString.equals("")) { //$NON-NLS-1$
-                matcher = null;
-            } else {
-                String pattern = patternString + "*"; //$NON-NLS-1$
-                if (includeLeadingWildcard) {
-                    pattern = "*" + pattern; //$NON-NLS-1$
-                }
-                matcher = new StringMatcher(pattern, true, false);
-            }
-        }
-
-        /**
-         * Clears the caches used for optimizing this filter. Needs to be called whenever the tree content changes.
-         */
-        /* package */void clearCaches() {
-            cache.clear();
-            foundAnyCache.clear();
-        }
-
-        /**
-         * Answers whether the given String matches the pattern.
-         * 
-         * @param string the String to test
-         * 
-         * @return whether the string matches the pattern
-         */
-        private boolean match(String string) {
-            if (matcher == null) {
-                return true;
-            }
-            return matcher.match(string);
-        }
-
-        /**
-         * Answers whether the given element is a valid selection in the filtered tree. For example, if a tree has items
-         * that are categorized, the category itself may not be a valid selection since it is used merely to organize
-         * the elements.
-         * 
-         * @param element
-         * @return true if this element is eligible for automatic selection
-         */
-        public boolean isElementSelectable(Object element) {
-            return element != null;
-        }
-
-        /**
-         * Answers whether the given element in the given viewer matches the filter pattern. This is a default
-         * implementation that will show a leaf element in the tree based on whether the provided filter text matches
-         * the text of the given element's text, or that of it's children (if the element has any).
-         * 
-         * Subclasses may override this method.
-         * 
-         * @param viewer the tree viewer in which the element resides
-         * @param element the element in the tree to check for a match
-         * 
-         * @return true if the element matches the filter pattern
-         */
-        public boolean isElementVisible(Viewer viewer, Object element) {
-            return isParentMatch(viewer, element) || isLeafMatch(viewer, element);
-        }
-
-        /**
-         * Check if the parent (category) is a match to the filter text. The default behavior returns true if the
-         * element has at least one child element that is a match with the filter text.
-         * 
-         * Subclasses may override this method.
-         * 
-         * @param viewer the viewer that contains the element
-         * @param element the tree element to check
-         * @return true if the given element has children that matches the filter text
-         */
-        protected boolean isParentMatch(Viewer viewer, Object element) {
-            Object[] children = ((ITreeContentProvider) ((AbstractTreeViewer) viewer).getContentProvider()).getChildren(element);
-
-            if ((children != null) && (children.length > 0)) {
-                return isAnyVisible(viewer, element, children);
-            }
-            return false;
-        }
-
-        /**
-         * Check if the current (leaf) element is a match with the filter text. The default behavior checks that the
-         * label of the element is a match.
-         * 
-         * Subclasses should override this method.
-         * 
-         * @param viewer the viewer that contains the element
-         * @param element the tree element to check
-         * @return true if the given element's label matches the filter text
-         */
-        protected boolean isLeafMatch(Viewer viewer, Object element) {
-            String labelText = ((ILabelProvider) ((StructuredViewer) viewer).getLabelProvider()).getText(element);
-
-            if (labelText == null) {
-                return false;
-            }
-            return wordMatches(labelText);
-        }
-
-        /**
-         * Return whether or not if any of the words in text satisfy the match critera.
-         * 
-         * @param text the text to match
-         * @return boolean <code>true</code> if one of the words in text satisifes the match criteria.
-         */
-        protected boolean wordMatches(String text) {
-            if (text == null) {
-                return false;
-            }
-
-            // If the whole text matches we are all set
-            if (match(text)) {
-                return true;
-            }
-
-            // Otherwise check if any of the words of the text matches
-            String[] words = text.split("\\W");//$NON-NLS-1$
-            for (String word : words) {
-                if (match(word)) {
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
-        /**
-         * Can be called by the filtered tree to turn on caching.
-         * 
-         * @param useCache The useCache to set.
-         */
-        void setUseCache(boolean useCache) {
-            this.useCache = useCache;
-        }
     }
 
 }
