@@ -1475,7 +1475,11 @@ public class Messages extends NLS {
 
     public static String DataClusterBrowserMainPage_99;
 
+    public static String DataClusterBrowserMainPage_noAutoIncrementToManage;
+
     public static String DataClusterBrowserMainPage_referedRecord;
+
+    public static String DataClusterBrowserMainPage_UpdateAutoIncrement;
 
     public static String DataClusterDialog_0;
 
@@ -2090,6 +2094,16 @@ public class Messages extends NLS {
     public static String Util_29;
 
     public static String UnableAccessEndpoint;
+
+    public static String UpdateAutoIncrementDialog_AutoIncrement;
+
+    public static String UpdateAutoIncrementDialog_entity;
+
+    public static String UpdateAutoIncrementDialog_inputInvalid;
+
+    public static String UpdateAutoIncrementDialog_ManageAutoIncrement;
+
+    public static String UpdateAutoIncrementDialog_zeroAtBeginning;
 
     public static String Util_30;
 

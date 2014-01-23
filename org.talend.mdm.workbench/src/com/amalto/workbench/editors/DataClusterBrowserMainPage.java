@@ -12,6 +12,8 @@
 // ============================================================================
 package com.amalto.workbench.editors;
 
+import java.io.ByteArrayInputStream;
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.InvocationTargetException;
 import java.rmi.ServerException;
 import java.text.SimpleDateFormat;
@@ -19,6 +21,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -36,6 +40,7 @@ import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.IInputValidator;
 import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -66,13 +71,21 @@ import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.forms.widgets.FormToolkit;
+import org.talend.mdm.commmon.metadata.ComplexTypeMetadata;
+import org.talend.mdm.commmon.metadata.FieldMetadata;
+import org.talend.mdm.commmon.metadata.MetadataRepository;
+import org.talend.mdm.commmon.metadata.SimpleTypeFieldMetadata;
+import org.talend.mdm.commmon.metadata.TypeMetadata;
+import org.talend.mdm.commmon.util.core.EUUIDCustomType;
 
 import com.amalto.workbench.availablemodel.AvailableModelUtil;
 import com.amalto.workbench.availablemodel.IAvailableModel;
 import com.amalto.workbench.compare.CompareHeadInfo;
 import com.amalto.workbench.compare.CompareManager;
 import com.amalto.workbench.dialogs.DOMViewDialog;
+import com.amalto.workbench.dialogs.datacontainer.AutoIncrementHelper;
 import com.amalto.workbench.dialogs.datacontainer.DataContainerDOMViewDialog;
+import com.amalto.workbench.dialogs.datacontainer.UpdateAutoIncrementDialog;
 import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
@@ -84,10 +97,17 @@ import com.amalto.workbench.providers.XtentisServerObjectsRetriever;
 import com.amalto.workbench.utils.LineItem;
 import com.amalto.workbench.utils.UserInfo;
 import com.amalto.workbench.utils.Util;
+import com.amalto.workbench.utils.XtentisException;
+import com.amalto.workbench.webservices.WSConceptRevisionMap;
+import com.amalto.workbench.webservices.WSConceptRevisionMap.MapEntry;
 import com.amalto.workbench.webservices.WSDataClusterPK;
+import com.amalto.workbench.webservices.WSDataModel;
 import com.amalto.workbench.webservices.WSDataModelPK;
 import com.amalto.workbench.webservices.WSDeleteItemWithReport;
 import com.amalto.workbench.webservices.WSGetConceptsInDataCluster;
+import com.amalto.workbench.webservices.WSGetConceptsInDataClusterWithRevisions;
+import com.amalto.workbench.webservices.WSGetCurrentUniverse;
+import com.amalto.workbench.webservices.WSGetDataModel;
 import com.amalto.workbench.webservices.WSGetItem;
 import com.amalto.workbench.webservices.WSIsItemModifiedByOther;
 import com.amalto.workbench.webservices.WSItem;
@@ -97,6 +117,8 @@ import com.amalto.workbench.webservices.WSPutItemWithReport;
 import com.amalto.workbench.webservices.WSRegexDataModelPKs;
 import com.amalto.workbench.webservices.WSRouteItemV2;
 import com.amalto.workbench.webservices.WSStringArray;
+import com.amalto.workbench.webservices.WSUniverse;
+import com.amalto.workbench.webservices.WSUniversePK;
 import com.amalto.workbench.webservices.WSUpdateMetadataItem;
 import com.amalto.workbench.webservices.XtentisPort;
 
@@ -217,6 +239,8 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
             public void menuAboutToShow(IMenuManager manager) {
                 // ViewBrowserMainPage.this.fillContextMenu(manager);
                 manager.add(new GroupMarker(IWorkbenchActionConstants.MB_ADDITIONS));
+                manager.appendToGroup(IWorkbenchActionConstants.MB_ADDITIONS, new UpdateAutoIncrementKeyAction(
+                        DataClusterBrowserMainPage.this.getSite().getShell(), DataClusterBrowserMainPage.this.resultsViewer));
                 manager.appendToGroup(IWorkbenchActionConstants.MB_ADDITIONS, new EditItemAction(DataClusterBrowserMainPage.this
                         .getSite().getShell(), DataClusterBrowserMainPage.this.resultsViewer));
                 manager.appendToGroup(IWorkbenchActionConstants.MB_ADDITIONS, new EditTaskIdAction(
@@ -257,6 +281,205 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
      */
     public void handleEvent(int type, TreeObject parent, TreeObject child) {
         refreshData();
+    }
+
+    class UpdateAutoIncrementKeyAction extends Action {
+
+        protected Shell shell = null;
+
+        protected Viewer viewer;
+
+        private MetadataRepository repository;
+
+        private String schema;
+
+        public UpdateAutoIncrementKeyAction(Shell shell, Viewer viewer) {
+            super();
+            setImageDescriptor(ImageCache.getImage("icons/edit_obj.gif"));//$NON-NLS-1$
+            String text2 = Messages.DataClusterBrowserMainPage_UpdateAutoIncrement;
+            setText(text2);
+            setToolTipText(text2);
+            this.shell = shell;
+            this.viewer = viewer;
+        }
+
+        @Override
+        public void run() {
+            try {
+                TreeObject xObject = getXObject();
+                String dataContainer = xObject.getName();
+                final XtentisPort port = Util.getPort(xObject);
+
+                Map<String, String> entityToRevisions = getAllEntityRevisionsInDataContainer(port, dataContainer);
+
+                String conent = getAutoIncrementRecord(port);
+
+                Map<String, String> entityToAutoIncrementValues = getEntityAutoIncrementValues(conent, dataContainer,
+                        entityToRevisions);
+
+                if (entityToAutoIncrementValues == null || entityToAutoIncrementValues.isEmpty()) {
+                    MessageDialog.openInformation(shell, Messages.Warnning, Messages.DataClusterBrowserMainPage_noAutoIncrementToManage);
+                    return;
+                }
+
+                UpdateAutoIncrementDialog dialog = new UpdateAutoIncrementDialog(shell, entityToAutoIncrementValues);
+                if (dialog.open() == IDialogConstants.OK_ID) {
+                    String updatedContent = updateAutoIncrement(dataContainer, conent, entityToRevisions, dialog.getResults());
+                    saveAutoIncrement(port, updatedContent);
+                }
+
+            } catch (Exception e) {
+                log.error(e.getMessage(), e);
+            }
+        }
+
+        private String getAutoIncrementRecord(final XtentisPort port) {
+            WSItem wsItem = port.getItem(new WSGetItem(new WSItemPK(new WSDataClusterPK("CONF"), "AutoIncrement", //$NON-NLS-1$ //$NON-NLS-2$
+                    Arrays.asList(new String[] { "AutoIncrement" })))); //$NON-NLS-1$
+            if (wsItem != null) {
+                return wsItem.getContent();
+            }
+
+            return null;
+        }
+
+        private Map<String, String> getEntityAutoIncrementValues(String content, String dataContainer,
+                Map<String, String> entityToRevisions) {
+
+            Iterator<String> iterator = entityToRevisions.keySet().iterator();
+            Map<String, String> entityToKeys = new HashMap<String, String>();
+            while (iterator.hasNext()) {
+                String entity = iterator.next();
+                String fieldName = getAutoIncrementKeyFieldNames(entity);
+                if (fieldName != null) {
+                    String crevision = entityToRevisions.get(entity);
+                    String key = "[" + crevision + "]." + dataContainer + "." + entity + "." + fieldName; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+                    entityToKeys.put(entity, key);
+                }
+            }
+
+            Map<String, String> entityValues = null;
+            try {
+                entityValues = AutoIncrementHelper.getCurrentValue(content, entityToKeys);
+            } catch (Exception e) {
+                log.error(e.getMessage(), e);
+            }
+
+            return entityValues;
+        }
+
+        private String updateAutoIncrement(String cluster, String content, Map<String, String> conceptRevisions,
+                Map<String, String> results)
+                throws Exception {
+            Map<String, String> keyvalues = new HashMap<String, String>();
+            for(String concept:results.keySet()) {
+                String revision = conceptRevisions.get(concept);
+                String fieldName = getAutoIncrementKeyFieldNames(concept);
+
+                String key = "[" + revision + "]." + cluster + "." + concept + "."+ fieldName;   //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$ //$NON-NLS-4$
+                String value = results.get(concept);
+
+                if (value.isEmpty()) {
+                    value = "0"; //$NON-NLS-1$
+                }
+                keyvalues.put(key, value);
+            }
+
+            String updatedValue = AutoIncrementHelper.updateValue(content, keyvalues);
+
+            return updatedValue;
+        }
+
+        private Map<String, String> getAllEntityRevisionsInDataContainer(final XtentisPort port, String dataContainer) {
+            Map<String, String> entityToRevisions = new HashMap<String, String>();
+            WSUniverse currentUniverse = port.getCurrentUniverse(new WSGetCurrentUniverse());
+            String currentUniverseName = "";//$NON-NLS-1$
+            if (currentUniverse != null) {
+                currentUniverseName = currentUniverse.getName();
+            }
+            if (currentUniverseName != null && currentUniverseName.equals("[HEAD]")) { //$NON-NLS-1$
+                currentUniverseName = "";//$NON-NLS-1$
+            }
+            WSConceptRevisionMap conceptsRevisionMap = port
+                    .getConceptsInDataClusterWithRevisions(new WSGetConceptsInDataClusterWithRevisions(new WSDataClusterPK(
+                            dataContainer), new WSUniversePK(currentUniverseName)));
+
+            if (conceptsRevisionMap != null) {
+                List<MapEntry> wsConceptRevisionMapMapEntries = conceptsRevisionMap.getMapEntry();
+
+                for (MapEntry entry : wsConceptRevisionMapMapEntries) {
+                    String entity = entry.getConcept();
+                    String revision = entry.getRevision();
+                    if (revision == null || revision.equals("")) { //$NON-NLS-1$
+                        revision = "HEAD";//$NON-NLS-1$
+                    }
+
+                    if (getAutoIncrementKeyFieldNames(entity) != null) {
+                        entityToRevisions.put(entity, revision);
+                    }
+                }
+            }
+
+            return entityToRevisions;
+        }
+
+        private String getAutoIncrementKeyFieldNames(String concept) {
+            String fieldName = null;
+            ComplexTypeMetadata complexType = getRepository().getComplexType(concept);
+            if (complexType != null) {
+                Collection<FieldMetadata> keyFields = complexType.getKeyFields();
+                for (FieldMetadata fieldMeta : keyFields) {
+                    SimpleTypeFieldMetadata simpleFieldMeta = (SimpleTypeFieldMetadata) fieldMeta;
+                    TypeMetadata type = simpleFieldMeta.getType();
+                    if (type.getName().equals(EUUIDCustomType.AUTO_INCREMENT.getName())) {
+                        fieldName = simpleFieldMeta.getName();
+                    }
+                }
+            }
+            return fieldName;
+        }
+
+        private void saveAutoIncrement(XtentisPort port, String content) {
+            String pk = "CONF"; //$NON-NLS-1$
+            WSPutItem putItem = new WSPutItem(new WSDataClusterPK(pk), content, new WSDataModelPK(pk), false);
+            port.putItem(putItem);
+        }
+
+        private MetadataRepository getRepository() {
+            if (getSchema() == null) {
+                throw new IllegalStateException("Schema has not been set"); //$NON-NLS-1$
+            }
+
+            if (repository == null) {
+                repository = new MetadataRepository();
+                try {
+                    repository.load(new ByteArrayInputStream(getSchema().getBytes("UTF-8"))); //$NON-NLS-1$
+                } catch (UnsupportedEncodingException e) {
+                    // ignore it
+                }
+            }
+            return repository;
+        }
+
+        private String getSchema() {
+            if (schema == null) {
+                TreeObject xObject = getXObject();
+                String dataContainer = xObject.getName();
+
+                XtentisPort port = null;
+                try {
+                    port = Util.getPort(xObject);
+                } catch (XtentisException e) {
+                }
+                if (port != null) {
+                    WSDataModel dataModel = port.getDataModel(new WSGetDataModel(new WSDataModelPK(dataContainer)));
+                    schema = dataModel.getXsdSchema();
+                }
+            }
+
+            return schema;
+        }
+
     }
 
     class EditItemAction extends Action {
@@ -484,9 +707,9 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 
     /***************************************************************
      * Delete Items Action
-     * 
+     *
      * @author bgrieder
-     * 
+     *
      ***************************************************************/
 
     class LogicalDeleteItemsAction extends Action {
@@ -801,9 +1024,9 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 
     /***************************************************************
      * New Item Action
-     * 
+     *
      * @author bgrieder
-     * 
+     *
      ***************************************************************/
     class NewItemAction extends Action {
 
@@ -892,9 +1115,9 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 
     /***************************************************************
      * SubmitItems Action
-     * 
+     *
      * @author bgrieder
-     * 
+     *
      ***************************************************************/
     class SubmitItemsAction extends Action {
 
@@ -1014,9 +1237,9 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 
     /***************************************************************
      * Table Label Provider
-     * 
+     *
      * @author bgrieder
-     * 
+     *
      ***************************************************************/
     class ClusterTableLabelProvider implements ITableLabelProvider {
 
@@ -1057,9 +1280,9 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 
     /***************************************************************
      * Table Sorter
-     * 
+     *
      * @author bgrieder
-     * 
+     *
      ***************************************************************/
     class TableSorter extends ViewerSorter {
 
