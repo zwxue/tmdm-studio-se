@@ -22,7 +22,7 @@ import org.eclipse.ui.views.markers.MarkerItem;
 import org.eclipse.ui.views.markers.internal.FieldCategory;
 import org.eclipse.ui.views.markers.internal.MarkerGroup;
 import org.eclipse.ui.views.markers.internal.MarkerGroupingEntry;
-import org.eclipse.ui.views.markers.internal.MarkerMessages;
+import org.talend.mdm.repository.core.validate.i18n.Messages;
 
 /**
  * created by HHB on 2013-1-25 Detailled comment
@@ -51,7 +51,8 @@ public class ModelNameMarkerGroup extends MarkerGroup {
             if (item.getMarker() != null) {
                 IMarker marker = item.getMarker();
                 if (marker == null || !marker.exists()) {
-                    return MarkerMessages.FieldCategory_Uncategorized;
+                    // Uncategorized
+                    return Messages.ModelNameMarkerGroup_Uncategorized;
                 }
                 String groupName = ModelMarkerHelper.getModelName(marker);
                 if (groupName == null) {
@@ -61,7 +62,7 @@ public class ModelNameMarkerGroup extends MarkerGroup {
                 return groupName;
             }
 
-            return "";
+            return ""; //$NON-NLS-1$
         }
 
         /*
@@ -85,7 +86,7 @@ public class ModelNameMarkerGroup extends MarkerGroup {
 
     public ModelNameMarkerGroup() {
         super(null);
-        this.name = "Model Name"; //$NON-NLS-1$
+        this.name = Messages.ModelNameMarkerGroup_modelName;
     }
 
     /**

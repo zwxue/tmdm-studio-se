@@ -14,7 +14,6 @@ package org.talend.mdm.repository.ui.markers.datamodel;
 
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.ui.internal.views.markers.MarkerSupportInternalUtilities;
 import org.eclipse.ui.views.markers.MarkerItem;
 
 /**
@@ -44,6 +43,6 @@ public class ElementPathField extends AbstractDataModelField {
 
     @Override
     public int getDefaultColumnWidth(Control control) {
-        return 20 * MarkerSupportInternalUtilities.getFontWidth(control);
+        return 20 * getFontWidth(control);
     }
 }

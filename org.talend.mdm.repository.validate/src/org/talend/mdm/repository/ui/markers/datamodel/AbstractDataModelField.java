@@ -14,6 +14,8 @@ package org.talend.mdm.repository.ui.markers.datamodel;
 
 import org.apache.log4j.Logger;
 import org.eclipse.core.resources.IMarker;
+import org.eclipse.swt.graphics.GC;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.views.markers.MarkerField;
 import org.talend.mdm.repository.core.validate.datamodel.model.IDataModelMarkerConst;
 import org.talend.mdm.repository.core.validate.datamodel.validator.rule.IComponentValidationRule;
@@ -35,5 +37,12 @@ public abstract class AbstractDataModelField extends MarkerField implements IDat
 
     protected boolean isBelongGroup(int group, int cur) {
         return (group & cur) == group;
+    }
+
+    protected final int getFontWidth(Control control) {
+        GC gc = new GC(control.getDisplay());
+        int width = gc.getFontMetrics().getAverageCharWidth();
+        gc.dispose();
+        return width;
     }
 }

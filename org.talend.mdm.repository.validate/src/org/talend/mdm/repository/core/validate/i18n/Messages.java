@@ -47,6 +47,10 @@ public class Messages extends NLS {
 
     public static String MDMValidationRunner_promptToSaveEditors;
 
+    public static String ModelNameMarkerGroup_modelName;
+
+    public static String ModelNameMarkerGroup_Uncategorized;
+
     public static String PKInfoElementVisitor_MK_FIELD_NOT_DISPLAY_TYPE;
 
     public static String PKInfoElementVisitor_MK_FIELD_NOT_LIST;
