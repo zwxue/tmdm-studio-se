@@ -2103,6 +2103,14 @@ public class Messages extends NLS {
 
     public static String UpdateAutoIncrementDialog_ManageAutoIncrement;
 
+    public static String UpdateAutoIncrementDialog_reset;
+
+    public static String UpdateAutoIncrementDialog_resetAll;
+
+    public static String UpdateAutoIncrementDialog_Reset;
+
+    public static String UpdateAutoIncrementDialog_value;
+
     public static String UpdateAutoIncrementDialog_zeroAtBeginning;
 
     public static String Util_30;

@@ -98,7 +98,7 @@ public class AutoIncrementHelper {
             String key = iterator.next();
             if (keyvalues.get(key).equals(DEFAULT_VALUE)) {
                 removeKeys.add(key);
-                keyvalues.remove(key);
+                iterator.remove();
             }
         }
 

@@ -12,30 +12,46 @@
 // ============================================================================
 package com.amalto.workbench.dialogs.datacontainer;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 
 import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.layout.GridDataFactory;
+import org.eclipse.jface.layout.GridLayoutFactory;
+import org.eclipse.jface.viewers.CellEditor;
+import org.eclipse.jface.viewers.ColumnLabelProvider;
+import org.eclipse.jface.viewers.EditingSupport;
+import org.eclipse.jface.viewers.IContentProvider;
+import org.eclipse.jface.viewers.IStructuredContentProvider;
+import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.jface.viewers.TableViewerColumn;
+import org.eclipse.jface.viewers.TextCellEditor;
+import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
-import org.eclipse.swt.events.MouseAdapter;
-import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.VerifyEvent;
 import org.eclipse.swt.events.VerifyListener;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.Text;
 
 import com.amalto.workbench.i18n.Messages;
+import com.amalto.workbench.models.KeyValue;
+import com.amalto.workbench.models.Line;
 
 public class UpdateAutoIncrementDialog extends Dialog {
 
@@ -43,9 +59,13 @@ public class UpdateAutoIncrementDialog extends Dialog {
 
     private Map<String, String> entityValues;
 
-    private ModifyListener modifyListener;
-
     private VerifyListener verifyListeneer;
+
+    private static int resetBtnId = 4;
+
+    private TableViewer resultsViewer;
+
+    private IContentProvider contentProvider;
 
     public UpdateAutoIncrementDialog(Shell parentShell, Map<String, String> entityValues) {
         super(parentShell);
@@ -62,7 +82,7 @@ public class UpdateAutoIncrementDialog extends Dialog {
     @Override
     protected void initializeBounds() {
         super.initializeBounds();
-        getShell().setSize(350, getInitialSize().y);
+        getShell().setSize(550, 450);
         Point location = getInitialLocation(getShell().getSize());
         getShell().setLocation(location.x, location.y);
     }
@@ -70,63 +90,207 @@ public class UpdateAutoIncrementDialog extends Dialog {
     @Override
     protected Control createDialogArea(Composite parent) {
         Composite mainComp = (Composite) super.createDialogArea(parent);
-        mainComp.setLayout(new GridLayout(2, false));
-        Label entityLabel = new Label(mainComp, SWT.NONE);
-        entityLabel.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false));
-        entityLabel.setText(Messages.UpdateAutoIncrementDialog_entity);
-
-        Label valueLabel = new Label(mainComp, SWT.NONE);
-        valueLabel.setText(Messages.UpdateAutoIncrementDialog_AutoIncrement);
-        valueLabel.setLayoutData(new GridData());
-
-        createMainPart(mainComp);
+        mainComp.setLayout(new GridLayout());
+        createTable(mainComp);
 
         return mainComp;
     }
 
-    private void createMainPart(Composite mainComp) {
-        Iterator<String> iterator = entityValues.keySet().iterator();
+    private void createTable(Composite mainComp) {
+        int style = SWT.MULTI | SWT.BORDER | SWT.H_SCROLL | SWT.FULL_SELECTION | SWT.HIDE_SELECTION;
+        resultsViewer = new TableViewer(mainComp, style);
+        resultsViewer.getTable().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+        resultsViewer.getTable().setHeaderVisible(true);
+        resultsViewer.getTable().setLinesVisible(true);
+        resultsViewer.setContentProvider(getContentProvider());
 
-        Label entityLabel = null;
-        Text valueText = null;
-        while (iterator.hasNext()) {
-            String entity = iterator.next();
-            entityLabel = new Label(mainComp, SWT.NONE);
-            entityLabel.setText(entity);
+        TableViewerColumn column = new TableViewerColumn(resultsViewer, SWT.NONE);
+        column.getColumn().setText(Messages.UpdateAutoIncrementDialog_entity);
+        column.getColumn().setResizable(true);
+        column.getColumn().setWidth(300);
+        column.setLabelProvider(new CustomedLabelProvider(0));
+        column.setEditingSupport(null);
 
-            valueText = new Text(mainComp, SWT.BORDER);
-            valueText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
-            valueText.setData(entity);
-            valueText.setText(entityValues.get(entity));
-            valueText.addModifyListener(getModifyListener());
-            valueText.addVerifyListener(getVerifyListener());
-            valueText.addMouseListener(new MouseAdapter() {
+        column = new TableViewerColumn(resultsViewer, SWT.NONE);
+        column.getColumn().setText(Messages.UpdateAutoIncrementDialog_value);
+        column.getColumn().setResizable(true);
+        column.getColumn().setWidth(100);
+        column.setLabelProvider(new CustomedLabelProvider(1));
+        column.setEditingSupport(new EditingSupport(resultsViewer) {
 
-                @Override
-                public void mouseUp(MouseEvent e) {
-                    Text text = (Text) e.getSource();
-                    if (text.getSelectionCount() > 0) {
-                        Point selection = text.getSelection();
-                        text.setSelection(selection.x);
-                    }
-                    super.mouseUp(e);
-                }
-            });
-        }
+            @Override
+            protected CellEditor getCellEditor(Object element) {
+                return new VerificableTextCellEditor(resultsViewer.getTable());
+            }
+
+            @Override
+            protected boolean canEdit(Object element) {
+                return true;
+            }
+
+            @Override
+            protected Object getValue(Object element) {
+                Line line = (Line) element;
+                return line.keyValues.get(1).value;
+            }
+
+            @Override
+            protected void setValue(Object element, Object value) {
+                Line line = (Line) element;
+                line.keyValues.get(1).value = value.toString();
+                resultsViewer.refresh();
+            }
+
+        });
+
+        column = new TableViewerColumn(resultsViewer, SWT.NONE);
+        column.getColumn().setText(Messages.UpdateAutoIncrementDialog_Reset);
+        column.getColumn().setResizable(true);
+        column.getColumn().setWidth(100);
+        column.setLabelProvider(new CustomedLabelProvider(2));
+        column.setEditingSupport(new EditingSupport(resultsViewer) {
+
+            @Override
+            protected void setValue(Object element, Object value) {
+            }
+
+            @Override
+            protected Object getValue(Object element) {
+                return null;
+            }
+
+            @Override
+            protected CellEditor getCellEditor(Object element) {
+                return new ButtonCellEditor(resultsViewer.getTable());
+            }
+
+            @Override
+            protected boolean canEdit(Object element) {
+                return true;
+            }
+        });
+
+
+        List<Line> lines = getInput();
+
+        resultsViewer.setInput(lines);
     }
 
-    private ModifyListener getModifyListener() {
-        if (modifyListener == null) {
-            modifyListener = new ModifyListener() {
+    private List<Line> getInput() {
+        List<Line> lines = new ArrayList<Line>();
+        Iterator<String> iterator = entityValues.keySet().iterator();
+        while (iterator.hasNext()) {
+            String entity = iterator.next();
+            String value = entityValues.get(entity);
 
-                public void modifyText(ModifyEvent e) {
-                    Text text = (Text) e.getSource();
-                    String entity = (String) text.getData();
-                    results.put(entity, text.getText().trim());
+            List<KeyValue> keyvalues = new ArrayList<KeyValue>();
+            keyvalues.add(new KeyValue("Entity", entity)); //$NON-NLS-1$
+            keyvalues.add(new KeyValue("Value", value)); //$NON-NLS-1$
+            keyvalues.add(new KeyValue("Reset", "")); //$NON-NLS-1$ //$NON-NLS-2$
+            Line line = new Line(keyvalues);
+            lines.add(line);
+        }
+
+        return lines;
+    }
+
+    private IContentProvider getContentProvider() {
+        if (contentProvider == null) {
+            contentProvider = new IStructuredContentProvider() {
+
+                public Object[] getElements(Object inputElement) {
+                    @SuppressWarnings("unchecked")
+                    List<Line> lines = (List<Line>) inputElement;
+                    return lines.toArray();
+                }
+
+                public void dispose() {
+                }
+
+                public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
                 }
             };
         }
-        return modifyListener;
+        return contentProvider;
+    }
+
+    class CustomedLabelProvider extends ColumnLabelProvider {
+
+        private int index;
+
+        public CustomedLabelProvider(int index) {
+            this.index = index;
+        }
+
+        @Override
+        public String getText(Object element) {
+            Line line = (Line) element;
+            return line.keyValues.get(index).value;
+        }
+    }
+
+    class VerificableTextCellEditor extends TextCellEditor {
+
+        public VerificableTextCellEditor(Table table) {
+            super(table);
+        }
+
+        @Override
+        protected Control createControl(Composite parent) {
+            Control control = super.createControl(parent);
+            text.addVerifyListener(getVerifyListener());
+
+            return control;
+        }
+
+        @Override
+        protected Object doGetValue() {
+            return super.doGetValue();
+        }
+    }
+
+    class ButtonCellEditor extends CellEditor {
+
+        private Button resetBtn;
+
+        public ButtonCellEditor(Table table) {
+            super(table);
+        }
+
+        @Override
+        protected Control createControl(Composite parent) {
+            resetBtn = new Button(parent, SWT.PUSH);
+            resetBtn.setText(Messages.UpdateAutoIncrementDialog_reset);
+            resetBtn.addSelectionListener(new SelectionAdapter() {
+
+                @Override
+                public void widgetSelected(SelectionEvent e) {
+                    IStructuredSelection selection = (IStructuredSelection) resultsViewer.getSelection();
+                    Line line = (Line) selection.getFirstElement();
+
+                    line.keyValues.get(1).value = "0"; //$NON-NLS-1$
+                    resultsViewer.refresh();
+                }
+            });
+            return resetBtn;
+        }
+
+        @Override
+        protected Object doGetValue() {
+            return null;
+        }
+
+        @Override
+        protected void doSetFocus() {
+            if (resetBtn != null) {
+                resetBtn.setFocus();
+            }
+        }
+
+        @Override
+        protected void doSetValue(Object value) {
+        }
+
     }
 
     private VerifyListener getVerifyListener() {
@@ -135,37 +299,30 @@ public class UpdateAutoIncrementDialog extends Dialog {
 
                 private String defaultValue = "0"; //$NON-NLS-1$
                 public void verifyText(VerifyEvent e) {
-                    String inputStr = e.text;
-
-                    boolean matches = true;
-                    int start = e.start;
-                    Text source = (Text) e.getSource();
-                    String text = source.getText();
-
+                    Text text = (Text) e.getSource();
                     String msg = null;
-                    if (start == 0) {
-                        if (inputStr.startsWith(defaultValue)) {
-                            matches = false;
-                            msg = Messages.UpdateAutoIncrementDialog_zeroAtBeginning;
-                        } else {
-                            String digitRegex = "[0-9]*"; //$NON-NLS-1$
-                            matches = Pattern.matches(digitRegex, inputStr);
-                            if (!matches) {
-                                msg = Messages.UpdateAutoIncrementDialog_inputInvalid;
-                            }
-                        }
+
+                    String inputStr = e.text;
+                    boolean matches = true;
+                    String digitRegex = "[0-9]*"; //$NON-NLS-1$
+                    matches = Pattern.matches(digitRegex, inputStr);
+                    if (!matches) {
+                        msg = Messages.UpdateAutoIncrementDialog_inputInvalid;
                     } else {
-                        if (text.startsWith(defaultValue)) {
-                            matches = false;
-                            msg = Messages.UpdateAutoIncrementDialog_zeroAtBeginning;
+                        if (e.start == 0) {
+                            if ((inputStr.startsWith(defaultValue) && inputStr.length() > 1)
+                                    || (inputStr.equals(defaultValue) && !isFullSelected(e))) {
+                                matches = false;
+                                msg = Messages.UpdateAutoIncrementDialog_zeroAtBeginning;
+                            }
                         } else {
-                            String digitRegex = "[0-9]*"; //$NON-NLS-1$
-                            matches = Pattern.matches(digitRegex, inputStr);
-                            if (!matches) {
-                                msg = Messages.UpdateAutoIncrementDialog_inputInvalid;
+                            if (text.getText().startsWith(defaultValue)) {
+                                matches = false;
+                                msg = Messages.UpdateAutoIncrementDialog_zeroAtBeginning;
                             }
                         }
                     }
+
 
                     if (!matches) {
                         MessageDialog.openError(getShell(), Messages._Error, msg);
@@ -174,15 +331,58 @@ public class UpdateAutoIncrementDialog extends Dialog {
                     }
 
                 }
+
+                private boolean isFullSelected(VerifyEvent e) {
+                    Text text = (Text) e.getSource();
+                    String textContent = text.getText();
+                    if (textContent.length() == text.getSelectionCount()) {
+                        return true;
+                    }
+
+                    return false;
+                }
             };
+
         }
         return verifyListeneer;
     }
 
     @Override
+    protected void buttonPressed(int buttonId) {
+        if (resetBtnId == buttonId) {
+            List<Line> lines = (List<Line>) resultsViewer.getInput();
+            for (Line line : lines) {
+                line.keyValues.get(1).value = "0"; //$NON-NLS-1$
+            }
+            resultsViewer.refresh();
+        }
+        super.buttonPressed(buttonId);
+    }
+
+    @Override
     protected void okPressed() {
+        deactivateCellEditors();
+        save();
         removeNotChanged();
         super.okPressed();
+    }
+
+    private void deactivateCellEditors() {
+        CellEditor[] cellEditors = resultsViewer.getCellEditors();
+        if (cellEditors != null) {
+            for (CellEditor cellEditor : cellEditors) {
+                cellEditor.deactivate();
+            }
+        }
+    }
+
+    private void save() {
+        List<Line> lines = (List<Line>) resultsViewer.getInput();
+        for (Line line : lines) {
+            String key = line.keyValues.get(0).value;
+            String value = line.keyValues.get(1).value;
+            results.put(key, value);
+        }
     }
 
     private void removeNotChanged() {
@@ -193,6 +393,30 @@ public class UpdateAutoIncrementDialog extends Dialog {
                 results.remove(entity);
             }
         }
+    }
+
+    @Override
+    protected Control createButtonBar(Composite parent) {
+        Composite composite = new Composite(parent, SWT.NONE);
+        GridLayoutFactory.fillDefaults().numColumns(2).extendedMargins(5, -3, 5, 5).equalWidth(false).applyTo(composite);
+
+        GridDataFactory.fillDefaults().align(SWT.FILL, SWT.CENTER).span(2, 1).indent(0, 0).applyTo(composite);
+        composite.setFont(parent.getFont());
+        createButtonsForButtonBar(composite);
+        return composite;
+    }
+
+    @Override
+    protected void createButtonsForButtonBar(Composite parent) {
+        Button resetBtn = createButton(parent, resetBtnId, Messages.UpdateAutoIncrementDialog_resetAll, false);
+        GridDataFactory.fillDefaults().align(SWT.BEGINNING, SWT.CENTER).applyTo(resetBtn);
+
+        Composite rightArea = new Composite(parent, SWT.NONE);
+        GridLayoutFactory.fillDefaults().numColumns(0).equalWidth(true).applyTo(rightArea);
+        GridDataFactory.fillDefaults().align(SWT.END, SWT.CENTER).grab(true, false).applyTo(rightArea);
+
+        createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL, true);
+        createButton(parent, IDialogConstants.CANCEL_ID, IDialogConstants.CANCEL_LABEL, false);
     }
 
     /**
