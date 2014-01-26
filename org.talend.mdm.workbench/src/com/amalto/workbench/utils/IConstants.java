@@ -18,7 +18,8 @@ public interface IConstants {
     static final String[] COMPOSITE_VIEW_CONDITION_OPERATORS = { "Contains", "Join With", "Contains Text Of", "Starts With",//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$
             "Strict Contains", "Is Empty Or Null", "=", "!=", ">", ">=", "<", "<=" };//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$//$NON-NLS-5$//$NON-NLS-6$//$NON-NLS-7$//$NON-NLS-8$
 
-    static final String[] VIEW_CONDITION_OPERATORS = { "Contains", "Contains Text Of", "Starts With", "Strict Contains", "=",//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$//$NON-NLS-5$
+    static final String[] VIEW_CONDITION_OPERATORS = {
+            "Contains", "Contains Text Of", "Starts With", "Strict Contains", "Is Empty Or Null", "=",//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$//$NON-NLS-5$ //$NON-NLS-6$
             "!=", ">", ">=", "<", "<=" };//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$//$NON-NLS-5$
 
     static final String[] ROUTE_CONDITION_OPERATORS = { "Contains", "Matches", "Starts With", "Is Null", "Is Not Null", "=",//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$//$NON-NLS-5$//$NON-NLS-6$
