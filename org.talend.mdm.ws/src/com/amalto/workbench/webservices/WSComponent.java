@@ -16,6 +16,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;restriction base="{http://www.w3.org/2001/XMLSchema}NMTOKEN">
  *     &lt;enumeration value="DataManager"/>
  *     &lt;enumeration value="Service"/>
+ *     &lt;enumeration value="Connector"/>
  *   &lt;/restriction>
  * &lt;/simpleType>
  * </pre>
@@ -28,7 +29,9 @@ public enum WSComponent {
     @XmlEnumValue("DataManager")
     DATA_MANAGER("DataManager"),
     @XmlEnumValue("Service")
-    SERVICE("Service");
+    SERVICE("Service"),
+    @XmlEnumValue("Connector")
+    CONNECTOR("Connector");
     private final String value;
 
     WSComponent(String v) {
