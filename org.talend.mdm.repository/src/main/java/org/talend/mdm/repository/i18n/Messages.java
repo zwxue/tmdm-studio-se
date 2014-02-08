@@ -184,6 +184,8 @@ public class Messages extends NLS {
 
     public static String NewDataModelAction_CanNotCreateModel;
 
+    public static String NewDataModelAction_createDataContainer;
+
     public static String NewDataModelAction_newDataModel;
 
     public static String NewDataModelAction_UserAuthority;

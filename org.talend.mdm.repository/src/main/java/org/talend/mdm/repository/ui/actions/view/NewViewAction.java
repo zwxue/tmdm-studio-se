@@ -69,7 +69,7 @@ public class NewViewAction extends AbstractSimpleAddAction implements IViewNodeC
 
     @Override
     protected void doRun() {
-        getParentItem();
+        updateParentItem();
 
         int type = getType();
 

@@ -19,6 +19,8 @@ import org.apache.log4j.Logger;
 import org.eclipse.jface.dialogs.IInputValidator;
 import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.window.Window;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.talend.core.model.properties.Item;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.AbstractRepositoryAction;
@@ -56,7 +58,7 @@ public abstract class AbstractSimpleAddAction extends AbstractRepositoryAction {
 
     @Override
     protected void doRun() {
-        getParentItem();
+        updateParentItem();
 
         String key = getInputName();
         if (key != null) {
@@ -70,7 +72,7 @@ public abstract class AbstractSimpleAddAction extends AbstractRepositoryAction {
 
     }
 
-    private String getInputName() {
+    protected String getInputName() {
         InputDialog dlg = new InputDialog(getShell(), getDialogTitle(), Messages.Common_inputName, null, new IInputValidator() {
 
             public String isValid(String newText) {
@@ -85,7 +87,18 @@ public abstract class AbstractSimpleAddAction extends AbstractRepositoryAction {
                 }
                 return null;
             };
-        });
+        }) {
+
+            @Override
+            protected Control createDialogArea(Composite parent) {
+
+                Control area = super.createDialogArea(parent);
+                extendDialogArea(area);
+                return area;
+
+            }
+
+        };
         dlg.setBlockOnOpen(true);
         if (dlg.open() == Window.CANCEL) {
             return null;
@@ -95,7 +108,11 @@ public abstract class AbstractSimpleAddAction extends AbstractRepositoryAction {
         return key;
     }
 
-    protected void getParentItem() {
+    protected void extendDialogArea(Control area) {
+
+    }
+
+    protected void updateParentItem() {
         parentItem = null;
         if (!getSelectedObject().isEmpty()) {
             selectObj = getSelectedObject().get(0);
@@ -106,6 +123,10 @@ public abstract class AbstractSimpleAddAction extends AbstractRepositoryAction {
                 }
             }
         }
+    }
+
+    public void setParentItem(ContainerItem parentItem) {
+        this.parentItem = parentItem;
     }
 
     protected boolean runOpenActionAfterCreation(Item item) {

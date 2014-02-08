@@ -24,6 +24,12 @@ package org.talend.mdm.repository.ui.actions.datamodel;
 import java.util.Properties;
 
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.IPerspectiveDescriptor;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
@@ -48,6 +54,7 @@ import org.talend.mdm.repository.model.mdmserverobject.MdmserverobjectFactory;
 import org.talend.mdm.repository.model.mdmserverobject.WSDataModelE;
 import org.talend.mdm.repository.models.FolderRepositoryObject;
 import org.talend.mdm.repository.ui.actions.AbstractSimpleAddAction;
+import org.talend.mdm.repository.ui.actions.datacontainer.NewDataContainerAction;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 import org.talend.repository.model.IProxyRepositoryFactory;
 
@@ -65,6 +72,8 @@ public class NewDataModelAction extends AbstractSimpleAddAction implements IIntr
     public NewDataModelAction() {
         super();
     }
+
+    boolean needCreateDataContainer;
 
     @Override
     protected String getDialogTitle() {
@@ -98,31 +107,60 @@ public class NewDataModelAction extends AbstractSimpleAddAction implements IIntr
             item.getState().setPath(parentItem.getState().getPath());
             RepositoryResourceUtil.createItem(item, key);
         }
+        if (needCreateDataContainer) {
+            createDataContainerObject(key);
+        }
         return item;
+    }
+
+    protected void createDataContainerObject(final String key) {
+        if (!RepositoryResourceUtil.isExistByName(IServerObjectRepositoryType.TYPE_DATACLUSTER, key)) {
+            NewDataContainerAction newDataContainerAction = new NewDataContainerAction() {
+
+                @Override
+                protected String getInputName() {
+                    return key;
+                }
+
+                @Override
+                protected void updateParentItem() {
+                    IRepositoryViewObject folderViewObj = ContainerCacheService.get(IServerObjectRepositoryType.TYPE_DATACLUSTER,
+                            ""); //$NON-NLS-1$
+                    if (folderViewObj != null) {
+                        Item pItem = folderViewObj.getProperty().getItem();
+                        setParentItem((ContainerItem) pItem);
+
+                    }
+                }
+
+            };
+            newDataContainerAction.run();
+        }
     }
 
     private boolean noSelection = false;
 
+    @Override
     public void setParentItem(ContainerItem parentItem) {
         this.parentItem = parentItem;
         noSelection = true;
     }
 
     @Override
-    protected void getParentItem() {
+    protected void updateParentItem() {
         if (noSelection) {
             return;
         }
 
-        super.getParentItem();
+        super.updateParentItem();
     }
 
     public void run(IIntroSite site, Properties params) {
 
         IProxyRepositoryFactory factory = ProxyRepositoryFactory.getInstance();
         if (factory.isUserReadOnlyOnCurrentProject()) {
-            MessageDialog
-                    .openWarning(null, Messages.NewDataModelAction_UserAuthority, Messages.NewDataModelAction_CanNotCreateModel);
+            MessageDialog.openWarning(null, Messages.NewDataModelAction_UserAuthority,
+                    Messages.NewDataModelAction_CanNotCreateModel);
         } else {
             PlatformUI.getWorkbench().getIntroManager().closeIntro(PlatformUI.getWorkbench().getIntroManager().getIntro());
             IWorkbenchWindow workbenchWindow = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
@@ -157,5 +195,21 @@ public class NewDataModelAction extends AbstractSimpleAddAction implements IIntr
             run();
         }
 
+    }
+
+    @Override
+    protected void extendDialogArea(Control area) {
+        needCreateDataContainer = false;
+        Composite composite = (Composite) area;
+        final Button createDCBun = new Button(composite, SWT.CHECK);
+        createDCBun.setText(Messages.NewDataModelAction_createDataContainer);
+        createDCBun.addSelectionListener(new SelectionAdapter() {
+
+            @Override
+            public void widgetSelected(SelectionEvent e) {
+                needCreateDataContainer = createDCBun.getSelection();
+            }
+
+        });
     }
 }
