@@ -38,6 +38,8 @@ Require-Bundle: org.eclipse.ui,
  org.talend.commons.runtime,
  org.talend.librariesmanager,
  org.talend.librariesmanager.ui,
+ org.talend.mdm.ws;resolution:=optional,
+ org.talend.mdm.ws.enterprise;resolution:=optional,
  org.talend.mdm.commmon
 Eclipse-AutoStart: true
 Eclipse-RegisterBuddy: org.talend.testutils
@@ -266,4 +268,3 @@ Export-Package: com.amalto.workbench,
  org.w3c.dom.xpath,
  org.xml.sax,
  org.xml.sax.ext
-Import-Package: com.amalto.workbench.webservices
