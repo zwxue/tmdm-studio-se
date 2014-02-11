@@ -269,22 +269,6 @@ public class UtilTest {
     }
 
     @Test
-    public void testConvertRoleWhereCondition() {
-        RoleWhereCondition rc = new RoleWhereCondition();
-        rc.setLeftPath("Entity/Id"); //$NON-NLS-1$
-        rc.setOperator("Contains"); //$NON-NLS-1$
-        rc.setRightValueOrPath("id1"); //$NON-NLS-1$
-        rc.setPredicate("Or"); //$NON-NLS-1$
-
-        String[] lines = Util.convertRoleWhereCondition(rc);
-        assertEquals(lines.length, 4);
-        assertEquals(lines[0], "Entity/Id"); //$NON-NLS-1$
-        assertEquals(lines[1], "Contains"); //$NON-NLS-1$
-        assertEquals(lines[2], "id1"); //$NON-NLS-1$
-        assertEquals(lines[3], "Or"); //$NON-NLS-1$
-    }
-
-    @Test
     public void testConvertRouteCondition() {
         WSRoutingRuleExpression wr = new WSRoutingRuleExpression("name", "Entity/Id", WSRoutingRuleOperator.CONTAINS, "value"); //$NON-NLS-1$ //$NON-NLS-2$
         String[] lines = Util.convertRouteCondition(wr);
@@ -314,16 +298,6 @@ public class UtilTest {
         assertEquals(wc.getOperator().value(), "CONTAINS"); //$NON-NLS-1$
         assertEquals(wc.getRightValueOrPath(), "id1"); //$NON-NLS-1$
         assertEquals(wc.getStringPredicate().value(), "OR"); //$NON-NLS-1$
-    }
-
-    @Test
-    public void testConvertLineToRC() {
-        String[] values = { "Entity/Id", "Contains", "id1", "Or" }; //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-        RoleWhereCondition wc = Util.convertLineToRC(values);
-        assertEquals(wc.getLeftPath(), "Entity/Id"); //$NON-NLS-1$
-        assertEquals(wc.getOperator(), "Contains"); //$NON-NLS-1$
-        assertEquals(wc.getRightValueOrPath(), "id1"); //$NON-NLS-1$
-        assertEquals(wc.getPredicate(), "Or"); //$NON-NLS-1$
     }
 
     @Test
