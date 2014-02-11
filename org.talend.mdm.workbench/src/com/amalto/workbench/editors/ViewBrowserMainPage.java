@@ -283,7 +283,11 @@ public class ViewBrowserMainPage extends AMainPage implements IXObjectModelListe
 
             matchAllWordsBtn = toolkit.createButton(resultsGroup, Messages.ViewBrowserMainPage_MatchWholeSentence, SWT.CHECK);
             matchAllWordsBtn.setSelection(true);
-            matchAllWordsBtn.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, columns, 1));
+
+            resultsLabel = toolkit.createLabel(resultsGroup, "", SWT.NULL); //$NON-NLS-1$
+            GridData resultLayoutData = new GridData(SWT.LEFT, SWT.CENTER, false, false, columns - 1, 1);
+            resultLayoutData.widthHint = 100;
+            resultsLabel.setLayoutData(resultLayoutData);
 
             resultsViewer = new TableViewer(resultsGroup);
             resultsViewer.getControl().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, columns, 1));
