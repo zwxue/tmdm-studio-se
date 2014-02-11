@@ -353,7 +353,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                 String fieldName = getAutoIncrementKeyFieldNames(entity);
                 if (fieldName != null) {
                     String crevision = entityToRevisions.get(entity);
-                    String key = "[" + crevision + "]." + dataContainer + "." + entity + "." + fieldName; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+                    String key = formKey(dataContainer, entity, crevision, fieldName);
                     entityToKeys.put(entity, key);
                 }
             }
@@ -376,7 +376,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                 String revision = conceptRevisions.get(concept);
                 String fieldName = getAutoIncrementKeyFieldNames(concept);
 
-                String key = "[" + revision + "]." + cluster + "." + concept + "."+ fieldName;   //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$ //$NON-NLS-4$
+                String key = formKey(cluster, concept, revision, fieldName);
                 String value = results.get(concept);
 
                 if (value.isEmpty()) {
@@ -388,6 +388,14 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
             String updatedValue = AutoIncrementHelper.updateValue(content, keyvalues);
 
             return updatedValue;
+        }
+
+        private String formKey(String cluster, String concept, String revision, String fieldName) {
+            if ("HEAD".equals(revision)) { //$NON-NLS-1$
+                revision = "[" + revision + "]"; //$NON-NLS-1$ //$NON-NLS-2$
+            }
+
+            return revision + "." + cluster + "." + concept + "." + fieldName; //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
         }
 
         private Map<String, String> getAllEntityRevisionsInDataContainer(final XtentisPort port, String dataContainer) {
@@ -410,12 +418,14 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                 for (MapEntry entry : wsConceptRevisionMapMapEntries) {
                     String entity = entry.getConcept();
                     String revision = entry.getRevision();
-                    if (revision == null || revision.equals("")) { //$NON-NLS-1$
-                        revision = "HEAD";//$NON-NLS-1$
-                    }
+                    if ((revision == null && currentUniverseName == null) || currentUniverseName.equals(revision)) {
+                        if (revision == null || revision.equals("")) { //$NON-NLS-1$
+                            revision = "HEAD";//$NON-NLS-1$
+                        }
 
-                    if (getAutoIncrementKeyFieldNames(entity) != null) {
-                        entityToRevisions.put(entity, revision);
+                        if (getAutoIncrementKeyFieldNames(entity) != null) {
+                            entityToRevisions.put(entity, revision);
+                        }
                     }
                 }
             }
