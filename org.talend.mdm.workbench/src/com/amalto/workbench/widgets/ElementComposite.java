@@ -133,8 +133,9 @@ public class ElementComposite {
     }
 
     private void addTypes(final List customTypes, final List builtInTypes, String defaultTypeName) {
-        if (customTypes == null || builtInTypes == null)
+        if (customTypes == null || builtInTypes == null) {
             throw new IllegalArgumentException();
+        }
 
         boolean isCustomType = customTypes.indexOf(defaultTypeName) != -1;
 
@@ -155,15 +156,19 @@ public class ElementComposite {
     }
 
     private void addCustomTypes(final List customTypes) {
-        Set<String> alltypes = new HashSet<String>();
+        Set<String> uuidTypes = new HashSet<String>();
         // add uuid type aiming
-        Set<String> uuidtypes = EUUIDCustomType.allTypes();
-        alltypes.addAll(uuidtypes);
-        typeCombo.setItems(alltypes.toArray(new String[alltypes.size()]));
-        for (Iterator iter = customTypes.iterator(); iter.hasNext();) {
-            String name = (String) iter.next();
-            if (!uuidtypes.contains(name))
+        for (EUUIDCustomType current : EUUIDCustomType.values()) {
+            String name = current.getName();
+            uuidTypes.add(name);
+            typeCombo.add(name);
+        }
+
+        for (Object current : customTypes) {
+            String name = String.valueOf(current);
+            if (!uuidTypes.contains(name)) {
                 typeCombo.add(name);
+            }
         }
     }
 

@@ -14,6 +14,7 @@ package com.amalto.workbench.detailtabs.sections.composites;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -132,8 +133,9 @@ public class SimpleTypeConfigComposite extends Composite {
 
     public void setSimpleType(XSDSimpleTypeDefinition xsdSimpleType) {
 
-        if (xsdSimpleType == null)
+        if (xsdSimpleType == null) {
             return;
+        }
 
         this.xsdSimpleType = xsdSimpleType;
 
@@ -158,8 +160,12 @@ public class SimpleTypeConfigComposite extends Composite {
         String name = xsdSimpleType.getName() == null ? "" : xsdSimpleType.getName(); //$NON-NLS-1$
 		txtName.setText(name);
 
-        Set<String> uuidtypes = EUUIDCustomType.allTypes();
-        if (uuidtypes.contains(name)) {
+        Set<String> uuidTypes = new HashSet<String>();
+        for (EUUIDCustomType current : EUUIDCustomType.values()) {
+            uuidTypes.add(current.getName());
+        }
+
+        if (uuidTypes.contains(name)) {
             txtName.setEditable(false);
         }
 
@@ -187,18 +193,19 @@ public class SimpleTypeConfigComposite extends Composite {
 
     private void initUIContentsForComboCustomTypes() {
     	comboCustomTypes.removeSelectionChangedListener(customChangedListener);
-    	
+
     	 List<String> allCustomTypeNames = null;
     	if(xsdSimpleType.getSchema() !=null){
     	     allCustomTypeNames = Util.getAllCustomTypeNames(xsdSimpleType.getSchema());
     	}
-        
+
         if (xsdSimpleType.getName() != null && allCustomTypeNames != null) {
             allCustomTypeNames.remove(xsdSimpleType.getName());
         }
-        if (allCustomTypeNames != null)
+        if (allCustomTypeNames != null) {
             comboCustomTypes.setInput(allCustomTypeNames);
-        if(xsdSimpleType.getBaseType() != null && xsdSimpleType.getBaseType().getName() != null){ 
+        }
+        if(xsdSimpleType.getBaseType() != null && xsdSimpleType.getBaseType().getName() != null){
                comboCustomTypes.setSelection(new StructuredSelection(xsdSimpleType.getBaseType().getName()));
         }
         radCustomTypes.setSelection(!comboCustomTypes.getSelection().isEmpty());
@@ -219,8 +226,9 @@ public class SimpleTypeConfigComposite extends Composite {
             IPropertySource<?> propSource = SimpleTypeFacetPropSourceBuilder.createFacetPropSource(xsdSimpleType, baseTypeDef,
                     eachFacetName, compProperty.getPropertyViewer().getTree());
 
-            if (propSource == null)
+            if (propSource == null) {
                 continue;
+            }
 
             propertySources.add(propSource);
 
@@ -234,8 +242,9 @@ public class SimpleTypeConfigComposite extends Composite {
 
         Map<String, IPropertySource<?>> results = new HashMap<String, IPropertySource<?>>();
 
-        for (IPropertySource<?> eachPropSource : compProperty.getProperySources())
+        for (IPropertySource<?> eachPropSource : compProperty.getProperySources()) {
             results.put(eachPropSource.getPropertyName(), eachPropSource);
+        }
 
         return results;
     }
@@ -244,8 +253,9 @@ public class SimpleTypeConfigComposite extends Composite {
 
         Map<String, Object> results = new HashMap<String, Object>();
 
-        for (Entry<String, IPropertySource<?>> eachPropName2PropSource : getPropertySources().entrySet())
+        for (Entry<String, IPropertySource<?>> eachPropName2PropSource : getPropertySources().entrySet()) {
             results.put(eachPropName2PropSource.getKey(), eachPropName2PropSource.getValue().getPropertyValue());
+        }
 
         return results;
     }
@@ -261,7 +271,7 @@ public class SimpleTypeConfigComposite extends Composite {
     ModifyListener nameTxtListener;
     private void initUIListenerForText(){
     nameTxtListener = new ModifyListener() {
-			
+
 			public void modifyText(ModifyEvent e) {
 				caretOffset = txtName.getCaretPosition();
                 if (section != null && !txtName.getText().equals(xsdSimpleType.getName())) {
@@ -271,14 +281,14 @@ public class SimpleTypeConfigComposite extends Composite {
                 }
 			}
 		};
-		
+
     }
     private void addNameTxtListener(){
     	txtName.addModifyListener(nameTxtListener);
     }
     private void removeNameTxtListener(){
     	txtName.removeModifyListener(nameTxtListener);
-    }    
+    }
     private void initUIListenerForBaseTypeRadioBtns() {
 
         radCustomTypes.addSelectionListener(new SelectionAdapter() {
@@ -294,7 +304,7 @@ public class SimpleTypeConfigComposite extends Composite {
 
             @Override
             public void widgetSelected(SelectionEvent e) {
-                refresh();                
+                refresh();
             }
 
         });
@@ -307,7 +317,7 @@ public class SimpleTypeConfigComposite extends Composite {
 
             public void selectionChanged(SelectionChangedEvent event) {
                 if(section!=null && getSelectedBaseTypeName().length()>0){
-					section.autoCommit();			
+					section.autoCommit();
                 }
             }
         };
@@ -332,13 +342,14 @@ public class SimpleTypeConfigComposite extends Composite {
 
             public void selectionChanged(SelectionChangedEvent event) {
                 if(section!=null && getSelectedBaseTypeName().length()>0){
-					section.autoCommit();			
+					section.autoCommit();
                 }
             }
         };
 
         comboBuildInTypes.getCombo().addMouseListener(new MouseAdapter() {
 
+            @Override
             public void mouseDown(MouseEvent e) {
 
                 ISelection oldSelection = comboBuildInTypes.getSelection();
@@ -363,21 +374,23 @@ public class SimpleTypeConfigComposite extends Composite {
         comboBuildInTypes.getCombo().setEnabled(radBuildInTypes.getSelection() && !isBuildInType);
 
         initUIContentForCompFacet(getSelectedBaseType());
-        
+
     }
 
     public XSDSimpleTypeDefinition getSelectedBaseType() {
 
-        if (radCustomTypes.getSelection())
+        if (radCustomTypes.getSelection()) {
             return getCurSelectedCustomBaseType();
+        }
 
         return getCurSelectedBuildInBaseType();
     }
 
     public String getSelectedBaseTypeName() {
 
-        if (radCustomTypes.getSelection())
+        if (radCustomTypes.getSelection()) {
             return comboCustomTypes.getCombo().getText();
+        }
 
         return comboBuildInTypes.getCombo().getText();
     }
@@ -386,8 +399,9 @@ public class SimpleTypeConfigComposite extends Composite {
 
         IStructuredSelection selection = (IStructuredSelection) comboBuildInTypes.getSelection();
 
-        if (selection == null || selection.isEmpty())
+        if (selection == null || selection.isEmpty()) {
             return null;
+        }
 
         return (XSDSimpleTypeDefinition) selection.getFirstElement();
     }
@@ -396,15 +410,18 @@ public class SimpleTypeConfigComposite extends Composite {
 
         IStructuredSelection selection = (IStructuredSelection) comboCustomTypes.getSelection();
 
-        if (selection == null || selection.isEmpty())
+        if (selection == null || selection.isEmpty()) {
             return null;
+        }
 
         XSDSimpleTypeDefinition curSelectedCustomBaseType = xsdSimpleType.getSchema().resolveSimpleTypeDefinition(
                 xsdSimpleType.getSchema().getSchemaForSchemaNamespace(), (String) selection.getFirstElement());
 
         if (!xsdSimpleType.getSchema().getTypeDefinitions().contains(curSelectedCustomBaseType))
+         {
             return xsdSimpleType.getSchema().resolveSimpleTypeDefinition(xsdSimpleType.getSchema().getSchemaForSchemaNamespace(),
                     "string");//$NON-NLS-1$
+        }
 
         return curSelectedCustomBaseType;
     }
@@ -423,33 +440,42 @@ class CustomTypeSorter extends ViewerSorter {
         String typeName1 = getTypeName(e1);
         String typeName2 = getTypeName(e2);
 
-        if ("".equals(typeName1) || "".equals(typeName2))//$NON-NLS-1$//$NON-NLS-2$
+        if ("".equals(typeName1) || "".equals(typeName2)) {
             return super.compare(viewer, e1, e2);
+        }
 
         int typeCode1 = getTypeCode(typeName1);
         int typeCode2 = getTypeCode(typeName2);
 
-        if (typeCode1 != typeCode2)
+        if (typeCode1 != typeCode2) {
             return (typeCode1 - typeCode2);
+        }
 
         return typeName1.compareTo(typeName2);
     }
 
     private int getTypeCode(String typeName) {
+        Set<String> uuidTypes = new HashSet<String>();
+        for (EUUIDCustomType current : EUUIDCustomType.values()) {
+            uuidTypes.add(current.getName());
+        }
 
-        if (EUUIDCustomType.allTypes().contains(typeName))
+        if (uuidTypes.contains(typeName)) {
             return 0;
+        }
 
         return 1;
     }
 
     private String getTypeName(Object typeObj) {
 
-        if (typeObj instanceof XSDSimpleTypeDefinition)
+        if (typeObj instanceof XSDSimpleTypeDefinition) {
             return ((XSDSimpleTypeDefinition) typeObj).getName();
+        }
 
-        if (typeObj instanceof String)
+        if (typeObj instanceof String) {
             return (String) typeObj;
+        }
 
         return "";//$NON-NLS-1$
     }
