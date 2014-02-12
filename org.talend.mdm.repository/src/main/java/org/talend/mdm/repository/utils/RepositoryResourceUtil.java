@@ -92,6 +92,7 @@ import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.model.mdmproperties.MdmpropertiesFactory;
+import org.talend.mdm.repository.model.mdmproperties.WSViewItem;
 import org.talend.mdm.repository.model.mdmproperties.WorkspaceRootItem;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
 import org.talend.mdm.repository.model.mdmserverobject.WSDataModelE;
@@ -107,6 +108,7 @@ import org.talend.repository.model.IRepositoryNode.EProperties;
 import org.talend.repository.model.RepositoryNode;
 
 import com.amalto.workbench.exadapter.ExAdapterManager;
+import com.amalto.workbench.providers.XObjectBrowserInput;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.XtentisException;
 import com.amalto.workbench.webservices.WSConceptKey;
@@ -114,7 +116,7 @@ import com.amalto.workbench.webservices.WSGetBusinessConceptKey;
 
 /**
  * DOC hbhong class global comment. Detailled comment <br/>
- * 
+ *
  */
 public class RepositoryResourceUtil {
 
@@ -1029,7 +1031,7 @@ public class RepositoryResourceUtil {
 
     /**
      * convert viewObj's children to RepositoryNode type and add to node as its children
-     * 
+     *
      * @param viewObj
      * @param node RepositoryNode Object corresponding to viewObj
      */
@@ -1057,6 +1059,10 @@ public class RepositoryResourceUtil {
                     if (editorInput instanceof IRepositoryViewEditorInput) {
                         Item inputItem = ((IRepositoryViewEditorInput) editorInput).getInputItem();
                         if (inputItem != null) {
+                            if (inputItem instanceof WSViewItem && editorInput instanceof XObjectBrowserInput) {
+                                continue;
+                            }
+
                             IRepositoryViewObject vObj = ContainerCacheService.get(inputItem.getProperty());
                             if (vObj != null && vObj.equals(viewObj)) {
                                 return ref;
@@ -1165,7 +1171,7 @@ public class RepositoryResourceUtil {
     public static final String PROP_LAST_SERVER_DEF = "lastServerDef"; //$NON-NLS-1$
 
     /**
-     * 
+     *
      * @param viewObj
      * @return A decrypted serverDef
      */
@@ -1178,7 +1184,7 @@ public class RepositoryResourceUtil {
     }
 
     /**
-     * 
+     *
      * @param item
      * @return A decrypted serverDef
      */
@@ -1202,7 +1208,7 @@ public class RepositoryResourceUtil {
     }
 
     /**
-     * 
+     *
      * @param item
      * @param def need A decrypted serverDef
      */
