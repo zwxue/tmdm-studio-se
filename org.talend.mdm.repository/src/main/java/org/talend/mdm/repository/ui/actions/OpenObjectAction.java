@@ -27,9 +27,14 @@ import java.util.Properties;
 
 import org.apache.log4j.Logger;
 import org.eclipse.core.resources.IMarker;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorReference;
 import org.eclipse.ui.IWorkbenchPage;
@@ -49,6 +54,7 @@ import org.talend.mdm.repository.core.IRepositoryNodeConfiguration;
 import org.talend.mdm.repository.core.IRepositoryViewGlobalActionHandler;
 import org.talend.mdm.repository.core.IServerObjectRepositoryType;
 import org.talend.mdm.repository.core.service.IMDMSVNProviderService;
+import org.talend.mdm.repository.core.service.IRelationService;
 import org.talend.mdm.repository.extension.RepositoryNodeConfigurationManager;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
@@ -58,6 +64,7 @@ import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
 import org.talend.mdm.repository.models.WSRootRepositoryObject;
 import org.talend.mdm.repository.ui.editors.IRepositoryViewEditorInput;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
+import org.talend.mdm.repository.utils.ServiceUtil;
 import org.talend.mdm.workbench.serverexplorer.ui.dialogs.SelectServerDefDialog;
 import org.talend.repository.model.ERepositoryStatus;
 import org.talend.repository.model.IProxyRepositoryFactory;
@@ -151,50 +158,89 @@ public class OpenObjectAction extends AbstractRepositoryAction implements IIntro
 
     @Override
     protected void doRun() {
-        List<Object> sels = getSelectedObject();
-        if (selObjects != null) {
-            sels = selObjects;
+        IRelationService relationService = getRelationService();
+        if (relationService != null) {
+            Job openJob = new OpenJob();
+            openJob.setRule(relationService.getScheduleRule());
+            openJob.schedule();
+        } else {
+            doOpen();
         }
-        if (sels.isEmpty()) {
-            return;
-        }
-        Object obj = sels.get(0);
-        if (obj instanceof IRepositoryViewObject) {
-            if (obj instanceof WSRootRepositoryObject) {
-                return;
-            }
-            IRepositoryViewObject viewObject = (IRepositoryViewObject) obj;
+    }
 
-            Item item = viewObject.getProperty().getItem();
-            if (item instanceof ContainerItem) {
-                if (viewObject.getRepositoryObjectType().equals(IServerObjectRepositoryType.TYPE_SERVICECONFIGURATION)) {// service
-                    boolean checkMissingJar = MissingJarService.getInstance().checkMissingJar(true);
-                    if (!checkMissingJar) {
+    class OpenJob extends Job {
+
+        public OpenJob() {
+            super("Open Object"); //$NON-NLS-1$
+            setUser(true);
+        }
+
+        //$NON-NLS-1$
+
+        @Override
+        protected IStatus run(IProgressMonitor monitor) {
+            doOpen();
+            monitor.done();
+            return Status.OK_STATUS;
+        }
+
+    };
+
+    private IRelationService getRelationService() {
+        IRelationService service = ServiceUtil.getService(IRelationService.class);
+        return service;
+    }
+
+    protected void doOpen() {
+        Display.getDefault().syncExec(new Runnable() {
+
+            public void run() {
+                List<Object> sels = getSelectedObject();
+                if (selObjects != null) {
+                    sels = selObjects;
+                }
+                if (sels.isEmpty()) {
+                    return;
+                }
+                Object obj = sels.get(0);
+                if (obj instanceof IRepositoryViewObject) {
+                    if (obj instanceof WSRootRepositoryObject) {
                         return;
                     }
-                    // configuration
-                    MDMServerDef serverDef = openServerDialog(null);
-                    openServiceConfig(serverDef);
-                } else {
-                    getCommonViewer().expandToLevel(obj, 1);
-                }
-            } else {
-                IEditorReference editorRef = RepositoryResourceUtil.isOpenedInEditor(viewObject);
-                if (editorRef != null) {
-                    if (page == null) {
-                        this.page = getCommonViewer().getCommonNavigator().getSite().getWorkbenchWindow().getActivePage();
+                    IRepositoryViewObject viewObject = (IRepositoryViewObject) obj;
+
+                    Item item = viewObject.getProperty().getItem();
+                    if (item instanceof ContainerItem) {
+                        if (viewObject.getRepositoryObjectType().equals(IServerObjectRepositoryType.TYPE_SERVICECONFIGURATION)) {// service
+                            boolean checkMissingJar = MissingJarService.getInstance().checkMissingJar(true);
+                            if (!checkMissingJar) {
+                                return;
+                            }
+                            // configuration
+                            MDMServerDef serverDef = openServerDialog(null);
+                            openServiceConfig(serverDef);
+                        } else {
+                            getCommonViewer().expandToLevel(obj, 1);
+                        }
+                    } else {
+                        IEditorReference editorRef = RepositoryResourceUtil.isOpenedInEditor(viewObject);
+                        if (editorRef != null) {
+                            if (page == null) {
+                                page = getCommonViewer().getCommonNavigator().getSite().getWorkbenchWindow().getActivePage();
+                            }
+                            if (page != null) {
+                                page.bringToTop(editorRef.getPart(false));
+                            }
+                            if (marker != null) {
+                                IDE.gotoMarker(editorRef.getEditor(true), marker);
+                            }
+                        } else {
+                            openItem(viewObject);
+                        }
                     }
-                    if (page != null) {
-                        page.bringToTop(editorRef.getPart(false));
-                    }
-                    if (marker != null) {
-                        IDE.gotoMarker(editorRef.getEditor(true), marker);
-                    }
-                } else {
-                    openItem(viewObject);
                 }
             }
-        }
+        });
 
     }
 

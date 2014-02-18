@@ -341,6 +341,12 @@
       </key>
    </extension>
    <extension
+         point="org.eclipse.ui.startup">
+      <startup
+            class="org.talend.mdm.repository.core.startup.Startup">
+      </startup>
+   </extension>
+   <extension
          point="org.talend.core.repository.repository_node_provider">
       <repositoryNode
             class="org.talend.mdm.repository.core.nodes.MenuRepositoryNode"
