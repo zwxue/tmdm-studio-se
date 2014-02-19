@@ -312,8 +312,6 @@ public class Messages extends NLS {
 
     public static String RoutingRuleMainPage2_ExecuteTriggerSuccess;
 
-    public static String RoutingRuleMainPage2_NoSpecifyServer;
-
     public static String RoutingRuleMainPage2_run;
 
     public static String RoutingRuleMainPage2_selectEntity;

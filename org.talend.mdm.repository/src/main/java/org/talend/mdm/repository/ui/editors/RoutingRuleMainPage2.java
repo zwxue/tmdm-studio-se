@@ -13,10 +13,7 @@
 package org.talend.mdm.repository.ui.editors;
 
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -33,25 +30,24 @@ import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
-import org.talend.mdm.repository.ui.dialogs.trigger.StartTriggerDialog;
 import org.talend.mdm.repository.ui.dialogs.xpath.XpathSelectDialog2;
 import org.talend.mdm.repository.ui.widgets.TisTableViewerR;
 import org.talend.mdm.repository.ui.widgets.xmleditor.infoholder.RepositoryExternalInfoHolder;
 import org.talend.mdm.workbench.serverexplorer.ui.dialogs.SelectServerDefDialog;
 
 import com.amalto.workbench.dialogs.XpathSelectDialog;
+import com.amalto.workbench.editors.DataClusterDialog;
 import com.amalto.workbench.editors.RoutingRuleMainPage;
 import com.amalto.workbench.editors.XObjectEditor;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
+import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.service.ILegendServerDefService;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.XtentisException;
 import com.amalto.workbench.webservices.WSDataClusterPK;
 import com.amalto.workbench.webservices.WSItemPK;
-import com.amalto.workbench.webservices.WSRegexDataClusterPKs;
 import com.amalto.workbench.webservices.WSRouteItemV2;
-import com.amalto.workbench.webservices.WSRoutingRule;
 import com.amalto.workbench.webservices.WSServiceGetDocument;
 import com.amalto.workbench.webservices.XtentisPort;
 import com.amalto.workbench.widgets.TisTableViewer;
@@ -147,8 +143,6 @@ public class RoutingRuleMainPage2 extends RoutingRuleMainPage {
             try {
                 com.amalto.workbench.utils.MDMServerDef serverDef = getServerDef();
                 if (serverDef == null) {
-                    MessageDialog.openError(getSite().getShell(), Messages._Error,
-                            Messages.RoutingRuleMainPage2_NoSpecifyServer);
                     return;
                 }
 
@@ -163,23 +157,13 @@ public class RoutingRuleMainPage2 extends RoutingRuleMainPage {
                 XtentisPort port = Util.getPort(new URL(serverDef.getUrl()), serverDef.getUniverse(), serverDef.getUser(),
                         serverDef.getPasswd());
 
-                List<String> dataContainers = getAllDataContainers(port);
-                WSRoutingRule ws = (WSRoutingRule) (getXObject().getWsObject());
-                StartTriggerDialog dialog = new StartTriggerDialog(getSite(), port, dataContainers, ws.getConcept(), serverDef);
+                DataClusterDialog dialog = new DataClusterDialog(getSite().getShell(), new TreeObject(), getSite());
                 if (dialog.open() == IDialogConstants.OK_ID) {
-                    String dataCluster = dialog.getDataCluster();
-                    Map<String, String> keyValues = dialog.getConceptRecords();
-                    for (String concept : keyValues.keySet()) {
-                        List<String> ids = new ArrayList<String>();
-                        String id = keyValues.get(concept);
-                        if (id.indexOf(".") != -1) { //$NON-NLS-1$
-                            ids.addAll(Arrays.asList(id.split("."))); //$NON-NLS-1$
-                        } else {
-                            ids.add(id);
-                        }
-
-                        port.routeItemV2(new WSRouteItemV2(new WSItemPK(new WSDataClusterPK(dataCluster), concept, ids)));
-                    }
+                    String dataCluster = dialog.getDataContainer();
+                    String concept = dialog.getConcept();
+                    String[] recordIds = dialog.getRecordIds();
+                    port.routeItemV2(new WSRouteItemV2(new WSItemPK(new WSDataClusterPK(dataCluster), concept, Arrays
+                            .asList(recordIds))));
 
                     MessageDialog.openInformation(getSite().getShell(), Messages.RoutingRuleMainPage2_Success, Messages.RoutingRuleMainPage2_ExecuteTriggerSuccess);
                 }
@@ -227,23 +211,6 @@ public class RoutingRuleMainPage2 extends RoutingRuleMainPage {
             mdmServerDef.setUser(serverDef.getUser());
 
             return mdmServerDef;
-        }
-
-        private List<String> getAllDataContainers(XtentisPort port) {
-            List<String> dataContainers = new ArrayList<String>();
-            try {
-                List<WSDataClusterPK> xdcPKs = port.getDataClusterPKs(new WSRegexDataClusterPKs("")).getWsDataClusterPKs();//$NON-NLS-1$
-                for (WSDataClusterPK pk : xdcPKs) {
-                    String name = pk.getPk();
-                    if (!("CACHE".equals(name))) { //$NON-NLS-1$
-                        dataContainers.add(name);
-                    }
-                }
-            } catch (Exception e) {
-                log.error(e.getMessage(), e);
-            }
-
-            return dataContainers;
         }
 
         private boolean checkConnection(String endpointaddress, String username, String password, String universe) {
