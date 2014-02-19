@@ -395,7 +395,7 @@ public class StartTriggerDialog extends Dialog {
                 String[] recordIds = dialog.getRecordIds();
                 StringBuilder keys = new StringBuilder(recordIds[0]);
                 for (int i = 1; i < recordIds.length; i++) {
-                    keys.append("." + recordIds[i]);
+                    keys.append("." + recordIds[i]); //$NON-NLS-1$
                 }
                 text.setText(keys.toString());
             }

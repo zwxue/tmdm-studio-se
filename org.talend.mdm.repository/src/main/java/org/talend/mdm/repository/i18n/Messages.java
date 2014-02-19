@@ -306,7 +306,21 @@ public class Messages extends NLS {
 
     public static String RoutingRuleInteractiveHandler_label;
 
+    public static String RoutingRuleMainPage2_CheckConnection;
+
+    public static String RoutingRuleMainPage2_ErrorTestTrigger;
+
+    public static String RoutingRuleMainPage2_ExecuteTriggerSuccess;
+
+    public static String RoutingRuleMainPage2_NoSpecifyServer;
+
+    public static String RoutingRuleMainPage2_run;
+
     public static String RoutingRuleMainPage2_selectEntity;
+
+    public static String RoutingRuleMainPage2_Success;
+
+    public static String RoutingRuleMainPage2_UnableToConnect;
 
     public static String Common_Error;
 
