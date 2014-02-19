@@ -312,6 +312,26 @@ public class Messages extends NLS {
 
     public static String Common_Warning;
 
+    public static String StartTriggerDialog_container;
+
+    public static String StartTriggerDialog_entity;
+
+    public static String StartTriggerDialog_labelText;
+
+    public static String StartTriggerDialog_NoDuplication;
+
+    public static String StartTriggerDialog_NoEmpty;
+
+    public static String StartTriggerDialog_NoSameConcept;
+
+    public static String StartTriggerDialog_NoSameContainer;
+
+    public static String StartTriggerDialog_NoSameServer;
+
+    public static String StartTriggerDialog_recordKeys;
+
+    public static String StartTriggerDialog_shellText;
+
     public static String StoredProcedureInteractiveHandler_label;
 
     public static String StoredProcedureMainPage2_noDataContainer;

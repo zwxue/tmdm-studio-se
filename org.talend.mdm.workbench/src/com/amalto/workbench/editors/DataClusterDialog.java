@@ -32,6 +32,7 @@ import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Combo;
@@ -85,6 +86,8 @@ public class DataClusterDialog extends Dialog {
 
     private String recordContent;
 
+    private LineItem selected;
+
     private IWorkbenchPartSite site;
 
     private Color defaultColor;
@@ -117,6 +120,13 @@ public class DataClusterDialog extends Dialog {
         hookService();
 
         return parent;
+    }
+
+    @Override
+    protected void initializeBounds() {
+        super.initializeBounds();
+        Point location = getInitialLocation(getShell().getSize());
+        getShell().setLocation(location.x, location.y);
     }
 
     private void createFirstLine(Composite parent) {
@@ -235,9 +245,9 @@ public class DataClusterDialog extends Dialog {
 
             public void selectionChanged(SelectionChangedEvent event) {
                 IStructuredSelection structedSelection = (IStructuredSelection) event.getSelection();
-                LineItem lineItem = (LineItem) structedSelection.getFirstElement();
+                selected = (LineItem) structedSelection.getFirstElement();
 
-                showInTextWidget(lineItem);
+                showInTextWidget(selected);
             }
         });
     }
@@ -347,7 +357,30 @@ public class DataClusterDialog extends Dialog {
         return textViewer;
     }
 
+    public MDMServerDef getServerDef() {
+        return oldServerDef;
+    }
+
+    public String getDataContainer() {
+        return model.getName();
+    }
+
+    public String getConcept() {
+        if (selected != null) {
+            return selected.getConcept();
+        }
+
+        return null;
+    }
+
     public String getRecordContent() {
         return recordContent;
+    }
+
+    public String[] getRecordIds() {
+        if (selected != null) {
+            return selected.getIds();
+        }
+        return null;
     }
 }

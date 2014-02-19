@@ -14,6 +14,9 @@ package org.talend.mdm.repository.ui.editors;
 
 import java.util.Arrays;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.eclipse.jface.action.Action;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.forms.widgets.FormToolkit;
@@ -25,6 +28,9 @@ import org.talend.mdm.repository.ui.widgets.xmleditor.infoholder.RepositoryExter
 
 import com.amalto.workbench.dialogs.XpathSelectDialog;
 import com.amalto.workbench.editors.RoutingRuleMainPage;
+import com.amalto.workbench.editors.XObjectEditor;
+import com.amalto.workbench.image.EImage;
+import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.utils.XtentisException;
 import com.amalto.workbench.webservices.WSServiceGetDocument;
 import com.amalto.workbench.widgets.TisTableViewer;
@@ -35,9 +41,10 @@ import com.amalto.workbench.widgets.xmleditor.infoholder.ExternalInfoHolder;
  */
 public class RoutingRuleMainPage2 extends RoutingRuleMainPage {
 
+    private static Log log = LogFactory.getLog(RoutingRuleMainPage2.class);
     /**
      * DOC hbhong RoutingRuleMainPage2 constructor comment.
-     * 
+     *
      * @param editor
      */
     public RoutingRuleMainPage2(FormEditor editor) {
@@ -81,6 +88,20 @@ public class RoutingRuleMainPage2 extends RoutingRuleMainPage {
     }
 
     @Override
+    protected void createCharacteristicsContent(FormToolkit toolkit, Composite charComposite) {
+        addToolbar();
+        super.createCharacteristicsContent(toolkit, charComposite);
+    }
+
+    private void addToolbar() {
+        FormEditor editor = getEditor();
+        if (editor instanceof XObjectEditor) {
+            XObjectEditor xobjectEditor = (XObjectEditor) editor;
+            xobjectEditor.getToolBar().addActions(new RunTriggerTestAction());
+        }
+    }
+
+    @Override
     protected XpathSelectDialog getNewXpathDlg() {
         return new XpathSelectDialog2(getSite().getShell(), Messages.RoutingRuleMainPage2_selectEntity, getSite(), false,
                 dataModelName);
@@ -89,6 +110,21 @@ public class RoutingRuleMainPage2 extends RoutingRuleMainPage {
     @Override
     protected WSServiceGetDocument getServiceDocument(String jndiName) {
         return RepositoryWebServiceAdapter.getServiceDocument(jndiName);
+    }
+
+    class RunTriggerTestAction extends Action {
+
+        public RunTriggerTestAction() {
+            setImageDescriptor(ImageCache.getImage(EImage.RUN_EXC.getPath()));
+            setText("");//$NON-NLS-1$
+            setToolTipText("Run");
+            setId("starttrigger"); //$NON-NLS-1$
+        }
+
+        @Override
+        public void run() {
+            // TODO trigger test code
+        }
     }
 
 }
