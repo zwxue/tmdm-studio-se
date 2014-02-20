@@ -1056,65 +1056,15 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
         @Override
         public void run() {
             try {
-                super.run();
-
-                String xml = "<NewItem><NewElement></NewElement></NewItem>"; //$NON-NLS-1$
-
-                List<WSDataModelPK> dmPKs = Util.getPort(getXObject()).getDataModelPKs(new WSRegexDataModelPKs("*")) //$NON-NLS-1$
-                        .getWsDataModelPKs();
-                ArrayList<String> dataModels = new ArrayList<String>();
-                if (dmPKs != null) {
-                    for (WSDataModelPK pk : dmPKs) {
-                        if (!"XMLSCHEMA---".equals(pk.getPk())) { //$NON-NLS-1$
-                            dataModels.add(pk.getPk());
-                        }
-                    }
-                }
-                final XtentisPort port = Util.getPort(getXObject());
-                final DataContainerDOMViewDialog d = new DataContainerDOMViewDialog(DataClusterBrowserMainPage.this.getSite()
-                        .getShell(), port, Util.parse(xml), dataModels, DOMViewDialog.SOURCE_VIEWER, null);
-                d.addListener(new Listener() {
-
-                    public void handleEvent(Event event) {
-                        if (event.button == DOMViewDialog.BUTTON_SAVE) {
-                            // attempt to save
-                            try {
-
-                                WSPutItem putItem = new WSPutItem((WSDataClusterPK) getXObject().getWsKey(), d.getXML(),
-                                        "".equals(d //$NON-NLS-1$
-                                                .getDataModelName()) ? null : new WSDataModelPK(d.getDataModelName()), false);
-                                WSPutItemWithReport item = new WSPutItemWithReport(putItem, "genericUI", d.isBeforeVerification());//$NON-NLS-1$
-                                if (d.isTriggerProcess()) {
-                                    port.putItemWithReport(item);
-                                } else {
-                                    port.putItem(putItem);
-                                }
-                                doSearch();
-                            } catch (Exception e) {
-                                log.error(e.getMessage(), e);
-                                MessageDialog.openError(
-                                        shell,
-                                        Messages.DataClusterBrowserMainPage_100,
-                                        Messages.bind(Messages.DataClusterBrowserMainPage_101,
-                                                Util.formatErrorMessage(e.getLocalizedMessage())));
-                                return;
-                            }
-                        }// if
-                        d.close();
-                    }// handleEvent
-                });
-
-                d.setBlockOnOpen(true);
-                d.open();
-
-            } catch (Exception e) {
+                XtentisPort port = Util.getPort(getXObject());
+                NewItemHandler.createItemRecord(port, log, shell, (WSDataClusterPK) getXObject().getWsKey());
+                doSearch();
+            } catch (XtentisException e) {
                 log.error(e.getMessage(), e);
-                if (!Util.handleConnectionException(shell, e, null)) {
-                    MessageDialog.openError(shell, Messages._Error,
-                            Messages.bind(Messages.DataClusterBrowserMainPage_103, e.getLocalizedMessage()));
-                }
             }
         }
+
+
 
         @Override
         public void runWithEvent(Event event) {

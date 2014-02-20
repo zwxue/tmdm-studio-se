@@ -12,6 +12,7 @@
 // ============================================================================
 package com.amalto.workbench.editors;
 
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -21,6 +22,11 @@ import javax.xml.ws.WebServiceException;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.eclipse.jface.action.Action;
+import org.eclipse.jface.action.GroupMarker;
+import org.eclipse.jface.action.IMenuListener;
+import org.eclipse.jface.action.IMenuManager;
+import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ArrayContentProvider;
@@ -29,6 +35,7 @@ import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
@@ -41,12 +48,15 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.IWorkbenchPartSite;
 import org.talend.core.GlobalServiceRegister;
 
 import com.amalto.workbench.i18n.Messages;
+import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.models.TreeParent;
 import com.amalto.workbench.service.ILegendServerDefService;
@@ -96,6 +106,10 @@ public class DataClusterDialog extends Dialog {
 
     private List<TreeObject> dataContainers;
 
+    private List<MDMServerDef> allServerDefs;
+
+    private boolean hasdefaultServer = false;
+
     public DataClusterDialog(Shell parentShell, TreeObject treeObject, IWorkbenchPartSite site) {
         super(parentShell);
         this.model = treeObject;
@@ -118,6 +132,10 @@ public class DataClusterDialog extends Dialog {
         createLastPortion(parent);
 
         hookService();
+
+        hookContextMenu();
+
+        init();
 
         return parent;
     }
@@ -153,10 +171,7 @@ public class DataClusterDialog extends Dialog {
         });
         serverComboViewer.setContentProvider(new ArrayContentProvider());
 
-        ILegendServerDefService serverDefService = (ILegendServerDefService) GlobalServiceRegister.getDefault().getService(
-                ILegendServerDefService.class);
-        List<MDMServerDef> allServerDefs = serverDefService.getLegendServerDefs();
-        serverComboViewer.setInput(allServerDefs);
+        serverComboViewer.setInput(getAllServerDefs());
 
         Label containerLabel = new Label(firstLine, SWT.NONE);
         containerLabel.setText(Messages.DataClusterDialog_2);
@@ -180,6 +195,16 @@ public class DataClusterDialog extends Dialog {
         containerComboViewer.setContentProvider(new ArrayContentProvider());
         containerComboViewer.setInput(new TreeObject[0]);
         containerComboViewer.getCombo().setEnabled(false);
+    }
+
+    private List<MDMServerDef> getAllServerDefs() {
+        if (allServerDefs == null) {
+            ILegendServerDefService serverDefService = (ILegendServerDefService) GlobalServiceRegister.getDefault().getService(
+                    ILegendServerDefService.class);
+            allServerDefs = serverDefService.getLegendServerDefs();
+        }
+
+        return allServerDefs;
     }
 
     private void createLastPortion(Composite parent) {
@@ -252,9 +277,43 @@ public class DataClusterDialog extends Dialog {
         });
     }
 
+    private void hookContextMenu() {
+        MenuManager menuMgr = new MenuManager();
+        menuMgr.setRemoveAllWhenShown(true);
+        menuMgr.addMenuListener(new IMenuListener() {
+
+            public void menuAboutToShow(IMenuManager manager) {
+                manager.add(new GroupMarker(IWorkbenchActionConstants.MB_ADDITIONS));
+                manager.appendToGroup(IWorkbenchActionConstants.MB_ADDITIONS, new NewItemAction(site.getShell()));
+            }
+        });
+        Menu menu = menuMgr.createContextMenu(clusterComposite.getResultsViewer().getControl());
+        clusterComposite.getResultsViewer().getControl().setMenu(menu);
+//        site.registerContextMenu(menuMgr, clusterComposite.getResultsViewer());
+    }
+
+    private void init() {
+        if (hasdefaultServer) {
+            for (MDMServerDef serverDef : getAllServerDefs()) {
+                if (serverDef.getName().equals(oldServerDef.getName())) {
+                    serverComboViewer.setSelection(new StructuredSelection(serverDef), true);
+                    break;
+                }
+            }
+
+            for (TreeObject treeObj : dataContainers) {
+                if (treeObj.getName().equals("UpdateReport")) { //$NON-NLS-1$
+                    containerComboViewer.setSelection(new StructuredSelection(treeObj));
+                    break;
+                }
+            }
+        }
+    }
     private void changeWidgetColor(Color color) {
         WidgetUtils.changeWidgetColor(clusterComposite, color, new boolean[] { true, false });
-        textViewer.setBackground(color);
+        if (!textViewer.getEditable()) {
+            textViewer.setBackground(color);
+        }
     }
 
     private void showInTextWidget(LineItem lineItem) {
@@ -347,6 +406,11 @@ public class DataClusterDialog extends Dialog {
         return (MDMServerDef) structuredSelection.getFirstElement();
     }
 
+    public void setDefaultServerDef(MDMServerDef defaultServerDef) {
+        oldServerDef = defaultServerDef;
+        hasdefaultServer = true;
+    }
+
     @Override
     protected void okPressed() {
         recordContent = textViewer.getText().trim();
@@ -382,5 +446,31 @@ public class DataClusterDialog extends Dialog {
             return selected.getIds();
         }
         return null;
+    }
+
+    class NewItemAction extends Action {
+
+        private Shell shell;
+
+        public NewItemAction(Shell shell) {
+            this.shell = shell;
+            setImageDescriptor(ImageCache.getImage("icons/add_obj.gif")); //$NON-NLS-1$
+            setText(Messages.DataClusterBrowserMainPage_98);
+            setToolTipText(Messages.DataClusterBrowserMainPage_99);
+        }
+
+        @Override
+        public void run() {
+            try {
+                final XtentisPort port = Util.getPort(new URL(oldServerDef.getUrl()), oldServerDef.getUniverse(),
+                        oldServerDef.getUser(), oldServerDef.getPasswd());
+                NewItemHandler.createItemRecord(port, log, shell, new WSDataClusterPK(getDataContainer()));
+                clusterComposite.doSearch();
+            } catch (MalformedURLException e) {
+                log.error(e.getMessage(), e);
+            } catch (XtentisException e) {
+                log.error(e.getMessage(), e);
+            }
+        }
     }
 }
