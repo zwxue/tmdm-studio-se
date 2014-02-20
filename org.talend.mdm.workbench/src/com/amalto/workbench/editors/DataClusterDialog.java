@@ -289,7 +289,6 @@ public class DataClusterDialog extends Dialog {
         });
         Menu menu = menuMgr.createContextMenu(clusterComposite.getResultsViewer().getControl());
         clusterComposite.getResultsViewer().getControl().setMenu(menu);
-//        site.registerContextMenu(menuMgr, clusterComposite.getResultsViewer());
     }
 
     private void init() {
