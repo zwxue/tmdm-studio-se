@@ -158,10 +158,16 @@ public class RoutingRuleMainPage2 extends RoutingRuleMainPage {
                         serverDef.getPasswd());
 
                 DataClusterDialog dialog = new DataClusterDialog(getSite().getShell(), new TreeObject(), getSite());
+                dialog.setDefaultServerDef(serverDef);
                 if (dialog.open() == IDialogConstants.OK_ID) {
                     String dataCluster = dialog.getDataContainer();
                     String concept = dialog.getConcept();
                     String[] recordIds = dialog.getRecordIds();
+                    if (recordIds == null || recordIds.length == 0) {
+                        MessageDialog.openError(getSite().getShell(), Messages._Error,
+                                Messages.RoutingRuleMainPage2_NoRecordSelected);
+                        return;
+                    }
                     port.routeItemV2(new WSRouteItemV2(new WSItemPK(new WSDataClusterPK(dataCluster), concept, Arrays
                             .asList(recordIds))));
 
