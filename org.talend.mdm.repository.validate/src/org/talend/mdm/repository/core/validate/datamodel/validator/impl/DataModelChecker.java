@@ -24,7 +24,6 @@ import java.util.regex.Pattern;
 import org.apache.commons.collections.map.MultiKeyMap;
 import org.apache.log4j.Logger;
 import org.talend.mdm.commmon.metadata.ComplexTypeMetadata;
-import org.talend.mdm.commmon.metadata.ContainedComplexTypeMetadata;
 import org.talend.mdm.commmon.metadata.FieldMetadata;
 import org.talend.mdm.commmon.metadata.MetadataRepository;
 import org.talend.mdm.commmon.metadata.MetadataVisitor;
@@ -94,28 +93,6 @@ public class DataModelChecker implements IChecker<ModelValidationMessage> {
 
         public ValidationHandlerAdapter(String dataModelName) {
             this.dataModelName = dataModelName;
-        }
-
-        // Compute a string representation from a field to its containing entity type.
-        private static String getPath(FieldMetadata field) {
-            StringBuilder pathAsAsString = new StringBuilder();
-            pathAsAsString.append(getFieldName(field));
-            try {
-                ComplexTypeMetadata containingType = field.getContainingType();
-                while (containingType instanceof ContainedComplexTypeMetadata) {
-                    pathAsAsString.insert(0, '/');
-                    String name = getTypeName(containingType);
-                    pathAsAsString.insert(0, name);
-                    containingType = ((ContainedComplexTypeMetadata) containingType).getContainerType();
-                }
-                pathAsAsString.insert(0, '/');
-                pathAsAsString.insert(0, containingType.getName());
-            } catch (Exception e) {
-                // TODO Temp solution (for building a path from a field that doesn't exist).
-                // In case of exception, return an incomplete path
-                pathAsAsString.insert(0, "../"); //$NON-NLS-1$
-            }
-            return pathAsAsString.toString();
         }
 
         private static String getTypeName(TypeMetadata type) {
@@ -194,10 +171,7 @@ public class DataModelChecker implements IChecker<ModelValidationMessage> {
             if (error != ValidationError.XML_SCHEMA) {
                 int group;
                 try {
-                    ComplexTypeMetadata containingType = field.getContainingType();
-                    while (containingType instanceof ContainedComplexTypeMetadata) {
-                        containingType = ((ContainedComplexTypeMetadata) containingType).getContainerType();
-                    }
+                    ComplexTypeMetadata containingType = field.getContainingType().getEntity();
                     group = containingType.isInstantiable() ? IComponentValidationRule.MSG_GROUP_ENTITY
                             : IComponentValidationRule.MSG_GROUP_TYPE;
                 } catch (Exception e) {
@@ -209,7 +183,7 @@ public class DataModelChecker implements IChecker<ModelValidationMessage> {
                         dataModelName, getValue(lineNumber, -1), getValue(columnNumber, -1), group, element,
                         getEntityName(field),
                         getEntityName(field),
-                        getPath(field));
+ field.getPath());
                 addMessage(getValue(lineNumber, -1), getValue(columnNumber, -1), error, validationMessage);
                 errorCount++;
             }
@@ -217,10 +191,7 @@ public class DataModelChecker implements IChecker<ModelValidationMessage> {
 
         private static String getEntityName(FieldMetadata field) {
             try {
-                ComplexTypeMetadata containingType = field.getContainingType();
-                while (containingType instanceof ContainedComplexTypeMetadata) {
-                    containingType = ((ContainedComplexTypeMetadata) containingType).getContainerType();
-                }
+                ComplexTypeMetadata containingType = field.getContainingType().getEntity();
                 String name = containingType.getName();
                 if (name.startsWith(MetadataRepository.ANONYMOUS_PREFIX)) {
                     name = ANONYMOUS_TYPE_NAME;
@@ -249,7 +220,8 @@ public class DataModelChecker implements IChecker<ModelValidationMessage> {
                     message,
                     "key", // TODO
                     dataModelName, getValue(lineNumber, -1), getValue(columnNumber, -1), group, element,
-                    getEntityName(field), getEntityName(field), getPath(field));
+ getEntityName(field),
+                    getEntityName(field), field.getPath());
             addMessage(getValue(lineNumber, -1), getValue(columnNumber, -1), error, validationMessage);
         }
 
@@ -299,7 +271,7 @@ class TypeMetadataAdapter implements TypeMetadata {
     }
 
     @Override
-    public void addSuperType(TypeMetadata superType, MetadataRepository repository) {
+    public void addSuperType(TypeMetadata superType) {
     }
 
     @Override
@@ -322,7 +294,7 @@ class TypeMetadataAdapter implements TypeMetadata {
     }
 
     @Override
-    public TypeMetadata copy(MetadataRepository repository) {
+    public TypeMetadata copy() {
         return null;
     }
 
