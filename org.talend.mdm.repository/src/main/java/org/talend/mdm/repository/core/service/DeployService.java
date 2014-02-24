@@ -85,7 +85,7 @@ public class DeployService {
 
         /**
          * DOC hbhong DeployStatus constructor comment.
-         * 
+         *
          * @param severity
          * @param pluginId
          * @param message
@@ -268,7 +268,7 @@ public class DeployService {
 
     /**
      * work for updater server operation.
-     * 
+     *
      * @param serverDef
      * @param viewObjs
      * @param selectededCommands
@@ -426,7 +426,7 @@ public class DeployService {
         //
         try {
             IProgressService progressService = null;
-            if (PlatformUI.getWorkbench() != null) {
+            if (PlatformUI.isWorkbenchRunning()) {
                 progressService = PlatformUI.getWorkbench().getProgressService();
             } else {
                 progressService = ConsoleProgressService.getInstance();
