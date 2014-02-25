@@ -778,7 +778,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener, IGo
 
         /*
          * (non-Javadoc)
-         * 
+         *
          * @see org.eclipse.jface.viewers.IElementComparer#equals(java.lang.Object, java.lang.Object)
          */
         public boolean equals(Object a, Object b) {
@@ -792,7 +792,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener, IGo
 
         /*
          * (non-Javadoc)
-         * 
+         *
          * @see org.eclipse.jface.viewers.IElementComparer#hashCode(java.lang.Object)
          */
         public int hashCode(Object element) {
@@ -1654,7 +1654,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener, IGo
 
     /**
      * check whether the model field is UUID or AUTO_INCREMENT type.
-     * 
+     *
      * @param obj
      * @return
      */
@@ -1790,7 +1790,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener, IGo
 
     /**
      * Returns and XSDSchema Object from an xsd
-     * 
+     *
      * @param schema
      * @return
      * @throws Exception
@@ -2644,6 +2644,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener, IGo
                 if (exAdapter != null) {
                     exAdapter.doubleClick(elem);
                 }
+                break;
             case 121:
                 setAnnotationFKIntegrity.run();
                 break;
@@ -3011,7 +3012,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener, IGo
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.eclipse.ui.ide.IGotoMarker#gotoMarker(org.eclipse.core.resources.IMarker)
      */
     public void gotoMarker(IMarker marker) {
