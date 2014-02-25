@@ -10,26 +10,15 @@
 // 9 rue Pages 92150 Suresnes, France
 //
 // ============================================================================
-package org.talend.mdm.repository.utils;
+package org.talend.mdm.repository.ui.actions;
 
-import org.apache.log4j.Logger;
-import org.talend.core.GlobalServiceRegister;
+import com.amalto.workbench.exadapter.IExAdapter;
 
 /**
- * created by HHB on 2013-8-21 Detailled comment
+ * created by HHB on 2014-2-25 Detailled comment
  * 
  */
-public class ServiceUtil {
+public interface IOpenObjectActionExAdapter extends IExAdapter<OpenObjectAction> {
 
-    static Logger log = Logger.getLogger(ServiceUtil.class);
-
-    public static <T> T getService(Class<T> t) {
-        try {
-            T service = (T) GlobalServiceRegister.getDefault().getService(t);
-            return service;
-        } catch (Exception e) {
-            log.error(e.getMessage(), e);
-        }
-        return null;
-    }
+    void doOpen();
 }

@@ -27,10 +27,6 @@ import java.util.Properties;
 
 import org.apache.log4j.Logger;
 import org.eclipse.core.resources.IMarker;
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
@@ -54,7 +50,6 @@ import org.talend.mdm.repository.core.IRepositoryNodeConfiguration;
 import org.talend.mdm.repository.core.IRepositoryViewGlobalActionHandler;
 import org.talend.mdm.repository.core.IServerObjectRepositoryType;
 import org.talend.mdm.repository.core.service.IMDMSVNProviderService;
-import org.talend.mdm.repository.core.service.IRelationService;
 import org.talend.mdm.repository.extension.RepositoryNodeConfigurationManager;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
@@ -64,11 +59,11 @@ import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
 import org.talend.mdm.repository.models.WSRootRepositoryObject;
 import org.talend.mdm.repository.ui.editors.IRepositoryViewEditorInput;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
-import org.talend.mdm.repository.utils.ServiceUtil;
 import org.talend.mdm.workbench.serverexplorer.ui.dialogs.SelectServerDefDialog;
 import org.talend.repository.model.ERepositoryStatus;
 import org.talend.repository.model.IProxyRepositoryFactory;
 
+import com.amalto.workbench.exadapter.ExAdapterManager;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.models.TreeParent;
 import com.amalto.workbench.providers.XObjectBrowserInput;
@@ -88,6 +83,8 @@ public class OpenObjectAction extends AbstractRepositoryAction implements IIntro
 
     private List<Object> selObjects;
 
+    private IOpenObjectActionExAdapter exAdapter;
+
     public void setSelObjects(List<Object> selObjects) {
         this.selObjects = selObjects;
     }
@@ -101,6 +98,7 @@ public class OpenObjectAction extends AbstractRepositoryAction implements IIntro
         super(Messages.OpenObjectAction_open);
         setId(IRepositoryViewGlobalActionHandler.OPEN);
         setActionDefinitionId(IRepositoryViewGlobalActionHandler.OPEN);
+        exAdapter = ExAdapterManager.getAdapter(this, IOpenObjectActionExAdapter.class);
     }
 
     private IWorkbenchPage page = null;
@@ -158,40 +156,14 @@ public class OpenObjectAction extends AbstractRepositoryAction implements IIntro
 
     @Override
     protected void doRun() {
-        IRelationService relationService = getRelationService();
-        if (relationService != null) {
-            Job openJob = new OpenJob();
-            openJob.setRule(relationService.getScheduleRule());
-            openJob.schedule();
+        if (exAdapter != null) {
+            exAdapter.doOpen();
         } else {
             doOpen();
         }
     }
 
-    class OpenJob extends Job {
-
-        public OpenJob() {
-            super("Open Object"); //$NON-NLS-1$
-            setUser(true);
-        }
-
-        //$NON-NLS-1$
-
-        @Override
-        protected IStatus run(IProgressMonitor monitor) {
-            doOpen();
-            monitor.done();
-            return Status.OK_STATUS;
-        }
-
-    };
-
-    private IRelationService getRelationService() {
-        IRelationService service = ServiceUtil.getService(IRelationService.class);
-        return service;
-    }
-
-    protected void doOpen() {
+    public void doOpen() {
         Display.getDefault().syncExec(new Runnable() {
 
             public void run() {

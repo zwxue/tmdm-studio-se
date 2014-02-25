@@ -26,6 +26,7 @@ import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.ui.PlatformUI;
 import org.talend.core.model.properties.Item;
+import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.core.repository.model.ProxyRepositoryFactory;
 import org.talend.mdm.repository.plugin.RepositoryPlugin;
 
@@ -67,20 +68,24 @@ public class RepositoryViewObjectResourceChangeManager implements PropertyChange
         if (isWorkInUI() && ProxyRepositoryFactory.getInstance().isFullLogonFinished()) {
             String propertyName = event.getPropertyName();
             Object newValue = event.getNewValue();
-            if (newValue instanceof Item) {
-                Item item = (Item) newValue;
-                for (AbstractRepositoryResourceChangeListener listener : getListeners()) {
-                    if (listener.isHandleProperty(propertyName) && listener.isHandleItem(item)) {
-                        try {
-                            listener.run(propertyName, item);
-                        } catch (Exception e) {
-                            log.error(e.getMessage(), e);
+            if (newValue != null) {
+                if (newValue instanceof IRepositoryViewObject) {
+                    newValue = ((IRepositoryViewObject) newValue).getProperty().getItem();
+                }
+                if (newValue instanceof Item) {
+                    Item item = (Item) newValue;
+                    for (AbstractRepositoryResourceChangeListener listener : getListeners()) {
+                        if (listener.isHandleProperty(propertyName) && listener.isHandleItem(item)) {
+                            try {
+                                listener.run(propertyName, item);
+                            } catch (Exception e) {
+                                log.error(e.getMessage(), e);
+                            }
                         }
                     }
                 }
             }
         }
-
     }
 
     private List<AbstractRepositoryResourceChangeListener> listeners = null;

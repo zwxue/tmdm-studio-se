@@ -676,6 +676,18 @@ public class RepositoryResourceUtil {
         return null;
     }
 
+    public static IRepositoryViewObject findViewObjectByNameWithoutDeleted(ERepositoryObjectType type, String name) {
+        List<IRepositoryViewObject> viewObjects = findAllViewObjects(type, true, false);
+        if (viewObjects != null) {
+            for (IRepositoryViewObject viewObj : viewObjects) {
+                if (viewObj.getProperty().getLabel().equalsIgnoreCase(name)) {
+                    return viewObj;
+                }
+            }
+        }
+        return null;
+    }
+
     public static IRepositoryViewObject findViewObjectByReferenceResource(ERepositoryObjectType type, IFile file) {
         String name = file.getName();
         String ext = file.getFileExtension();
