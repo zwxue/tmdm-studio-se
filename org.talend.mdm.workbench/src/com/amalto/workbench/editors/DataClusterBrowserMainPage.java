@@ -1057,7 +1057,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
         public void run() {
             try {
                 XtentisPort port = Util.getPort(getXObject());
-                NewItemHandler.createItemRecord(port, log, shell, (WSDataClusterPK) getXObject().getWsKey());
+                NewItemHandler.createItemRecord(port, shell, (WSDataClusterPK) getXObject().getWsKey());
                 doSearch();
             } catch (XtentisException e) {
                 log.error(e.getMessage(), e);

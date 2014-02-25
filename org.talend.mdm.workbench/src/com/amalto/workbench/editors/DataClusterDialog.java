@@ -199,9 +199,11 @@ public class DataClusterDialog extends Dialog {
 
     private List<MDMServerDef> getAllServerDefs() {
         if (allServerDefs == null) {
-            ILegendServerDefService serverDefService = (ILegendServerDefService) GlobalServiceRegister.getDefault().getService(
-                    ILegendServerDefService.class);
-            allServerDefs = serverDefService.getLegendServerDefs();
+            if (GlobalServiceRegister.getDefault().isServiceRegistered(ILegendServerDefService.class)) {
+                ILegendServerDefService serverDefService = (ILegendServerDefService) GlobalServiceRegister.getDefault()
+                        .getService(ILegendServerDefService.class);
+                allServerDefs = serverDefService.getLegendServerDefs();
+            }
         }
 
         return allServerDefs;
@@ -463,7 +465,7 @@ public class DataClusterDialog extends Dialog {
             try {
                 final XtentisPort port = Util.getPort(new URL(oldServerDef.getUrl()), oldServerDef.getUniverse(),
                         oldServerDef.getUser(), oldServerDef.getPasswd());
-                NewItemHandler.createItemRecord(port, log, shell, new WSDataClusterPK(getDataContainer()));
+                NewItemHandler.createItemRecord(port, shell, new WSDataClusterPK(getDataContainer()));
                 clusterComposite.doSearch();
             } catch (MalformedURLException e) {
                 log.error(e.getMessage(), e);

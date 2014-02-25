@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
@@ -39,8 +40,9 @@ import com.amalto.workbench.webservices.XtentisPort;
  */
 public class NewItemHandler {
 
-    public static void createItemRecord(final XtentisPort port, final Log log, final Shell ashell,
-            final WSDataClusterPK dataClusterPk) {
+    private static final Log log = LogFactory.getLog(NewItemHandler.class);
+
+    public static void createItemRecord(final XtentisPort port, final Shell ashell, final WSDataClusterPK dataClusterPk) {
         if (port == null || dataClusterPk == null) {
             throw new IllegalArgumentException();
         }
@@ -78,9 +80,7 @@ public class NewItemHandler {
                             }
 
                         } catch (Exception e) {
-                            if (log != null) {
-                                log.error(e.getMessage(), e);
-                            }
+                            log.error(e.getMessage(), e);
                             MessageDialog.openError(
                                     shell,
                                     Messages.DataClusterBrowserMainPage_100,
@@ -97,9 +97,7 @@ public class NewItemHandler {
             d.open();
 
         } catch (Exception e) {
-            if (log != null) {
-                log.error(e.getMessage(), e);
-            }
+            log.error(e.getMessage(), e);
             if (!Util.handleConnectionException(shell, e, null)) {
                 MessageDialog.openError(shell, Messages._Error,
                         Messages.bind(Messages.DataClusterBrowserMainPage_103, e.getLocalizedMessage()));
