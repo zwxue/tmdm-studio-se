@@ -53,7 +53,7 @@ import com.amalto.workbench.webservices.XtentisPort;
 
 /**
  * created by HHB on 2012-10-9 Detailled comment
- * 
+ *
  */
 public class ExportDataContentProcess extends AbstractDataContentProcess {
 
@@ -76,7 +76,7 @@ public class ExportDataContentProcess extends AbstractDataContentProcess {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * org.talend.mdm.repository.core.datacontent.IDataContentProcess#processDatas(org.eclipse.core.runtime.IProgressMonitor
      * )
@@ -89,7 +89,7 @@ public class ExportDataContentProcess extends AbstractDataContentProcess {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.talend.mdm.repository.core.datacontent.IDataContentProcess#buildRule()
      */
     public DataProcessRule buildRule() throws InvocationTargetException {
@@ -103,7 +103,7 @@ public class ExportDataContentProcess extends AbstractDataContentProcess {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * org.talend.mdm.repository.core.datacontent.IDataContentProcess#tuneRule(org.talend.mdm.repository.core.datacontent
      * .DataProcessRule)
@@ -119,7 +119,7 @@ public class ExportDataContentProcess extends AbstractDataContentProcess {
         if (rule != null) {
             File file = new File(tempFolderPath + File.separator + RULE_FILE_NAME);
             try {
-                OutputStreamWriter writer = new OutputStreamWriter(new FileOutputStream(file), "UTF-8");//$NON-NLS-1$ 
+                OutputStreamWriter writer = new OutputStreamWriter(new FileOutputStream(file), "UTF-8");//$NON-NLS-1$
                 Marshaller.marshal(rule, writer);
                 return true;
             } catch (Exception e) {
@@ -131,17 +131,19 @@ public class ExportDataContentProcess extends AbstractDataContentProcess {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.talend.mdm.repository.core.datacontent.IDataContentProcess#getResult()
      */
     public MultiStatus getResult() {
-        processResult = new MultiStatus(RepositoryPlugin.PLUGIN_ID, IStatus.ERROR, Messages.ExportObjectAction_error, null);
+        if (processResult == null) {
+            processResult = new MultiStatus(RepositoryPlugin.PLUGIN_ID, IStatus.ERROR, Messages.ExportObjectAction_error, null);
+        }
         return processResult;
     }
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.talend.mdm.repository.core.datacontent.impl.AbstractDataContentProcess#getProcessService()
      */
     @Override
@@ -155,7 +157,7 @@ public class ExportDataContentProcess extends AbstractDataContentProcess {
 
         /**
          * DOC hbhong Comment method "zipFile".
-         * 
+         *
          * @param tempFolderPath
          * @param fPath
          */
@@ -167,7 +169,7 @@ public class ExportDataContentProcess extends AbstractDataContentProcess {
 
         /**
          * DOC hbhong ExprocessContentProcess constructor comment.
-         * 
+         *
          * @param port
          * @param tempFolderPath
          * @param dName
@@ -195,10 +197,8 @@ public class ExportDataContentProcess extends AbstractDataContentProcess {
                     totalSize = Integer.parseInt(Util.parse(results.get(0).getWsItemPK().getConceptName()).getDocumentElement()
                             .getTextContent());
                 }
-                for (Results item : results) {
-                    if (item.getWsItemPK().getIds() == null) {
-                        continue;
-                    }
+                for (int i = 1; i <= totalSize; i++) {
+                    Results item = results.get(i);
                     WSItem wsitem = port.getItem(new WSGetItem(item.getWsItemPK()));
 
                     // Marshal
@@ -210,7 +210,7 @@ public class ExportDataContentProcess extends AbstractDataContentProcess {
                         uniqueId = uniqueId + "." + id;//$NON-NLS-1$
                     }
                     encodedID = URLEncoder.encode(uniqueId, "UTF-8");//$NON-NLS-1$
-                    writeString(tempFolderPath, sw.toString(), pk.getPk() + "/" + encodedID);//$NON-NLS-1$ 
+                    writeString(tempFolderPath, sw.toString(), pk.getPk() + "/" + encodedID);//$NON-NLS-1$
                     items.add(TreeObject.DATACONTAINER_COTENTS + "/" + pk.getPk() + "/" + encodedID);//$NON-NLS-1$//$NON-NLS-2$
                     monitor.worked(1);
                 }
@@ -221,13 +221,12 @@ public class ExportDataContentProcess extends AbstractDataContentProcess {
             return -1;
         }
 
-        /*
-         * (non-Javadoc)
-         * 
-         * @see org.eclipse.jface.operation.IRunnableWithProgress#run(org.eclipse.core.runtime.IProgressMonitor)
-         */
         public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
             final int totalSize = exportCluster(port, tempFolderPath, dName, monitor);
+            if (totalSize == -1) {
+                throw new InvocationTargetException(new RuntimeException(Messages.ExportDataContentProcess_exportContentError));
+            }
+
             zipFile(tempFolderPath, outputPath, monitor);
             IOUtil.cleanFolder(new File(tempFolderPath));
             monitor.done();

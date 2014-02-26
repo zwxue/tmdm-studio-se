@@ -59,7 +59,7 @@ import com.amalto.workbench.webservices.WSItem;
 
 /**
  * created by HHB on 2012-10-9 Detailled comment
- * 
+ *
  */
 public class ImportDataContentProcess extends AbstractDataContentProcess {
 
@@ -82,7 +82,7 @@ public class ImportDataContentProcess extends AbstractDataContentProcess {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.talend.mdm.repository.core.datacontent.IDataContentProcess#buildRule()
      */
     public DataProcessRule buildRule() throws InvocationTargetException {
@@ -106,7 +106,7 @@ public class ImportDataContentProcess extends AbstractDataContentProcess {
         if (folder.exists()) {
             File file = new File(folder.getParent() + File.separator + RULE_FILE_NAME);
             if (file.exists()) {
-                InputStreamReader reader = new InputStreamReader(new FileInputStream(file), "UTF-8");//$NON-NLS-1$ 
+                InputStreamReader reader = new InputStreamReader(new FileInputStream(file), "UTF-8");//$NON-NLS-1$
                 rule = (DataProcessRule) Unmarshaller.unmarshal(DataProcessRule.class, reader);
             }
         }
@@ -116,7 +116,7 @@ public class ImportDataContentProcess extends AbstractDataContentProcess {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * org.talend.mdm.repository.core.datacontent.IDataContentProcess#tuneRule(org.talend.mdm.repository.core.datacontent
      * .DataProcessRule)
@@ -132,18 +132,20 @@ public class ImportDataContentProcess extends AbstractDataContentProcess {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.talend.mdm.repository.core.datacontent.IDataContentProcess#getResult()
      */
     public MultiStatus getResult() {
-        processResult = new MultiStatus(RepositoryPlugin.PLUGIN_ID, IStatus.ERROR, Messages.ImportDataClusterAction_errorTitle,
-                null);
+        if (processResult == null) {
+            processResult = new MultiStatus(RepositoryPlugin.PLUGIN_ID, IStatus.ERROR,
+                    Messages.ImportDataClusterAction_errorTitle, null);
+        }
         return processResult;
     }
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.talend.mdm.repository.core.datacontent.IDataContentProcess#processDatas(org.talend.mdm.repository.core.
      * datacontent.DataProcessRule, org.eclipse.core.runtime.IProgressMonitor)
      */
@@ -156,7 +158,7 @@ public class ImportDataContentProcess extends AbstractDataContentProcess {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.talend.mdm.repository.core.datacontent.impl.AbstractDataContentProcess#getProcessService()
      */
     @Override
@@ -170,7 +172,7 @@ public class ImportDataContentProcess extends AbstractDataContentProcess {
 
         /**
          * DOC hbhong ExportContentProcess constructor comment.
-         * 
+         *
          * @param serverDef
          * @param dName
          * @param path
@@ -192,7 +194,7 @@ public class ImportDataContentProcess extends AbstractDataContentProcess {
 
             /*
              * (non-Javadoc)
-             * 
+             *
              * @see java.io.FilenameFilter#accept(java.io.File, java.lang.String)
              */
             public boolean accept(File dir, String name) {
@@ -219,7 +221,7 @@ public class ImportDataContentProcess extends AbstractDataContentProcess {
 
         protected void importClusterContents(IProgressMonitor monitor) {
 
-            String url = serverDef.getProtocol() + serverDef.getHost() + ":" + serverDef.getPort() + "/datamanager/loadServlet"; //$NON-NLS-1$ //$NON-NLS-2$ 
+            String url = serverDef.getProtocol() + serverDef.getHost() + ":" + serverDef.getPort() + "/datamanager/loadServlet"; //$NON-NLS-1$ //$NON-NLS-2$
             String userName = serverDef.getUser();
             String password = serverDef.getPasswd();
             Reader reader = null;
@@ -231,7 +233,7 @@ public class ImportDataContentProcess extends AbstractDataContentProcess {
             for (File file : files) {
                 String concept = ""; //$NON-NLS-1$
                 try {
-                    reader = new InputStreamReader(new FileInputStream(file), "UTF-8");//$NON-NLS-1$ 
+                    reader = new InputStreamReader(new FileInputStream(file), "UTF-8");//$NON-NLS-1$
                     WSItem wsItem = (WSItem) Unmarshaller.unmarshal(WSItem.class, reader);
                     String key = wsItem.getWsDataClusterPK().getPk() + "##" + wsItem.getConceptName() + "##"//$NON-NLS-1$//$NON-NLS-2$
                             + wsItem.getDataModelName();

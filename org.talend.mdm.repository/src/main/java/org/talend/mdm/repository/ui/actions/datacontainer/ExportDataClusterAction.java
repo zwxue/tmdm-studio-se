@@ -18,6 +18,7 @@ import java.util.List;
 import javax.xml.ws.WebServiceException;
 
 import org.apache.log4j.Logger;
+import org.eclipse.core.runtime.MultiStatus;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
@@ -47,7 +48,7 @@ public class ExportDataClusterAction extends AbstractDataClusterAction {
 
     /**
      * DOC hbhong ExportDataClusterAction constructor comment.
-     * 
+     *
      * @param text
      */
     public ExportDataClusterAction() {
@@ -86,14 +87,19 @@ public class ExportDataClusterAction extends AbstractDataClusterAction {
                                     dName, fPath);
                             try {
                                 process.run();
-                                // show success info
-                                MessageDialog.openInformation(getShell(), Messages.ExportDataClusterAction_exportContent,
-                                        Messages.bind(Messages.ExportDataClusterAction_successExport, dName));
                             } catch (InterruptedException e) {
                                 // do nothing
                                 return;
                             }
 
+                            MultiStatus status = process.getResult();
+                            if (status != null && status.getChildren().length > 0) {
+                                MessageDialog.openError(getShell(), Messages._Error,
+                                        Messages.bind(Messages.ExportDataClusterAction_failedExportContent, dName));
+                            } else {
+                                MessageDialog.openInformation(getShell(), Messages.ExportDataClusterAction_exportContent,
+                                        Messages.bind(Messages.ExportDataClusterAction_successExport, dName));
+                            }
                         } else {
                             MessageDialog.openInformation(getShell(), Messages.Common_Warning,
                                     Messages.bind(Messages.ExportDataClusterAction_noContainerFound, dName));

@@ -508,6 +508,8 @@ public class Messages extends NLS {
 
     public static String ExportDataClusterAction_exporting;
 
+    public static String ExportDataClusterAction_failedExportContent;
+
     public static String ExportDataClusterAction_noContainerFound;
 
     public static String ExportDataClusterAction_successExport;
@@ -515,6 +517,8 @@ public class Messages extends NLS {
     public static String ExportDataClusterAction_title;
 
     public static String ExportDataContentProcess_CanNotConnectServer;
+
+    public static String ExportDataContentProcess_exportContentError;
 
     public static String ExportDataContentProcess_greaterThanMaxExportLimit;
 
