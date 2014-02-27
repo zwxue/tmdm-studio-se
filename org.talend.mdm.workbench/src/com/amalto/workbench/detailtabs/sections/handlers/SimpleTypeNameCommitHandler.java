@@ -25,12 +25,9 @@ public class SimpleTypeNameCommitHandler extends CommitHandler<SimpleTypeWrapper
 
     @Override
     protected void validateCommit() throws CommitValidationException {
-
-        if ("".equals(getCommitedObj().getNewTypeName().trim())) //$NON-NLS-1$
-            throw new CommitValidationException(Messages.SimpleTypeNameCommitHandler_TypeNameCannotbeEmpty);
-
-        if (getCommitedObj().getNewTypeName().replaceAll("\\s", "").length() != getCommitedObj().getNewTypeName().length())//$NON-NLS-1$//$NON-NLS-2$
+        if (getCommitedObj().getNewTypeName().replaceAll("\\s", "").length() != getCommitedObj().getNewTypeName().length()) { //$NON-NLS-1$ //$NON-NLS-2$
             throw new CommitValidationException(Messages.SimpleTypeNameCommitHandler_TypeNameCannotContainEmpty);
+        }
     }
 
     @Override
