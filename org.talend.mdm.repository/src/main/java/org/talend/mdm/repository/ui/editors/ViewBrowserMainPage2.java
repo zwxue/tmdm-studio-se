@@ -37,7 +37,7 @@ public class ViewBrowserMainPage2 extends ViewBrowserMainPage {
 
     /**
      * DOC hbhong ViewBrowserMainPage2 constructor comment.
-     * 
+     *
      * @param editor
      */
     public ViewBrowserMainPage2(FormEditor editor) {
@@ -51,7 +51,7 @@ public class ViewBrowserMainPage2 extends ViewBrowserMainPage {
     }
 
     private MDMServerDef getServerDef() {
-        XObjectBrowserInput2 input = (XObjectBrowserInput2) getEditorInput();
+        ViewBrowserInput input = (ViewBrowserInput) getEditorInput();
         return input.getServerDef();
     }
 

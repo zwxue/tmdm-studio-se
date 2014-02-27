@@ -22,8 +22,8 @@ import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 import org.talend.mdm.repository.model.mdmproperties.WSViewItem;
 import org.talend.mdm.repository.model.mdmserverobject.WSViewE;
+import org.talend.mdm.repository.ui.editors.ViewBrowserInput;
 import org.talend.mdm.repository.ui.editors.XObjectBrowser2;
-import org.talend.mdm.repository.ui.editors.XObjectBrowserInput2;
 import org.talend.mdm.workbench.serverexplorer.ui.dialogs.SelectServerDefDialog;
 
 import com.amalto.workbench.image.EImage;
@@ -40,7 +40,7 @@ public class BrowseViewAction extends AbstractRepositoryAction {
 
     /**
      * DOC hbhong BrowseViewAction constructor comment.
-     * 
+     *
      * @param text
      */
     public BrowseViewAction() {
@@ -48,6 +48,7 @@ public class BrowseViewAction extends AbstractRepositoryAction {
         setImageDescriptor(ImageCache.getImage(EImage.BROWSE.getPath()));
     }
 
+    @Override
     protected void doRun() {
         Object obj = getSelectedObject().get(0);
         if (obj instanceof IRepositoryViewObject) {
@@ -59,10 +60,11 @@ public class BrowseViewAction extends AbstractRepositoryAction {
             dlg.create();
             dlg.setSelectServer(lastServerDef);
             if (dlg.open() == IDialogConstants.OK_ID) {
-                XObjectBrowserInput2 input = new XObjectBrowserInput2(viewObject);
+                ViewBrowserInput input = new ViewBrowserInput(viewObject);
                 input.setServerDef(dlg.getSelectedServerDef());
-                if (page == null)
+                if (page == null) {
                     this.page = commonViewer.getCommonNavigator().getSite().getWorkbenchWindow().getActivePage();
+                }
                 try {
                     this.page.openEditor(input, XObjectBrowser2.EDITOR_ID);
                 } catch (PartInitException e) {
@@ -72,6 +74,7 @@ public class BrowseViewAction extends AbstractRepositoryAction {
         }
     }
 
+    @Override
     public String getGroupName() {
         return GROUP_EDIT;
     }

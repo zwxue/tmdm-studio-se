@@ -108,7 +108,7 @@ public class ViewMainPage2 extends ViewMainPage {
         IRepositoryViewObject viewObject = ContainerCacheService.get(prop);
         IWorkbenchPage page = getEditor().getEditorSite().getPage();
 
-        XObjectBrowserInput2 browserInput = new XObjectBrowserInput2(viewObject);
+        ViewBrowserInput browserInput = new ViewBrowserInput(viewObject);
         browserInput.setServerDef(getLastServerDef());
         try {
             page.openEditor(browserInput, XObjectBrowser2.EDITOR_ID);
