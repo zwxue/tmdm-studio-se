@@ -25,8 +25,10 @@ public class ServiceUtil {
 
     public static <T> T getService(Class<T> t) {
         try {
-            T service = (T) GlobalServiceRegister.getDefault().getService(t);
-            return service;
+            if (GlobalServiceRegister.getDefault().isServiceRegistered(t)) {
+                T service = (T) GlobalServiceRegister.getDefault().getService(t);
+                return service;
+            }
         } catch (Exception e) {
             log.error(e.getMessage(), e);
         }
