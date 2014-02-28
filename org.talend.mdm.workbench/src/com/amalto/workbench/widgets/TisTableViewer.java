@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.eclipse.jface.viewers.CellEditor;
@@ -128,6 +129,7 @@ public class TisTableViewer extends ComplexTableViewer {
                 // Update the model
                 Line line = new Line(columns.toArray(new ComplexTableViewerColumn[columns.size()]), getInitValues());
                 list.add(line);
+                viewer.setInput(list);
                 // update the instances viewer
                 viewer.setSelection(null);
                 viewer.refresh();
@@ -157,14 +159,16 @@ public class TisTableViewer extends ComplexTableViewer {
                     if (xpathDialog.getReturnCode() == Window.OK) {
                         datamodelName = xpathDialog.getDataModelName();
                         String[] xpaths = xpathDialog.getXpath().split("&");//$NON-NLS-1$
+                        List<Line> list = new LinkedList<Line>();
                         for (String xpath : xpaths) {
                             // check uniqueness by concatenating all the values
-                            List<Line> list = (List<Line>) getViewer().getInput();
+                            list = (List<Line>) getViewer().getInput();
                             // Update the model
                             Line line = new Line(columns.toArray(new ComplexTableViewerColumn[columns.size()]), getLineValues(
                                     xpath, 0));
                             list.add(line);
                         }
+                        viewer.setInput(list);
                         // update the instances viewer
                         viewer.setSelection(null);
                         viewer.refresh();
@@ -208,6 +212,7 @@ public class TisTableViewer extends ComplexTableViewer {
             public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
                 List<Line> items = (List<Line>) viewer.getInput();
                 items.clear();
+                viewer.setInput(items);
                 viewer.refresh();
                 markDirty();
             };
