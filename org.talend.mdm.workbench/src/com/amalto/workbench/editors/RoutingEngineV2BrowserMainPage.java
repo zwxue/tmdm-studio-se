@@ -105,7 +105,7 @@ import com.amalto.workbench.widgets.WidgetFactory;
 public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjectModelListener, IPagingListener {
 
     /**
-     * 
+     *
      */
     private static final String BLANK = ""; //$NON-NLS-1$
 
@@ -335,7 +335,7 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
             if ((servicesList != null) && (servicesList.size() > 0)) {
                 String[] services = new String[servicesList.size()];
                 for (int i = 0; i < servicesList.size(); i++) {
-                    services[i] = servicesList.get(i).getJndiName().replaceFirst("amalto/local/service/", BLANK);//$NON-NLS-1$ 
+                    services[i] = servicesList.get(i).getJndiName().replaceFirst("amalto/local/service/", BLANK);//$NON-NLS-1$
                 }
                 Arrays.sort(services);
                 for (String service : services) {
@@ -747,7 +747,7 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
                                             timeLastRunStartedMax,
                                             timeLastRunCompletedMin,
                                             timeLastRunCompletedMax,
-                                            "*".equals(documentTypeText.getText()) || BLANK.equals(documentTypeText.getText()) ? null : documentTypeText.getText(), //$NON-NLS-1$ 
+                                            "*".equals(documentTypeText.getText()) || BLANK.equals(documentTypeText.getText()) ? null : documentTypeText.getText(), //$NON-NLS-1$
                                             "*".equals(idText.getText()) || BLANK.equals(idText.getText()) ? null : idText.getText(),//$NON-NLS-1$
                                             serviceJNDI, null, null, start, limit, true))).getWsRoutingOrder();
 
@@ -763,7 +763,7 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
             pageToolBar.refreshUI();
 
             WSRoutingOrderV2[] resultOrderV2s = new WSRoutingOrderV2[wsRoutingOrder.size() - 1];
-            System.arraycopy(wsRoutingOrder, 1, resultOrderV2s, 0, resultOrderV2s.length);
+            System.arraycopy(wsRoutingOrder.toArray(new WSRoutingOrderV2[0]), 1, resultOrderV2s, 0, resultOrderV2s.length);
 
             return resultOrderV2s;
         } catch (Exception e) {
@@ -797,9 +797,9 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
 
     /***************************************************************
      * Edit Item Action
-     * 
+     *
      * @author bgrieder
-     * 
+     *
      ***************************************************************/
     class EditItemAction extends Action {
 
@@ -860,9 +860,9 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
 
     /***************************************************************
      * Delete Items Action
-     * 
+     *
      * @author bgrieder
-     * 
+     *
      ***************************************************************/
     class DeleteItemsAction extends Action {
 
@@ -881,7 +881,7 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
             } else {
                 setText(Messages.bind(Messages.RoutingEngineV2BrowserMainPage_DeleteThese, selection.size()));
             }
-            setToolTipText("Delete the selected Routing Order" + (selection.size() > 1 ? "s" : TEXT));//$NON-NLS-1$//$NON-NLS-2$ 
+            setToolTipText("Delete the selected Routing Order" + (selection.size() > 1 ? "s" : TEXT));//$NON-NLS-1$//$NON-NLS-2$
         }
 
         @Override
@@ -975,9 +975,9 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
 
     /***************************************************************
      * Execute Routing Orders
-     * 
+     *
      * @author bgrieder
-     * 
+     *
      ***************************************************************/
     class ExecuteRoutingOrdersAction extends Action {
 
@@ -1128,9 +1128,9 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
 
     /***************************************************************
      * Table Label Provider
-     * 
+     *
      * @author bgrieder
-     * 
+     *
      ***************************************************************/
     class ClusterTableLabelProvider implements ITableLabelProvider {
 
@@ -1177,9 +1177,9 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
 
     /***************************************************************
      * Table Sorter
-     * 
+     *
      * @author bgrieder
-     * 
+     *
      ***************************************************************/
     class TableSorter extends ViewerSorter {
 
