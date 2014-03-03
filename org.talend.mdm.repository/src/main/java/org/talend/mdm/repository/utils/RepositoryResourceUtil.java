@@ -114,7 +114,7 @@ import com.amalto.workbench.webservices.WSGetBusinessConceptKey;
 
 /**
  * DOC hbhong class global comment. Detailled comment <br/>
- *
+ * 
  */
 public class RepositoryResourceUtil {
 
@@ -230,8 +230,9 @@ public class RepositoryResourceUtil {
                     } catch (LoginException e) {
                         log.error(e.getMessage(), e);
                     }
-
                 }
+                factory.save(item);
+
             }
             if (pushCommandStack) {
                 CommandManager.getInstance().pushCommand(ICommand.CMD_ADD, nextId, name);
@@ -363,6 +364,11 @@ public class RepositoryResourceUtil {
         }
 
         return null;
+    }
+
+    public static IFile getItemFile(IRepositoryViewObject viewObj) {
+        Item item = viewObj.getProperty().getItem();
+        return findReferenceFile(viewObj.getRepositoryObjectType(), item, "item"); //$NON-NLS-1$
     }
 
     public static IFile findReferenceFile(ERepositoryObjectType type, Item item, String fileExtension) {
@@ -672,6 +678,25 @@ public class RepositoryResourceUtil {
             }
         }
         return null;
+    }
+
+    public static IRepositoryViewObject findViewObjectById(String id) {
+        IRepositoryViewObject viewObject = ContainerCacheService.get(id);
+        if (viewObject != null) {
+            viewObject = assertViewObject(viewObject);
+        } else {
+            IProxyRepositoryFactory factory = CoreRuntimePlugin.getInstance().getProxyRepositoryFactory();
+            try {
+                viewObject = factory.getLastVersion(id);
+                if (viewObject != null) {
+                    ContainerCacheService.put(viewObject);
+                }
+
+            } catch (PersistenceException e) {
+                log.error(e.getMessage(), e);
+            }
+        }
+        return viewObject;
     }
 
     public static IRepositoryViewObject findViewObjectByNameWithoutDeleted(ERepositoryObjectType type, String name) {
@@ -1041,7 +1066,7 @@ public class RepositoryResourceUtil {
 
     /**
      * convert viewObj's children to RepositoryNode type and add to node as its children
-     *
+     * 
      * @param viewObj
      * @param node RepositoryNode Object corresponding to viewObj
      */
@@ -1177,7 +1202,7 @@ public class RepositoryResourceUtil {
     public static final String PROP_LAST_SERVER_DEF = "lastServerDef"; //$NON-NLS-1$
 
     /**
-     *
+     * 
      * @param viewObj
      * @return A decrypted serverDef
      */
@@ -1190,7 +1215,7 @@ public class RepositoryResourceUtil {
     }
 
     /**
-     *
+     * 
      * @param item
      * @return A decrypted serverDef
      */
@@ -1214,7 +1239,7 @@ public class RepositoryResourceUtil {
     }
 
     /**
-     *
+     * 
      * @param item
      * @param def need A decrypted serverDef
      */

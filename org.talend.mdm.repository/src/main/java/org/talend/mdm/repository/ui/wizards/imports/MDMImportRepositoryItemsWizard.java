@@ -267,6 +267,8 @@ public class MDMImportRepositoryItemsWizard extends ImportItemsWizard {
         }
     }
 
+    final List<String> importedIds = new LinkedList<String>();
+
     @Override
     public void doImport(final Object[] selectedObjs, final IProgressMonitor monitor) {
         ImportService.setImporting(true);
@@ -290,6 +292,7 @@ public class MDMImportRepositoryItemsWizard extends ImportItemsWizard {
                                 Property property = object.getProperty();
                                 Item item = property.getItem();
                                 boolean needSave = false;
+                                importedIds.add(itemRec.getItemId());
                                 if (item instanceof MDMServerObjectItem) {
 
                                     serverObj = ((MDMServerObjectItem) item).getMDMServerObject();
@@ -318,6 +321,7 @@ public class MDMImportRepositoryItemsWizard extends ImportItemsWizard {
                                         if (name != null) {
                                             CommandManager.getInstance().pushCommand(ICommand.CMD_ADD, itemRec.getItemId(), name);
                                         }
+
                                     }
                                     ContainerCacheService.put(object);
                                 } catch (Exception e) {
@@ -335,6 +339,7 @@ public class MDMImportRepositoryItemsWizard extends ImportItemsWizard {
         monitor.done();
 
         ImportService.setImporting(false);
+
         Display.getDefault().asyncExec(new Runnable() {
 
             public void run() {
@@ -570,6 +575,10 @@ public class MDMImportRepositoryItemsWizard extends ImportItemsWizard {
             }
         }
         return true;
+    }
+
+    public List<String> getImportedIds() {
+        return this.importedIds;
     }
 
 }
