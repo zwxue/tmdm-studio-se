@@ -126,6 +126,7 @@ public class MDMExportRepositoryItemsWizard extends ExportItemsWizard {
 
         recursiveExpand(tv.getTree().getItems(), leafItems);
         ((CheckboxTreeViewer) checkTreeViewer.getViewer()).setCheckedElements(leafItems.toArray());
+        checkTreeViewer.updateCountStatus();
     }
 
     private boolean recursiveExpand(TreeItem[] items, List<IRepositoryViewObject> leafItems) {

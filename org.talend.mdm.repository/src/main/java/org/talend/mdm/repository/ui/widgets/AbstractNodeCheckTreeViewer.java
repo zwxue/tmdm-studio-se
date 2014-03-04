@@ -34,7 +34,6 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
@@ -231,7 +230,7 @@ public abstract class AbstractNodeCheckTreeViewer {
         Composite buttonComposite = new Composite(itemComposite, SWT.NONE);
         GridLayoutFactory.swtDefaults().margins(0, 25).applyTo(buttonComposite);
         GridDataFactory.swtDefaults().align(SWT.FILL, SWT.BEGINNING).applyTo(buttonComposite);
-        buttonComposite.setLayout(new RowLayout(SWT.VERTICAL));
+        buttonComposite.setLayout(new GridLayout(1, false));
 
         Button hide = new Button(buttonComposite, SWT.PUSH);
         hide.setVisible(false);
@@ -242,6 +241,7 @@ public abstract class AbstractNodeCheckTreeViewer {
             @Override
             public void widgetSelected(SelectionEvent e) {
                 ((CheckboxTreeViewer) viewer).setAllChecked(true);
+                updateCountStatus();
             }
         });
 
@@ -252,6 +252,7 @@ public abstract class AbstractNodeCheckTreeViewer {
             @Override
             public void widgetSelected(SelectionEvent e) {
                 ((CheckboxTreeViewer) viewer).setAllChecked(false);
+                updateCountStatus();
             }
         });
         if (bunListener != null) {
@@ -286,6 +287,10 @@ public abstract class AbstractNodeCheckTreeViewer {
     }
 
     protected abstract void createTreeViewer(Composite itemComposite);
+
+    public void updateCountStatus() {
+        // do nothing
+    }
 
     protected void expandParent(TreeViewer viewer, TreeObject node) {
         TreeParent parent = node.getParent();

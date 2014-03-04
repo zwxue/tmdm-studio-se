@@ -117,4 +117,30 @@ public class ExportRepositoryObjectCheckTreeViewer extends AbstractNodeCheckTree
         }
     }
 
+    @Override
+    protected Composite createSelectionButton(Composite itemComposite) {
+        Composite container = super.createSelectionButton(itemComposite);
+        if (exAdapter != null) {
+            exAdapter.createSelectionButton(container);
+        }
+
+        return container;
+    }
+
+    @Override
+    protected void createOtherControl(Composite itemComposite) {
+
+        super.createOtherControl(itemComposite);
+        if (exAdapter != null) {
+            exAdapter.createOtherControl(itemComposite);
+        }
+    }
+
+    @Override
+    public void updateCountStatus() {
+        if (exAdapter != null) {
+            exAdapter.updateCountStatus();
+        }
+    }
+
 }

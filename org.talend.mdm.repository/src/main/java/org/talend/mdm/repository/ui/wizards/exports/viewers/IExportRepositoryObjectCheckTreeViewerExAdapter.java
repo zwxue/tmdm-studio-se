@@ -14,6 +14,7 @@ package org.talend.mdm.repository.ui.wizards.exports.viewers;
 
 import java.util.List;
 
+import org.eclipse.swt.widgets.Composite;
 import org.talend.core.model.repository.IRepositoryViewObject;
 
 import com.amalto.workbench.exadapter.IExAdapter;
@@ -25,4 +26,12 @@ import com.amalto.workbench.exadapter.IExAdapter;
 public interface IExportRepositoryObjectCheckTreeViewerExAdapter extends IExAdapter<ExportRepositoryObjectCheckTreeViewer> {
 
     void addSortedViewObjects(List<IRepositoryViewObject> sortedViewObjs);
+
+    void appendDependencies(Object[] checkedElements);
+
+    Composite createSelectionButton(Composite itemComposite);
+
+    void createOtherControl(Composite itemComposite);
+
+    void updateCountStatus();
 }
