@@ -59,15 +59,20 @@ import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbenchActionConstants;
+import org.eclipse.ui.IWorkbenchPartSite;
 import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.forms.widgets.FormToolkit;
@@ -121,6 +126,7 @@ import com.amalto.workbench.webservices.WSUniverse;
 import com.amalto.workbench.webservices.WSUniversePK;
 import com.amalto.workbench.webservices.WSUpdateMetadataItem;
 import com.amalto.workbench.webservices.XtentisPort;
+import com.amalto.workbench.widgets.WidgetFactory;
 
 public class DataClusterBrowserMainPage extends AMainPage implements IXObjectModelListener {
 
@@ -152,7 +158,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
             // composite.setLayout(new GridLayout(9, false));
             composite.setLayout(new GridLayout());
 
-            clusterComp = new DataClusterComposite(composite, SWT.NONE, this, getSite(), getXObject());
+            clusterComp = new SearchRecordComposite(composite, SWT.NONE, this, getSite(), getXObject());
             clusterComp.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
             resultsViewer = clusterComp.getResultsViewer();
 
@@ -239,8 +245,6 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
             public void menuAboutToShow(IMenuManager manager) {
                 // ViewBrowserMainPage.this.fillContextMenu(manager);
                 manager.add(new GroupMarker(IWorkbenchActionConstants.MB_ADDITIONS));
-                manager.appendToGroup(IWorkbenchActionConstants.MB_ADDITIONS, new UpdateAutoIncrementKeyAction(
-                        DataClusterBrowserMainPage.this.getSite().getShell(), DataClusterBrowserMainPage.this.resultsViewer));
                 manager.appendToGroup(IWorkbenchActionConstants.MB_ADDITIONS, new EditItemAction(DataClusterBrowserMainPage.this
                         .getSite().getShell(), DataClusterBrowserMainPage.this.resultsViewer));
                 manager.appendToGroup(IWorkbenchActionConstants.MB_ADDITIONS, new EditTaskIdAction(
@@ -283,7 +287,42 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
         refreshData();
     }
 
-    class UpdateAutoIncrementKeyAction extends Action {
+    class SearchRecordComposite extends DataClusterComposite {
+
+        public SearchRecordComposite(Composite parent, int style, AFormPage page, IWorkbenchPartSite site, TreeObject model) {
+            super(parent, style, page, site, model);
+        }
+
+        @Override
+        protected void createShowTaskIdPart(Composite compSecondLine) {
+            FormToolkit toolkit = WidgetFactory.getWidgetFactory();
+
+            Button autoIncrementBtn = toolkit.createButton(compSecondLine, Messages.DataClusterBrowserMainPage_ManageAutoIncrement,
+                    SWT.PUSH);
+            autoIncrementBtn.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1));
+
+            Label fill = toolkit.createLabel(compSecondLine, "", SWT.NULL);//$NON-NLS-1$
+            fill.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 7, 1));
+
+            showTaskIdCB = toolkit.createButton(compSecondLine, Messages.DataClusterBrowserMainPage_8, SWT.CHECK);
+            showTaskIdCB.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
+            
+            autoIncrementBtn.addSelectionListener(new SelectionAdapter() {
+
+                @Override
+                public void widgetSelected(SelectionEvent e) {
+                    UpdateAutoIncrementKeyCommand updateCommand = new UpdateAutoIncrementKeyCommand(getSite().getShell(),
+                            DataClusterBrowserMainPage.this.resultsViewer);
+                    updateCommand.execute();
+                }
+            });
+        }
+
+    }
+
+    //
+
+    class UpdateAutoIncrementKeyCommand {
 
         protected Shell shell = null;
 
@@ -293,18 +332,12 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 
         private String schema;
 
-        public UpdateAutoIncrementKeyAction(Shell shell, Viewer viewer) {
-            super();
-            setImageDescriptor(ImageCache.getImage("icons/edit_obj.gif"));//$NON-NLS-1$
-            String text2 = Messages.DataClusterBrowserMainPage_UpdateAutoIncrement;
-            setText(text2);
-            setToolTipText(text2);
+        public UpdateAutoIncrementKeyCommand(Shell shell, Viewer viewer) {
             this.shell = shell;
             this.viewer = viewer;
         }
 
-        @Override
-        public void run() {
+        public void execute() {
             try {
                 TreeObject xObject = getXObject();
                 String dataContainer = xObject.getName();

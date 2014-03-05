@@ -1479,7 +1479,7 @@ public class Messages extends NLS {
 
     public static String DataClusterBrowserMainPage_referedRecord;
 
-    public static String DataClusterBrowserMainPage_UpdateAutoIncrement;
+    public static String DataClusterBrowserMainPage_ManageAutoIncrement;
 
     public static String DataClusterDialog_0;
 

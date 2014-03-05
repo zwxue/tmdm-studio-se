@@ -115,7 +115,7 @@ public class DataClusterComposite extends Composite implements IPagingListener {
 
     private Button checkFTSearchButton;
 
-    private Button showTaskIdCB;
+    protected Button showTaskIdCB;
 
     private PageingToolBar pageToolBar;
 
@@ -152,10 +152,20 @@ public class DataClusterComposite extends Composite implements IPagingListener {
     }
 
     private void create(Composite composite) {
+        createFirstPart(composite);
 
-        // get the toolkit
+        createSecondPart(composite);
+
+        createPageToolbar(composite);
+
+        createSearchResultPart(composite);
+        // adapt body add mouse/focus listener for child
         FormToolkit toolkit = WidgetFactory.getWidgetFactory();// managedForm.getToolkit();
+        toolkit.adapt(composite);
+    }
 
+    protected void createFirstPart(Composite composite) {
+        FormToolkit toolkit = WidgetFactory.getWidgetFactory();
         // We do not implement IFormPart: we do not care about lifecycle management
         Composite compFirstLine = toolkit.createComposite(composite, SWT.NONE);
         compFirstLine.setLayoutData(new GridData(SWT.FILL, SWT.NONE, true, false));
@@ -195,14 +205,23 @@ public class DataClusterComposite extends Composite implements IPagingListener {
                 doSearch();
             };
         });
+    }
 
-        /**********
-         * Second Line
-         */
+    protected Composite createSecondPart(Composite composite) {
+        FormToolkit toolkit = WidgetFactory.getWidgetFactory();
+
         Composite compSecondLine = toolkit.createComposite(composite, SWT.NONE);
         compSecondLine.setLayoutData(new GridData(SWT.FILL, SWT.NONE, true, false));
         compSecondLine.setLayout(new GridLayout(9, false));
 
+        createSearchPart(compSecondLine);
+
+        createShowTaskIdPart(compSecondLine);
+        return compSecondLine;
+    }
+
+    protected void createSearchPart(Composite compSecondLine) {
+        FormToolkit toolkit = WidgetFactory.getWidgetFactory();
         Label keyLabel = toolkit.createLabel(compSecondLine, Messages.DataClusterBrowserMainPage_5, SWT.NULL);
         keyLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
         keyText = toolkit.createText(compSecondLine, "", SWT.BORDER);//$NON-NLS-1$
@@ -218,22 +237,29 @@ public class DataClusterComposite extends Composite implements IPagingListener {
         searchText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 3, 1));
         // searchText.addModifyListener(this);
         searchText.addKeyListener(keylistener);
+        searchText.setFocus();
 
         checkFTSearchButton = toolkit.createButton(compSecondLine, Messages.DataClusterBrowserMainPage_7, SWT.CHECK);
         checkFTSearchButton.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
+    }
 
+    protected void createShowTaskIdPart(Composite compSecondLine) {
+        FormToolkit toolkit = WidgetFactory.getWidgetFactory();
         Label fill = toolkit.createLabel(compSecondLine, "", SWT.NULL);//$NON-NLS-1$
         fill.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 8, 1));
 
         showTaskIdCB = toolkit.createButton(compSecondLine, Messages.DataClusterBrowserMainPage_8, SWT.CHECK);
         showTaskIdCB.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
+    }
 
-        // pagetoolbar
+    protected void createPageToolbar(Composite composite) {
         pageToolBar = new PageingToolBar(composite);
         pageToolBar.getComposite().setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false, 9, 1));
         pageToolBar.getComposite().setVisible(false);
         pageToolBar.setPageingListener(this);
+    }
 
+    protected void createSearchResultPart(Composite composite) {
         int style = SWT.MULTI | SWT.BORDER | SWT.H_SCROLL | SWT.FULL_SELECTION | SWT.HIDE_SELECTION;
         resultsViewer = new TableViewer(composite, style);
         initTable(resultsViewer.getTable());
@@ -242,10 +268,6 @@ public class DataClusterComposite extends Composite implements IPagingListener {
         // ((GridData) resultsViewer.getControl().getLayoutData()).heightHint = DEFAULT_VIEWER_HEIGHT;
         resultsViewer.setContentProvider(new ArrayContentProvider());
         resultsViewer.setLabelProvider(new ClusterTableLabelProvider());
-        searchText.setFocus();
-        // adapt body add mouse/focus listener for child
-        // WidgetFactory factory=new WidgetFactory();
-        toolkit.adapt(composite);
     }
 
     private KeyListener keylistener = new KeyAdapter() {
@@ -766,9 +788,9 @@ public class DataClusterComposite extends Composite implements IPagingListener {
 
     /***************************************************************
      * Table Label Provider
-     * 
+     *
      * @author bgrieder
-     * 
+     *
      ***************************************************************/
     class ClusterTableLabelProvider implements ITableLabelProvider {
 
@@ -809,9 +831,9 @@ public class DataClusterComposite extends Composite implements IPagingListener {
 
     /***************************************************************
      * Table Sorter
-     * 
+     *
      * @author bgrieder
-     * 
+     *
      ***************************************************************/
     class TableSorter extends ViewerSorter {
 
