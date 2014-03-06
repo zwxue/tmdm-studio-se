@@ -19,7 +19,8 @@ import java.util.List;
 
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.layout.RowLayout;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
@@ -37,19 +38,22 @@ public class CalendarDialog extends Dialog {
     public CalendarDialog(Shell parentShell) {
         super(parentShell);
     }
-    
+
     @Override
     protected void configureShell(Shell newShell) {
         super.configureShell(newShell);
         newShell.setText(Messages.CalendarDialog_DatePicker);
-        newShell.setSize(170, 160);
     }
 
     @Override
     protected Control createDialogArea(Composite parent) {
         Composite comp = new Composite(parent, SWT.NONE);
-        comp.setLayout(new RowLayout());
+        GridLayout gridLayout = new GridLayout();
+        comp.setLayout(gridLayout);
         swtcal = new SWTCalendar(comp);
+        GridData layoutData = new GridData(SWT.FILL, SWT.FILL, true, true);
+        layoutData.widthHint = 270;
+        swtcal.setLayoutData(layoutData);
         for (SWTCalendarListener listener : listeners) {
             swtcal.addSWTCalendarListener(listener);
         }
@@ -82,8 +86,9 @@ public class CalendarDialog extends Dialog {
 
     @Override
     public Shell getShell() {
-        if (swtcal.isDisposed())
+        if (swtcal.isDisposed()) {
             return null;
+        }
         return swtcal.getShell();
     }
 

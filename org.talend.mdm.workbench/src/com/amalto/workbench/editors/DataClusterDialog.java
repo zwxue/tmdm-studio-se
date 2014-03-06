@@ -38,8 +38,10 @@ import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Combo;
@@ -127,9 +129,11 @@ public class DataClusterDialog extends Dialog {
     @Override
     protected Control createDialogArea(Composite parent) {
         //
-        createFirstLine(parent);
+        Composite firstLine = createFirstLine(parent);
+        firstLine.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
 
-        createLastPortion(parent);
+        Composite lastPortion = createLastPortion(parent);
+        lastPortion.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
         hookService();
 
@@ -147,10 +151,9 @@ public class DataClusterDialog extends Dialog {
         getShell().setLocation(location.x, location.y);
     }
 
-    private void createFirstLine(Composite parent) {
+    private Composite createFirstLine(Composite parent) {
         Composite firstLine = new Composite(parent, SWT.NONE);
         firstLine.setLayout(new GridLayout(4, false));
-        firstLine.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
 
         Label serverLabel = new Label(firstLine, SWT.NONE);
         serverLabel.setText(Messages.DataClusterDialog_1);
@@ -195,6 +198,8 @@ public class DataClusterDialog extends Dialog {
         containerComboViewer.setContentProvider(new ArrayContentProvider());
         containerComboViewer.setInput(new TreeObject[0]);
         containerComboViewer.getCombo().setEnabled(false);
+
+        return firstLine;
     }
 
     private List<MDMServerDef> getAllServerDefs() {
@@ -209,28 +214,33 @@ public class DataClusterDialog extends Dialog {
         return allServerDefs;
     }
 
-    private void createLastPortion(Composite parent) {
+    private Composite createLastPortion(Composite parent) {
         Group group = new Group(parent, SWT.NONE);
         group.setText(Messages.DataClusterDialog_3);
-        group.setLayout(new GridLayout());
-        group.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+        group.setLayout(new FillLayout());
 
-        clusterComposite = new DataClusterComposite(group, SWT.NONE, model, site);
+        SashForm splitter = new SashForm(group, SWT.VERTICAL);
+        splitter.setSashWidth(8);
+        clusterComposite = new DataClusterComposite(splitter, SWT.NONE, model, site);
         clusterComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
         clusterComposite.setEnabled(false);
 
-        new Label(group, SWT.NONE);
-        Label recordContentLabel = new Label(group, SWT.NONE);
+        Composite contentComp = new Composite(splitter, SWT.NONE);
+        contentComp.setLayout(new GridLayout());
+        Label recordContentLabel = new Label(contentComp, SWT.NONE);
         recordContentLabel.setText(Messages.DataClusterDialog_4);
 
-        textViewer = new Text(group, SWT.BORDER | SWT.WRAP | SWT.MULTI | SWT.V_SCROLL);
+        textViewer = new Text(contentComp, SWT.BORDER | SWT.WRAP | SWT.MULTI | SWT.V_SCROLL);
         textViewer.setEditable(false);
         textViewer.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
         textViewer.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+        splitter.setWeights(new int[] { 2, 1 });
 
         defaultColor = clusterComposite.getBackground();
 
         changeWidgetColor(greyColor);
+
+        return group;
     }
 
     private void hookService() {
