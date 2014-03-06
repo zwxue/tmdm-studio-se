@@ -25,6 +25,7 @@ import org.talend.mdm.repository.ui.dialogs.lock.LockedDirtyObjectDialog;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 import org.talend.mdm.workbench.serverexplorer.ui.dialogs.SelectServerDefDialog;
 
+import com.amalto.workbench.exadapter.ExAdapterManager;
 import com.amalto.workbench.service.MissingJarService;
 
 /**
@@ -32,12 +33,20 @@ import com.amalto.workbench.service.MissingJarService;
  */
 public class DeployToAction extends AbstractDeployAction {
 
+    IDeployActionExAdapter<DeployToAction> exAdapter;
+
     public DeployToAction() {
         super(Messages.DeployToAction_deployTo);
+        initExAdapter();
     }
 
     public DeployToAction(String label) {
         super(label);
+        initExAdapter();
+    }
+
+    private void initExAdapter() {
+        exAdapter = ExAdapterManager.getAdapter(this, IDeployActionExAdapter.class);
     }
 
     @Override
@@ -47,7 +56,14 @@ public class DeployToAction extends AbstractDeployAction {
             return;
         }
         List<IRepositoryViewObject> viewObjs = getSelectedRepositoryViewObject();
-
+        if (exAdapter != null) {
+            viewObjs = exAdapter.showDependencyConfigDialog(viewObjs);
+            if (viewObjs == null) {
+                return;
+            }
+            // TO add match rule object
+            viewObjs = getSelectedRepositoryViewObject(viewObjs);
+        }
         SelectServerDefDialog dialog = getSelectServerDefDialog(viewObjs);
 
         if (dialog.open() == IDialogConstants.OK_ID) {
@@ -82,7 +98,7 @@ public class DeployToAction extends AbstractDeployAction {
 
     /**
      * set the default selection in SelectServerDefDialog
-     *
+     * 
      * @param viewObjs current selected view objects
      * @param dialog
      */

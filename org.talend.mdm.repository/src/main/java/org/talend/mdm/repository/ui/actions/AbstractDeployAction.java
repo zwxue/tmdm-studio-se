@@ -97,8 +97,13 @@ public abstract class AbstractDeployAction extends AbstractRepositoryAction {
     IProxyRepositoryFactory factory = CoreRuntimePlugin.getInstance().getProxyRepositoryFactory();
 
     protected List<IRepositoryViewObject> getSelectedRepositoryViewObject() {
+        List<IRepositoryViewObject> viewObjs = getSelectedRepositoryViewObject(getSelectedObject());
+        return viewObjs;
+    }
+
+    protected List<IRepositoryViewObject> getSelectedRepositoryViewObject(List inputObjs) {
         List<IRepositoryViewObject> viewObjs = new LinkedList<IRepositoryViewObject>();
-        for (Object obj : getSelectedObject()) {
+        for (Object obj : inputObjs) {
             if (obj instanceof IRepositoryViewObject) {
                 IRepositoryViewObject viewObject = (IRepositoryViewObject) obj;
                 viewObjs.add(viewObject);

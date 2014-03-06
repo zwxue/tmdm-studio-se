@@ -171,4 +171,8 @@ public abstract class AbstractLabelProvider implements IRepositoryNodeLabelProvi
 
     public abstract Image getCategoryImage(Item item);
 
+    public static Image getFolderImg() {
+        return FOLDER_IMG;
+    }
+
 }

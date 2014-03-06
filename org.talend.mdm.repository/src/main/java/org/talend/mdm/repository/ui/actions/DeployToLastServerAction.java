@@ -28,6 +28,7 @@ import org.talend.mdm.repository.models.FolderRepositoryObject;
 import org.talend.mdm.repository.ui.dialogs.lock.LockedDirtyObjectDialog;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 
+import com.amalto.workbench.exadapter.ExAdapterManager;
 import com.amalto.workbench.service.MissingJarService;
 
 /**
@@ -35,11 +36,13 @@ import com.amalto.workbench.service.MissingJarService;
  */
 public class DeployToLastServerAction extends AbstractDeployAction {
 
+    IDeployActionExAdapter<DeployToAction> exAdapter;
+
     private static Logger log = Logger.getLogger(DeployToLastServerAction.class);
 
     public DeployToLastServerAction() {
         super(Messages.DeployToLastServerAction_deployToLastServer);
-
+        exAdapter = ExAdapterManager.getAdapter(this, IDeployActionExAdapter.class);
     }
 
     @Override
@@ -49,6 +52,14 @@ public class DeployToLastServerAction extends AbstractDeployAction {
             return;
         }
         List<IRepositoryViewObject> viewObjs = getSelectedRepositoryViewObject();
+        if (exAdapter != null) {
+            viewObjs = exAdapter.showDependencyConfigDialog(viewObjs);
+            if (viewObjs == null) {
+                return;
+            }
+            // TO add match rule object
+            viewObjs = getSelectedRepositoryViewObject(viewObjs);
+        }
         LockedDirtyObjectDialog lockDirtyDialog = new LockedDirtyObjectDialog(getShell(),
                 Messages.AbstractDeployAction_promptToSaveEditors, viewObjs);
         if (lockDirtyDialog.needShowDialog() && lockDirtyDialog.open() == IDialogConstants.CANCEL_ID) {
