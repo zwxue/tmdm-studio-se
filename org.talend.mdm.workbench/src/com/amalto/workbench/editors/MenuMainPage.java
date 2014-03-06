@@ -299,7 +299,7 @@ public class MenuMainPage extends AMainPageV2 {
 
     /*
      * private void hookContextMenu(TreeViewer viewer) { }
-     * 
+     *
      * private void fillContextMenu(IMenuManager manager) { }
      */
 
@@ -598,14 +598,14 @@ public class MenuMainPage extends AMainPageV2 {
                                 Messages.MenuMainPage_ErrorMsg2);
                         return;
                     }
-                    ArrayList<WSMenuEntry> subMenus = new ArrayList(Arrays.asList(menu.getMenuEntries()));
+                    ArrayList<WSMenuEntry> subMenus = new ArrayList<WSMenuEntry>(menu.getMenuEntries());
                     subMenus.remove(treeEntry.getWsMenuEntry());
                     menu.getMenuEntries().clear();
                     menu.getMenuEntries().addAll(subMenus);
                 } else {
                     // sub Menu Entry of a sub menu
-                    ArrayList<WSMenuEntry> subMenus = new ArrayList(Arrays.asList(treeEntry.getParentTreeEntry().getWsMenuEntry()
-                            .getSubMenus()));
+                    ArrayList<WSMenuEntry> subMenus = new ArrayList<WSMenuEntry>(treeEntry.getParentTreeEntry().getWsMenuEntry()
+                            .getSubMenus());
                     subMenus.remove(treeEntry.getWsMenuEntry());
                     treeEntry.getParentTreeEntry().getWsMenuEntry().getSubMenus().clear();
                     treeEntry.getParentTreeEntry().getWsMenuEntry().getSubMenus().addAll(subMenus);
