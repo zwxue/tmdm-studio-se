@@ -22,6 +22,7 @@ import org.eclipse.emf.common.util.EList;
  *   <li>{@link org.talend.mdm.repository.model.mdmserverobject.WSRoutingRuleE#getParameters <em>Parameters</em>}</li>
  *   <li>{@link org.talend.mdm.repository.model.mdmserverobject.WSRoutingRuleE#getCondition <em>Condition</em>}</li>
  *   <li>{@link org.talend.mdm.repository.model.mdmserverobject.WSRoutingRuleE#isDeactive <em>Deactive</em>}</li>
+ *   <li>{@link org.talend.mdm.repository.model.mdmserverobject.WSRoutingRuleE#getExecuteOrder <em>Execute Order</em>}</li>
  *   <li>{@link org.talend.mdm.repository.model.mdmserverobject.WSRoutingRuleE#getWsRoutingRuleExpressions <em>Ws Routing Rule Expressions</em>}</li>
  * </ul>
  * </p>
@@ -186,6 +187,32 @@ public interface WSRoutingRuleE extends MDMServerObject {
      * @generated
      */
     void setDeactive(boolean value);
+
+    /**
+     * Returns the value of the '<em><b>Execute Order</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <p>
+     * If the meaning of the '<em>Execute Order</em>' attribute isn't clear,
+     * there really should be more of a description here...
+     * </p>
+     * <!-- end-user-doc -->
+     * @return the value of the '<em>Execute Order</em>' attribute.
+     * @see #setExecuteOrder(int)
+     * @see org.talend.mdm.repository.model.mdmserverobject.MdmserverobjectPackage#getWSRoutingRuleE_ExecuteOrder()
+     * @model
+     * @generated
+     */
+    int getExecuteOrder();
+
+    /**
+     * Sets the value of the '{@link org.talend.mdm.repository.model.mdmserverobject.WSRoutingRuleE#getExecuteOrder <em>Execute Order</em>}' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @param value the new value of the '<em>Execute Order</em>' attribute.
+     * @see #getExecuteOrder()
+     * @generated
+     */
+    void setExecuteOrder(int value);
 
     /**
      * Returns the value of the '<em><b>Ws Routing Rule Expressions</b></em>' containment reference list.

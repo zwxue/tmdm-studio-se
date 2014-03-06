@@ -751,6 +751,10 @@ public class Messages extends NLS {
 
     public static String RoutingEngineV2BrowserMainPage_WraningMsgB;
 
+    public static String RoutingRuleMainPage_executeOrder;
+
+    public static String RoutingRuleMainPage_invalidOrder;
+
     public static String ReadOnly;
 
     public static String ReadAndWrite;

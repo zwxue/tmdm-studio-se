@@ -18,6 +18,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -147,6 +149,10 @@ public class RoutingRuleMainPage extends AMainPageV2 {
     private Button deactiveButton;
 
     ContentProposalAdapterExtended adapter;
+
+    private Text orderText;
+
+    private Label orderLabel;
 
     public String getDataModelName() {
         return dataModelName;
@@ -280,12 +286,31 @@ public class RoutingRuleMainPage extends AMainPageV2 {
             // xpathWidget1 = new XpathWidget("...",treeParent, toolkit,
             // charComposite,(AMainPageV2)RoutingRuleMainPage.this,false,false,dataModelName);
 
+            Composite paramComposite = toolkit.createComposite(charComposite);
+            GridLayout pcLayout = new GridLayout(4, false);
+            pcLayout.marginLeft = 0;
+            pcLayout.horizontalSpacing = 0;
+            paramComposite.setLayout(pcLayout);
+            GridData pcLayoutData = new GridData(SWT.FILL, SWT.FILL, true, false);
+            pcLayoutData.horizontalSpan = 2;
+            pcLayoutData.horizontalIndent = 0;
+            paramComposite.setLayoutData(pcLayoutData);
+
             // issynchronous Button
-            isSynchronousButton = toolkit.createButton(charComposite, Messages.executesynLabel, SWT.CHECK);
-            isSynchronousButton.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true, 1, 1));
+            isSynchronousButton = toolkit.createButton(paramComposite, Messages.executesynLabel, SWT.CHECK);
+            GridData synBtnLayoutData = new GridData(SWT.FILL, SWT.FILL, false, true, 1, 1);
+            synBtnLayoutData.horizontalIndent = 0;
+            isSynchronousButton.setLayoutData(synBtnLayoutData);
             isSynchronousButton.addMouseListener(new MouseListener() {
 
                 public void mouseUp(MouseEvent e) {
+                    orderLabel.setEnabled(isSynchronousButton.getSelection());
+                    orderText.setEnabled(isSynchronousButton.getSelection());
+                    if (isSynchronousButton.getSelection()) {
+                        orderText.setText("0"); //$NON-NLS-1$
+                    } else {
+                        orderText.setText(""); //$NON-NLS-1$
+                    }
                     // mark for need to save
                     markDirtyWithoutCommit();
                 }
@@ -296,8 +321,29 @@ public class RoutingRuleMainPage extends AMainPageV2 {
                 public void mouseDown(MouseEvent e) {
                 }
             });
-            deactiveButton = toolkit.createButton(charComposite, Messages.deactivateLabel, SWT.CHECK);
-            deactiveButton.setLayoutData(new GridData(SWT.BEGINNING, SWT.FILL, false, true, 1, 1));
+
+            orderLabel = toolkit.createLabel(paramComposite, Messages.RoutingRuleMainPage_executeOrder);
+            GridData olLayoutData = new GridData();
+            olLayoutData.horizontalIndent = 10;
+            orderLabel.setLayoutData(olLayoutData);
+            orderLabel.setEnabled(false);
+
+            orderText = toolkit.createText(paramComposite, "", SWT.BORDER | SWT.SINGLE); //$NON-NLS-1$
+            GridData otLayoutData = new GridData(SWT.FILL, SWT.CENTER, false, false);
+            otLayoutData.widthHint = 50;
+            otLayoutData.horizontalIndent = 10;
+            orderText.setLayoutData(otLayoutData);
+            orderText.setEnabled(false);
+            orderText.addModifyListener(new ModifyListener() {
+
+                public void modifyText(ModifyEvent e) {
+                    markDirtyWithoutCommit();
+                }
+            });
+            deactiveButton = toolkit.createButton(paramComposite, Messages.deactivateLabel, SWT.CHECK);
+            GridData dbLayoutData = new GridData(SWT.BEGINNING, SWT.FILL, false, true, 1, 1);
+            dbLayoutData.horizontalIndent = 25;
+            deactiveButton.setLayoutData(dbLayoutData);
             deactiveButton.addMouseListener(new MouseListener() {
 
                 public void mouseUp(MouseEvent e) {
@@ -311,6 +357,7 @@ public class RoutingRuleMainPage extends AMainPageV2 {
                 public void mouseDown(MouseEvent e) {
                 }
             });
+
             // Routing Expressions
             Composite serviceGroup = this.getNewSectionComposite(Messages.serviceLabel);
             serviceGroup.setLayout(new GridLayout(2, false));
@@ -332,7 +379,7 @@ public class RoutingRuleMainPage extends AMainPageV2 {
                     }
                     String serviceName = serviceNameCombo.getText();
                     String helpPara = ""; //$NON-NLS-1$
-                    if (!"".equals(serviceName) && !serviceName.equals(null)) {
+                    if (!"".equals(serviceName) && !serviceName.equals(null)) { //$NON-NLS-1$
                         if (EInputTemplate.getXtentisObjexts().get(serviceName) != null) {
                             helpPara = EInputTemplate.getXtentisObjexts().get(serviceName).getContent();
                         } else {
@@ -507,7 +554,7 @@ public class RoutingRuleMainPage extends AMainPageV2 {
 
     /**
      * DOC hbhong Comment method "getNewXpathDlg".
-     * 
+     *
      * @return
      */
     protected XpathSelectDialog getNewXpathDlg() {
@@ -529,7 +576,7 @@ public class RoutingRuleMainPage extends AMainPageV2 {
 
     /**
      * DOC hbhong Comment method "initServiceNameCombo".
-     * 
+     *
      * @throws XtentisException
      */
     protected void initServiceNameCombo() throws XtentisException {
@@ -550,7 +597,7 @@ public class RoutingRuleMainPage extends AMainPageV2 {
 
     private void addSourceServiceParameterEditorPage(String serviceName) {
 
-        if ("callprocess".equals(serviceName)) {
+        if ("callprocess".equals(serviceName)) { //$NON-NLS-1$
             serviceParametersEditor.addPage(new ExtensibleContentEditorPageDescription("Source", Integer.MAX_VALUE,//$NON-NLS-1$
                     new TriggerCallProcessSourcePageCreator(), false));
         } else {
@@ -616,6 +663,12 @@ public class RoutingRuleMainPage extends AMainPageV2 {
             if (wsRoutingRule.isDeactive() != null) {
                 deactiveButton.setSelection(wsRoutingRule.isDeactive());
             }
+
+            if (wsRoutingRule.isSynchronous()) {
+                orderLabel.setEnabled(true);
+                orderText.setEnabled(true);
+                orderText.setText(String.valueOf(wsRoutingRule.getExecuteOrder()));
+            }
             // serviceNameText.setText(wsRoutingRule.getServiceJNDI().replaceFirst("amalto/local/service/", ""));
             serviceNameCombo.setText(wsRoutingRule.getServiceJNDI().replaceFirst("amalto/local/service/", ""));//$NON-NLS-1$//$NON-NLS-2$
             // serviceParametersText.setText(wsRoutingRule.getParameters() == null ? "" :
@@ -675,6 +728,21 @@ public class RoutingRuleMainPage extends AMainPageV2 {
 
             ws.setSynchronous(isSynchronousButton.getSelection());
             ws.setDeactive(deactiveButton.getSelection());
+
+            if (isSynchronousButton.getSelection()) {
+                String orderStr = orderText.getText().trim();
+                if (orderStr.isEmpty()) {
+                    orderStr = "0"; //$NON-NLS-1$
+                }
+                try {
+                    int order = Integer.parseInt(orderStr);
+                    ws.setExecuteOrder(order);
+                } catch (Exception e) {
+                }
+            } else {
+                ws.setExecuteOrder(0);
+            }
+
             java.util.List<Line> lines = (java.util.List<Line>) conditionViewer.getViewer().getInput();
             java.util.List<WSRoutingRuleExpression> wclist = new ArrayList<WSRoutingRuleExpression>();
             for (Line item : lines) {
@@ -699,6 +767,24 @@ public class RoutingRuleMainPage extends AMainPageV2 {
 
     public void textChanged(TextEvent event) {
         markDirtyWithoutCommit();
+    }
+
+    private boolean isValidDigit(String text) {
+        if (text.trim().isEmpty()) {
+            return true;
+        }
+
+        Pattern pattern = Pattern.compile("[0-9]*");//$NON-NLS-1$
+        Matcher matcher = pattern.matcher(text.trim());
+        if (!matcher.matches()) {
+            return false;
+        }
+
+        if (text.trim().startsWith("0") && text.trim().length() > 1) { //$NON-NLS-1$
+            return false;
+        }
+
+        return true;
     }
 
     @Override
@@ -824,12 +910,20 @@ public class RoutingRuleMainPage extends AMainPageV2 {
 
     @Override
     public boolean beforeDoSave() {
+        if (isSynchronousButton.getSelection()) {
+            String text = orderText.getText();
+            if (!isValidDigit(text)) {
+                MessageDialog.openError(getSite().getShell(), Messages._Error, Messages.RoutingRuleMainPage_invalidOrder);
+                return false;
+            }
+        }
+
         if (serviceNameCombo.getText() == null || serviceNameCombo.getText().length() == 0) {
             MessageDialog.openError(this.getSite().getShell(), Messages.errorSaveTitleLabel, Messages.errorSaveMsgLabel);
             return false;
-        } else {
-            return true;
         }
+
+        return true;
     }
 
     @Override

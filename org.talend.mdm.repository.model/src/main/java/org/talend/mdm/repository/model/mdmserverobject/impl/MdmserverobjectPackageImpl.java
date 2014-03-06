@@ -1485,12 +1485,21 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
     }
 
     /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EAttribute getWSRoutingRuleE_ExecuteOrder() {
+        return (EAttribute)wsRoutingRuleEEClass.getEStructuralFeatures().get(6);
+    }
+
+    /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
     @Override
     public EReference getWSRoutingRuleE_WsRoutingRuleExpressions() {
-        return (EReference)wsRoutingRuleEEClass.getEStructuralFeatures().get(6);
+        return (EReference)wsRoutingRuleEEClass.getEStructuralFeatures().get(7);
     }
 
     /**
@@ -1948,6 +1957,7 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
         createEAttribute(wsRoutingRuleEEClass, WS_ROUTING_RULE_E__PARAMETERS);
         createEAttribute(wsRoutingRuleEEClass, WS_ROUTING_RULE_E__CONDITION);
         createEAttribute(wsRoutingRuleEEClass, WS_ROUTING_RULE_E__DEACTIVE);
+        createEAttribute(wsRoutingRuleEEClass, WS_ROUTING_RULE_E__EXECUTE_ORDER);
         createEReference(wsRoutingRuleEEClass, WS_ROUTING_RULE_E__WS_ROUTING_RULE_EXPRESSIONS);
 
         wsRoutingRuleExpressionEEClass = createEClass(WS_ROUTING_RULE_EXPRESSION_E);
@@ -2199,6 +2209,7 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
         initEAttribute(getWSRoutingRuleE_Parameters(), ecorePackage.getEString(), "parameters", null, 0, 1, WSRoutingRuleE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
         initEAttribute(getWSRoutingRuleE_Condition(), ecorePackage.getEString(), "condition", null, 0, 1, WSRoutingRuleE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
         initEAttribute(getWSRoutingRuleE_Deactive(), ecorePackage.getEBoolean(), "deactive", null, 0, 1, WSRoutingRuleE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+        initEAttribute(getWSRoutingRuleE_ExecuteOrder(), theEcorePackage.getEInt(), "executeOrder", null, 0, 1, WSRoutingRuleE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
         initEReference(getWSRoutingRuleE_WsRoutingRuleExpressions(), this.getWSRoutingRuleExpressionE(), null, "wsRoutingRuleExpressions", null, 0, -1, WSRoutingRuleE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
         initEClass(wsRoutingRuleExpressionEEClass, WSRoutingRuleExpressionE.class, "WSRoutingRuleExpressionE", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);

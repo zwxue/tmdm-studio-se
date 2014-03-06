@@ -2232,13 +2232,22 @@ public interface MdmserverobjectPackage extends EPackage {
     int WS_ROUTING_RULE_E__DEACTIVE = MDM_SERVER_OBJECT_FEATURE_COUNT + 5;
 
     /**
+     * The feature id for the '<em><b>Execute Order</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_ROUTING_RULE_E__EXECUTE_ORDER = MDM_SERVER_OBJECT_FEATURE_COUNT + 6;
+
+    /**
      * The feature id for the '<em><b>Ws Routing Rule Expressions</b></em>' containment reference list.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      * @ordered
      */
-    int WS_ROUTING_RULE_E__WS_ROUTING_RULE_EXPRESSIONS = MDM_SERVER_OBJECT_FEATURE_COUNT + 6;
+    int WS_ROUTING_RULE_E__WS_ROUTING_RULE_EXPRESSIONS = MDM_SERVER_OBJECT_FEATURE_COUNT + 7;
 
     /**
      * The number of structural features of the '<em>WS Routing Rule E</em>' class.
@@ -2247,7 +2256,7 @@ public interface MdmserverobjectPackage extends EPackage {
      * @generated
      * @ordered
      */
-    int WS_ROUTING_RULE_E_FEATURE_COUNT = MDM_SERVER_OBJECT_FEATURE_COUNT + 7;
+    int WS_ROUTING_RULE_E_FEATURE_COUNT = MDM_SERVER_OBJECT_FEATURE_COUNT + 8;
 
     /**
      * The meta object id for the '{@link org.talend.mdm.repository.model.mdmserverobject.impl.WSRoutingRuleExpressionEImpl <em>WS Routing Rule Expression E</em>}' class.
@@ -4456,6 +4465,17 @@ public interface MdmserverobjectPackage extends EPackage {
     EAttribute getWSRoutingRuleE_Deactive();
 
     /**
+     * Returns the meta object for the attribute '{@link org.talend.mdm.repository.model.mdmserverobject.WSRoutingRuleE#getExecuteOrder <em>Execute Order</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for the attribute '<em>Execute Order</em>'.
+     * @see org.talend.mdm.repository.model.mdmserverobject.WSRoutingRuleE#getExecuteOrder()
+     * @see #getWSRoutingRuleE()
+     * @generated
+     */
+    EAttribute getWSRoutingRuleE_ExecuteOrder();
+
+    /**
      * Returns the meta object for the containment reference list '{@link org.talend.mdm.repository.model.mdmserverobject.WSRoutingRuleE#getWsRoutingRuleExpressions <em>Ws Routing Rule Expressions</em>}'.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -5851,6 +5871,14 @@ public interface MdmserverobjectPackage extends EPackage {
          * @generated
          */
         EAttribute WS_ROUTING_RULE_E__DEACTIVE = eINSTANCE.getWSRoutingRuleE_Deactive();
+
+        /**
+         * The meta object literal for the '<em><b>Execute Order</b></em>' attribute feature.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @generated
+         */
+        EAttribute WS_ROUTING_RULE_E__EXECUTE_ORDER = eINSTANCE.getWSRoutingRuleE_ExecuteOrder();
 
         /**
          * The meta object literal for the '<em><b>Ws Routing Rule Expressions</b></em>' containment reference list feature.

@@ -28,6 +28,7 @@ import javax.xml.bind.annotation.XmlType;
  *         &lt;element name="wsRoutingRuleExpressions" type="{urn-com-amalto-xtentis-webservice}WSRoutingRuleExpression" maxOccurs="unbounded" minOccurs="0"/>
  *         &lt;element name="condition" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="deactive" type="{http://www.w3.org/2001/XMLSchema}boolean" minOccurs="0"/>
+ *         &lt;element name="executeOrder" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -46,7 +47,8 @@ import javax.xml.bind.annotation.XmlType;
     "parameters",
     "wsRoutingRuleExpressions",
     "condition",
-    "deactive"
+    "deactive",
+    "executeOrder"
 })
 public class WSRoutingRule {
 
@@ -67,6 +69,8 @@ public class WSRoutingRule {
     protected String condition;
     @XmlElement(nillable = true)
     protected Boolean deactive;
+    @XmlElement(nillable = true)
+    protected Integer executeOrder;
 
     /**
      * Default no-arg constructor
@@ -80,7 +84,7 @@ public class WSRoutingRule {
      * Fully-initialising value constructor
      * 
      */
-    public WSRoutingRule(final String name, final String description, final boolean synchronous, final String concept, final String serviceJNDI, final String parameters, final List<WSRoutingRuleExpression> wsRoutingRuleExpressions, final String condition, final Boolean deactive) {
+    public WSRoutingRule(final String name, final String description, final boolean synchronous, final String concept, final String serviceJNDI, final String parameters, final List<WSRoutingRuleExpression> wsRoutingRuleExpressions, final String condition, final Boolean deactive, final Integer executeOrder) {
         this.name = name;
         this.description = description;
         this.synchronous = synchronous;
@@ -90,6 +94,7 @@ public class WSRoutingRule {
         this.wsRoutingRuleExpressions = wsRoutingRuleExpressions;
         this.condition = condition;
         this.deactive = deactive;
+        this.executeOrder = executeOrder;
     }
 
     /**
@@ -303,6 +308,30 @@ public class WSRoutingRule {
      */
     public void setDeactive(Boolean value) {
         this.deactive = value;
+    }
+
+    /**
+     * Gets the value of the executeOrder property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Integer }
+     *     
+     */
+    public Integer getExecuteOrder() {
+        return executeOrder;
+    }
+
+    /**
+     * Sets the value of the executeOrder property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Integer }
+     *     
+     */
+    public void setExecuteOrder(Integer value) {
+        this.executeOrder = value;
     }
 
 }

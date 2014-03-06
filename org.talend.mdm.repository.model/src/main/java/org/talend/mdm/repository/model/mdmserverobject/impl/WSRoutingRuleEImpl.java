@@ -34,6 +34,7 @@ import org.talend.mdm.repository.model.mdmserverobject.WSRoutingRuleExpression;
  *   <li>{@link org.talend.mdm.repository.model.mdmserverobject.impl.WSRoutingRuleEImpl#getParameters <em>Parameters</em>}</li>
  *   <li>{@link org.talend.mdm.repository.model.mdmserverobject.impl.WSRoutingRuleEImpl#getCondition <em>Condition</em>}</li>
  *   <li>{@link org.talend.mdm.repository.model.mdmserverobject.impl.WSRoutingRuleEImpl#isDeactive <em>Deactive</em>}</li>
+ *   <li>{@link org.talend.mdm.repository.model.mdmserverobject.impl.WSRoutingRuleEImpl#getExecuteOrder <em>Execute Order</em>}</li>
  *   <li>{@link org.talend.mdm.repository.model.mdmserverobject.impl.WSRoutingRuleEImpl#getWsRoutingRuleExpressions <em>Ws Routing Rule Expressions</em>}</li>
  * </ul>
  * </p>
@@ -160,6 +161,26 @@ public class WSRoutingRuleEImpl extends MDMServerObjectImpl implements WSRouting
      * @ordered
      */
     protected boolean deactive = DEACTIVE_EDEFAULT;
+
+    /**
+     * The default value of the '{@link #getExecuteOrder() <em>Execute Order</em>}' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see #getExecuteOrder()
+     * @generated
+     * @ordered
+     */
+    protected static final int EXECUTE_ORDER_EDEFAULT = 0;
+
+    /**
+     * The cached value of the '{@link #getExecuteOrder() <em>Execute Order</em>}' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see #getExecuteOrder()
+     * @generated
+     * @ordered
+     */
+    protected int executeOrder = EXECUTE_ORDER_EDEFAULT;
 
     /**
      * The cached value of the '{@link #getWsRoutingRuleExpressions() <em>Ws Routing Rule Expressions</em>}' containment reference list.
@@ -321,6 +342,27 @@ public class WSRoutingRuleEImpl extends MDMServerObjectImpl implements WSRouting
      * <!-- end-user-doc -->
      * @generated
      */
+    public int getExecuteOrder() {
+        return executeOrder;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public void setExecuteOrder(int newExecuteOrder) {
+        int oldExecuteOrder = executeOrder;
+        executeOrder = newExecuteOrder;
+        if (eNotificationRequired())
+            eNotify(new ENotificationImpl(this, Notification.SET, MdmserverobjectPackage.WS_ROUTING_RULE_E__EXECUTE_ORDER, oldExecuteOrder, executeOrder));
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
     public EList<WSRoutingRuleExpressionE> getWsRoutingRuleExpressions() {
         if (wsRoutingRuleExpressions == null) {
             wsRoutingRuleExpressions = new EObjectContainmentEList<WSRoutingRuleExpressionE>(WSRoutingRuleExpressionE.class, this, MdmserverobjectPackage.WS_ROUTING_RULE_E__WS_ROUTING_RULE_EXPRESSIONS);
@@ -362,6 +404,8 @@ public class WSRoutingRuleEImpl extends MDMServerObjectImpl implements WSRouting
                 return getCondition();
             case MdmserverobjectPackage.WS_ROUTING_RULE_E__DEACTIVE:
                 return isDeactive();
+            case MdmserverobjectPackage.WS_ROUTING_RULE_E__EXECUTE_ORDER:
+                return getExecuteOrder();
             case MdmserverobjectPackage.WS_ROUTING_RULE_E__WS_ROUTING_RULE_EXPRESSIONS:
                 return getWsRoutingRuleExpressions();
         }
@@ -394,6 +438,9 @@ public class WSRoutingRuleEImpl extends MDMServerObjectImpl implements WSRouting
                 return;
             case MdmserverobjectPackage.WS_ROUTING_RULE_E__DEACTIVE:
                 setDeactive((Boolean)newValue);
+                return;
+            case MdmserverobjectPackage.WS_ROUTING_RULE_E__EXECUTE_ORDER:
+                setExecuteOrder((Integer)newValue);
                 return;
             case MdmserverobjectPackage.WS_ROUTING_RULE_E__WS_ROUTING_RULE_EXPRESSIONS:
                 getWsRoutingRuleExpressions().clear();
@@ -429,6 +476,9 @@ public class WSRoutingRuleEImpl extends MDMServerObjectImpl implements WSRouting
             case MdmserverobjectPackage.WS_ROUTING_RULE_E__DEACTIVE:
                 setDeactive(DEACTIVE_EDEFAULT);
                 return;
+            case MdmserverobjectPackage.WS_ROUTING_RULE_E__EXECUTE_ORDER:
+                setExecuteOrder(EXECUTE_ORDER_EDEFAULT);
+                return;
             case MdmserverobjectPackage.WS_ROUTING_RULE_E__WS_ROUTING_RULE_EXPRESSIONS:
                 getWsRoutingRuleExpressions().clear();
                 return;
@@ -456,6 +506,8 @@ public class WSRoutingRuleEImpl extends MDMServerObjectImpl implements WSRouting
                 return CONDITION_EDEFAULT == null ? condition != null : !CONDITION_EDEFAULT.equals(condition);
             case MdmserverobjectPackage.WS_ROUTING_RULE_E__DEACTIVE:
                 return deactive != DEACTIVE_EDEFAULT;
+            case MdmserverobjectPackage.WS_ROUTING_RULE_E__EXECUTE_ORDER:
+                return executeOrder != EXECUTE_ORDER_EDEFAULT;
             case MdmserverobjectPackage.WS_ROUTING_RULE_E__WS_ROUTING_RULE_EXPRESSIONS:
                 return wsRoutingRuleExpressions != null && !wsRoutingRuleExpressions.isEmpty();
         }
@@ -484,6 +536,8 @@ public class WSRoutingRuleEImpl extends MDMServerObjectImpl implements WSRouting
         result.append(condition);
         result.append(", deactive: ");
         result.append(deactive);
+        result.append(", executeOrder: ");
+        result.append(executeOrder);
         result.append(')');
         return result.toString();
     }
