@@ -247,8 +247,12 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                 manager.add(new GroupMarker(IWorkbenchActionConstants.MB_ADDITIONS));
                 manager.appendToGroup(IWorkbenchActionConstants.MB_ADDITIONS, new EditItemAction(DataClusterBrowserMainPage.this
                         .getSite().getShell(), DataClusterBrowserMainPage.this.resultsViewer));
-                manager.appendToGroup(IWorkbenchActionConstants.MB_ADDITIONS, new EditTaskIdAction(
-                        DataClusterBrowserMainPage.this.getSite().getShell(), DataClusterBrowserMainPage.this.resultsViewer));
+
+                IStructuredSelection selection = ((IStructuredSelection) resultsViewer.getSelection());
+                if (selection.size() == 1) {
+                    manager.appendToGroup(IWorkbenchActionConstants.MB_ADDITIONS, new EditTaskIdAction(
+                            DataClusterBrowserMainPage.this.getSite().getShell(), DataClusterBrowserMainPage.this.resultsViewer));
+                }
                 manager.appendToGroup(IWorkbenchActionConstants.MB_ADDITIONS, new PhysicalDeleteItemsAction(
                         DataClusterBrowserMainPage.this.getSite().getShell(), DataClusterBrowserMainPage.this.resultsViewer));
                 manager.appendToGroup(IWorkbenchActionConstants.MB_ADDITIONS, new LogicalDeleteItemsAction(
@@ -306,7 +310,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 
             showTaskIdCB = toolkit.createButton(compSecondLine, Messages.DataClusterBrowserMainPage_8, SWT.CHECK);
             showTaskIdCB.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
-            
+
             autoIncrementBtn.addSelectionListener(new SelectionAdapter() {
 
                 @Override
