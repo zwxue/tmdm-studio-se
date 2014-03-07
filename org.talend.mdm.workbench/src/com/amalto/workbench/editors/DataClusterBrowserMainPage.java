@@ -245,31 +245,37 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
             public void menuAboutToShow(IMenuManager manager) {
                 // ViewBrowserMainPage.this.fillContextMenu(manager);
                 manager.add(new GroupMarker(IWorkbenchActionConstants.MB_ADDITIONS));
-                manager.appendToGroup(IWorkbenchActionConstants.MB_ADDITIONS, new EditItemAction(DataClusterBrowserMainPage.this
+                manager.appendToGroup(IWorkbenchActionConstants.MB_ADDITIONS, new NewItemAction(DataClusterBrowserMainPage.this
                         .getSite().getShell(), DataClusterBrowserMainPage.this.resultsViewer));
 
                 IStructuredSelection selection = ((IStructuredSelection) resultsViewer.getSelection());
                 if (selection.size() == 1) {
+                    manager.appendToGroup(IWorkbenchActionConstants.MB_ADDITIONS, new EditItemAction(
+                            DataClusterBrowserMainPage.this.getSite().getShell(), DataClusterBrowserMainPage.this.resultsViewer));
                     manager.appendToGroup(IWorkbenchActionConstants.MB_ADDITIONS, new EditTaskIdAction(
                             DataClusterBrowserMainPage.this.getSite().getShell(), DataClusterBrowserMainPage.this.resultsViewer));
                 }
-                manager.appendToGroup(IWorkbenchActionConstants.MB_ADDITIONS, new PhysicalDeleteItemsAction(
-                        DataClusterBrowserMainPage.this.getSite().getShell(), DataClusterBrowserMainPage.this.resultsViewer));
-                manager.appendToGroup(IWorkbenchActionConstants.MB_ADDITIONS, new LogicalDeleteItemsAction(
-                        DataClusterBrowserMainPage.this.getSite().getShell(), DataClusterBrowserMainPage.this.resultsViewer));
-                manager.appendToGroup(IWorkbenchActionConstants.MB_ADDITIONS, new NewItemAction(DataClusterBrowserMainPage.this
-                        .getSite().getShell(), DataClusterBrowserMainPage.this.resultsViewer));
-                manager.appendToGroup(IWorkbenchActionConstants.MB_ADDITIONS, new SubmitItemsAction(
-                        DataClusterBrowserMainPage.this.getSite().getShell(), DataClusterBrowserMainPage.this.resultsViewer));
+                if (selection.size() > 0) {
+                    manager.appendToGroup(IWorkbenchActionConstants.MB_ADDITIONS, new PhysicalDeleteItemsAction(
+                            DataClusterBrowserMainPage.this.getSite().getShell(), DataClusterBrowserMainPage.this.resultsViewer));
+                    manager.appendToGroup(IWorkbenchActionConstants.MB_ADDITIONS, new LogicalDeleteItemsAction(
+                            DataClusterBrowserMainPage.this.getSite().getShell(), DataClusterBrowserMainPage.this.resultsViewer));
+                    manager.appendToGroup(IWorkbenchActionConstants.MB_ADDITIONS, new SubmitItemsAction(
+                            DataClusterBrowserMainPage.this.getSite().getShell(), DataClusterBrowserMainPage.this.resultsViewer));
+                }
                 // compare item with each other
-                manager.appendToGroup(IWorkbenchActionConstants.MB_ADDITIONS, new CompareItemWithEachOtherAction(getSite()
-                        .getShell(), getResultsViewer()));
-                // available models
-                java.util.List<IAvailableModel> availablemodels = AvailableModelUtil.getAvailableModels();
-                for (IAvailableModel model : availablemodels) {
-                    model.menuAboutToShow(manager, DataClusterBrowserMainPage.this);
+                if (selection.size() == 2) {
+                    manager.appendToGroup(IWorkbenchActionConstants.MB_ADDITIONS, new CompareItemWithEachOtherAction(getSite()
+                            .getShell(), getResultsViewer()));
                 }
 
+                // available models
+                if (selection.size() == 1) {
+                    java.util.List<IAvailableModel> availablemodels = AvailableModelUtil.getAvailableModels();
+                    for (IAvailableModel model : availablemodels) {
+                        model.menuAboutToShow(manager, DataClusterBrowserMainPage.this);
+                    }
+                }
             }
         });
         Menu menu = menuMgr.createContextMenu(resultsViewer.getControl());
