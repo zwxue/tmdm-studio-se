@@ -17,6 +17,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
@@ -38,14 +39,17 @@ import org.apache.http.HttpVersion;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.ResponseHandler;
+import org.apache.http.client.methods.HttpEntityEnclosingRequestBase;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.conn.ClientConnectionManager;
 import org.apache.http.conn.scheme.Scheme;
 import org.apache.http.conn.scheme.SchemeRegistry;
 import org.apache.http.conn.ssl.SSLSocketFactory;
 import org.apache.http.conn.ssl.X509HostnameVerifier;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.entity.mime.MultipartEntity;
 import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.entity.mime.content.StringBody;
@@ -143,6 +147,22 @@ public class HttpClientUtil {
         }
         request.setEntity(entity);
         return request;
+    }
+
+    private static HttpUriRequest createModelRequest(String url, boolean isUpdate, String content)
+            throws UnsupportedEncodingException {
+
+        HttpEntityEnclosingRequestBase request = null;
+        if (!isUpdate) {
+            request = new HttpPost(url);
+        } else {
+            request = new HttpPut(url);
+        }
+
+        StringEntity entity = new StringEntity(content, "UTF-8");
+        request.setEntity(entity);
+        return request;
+
     }
 
     public static String uploadFileToAppServer(String URL, String localFilename, String username, String password)
@@ -333,6 +353,25 @@ public class HttpClientUtil {
         } else {
             return ""; //$NON-NLS-1$
         }
+    }
+
+    public static String invokeModelService(String protocol, String host, String port, String username, String password,
+            String modelName, String xsd, boolean isUpdate) throws XtentisException {
+        try {
+            String url = protocol + "://" + host + ":" + port + "/datamanager/services/system/models/" + modelName; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+            HttpUriRequest request = null;
+            request = createModelRequest(url, isUpdate, xsd);
+            DefaultHttpClient httpClient = wrapAuthClient(url, username, password);
+            String errMessage = Messages.Util_21 + "%s" + Messages.Util_22 + "%s"; //$NON-NLS-1$//$NON-NLS-2$
+            String content = getTextContent(httpClient, request, errMessage);
+
+            return content;
+        } catch (UnsupportedEncodingException e) {
+            log.error(e.getMessage(), e);
+        } catch (SecurityException e) {
+            log.error(e.getMessage(), e);
+        }
+        return null;
     }
 
     public static DefaultHttpClient enableSSL(DefaultHttpClient client, int port) throws SecurityException {

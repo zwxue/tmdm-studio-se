@@ -1,0 +1,194 @@
+// ============================================================================
+//
+// Copyright (C) 2006-2013 Talend Inc. - www.talend.com
+//
+// This source code is available under agreement available at
+// %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
+//
+// You should have received a copy of the agreement
+// along with this program; if not, write to Talend SA
+// 9 rue Pages 92150 Suresnes, France
+//
+// ============================================================================
+package org.talend.mdm.repository.core.service;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+
+import org.apache.commons.io.IOUtils;
+import org.apache.log4j.Logger;
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.runtime.CoreException;
+import org.talend.core.model.properties.Item;
+import org.talend.core.model.repository.IRepositoryViewObject;
+import org.talend.mdm.repository.core.IServerObjectRepositoryType;
+import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
+import org.talend.mdm.repository.plugin.RepositoryPlugin;
+import org.talend.mdm.repository.utils.RepositoryResourceUtil;
+
+import com.amalto.workbench.utils.HttpClientUtil;
+import com.amalto.workbench.utils.XtentisException;
+import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.io.xml.DomDriver;
+
+/**
+ * created by HHB on 2014-3-7 Detailled comment
+ * 
+ */
+public class ModelImpactAnalyseService {
+
+    public static final int LOW = 1, MEDIUM = 2, HIGH = 3;
+
+    public static class Change {
+
+        private String message;
+
+        private int severity;
+
+        public String getMessage() {
+            return this.message;
+        }
+
+        public void setMessage(String message) {
+            this.message = message;
+        }
+
+        public int getSeverity() {
+            return this.severity;
+        }
+
+        public void setSeverity(int severity) {
+            this.severity = severity;
+        }
+    }
+
+    static class Severity {
+
+        List<Change> changes = new ArrayList<Change>();
+
+        public void addChange(Change change) {
+            changes.add(change);
+        }
+
+        public List<Change> getChanges() {
+            return this.changes;
+        }
+    }
+
+    static class SeverityLow extends Severity {
+    }
+
+    static class SeverityMedium extends Severity {
+    }
+
+    static class SeverityHigh extends Severity {
+    }
+
+    public static class Result {
+
+        List<Severity> severities = new ArrayList<Severity>();
+
+        public void addSeverity(Severity severity) {
+            severities.add(severity);
+        }
+
+        public List<Severity> getSeverities() {
+            return this.severities;
+        }
+
+        public List<Change> getChanges() {
+            List<Change> changes = new LinkedList<ModelImpactAnalyseService.Change>();
+            for (Severity severity : getSeverities()) {
+                if (severity.getChanges() != null) {
+                    for (Change change : severity.getChanges()) {
+                        int s = 0;
+                        if (severity instanceof SeverityHigh) {
+                            s = HIGH;
+                        } else if (severity instanceof SeverityMedium) {
+                            s = MEDIUM;
+                        } else if (severity instanceof SeverityLow) {
+                            s = LOW;
+                        }
+                        change.setSeverity(s);
+                        changes.add(change);
+                    }
+                }
+            }
+            return changes;
+        }
+    }
+
+    private static Logger log = Logger.getLogger(ModelImpactAnalyseService.class);
+
+    private static int next;
+
+    private static XStream xstream;
+
+    public static void analyzeModelChange(MDMServerDef serverDef, IRepositoryViewObject modelViewObj) throws XtentisException {
+        invokeService(serverDef, modelViewObj, false);
+    }
+
+    public static void updateModel(MDMServerDef serverDef, IRepositoryViewObject modelViewObj) throws XtentisException {
+        invokeService(serverDef, modelViewObj, true);
+    }
+
+    private static String invokeService(MDMServerDef serverDef, IRepositoryViewObject modelViewObj, boolean isUpdateModel)
+            throws XtentisException {
+        String xsd = getModelContent(modelViewObj);
+        if (xsd != null) {
+            String result = HttpClientUtil.invokeModelService(serverDef.getProtocol(), serverDef.getHost(), serverDef.getPort(),
+                    serverDef.getUser(), serverDef.getPasswd(), modelViewObj.getLabel(), xsd, isUpdateModel);
+            return result;
+        }
+        return null;
+    }
+
+    private static String getModelContent(IRepositoryViewObject viewObj) {
+        Item item = viewObj.getProperty().getItem();
+        IFile file = RepositoryResourceUtil.findReferenceFile(IServerObjectRepositoryType.TYPE_DATAMODEL, item, "xsd"); //$NON-NLS-1$
+
+        try {
+            byte[] bytes = IOUtils.toByteArray(file.getContents());
+
+            String xsd = new String(bytes);
+            return xsd;
+        } catch (IOException e) {
+            log.error(e.getMessage(), e);
+        } catch (CoreException e) {
+            log.error(e.getMessage(), e);
+        }
+        return null;
+    }
+
+    private static XStream getParser() {
+        if (xstream == null) {
+            xstream = new XStream(new DomDriver());
+            xstream.alias("result", Result.class); //$NON-NLS-1$
+            xstream.alias("change", Change.class); //$NON-NLS-1$
+            xstream.alias("medium", SeverityMedium.class); //$NON-NLS-1$
+            xstream.alias("low", SeverityLow.class); //$NON-NLS-1$
+            xstream.alias("high", SeverityHigh.class); //$NON-NLS-1$
+            xstream.addImplicitCollection(Result.class, "severities"); //$NON-NLS-1$
+            xstream.addImplicitCollection(Severity.class, "changes"); //$NON-NLS-1$
+        }
+        return xstream;
+    }
+
+    public static List<Change> readResponseMessage(String message) {
+        Thread cur = Thread.currentThread();
+        ClassLoader save = cur.getContextClassLoader();
+        cur.setContextClassLoader(RepositoryPlugin.getDefault().getClass().getClassLoader());
+        try {
+            Result result = (Result) getParser().fromXML(message);
+            return result.getChanges();
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            return null;
+        } finally {
+            cur.setContextClassLoader(save);
+
+        }
+    }
+}
