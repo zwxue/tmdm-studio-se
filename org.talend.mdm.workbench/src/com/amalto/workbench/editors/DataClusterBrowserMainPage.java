@@ -98,12 +98,14 @@ import com.amalto.workbench.utils.LineItem;
 import com.amalto.workbench.utils.UserInfo;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.XtentisException;
+import com.amalto.workbench.webservices.WSBoolean;
 import com.amalto.workbench.webservices.WSConceptRevisionMap;
 import com.amalto.workbench.webservices.WSConceptRevisionMap.MapEntry;
 import com.amalto.workbench.webservices.WSDataClusterPK;
 import com.amalto.workbench.webservices.WSDataModel;
 import com.amalto.workbench.webservices.WSDataModelPK;
 import com.amalto.workbench.webservices.WSDeleteItemWithReport;
+import com.amalto.workbench.webservices.WSExistsItem;
 import com.amalto.workbench.webservices.WSGetConceptsInDataCluster;
 import com.amalto.workbench.webservices.WSGetConceptsInDataClusterWithRevisions;
 import com.amalto.workbench.webservices.WSGetCurrentUniverse;
@@ -357,17 +359,25 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 
             } catch (Exception e) {
                 log.error(e.getMessage(), e);
+                MessageDialog.openError(getSite().getShell(), Messages._Error, e.getLocalizedMessage());
             }
         }
 
         private String getAutoIncrementRecord(final XtentisPort port) {
-            WSItem wsItem = port.getItem(new WSGetItem(new WSItemPK(new WSDataClusterPK("CONF"), "AutoIncrement", //$NON-NLS-1$ //$NON-NLS-2$
+            String record = emptyRecord();
+
+            WSBoolean existsItem = port.existsItem(new WSExistsItem(new WSItemPK(new WSDataClusterPK("CONF"), "AutoIncrement", //$NON-NLS-1$ //$NON-NLS-2$
                     Arrays.asList(new String[] { "AutoIncrement" })))); //$NON-NLS-1$
-            if (wsItem != null) {
-                return wsItem.getContent();
+            if (existsItem.isTrue()) {
+                WSItem wsItem = port.getItem(new WSGetItem(new WSItemPK(new WSDataClusterPK("CONF"), "AutoIncrement", //$NON-NLS-1$ //$NON-NLS-2$
+                        Arrays.asList(new String[] { "AutoIncrement" })))); //$NON-NLS-1$
+
+                if (wsItem != null) {
+                    record = wsItem.getContent();
+                }
             }
 
-            return null;
+            return record;
         }
 
         private Map<String, String> getEntityAutoIncrementValues(String content, String dataContainer,
@@ -517,6 +527,10 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
             return schema;
         }
 
+        private String emptyRecord() {
+            String emptyRecord = "<AutoIncrement>\n  <id>AutoIncrement</id>\n</AutoIncrement>\n"; //$NON-NLS-1$
+            return emptyRecord;
+        }
     }
 
     class EditItemAction extends Action {

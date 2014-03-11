@@ -87,8 +87,8 @@ public class AutoIncrementHelper {
         List<String> allKeys = new LinkedList<String>();
         NodeList nodeLists = doc.getElementsByTagName(TAG_KEY);
         for (int i = 0; i < nodeLists.getLength(); i++) {
-            Node item = nodeLists.item(i);
-            String keyContent = item.getTextContent();
+            Node keyNode = nodeLists.item(i);
+            String keyContent = keyNode.getTextContent();
             allKeys.add(keyContent);
         }
 
@@ -108,34 +108,40 @@ public class AutoIncrementHelper {
         List<String> updateKeys = new ArrayList<String>(keyvalues.keySet());
         updateKeys.retainAll(allKeys);
 
+        List<Node> removedEntryNodes = new LinkedList<Node>();
         for (int i = 0; i < nodeLists.getLength(); i++) {
-            Node item = nodeLists.item(i);
-            String keyContent = item.getTextContent();
+            Node keyNode = nodeLists.item(i);
+            String keyContent = keyNode.getTextContent();
 
             if (removeKeys.contains(keyContent)) {
-                Node parentNode = item.getParentNode();
-                parentNode.getParentNode().removeChild(parentNode);
+                Node entryNode = keyNode.getParentNode();
+                removedEntryNodes.add(entryNode);
             } else if (updateKeys.contains(keyContent)) {
-                NodeList nodeList = item.getParentNode().getChildNodes();
+                NodeList nodeList = keyNode.getParentNode().getChildNodes();
                 for (int j = 0; j < nodeList.getLength(); j++) {
-                    Node item2 = nodeList.item(j);
-                    if (item2.getNodeName().equals(TAG_VALUE)) {
-                        item2.setTextContent(keyvalues.get(keyContent));
+                    Node item = nodeList.item(j);
+                    if (item.getNodeName().equals(TAG_VALUE)) {
+                        item.setTextContent(keyvalues.get(keyContent));
                     }
                 }
             }
         }
 
+        //
+        for (Node node : removedEntryNodes) {
+            doc.getDocumentElement().removeChild(node);
+        }
+
         if (!addKeys.isEmpty()) {
             for (String key : addKeys) {
-                addNode(doc, key, keyvalues.get(key));
+                addEntryNode(doc, key, keyvalues.get(key));
             }
         }
 
         return Util.nodeToString(doc);
     }
 
-    private static void addNode(Document doc, String key, String value) {
+    private static void addEntryNode(Document doc, String key, String value) {
         Element parentNode = doc.getDocumentElement();
 
         Element entryElement = doc.createElement(TAG_ENTRY);
