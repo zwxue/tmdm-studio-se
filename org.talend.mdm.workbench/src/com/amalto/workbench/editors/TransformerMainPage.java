@@ -31,6 +31,7 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.preferences.InstanceScope;
+import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.IInputValidator;
 import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -134,6 +135,7 @@ import com.amalto.workbench.webservices.WSTypedContent;
 import com.amalto.workbench.webservices.XtentisPort;
 import com.amalto.workbench.widgets.DescAnnotationComposite;
 import com.amalto.workbench.widgets.LabelCombo;
+import com.amalto.workbench.widgets.WidgetFactory;
 import com.amalto.workbench.widgets.xmleditor.ExtensibleContentEditor;
 import com.amalto.workbench.widgets.xmleditor.ExtensibleContentEditorPage;
 import com.amalto.workbench.widgets.xmleditor.ExtensibleContentEditorPageDescription;
@@ -360,7 +362,7 @@ public class TransformerMainPage extends AMainPageV2 {
                                     /*
                                      * ProcessResultsPage page = new ProcessResultsPage(editor,pipeline);
                                      * parent.editor.addPage(page); parent.editor.setActivePage(page.getId());
-                                     * 
+                                     *
                                      * parent.editor.getEditorSite().getShell()
                                      */
                                     // Shell shell = new Shell(SWT.DIALOG_TRIM | SWT.RESIZE | SWT.MAX | SWT.MIN);
@@ -431,22 +433,6 @@ public class TransformerMainPage extends AMainPageV2 {
                     TransformerMainPage.this.comitting = false;
                     markDirtyWithoutCommit();
                 }
-            });
-
-            // File Process
-            Button processButton = toolkit.createButton(descriptionComposite, "", SWT.PUSH);//$NON-NLS-1$
-            processButton.setLayoutData(new GridData(SWT.BEGINNING, SWT.CENTER, false, false, 1, 1));
-            processButton.setImage(ImageCache.getCreatedImage(EImage.RUN_EXC.getPath()));
-            processButton.setToolTipText(Messages.TransformerMainPage_Execute);
-            processButton.addSelectionListener(new SelectionListener() {
-
-                public void widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent e) {
-                };
-
-                public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
-                    executeProcess(toolkit);
-                }
-
             });
 
             // make the Page window a DropTarget - we need to dispose it
@@ -702,11 +688,18 @@ public class TransformerMainPage extends AMainPageV2 {
             refreshParameterEditor();
             refreshData();
 
+            addToolBarItem();
+
             this.oldBackground = parameterEditor.getBackground();
         } catch (Exception e) {
             log.error(e.getMessage(), e);
         }
 
+    }
+
+    private void addToolBarItem() {
+        XObjectEditor editor = (XObjectEditor) getEditor();
+        editor.getToolBar().addActions(new TestProcessAction());
     }
 
     protected void executeProcess(final FormToolkit toolkit) {
@@ -1112,6 +1105,20 @@ public class TransformerMainPage extends AMainPageV2 {
             refreshStep(currentPlugin);
         }
         parameterEditor.clearExternalResources();
+    }
+
+    class TestProcessAction extends Action {
+
+        public TestProcessAction() {
+            setImageDescriptor(ImageCache.getImage(EImage.RUN_EXC.getPath()));
+            setText(Messages.TransformerMainPage_Execute);
+            setToolTipText(Messages.TransformerMainPage_Execute);
+        }
+
+        @Override
+        public void run() {
+            executeProcess(WidgetFactory.getWidgetFactory());
+        }
     }
 
     class TransformerStepWidget {

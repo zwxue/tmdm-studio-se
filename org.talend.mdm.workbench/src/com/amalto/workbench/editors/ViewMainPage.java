@@ -20,6 +20,7 @@ import java.util.Iterator;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
@@ -37,7 +38,6 @@ import org.eclipse.swt.dnd.TextTransfer;
 import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
-import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
@@ -145,23 +145,12 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener {
         try {
             Composite descriptionComposite = toolkit.createComposite(charComposite, SWT.NONE);
             descriptionComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
-            descriptionComposite.setLayout(new GridLayout(3, false));
+            descriptionComposite.setLayout(new GridLayout());
 
             desAntionComposite = new DescAnnotationComposite(Messages.ViewMainPage_Description,
                     " ...", toolkit, descriptionComposite, this, //$NON-NLS-1$
                     false);
 
-            Button processButton = toolkit.createButton(descriptionComposite, "", SWT.PUSH);//$NON-NLS-1$
-            processButton.setLayoutData(new GridData(SWT.BEGINNING, SWT.CENTER, false, false, 1, 1));
-            processButton.setImage(ImageCache.getCreatedImage(EImage.RUN_EXC.getPath()));
-            processButton.setToolTipText(Messages.ViewMainPage_test);
-            processButton.addSelectionListener(new SelectionAdapter() {
-
-                @Override
-                public void widgetSelected(SelectionEvent e) {
-                    runTest();
-                }
-            });
             Composite comp = toolkit.createComposite(descriptionComposite);
             GridLayout layout = new GridLayout(2, false);
             layout.marginWidth = 0;
@@ -255,6 +244,7 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener {
             conditionViewer.setHeight(110);
 
             // wrap.Wrap(this, conditionViewer);
+            addToolBarItem();
 
             refreshData();
 
@@ -263,6 +253,11 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener {
         }
 
     }// createCharacteristicsContent
+
+    private void addToolBarItem() {
+        XObjectEditor editor = (XObjectEditor) getEditor();
+        editor.getToolBar().addActions(new TestViewAction());
+    }
 
     protected TisTableViewer getNewTisTableViewer(Composite parent, FormToolkit toolkit,
             java.util.List<ComplexTableViewerColumn> columns) {
@@ -510,6 +505,20 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener {
             return;
         }
         super.modifyText(e);
+    }
+
+    class TestViewAction extends Action {
+
+        public TestViewAction() {
+            setImageDescriptor(ImageCache.getImage(EImage.RUN_EXC.getPath()));
+            setText(Messages.ViewMainPage_test);
+            setToolTipText(Messages.ViewMainPage_test);
+        }
+
+        @Override
+        public void run() {
+            runTest();
+        }
     }
 
     /****************************************************************************
