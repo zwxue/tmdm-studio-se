@@ -28,6 +28,7 @@ import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ComboViewer;
@@ -420,6 +421,12 @@ public class DataClusterDialog extends Dialog {
     public void setDefaultServerDef(MDMServerDef defaultServerDef) {
         oldServerDef = defaultServerDef;
         hasdefaultServer = true;
+    }
+
+    @Override
+    protected void createButtonsForButtonBar(Composite parent) {
+        createButton(parent, Dialog.OK, IDialogConstants.OK_LABEL, false);
+        createButton(parent, Dialog.CANCEL, IDialogConstants.CANCEL_LABEL, false);
     }
 
     @Override
