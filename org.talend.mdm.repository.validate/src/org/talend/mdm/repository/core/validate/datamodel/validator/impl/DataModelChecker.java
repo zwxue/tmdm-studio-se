@@ -13,23 +13,13 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.collections.map.MultiKeyMap;
 import org.apache.log4j.Logger;
-import org.talend.mdm.commmon.metadata.ComplexTypeMetadata;
-import org.talend.mdm.commmon.metadata.FieldMetadata;
-import org.talend.mdm.commmon.metadata.MetadataRepository;
-import org.talend.mdm.commmon.metadata.MetadataVisitor;
-import org.talend.mdm.commmon.metadata.TypeMetadata;
-import org.talend.mdm.commmon.metadata.ValidationError;
-import org.talend.mdm.commmon.metadata.ValidationHandler;
+import org.talend.mdm.commmon.metadata.*;
 import org.talend.mdm.commmon.metadata.validation.ValidationFactory;
 import org.talend.mdm.commmon.metadata.validation.ValidationRule;
 import org.talend.mdm.repository.core.validate.datamodel.IChecker;
@@ -40,6 +30,15 @@ import org.w3c.dom.Element;
 public class DataModelChecker implements IChecker<ModelValidationMessage> {
 
     static Logger log = Logger.getLogger(DataModelChecker.class);
+
+    public static String getDataModelName(String fileName) {
+        Pattern pattern = Pattern.compile("(\\w*?)_(\\d*?)\\.(\\d*?)\\.xsd"); //$NON-NLS-1$
+        Matcher matcher = pattern.matcher(fileName);
+        if (matcher.find()) {
+            return matcher.group(1);
+        }
+        return fileName;
+    }
 
     @Override
     public List<ModelValidationMessage> toCheck(File file) {
@@ -72,15 +71,6 @@ public class DataModelChecker implements IChecker<ModelValidationMessage> {
         return validationHandler.getMessages();
     }
 
-    public static String getDataModelName(String fileName) {
-        Pattern pattern = Pattern.compile("(\\w*?)_(\\d*?)\\.(\\d*?)\\.xsd"); //$NON-NLS-1$
-        Matcher matcher = pattern.matcher(fileName);
-        if (matcher.find()) {
-            return matcher.group(1);
-        }
-        return fileName;
-    }
-
     private static class ValidationHandlerAdapter implements ValidationHandler {
 
         public static final String ANONYMOUS_TYPE_NAME = "<Anonymous>"; //$NON-NLS-1$
@@ -103,18 +93,31 @@ public class DataModelChecker implements IChecker<ModelValidationMessage> {
             return name;
         }
 
-        @Override
-        public void fatal(TypeMetadata type, String message, Element element, Integer lineNumber, Integer columnNumber,
-                ValidationError error) {
-            error(type, message, element, getValue(lineNumber, -1), getValue(columnNumber, -1), error);
-        }
-
         private static int getValue(Integer integer, int defaultValue) {
             if (integer == null) {
                 return defaultValue;
             } else {
                 return integer;
             }
+        }
+
+        private static String getEntityName(FieldMetadata field) {
+            try {
+                ComplexTypeMetadata containingType = field.getContainingType().getEntity();
+                String name = containingType.getName();
+                if (name.startsWith(MetadataRepository.ANONYMOUS_PREFIX)) {
+                    name = ANONYMOUS_TYPE_NAME;
+                }
+                return name;
+            } catch (Exception e) {
+                return ""; //$NON-NLS-1$
+            }
+        }
+
+        @Override
+        public void fatal(TypeMetadata type, String message, Element element, Integer lineNumber, Integer columnNumber,
+                ValidationError error) {
+            error(type, message, element, getValue(lineNumber, -1), getValue(columnNumber, -1), error);
         }
 
         @Override
@@ -126,10 +129,8 @@ public class DataModelChecker implements IChecker<ModelValidationMessage> {
                 ModelValidationMessage validationMessage = new ModelValidationMessage(IComponentValidationRule.SEV_ERROR,
                         message,
                         "key", // TODO
-                        dataModelName, getValue(lineNumber, -1), getValue(columnNumber, -1), group, element,
-                        getTypeName(type),
-                        getTypeName(type),
-                        getTypeName(type));
+                        dataModelName, getValue(lineNumber, -1), getValue(columnNumber, -1), group, element, getTypeName(type),
+                        getTypeName(type), getTypeName(type));
                 addMessage(getValue(lineNumber, -1), getValue(columnNumber, -1), error, validationMessage);
                 errorCount++;
             }
@@ -152,10 +153,8 @@ public class DataModelChecker implements IChecker<ModelValidationMessage> {
             ModelValidationMessage validationMessage = new ModelValidationMessage(IComponentValidationRule.SEV_WARNING,
                     message,
                     "key", // TODO
-                    dataModelName, getValue(lineNumber, -1), getValue(columnNumber, -1), group, element,
-                    getTypeName(type),
-                    getTypeName(type),
-                    getTypeName(type));
+                    dataModelName, getValue(lineNumber, -1), getValue(columnNumber, -1), group, element, getTypeName(type),
+                    getTypeName(type), getTypeName(type));
             addMessage(getValue(lineNumber, -1), getValue(columnNumber, -1), error, validationMessage);
         }
 
@@ -181,33 +180,9 @@ public class DataModelChecker implements IChecker<ModelValidationMessage> {
                         message,
                         "key", // TODO
                         dataModelName, getValue(lineNumber, -1), getValue(columnNumber, -1), group, element,
-                        getEntityName(field),
-                        getEntityName(field),
- field.getPath());
+                        getEntityName(field), getEntityName(field), field.getPath());
                 addMessage(getValue(lineNumber, -1), getValue(columnNumber, -1), error, validationMessage);
                 errorCount++;
-            }
-        }
-
-        private static String getEntityName(FieldMetadata field) {
-            try {
-                ComplexTypeMetadata containingType = field.getContainingType().getEntity();
-                String name = containingType.getName();
-                if (name.startsWith(MetadataRepository.ANONYMOUS_PREFIX)) {
-                    name = ANONYMOUS_TYPE_NAME;
-                }
-                return name;
-            } catch (Exception e) {
-                return ""; //$NON-NLS-1$
-            }
-        }
-
-        private static String getFieldName(FieldMetadata field) {
-            try {
-                return field.getName();
-            } catch (Exception e) {
-                // TODO For case where FK is defined from a type that doesn't exist (just "Root" iso. "Root/Id").
-                return ""; //$NON-NLS-1$
             }
         }
 
@@ -219,8 +194,7 @@ public class DataModelChecker implements IChecker<ModelValidationMessage> {
             ModelValidationMessage validationMessage = new ModelValidationMessage(IComponentValidationRule.SEV_WARNING,
                     message,
                     "key", // TODO
-                    dataModelName, getValue(lineNumber, -1), getValue(columnNumber, -1), group, element,
- getEntityName(field),
+                    dataModelName, getValue(lineNumber, -1), getValue(columnNumber, -1), group, element, getEntityName(field),
                     getEntityName(field), field.getPath());
             addMessage(getValue(lineNumber, -1), getValue(columnNumber, -1), error, validationMessage);
         }
