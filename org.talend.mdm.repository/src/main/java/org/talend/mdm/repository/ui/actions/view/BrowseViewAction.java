@@ -14,6 +14,7 @@ package org.talend.mdm.repository.ui.actions.view;
 
 import org.apache.log4j.Logger;
 import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
 import org.talend.core.model.repository.IRepositoryViewObject;
@@ -63,10 +64,14 @@ public class BrowseViewAction extends AbstractRepositoryAction {
                 ViewBrowserInput input = new ViewBrowserInput(viewObject);
                 input.setServerDef(dlg.getSelectedServerDef());
                 if (page == null) {
-                    this.page = commonViewer.getCommonNavigator().getSite().getWorkbenchWindow().getActivePage();
+                    page = commonViewer.getCommonNavigator().getSite().getWorkbenchWindow().getActivePage();
                 }
                 try {
-                    this.page.openEditor(input, XObjectBrowser2.EDITOR_ID);
+                    IEditorPart oldEditor = page.findEditor(input);
+                    if (oldEditor != null) {
+                        page.closeEditor(oldEditor, false);
+                    }
+                    page.openEditor(input, XObjectBrowser2.EDITOR_ID);
                 } catch (PartInitException e) {
                     log.error(e.getMessage(), e);
                 }

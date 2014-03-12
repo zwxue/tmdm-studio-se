@@ -18,6 +18,7 @@ import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.forms.editor.FormEditor;
@@ -111,6 +112,10 @@ public class ViewMainPage2 extends ViewMainPage {
         ViewBrowserInput browserInput = new ViewBrowserInput(viewObject);
         browserInput.setServerDef(getLastServerDef());
         try {
+            IEditorPart oldEditor = page.findEditor(browserInput);
+            if (oldEditor != null) {
+                page.closeEditor(oldEditor, false);
+            }
             page.openEditor(browserInput, XObjectBrowser2.EDITOR_ID);
         } catch (PartInitException e) {
             log.error(e.getMessage(), e);
