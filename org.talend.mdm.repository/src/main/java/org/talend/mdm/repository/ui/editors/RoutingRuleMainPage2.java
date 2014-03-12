@@ -14,6 +14,7 @@ package org.talend.mdm.repository.ui.editors;
 
 import java.net.URL;
 import java.util.Arrays;
+import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -48,6 +49,8 @@ import com.amalto.workbench.utils.XtentisException;
 import com.amalto.workbench.webservices.WSDataClusterPK;
 import com.amalto.workbench.webservices.WSItemPK;
 import com.amalto.workbench.webservices.WSRouteItemV2;
+import com.amalto.workbench.webservices.WSRoutingRulePK;
+import com.amalto.workbench.webservices.WSRoutingRulePKArray;
 import com.amalto.workbench.webservices.WSServiceGetDocument;
 import com.amalto.workbench.webservices.XtentisPort;
 import com.amalto.workbench.widgets.TisTableViewer;
@@ -168,10 +171,23 @@ public class RoutingRuleMainPage2 extends RoutingRuleMainPage {
                                 Messages.RoutingRuleMainPage2_NoRecordSelected);
                         return;
                     }
-                    port.routeItemV2(new WSRouteItemV2(new WSItemPK(new WSDataClusterPK(dataCluster), concept, Arrays
+                    WSRoutingRulePKArray routeItemV2 = port.routeItemV2(new WSRouteItemV2(new WSItemPK(new WSDataClusterPK(dataCluster), concept, Arrays
                             .asList(recordIds))));
 
-                    MessageDialog.openInformation(getSite().getShell(), Messages.RoutingRuleMainPage2_Success, Messages.RoutingRuleMainPage2_ExecuteTriggerSuccess);
+                    if (routeItemV2 == null || routeItemV2.getWsRoutingRulePKs() == null
+                            || routeItemV2.getWsRoutingRulePKs().size() == 0) {
+                        MessageDialog.openInformation(getSite().getShell(), Messages.RoutingRuleMainPage2_fail, Messages.RoutingRuleMainPage2_noTriggerExecuted);
+                        return;
+                    }
+
+                    List<WSRoutingRulePK> wsRoutingRulePKs = routeItemV2.getWsRoutingRulePKs();
+                    StringBuilder builder = new StringBuilder(wsRoutingRulePKs.get(0).getPk());
+                    for (int i = 1; i < wsRoutingRulePKs.size(); i++) {
+                        builder.append("," + wsRoutingRulePKs.get(i).getPk()); //$NON-NLS-1$
+                    }
+
+                    MessageDialog.openInformation(getSite().getShell(), Messages.RoutingRuleMainPage2_Success,
+                            Messages.bind(Messages.RoutingRuleMainPage2_ExecuteTriggerSuccess, builder.toString()));
                 }
             } catch (Exception e) {
                 log.error(e.getMessage(), e);
