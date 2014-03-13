@@ -168,6 +168,10 @@ public class PageingToolBar {
 
         totalpage = totalsize % pagesize == 0 ? totalsize / pagesize : totalsize / pagesize + 1;
         totalPage.setText(Messages.bind(Messages.PageingToolBar_LabelText, totalpage));
+        if (totalpage == 0) {
+            return false;
+        }
+
         if (page == 0) {
             MessageDialog.openWarning(getComposite().getShell(), Messages.Warning,
                     Messages.bind(Messages.PageingToolBar_invalidNumber, totalpage));
