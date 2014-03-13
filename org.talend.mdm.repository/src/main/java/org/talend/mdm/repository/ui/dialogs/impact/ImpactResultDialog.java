@@ -1,0 +1,370 @@
+// ============================================================================
+//
+// Copyright (C) 2006-2013 Talend Inc. - www.talend.com
+//
+// This source code is available under agreement available at
+// %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
+//
+// You should have received a copy of the agreement
+// along with this program; if not, write to Talend SA
+// 9 rue Pages 92150 Suresnes, France
+//
+// ============================================================================
+package org.talend.mdm.repository.ui.dialogs.impact;
+
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.jface.viewers.CellEditor;
+import org.eclipse.jface.viewers.ComboBoxCellEditor;
+import org.eclipse.jface.viewers.ICellModifier;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.ITableLabelProvider;
+import org.eclipse.jface.viewers.ITreeContentProvider;
+import org.eclipse.jface.viewers.LabelProvider;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.jface.viewers.TreeViewer;
+import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.CLabel;
+import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Group;
+import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.Tree;
+import org.eclipse.swt.widgets.TreeColumn;
+import org.eclipse.swt.widgets.TreeItem;
+import org.talend.core.model.repository.IRepositoryViewObject;
+import org.talend.mdm.repository.core.service.ModelImpactAnalyseService;
+import org.talend.mdm.repository.core.service.ModelImpactAnalyseService.Change;
+import org.talend.mdm.repository.core.service.ModelImpactAnalyseService.ImpactOperation;
+import org.talend.mdm.repository.i18n.Messages;
+import org.talend.mdm.repository.plugin.RepositoryPlugin;
+import org.talend.mdm.repository.utils.EclipseResourceManager;
+
+/**
+ * created by HHB on 2014-3-11 Detailled comment
+ * 
+ */
+public class ImpactResultDialog extends Dialog {
+
+    private class TreeContentProvider implements ITreeContentProvider {
+
+        public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
+        }
+
+        public void dispose() {
+        }
+
+        public Object[] getElements(Object inputElement) {
+            return getChildren(inputElement);
+        }
+
+        public Object[] getChildren(Object parentElement) {
+            if (parentElement instanceof Collection) {
+                return ((Collection) parentElement).toArray();
+            } else if (parentElement instanceof IRepositoryViewObject) {
+                List<Change> changes = input.get(parentElement);
+                if (changes != null) {
+                    return changes.toArray();
+                }
+            }
+            return new Object[0];
+        }
+
+        public Object getParent(Object element) {
+            return null;
+        }
+
+        public boolean hasChildren(Object element) {
+            return getChildren(element).length > 0;
+        }
+    }
+
+    private static final String[] OPERATIONS_FULL = { Messages.ModelImpactAnalyseService_recreateTable,
+            Messages.ModelImpactAnalyseService_applyChange, Messages.ModelImpactAnalyseService_cancelDeploying };
+
+    private static final String[] OPERATIONS_LITE = { Messages.ModelImpactAnalyseService_applyChange,
+            Messages.ModelImpactAnalyseService_cancelDeploying };
+
+    private TreeViewer treeViewer;
+
+    private final Map<IRepositoryViewObject, List<Change>> input;
+
+    private final Map<IRepositoryViewObject, ImpactOperation> result = new HashMap<IRepositoryViewObject, ModelImpactAnalyseService.ImpactOperation>();
+
+    private static final Image IMG_MODEL = EclipseResourceManager.getImage(RepositoryPlugin.PLUGIN_ID, "icons/datamodel.png"); //$NON-NLS-1$;
+
+    private static final Image IMG_HIGH = EclipseResourceManager.getImage(RepositoryPlugin.PLUGIN_ID, "icons/high.gif"); //$NON-NLS-1$;
+
+    private static final Image IMG_MEDIUM = EclipseResourceManager.getImage(RepositoryPlugin.PLUGIN_ID, "icons/medium.gif"); //$NON-NLS-1$;
+
+    private static final Image IMG_LOW = EclipseResourceManager.getImage(RepositoryPlugin.PLUGIN_ID, "icons/low.gif"); //$NON-NLS-1$;
+
+    private class ViewerLabelProvider extends LabelProvider implements ITableLabelProvider {
+
+        @Override
+        public Image getImage(Object element) {
+            return super.getImage(element);
+        }
+
+        @Override
+        public String getText(Object element) {
+            return super.getText(element);
+        }
+
+        public Image getColumnImage(Object element, int columnIndex) {
+            if (columnIndex == 0) {
+                if (element instanceof IRepositoryViewObject) {
+                    return IMG_MODEL;
+                } else if (element instanceof Change) {
+                    switch (((Change) element).getSeverity()) {
+                    case ModelImpactAnalyseService.HIGH:
+                        return IMG_HIGH;
+                    case ModelImpactAnalyseService.MEDIUM:
+                        return IMG_MEDIUM;
+                    case ModelImpactAnalyseService.LOW:
+                        return IMG_LOW;
+                    }
+                }
+            }
+            return null;
+        }
+
+        public String getColumnText(Object element, int columnIndex) {
+            if (element instanceof IRepositoryViewObject) {
+                IRepositoryViewObject viewObject = (IRepositoryViewObject) element;
+                if (columnIndex == 0) {
+
+                    return viewObject.getLabel();
+                } else if (columnIndex == 2) {
+                    ImpactOperation operation = getOperation(viewObject);
+                    return operation.getDescription();
+                }
+
+            } else if (element instanceof Change) {
+                Change change = (Change) element;
+                switch (columnIndex) {
+                case 0:
+                    return change.getMessage();
+                case 1:
+                    switch (change.getSeverity()) {
+                    case ModelImpactAnalyseService.HIGH:
+                        return Messages.ImpactResultDialog_high;
+                    case ModelImpactAnalyseService.MEDIUM:
+                        return Messages.ImpactResultDialog_medium;
+                    case ModelImpactAnalyseService.LOW:
+                        return Messages.ImpactResultDialog_low;
+                    }
+                    break;
+                case 2:
+
+                }
+
+            }
+            return ""; //$NON-NLS-1$
+        }
+    }
+
+    public ImpactResultDialog(Shell parentShell, Map<IRepositoryViewObject, List<Change>> map) {
+        super(parentShell);
+        setShellStyle(SWT.RESIZE);
+        this.input = map;
+    }
+
+    /**
+     * Create contents of the dialog.
+     * 
+     * @param parent
+     */
+    @Override
+    protected Control createDialogArea(Composite parent) {
+        Composite container = (Composite) super.createDialogArea(parent);
+        container.setLayout(new GridLayout(1, false));
+
+        Label messageLabel = new Label(container, SWT.WRAP);
+        messageLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+        messageLabel.setText(Messages.ImpactResultDialog_titleMessage);
+
+        treeViewer = new TreeViewer(container, SWT.BORDER | SWT.FULL_SELECTION);
+        Tree tree = treeViewer.getTree();
+        tree.setHeaderVisible(true);
+        GridData gd_tree = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
+        gd_tree.verticalIndent = 5;
+        tree.setLayoutData(gd_tree);
+
+        TreeColumn changeColumn = new TreeColumn(tree, SWT.NONE);
+        changeColumn.setWidth(340);
+        changeColumn.setText(Messages.ImpactResultDialog_modelChange);
+
+        TreeColumn levelColumn = new TreeColumn(tree, SWT.NONE);
+        levelColumn.setWidth(60);
+        levelColumn.setText(Messages.ImpactResultDialog_level);
+
+        TreeColumn operationColumn = new TreeColumn(tree, SWT.NONE);
+        operationColumn.setWidth(120);
+        operationColumn.setText(Messages.ImpactResultDialog_operation);
+
+        Group grpLevel = new Group(container, SWT.NONE);
+        grpLevel.setText(Messages.ImpactResultDialog_changeLegend);
+        grpLevel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+        grpLevel.setLayout(new GridLayout(2, false));
+
+        CLabel lowLabel = new CLabel(grpLevel, SWT.NONE);
+        lowLabel.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, false, false, 1, 1));
+        lowLabel.setText(Messages.ImpactResultDialog_low);
+        lowLabel.setImage(IMG_LOW);
+        Label lowMsgLabel = new Label(grpLevel, SWT.WRAP);
+        lowMsgLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+        lowMsgLabel.setText(Messages.ImpactResultDialog_lowMessage);
+
+        CLabel mediumLabel = new CLabel(grpLevel, SWT.NONE);
+        mediumLabel.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, false, false, 1, 1));
+        mediumLabel.setText(Messages.ImpactResultDialog_medium);
+        mediumLabel.setImage(IMG_MEDIUM);
+        Label mediumMsgLabel = new Label(grpLevel, SWT.WRAP);
+        mediumMsgLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+        mediumMsgLabel.setText(Messages.ImpactResultDialog_mediumMessage);
+
+        CLabel highLabel = new CLabel(grpLevel, SWT.NONE);
+        highLabel.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, false, false, 1, 1));
+        highLabel.setText(Messages.ImpactResultDialog_high);
+        highLabel.setImage(IMG_HIGH);
+        Label highMsgLabel = new Label(grpLevel, SWT.WRAP);
+        highMsgLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+        highMsgLabel.setText(Messages.ImpactResultDialog_highMessage);
+        treeViewer.setContentProvider(new TreeContentProvider());
+        treeViewer.setLabelProvider(new ViewerLabelProvider());
+        //
+        installCellEditor();
+        //
+        initTree();
+        return container;
+    }
+
+    private void installCellEditor() {
+        treeViewer.setColumnProperties(new String[] { "0", "1", "2" }); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ 
+        treeViewer.setCellModifier(new ICellModifier() {
+
+            public void modify(Object element, String property, Object value) {
+                if (property.equals("2")) { //$NON-NLS-1$
+                    int index = (Integer) value;
+                    if (index < 0) {
+                        return;
+                    }
+                    IRepositoryViewObject viewObj = (IRepositoryViewObject) ((TreeItem) element).getData();
+                    int severity = getCurrentTopSeverityLevel(viewObj);
+                    if (severity == ModelImpactAnalyseService.LOW) {
+                        index += 1;
+                    }
+                    ImpactOperation operation = ImpactOperation.getOperation(index);
+                    result.put(viewObj, operation);
+                    treeViewer.refresh(viewObj);
+                }
+
+            }
+
+            public Object getValue(Object element, String property) {
+                IRepositoryViewObject viewObj = (IRepositoryViewObject) element;
+
+                ImpactOperation operation = getOperation(viewObj);
+                int severity = getCurrentTopSeverityLevel(viewObj);
+                if (severity == ModelImpactAnalyseService.LOW) {
+                    return operation.ordinal() - 1;
+                } else {
+                    return operation.ordinal();
+                }
+
+            }
+
+            public boolean canModify(Object element, String property) {
+                return element instanceof IRepositoryViewObject && property.equals("2"); //$NON-NLS-1$
+            }
+        });
+        final CellEditor[] cellEditors = new CellEditor[3];
+        cellEditors[2] = new ComboBoxCellEditor(treeViewer.getTree(), OPERATIONS_FULL, SWT.READ_ONLY);
+        treeViewer.addSelectionChangedListener(new ISelectionChangedListener() {
+
+            public void selectionChanged(SelectionChangedEvent event) {
+                if (!event.getSelection().isEmpty()) {
+                    Object element = ((IStructuredSelection) event.getSelection()).getFirstElement();
+                    if (element instanceof IRepositoryViewObject) {
+                        int severity = getCurrentTopSeverityLevel((IRepositoryViewObject) element);
+                        if (severity == ModelImpactAnalyseService.LOW) {
+                            ((ComboBoxCellEditor) cellEditors[2]).setItems(OPERATIONS_LITE);
+                        } else {
+                            ((ComboBoxCellEditor) cellEditors[2]).setItems(OPERATIONS_FULL);
+                        }
+                    }
+                }
+
+            }
+        });
+        treeViewer.setCellEditors(cellEditors);
+    }
+
+    private int getCurrentTopSeverityLevel(IRepositoryViewObject viewObj) {
+        List<Change> changes = input.get(viewObj);
+        int level = 0;
+        for (Change change : changes) {
+            if (change.getSeverity() > level) {
+                level = change.getSeverity();
+            }
+        }
+        return level;
+
+    }
+
+    private ImpactOperation getOperation(IRepositoryViewObject viewObj) {
+        ImpactOperation operation = result.get(viewObj);
+        if (operation == null) {
+            operation = ImpactOperation.APPLY_LOW_CHANGE;
+            result.put(viewObj, operation);
+        }
+        return operation;
+
+    }
+
+    private void initTree() {
+        treeViewer.setInput(input.keySet());
+        treeViewer.expandAll();
+    }
+
+    /**
+     * Create contents of the button bar.
+     * 
+     * @param parent
+     */
+    @Override
+    protected void createButtonsForButtonBar(Composite parent) {
+        createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL, true);
+    }
+
+    /**
+     * Return the initial size of the dialog.
+     */
+    @Override
+    protected Point getInitialSize() {
+        return new Point(580, 495);
+    }
+
+    public Map<IRepositoryViewObject, ImpactOperation> getImpactConfiguration() {
+        return result;
+    }
+
+    @Override
+    protected boolean canHandleShellCloseEvent() {
+        return false;
+    }
+
+}

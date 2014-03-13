@@ -215,7 +215,9 @@ public class HttpClientUtil {
         HttpEntity content = response.getEntity();
         switch (response.getStatusLine().getStatusCode()) {
         case HttpStatus.SC_OK:
+        case HttpStatus.SC_NO_CONTENT:
             break;
+
         case HttpStatus.SC_NOT_FOUND:
             throw new XtentisException(Messages.httpclientError_url);
         case HttpStatus.SC_UNAUTHORIZED:
@@ -356,9 +358,12 @@ public class HttpClientUtil {
     }
 
     public static String invokeModelService(String protocol, String host, String port, String username, String password,
-            String modelName, String xsd, boolean isUpdate) throws XtentisException {
+            String modelName, String xsd, boolean isUpdate, Boolean force) throws XtentisException {
         try {
-            String url = protocol + "://" + host + ":" + port + "/datamanager/services/system/models/" + modelName; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+            String url = protocol + host + ":" + port + "/datamanager/services/system/models/" + modelName; //$NON-NLS-1$ //$NON-NLS-2$ 
+            if (force != null) {
+                url += "?force=" + force.toString(); //$NON-NLS-1$
+            }
             HttpUriRequest request = null;
             request = createModelRequest(url, isUpdate, xsd);
             DefaultHttpClient httpClient = wrapAuthClient(url, username, password);

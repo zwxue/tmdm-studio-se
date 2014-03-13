@@ -20,6 +20,7 @@ import org.eclipse.core.runtime.Status;
 import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.mdm.repository.core.command.AbstractCommand;
 import org.talend.mdm.repository.core.command.ICommand;
+import org.talend.mdm.repository.core.command.param.ICommandParameter;
 import org.talend.mdm.repository.core.service.DeployService.DeployStatus;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
@@ -32,6 +33,8 @@ import com.amalto.workbench.utils.Util;
  * DOC hbhong class global comment. Detailled comment
  */
 public abstract class AbstractDeployCommand extends AbstractCommand {
+
+    private ICommandParameter parameter;
 
     protected MDMServerDef serverDef;
 
@@ -90,6 +93,14 @@ public abstract class AbstractDeployCommand extends AbstractCommand {
         }
 
         return status;
+    }
+
+    public ICommandParameter getParameter() {
+        return this.parameter;
+    }
+
+    public void setParameter(ICommandParameter parameter) {
+        this.parameter = parameter;
     }
 
 }

@@ -358,6 +358,28 @@ public class Messages extends NLS {
 
     public static String XSDSetAnnotationWriteActionR_title;
 
+    public static String ImpactResultDialog_changeLegend;
+
+    public static String ImpactResultDialog_high;
+
+    public static String ImpactResultDialog_highMessage;
+
+    public static String ImpactResultDialog_level;
+
+    public static String ImpactResultDialog_low;
+
+    public static String ImpactResultDialog_lowMessage;
+
+    public static String ImpactResultDialog_medium;
+
+    public static String ImpactResultDialog_mediumMessage;
+
+    public static String ImpactResultDialog_modelChange;
+
+    public static String ImpactResultDialog_operation;
+
+    public static String ImpactResultDialog_titleMessage;
+
     public static String ImportServerObject;
 
     public static String ImportServerObjectAction_importServerObject;
@@ -817,6 +839,12 @@ public class Messages extends NLS {
     public static String MdmPropertiesWizard_lockedByOther;
 
     public static String MdmPropertiesWizard_imageCatalog;
+
+    public static String ModelImpactAnalyseService_applyChange;
+
+    public static String ModelImpactAnalyseService_cancelDeploying;
+
+    public static String ModelImpactAnalyseService_recreateTable;
 
     public static String MultiStatusDialog_MultiStatus_Messages;
 

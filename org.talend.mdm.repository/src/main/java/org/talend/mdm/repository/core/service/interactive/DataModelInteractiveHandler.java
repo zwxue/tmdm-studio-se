@@ -21,7 +21,11 @@ import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.IServerObjectRepositoryType;
 import org.talend.mdm.repository.core.command.deploy.AbstractDeployCommand;
+import org.talend.mdm.repository.core.command.param.ICommandParameter;
+import org.talend.mdm.repository.core.service.ModelImpactAnalyseService;
+import org.talend.mdm.repository.core.service.ModelImpactAnalyseService.ImpactOperation;
 import org.talend.mdm.repository.i18n.Messages;
+import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.model.mdmproperties.WSDataModelItem;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
@@ -111,4 +115,35 @@ public class DataModelInteractiveHandler extends AbstractInteractiveHandler {
         return super.getAssociatedObjects(obj);
     }
 
+    @Override
+    public boolean deploy(AbstractDeployCommand cmd) throws XtentisException {
+        IRepositoryViewObject viewObj = cmd.getViewObject();
+        Item item = viewObj.getProperty().getItem();
+        MDMServerObject serverObject = ((MDMServerObjectItem) item).getMDMServerObject();
+        Object wsObj = convert(item, serverObject);
+        //
+        callModelService(cmd);
+        //
+        XtentisPort port = getPort(cmd.getServerDef());
+        return doDeployWSObject(port, wsObj);
+    }
+
+    private void callModelService(AbstractDeployCommand cmd) {
+        ICommandParameter parameter = cmd.getParameter();
+        if (parameter != null) {
+            ImpactOperation operation = (ImpactOperation) parameter.getParameter();
+            Boolean force = null;
+            if (operation == ImpactOperation.APPLY_LOW_CHANGE) {
+                force = false;
+            } else if (operation == ImpactOperation.RECREATE_TABLE) {
+                force = true;
+            }
+            try {
+                ModelImpactAnalyseService.updateModel(cmd.getServerDef(), cmd.getViewObject(), force);
+            } catch (XtentisException e) {
+                log.error(e.getMessage(), e);
+            }
+
+        }
+    }
 }

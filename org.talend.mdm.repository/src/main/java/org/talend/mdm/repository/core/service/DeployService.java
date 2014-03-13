@@ -48,8 +48,10 @@ import org.talend.mdm.repository.core.command.common.UpdateLastServerCommand;
 import org.talend.mdm.repository.core.command.deploy.AbstractDeployCommand;
 import org.talend.mdm.repository.core.command.deploy.DeployCompoundCommand;
 import org.talend.mdm.repository.core.command.deploy.job.BatchDeployJobCommand;
+import org.talend.mdm.repository.core.command.param.ICommandParameter;
 import org.talend.mdm.repository.core.service.ConsistencyService.ConsistencyCheckResult;
 import org.talend.mdm.repository.core.service.IModelValidationService.IModelValidateResult;
+import org.talend.mdm.repository.core.service.ModelImpactAnalyseService.ImpactOperation;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 import org.talend.mdm.repository.plugin.RepositoryPlugin;
@@ -85,7 +87,7 @@ public class DeployService {
 
         /**
          * DOC hbhong DeployStatus constructor comment.
-         *
+         * 
          * @param severity
          * @param pluginId
          * @param message
@@ -176,8 +178,19 @@ public class DeployService {
                 return Status.CANCEL_STATUS;
             }
             validObjects = consistencyCheckResult.getToDeployObjects();
+
+            //
             CommandManager manager = CommandManager.getInstance();
             List<AbstractDeployCommand> commands = manager.getDeployCommands(validObjects, defaultCmdType);
+            // insert impact dialog
+            Map<IRepositoryViewObject, ImpactOperation> analyzeModelImpact = ModelImpactAnalyseService.analyzeCommandImpact(
+                    serverDef, commands);
+            Map<IRepositoryViewObject, ICommandParameter> paramMap = null;
+            if (analyzeModelImpact != null) {
+                ModelImpactAnalyseService.shrinkDeployCommands(analyzeModelImpact, commands);
+                paramMap = ModelImpactAnalyseService.convertToParameters(analyzeModelImpact);
+                manager.attachParameterToCommand(commands, paramMap);
+            }
             IStatus mainStatus = runCommands(commands, serverDef);
             // update consistency value
             try {
@@ -268,7 +281,7 @@ public class DeployService {
 
     /**
      * work for updater server operation.
-     *
+     * 
      * @param serverDef
      * @param viewObjs
      * @param selectededCommands
@@ -299,6 +312,15 @@ public class DeployService {
     public IStatus deployAnotherVersion(MDMServerDef serverDef, List<IRepositoryViewObject> viewObjs) {
         CommandManager manager = CommandManager.getInstance();
         List<AbstractDeployCommand> commands = manager.getDeployCommandsWithoutHistory(viewObjs);
+        // insert impact dialog
+        Map<IRepositoryViewObject, ImpactOperation> analyzeModelImpact = ModelImpactAnalyseService.analyzeCommandImpact(
+                serverDef, commands);
+        Map<IRepositoryViewObject, ICommandParameter> paramMap = null;
+        if (analyzeModelImpact != null) {
+            ModelImpactAnalyseService.shrinkDeployCommands(analyzeModelImpact, commands);
+            paramMap = ModelImpactAnalyseService.convertToParameters(analyzeModelImpact);
+            manager.attachParameterToCommand(commands, paramMap);
+        }
         return runCommands(commands, serverDef);
     }
 

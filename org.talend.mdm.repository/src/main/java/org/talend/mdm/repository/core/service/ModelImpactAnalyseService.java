@@ -14,18 +14,30 @@ package org.talend.mdm.repository.core.service;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.EnumSet;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Shell;
 import org.talend.core.model.properties.Item;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.IServerObjectRepositoryType;
+import org.talend.mdm.repository.core.command.deploy.AbstractDeployCommand;
+import org.talend.mdm.repository.core.command.param.DataModelCmdParam;
+import org.talend.mdm.repository.core.command.param.ICommandParameter;
+import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 import org.talend.mdm.repository.plugin.RepositoryPlugin;
+import org.talend.mdm.repository.ui.dialogs.impact.ImpactResultDialog;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 
 import com.amalto.workbench.utils.HttpClientUtil;
@@ -39,7 +51,34 @@ import com.thoughtworks.xstream.io.xml.DomDriver;
  */
 public class ModelImpactAnalyseService {
 
+    // SEVERITY
     public static final int LOW = 1, MEDIUM = 2, HIGH = 3;
+
+    public enum ImpactOperation {
+        RECREATE_TABLE(Messages.ModelImpactAnalyseService_recreateTable),
+        APPLY_LOW_CHANGE(Messages.ModelImpactAnalyseService_applyChange),
+        CANCEL(Messages.ModelImpactAnalyseService_cancelDeploying);
+
+        private final String description;
+
+        private ImpactOperation(String description) {
+            this.description = description;
+        }
+
+        public static ImpactOperation getOperation(int index) {
+            EnumSet<ImpactOperation> set = EnumSet.allOf(ImpactOperation.class);
+            for (ImpactOperation operation : set) {
+                if (operation.ordinal() == index) {
+                    return operation;
+                }
+            }
+            return null;
+        }
+
+        public String getDescription() {
+            return this.description;
+        }
+    }
 
     public static class Change {
 
@@ -122,24 +161,71 @@ public class ModelImpactAnalyseService {
 
     private static Logger log = Logger.getLogger(ModelImpactAnalyseService.class);
 
-    private static int next;
-
     private static XStream xstream;
 
-    public static void analyzeModelChange(MDMServerDef serverDef, IRepositoryViewObject modelViewObj) throws XtentisException {
-        invokeService(serverDef, modelViewObj, false);
-    }
-
-    public static void updateModel(MDMServerDef serverDef, IRepositoryViewObject modelViewObj) throws XtentisException {
-        invokeService(serverDef, modelViewObj, true);
-    }
-
-    private static String invokeService(MDMServerDef serverDef, IRepositoryViewObject modelViewObj, boolean isUpdateModel)
+    private static List<Change> analyzeModelChange(MDMServerDef serverDef, IRepositoryViewObject modelViewObj)
             throws XtentisException {
+        String responseMsg = invokeService(serverDef, modelViewObj, false, null);
+        if (responseMsg != null) {
+            return readResponseMessage(responseMsg);
+        }
+        return null;
+    }
+
+    private static Map<IRepositoryViewObject, List<Change>> analyzeModelChanges(MDMServerDef serverDef,
+            List<IRepositoryViewObject> modelViewObjs) throws XtentisException {
+        Map<IRepositoryViewObject, List<Change>> result = new HashMap<IRepositoryViewObject, List<Change>>();
+        for (IRepositoryViewObject viewObj : modelViewObjs) {
+            if (viewObj.getRepositoryObjectType() == IServerObjectRepositoryType.TYPE_DATAMODEL) {
+                List<Change> changes = analyzeModelChange(serverDef, viewObj);
+                if (changes != null && changes.size() > 0) {
+                    result.put(viewObj, changes);
+                }
+            }
+        }
+        return result;
+    }
+
+    public static Map<IRepositoryViewObject, ImpactOperation> analyzeCommandImpact(MDMServerDef serverDef,
+            List<AbstractDeployCommand> commands) {
+        List<IRepositoryViewObject> viewObjs = new LinkedList<IRepositoryViewObject>();
+        for (AbstractDeployCommand cmd : commands) {
+            if (cmd.getViewObject() != null) {
+                viewObjs.add(cmd.getViewObject());
+            }
+        }
+        return analyzeModelImpact(serverDef, viewObjs);
+    }
+
+    public static Map<IRepositoryViewObject, ImpactOperation> analyzeModelImpact(MDMServerDef serverDef,
+            List<IRepositoryViewObject> modelViewObjs) {
+        try {
+            Map<IRepositoryViewObject, List<Change>> changes = analyzeModelChanges(serverDef, modelViewObjs);
+            if (!changes.isEmpty()) {
+                Shell shell = Display.getDefault().getActiveShell();
+                ImpactResultDialog dialog = new ImpactResultDialog(shell, changes);
+                if (dialog.open() == IDialogConstants.OK_ID) {
+                    Map<IRepositoryViewObject, ImpactOperation> configuration = dialog.getImpactConfiguration();
+                    return configuration;
+                }
+            }
+        } catch (XtentisException e) {
+            log.error(e.getMessage(), e);
+        }
+        return null;
+    }
+
+    public static void updateModel(MDMServerDef serverDef, IRepositoryViewObject modelViewObj, Boolean force)
+            throws XtentisException {
+        invokeService(serverDef, modelViewObj, true, force);
+    }
+
+    private static String invokeService(MDMServerDef serverDef, IRepositoryViewObject modelViewObj, boolean isUpdateModel,
+            Boolean force) throws XtentisException {
         String xsd = getModelContent(modelViewObj);
         if (xsd != null) {
             String result = HttpClientUtil.invokeModelService(serverDef.getProtocol(), serverDef.getHost(), serverDef.getPort(),
-                    serverDef.getUser(), serverDef.getPasswd(), modelViewObj.getLabel(), xsd, isUpdateModel);
+                    serverDef.getUser(), serverDef.getPasswd(), modelViewObj.getLabel(), xsd, isUpdateModel, force);
             return result;
         }
         return null;
@@ -190,5 +276,32 @@ public class ModelImpactAnalyseService {
             cur.setContextClassLoader(save);
 
         }
+    }
+
+    public static void shrinkDeployCommands(Map<IRepositoryViewObject, ImpactOperation> impactResult,
+            List<AbstractDeployCommand> commands) {
+        Iterator<AbstractDeployCommand> il = commands.iterator();
+        while (il.hasNext()) {
+            AbstractDeployCommand cmd = il.next();
+            IRepositoryViewObject viewObject = cmd.getViewObject();
+            if (viewObject != null) {
+                ImpactOperation operation = impactResult.get(viewObject);
+                if (operation == ImpactOperation.CANCEL) {
+                    il.remove();
+                    impactResult.remove(viewObject);
+                }
+            }
+        }
+    }
+
+    public static Map<IRepositoryViewObject, ICommandParameter> convertToParameters(
+            Map<IRepositoryViewObject, ImpactOperation> impactResult) {
+        Map<IRepositoryViewObject, ICommandParameter> paramMap = new HashMap<IRepositoryViewObject, ICommandParameter>();
+        for (IRepositoryViewObject viewObj : impactResult.keySet()) {
+            ImpactOperation impactOperation = impactResult.get(viewObj);
+            ICommandParameter param = new DataModelCmdParam(impactOperation);
+            paramMap.put(viewObj, param);
+        }
+        return paramMap;
     }
 }

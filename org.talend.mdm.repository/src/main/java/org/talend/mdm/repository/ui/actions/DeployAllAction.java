@@ -13,6 +13,7 @@
 package org.talend.mdm.repository.ui.actions;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.xml.ws.WebServiceException;
 
@@ -24,12 +25,16 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.core.model.repository.IRepositoryViewObject;
+import org.talend.mdm.repository.core.command.CommandManager;
 import org.talend.mdm.repository.core.command.deploy.AbstractDeployCommand;
+import org.talend.mdm.repository.core.command.param.ICommandParameter;
 import org.talend.mdm.repository.core.service.ConsistencyService.ConsistencyCheckResult;
 import org.talend.mdm.repository.core.service.ContainerCacheService;
 import org.talend.mdm.repository.core.service.DeployService;
 import org.talend.mdm.repository.core.service.IModelValidationService;
 import org.talend.mdm.repository.core.service.IModelValidationService.IModelValidateResult;
+import org.talend.mdm.repository.core.service.ModelImpactAnalyseService;
+import org.talend.mdm.repository.core.service.ModelImpactAnalyseService.ImpactOperation;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 import org.talend.mdm.repository.plugin.RepositoryPlugin;
@@ -117,6 +122,15 @@ public class DeployAllAction extends AbstractDeployAction {
                         return;
                     }
                     lockDirtyDialog.saveDirtyObjects();
+                    // insert impact dialog
+                    Map<IRepositoryViewObject, ImpactOperation> analyzeModelImpact = ModelImpactAnalyseService
+                            .analyzeCommandImpact(serverDef, selectededCommands);
+                    Map<IRepositoryViewObject, ICommandParameter> paramMap = null;
+                    if (analyzeModelImpact != null) {
+                        ModelImpactAnalyseService.shrinkDeployCommands(analyzeModelImpact, selectededCommands);
+                        paramMap = ModelImpactAnalyseService.convertToParameters(analyzeModelImpact);
+                        CommandManager.getInstance().attachParameterToCommand(selectededCommands, paramMap);
+                    }
                     IStatus status = deployService.runCommands(selectededCommands, serverDef);
                     // update consistency value
                     try {

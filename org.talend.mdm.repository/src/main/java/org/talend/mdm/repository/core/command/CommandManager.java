@@ -37,6 +37,7 @@ import org.talend.mdm.repository.core.command.deploy.RenameCommand;
 import org.talend.mdm.repository.core.command.deploy.job.BatchDeployJobCommand;
 import org.talend.mdm.repository.core.command.impl.NOPCommand;
 import org.talend.mdm.repository.core.command.impl.RestoreCommand;
+import org.talend.mdm.repository.core.command.param.ICommandParameter;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 import org.talend.repository.model.IProxyRepositoryFactory;
 
@@ -275,6 +276,10 @@ public class CommandManager implements IMementoAware {
         return cmdMap;
     }
 
+    public List<AbstractDeployCommand> getDeployCommands(List<IRepositoryViewObject> viewObjs, int defaultCmdType) {
+        return getDeployCommands(viewObjs, defaultCmdType, null);
+    }
+
     /**
      * DOC hbhong Comment method "getDeployCommands".
      * 
@@ -282,7 +287,8 @@ public class CommandManager implements IMementoAware {
      * @param defaultCmdType if none then assign -1
      * @return
      */
-    public List<AbstractDeployCommand> getDeployCommands(List<IRepositoryViewObject> viewObjs, int defaultCmdType) {
+    public List<AbstractDeployCommand> getDeployCommands(List<IRepositoryViewObject> viewObjs, int defaultCmdType,
+            Map<IRepositoryViewObject, ICommandParameter> paramMap) {
         List<AbstractDeployCommand> cmds = new LinkedList<AbstractDeployCommand>();
         for (IRepositoryViewObject viewObj : viewObjs) {
             CommandStack stack = findCommandStack(viewObj.getId());
@@ -297,6 +303,10 @@ public class CommandManager implements IMementoAware {
                 if (validCommand instanceof AbstractDeployCommand) {
                     fillViewObjectToCommand(validCommand);
                     AbstractDeployCommand deployCommand = (AbstractDeployCommand) validCommand;
+                    if (paramMap != null) {
+                        ICommandParameter param = paramMap.get(viewObj);
+                        deployCommand.setParameter(param);
+                    }
                     cmds.add(deployCommand);
                 } else if (validCommand instanceof NOPCommand && defaultCmdType > 0) {
                     ICommand cmd = getNewCommand(defaultCmdType);
@@ -308,6 +318,17 @@ public class CommandManager implements IMementoAware {
             }
         }
         return cmds;
+    }
+
+    public void attachParameterToCommand(List<AbstractDeployCommand> commands,
+            Map<IRepositoryViewObject, ICommandParameter> paramMap) {
+        for (AbstractDeployCommand cmd : commands) {
+            IRepositoryViewObject viewObject = cmd.getViewObject();
+            if (viewObject != null) {
+                ICommandParameter param = paramMap.get(viewObject);
+                cmd.setParameter(param);
+            }
+        }
     }
 
     public List<AbstractDeployCommand> getDeployCommandsWithoutHistory(List<IRepositoryViewObject> viewObjs) {
