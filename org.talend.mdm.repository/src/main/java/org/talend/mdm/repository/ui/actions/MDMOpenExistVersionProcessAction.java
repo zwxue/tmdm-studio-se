@@ -54,14 +54,20 @@ public class MDMOpenExistVersionProcessAction extends AbstractBridgeRepositoryAc
             MDMOpenExistVersionProcessWizard wizard = new MDMOpenExistVersionProcessWizard(repositoryObj);
             PropertyManagerWizardDialog dialog = new PropertyManagerWizardDialog(Display.getCurrent().getActiveShell(), wizard);
             dialog.setPageSize(300, 250);
-            if (dialog.open() == Dialog.OK) {    
+            if (dialog.open() == Dialog.OK) {
                 if(wizard.getViewObj()!=null){
                     obj=wizard.getViewObj();
                 }
-                MDMRepositoryView.show().getCommonViewer().refresh(obj);                
+
+                if (obj == node.getObject()) {
+                    MDMRepositoryView.show().getCommonViewer().refresh(obj);
+                } else {
+                    MDMRepositoryView.show().getCommonViewer().refresh(node.getParent().getObject());
+                }
             }
         }
 
+        @Override
         protected IEditorPart getCorrespondingEditor(RepositoryNode node) {
             IRepositoryViewObject viewObject = node.getObject();
             Item item = viewObject.getProperty().getItem();
@@ -89,7 +95,7 @@ public class MDMOpenExistVersionProcessAction extends AbstractBridgeRepositoryAc
 
     /**
      * DOC achen MDMOpenExistVersionProcessAction constructor comment.
-     * 
+     *
      * @param cAction
      */
     public MDMOpenExistVersionProcessAction() {
@@ -99,7 +105,7 @@ public class MDMOpenExistVersionProcessAction extends AbstractBridgeRepositoryAc
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.talend.mdm.repository.core.AbstractRepositoryAction#getGroupName()
      */
     @Override
@@ -107,6 +113,7 @@ public class MDMOpenExistVersionProcessAction extends AbstractBridgeRepositoryAc
         return GROUP_COMMON;
     }
 
+    @Override
     public boolean isVisible(IRepositoryViewObject viewObj) {
         return getSelectedObject().size() == 1;
     }

@@ -692,6 +692,8 @@ public class Messages extends NLS {
 
     public static String MDMOpenExistVersionProcessWizard_NewObject;
 
+    public static String MDMOpenExistVersionProcessWizard_NotReadToOpen;
+
     public static String MDMOpenExistVersionProcessPage_ChooseVersion;
 
     public static String MDMOpenExistVersionProcessPage_lockedByUser;
@@ -729,6 +731,8 @@ public class Messages extends NLS {
     public static String AutoDeployPreferencePage_btnCheckButton_text;
 
     public static String ImportXSDSchema;
+
+    public static String Information;
 
     public static String InputProcessNamePage_description;
 

@@ -17,8 +17,10 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
+import org.talend.commons.exception.LoginException;
 import org.talend.commons.exception.PersistenceException;
 import org.talend.core.GlobalServiceRegister;
 import org.talend.core.model.properties.Item;
@@ -35,8 +37,10 @@ import org.talend.mdm.repository.ui.navigator.MDMRepositoryView;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 import org.talend.repository.model.ERepositoryStatus;
 import org.talend.repository.model.IProxyRepositoryFactory;
+import org.talend.repository.model.IRepositoryNode;
 import org.talend.repository.model.RepositoryNode;
 
+import com.amalto.workbench.exadapter.ExAdapterManager;
 
 /**
  * DOC achen  class global comment. Detailled comment
@@ -46,6 +50,9 @@ public class MDMOpenExistVersionProcessWizard extends OpenExistVersionProcessWiz
     static Logger log = Logger.getLogger(MDMOpenExistVersionProcessWizard.class);
 
     IRepositoryViewObject viewObject;
+
+
+    private IMDMOpenExistVersionProcessWizardExAdapter<?> adapter;
 
     /**
      * DOC achen MDMOpenExistVersionProcessWizard constructor comment.
@@ -61,6 +68,7 @@ public class MDMOpenExistVersionProcessWizard extends OpenExistVersionProcessWiz
         	alreadyEditedByUser = true;
         }
         this.viewObject = processObject;
+        adapter = ExAdapterManager.getAdapter(this, IMDMOpenExistVersionProcessWizardExAdapter.class);
     }
 
     @Override
@@ -79,32 +87,52 @@ public class MDMOpenExistVersionProcessWizard extends OpenExistVersionProcessWiz
     @Override
     protected void openAnotherVersion(RepositoryNode node, boolean readonly) {
 
-        IRepositoryViewObject viewObject = node.getObject();
-        Item item = viewObject.getProperty().getItem();
+        IRepositoryViewObject viewObj = node.getObject();
+        Item item = viewObj.getProperty().getItem();
         IRepositoryNodeConfiguration configuration = RepositoryNodeConfigurationManager.getConfiguration(item);
         if (configuration != null) {
             IRepositoryNodeActionProvider actionProvider = configuration.getActionProvider();
             if (actionProvider != null) {
-                IRepositoryViewEditorInput editorInput = actionProvider.getOpenEditorInput(viewObject);
+                IRepositoryViewEditorInput editorInput = actionProvider.getOpenEditorInput(viewObj);
                 editorInput.setReadOnly(readonly);
                 if (editorInput != null) {
+                    boolean canOpen = true;
+                    if (adapter != null) {
+                        canOpen = adapter.canOpen(viewObj, getOriginVersion());
+                    }
 
-                    IWorkbenchPage page = MDMRepositoryView.show().getCommonViewer().getCommonNavigator().getSite()
-                            .getWorkbenchWindow().getActivePage();
-                    try {
-                        updateEditorInputVersionInfo(editorInput, viewObject);
-                        page.openEditor(editorInput, editorInput.getEditorId(), readonly);
-                        this.viewObject=viewObject;
-                    } catch (PartInitException e) {
-                        log.error(e.getMessage(), e);
+                    if (canOpen) {
+                        openEditor(readonly, viewObj, editorInput);
+                    } else {
+                        try {
+                            CoreRuntimePlugin.getInstance().getProxyRepositoryFactory().unlock(viewObj);
+                        } catch (PersistenceException e) {
+                            log.error(e.getMessage(), e);
+                        } catch (LoginException e) {
+                            log.error(e.getMessage(), e);
+                        }
+
+                        MessageDialog.openInformation(getShell(), Messages.Information,
+                                Messages.MDMOpenExistVersionProcessWizard_NotReadToOpen);
                     }
                 }
             }
         }
     }
 
-    private void updateEditorInputVersionInfo(IRepositoryViewEditorInput editorInput, IRepositoryViewObject viewObject) {
-        String version = viewObject.getVersion();
+    protected void openEditor(boolean readonly, IRepositoryViewObject viewObj, IRepositoryViewEditorInput editorInput) {
+        IWorkbenchPage page = MDMRepositoryView.show().getCommonViewer().getCommonNavigator().getSite()
+                .getWorkbenchWindow().getActivePage();
+        try {
+            updateEditorInputVersionInfo(editorInput, viewObj);
+            page.openEditor(editorInput, editorInput.getEditorId(), readonly);
+        } catch (PartInitException e) {
+            log.error(e.getMessage(), e);
+        }
+    }
+
+    private void updateEditorInputVersionInfo(IRepositoryViewEditorInput editorInput, IRepositoryViewObject viewObj) {
+        String version = viewObj.getVersion();
         try {
             IProxyRepositoryFactory factory = CoreRuntimePlugin.getInstance().getProxyRepositoryFactory();
             if (!factory.isLocalConnectionProvider()) {
@@ -112,7 +140,7 @@ public class MDMOpenExistVersionProcessWizard extends OpenExistVersionProcessWiz
                         IMDMSVNProviderService.class);
                 if (service != null) {
                     if (service.isProjectInSvnMode()) {
-                        String revisionNumStr = service.getCurrentSVNRevision(viewObject);
+                        String revisionNumStr = service.getCurrentSVNRevision(viewObj);
                         if (revisionNumStr != null) {
                             revisionNumStr = ".r" + revisionNumStr; //$NON-NLS-1$
                             version += revisionNumStr;
@@ -133,6 +161,8 @@ public class MDMOpenExistVersionProcessWizard extends OpenExistVersionProcessWiz
 
     @Override
     protected boolean refreshNewJob() {
+        beforeRefresh();
+
         IFolder folder = RepositoryResourceUtil.getFolder(getViewObj());
         if (folder != null && folder.exists()) {
             try {
@@ -151,5 +181,17 @@ public class MDMOpenExistVersionProcessWizard extends OpenExistVersionProcessWiz
             }
         }
         return super.refreshNewJob();
+    }
+
+    protected void beforeRefresh() {
+        IRepositoryNode repositoryNode = viewObject.getRepositoryNode();
+        String version = viewObject.getProperty().getVersion();
+
+        viewObject = RepositoryResourceUtil.assertViewObject(getViewObj());
+        viewObject.getProperty().setVersion(version);
+        processObject = viewObject;
+        RepositoryNode node = new RepositoryNode(viewObject, repositoryNode.getParent(), repositoryNode.getType());
+        processObject.setRepositoryNode(node);
+        viewObject.setRepositoryNode(node);
     }
 }
