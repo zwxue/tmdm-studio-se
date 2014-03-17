@@ -28,8 +28,10 @@ import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.EditingSupport;
 import org.eclipse.jface.viewers.IContentProvider;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.viewers.TextCellEditor;
@@ -67,6 +69,8 @@ public class UpdateAutoIncrementDialog extends Dialog {
     private TableViewer resultsViewer;
 
     private IContentProvider contentProvider;
+
+    private Button resetBtn;
 
     public UpdateAutoIncrementDialog(Shell parentShell, Map<String, String> entityValues) {
         super(parentShell);
@@ -142,6 +146,14 @@ public class UpdateAutoIncrementDialog extends Dialog {
                 resultsViewer.refresh();
             }
 
+        });
+
+        resultsViewer.addSelectionChangedListener(new ISelectionChangedListener() {
+
+            public void selectionChanged(SelectionChangedEvent event) {
+                IStructuredSelection selection = (IStructuredSelection) resultsViewer.getSelection();
+                resetBtn.setEnabled(!selection.isEmpty());
+            }
         });
 
         List<Line> lines = getInput();
@@ -344,7 +356,8 @@ public class UpdateAutoIncrementDialog extends Dialog {
 
     @Override
     protected void createButtonsForButtonBar(Composite parent) {
-        Button resetBtn = createButton(parent, resetBtnId, Messages.UpdateAutoIncrementDialog_Reset, false);
+        resetBtn = createButton(parent, resetBtnId, Messages.UpdateAutoIncrementDialog_Reset, false);
+        resetBtn.setEnabled(false);
         GridDataFactory.fillDefaults().align(SWT.BEGINNING, SWT.CENTER).applyTo(resetBtn);
 
         Button resetAllBtn = createButton(parent, resetAllBtnId, Messages.UpdateAutoIncrementDialog_resetAll, false);
