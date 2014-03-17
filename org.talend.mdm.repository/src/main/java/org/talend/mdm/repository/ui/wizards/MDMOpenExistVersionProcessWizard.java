@@ -18,6 +18,7 @@ import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
 import org.talend.commons.exception.LoginException;
@@ -52,7 +53,7 @@ public class MDMOpenExistVersionProcessWizard extends OpenExistVersionProcessWiz
     IRepositoryViewObject viewObject;
 
 
-    private IMDMOpenExistVersionProcessWizardExAdapter<?> adapter;
+    private IMDMOpenExistVersionProcessWizardExAdapter adapter;
 
     /**
      * DOC achen MDMOpenExistVersionProcessWizard constructor comment.
@@ -85,39 +86,45 @@ public class MDMOpenExistVersionProcessWizard extends OpenExistVersionProcessWiz
      * .RepositoryNode, boolean)
      */
     @Override
-    protected void openAnotherVersion(RepositoryNode node, boolean readonly) {
+    protected void openAnotherVersion(final RepositoryNode node, final boolean readonly) {
+        Display.getCurrent().asyncExec(new Runnable() {
 
-        IRepositoryViewObject viewObj = node.getObject();
-        Item item = viewObj.getProperty().getItem();
-        IRepositoryNodeConfiguration configuration = RepositoryNodeConfigurationManager.getConfiguration(item);
-        if (configuration != null) {
-            IRepositoryNodeActionProvider actionProvider = configuration.getActionProvider();
-            if (actionProvider != null) {
-                IRepositoryViewEditorInput editorInput = actionProvider.getOpenEditorInput(viewObj);
-                editorInput.setReadOnly(readonly);
-                if (editorInput != null) {
-                    boolean canOpen = true;
-                    if (adapter != null) {
-                        canOpen = adapter.canOpen(viewObj, getOriginVersion());
-                    }
+            public void run() {
 
-                    if (canOpen) {
-                        openEditor(readonly, viewObj, editorInput);
-                    } else {
-                        try {
-                            CoreRuntimePlugin.getInstance().getProxyRepositoryFactory().unlock(viewObj);
-                        } catch (PersistenceException e) {
-                            log.error(e.getMessage(), e);
-                        } catch (LoginException e) {
-                            log.error(e.getMessage(), e);
+                final IRepositoryViewObject viewObj = node.getObject();
+                Item item = viewObj.getProperty().getItem();
+                IRepositoryNodeConfiguration configuration = RepositoryNodeConfigurationManager.getConfiguration(item);
+                if (configuration != null) {
+                    IRepositoryNodeActionProvider actionProvider = configuration.getActionProvider();
+                    if (actionProvider != null) {
+                        final IRepositoryViewEditorInput editorInput = actionProvider.getOpenEditorInput(viewObj);
+                        editorInput.setReadOnly(readonly);
+                        if (editorInput != null) {
+                            boolean canOpen = true;
+                            if (adapter != null) {
+                                canOpen = adapter.canOpen(viewObj, getOriginVersion());
+                            }
+
+                            if (canOpen) {
+                                openEditor(readonly, viewObj, editorInput);
+                            } else {
+                                try {
+                                    CoreRuntimePlugin.getInstance().getProxyRepositoryFactory().unlock(viewObj);
+                                } catch (PersistenceException e) {
+                                    log.error(e.getMessage(), e);
+                                } catch (LoginException e) {
+                                    log.error(e.getMessage(), e);
+                                }
+
+                                MessageDialog.openInformation(getShell(), Messages.Information,
+                                        Messages.MDMOpenExistVersionProcessWizard_NotReadToOpen);
+                            }
                         }
-
-                        MessageDialog.openInformation(getShell(), Messages.Information,
-                                Messages.MDMOpenExistVersionProcessWizard_NotReadToOpen);
                     }
                 }
             }
-        }
+        });
+
     }
 
     protected void openEditor(boolean readonly, IRepositoryViewObject viewObj, IRepositoryViewEditorInput editorInput) {
