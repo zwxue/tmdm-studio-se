@@ -2107,8 +2107,6 @@ public class Messages extends NLS {
 
     public static String UpdateAutoIncrementDialog_ManageAutoIncrement;
 
-    public static String UpdateAutoIncrementDialog_reset;
-
     public static String UpdateAutoIncrementDialog_resetAll;
 
     public static String UpdateAutoIncrementDialog_Reset;

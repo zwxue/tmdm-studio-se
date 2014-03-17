@@ -35,8 +35,6 @@ import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.VerifyEvent;
 import org.eclipse.swt.events.VerifyListener;
 import org.eclipse.swt.graphics.Point;
@@ -59,9 +57,12 @@ public class UpdateAutoIncrementDialog extends Dialog {
 
     private Map<String, String> entityValues;
 
+    private static final String DEFAULT_VALUE = "0"; //$NON-NLS-1$
+
     private VerifyListener verifyListeneer;
 
     private static int resetBtnId = 4;
+    private static int resetAllBtnId = 8;
 
     private TableViewer resultsViewer;
 
@@ -143,34 +144,6 @@ public class UpdateAutoIncrementDialog extends Dialog {
 
         });
 
-        column = new TableViewerColumn(resultsViewer, SWT.NONE);
-        column.getColumn().setText(Messages.UpdateAutoIncrementDialog_Reset);
-        column.getColumn().setResizable(true);
-        column.getColumn().setWidth(100);
-        column.setLabelProvider(new CustomedLabelProvider(2));
-        column.setEditingSupport(new EditingSupport(resultsViewer) {
-
-            @Override
-            protected void setValue(Object element, Object value) {
-            }
-
-            @Override
-            protected Object getValue(Object element) {
-                return null;
-            }
-
-            @Override
-            protected CellEditor getCellEditor(Object element) {
-                return new ButtonCellEditor(resultsViewer.getTable());
-            }
-
-            @Override
-            protected boolean canEdit(Object element) {
-                return true;
-            }
-        });
-
-
         List<Line> lines = getInput();
 
         resultsViewer.setInput(lines);
@@ -186,7 +159,6 @@ public class UpdateAutoIncrementDialog extends Dialog {
             List<KeyValue> keyvalues = new ArrayList<KeyValue>();
             keyvalues.add(new KeyValue("Entity", entity)); //$NON-NLS-1$
             keyvalues.add(new KeyValue("Value", value)); //$NON-NLS-1$
-            keyvalues.add(new KeyValue("Reset", "")); //$NON-NLS-1$ //$NON-NLS-2$
             Line line = new Line(keyvalues);
             lines.add(line);
         }
@@ -249,55 +221,10 @@ public class UpdateAutoIncrementDialog extends Dialog {
         }
     }
 
-    class ButtonCellEditor extends CellEditor {
-
-        private Button resetBtn;
-
-        public ButtonCellEditor(Table table) {
-            super(table);
-        }
-
-        @Override
-        protected Control createControl(Composite parent) {
-            resetBtn = new Button(parent, SWT.PUSH);
-            resetBtn.setText(Messages.UpdateAutoIncrementDialog_reset);
-            resetBtn.addSelectionListener(new SelectionAdapter() {
-
-                @Override
-                public void widgetSelected(SelectionEvent e) {
-                    IStructuredSelection selection = (IStructuredSelection) resultsViewer.getSelection();
-                    Line line = (Line) selection.getFirstElement();
-
-                    line.keyValues.get(1).value = "0"; //$NON-NLS-1$
-                    resultsViewer.refresh();
-                }
-            });
-            return resetBtn;
-        }
-
-        @Override
-        protected Object doGetValue() {
-            return null;
-        }
-
-        @Override
-        protected void doSetFocus() {
-            if (resetBtn != null) {
-                resetBtn.setFocus();
-            }
-        }
-
-        @Override
-        protected void doSetValue(Object value) {
-        }
-
-    }
-
     private VerifyListener getVerifyListener() {
         if (verifyListeneer == null) {
             verifyListeneer = new VerifyListener() {
 
-                private String defaultValue = "0"; //$NON-NLS-1$
                 public void verifyText(VerifyEvent e) {
                     Text text = (Text) e.getSource();
                     String msg = null;
@@ -310,13 +237,13 @@ public class UpdateAutoIncrementDialog extends Dialog {
                         msg = Messages.UpdateAutoIncrementDialog_inputInvalid;
                     } else {
                         if (e.start == 0) {
-                            if ((inputStr.startsWith(defaultValue) && inputStr.length() > 1)
-                                    || (inputStr.equals(defaultValue) && !isFullSelected(e))) {
+                            if ((inputStr.startsWith(DEFAULT_VALUE) && inputStr.length() > 1)
+                                    || (inputStr.equals(DEFAULT_VALUE) && !isFullSelected(e))) {
                                 matches = false;
                                 msg = Messages.UpdateAutoIncrementDialog_zeroAtBeginning;
                             }
                         } else {
-                            if (text.getText().startsWith(defaultValue)) {
+                            if (text.getText().startsWith(DEFAULT_VALUE)) {
                                 matches = false;
                                 msg = Messages.UpdateAutoIncrementDialog_zeroAtBeginning;
                             }
@@ -349,10 +276,19 @@ public class UpdateAutoIncrementDialog extends Dialog {
 
     @Override
     protected void buttonPressed(int buttonId) {
-        if (resetBtnId == buttonId) {
+        if (resetAllBtnId == buttonId) {
             List<Line> lines = (List<Line>) resultsViewer.getInput();
             for (Line line : lines) {
-                line.keyValues.get(1).value = "0"; //$NON-NLS-1$
+                line.keyValues.get(1).value = DEFAULT_VALUE;
+            }
+            resultsViewer.refresh();
+        }
+
+        if (resetBtnId == buttonId) {
+            IStructuredSelection selection = (IStructuredSelection) resultsViewer.getSelection();
+            for (Object obj : selection.toList()) {
+                Line line = (Line) obj;
+                line.keyValues.get(1).value = DEFAULT_VALUE;
             }
             resultsViewer.refresh();
         }
@@ -408,8 +344,11 @@ public class UpdateAutoIncrementDialog extends Dialog {
 
     @Override
     protected void createButtonsForButtonBar(Composite parent) {
-        Button resetBtn = createButton(parent, resetBtnId, Messages.UpdateAutoIncrementDialog_resetAll, false);
+        Button resetBtn = createButton(parent, resetBtnId, Messages.UpdateAutoIncrementDialog_Reset, false);
         GridDataFactory.fillDefaults().align(SWT.BEGINNING, SWT.CENTER).applyTo(resetBtn);
+
+        Button resetAllBtn = createButton(parent, resetAllBtnId, Messages.UpdateAutoIncrementDialog_resetAll, false);
+        GridDataFactory.fillDefaults().align(SWT.BEGINNING, SWT.CENTER).applyTo(resetAllBtn);
 
         Composite rightArea = new Composite(parent, SWT.NONE);
         GridLayoutFactory.fillDefaults().numColumns(0).equalWidth(true).applyTo(rightArea);
