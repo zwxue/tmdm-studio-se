@@ -35,6 +35,7 @@ import org.apache.commons.logging.LogFactory;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.action.Action;
+import org.eclipse.jface.action.ActionContributionItem;
 import org.eclipse.jface.action.GroupMarker;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
@@ -285,7 +286,9 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
         FormEditor editor = getEditor();
         if (editor instanceof XObjectBrowser) {
             XObjectBrowser xobjectEditor = (XObjectBrowser) editor;
-            xobjectEditor.getToolBar().addActions(new ManageAutoIncrementAction());
+            ActionContributionItem manageAutoIncrementItem = new ActionContributionItem(new ManageAutoIncrementAction());
+            manageAutoIncrementItem.setMode(ActionContributionItem.MODE_FORCE_TEXT);
+            xobjectEditor.getToolBar().addActions(manageAutoIncrementItem);
         }
     }
 

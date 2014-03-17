@@ -17,6 +17,7 @@ import java.util.List;
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.CoolBarManager;
+import org.eclipse.jface.action.IContributionItem;
 import org.eclipse.jface.action.ToolBarContributionItem;
 import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.swt.SWT;
@@ -47,7 +48,7 @@ public class TdEditorToolBar {
         coolBar.setLayoutData(gid);
 
         // initialize default actions
-        defaultToolBarMgr = new ToolBarManager(SWT.FLAT);
+        defaultToolBarMgr = new ToolBarManager(SWT.FLAT | SWT.RIGHT);
 
         for (Action action : actions) {
             defaultToolBarMgr.add(action);
@@ -79,6 +80,19 @@ public class TdEditorToolBar {
             }
 
             // coolBarMgr.add(new ToolBarContributionItem(defaultToolBarMgr));
+            defaultToolBarMgr.update(true);
+            coolBarMgr.update(true);
+        }
+    }
+
+    public void addActions(IContributionItem... contributionItems) {
+        assert contributionItems != null;
+
+        if (coolBarMgr != null) {
+            for (IContributionItem item : contributionItems) {
+                defaultToolBarMgr.add(item);
+            }
+
             defaultToolBarMgr.update(true);
             coolBarMgr.update(true);
         }
