@@ -29,6 +29,8 @@ public class WorkflowEditorInput extends URIEditorInput implements IRepositoryVi
 
     private String version;
 
+    private final IFile file;
+
     public String getVersion() {
         return this.version;
     }
@@ -45,6 +47,7 @@ public class WorkflowEditorInput extends URIEditorInput implements IRepositoryVi
     public WorkflowEditorInput(IRepositoryViewObject viewObject, IFile file) {
         super(URI.createPlatformResourceURI(file.getFullPath().toString(), true));
         this.viewObject = viewObject;
+        this.file = file;
         version = viewObject.getVersion();
     }
 
@@ -81,5 +84,9 @@ public class WorkflowEditorInput extends URIEditorInput implements IRepositoryVi
             return viewObject.getLabel() + "_" + getVersion() + ".proc"; //$NON-NLS-1$ //$NON-NLS-2$
         }
         return super.getName();
+    }
+
+    public IFile getFile() {
+        return this.file;
     }
 }
