@@ -63,6 +63,7 @@ public class DeployToAction extends AbstractDeployAction {
             }
             // TO add match rule object
             viewObjs = getSelectedRepositoryViewObject(viewObjs);
+            filterMatchRuleObjs(viewObjs);
         }
         SelectServerDefDialog dialog = getSelectServerDefDialog(viewObjs);
 

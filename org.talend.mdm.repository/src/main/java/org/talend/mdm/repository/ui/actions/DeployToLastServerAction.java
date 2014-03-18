@@ -59,6 +59,7 @@ public class DeployToLastServerAction extends AbstractDeployAction {
             }
             // TO add match rule object
             viewObjs = getSelectedRepositoryViewObject(viewObjs);
+            filterMatchRuleObjs(viewObjs);
         }
         LockedDirtyObjectDialog lockDirtyDialog = new LockedDirtyObjectDialog(getShell(),
                 Messages.AbstractDeployAction_promptToSaveEditors, viewObjs);

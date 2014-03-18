@@ -19,16 +19,21 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.talend.core.model.properties.Item;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.core.runtime.CoreRuntimePlugin;
+import org.talend.dataquality.properties.TDQMatchRuleItem;
+import org.talend.dataquality.rules.MatchRuleDefinition;
 import org.talend.mdm.repository.core.AbstractRepositoryAction;
 import org.talend.mdm.repository.core.service.DeployService;
+import org.talend.mdm.repository.core.service.IMatchRuleMapInfoService;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 import org.talend.mdm.repository.plugin.RepositoryPlugin;
 import org.talend.mdm.repository.ui.dialogs.deploy.DeployStatusDialog;
 import org.talend.mdm.repository.ui.dialogs.message.MultiStatusDialog;
 import org.talend.mdm.repository.utils.EclipseResourceManager;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
+import org.talend.mdm.repository.utils.ServiceUtil;
 import org.talend.repository.model.IProxyRepositoryFactory;
 
 /**
@@ -108,9 +113,42 @@ public abstract class AbstractDeployAction extends AbstractRepositoryAction {
                 IRepositoryViewObject viewObject = (IRepositoryViewObject) obj;
                 viewObjs.add(viewObject);
                 viewObjs.addAll(getAssociatedObjects(viewObject));
+
             }
         }
         return viewObjs;
+    }
+
+    // remove match rule and add associated model objects
+    protected void filterMatchRuleObjs(List<IRepositoryViewObject> viewObjs) {
+        for (Object obj : viewObjs.toArray()) {
+            if (obj instanceof IRepositoryViewObject) {
+                IRepositoryViewObject viewObject = (IRepositoryViewObject) obj;
+                Item item = viewObject.getProperty().getItem();
+                if (item instanceof TDQMatchRuleItem) {
+                    MatchRuleDefinition matchRule = ((TDQMatchRuleItem) item).getMatchRule();
+                    String name = matchRule.getName();
+                    if (getMapInfoService() != null) {
+                        List<IRepositoryViewObject> dataModels = service.findReferencedDataModels(name);
+                        viewObjs.remove(obj);
+                        for (IRepositoryViewObject modelObj : dataModels) {
+                            if (!viewObjs.contains(modelObj)) {
+                                viewObjs.add(modelObj);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private IMatchRuleMapInfoService service = null;
+
+    private IMatchRuleMapInfoService getMapInfoService() {
+        if (service == null) {
+            this.service = ServiceUtil.getService(IMatchRuleMapInfoService.class);
+        }
+        return service;
     }
 
     protected List<IRepositoryViewObject> getAssociatedObjects(IRepositoryViewObject viewObject) {
