@@ -15,14 +15,22 @@ package org.talend.mdm.workbench.serverexplorer.plugin;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.eclipse.core.runtime.Platform;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
+import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.BundleException;
 import org.talend.mdm.workbench.serverexplorer.console.MDMServerMessageConsole;
 
 /**
  * The activator class controls the plug-in life cycle
  */
 public class MDMServerExplorerPlugin extends AbstractUIPlugin {
+
+    private static final Log log = LogFactory.getLog(MDMServerExplorerPlugin.class);
 
     // The plug-in ID
     public static final String PLUGIN_ID = "org.talend.mdm.workbench.serverexplorer"; //$NON-NLS-1$
@@ -46,8 +54,35 @@ public class MDMServerExplorerPlugin extends AbstractUIPlugin {
         plugin = this;
         serverToConsole = new HashMap<String, MDMServerMessageConsole>();
         serverMatchToConsole = new HashMap<String, MDMServerMessageConsole>();
+
+        activateEEBundleIfExist();
     }
 
+    private void activateEEBundleIfExist() {
+        Display disp = Display.getCurrent();
+        if(disp != null) {
+            disp.asyncExec(new Runnable() {
+
+                public void run() {
+                    activate();
+                }
+            });
+        } else {
+            activate();
+        }
+    }
+    
+    private void activate() {
+        try {
+            Bundle bundle = Platform.getBundle(PLUGIN_ID + ".enterprise"); //$NON-NLS-1$
+            if (bundle != null && bundle.getState() != Bundle.ACTIVE) {
+                bundle.start();
+            }
+        } catch (BundleException e) {
+            log.error(e.getMessage(), e);
+        }
+    }
+    
     @Override
     public void stop(BundleContext context) throws Exception {
         if (serverToConsole != null) {
