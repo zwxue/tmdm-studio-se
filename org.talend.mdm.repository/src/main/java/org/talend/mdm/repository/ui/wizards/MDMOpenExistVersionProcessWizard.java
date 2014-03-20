@@ -93,12 +93,13 @@ public class MDMOpenExistVersionProcessWizard extends OpenExistVersionProcessWiz
 
                 final IRepositoryViewObject viewObj = node.getObject();
                 Item item = viewObj.getProperty().getItem();
+                boolean latestVersion = isLatestVersion(viewObj);
                 IRepositoryNodeConfiguration configuration = RepositoryNodeConfigurationManager.getConfiguration(item);
                 if (configuration != null) {
                     IRepositoryNodeActionProvider actionProvider = configuration.getActionProvider();
                     if (actionProvider != null) {
                         final IRepositoryViewEditorInput editorInput = actionProvider.getOpenEditorInput(viewObj);
-                        editorInput.setReadOnly(readonly);
+                        editorInput.setReadOnly(!latestVersion);
                         if (editorInput != null) {
                             boolean canOpen = true;
                             if (adapter != null) {
@@ -106,7 +107,7 @@ public class MDMOpenExistVersionProcessWizard extends OpenExistVersionProcessWiz
                             }
 
                             if (canOpen) {
-                                openEditor(readonly, viewObj, editorInput);
+                                openEditor(!latestVersion, viewObj, editorInput);
                             } else {
                                 try {
                                     CoreRuntimePlugin.getInstance().getProxyRepositoryFactory().unlock(viewObj);
@@ -122,6 +123,11 @@ public class MDMOpenExistVersionProcessWizard extends OpenExistVersionProcessWiz
                         }
                     }
                 }
+            }
+
+            private boolean isLatestVersion(final IRepositoryViewObject viewObj) {
+                String selectedVersion = viewObj.getProperty().getVersion();
+                return selectedVersion.equals(getOriginVersion());
             }
         });
 
