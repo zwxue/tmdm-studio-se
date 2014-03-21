@@ -28,9 +28,12 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.TraverseEvent;
 import org.eclipse.swt.events.TraverseListener;
+import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Layout;
 
 public class EditableComboBoxCellEditor extends CellEditor {
 
@@ -80,7 +83,10 @@ public class EditableComboBoxCellEditor extends CellEditor {
 
     @Override
     protected Control createControl(Composite parent) {
-        comboBox = new CCombo(parent, getStyle());
+        Composite cell = new Composite(parent, SWT.NONE);
+        cell.setLayout(new ComboCellLayout());
+
+        comboBox = new CCombo(cell, getStyle());
         comboBox.setFont(parent.getFont());
         populateComboBoxItems();
 
@@ -128,7 +134,7 @@ public class EditableComboBoxCellEditor extends CellEditor {
 
         setValueValid(true);
 
-        return comboBox;
+        return cell;
     }
 
     @Override
@@ -226,6 +232,29 @@ public class EditableComboBoxCellEditor extends CellEditor {
             comboBox.removeModifyListener(getModifyListener());
             comboBox.setText((String) value);
             comboBox.addModifyListener(getModifyListener());
+        }
+    }
+
+    private class ComboCellLayout extends Layout {
+
+        @Override
+        public void layout(Composite editor, boolean force) {
+            Rectangle bounds = editor.getClientArea();
+            comboBox.setBounds(0, 0, bounds.width, bounds.height);
+        }
+
+        @Override
+        public Point computeSize(Composite editor, int wHint, int hHint, boolean force) {
+            if (wHint != SWT.DEFAULT && hHint != SWT.DEFAULT) {
+                return new Point(wHint, hHint);
+            }
+
+            String text = comboBox.getText();
+            comboBox.setText(""); //$NON-NLS-1$
+            Point contentsSize = comboBox.computeSize(SWT.DEFAULT, SWT.DEFAULT, force);
+            comboBox.setText(text);
+
+            return contentsSize;
         }
     }
 }
