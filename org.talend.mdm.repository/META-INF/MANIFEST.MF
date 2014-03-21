@@ -53,7 +53,8 @@ Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Eclipse-RegisterBuddy: org.talend.testutils
 Bundle-ClassPath: .,
- META-INF/lib/castor-1.1-xml.jar
+ META-INF/lib/castor-1.1-xml.jar,
+ META-INF/lib/xstream-1.4.7.jar
 Export-Package: org.talend.mdm.repository.core,
  org.talend.mdm.repository.core.bridge,
  org.talend.mdm.repository.core.command,
@@ -88,7 +89,4 @@ Export-Package: org.talend.mdm.repository.core,
  org.talend.mdm.repository.ui.wizards.imports,
  org.talend.mdm.repository.ui.wizards.process,
  org.talend.mdm.repository.utils
-Import-Package: com.amalto.workbench.webservices,
- com.thoughtworks.xstream,
- com.thoughtworks.xstream.io,
- com.thoughtworks.xstream.io.xml
+Import-Package: com.amalto.workbench.webservices
