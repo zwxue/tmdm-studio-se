@@ -123,13 +123,17 @@ public class DeployAllAction extends AbstractDeployAction {
                     }
                     lockDirtyDialog.saveDirtyObjects();
                     // insert impact dialog
-                    Map<IRepositoryViewObject, ImpactOperation> analyzeModelImpact = ModelImpactAnalyseService
-                            .analyzeCommandImpact(serverDef, selectededCommands);
-                    Map<IRepositoryViewObject, ICommandParameter> paramMap = null;
-                    if (analyzeModelImpact != null) {
-                        ModelImpactAnalyseService.shrinkDeployCommands(analyzeModelImpact, selectededCommands);
-                        paramMap = ModelImpactAnalyseService.convertToParameters(analyzeModelImpact);
-                        CommandManager.getInstance().attachParameterToCommand(selectededCommands, paramMap);
+                    try {
+                        Map<IRepositoryViewObject, ImpactOperation> analyzeModelImpact = ModelImpactAnalyseService
+                                .analyzeCommandImpact(serverDef, selectededCommands);
+                        Map<IRepositoryViewObject, ICommandParameter> paramMap = null;
+                        if (analyzeModelImpact != null) {
+                            ModelImpactAnalyseService.shrinkDeployCommands(analyzeModelImpact, selectededCommands);
+                            paramMap = ModelImpactAnalyseService.convertToParameters(analyzeModelImpact);
+                            CommandManager.getInstance().attachParameterToCommand(selectededCommands, paramMap);
+                        }
+                    } catch (InterruptedException ex) {
+                        return;
                     }
                     IStatus status = deployService.runCommands(selectededCommands, serverDef);
                     // update consistency value

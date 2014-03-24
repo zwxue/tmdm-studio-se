@@ -183,13 +183,17 @@ public class DeployService {
             CommandManager manager = CommandManager.getInstance();
             List<AbstractDeployCommand> commands = manager.getDeployCommands(validObjects, defaultCmdType);
             // insert impact dialog
-            Map<IRepositoryViewObject, ImpactOperation> analyzeModelImpact = ModelImpactAnalyseService.analyzeCommandImpact(
-                    serverDef, commands);
-            Map<IRepositoryViewObject, ICommandParameter> paramMap = null;
-            if (analyzeModelImpact != null) {
-                ModelImpactAnalyseService.shrinkDeployCommands(analyzeModelImpact, commands);
-                paramMap = ModelImpactAnalyseService.convertToParameters(analyzeModelImpact);
-                manager.attachParameterToCommand(commands, paramMap);
+            try {
+                Map<IRepositoryViewObject, ImpactOperation> analyzeModelImpact = ModelImpactAnalyseService.analyzeCommandImpact(
+                        serverDef, commands);
+                Map<IRepositoryViewObject, ICommandParameter> paramMap = null;
+                if (analyzeModelImpact != null) {
+                    ModelImpactAnalyseService.shrinkDeployCommands(analyzeModelImpact, commands);
+                    paramMap = ModelImpactAnalyseService.convertToParameters(analyzeModelImpact);
+                    manager.attachParameterToCommand(commands, paramMap);
+                }
+            } catch (InterruptedException ex) {
+                return Status.CANCEL_STATUS;
             }
             IStatus mainStatus = runCommands(commands, serverDef);
             // update consistency value
@@ -312,14 +316,18 @@ public class DeployService {
     public IStatus deployAnotherVersion(MDMServerDef serverDef, List<IRepositoryViewObject> viewObjs) {
         CommandManager manager = CommandManager.getInstance();
         List<AbstractDeployCommand> commands = manager.getDeployCommandsWithoutHistory(viewObjs);
-        // insert impact dialog
-        Map<IRepositoryViewObject, ImpactOperation> analyzeModelImpact = ModelImpactAnalyseService.analyzeCommandImpact(
-                serverDef, commands);
-        Map<IRepositoryViewObject, ICommandParameter> paramMap = null;
-        if (analyzeModelImpact != null) {
-            ModelImpactAnalyseService.shrinkDeployCommands(analyzeModelImpact, commands);
-            paramMap = ModelImpactAnalyseService.convertToParameters(analyzeModelImpact);
-            manager.attachParameterToCommand(commands, paramMap);
+        try {
+            // insert impact dialog
+            Map<IRepositoryViewObject, ImpactOperation> analyzeModelImpact = ModelImpactAnalyseService.analyzeCommandImpact(
+                    serverDef, commands);
+            Map<IRepositoryViewObject, ICommandParameter> paramMap = null;
+            if (analyzeModelImpact != null) {
+                ModelImpactAnalyseService.shrinkDeployCommands(analyzeModelImpact, commands);
+                paramMap = ModelImpactAnalyseService.convertToParameters(analyzeModelImpact);
+                manager.attachParameterToCommand(commands, paramMap);
+            }
+        } catch (InterruptedException ex) {
+            return Status.CANCEL_STATUS;
         }
         return runCommands(commands, serverDef);
     }

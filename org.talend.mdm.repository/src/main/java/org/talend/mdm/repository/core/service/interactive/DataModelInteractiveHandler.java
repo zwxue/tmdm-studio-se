@@ -122,10 +122,14 @@ public class DataModelInteractiveHandler extends AbstractInteractiveHandler {
         MDMServerObject serverObject = ((MDMServerObjectItem) item).getMDMServerObject();
         Object wsObj = convert(item, serverObject);
         //
-        callModelService(cmd);
-        //
-        XtentisPort port = getPort(cmd.getServerDef());
-        return doDeployWSObject(port, wsObj);
+        ICommandParameter parameter = cmd.getParameter();
+        if (parameter != null) {
+            callModelService(cmd);
+            return true;
+        } else {
+            XtentisPort port = getPort(cmd.getServerDef());
+            return doDeployWSObject(port, wsObj);
+        }
     }
 
     private void callModelService(AbstractDeployCommand cmd) {

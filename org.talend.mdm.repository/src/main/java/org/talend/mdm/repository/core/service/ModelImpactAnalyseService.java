@@ -16,10 +16,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
@@ -29,6 +31,7 @@ import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.talend.core.model.properties.Item;
+import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.IServerObjectRepositoryType;
 import org.talend.mdm.repository.core.command.deploy.AbstractDeployCommand;
@@ -187,7 +190,7 @@ public class ModelImpactAnalyseService {
     }
 
     public static Map<IRepositoryViewObject, ImpactOperation> analyzeCommandImpact(MDMServerDef serverDef,
-            List<AbstractDeployCommand> commands) {
+            List<AbstractDeployCommand> commands) throws InterruptedException {
         List<IRepositoryViewObject> viewObjs = new LinkedList<IRepositoryViewObject>();
         for (AbstractDeployCommand cmd : commands) {
             if (cmd.getViewObject() != null) {
@@ -198,7 +201,7 @@ public class ModelImpactAnalyseService {
     }
 
     public static Map<IRepositoryViewObject, ImpactOperation> analyzeModelImpact(MDMServerDef serverDef,
-            List<IRepositoryViewObject> modelViewObjs) {
+            List<IRepositoryViewObject> modelViewObjs) throws InterruptedException {
         try {
             Map<IRepositoryViewObject, List<Change>> changes = analyzeModelChanges(serverDef, modelViewObjs);
             if (!changes.isEmpty()) {
@@ -207,6 +210,8 @@ public class ModelImpactAnalyseService {
                 if (dialog.open() == IDialogConstants.OK_ID) {
                     Map<IRepositoryViewObject, ImpactOperation> configuration = dialog.getImpactConfiguration();
                     return configuration;
+                } else {
+                    throw new InterruptedException();
                 }
             }
         } catch (XtentisException e) {
@@ -263,34 +268,58 @@ public class ModelImpactAnalyseService {
     }
 
     public static List<Change> readResponseMessage(String message) {
-        Thread cur = Thread.currentThread();
-        ClassLoader save = cur.getContextClassLoader();
-        cur.setContextClassLoader(RepositoryPlugin.getDefault().getClass().getClassLoader());
-        try {
-            Result result = (Result) getParser().fromXML(message);
-            return result.getChanges();
-        } catch (Exception e) {
-            log.error(e.getMessage(), e);
-            return null;
-        } finally {
-            cur.setContextClassLoader(save);
+        if (message != null) {
+            if (message.trim().isEmpty()) {
+                // first time deploy
+                return null;
+            }
+            Thread cur = Thread.currentThread();
+            ClassLoader save = cur.getContextClassLoader();
+            cur.setContextClassLoader(RepositoryPlugin.getDefault().getClass().getClassLoader());
+            try {
+                Result result = (Result) getParser().fromXML(message);
+                return result.getChanges();
+            } catch (Exception e) {
+                log.error(e.getMessage(), e);
+                return null;
+            } finally {
+                cur.setContextClassLoader(save);
 
+            }
         }
+        return null;
     }
 
     public static void shrinkDeployCommands(Map<IRepositoryViewObject, ImpactOperation> impactResult,
             List<AbstractDeployCommand> commands) {
+        Set<IRepositoryViewObject> toRemoveKeys = new HashSet<IRepositoryViewObject>();
         Iterator<AbstractDeployCommand> il = commands.iterator();
         while (il.hasNext()) {
             AbstractDeployCommand cmd = il.next();
             IRepositoryViewObject viewObject = cmd.getViewObject();
             if (viewObject != null) {
-                ImpactOperation operation = impactResult.get(viewObject);
-                if (operation == ImpactOperation.CANCEL) {
-                    il.remove();
-                    impactResult.remove(viewObject);
+                ERepositoryObjectType type = viewObject.getRepositoryObjectType();
+                if (type == IServerObjectRepositoryType.TYPE_DATAMODEL) {
+                    ImpactOperation operation = impactResult.get(viewObject);
+                    if (operation == ImpactOperation.CANCEL) {
+                        il.remove();
+                        toRemoveKeys.add(viewObject);
+                    }
+                } else if (type == IServerObjectRepositoryType.TYPE_MATCH_RULE_MAPINFO) {
+                    String label = viewObject.getLabel();
+                    for (IRepositoryViewObject modelViewObj : impactResult.keySet()) {
+                        if (modelViewObj.getLabel().equals(label)) {
+                            ImpactOperation operation = impactResult.get(modelViewObj);
+                            if (operation == ImpactOperation.CANCEL) {
+                                il.remove();
+                            }
+                        }
+                    }
                 }
             }
+        }
+        for (IRepositoryViewObject key : toRemoveKeys) {
+            impactResult.remove(key);
         }
     }
 

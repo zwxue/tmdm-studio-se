@@ -91,6 +91,9 @@ public class ImpactResultDialog extends Dialog {
         }
     }
 
+    private static final String[] OPERATIONS_HIGH = { Messages.ModelImpactAnalyseService_recreateTable,
+            Messages.ModelImpactAnalyseService_cancelDeploying };
+
     private static final String[] OPERATIONS_FULL = { Messages.ModelImpactAnalyseService_recreateTable,
             Messages.ModelImpactAnalyseService_applyChange, Messages.ModelImpactAnalyseService_cancelDeploying };
 
@@ -178,7 +181,7 @@ public class ImpactResultDialog extends Dialog {
 
     public ImpactResultDialog(Shell parentShell, Map<IRepositoryViewObject, List<Change>> map) {
         super(parentShell);
-        setShellStyle(SWT.RESIZE);
+        setShellStyle(getShellStyle() | SWT.RESIZE);
         this.input = map;
     }
 
@@ -264,9 +267,20 @@ public class ImpactResultDialog extends Dialog {
                     }
                     IRepositoryViewObject viewObj = (IRepositoryViewObject) ((TreeItem) element).getData();
                     int severity = getCurrentTopSeverityLevel(viewObj);
-                    if (severity == ModelImpactAnalyseService.LOW) {
+
+                    switch (severity) {
+                    case ModelImpactAnalyseService.LOW:
                         index += 1;
+                        break;
+                    case ModelImpactAnalyseService.MEDIUM:
+                        break;
+                    case ModelImpactAnalyseService.HIGH:
+                        if (index > 0) {
+                            index = 2;
+                        }
+                        break;
                     }
+
                     ImpactOperation operation = ImpactOperation.getOperation(index);
                     result.put(viewObj, operation);
                     treeViewer.refresh(viewObj);
@@ -279,11 +293,20 @@ public class ImpactResultDialog extends Dialog {
 
                 ImpactOperation operation = getOperation(viewObj);
                 int severity = getCurrentTopSeverityLevel(viewObj);
-                if (severity == ModelImpactAnalyseService.LOW) {
+
+                switch (severity) {
+                case ModelImpactAnalyseService.LOW:
                     return operation.ordinal() - 1;
-                } else {
+                case ModelImpactAnalyseService.MEDIUM:
                     return operation.ordinal();
+                case ModelImpactAnalyseService.HIGH:
+                    if (operation.ordinal() == 2) {
+                        return 1;
+                    } else {
+                        return 0;
+                    }
                 }
+                return 0;
 
             }
 
@@ -292,7 +315,7 @@ public class ImpactResultDialog extends Dialog {
             }
         });
         final CellEditor[] cellEditors = new CellEditor[3];
-        cellEditors[2] = new ComboBoxCellEditor(treeViewer.getTree(), OPERATIONS_FULL, SWT.READ_ONLY);
+        cellEditors[2] = new ComboBoxCellEditor(treeViewer.getTree(), OPERATIONS_HIGH, SWT.READ_ONLY);
         treeViewer.addSelectionChangedListener(new ISelectionChangedListener() {
 
             public void selectionChanged(SelectionChangedEvent event) {
@@ -300,11 +323,18 @@ public class ImpactResultDialog extends Dialog {
                     Object element = ((IStructuredSelection) event.getSelection()).getFirstElement();
                     if (element instanceof IRepositoryViewObject) {
                         int severity = getCurrentTopSeverityLevel((IRepositoryViewObject) element);
-                        if (severity == ModelImpactAnalyseService.LOW) {
+                        switch (severity) {
+                        case ModelImpactAnalyseService.LOW:
                             ((ComboBoxCellEditor) cellEditors[2]).setItems(OPERATIONS_LITE);
-                        } else {
+                            break;
+                        case ModelImpactAnalyseService.MEDIUM:
                             ((ComboBoxCellEditor) cellEditors[2]).setItems(OPERATIONS_FULL);
+                            break;
+                        case ModelImpactAnalyseService.HIGH:
+                            ((ComboBoxCellEditor) cellEditors[2]).setItems(OPERATIONS_HIGH);
+                            break;
                         }
+
                     }
                 }
 
@@ -328,7 +358,14 @@ public class ImpactResultDialog extends Dialog {
     private ImpactOperation getOperation(IRepositoryViewObject viewObj) {
         ImpactOperation operation = result.get(viewObj);
         if (operation == null) {
-            operation = ImpactOperation.APPLY_LOW_CHANGE;
+            int topLevel = getCurrentTopSeverityLevel(viewObj);
+
+            if (topLevel == ModelImpactAnalyseService.LOW || topLevel == ModelImpactAnalyseService.MEDIUM) {
+                operation = ImpactOperation.APPLY_LOW_CHANGE;
+            } else {
+                operation = ImpactOperation.CANCEL;
+            }
+
             result.put(viewObj, operation);
         }
         return operation;
