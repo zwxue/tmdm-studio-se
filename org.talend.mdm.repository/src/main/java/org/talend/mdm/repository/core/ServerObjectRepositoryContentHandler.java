@@ -15,12 +15,17 @@ import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 
+import com.amalto.workbench.exadapter.ExAdapterManager;
+
 public class ServerObjectRepositoryContentHandler extends AbstractRepositoryContentHandler implements IServerObjectRepositoryType {
 
     private XmiResourceManager xmiResourceManager = ProxyRepositoryFactory.getInstance().getRepositoryFactoryFromProvider()
             .getResourceManager();
 
+    IServerObjectRepositoryContentHandlerExAdaper exAdaper = null;
+
     public ServerObjectRepositoryContentHandler() {
+        exAdaper = ExAdapterManager.getAdapter(this, IServerObjectRepositoryContentHandlerExAdaper.class);
     }
 
     public ERepositoryObjectType getRepositoryObjectType(Item item) {
@@ -61,9 +66,7 @@ public class ServerObjectRepositoryContentHandler extends AbstractRepositoryCont
         if (type == TYPE_MENU) {
             return ServerObjectImage.MENU_ICON;
         }
-        if (type == TYPE_ROLE) {
-            return ServerObjectImage.ROLE_ICON;
-        }
+
         if (type == TYPE_DATACLUSTER) {
             return ServerObjectImage.DATACLUSTER_ICON;
         }
@@ -73,9 +76,7 @@ public class ServerObjectRepositoryContentHandler extends AbstractRepositoryCont
         if (type == TYPE_EVENTMANAGER) {
             return ServerObjectImage.EVENTMANAGER_ICON;
         }
-        if (type == TYPE_RESOURCE) {
-            return ServerObjectImage.RESOURCE_ICON;
-        }
+
         if (type == TYPE_ROUTINGRULE) {
             return ServerObjectImage.ROUTINGRULE_ICON;
         }
@@ -85,25 +86,17 @@ public class ServerObjectRepositoryContentHandler extends AbstractRepositoryCont
         if (type == TYPE_STOREPROCEDURE) {
             return ServerObjectImage.STOREPROCEDURE_ICON;
         }
-        if (type == TYPE_SYNCHRONIZATIONPLAN) {
-            return ServerObjectImage.SYNCHRONIZATIONPLAN_ICON;
-        }
+
         if (type == TYPE_TRANSFORMERV2) {
             return ServerObjectImage.TRANSFORMERV2_ICON;
         }
-        if (type == TYPE_UNIVERSE) {
-            return ServerObjectImage.UNIVERSE_ICON;
-        }
+
         if (type == TYPE_VIEW) {
             return ServerObjectImage.VIEW_ICON;
         }
-        if (type == TYPE_WORKFLOW) {
-            return ServerObjectImage.WORKFLOW_ICON;
+        if (exAdaper != null) {
+            return exAdaper.getIcon(type);
         }
-        if (type == TYPE_CUSTOM_FORM) {
-            return ServerObjectImage.CUSTOMFORM_ICON;
-        }
-
         return null;
     }
 

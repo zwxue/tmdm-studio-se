@@ -45,7 +45,6 @@ import org.talend.mdm.repository.model.mdmproperties.MDMItem;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.model.mdmproperties.WorkspaceRootItem;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
-import org.talend.mdm.repository.ui.actions.CopyUrlAction;
 import org.talend.mdm.repository.ui.actions.CreateFolderAction;
 import org.talend.mdm.repository.ui.actions.DebugDigestValueAction;
 import org.talend.mdm.repository.ui.actions.DeployAllAction;
@@ -67,6 +66,7 @@ import org.talend.mdm.repository.ui.editors.IRepositoryViewEditorInput;
 import org.talend.mdm.repository.ui.editors.XObjectBrowserInput2;
 import org.talend.mdm.repository.ui.editors.XObjectEditorInput2;
 
+import com.amalto.workbench.exadapter.ExAdapterManager;
 import com.amalto.workbench.models.TreeObject;
 
 /**
@@ -119,9 +119,14 @@ public class RepositoryNodeActionProviderAdapter implements IRepositoryNodeActio
 
     protected AbstractRepositoryAction validateAction;
 
-    private AbstractRepositoryAction copyUrlAction;
-
     protected AbstractRepositoryAction debugDigestValueAction;
+
+    IRepositoryNodeActionProviderAdapterExAdapter exAdapter = null;
+
+    public RepositoryNodeActionProviderAdapter() {
+        exAdapter = ExAdapterManager.getAdapter(this, IRepositoryNodeActionProviderAdapterExAdapter.class);
+
+    }
 
     public void initCommonViewer(CommonViewer commonViewer) {
         importObjectAction = initRepositoryAction(ImportObjectAction.createImportAction(), commonViewer);
@@ -149,7 +154,9 @@ public class RepositoryNodeActionProviderAdapter implements IRepositoryNodeActio
         //
         refreshAction = globalActionHandler.getGlobalAction(IRepositoryViewGlobalActionHandler.REFRESH);
         copyAction = globalActionHandler.getGlobalAction(IRepositoryViewGlobalActionHandler.COPY);
-        copyUrlAction = initRepositoryAction(new CopyUrlAction(), commonViewer);
+        if (exAdapter != null) {
+            exAdapter.initCommonViewer(commonViewer);
+        }
 
         pasteAction = globalActionHandler.getGlobalAction(IRepositoryViewGlobalActionHandler.PASTE);
         // action provider
@@ -160,7 +167,7 @@ public class RepositoryNodeActionProviderAdapter implements IRepositoryNodeActio
         RepositoryNodeConfigurationManager.getRecycleBinNodeConfiguration().getActionProvider().initCommonViewer(commonViewer);
     }
 
-    protected AbstractRepositoryAction initRepositoryAction(AbstractRepositoryAction action, CommonViewer commonViewer) {
+    public AbstractRepositoryAction initRepositoryAction(AbstractRepositoryAction action, CommonViewer commonViewer) {
         action.initCommonViewer(commonViewer);
         return action;
     }
@@ -209,11 +216,10 @@ public class RepositoryNodeActionProviderAdapter implements IRepositoryNodeActio
                 addAction(actions, pasteAction, viewObj);
                 addAction(actions, duplicateAction, viewObj);
 
-                // temporarily added constraint
-                if (viewObj.getRepositoryObjectType() != null
-                        && IServerObjectRepositoryType.TYPE_RESOURCE.equals(viewObj.getRepositoryObjectType())) {
-                    actions.add(copyUrlAction);
+                if (exAdapter != null) {
+                    exAdapter.addActions(actions, viewObj);
                 }
+
             } else if (item instanceof WorkspaceRootItem) { // fix bug TMDM-3168
                 actions.add(importObjectAction);
             }
