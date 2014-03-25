@@ -22,10 +22,10 @@ public class ServerObjectRepositoryContentHandler extends AbstractRepositoryCont
     private XmiResourceManager xmiResourceManager = ProxyRepositoryFactory.getInstance().getRepositoryFactoryFromProvider()
             .getResourceManager();
 
-    IServerObjectRepositoryContentHandlerExAdaper exAdaper = null;
+    IServerObjectRepositoryContentHandlerExAdapter exAdapter = null;
 
     public ServerObjectRepositoryContentHandler() {
-        exAdaper = ExAdapterManager.getAdapter(this, IServerObjectRepositoryContentHandlerExAdaper.class);
+        exAdapter = ExAdapterManager.getAdapter(this, IServerObjectRepositoryContentHandlerExAdapter.class);
     }
 
     public ERepositoryObjectType getRepositoryObjectType(Item item) {
@@ -94,8 +94,8 @@ public class ServerObjectRepositoryContentHandler extends AbstractRepositoryCont
         if (type == TYPE_VIEW) {
             return ServerObjectImage.VIEW_ICON;
         }
-        if (exAdaper != null) {
-            return exAdaper.getIcon(type);
+        if (exAdapter != null) {
+            return exAdapter.getIcon(type);
         }
         return null;
     }

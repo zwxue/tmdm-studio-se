@@ -21,7 +21,7 @@ import com.amalto.workbench.exadapter.IExAdapter;
  * created by HHB on 2014-3-24 Detailled comment
  * 
  */
-public interface IServerObjectRepositoryContentHandlerExAdaper extends IExAdapter<ServerObjectRepositoryContentHandler> {
+public interface IServerObjectRepositoryContentHandlerExAdapter extends IExAdapter<ServerObjectRepositoryContentHandler> {
 
     IImage getIcon(ERepositoryObjectType type);
 }
