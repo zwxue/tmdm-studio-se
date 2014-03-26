@@ -22,6 +22,7 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.InvocationTargetException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -41,6 +42,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.progress.IProgressService;
+import org.exolab.castor.mapping.Mapping;
 import org.exolab.castor.xml.MarshalException;
 import org.exolab.castor.xml.Unmarshaller;
 import org.exolab.castor.xml.ValidationException;
@@ -59,7 +61,7 @@ import com.amalto.workbench.webservices.WSItem;
 
 /**
  * created by HHB on 2012-10-9 Detailled comment
- *
+ * 
  */
 public class ImportDataContentProcess extends AbstractDataContentProcess {
 
@@ -82,7 +84,7 @@ public class ImportDataContentProcess extends AbstractDataContentProcess {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see org.talend.mdm.repository.core.datacontent.IDataContentProcess#buildRule()
      */
     public DataProcessRule buildRule() throws InvocationTargetException {
@@ -116,7 +118,7 @@ public class ImportDataContentProcess extends AbstractDataContentProcess {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see
      * org.talend.mdm.repository.core.datacontent.IDataContentProcess#tuneRule(org.talend.mdm.repository.core.datacontent
      * .DataProcessRule)
@@ -132,7 +134,7 @@ public class ImportDataContentProcess extends AbstractDataContentProcess {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see org.talend.mdm.repository.core.datacontent.IDataContentProcess#getResult()
      */
     public MultiStatus getResult() {
@@ -145,7 +147,7 @@ public class ImportDataContentProcess extends AbstractDataContentProcess {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see org.talend.mdm.repository.core.datacontent.IDataContentProcess#processDatas(org.talend.mdm.repository.core.
      * datacontent.DataProcessRule, org.eclipse.core.runtime.IProgressMonitor)
      */
@@ -158,7 +160,7 @@ public class ImportDataContentProcess extends AbstractDataContentProcess {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see org.talend.mdm.repository.core.datacontent.impl.AbstractDataContentProcess#getProcessService()
      */
     @Override
@@ -172,7 +174,7 @@ public class ImportDataContentProcess extends AbstractDataContentProcess {
 
         /**
          * DOC hbhong ExportContentProcess constructor comment.
-         *
+         * 
          * @param serverDef
          * @param dName
          * @param path
@@ -194,7 +196,7 @@ public class ImportDataContentProcess extends AbstractDataContentProcess {
 
             /*
              * (non-Javadoc)
-             *
+             * 
              * @see java.io.FilenameFilter#accept(java.io.File, java.lang.String)
              */
             public boolean accept(File dir, String name) {
@@ -230,11 +232,21 @@ public class ImportDataContentProcess extends AbstractDataContentProcess {
             monitor.beginTask(Messages.ImportDataClusterAction_importProcessTitle, files.size() + 10);
             Map<String, List<String>> conceptMap = new LinkedHashMap<String, List<String>>();
 
+            //
             for (File file : files) {
                 String concept = ""; //$NON-NLS-1$
                 try {
                     reader = new InputStreamReader(new FileInputStream(file), "UTF-8");//$NON-NLS-1$
-                    WSItem wsItem = (WSItem) Unmarshaller.unmarshal(WSItem.class, reader);
+                    // WSItem wsItem = (WSItem) Unmarshaller.unmarshal(WSItem.class, reader);
+                    // replace with following to resolve serialize List type problem
+                    Unmarshaller unmarshaller = new Unmarshaller(WSItem.class);
+                    unmarshaller.setWhitespacePreserve(true);
+                    URL mappingUrl = this.getClass().getResource("mapping.xml"); //$NON-NLS-1$
+                    Mapping mapping = new Mapping(WSItem.class.getClassLoader());
+                    mapping.loadMapping(mappingUrl);
+                    unmarshaller.setMapping(mapping);
+                    WSItem wsItem = (WSItem) unmarshaller.unmarshal(reader);
+                    //
                     String key = wsItem.getWsDataClusterPK().getPk() + "##" + wsItem.getConceptName() + "##"//$NON-NLS-1$//$NON-NLS-2$
                             + wsItem.getDataModelName();
                     List<String> list = null;

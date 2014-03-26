@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.StringWriter;
 import java.lang.reflect.InvocationTargetException;
+import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +35,7 @@ import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.progress.IProgressService;
+import org.exolab.castor.mapping.Mapping;
 import org.exolab.castor.xml.Marshaller;
 import org.talend.mdm.repository.core.datacontent.DataProcessRule;
 import org.talend.mdm.repository.core.datacontent.DataProcessRuleFactory;
@@ -53,7 +55,7 @@ import com.amalto.workbench.webservices.XtentisPort;
 
 /**
  * created by HHB on 2012-10-9 Detailled comment
- *
+ * 
  */
 public class ExportDataContentProcess extends AbstractDataContentProcess {
 
@@ -76,7 +78,7 @@ public class ExportDataContentProcess extends AbstractDataContentProcess {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see
      * org.talend.mdm.repository.core.datacontent.IDataContentProcess#processDatas(org.eclipse.core.runtime.IProgressMonitor
      * )
@@ -89,7 +91,7 @@ public class ExportDataContentProcess extends AbstractDataContentProcess {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see org.talend.mdm.repository.core.datacontent.IDataContentProcess#buildRule()
      */
     public DataProcessRule buildRule() throws InvocationTargetException {
@@ -103,14 +105,15 @@ public class ExportDataContentProcess extends AbstractDataContentProcess {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see
      * org.talend.mdm.repository.core.datacontent.IDataContentProcess#tuneRule(org.talend.mdm.repository.core.datacontent
      * .DataProcessRule)
      */
     public void tuneRule(final DataProcessRule rule) throws InterruptedException {
-
-        saveRuleFile(rule);
+        if (rule.getEntityUnits().size() > 0) {
+            saveRuleFile(rule);
+        }
     }
 
     protected MultiStatus processResult;
@@ -131,7 +134,7 @@ public class ExportDataContentProcess extends AbstractDataContentProcess {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see org.talend.mdm.repository.core.datacontent.IDataContentProcess#getResult()
      */
     public MultiStatus getResult() {
@@ -143,7 +146,7 @@ public class ExportDataContentProcess extends AbstractDataContentProcess {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see org.talend.mdm.repository.core.datacontent.impl.AbstractDataContentProcess#getProcessService()
      */
     @Override
@@ -157,7 +160,7 @@ public class ExportDataContentProcess extends AbstractDataContentProcess {
 
         /**
          * DOC hbhong Comment method "zipFile".
-         *
+         * 
          * @param tempFolderPath
          * @param fPath
          */
@@ -169,7 +172,7 @@ public class ExportDataContentProcess extends AbstractDataContentProcess {
 
         /**
          * DOC hbhong ExprocessContentProcess constructor comment.
-         *
+         * 
          * @param port
          * @param tempFolderPath
          * @param dName
@@ -203,8 +206,15 @@ public class ExportDataContentProcess extends AbstractDataContentProcess {
 
                     // Marshal
                     StringWriter sw = new StringWriter();
-                    Marshaller.marshal(wsitem, sw);
-
+                    // Marshaller.marshal(wsitem, sw);
+                    // replace with following to resolve serialize List type problem
+                    Marshaller marshaller = new Marshaller(sw);
+                    URL mappingUrl = this.getClass().getResource("mapping.xml"); //$NON-NLS-1$
+                    Mapping mapping = new Mapping(WSItem.class.getClassLoader());
+                    mapping.loadMapping(mappingUrl);
+                    marshaller.setMapping(mapping);
+                    marshaller.marshal(wsitem);
+                    //
                     String uniqueId = pk.getPk() + "." + wsitem.getConceptName();//$NON-NLS-1$
                     for (String id : wsitem.getIds()) {
                         uniqueId = uniqueId + "." + id;//$NON-NLS-1$
