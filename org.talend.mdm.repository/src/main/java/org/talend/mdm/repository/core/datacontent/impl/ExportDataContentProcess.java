@@ -19,7 +19,6 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.StringWriter;
 import java.lang.reflect.InvocationTargetException;
-import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
@@ -200,18 +199,17 @@ public class ExportDataContentProcess extends AbstractDataContentProcess {
                     totalSize = Integer.parseInt(Util.parse(results.get(0).getWsItemPK().getConceptName()).getDocumentElement()
                             .getTextContent());
                 }
+                // Marshaller.marshal(wsitem, sw);
+                // replace with following to resolve serialize List type problem
+                Mapping mapping = getWSItemMapping();
+
                 for (int i = 1; i <= totalSize; i++) {
                     Results item = results.get(i);
                     WSItem wsitem = port.getItem(new WSGetItem(item.getWsItemPK()));
 
                     // Marshal
                     StringWriter sw = new StringWriter();
-                    // Marshaller.marshal(wsitem, sw);
-                    // replace with following to resolve serialize List type problem
                     Marshaller marshaller = new Marshaller(sw);
-                    URL mappingUrl = this.getClass().getResource("mapping.xml"); //$NON-NLS-1$
-                    Mapping mapping = new Mapping(WSItem.class.getClassLoader());
-                    mapping.loadMapping(mappingUrl);
                     marshaller.setMapping(mapping);
                     marshaller.marshal(wsitem);
                     //

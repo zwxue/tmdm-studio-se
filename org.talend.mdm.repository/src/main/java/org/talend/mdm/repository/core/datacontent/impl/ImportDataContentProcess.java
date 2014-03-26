@@ -22,7 +22,6 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.InvocationTargetException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -232,19 +231,25 @@ public class ImportDataContentProcess extends AbstractDataContentProcess {
             monitor.beginTask(Messages.ImportDataClusterAction_importProcessTitle, files.size() + 10);
             Map<String, List<String>> conceptMap = new LinkedHashMap<String, List<String>>();
 
+            Unmarshaller unmarshaller = new Unmarshaller(WSItem.class);
+            try {
+                Mapping mapping = getWSItemMapping();
+                unmarshaller.setWhitespacePreserve(true);
+                unmarshaller.setMapping(mapping);
+            } catch (Exception e) {
+                log.error(e.getLocalizedMessage(), e);
+
+                IStatus errStatus = new Status(IStatus.ERROR, RepositoryPlugin.PLUGIN_ID,
+                        Messages.ImportDataClusterAction_errorTitle, e);
+                getResult().add(errStatus);
+                return;
+            }
+
             //
             for (File file : files) {
                 String concept = ""; //$NON-NLS-1$
                 try {
                     reader = new InputStreamReader(new FileInputStream(file), "UTF-8");//$NON-NLS-1$
-                    // WSItem wsItem = (WSItem) Unmarshaller.unmarshal(WSItem.class, reader);
-                    // replace with following to resolve serialize List type problem
-                    Unmarshaller unmarshaller = new Unmarshaller(WSItem.class);
-                    unmarshaller.setWhitespacePreserve(true);
-                    URL mappingUrl = this.getClass().getResource("mapping.xml"); //$NON-NLS-1$
-                    Mapping mapping = new Mapping(WSItem.class.getClassLoader());
-                    mapping.loadMapping(mappingUrl);
-                    unmarshaller.setMapping(mapping);
                     WSItem wsItem = (WSItem) unmarshaller.unmarshal(reader);
                     //
                     String key = wsItem.getWsDataClusterPK().getPk() + "##" + wsItem.getConceptName() + "##"//$NON-NLS-1$//$NON-NLS-2$

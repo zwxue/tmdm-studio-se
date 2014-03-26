@@ -12,14 +12,20 @@
 // ============================================================================
 package org.talend.mdm.repository.core.datacontent.impl;
 
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.net.URL;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.ui.progress.IProgressService;
+import org.exolab.castor.mapping.Mapping;
+import org.exolab.castor.mapping.MappingException;
 import org.talend.mdm.repository.core.datacontent.DataProcessRule;
 import org.talend.mdm.repository.core.datacontent.IDataContentProcess;
 import org.talend.mdm.repository.plugin.RepositoryPlugin;
+
+import com.amalto.workbench.webservices.WSItem;
 
 /**
  * created by HHB on 2012-10-9 Detailled comment
@@ -48,6 +54,15 @@ public abstract class AbstractDataContentProcess implements IDataContentProcess 
             getResult().add(errStatus);
             return;
         }
+
+    }
+
+    protected Mapping getWSItemMapping() throws IOException, MappingException {
+
+        URL mappingUrl = this.getClass().getResource("mapping.xml"); //$NON-NLS-1$
+        Mapping mapping = new Mapping(WSItem.class.getClassLoader());
+        mapping.loadMapping(mappingUrl);
+        return mapping;
 
     }
 }
