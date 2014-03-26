@@ -199,10 +199,11 @@ public class NewDataModelAction extends AbstractSimpleAddAction implements IIntr
 
     @Override
     protected void extendDialogArea(Control area) {
-        needCreateDataContainer = false;
+        needCreateDataContainer = true;
         Composite composite = (Composite) area;
         final Button createDCBun = new Button(composite, SWT.CHECK);
         createDCBun.setText(Messages.NewDataModelAction_createDataContainer);
+        createDCBun.setSelection(needCreateDataContainer);
         createDCBun.addSelectionListener(new SelectionAdapter() {
 
             @Override
