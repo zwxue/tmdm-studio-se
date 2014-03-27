@@ -490,13 +490,16 @@ public class ExportItemsWizard extends Wizard {
         }
 
         public void checkCompleted() {
-            if (folderBtn.getSelection() && folder.getText().getText().length() > 0
-                    && new File(folder.getText().getText()).exists()) {
+            String folderText = folder.getText().getText();
+            if (folderBtn.getSelection() && folderText.length() > 0 && new File(folderText).exists()) {
                 setPageComplete(true);
             }
-            if (zipBtn.getSelection() && zip.getText().getText().length() > 0
-                    && new File(zip.getText().getText()).getParentFile().exists()) {
-                setPageComplete(true);
+            String zipText = zip.getText().getText();
+            if (zipBtn.getSelection() && zipText.length() > 0) {
+                File parentFolder = new File(zipText).getParentFile();
+                if (parentFolder != null && parentFolder.exists()) {
+                    setPageComplete(true);
+                }
             }
 
         }
