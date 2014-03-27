@@ -17,6 +17,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbenchPage;
@@ -63,6 +64,13 @@ public class ViewMainPage2 extends ViewMainPage {
      */
     public ViewMainPage2(FormEditor editor) {
         super(editor);
+    }
+
+    @Override
+    protected void createCharacteristicsContent(FormToolkit toolkit, Composite charComposite) {
+        super.createCharacteristicsContent(toolkit, charComposite);
+        TableViewer viewer = conditionViewer.getViewer();
+        viewer.setCellModifier(new UserSecurityCellModifier(getSite(), this, viewer, conditionsColumns));
     }
 
     @Override

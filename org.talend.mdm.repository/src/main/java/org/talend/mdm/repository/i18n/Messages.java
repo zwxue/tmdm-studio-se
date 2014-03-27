@@ -926,6 +926,14 @@ public class Messages extends NLS {
 
     public static String UndeployMatchRuleAction_label;
 
+    public static String UserSecurityComboBoxDialogCellEditor_CheckConnection;
+
+    public static String UserSecurityComboBoxDialogCellEditor_SelectXpath;
+
+    public static String UserSecurityComboBoxDialogCellEditor_UnableConnectMessage;
+
+    public static String UserVariableDialog_SelectVariable;
+
     public static String ConsistencyConflictDialog_btnNewButton_text;
 
     public static String ConsistencyConflict_modifiedLocally;

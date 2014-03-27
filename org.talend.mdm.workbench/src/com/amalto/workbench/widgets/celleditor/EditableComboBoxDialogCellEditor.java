@@ -27,6 +27,7 @@ import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.events.TraverseEvent;
 import org.eclipse.swt.events.TraverseListener;
 import org.eclipse.swt.graphics.Color;
@@ -62,6 +63,7 @@ public abstract class EditableComboBoxDialogCellEditor extends CellEditor {
      */
     private class DialogCellLayout extends Layout {
 
+        @Override
         public void layout(Composite editor, boolean force) {
             Rectangle bounds = editor.getClientArea();
             Point size = button.computeSize(SWT.DEFAULT, SWT.DEFAULT, force);
@@ -71,6 +73,7 @@ public abstract class EditableComboBoxDialogCellEditor extends CellEditor {
             button.setBounds(bounds.width - size.x, 0, size.x, bounds.height);
         }
 
+        @Override
         public Point computeSize(Composite editor, int wHint, int hHint, boolean force) {
             if (wHint != SWT.DEFAULT && hHint != SWT.DEFAULT) {
                 return new Point(wHint, hHint);
@@ -101,66 +104,10 @@ public abstract class EditableComboBoxDialogCellEditor extends CellEditor {
         setItems(items);
     }
 
-    public String[] getItems() {
-        return items;
-    }
-
-    public void setItems(String[] items) {
-        Assert.isNotNull(items);
-        this.items = items;
-        populateComboBoxItems();
-    }
-
     protected Button createButton(Composite parent) {
         Button result = new Button(parent, SWT.DOWN);
         result.setText(""); //$NON-NLS-1$
         return result;
-    }
-
-    protected Control createContents(Composite cell) {
-        comboBox = new CCombo(cell, getStyle());
-        comboBox.setFont(cell.getFont());
-        populateComboBoxItems();
-
-        comboBox.addKeyListener(new KeyAdapter() {
-
-            public void keyPressed(KeyEvent e) {
-                keyReleaseOccured(e);
-            }
-        });
-
-        comboBox.addModifyListener(getModifyListener());
-
-        comboBox.addSelectionListener(new SelectionAdapter() {
-
-            public void widgetDefaultSelected(SelectionEvent event) {
-                applyEditorValueAndDeactivate();
-            }
-
-            public void widgetSelected(SelectionEvent event) {
-                value = comboBox.getText();
-            }
-        });
-
-        comboBox.addTraverseListener(new TraverseListener() {
-
-            public void keyTraversed(TraverseEvent e) {
-                if (e.detail == SWT.TRAVERSE_ESCAPE || e.detail == SWT.TRAVERSE_RETURN) {
-                    e.doit = false;
-                }
-            }
-        });
-
-        comboBox.addFocusListener(new FocusAdapter() {
-
-            public void focusLost(FocusEvent e) {
-                if (!button.isFocusControl()) {
-                    EditableComboBoxDialogCellEditor.this.focusLost();
-                }
-            }
-        });
-
-        return comboBox;
     }
 
     @Override
@@ -181,6 +128,7 @@ public abstract class EditableComboBoxDialogCellEditor extends CellEditor {
 
         button.addKeyListener(new KeyAdapter() {
 
+            @Override
             public void keyReleased(KeyEvent e) {
                 if (e.character == '\u001b') { // Escape
                     fireCancelEditor();
@@ -190,6 +138,7 @@ public abstract class EditableComboBoxDialogCellEditor extends CellEditor {
         button.addFocusListener(getButtonFocusListener());
         button.addSelectionListener(new SelectionAdapter() {
 
+            @Override
             public void widgetSelected(SelectionEvent event) {
                 button.removeFocusListener(getButtonFocusListener());
                 Object newValue = openDialogBox(editor);
@@ -212,6 +161,86 @@ public abstract class EditableComboBoxDialogCellEditor extends CellEditor {
         return editor;
     }
 
+    protected Control createContents(Composite cell) {
+        comboBox = new CCombo(cell, getStyle());
+        comboBox.setFont(cell.getFont());
+        populateComboBoxItems();
+
+        comboBox.addKeyListener(getComboKeyListener());
+
+        comboBox.addModifyListener(getComboModifyListener());
+
+        comboBox.addSelectionListener(getComboSelectionListener());
+
+        comboBox.addTraverseListener(getTraverseListener());
+
+        comboBox.addFocusListener(getComboFocusListener());
+
+        return comboBox;
+    }
+
+    protected KeyAdapter getComboKeyListener() {
+        return new KeyAdapter() {
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+                keyReleaseOccured(e);
+            }
+        };
+    }
+
+    private ModifyListener getComboModifyListener() {
+        if (modifyListener == null) {
+            modifyListener = new ModifyListener() {
+
+                public void modifyText(ModifyEvent e) {
+                    editOccured(e);
+                }
+            };
+        }
+
+        return modifyListener;
+    }
+
+    protected SelectionListener getComboSelectionListener() {
+        return new SelectionAdapter() {
+
+            @Override
+            public void widgetDefaultSelected(SelectionEvent event) {
+                applyEditorValueAndDeactivate();
+            }
+
+            @Override
+            public void widgetSelected(SelectionEvent event) {
+                value = comboBox.getText();
+            }
+        };
+    }
+
+    protected TraverseListener getTraverseListener() {
+        return new TraverseListener() {
+
+            public void keyTraversed(TraverseEvent e) {
+                if (e.detail == SWT.TRAVERSE_ESCAPE || e.detail == SWT.TRAVERSE_RETURN) {
+                    e.doit = false;
+                }
+            }
+        };
+    }
+
+    protected FocusListener getComboFocusListener() {
+        return new FocusAdapter() {
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                if (!button.isFocusControl()) {
+                    EditableComboBoxDialogCellEditor.this.focusLost();
+                }
+            }
+        };
+    }
+
+    @Override
     public void deactivate() {
         if (button != null && !button.isDisposed()) {
             button.removeFocusListener(getButtonFocusListener());
@@ -227,8 +256,9 @@ public abstract class EditableComboBoxDialogCellEditor extends CellEditor {
 
     @Override
     protected void doSetFocus() {
-        if (comboBox != null)
+        if (comboBox != null) {
             comboBox.setFocus();
+        }
     }
 
     @Override
@@ -247,7 +277,7 @@ public abstract class EditableComboBoxDialogCellEditor extends CellEditor {
         }
     }
 
-    void applyEditorValueAndDeactivate() {
+    protected void applyEditorValueAndDeactivate() {
         Object newValue = comboBox.getText();
         if (newValue != null && !newValue.equals(value.toString())) {
             boolean newValidState = isCorrect(newValue);
@@ -264,9 +294,10 @@ public abstract class EditableComboBoxDialogCellEditor extends CellEditor {
 
     /**//*
           * (non-Javadoc)
-          * 
+          *
           * @see org.eclipse.jface.viewers.CellEditor#focusLost()
           */
+    @Override
     protected void focusLost() {
         if (isActivated()) {
             applyEditorValueAndDeactivate();
@@ -275,13 +306,15 @@ public abstract class EditableComboBoxDialogCellEditor extends CellEditor {
 
     /**//*
           * (non-Javadoc)
-          * 
+          *
           * @see org.eclipse.jface.viewers.CellEditor#keyReleaseOccured(org.eclipse.swt.events.KeyEvent)
           */
+    @Override
     protected void keyReleaseOccured(KeyEvent keyEvent) {
         if (keyEvent.character == '\r') { // Return key
-            if (comboBox != null && !comboBox.isDisposed())
+            if (comboBox != null && !comboBox.isDisposed()) {
                 fireCancelEditor();
+            }
         } else if (keyEvent.character == '\t') { // tab key
             applyEditorValueAndDeactivate();
         }
@@ -300,18 +333,6 @@ public abstract class EditableComboBoxDialogCellEditor extends CellEditor {
             setErrorMessage(MessageFormat.format(getErrorMessage(), new Object[] { value }));
         }
         valueChanged(oldValidState, newValidState);
-    }
-
-    private ModifyListener getModifyListener() {
-        if (modifyListener == null) {
-            modifyListener = new ModifyListener() {
-
-                public void modifyText(ModifyEvent e) {
-                    editOccured(e);
-                }
-            };
-        }
-        return modifyListener;
     }
 
     private FocusListener getButtonFocusListener() {
@@ -334,10 +355,28 @@ public abstract class EditableComboBoxDialogCellEditor extends CellEditor {
         Assert.isTrue(comboBox != null);
 
         if (value != null && value instanceof String) {
-            comboBox.removeModifyListener(getModifyListener());
+            comboBox.removeModifyListener(getComboModifyListener());
             comboBox.setText((String) value);
-            comboBox.addModifyListener(getModifyListener());
+            comboBox.addModifyListener(getComboModifyListener());
         }
+    }
+
+    public String[] getItems() {
+        return items;
+    }
+
+    public void setItems(String[] items) {
+        Assert.isNotNull(items);
+        this.items = items;
+        populateComboBoxItems();
+    }
+
+    public CCombo getComboBox() {
+        return comboBox;
+    }
+
+    public Button getButton() {
+        return button;
     }
 
     protected abstract Object openDialogBox(Control cellEditorWindow);
