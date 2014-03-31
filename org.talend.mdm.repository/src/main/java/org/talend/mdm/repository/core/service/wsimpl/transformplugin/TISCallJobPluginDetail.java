@@ -20,7 +20,7 @@ public class TISCallJobPluginDetail extends AbstractPluginDetail {
 
     /**
      * DOC hbhong ProjectPluginDetail constructor comment.
-     * 
+     *
      * @param twoLetterLanguageCode
      */
     public TISCallJobPluginDetail(String twoLetterLanguageCode) {
@@ -31,20 +31,26 @@ public class TISCallJobPluginDetail extends AbstractPluginDetail {
 
     private static final String OUTPUT_TEXT = "result"; //$NON-NLS-1$
 
+    @Override
     protected String[] getInputVarNames() {
         return new String[] { INPUT_TEXT };
     }
 
+    @Override
     protected String[] getOutputVarNames() {
         return new String[] { OUTPUT_TEXT };
     }
 
+    @Override
     public String getDescription() {
         if ("fr".matches(twoLettersLanguageCode.toLowerCase())) //$NON-NLS-1$
+         {
             return "Execute un call de TIS un texte et retourne le résultat"; //$NON-NLS-1$
-        return "Executes a TIS Job on a text and returns the result"; //$NON-NLS-1$
+        }
+        return "Executes a Job on a text and returns the result"; //$NON-NLS-1$
     }
 
+    @Override
     public String getDocumentation() {
         return "The TIS Call plugin executes a Web Service call to TIS on a text\n" + "\n" + "\n" + "Parameters\n" //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
                 + "   url [mandatory]: the webservice port URL to the TIS Server" + "\n" //$NON-NLS-1$ //$NON-NLS-2$
@@ -76,10 +82,12 @@ public class TISCallJobPluginDetail extends AbstractPluginDetail {
                 + "\n" + "   </configuration>" + "\n" + "\n"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
     }
 
+    @Override
     public String getParametersSchema() {
         return null;
     }
 
+    @Override
     public String getJNDIName() {
         return "callJob"; //$NON-NLS-1$
     }
