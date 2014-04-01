@@ -18,6 +18,46 @@ public class Messages extends NLS {
 
     private static final String BUNDLE_NAME = "org.talend.mdm.repository.i18n.messages"; //$NON-NLS-1$
 
+    public static String TISCallJobPluginDetail_description;
+
+    public static String TISCallJobPluginDetail_doc_line1;
+
+    public static String TISCallJobPluginDetail_doc_line10;
+
+    public static String TISCallJobPluginDetail_doc_line11;
+
+    public static String TISCallJobPluginDetail_doc_line12;
+
+    public static String TISCallJobPluginDetail_doc_line13;
+
+    public static String TISCallJobPluginDetail_doc_line14;
+
+    public static String TISCallJobPluginDetail_doc_line15;
+
+    public static String TISCallJobPluginDetail_doc_line16;
+
+    public static String TISCallJobPluginDetail_doc_line17;
+
+    public static String TISCallJobPluginDetail_doc_line2;
+
+    public static String TISCallJobPluginDetail_doc_line3;
+
+    public static String TISCallJobPluginDetail_doc_line4;
+
+    public static String TISCallJobPluginDetail_doc_line5;
+
+    public static String TISCallJobPluginDetail_doc_line6;
+
+    public static String TISCallJobPluginDetail_doc_line7;
+
+    public static String TISCallJobPluginDetail_doc_line8;
+
+    public static String TISCallJobPluginDetail_doc_line9;
+
+    public static String TISCallJobPluginDetail_example1;
+
+    public static String TISCallJobPluginDetail_example2;
+
     public static String TransformerMainPage_ConfirmTitle;
 
     public static String TransformerMainPage_ConfirmContent;
