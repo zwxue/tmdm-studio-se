@@ -13,7 +13,6 @@
 package org.talend.mdm.repository.ui.widgets;
 
 import java.net.MalformedURLException;
-import java.net.URL;
 
 import org.apache.log4j.Logger;
 import org.eclipse.jface.dialogs.IDialogConstants;
@@ -31,6 +30,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.IWorkbenchPartSite;
 import org.talend.mdm.repository.core.service.RepositoryQueryService;
+import org.talend.mdm.repository.core.service.RepositoryWebServiceAdapter;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 import org.talend.mdm.repository.model.mdmserverobject.WSDataModelE;
@@ -39,7 +39,6 @@ import org.talend.mdm.repository.ui.navigator.MDMRepositoryView;
 import org.talend.mdm.workbench.serverexplorer.core.ServerDefService;
 import org.talend.mdm.workbench.serverexplorer.ui.dialogs.SelectServerDefDialog;
 
-import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.XtentisException;
 import com.amalto.workbench.webservices.WSDataModel;
 import com.amalto.workbench.webservices.WSDataModelPK;
@@ -156,16 +155,10 @@ public class UserSecurityComboBoxDialogCellEditor extends EditableComboBoxDialog
     }
 
     private XtentisPort getPort(MDMServerDef serverDef) {
-        String universe = serverDef.getUniverse();
-        String userName = serverDef.getUser();
-        String passwd = serverDef.getPasswd();
-
         XtentisPort port = null;
         try {
-            port = Util.getPort(new URL(serverDef.getUrl()), universe, userName, passwd, true);
+            port = RepositoryWebServiceAdapter.getXtentisPort(serverDef);
         } catch (XtentisException e) {
-            log.error(e.getMessage(), e);
-        } catch (MalformedURLException e) {
             log.error(e.getMessage(), e);
         }
 
@@ -229,7 +222,8 @@ public class UserSecurityComboBoxDialogCellEditor extends EditableComboBoxDialog
             site = MDMRepositoryView.show().getSite();
         }
 
-        XpathSelectDialog2 dlg = new XpathSelectDialog2(site.getShell(), Messages.UserSecurityComboBoxDialogCellEditor_SelectXpath, site, false, dataModelName);
+        XpathSelectDialog2 dlg = new XpathSelectDialog2(site.getShell(),
+                Messages.UserSecurityComboBoxDialogCellEditor_SelectXpath, site, false, dataModelName);
         dlg.setConceptName(conceptName);
         if (dlg.open() == IDialogConstants.OK_ID) {
             return dlg.getXpath();
