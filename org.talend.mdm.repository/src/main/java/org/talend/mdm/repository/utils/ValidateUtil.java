@@ -16,33 +16,23 @@ import java.util.regex.Pattern;
 
 public class ValidateUtil {
 
-    /*
-     * the character '-' is allowed,and the original pattern regex = "\\w*(-|\\w*)+\\w+";
-     */
     public static boolean matchCommonRegex(String newText) {
-        String tailRegex = ".*\\w+";//$NON-NLS-1$
-        boolean match = Pattern.compile(tailRegex).matcher(newText).matches();
-        if (match) {
-            String replace = newText.replace("-", ""); //$NON-NLS-1$//$NON-NLS-2$
-            String pattern_hasInvalidChar = "\\w*\\W+\\w+"; //$NON-NLS-1$
-            if (!Pattern.compile(pattern_hasInvalidChar).matcher(replace).matches()) {
-                return true;
-            }
-        }
+        String headRegex = "\\w(-|\\w)*"; //$NON-NLS-1$
+        String tailRegex = ".*\\w";//$NON-NLS-1$
 
-        return false;
+        return matches(headRegex, tailRegex, newText);
     }
 
     public static boolean matchCustomFormRegex(String newText) {
-        String regex = "\\w*(#|\\.|\\w*)+\\w+";//$NON-NLS-1$
-        String tailRegex = ".*\\w+";//$NON-NLS-1$
+        String regex = "\\w(#|\\.|\\w)*";//$NON-NLS-1$
+        String tailRegex = ".*\\w";//$NON-NLS-1$
 
         return matches(regex, tailRegex, newText);
     }
 
     public static boolean matchViewProcessRegex(String newText) {
-        String regex = "\\w*(#|\\.|\\w*)+(#|\\w+)";//$NON-NLS-1$
-        String tailRegex = ".*(#|\\w+)";//$NON-NLS-1$
+        String regex = "\\w(#|\\.|\\w)*";//$NON-NLS-1$
+        String tailRegex = ".*(#|\\w)";//$NON-NLS-1$
 
         return matches(regex, tailRegex, newText);
     }
@@ -56,8 +46,8 @@ public class ValidateUtil {
     }
 
     public static boolean matchRoleRegex(String newText) {
-        String regex = "\\w*(#|\\w*)+\\w+";//$NON-NLS-1$
-        String tailRegex = ".*\\w+";//$NON-NLS-1$
+        String regex = "\\w(#|\\w)*";//$NON-NLS-1$
+        String tailRegex = ".*\\w";//$NON-NLS-1$
 
         return matches(regex, tailRegex, newText);
     }
