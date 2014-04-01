@@ -12,6 +12,7 @@
 // ============================================================================
 package org.talend.mdm.repository.core.service.wsimpl.transformplugin;
 
+import org.talend.mdm.repository.i18n.Messages;
 
 /**
  * DOC hbhong class global comment. Detailled comment
@@ -47,26 +48,21 @@ public class TISCallJobPluginDetail extends AbstractPluginDetail {
          {
             return "Execute un call de TIS un texte et retourne le résultat"; //$NON-NLS-1$
         }
-        return "Executes a Job on a text and returns the result"; //$NON-NLS-1$
+        return Messages.TISCallJobPluginDetail_description;
     }
 
     @Override
     public String getDocumentation() {
-        return "The TIS Call plugin executes a Web Service call to TIS on a text\n" + "\n" + "\n" + "Parameters\n" //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-                + "   url [mandatory]: the webservice port URL to the TIS Server" + "\n" //$NON-NLS-1$ //$NON-NLS-2$
-                + "       or the local talend job URL: ltj://<jobName>/<jobVersion>/[jobMainClass]" + "\n" //$NON-NLS-1$ //$NON-NLS-2$
-                + "   contextParam   : the contextParam of the tis job" + "\n" + "       name: the name of the context param" //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-                + "\n" + "       value: the value of context param, the value will be viewed as a priple" + "\n" //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-                + "                   variable if the value is embraced with a brace, " + "\n" //$NON-NLS-1$ //$NON-NLS-2$
-                + "       isPipleVariableName [optional]: true to set contextParam value as one " + "\n" //$NON-NLS-1$ //$NON-NLS-2$
-                + "                                            piplevariableName , this parameter will be " + "\n" //$NON-NLS-1$ //$NON-NLS-2$
-                + "                                            ignored if value is embraced with brace" + "\n" //$NON-NLS-1$ //$NON-NLS-2$
-                + "   username [optional]: the username to use for the call" + "\n" //$NON-NLS-1$ //$NON-NLS-2$
-                + "   password [optional]: the password to  use for the call" + "\n" //$NON-NLS-1$ //$NON-NLS-2$
-                + "   contentType [optional]: the contentType of the returned data. Defaults to 'text/xml'" + "\n" //$NON-NLS-1$ //$NON-NLS-2$
-                + "   conceptMapping [optional]: Directly map the result of a TIS call to a MDM Entity" + "\n" //$NON-NLS-1$ //$NON-NLS-2$
-                + "       concept: the name of the concept" + "\n" + "       fields: mapping rule with json format" + "\n" + "\n" //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
-                + "\n" + "Example1" + "\n" + "   <configuration>" + "\n" //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+        return Messages.TISCallJobPluginDetail_doc_line1 + Messages.TISCallJobPluginDetail_doc_line2
+                + Messages.TISCallJobPluginDetail_doc_line3 + Messages.TISCallJobPluginDetail_doc_line4
+                + Messages.TISCallJobPluginDetail_doc_line5 + Messages.TISCallJobPluginDetail_doc_line6
+                + Messages.TISCallJobPluginDetail_doc_line7 + Messages.TISCallJobPluginDetail_doc_line8
+                + Messages.TISCallJobPluginDetail_doc_line9 + Messages.TISCallJobPluginDetail_doc_line10
+                + Messages.TISCallJobPluginDetail_doc_line11 + Messages.TISCallJobPluginDetail_doc_line12
+                + Messages.TISCallJobPluginDetail_doc_line13 + Messages.TISCallJobPluginDetail_doc_line14
+                + Messages.TISCallJobPluginDetail_doc_line15 + Messages.TISCallJobPluginDetail_doc_line16
+                + Messages.TISCallJobPluginDetail_doc_line17 + Messages.TISCallJobPluginDetail_example1
+                + "   <configuration>" + "\n" //$NON-NLS-1$ //$NON-NLS-2$
                 + "       <url>http://server:port/TISService/TISPort</url>" + "\n" + "       <contextParam>" + "\n" //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
                 + "           <name>firstname</name>" + "\n" + "           <value>jack</value>" + "\n" + "       </contextParam>" //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
                 + "\n" + "       <contextParam>" + "\n" + "           <name>lastname</name>" + "\n" //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
@@ -76,10 +72,11 @@ public class TISCallJobPluginDetail extends AbstractPluginDetail {
                 + "\n" + "       <conceptMapping>" + "\n" + "           <concept>User</concept>" + "\n" + "           <fields>" //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$
                 + "\n" + "             {" + "\n" + "             p1:firstname," + "\n" + "             p2:lastname" + "\n" //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$
                 + "             }" + "\n" + "           </fields>" + "\n" + "       </conceptMapping>" + "\n" //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$
-                + "   </configuration>" + "\n" + "\n" + "Example2" + "\n" + "   <configuration>" + "\n" //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$
+                + "   </configuration>" + "\n\n" //$NON-NLS-1$ //$NON-NLS-2$
+                + Messages.TISCallJobPluginDetail_example2 + "   <configuration>" + "\n" //$NON-NLS-1$ //$NON-NLS-2$
                 + "       <url>ltj://tiscall_multi_return/0.1</url>" + "\n" + "       <contextParam>" + "\n" //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
                 + "           <name>nb_line</name>" + "\n" + "           <value>5</value>" + "\n" + "       </contextParam>" //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
-                + "\n" + "   </configuration>" + "\n" + "\n"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+                + "\n" + "   </configuration>" + "\n\n"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
     }
 
     @Override
