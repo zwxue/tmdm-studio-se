@@ -43,8 +43,8 @@ public class ClearAllMarkersHandler extends MarkerViewHandler {
         if (talendProject != null) {
             IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(talendProject.getTechnicalLabel());
             try {
-                for (String marker : ValidateMarkerUtil.getAllMarkers()) {
-                    project.deleteMarkers(marker, false, IResource.DEPTH_INFINITE);
+                for (String marker : ValidateMarkerUtil.getAllToRemoveMarkers()) {
+                    project.deleteMarkers(marker, true, IResource.DEPTH_INFINITE);
                 }
             } catch (CoreException e) {
                 log.error(e.getMessage(), e);

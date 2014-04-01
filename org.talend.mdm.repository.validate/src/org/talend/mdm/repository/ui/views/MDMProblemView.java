@@ -13,12 +13,11 @@
 package org.talend.mdm.repository.ui.views;
 
 import java.lang.reflect.Field;
+import java.util.Collection;
 import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.eclipse.core.resources.IMarker;
-import org.eclipse.core.resources.IResource;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.ListenerList;
 import org.eclipse.jface.action.IContributionItem;
 import org.eclipse.jface.action.IMenuListener;
@@ -44,14 +43,12 @@ import org.eclipse.ui.internal.views.markers.MarkerContentGenerator;
 import org.eclipse.ui.menus.IMenuService;
 import org.eclipse.ui.views.markers.MarkerSupportView;
 import org.eclipse.ui.views.markers.internal.ContentGeneratorDescriptor;
-import org.talend.core.model.repository.IRepositoryViewObject;
-import org.talend.mdm.repository.core.IServerObjectRepositoryType;
+import org.eclipse.ui.views.markers.internal.MarkerGroup;
+import org.eclipse.ui.views.markers.internal.TypeMarkerGroup;
 import org.talend.mdm.repository.core.marker.IValidationMarker;
-import org.talend.mdm.repository.core.validate.datamodel.model.IDataModelMarkerConst;
-import org.talend.mdm.repository.core.validate.datamodel.validator.impl.DataModelChecker;
-import org.talend.mdm.repository.ui.actions.OpenObjectAction;
+import org.talend.mdm.repository.ui.markers.IOpenMarkerHandler;
+import org.talend.mdm.repository.ui.markers.OpenMarkerHandlerRegister;
 import org.talend.mdm.repository.ui.markers.datamodel.ModelNameMarkerGroup;
-import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 
 /**
  * created by HHB on 2013-1-5 Detailled comment
@@ -103,7 +100,13 @@ public class MDMProblemView extends MarkerSupportView implements IValidationMark
                 if (object != null) {
                     Object descObj = descField.get(object);
                     if (descObj != null) {
-                        ((ContentGeneratorDescriptor) descObj).getMarkerGroups().add(new ModelNameMarkerGroup());
+                        Collection groups = ((ContentGeneratorDescriptor) descObj).getMarkerGroups();
+                        if (!hasMarkerGroup(groups, ModelNameMarkerGroup.ID)) {
+                            groups.add(new ModelNameMarkerGroup());
+                        }
+                        if (!hasMarkerGroup(groups, "org.eclipse.ui.ide.type")) { //$NON-NLS-1$
+                            groups.add(new TypeMarkerGroup("Type")); //$NON-NLS-1$
+                        }
                     }
                 }
             }
@@ -118,6 +121,15 @@ public class MDMProblemView extends MarkerSupportView implements IValidationMark
             log.error(e.getMessage(), e);
         }
 
+    }
+
+    private boolean hasMarkerGroup(Collection groups, String id) {
+        for (Object groupObj : groups) {
+            if (((MarkerGroup) groupObj).getId().equals(id)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private TreeViewer getTreeViewer() {
@@ -163,7 +175,7 @@ public class MDMProblemView extends MarkerSupportView implements IValidationMark
                 @Override
                 public void menuAboutToShow(IMenuManager manager) {
                     for (IContributionItem item : manager.getItems()) {
-                        if (item.getId().equals("org.eclipse.ui.navigate.goToResource")) {
+                        if (item.getId().equals("org.eclipse.ui.navigate.goToResource")) { //$NON-NLS-1$
                             manager.remove(item);
                             break;
                         }
@@ -204,82 +216,49 @@ public class MDMProblemView extends MarkerSupportView implements IValidationMark
     private void addLinkWithEditorSupport(TreeViewer viewer) {
         new OpenAndLinkWithEditorHelper(viewer) {
 
-            /*
-             * (non-Javadoc)
-             * 
-             * @see org.eclipse.ui.OpenAndLinkWithEditorHelper#activate(org.eclipse .jface.viewers.ISelection )
-             */
             @Override
             protected void activate(ISelection selection) {
                 final int currentMode = OpenStrategy.getOpenMethod();
                 try {
                     OpenStrategy.setOpenMethod(OpenStrategy.DOUBLE_CLICK);
-                    openSelectedMarkers(false);
+                    openSelectedMarkers(null);
                 } finally {
                     OpenStrategy.setOpenMethod(currentMode);
                 }
             }
 
-            /*
-             * (non-Javadoc)
-             * 
-             * @see org.eclipse.ui.OpenAndLinkWithEditorHelper#linkToEditor(org.eclipse .jface.viewers .ISelection)
-             */
             @Override
             protected void linkToEditor(ISelection selection) {
                 // Not supported by this part
             }
 
-            /*
-             * (non-Javadoc)
-             * 
-             * @see org.eclipse.ui.OpenAndLinkWithEditorHelper#open(org.eclipse.jface .viewers.ISelection, boolean)
-             */
             @Override
             protected void open(ISelection selection, boolean activate) {
-                openSelectedMarkers(false);
+                openSelectedMarkers(null);
             }
         };
     }
 
-    public void openSelectedMarkers(boolean openInSrc) {
+    public void openSelectedMarkers(Object param) {
         IMarker[] markers = getSelectedMarkers();
+        IWorkbenchPage page = getSite().getPage();
+        List<IOpenMarkerHandler> handlers = OpenMarkerHandlerRegister.getHandlers();
+
         for (IMarker marker : markers) {
-            IWorkbenchPage page = getSite().getPage();
-            try {
-                IResource resource = marker.getResource();
-                String type = marker.getType();
-                if (type.equals(MARKER_XSD_ERR)) {
-                    if (resource != null) {
-                        String dataModelName = DataModelChecker.getDataModelName(resource.getName());
-                        openDataModel(dataModelName, marker);
+            boolean canOpen = false;
+            if (handlers != null) {
+                for (IOpenMarkerHandler handler : handlers) {
+                    canOpen = handler.canOpen(marker);
+                    if (canOpen) {
+                        handler.open(page, marker, param);
+                        break;
                     }
-                } else if (type.equals(MARKER_DATA_MODEL)) {
-
-                    String modelName = (String) marker.getAttribute(IDataModelMarkerConst.DATA_MODEL);
-                    if (modelName != null && resource != null) {
-                        if (openInSrc) {
-                            marker.setAttribute(IDataModelMarkerConst.OPEN_IN_SOURCE, true);
-                        }
-                        openDataModel(modelName, marker);
-                    }
-                } else {
-                    openMarkerInEditor(marker, page);
                 }
-
-            } catch (CoreException e) {
-                log.error(e.getMessage(), e);
+            }
+            if (!canOpen) {
+                openMarkerInEditor(marker, page);
             }
         }
-    }
-
-    private void openDataModel(String modelName, IMarker marker) {
-        IRepositoryViewObject viewObj = RepositoryResourceUtil.findViewObjectByName(IServerObjectRepositoryType.TYPE_DATAMODEL,
-                modelName);
-        OpenObjectAction openAction = new OpenObjectAction();
-
-        openAction.openMarker(viewObj, marker);
-
     }
 
     private Object findListener(TreeViewer treeViewer) {

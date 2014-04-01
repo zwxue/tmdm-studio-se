@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2014 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2013 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -10,17 +10,18 @@
 // 9 rue Pages 92150 Suresnes, France
 //
 // ============================================================================
-package org.talend.mdm.repository.core.marker;
+package org.talend.mdm.repository.ui.markers;
+
+import org.eclipse.core.resources.IMarker;
+import org.eclipse.ui.IWorkbenchPage;
 
 /**
- * created by HHB on 2013-1-31 Detailled comment
+ * created by HHB on 2014-3-31 Detailled comment
  * 
  */
-public interface IValidationMarker {
+public interface IOpenMarkerHandler {
 
-    public static final String MARKER_MDM = "org.talend.mdm.problemmarker"; //$NON-NLS-1$
+    public boolean canOpen(IMarker marker);
 
-    public static final String MARKER_DATA_MODEL = "org.talend.mdm.error.datamodel.model"; //$NON-NLS-1$
-
-    public static final String MARKER_XSD_ERR = "org.eclipse.xsd.diagnostic"; //$NON-NLS-1$
+    public void open(IWorkbenchPage page, IMarker marker, Object param);
 }

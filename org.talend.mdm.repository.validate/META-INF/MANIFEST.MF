@@ -23,3 +23,5 @@ Require-Bundle: org.apache.commons.collections,
  org.eclipse.core.expressions
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Export-Package: org.talend.mdm.repository.core.marker,
+ org.talend.mdm.repository.ui.markers

@@ -42,6 +42,10 @@ public class ValidateMarkerUtil implements IValidationMarker {
         return viewTypeMarkerMap.get(type);
     }
 
+    public static String[] getAllToRemoveMarkers() {
+        return new String[] { MARKER_XSD_ERR, MARKER_MDM };
+    }
+
     public static String[] getAllMarkers() {
         if (allMarkers == null) {
             List<String> markers = new LinkedList<String>();

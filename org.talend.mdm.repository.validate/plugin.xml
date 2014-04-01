@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <plugin>
+   <extension-point id="openMarkerHandler" name="openMarkerHandler" schema="schema/openMarkerHandler.exsd"/>
    <extension
          id="dataModel"
          name="DataModel Validator"
@@ -61,22 +62,31 @@
       </delegate>
    </extension>
    <extension
-         id="org.talend.mdm.error.datamodel.xsdparse"
-         name="MDM XSD parsing"
+         id="org.talend.mdm.problemmarker"
+         name="MDM Problem"
          point="org.eclipse.core.resources.markers">
       <super
             type="org.eclipse.core.resources.problemmarker">
       </super>
+   </extension>
+   <!--
+   <extension
+         id="org.talend.mdm.error.datamodel.xsdparse"
+         name="MDM XSD parsing"
+         point="org.eclipse.core.resources.markers">
+      <super
+            type="org.talend.mdm.problemmarker">
+      </super>
       <persistent
             value="false">
       </persistent>
-   </extension>
+   </extension>-->
    <extension
          id="org.talend.mdm.error.datamodel.model"
          name="MDM Model"
          point="org.eclipse.core.resources.markers">
       <super
-            type="org.eclipse.core.resources.problemmarker">
+            type="org.talend.mdm.problemmarker">
       </super>
       <persistent
             value="false">
@@ -84,23 +94,25 @@
    </extension>
    <extension
          point="org.eclipse.ui.ide.markerSupport">
+        <!--
       <markerTypeCategory
             name="Talend MDM Problem">
          <markerTypeReference
-               id="org.talend.mdm.error.datamodel.model">
-         </markerTypeReference>
-         <markerTypeReference
                id="org.eclipse.xsd.diagnostic">
          </markerTypeReference>
+         <markerTypeReference
+               id="org.talend.mdm.problemmarker">
+         </markerTypeReference>
       </markerTypeCategory>
+      -->
       <markerContentGenerator
             id="org.talend.mdm.problemsGenerator"
             name="MDM Problems">
          <markerTypeReference
-               id="org.talend.mdm.error.datamodel.model">
+               id="org.eclipse.xsd.diagnostic">
          </markerTypeReference>
          <markerTypeReference
-               id="org.eclipse.xsd.diagnostic">
+               id="org.talend.mdm.problemmarker">
          </markerTypeReference>
          <markerFieldReference
                id="org.eclipse.ui.ide.severityAndDescriptionField"
@@ -160,12 +172,12 @@
                   attribute="severity"
                   markerType="org.eclipse.core.resources.marker">
                <markerAttributeMapping
-                     markerGroupingEntry="org.eclipse.ui.ide.allMarkers.errorSeverity"
-                     value="2">
-               </markerAttributeMapping>
-               <markerAttributeMapping
                      markerGroupingEntry="org.eclipse.ui.ide.allMarkers.warningSeverity"
                      value="1">
+               </markerAttributeMapping>
+               <markerAttributeMapping
+                     markerGroupingEntry="org.eclipse.ui.ide.allMarkers.errorSeverity"
+                     value="2">
                </markerAttributeMapping>
                <markerAttributeMapping
                      markerGroupingEntry="org.eclipse.ui.ide.allMarkers.other"
@@ -309,6 +321,17 @@
             id="org.talend.mdm.repository.ui.validate.JumpToSourceLineHandler"
             name="Jump to Source Line">
       </command>
+   </extension>
+   <extension
+         point="org.talend.mdm.repository.validate.openMarkerHandler">
+      <handler
+            class="org.talend.mdm.repository.ui.markers.datamodel.OpenXSDMarkerHandler"
+            name="Open XSD Error">
+      </handler>
+      <handler
+            class="org.talend.mdm.repository.ui.markers.datamodel.OpenDataModelMarkerHandler"
+            name="Open DataModel Error">
+      </handler>
    </extension>
  
   
