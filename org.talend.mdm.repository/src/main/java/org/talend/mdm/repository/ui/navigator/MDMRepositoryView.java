@@ -41,12 +41,15 @@ import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IActionBars;
+import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IMemento;
 import org.eclipse.ui.IPartListener2;
 import org.eclipse.ui.IPerspectiveDescriptor;
 import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchPartReference;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PerspectiveAdapter;
@@ -58,12 +61,17 @@ import org.eclipse.ui.navigator.CommonViewer;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
 import org.eclipse.ui.views.properties.tabbed.ITabbedPropertySheetPageContributor;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
+import org.talend.commons.exception.LoginException;
 import org.talend.commons.exception.PersistenceException;
 import org.talend.core.model.general.Project;
+import org.talend.core.model.properties.Item;
+import org.talend.core.model.properties.Property;
 import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.core.repository.model.IRepositoryFactory;
 import org.talend.core.repository.model.ProxyRepositoryFactory;
+import org.talend.core.runtime.CoreRuntimePlugin;
+import org.talend.designer.core.ui.editor.ProcessEditorInput;
 import org.talend.mdm.repository.core.AbstractRepositoryAction;
 import org.talend.mdm.repository.core.IServerObjectRepositoryType;
 import org.talend.mdm.repository.core.command.CommandManager;
@@ -76,10 +84,13 @@ import org.talend.mdm.repository.ui.actions.ImportObjectAction;
 import org.talend.mdm.repository.ui.actions.ImportServerObjectAction;
 import org.talend.mdm.repository.ui.actions.RefreshViewAction;
 import org.talend.mdm.repository.ui.dialogs.SwitchPerspectiveDialog;
+import org.talend.mdm.repository.ui.editors.IRepositoryViewEditorInput;
 import org.talend.mdm.repository.ui.preferences.PreferenceConstants;
 import org.talend.mdm.repository.ui.starting.ShowWelcomeEditor;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 import org.talend.repository.ProjectManager;
+import org.talend.repository.model.ERepositoryStatus;
+import org.talend.repository.model.IProxyRepositoryFactory;
 
 import com.amalto.workbench.exadapter.ExAdapterManager;
 import com.amalto.workbench.views.MDMPerspective;
@@ -289,6 +300,8 @@ public class MDMRepositoryView extends CommonNavigator implements ITabbedPropert
 
     private IPartListener2 partListener = new IPartListener2() {
 
+        IProxyRepositoryFactory factory = CoreRuntimePlugin.getInstance().getProxyRepositoryFactory();
+
         public void partVisible(IWorkbenchPartReference partRef) {
 
         }
@@ -313,6 +326,57 @@ public class MDMRepositoryView extends CommonNavigator implements ITabbedPropert
             if (activedJobEditorRefs.contains(partRef)) {
                 activedJobEditorRefs.remove(partRef);
             }
+            // unlock
+            Item item = getItem(partRef.getPart(false));
+            if (item != null) {
+                try {
+                    if (ERepositoryStatus.LOCK_BY_USER != factory.getStatus(item)) {
+                        return;
+                    }
+                    factory.unlock(item);
+                    Property property = item.getProperty();
+                    final String id = property.getId();
+
+                    Display.getDefault().asyncExec(new Runnable() {
+
+                        public void run() {
+                            if (!getCommonViewer().getTree().isDisposed()) {
+                                final IRepositoryViewObject viewObject = ContainerCacheService.get(id);
+                                if (viewObject != null) {
+                                    getCommonViewer().refresh(viewObject);
+                                }
+                            }
+                        }
+                    });
+
+                } catch (PersistenceException e) {
+                    log.error(e.getMessage(), e);
+                } catch (LoginException e) {
+                    log.error(e.getMessage(), e);
+                }
+            }
+
+        }
+
+        private Item getItem(IWorkbenchPart part) {
+            if (part != null && part instanceof IEditorPart) {
+                IEditorInput input = ((IEditorPart) part).getEditorInput();
+                if (input != null) {
+                    Item item = null;
+                    if (input instanceof IRepositoryViewEditorInput) {
+                        item = ((IRepositoryViewEditorInput) input).getInputItem();
+                    } else if (input instanceof ProcessEditorInput) {
+                        item = ((ProcessEditorInput) input).getItem();
+                    }
+
+                    if (item == null && exAdapter != null) {
+                        item = exAdapter.getItem(part);
+                    }
+                    return item;
+
+                }
+            }
+            return null;
 
         }
 
