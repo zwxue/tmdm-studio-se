@@ -433,26 +433,30 @@ public class XSDChangeToComplexTypeAction extends UndoAction implements Selectio
 
         XSDComplexTypeDefinition rootType = (XSDComplexTypeDefinition) complexType.getRootType();
         for (XSDElementDeclaration decla : elementDeclarations) {
-            XSDComplexTypeDefinition typeDefinition = (XSDComplexTypeDefinition) decla.getTypeDefinition();
-            XSDTypeDefinition arootType = typeDefinition.getRootTypeDefinition();
-            if (arootType == rootType) {
-                recordFields(decla, definedPKs);
+            if (decla.getTypeDefinition() instanceof XSDComplexTypeDefinition) {
+                XSDComplexTypeDefinition typeDefinition = (XSDComplexTypeDefinition) decla.getTypeDefinition();
+                XSDTypeDefinition arootType = typeDefinition.getRootTypeDefinition();
+                if (arootType == rootType) {
+                    recordFields(decla, definedPKs);
+                }
             }
         }
 
-        List<XSDComplexTypeDefinition> allSuperComplexTypes = Util.getAllSuperComplexTypes(complexType);
-        for (int i = allSuperComplexTypes.size() - 1; i >= 0; i--) {
-            XSDComplexTypeDefinition cTypeDef = allSuperComplexTypes.get(i);
-            if (cTypeDef.getContent() instanceof XSDParticle) {
-                XSDParticleImpl particle = (XSDParticleImpl) cTypeDef.getContent();
-                if (particle.getTerm() instanceof XSDModelGroup) {
-                    XSDModelGroup group = (XSDModelGroup) particle.getTerm();
-                    EList<XSDParticle> particles = group.getParticles();
-                    for (XSDParticle part : particles) {
-                        if (part.getTerm() instanceof XSDElementDeclaration) {
-                            XSDElementDeclaration xsdDecl = (XSDElementDeclaration) part.getTerm();
-                            if (definedPKs.contains(xsdDecl.getName())) {
-                                fields.add(xsdDecl.getName());
+        if (definedPKs.size() > 0) {
+            List<XSDComplexTypeDefinition> allSuperComplexTypes = Util.getAllSuperComplexTypes(complexType);
+            for (int i = allSuperComplexTypes.size() - 1; i >= 0; i--) {
+                XSDComplexTypeDefinition cTypeDef = allSuperComplexTypes.get(i);
+                if (cTypeDef.getContent() instanceof XSDParticle) {
+                    XSDParticleImpl particle = (XSDParticleImpl) cTypeDef.getContent();
+                    if (particle.getTerm() instanceof XSDModelGroup) {
+                        XSDModelGroup group = (XSDModelGroup) particle.getTerm();
+                        EList<XSDParticle> particles = group.getParticles();
+                        for (XSDParticle part : particles) {
+                            if (part.getTerm() instanceof XSDElementDeclaration) {
+                                XSDElementDeclaration xsdDecl = (XSDElementDeclaration) part.getTerm();
+                                if (definedPKs.contains(xsdDecl.getName())) {
+                                    fields.add(xsdDecl.getName());
+                                }
                             }
                         }
                     }
