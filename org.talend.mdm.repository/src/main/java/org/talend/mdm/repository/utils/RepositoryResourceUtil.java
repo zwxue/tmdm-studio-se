@@ -25,6 +25,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
 import org.eclipse.core.resources.IFile;
@@ -706,6 +707,28 @@ public class RepositoryResourceUtil {
                 if (viewObj.getProperty().getLabel().equalsIgnoreCase(name)) {
                     return viewObj;
                 }
+            }
+        }
+        return null;
+    }
+
+    public static List<IRepositoryViewObject> findViewObjectsByNamePattern(ERepositoryObjectType type, String namePattern,
+            boolean withDeleted) {
+        if (type == null || namePattern == null) {
+            throw new IllegalArgumentException();
+        }
+        List<IRepositoryViewObject> viewObjects = findAllViewObjects(type, true, withDeleted);
+        if (viewObjects != null) {
+            List<IRepositoryViewObject> foundViewObjs = new LinkedList<IRepositoryViewObject>();
+            Pattern pattern = Pattern.compile(namePattern);
+            for (IRepositoryViewObject viewObj : viewObjects) {
+                String label = viewObj.getProperty().getLabel();
+                if (pattern.matcher(label).matches()) {
+                    foundViewObjs.add(viewObj);
+                }
+            }
+            if (!foundViewObjs.isEmpty()) {
+                return foundViewObjs;
             }
         }
         return null;
