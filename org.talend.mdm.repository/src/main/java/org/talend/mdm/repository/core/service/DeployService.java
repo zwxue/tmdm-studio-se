@@ -192,9 +192,14 @@ public class DeployService {
                     paramMap = ModelImpactAnalyseService.convertToParameters(analyzeModelImpact);
                     manager.attachParameterToCommand(commands, paramMap);
                 }
+
+                if (commands.size() == 0) {
+                    return Status.CANCEL_STATUS;
+                }
             } catch (InterruptedException ex) {
                 return Status.CANCEL_STATUS;
             }
+
             IStatus mainStatus = runCommands(commands, serverDef);
             // update consistency value
             try {
@@ -218,7 +223,7 @@ public class DeployService {
     }
 
     public void updateServerConsistencyStatus(MDMServerDef serverDef, IStatus mainStatus) throws XtentisException,
-            WebServiceException {
+    WebServiceException {
         if (mainStatus.isMultiStatus()) {
             Set<IRepositoryViewObject> viewObjs = new HashSet<IRepositoryViewObject>();
             for (IStatus childStatus : mainStatus.getChildren()) {
