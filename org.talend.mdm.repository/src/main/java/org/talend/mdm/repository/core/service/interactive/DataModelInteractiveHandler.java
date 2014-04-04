@@ -132,7 +132,7 @@ public class DataModelInteractiveHandler extends AbstractInteractiveHandler {
         }
     }
 
-    private void callModelService(AbstractDeployCommand cmd) {
+    private void callModelService(AbstractDeployCommand cmd) throws XtentisException {
         ICommandParameter parameter = cmd.getParameter();
         if (parameter != null) {
             ImpactOperation operation = (ImpactOperation) parameter.getParameter();
@@ -142,11 +142,8 @@ public class DataModelInteractiveHandler extends AbstractInteractiveHandler {
             } else if (operation == ImpactOperation.RECREATE_TABLE) {
                 force = true;
             }
-            try {
-                ModelImpactAnalyseService.updateModel(cmd.getServerDef(), cmd.getViewObject(), force);
-            } catch (XtentisException e) {
-                log.error(e.getMessage(), e);
-            }
+
+            ModelImpactAnalyseService.updateModel(cmd.getServerDef(), cmd.getViewObject(), force);
 
         }
     }
