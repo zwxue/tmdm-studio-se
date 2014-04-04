@@ -106,11 +106,11 @@ public class RepositoryQueryService {
     public static List<String> findAllUniverseNames() {
         return findAllServerObjectNames(IServerObjectRepositoryType.TYPE_UNIVERSE);
     }
-    
+
     public static List<String> findAllCustomFormNames() {
         return findAllServerObjectNames(IServerObjectRepositoryType.TYPE_CUSTOM_FORM);
     }
-    
+
     /**
      * this method is compatible with Util.getDataModel, but for Repository view
      * 
@@ -144,8 +144,9 @@ public class RepositoryQueryService {
                 }
             }
         }
-        if (avaiList.size() == 0)
+        if (avaiList.size() == 0) {
             avaiList.addAll(systemDataModelValues);
+        }
         return avaiList;
     }
 
@@ -157,10 +158,11 @@ public class RepositoryQueryService {
                 Item item = viewObj.getProperty().getItem();
                 if (item instanceof MDMServerObjectItem) {
                     String name = ((MDMServerObjectItem) item).getMDMServerObject().getName();
-                    if (name != null)
+                    if (name != null) {
                         names.add(name);
-                    else
+                    } else {
                         names.add(viewObj.getLabel());
+                    }
                 }
                 // names[i]=viewObj.getLabel();
             }
@@ -181,10 +183,11 @@ public class RepositoryQueryService {
                         WSCustomFormE sForm = (WSCustomFormE) sObject;
                         String name = sForm.getDatamodel() + ICoreConstants.ITEM_PK_SPLIT + sForm.getEntity()
                                 + ICoreConstants.ITEM_PK_SPLIT + sForm.getName();
-                        if (name != null)
+                        if (name != null) {
                             names.add(name);
-                        else
+                        } else {
                             names.add(viewObj.getLabel());
+                        }
                     }
                 }
                 // names[i]=viewObj.getLabel();
@@ -192,6 +195,7 @@ public class RepositoryQueryService {
         }
         return names;
     }
+
     public static MDMServerObject findServerObjectByName(ERepositoryObjectType type, String name) {
         List<IRepositoryViewObject> viewObjects = RepositoryResourceUtil.findAllViewObjects(type);
         if (viewObjects != null) {
@@ -257,6 +261,10 @@ public class RepositoryQueryService {
 
     public static int getWSType(ERepositoryObjectType type) {
         initTypeMap();
-        return (Integer) typeMap.getKey(type);
+        Object key = typeMap.getKey(type);
+        if (key != null) {
+            return (Integer) key;
+        }
+        return -1;
     }
 }
