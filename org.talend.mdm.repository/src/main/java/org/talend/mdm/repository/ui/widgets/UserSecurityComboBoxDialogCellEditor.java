@@ -13,6 +13,8 @@
 package org.talend.mdm.repository.ui.widgets;
 
 import java.net.MalformedURLException;
+import java.util.Arrays;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.eclipse.jface.dialogs.IDialogConstants;
@@ -53,7 +55,7 @@ public class UserSecurityComboBoxDialogCellEditor extends EditableComboBoxDialog
 
     private static Logger log = Logger.getLogger(UserSecurityComboBoxDialogCellEditor.class);
 
-    private static final String SPECIAL_FIELD = "properties"; //$NON-NLS-1$
+    private static final List<String> SPECIAL_FIELDS = Arrays.asList("roles", "applications", "properties");        //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
     private static String user_var = "${user_context}..."; //$NON-NLS-1$
 
@@ -98,7 +100,7 @@ public class UserSecurityComboBoxDialogCellEditor extends EditableComboBoxDialog
             return;
         }
 
-        if (SPECIAL_FIELD.equals(userVariable)) {
+        if (SPECIAL_FIELDS.contains(userVariable)) {
             userVariable += "[\"\"]"; //$NON-NLS-1$
         }
         userVariable = "${user_context." + userVariable + "}"; //$NON-NLS-1$ //$NON-NLS-2$
