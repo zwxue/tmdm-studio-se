@@ -211,7 +211,7 @@ public class RepositoryViewObjectCheckedWidget extends Composite {
                 }
             }
             commands.add(e);
-            List<AbstractDeployCommand> associatedCommands = getAssociatedObjectCommand(viewObject, e.getCommandType());
+            List<AbstractDeployCommand> associatedCommands = getAssociatedObjectCommand(viewObject, ICommand.CMD_MODIFY);
             if (associatedCommands != null) {
                 commands.addAll(associatedCommands);
             }
