@@ -44,7 +44,6 @@ import org.eclipse.ui.menus.IMenuService;
 import org.eclipse.ui.views.markers.MarkerSupportView;
 import org.eclipse.ui.views.markers.internal.ContentGeneratorDescriptor;
 import org.eclipse.ui.views.markers.internal.MarkerGroup;
-import org.eclipse.ui.views.markers.internal.TypeMarkerGroup;
 import org.talend.mdm.repository.core.marker.IValidationMarker;
 import org.talend.mdm.repository.ui.markers.IOpenMarkerHandler;
 import org.talend.mdm.repository.ui.markers.OpenMarkerHandlerRegister;
@@ -103,9 +102,6 @@ public class MDMProblemView extends MarkerSupportView implements IValidationMark
                         Collection groups = ((ContentGeneratorDescriptor) descObj).getMarkerGroups();
                         if (!hasMarkerGroup(groups, ModelNameMarkerGroup.ID)) {
                             groups.add(new ModelNameMarkerGroup());
-                        }
-                        if (!hasMarkerGroup(groups, "org.eclipse.ui.ide.type")) { //$NON-NLS-1$
-                            groups.add(new TypeMarkerGroup("Type")); //$NON-NLS-1$
                         }
                     }
                 }

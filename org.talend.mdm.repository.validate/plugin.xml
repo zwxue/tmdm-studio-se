@@ -106,6 +106,7 @@
       </markerTypeCategory>
       -->
       <markerContentGenerator
+            defaultMarkerGrouping="org.eclipse.ui.ide.type"
             id="org.talend.mdm.problemsGenerator"
             name="MDM Problems">
          <markerTypeReference
@@ -189,6 +190,10 @@
                </markerAttributeMapping>
             </markerAttributeGrouping>
          </markerGrouping>
+        <markerGrouping
+              id="org.eclipse.ui.ide.type"
+              label="Type">
+        </markerGrouping>
        <!--    <markerGrouping
                id="org.talend.mdm.error.datamodel.groupby.model"
                label="Model">
