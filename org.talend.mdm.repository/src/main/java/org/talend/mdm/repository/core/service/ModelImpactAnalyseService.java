@@ -137,24 +137,26 @@ public class ModelImpactAnalyseService {
         }
 
         public List<Severity> getSeverities() {
-            return this.severities;
+            return severities;
         }
 
         public List<Change> getChanges() {
             List<Change> changes = new LinkedList<ModelImpactAnalyseService.Change>();
-            for (Severity severity : getSeverities()) {
-                if (severity.getChanges() != null) {
-                    for (Change change : severity.getChanges()) {
-                        int s = 0;
-                        if (severity instanceof SeverityHigh) {
-                            s = HIGH;
-                        } else if (severity instanceof SeverityMedium) {
-                            s = MEDIUM;
-                        } else if (severity instanceof SeverityLow) {
-                            s = LOW;
+            if (getSeverities() != null) {
+                for (Severity severity : getSeverities()) {
+                    if (severity.getChanges() != null) {
+                        for (Change change : severity.getChanges()) {
+                            int s = 0;
+                            if (severity instanceof SeverityHigh) {
+                                s = HIGH;
+                            } else if (severity instanceof SeverityMedium) {
+                                s = MEDIUM;
+                            } else if (severity instanceof SeverityLow) {
+                                s = LOW;
+                            }
+                            change.setSeverity(s);
+                            changes.add(change);
                         }
-                        change.setSeverity(s);
-                        changes.add(change);
                     }
                 }
             }
