@@ -66,7 +66,7 @@ public class MDMOpenExistVersionProcessWizard extends OpenExistVersionProcessWiz
         ERepositoryStatus status = processObject.getRepositoryStatus();
         if ( status.equals(ERepositoryStatus.LOCK_BY_USER)
                 && RepositoryResourceUtil.isOpenedItemInEditor(processObject)) {
-        	alreadyEditedByUser = true;
+            alreadyEditedByUser = true;
         }
         this.viewObject = processObject;
         adapter = ExAdapterManager.getAdapter(this, IMDMOpenExistVersionProcessWizardExAdapter.class);
@@ -193,7 +193,17 @@ public class MDMOpenExistVersionProcessWizard extends OpenExistVersionProcessWiz
                 log.error(e.getMessage(), e);
             }
         }
-        return super.refreshNewJob();
+        boolean refreshNewJob = super.refreshNewJob();
+
+        updateVersion();
+
+        return refreshNewJob;
+    }
+
+    private void updateVersion() {
+        if (adapter != null) {
+            adapter.updateVersion(viewObject, getOriginVersion());
+        }
     }
 
     protected void beforeRefresh() {
