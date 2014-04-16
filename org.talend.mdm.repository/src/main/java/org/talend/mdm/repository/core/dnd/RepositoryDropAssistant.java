@@ -109,8 +109,8 @@ public class RepositoryDropAssistant extends CommonDropAdapterAssistant {
 
         ERepositoryObjectType dragType = dragViewObj.getRepositoryObjectType();
 
-        // can't support workflow and job object
-        if (dragType == IServerObjectRepositoryType.TYPE_WORKFLOW || dragType == ERepositoryObjectType.PROCESS) {
+        // can't support job object
+        if (dragType == ERepositoryObjectType.PROCESS) {
             return false;
         }
 
@@ -307,7 +307,7 @@ public class RepositoryDropAssistant extends CommonDropAdapterAssistant {
                 ERepositoryObjectType type = dropViewObj.getRepositoryObjectType();
                 if (type == IServerObjectRepositoryType.TYPE_WORKFLOW) {
                     if (exAdapter != null) {
-                        exAdapter.copyWorkflowViewObj(item, name, newName);
+                        return exAdapter.copyWorkflowViewObj(item, name, newName);
                     }
                 } else {
                     IProxyRepositoryFactory factory = CoreRuntimePlugin.getInstance().getProxyRepositoryFactory();
@@ -367,37 +367,37 @@ public class RepositoryDropAssistant extends CommonDropAdapterAssistant {
         InputDialog dlg = new InputDialog(getShell(), Messages.RepositoryDropAssistant_pasteObject, Messages.Common_inputName,
                 initLabel, new IInputValidator() {
 
-                    public String isValid(String newText) {
-                        if (newText == null || newText.trim().length() == 0) {
-                            return Messages.Common_nameCanNotBeEmpty;
-                        }
-                        if (type.equals(IServerObjectRepositoryType.TYPE_TRANSFORMERV2)
-                                || type.equals(IServerObjectRepositoryType.TYPE_VIEW)) {
-                            if (type.equals(IServerObjectRepositoryType.TYPE_TRANSFORMERV2)) {
-                                if (newText.startsWith(ITransformerV2NodeConsDef.PREFIX_SMARTVIEW_UPPER)) {
-                                    if (!ValidateUtil.matchSmartViewRegex(newText)) {
-                                        return Messages.Common_nameInvalid;
-                                    }
-                                }
-
-                                if (!ValidateUtil.matchViewProcessRegex(newText)) {
-                                    return Messages.Common_nameInvalid;
-                                }
-                            } else if (type.equals(IServerObjectRepositoryType.TYPE_VIEW)) {
-                                if (!ValidateUtil.matchViewProcessRegex(newText)) {
-                                    return Messages.Common_nameInvalid;
-                                }
+            public String isValid(String newText) {
+                if (newText == null || newText.trim().length() == 0) {
+                    return Messages.Common_nameCanNotBeEmpty;
+                }
+                if (type.equals(IServerObjectRepositoryType.TYPE_TRANSFORMERV2)
+                        || type.equals(IServerObjectRepositoryType.TYPE_VIEW)) {
+                    if (type.equals(IServerObjectRepositoryType.TYPE_TRANSFORMERV2)) {
+                        if (newText.startsWith(ITransformerV2NodeConsDef.PREFIX_SMARTVIEW_UPPER)) {
+                            if (!ValidateUtil.matchSmartViewRegex(newText)) {
+                                return Messages.Common_nameInvalid;
                             }
-                        } else if (!ValidateUtil.matchCommonRegex(newText)) {
+                        }
+
+                        if (!ValidateUtil.matchViewProcessRegex(newText)) {
                             return Messages.Common_nameInvalid;
                         }
-                        //
-                        if (RepositoryResourceUtil.isExistByName(parentItem.getRepObjType(), newText.trim())) {
-                            return Messages.Common_nameIsUsed;
+                    } else if (type.equals(IServerObjectRepositoryType.TYPE_VIEW)) {
+                        if (!ValidateUtil.matchViewProcessRegex(newText)) {
+                            return Messages.Common_nameInvalid;
                         }
-                        return null;
-                    };
-                });
+                    }
+                } else if (!ValidateUtil.matchCommonRegex(newText)) {
+                    return Messages.Common_nameInvalid;
+                }
+                //
+                if (RepositoryResourceUtil.isExistByName(parentItem.getRepObjType(), newText.trim())) {
+                    return Messages.Common_nameIsUsed;
+                }
+                return null;
+            };
+        });
         dlg.setBlockOnOpen(true);
         if (dlg.open() == Window.CANCEL) {
             return null;
