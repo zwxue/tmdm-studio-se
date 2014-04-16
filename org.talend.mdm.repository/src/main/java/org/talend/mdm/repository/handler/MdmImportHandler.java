@@ -14,7 +14,7 @@ import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 import org.talend.repository.items.importexport.handlers.imports.ImportRepTypeHandler;
-import org.talend.repository.items.importexport.handlers.model.ItemRecord;
+import org.talend.repository.items.importexport.handlers.model.ImportItem;
 import org.talend.repository.items.importexport.manager.ResourcesManager;
 
 public class MdmImportHandler extends ImportRepTypeHandler {
@@ -24,21 +24,21 @@ public class MdmImportHandler extends ImportRepTypeHandler {
     private static Logger log = Logger.getLogger(MdmImportHandler.class);
 
     @Override
-    public void afterImportingItemRecords(IProgressMonitor monitor, ResourcesManager resManager, ItemRecord selectedItemRecord) {
-        super.afterImportingItemRecords(monitor, resManager, selectedItemRecord);
+    public void afterImportingItems(IProgressMonitor monitor, ResourcesManager resManager, ImportItem selectedImportItem) {
+        super.afterImportingItems(monitor, resManager, selectedImportItem);
 
         try {
-            IRepositoryViewObject object = factory.getSpecificVersion(selectedItemRecord.getItemId(),
-                    selectedItemRecord.getItemVersion(), true);
+            IRepositoryViewObject object = factory.getSpecificVersion(selectedImportItem.getItemId(),
+                    selectedImportItem.getItemVersion(), true);
             if (null != object) {
-                update(object, selectedItemRecord);
+                update(object, selectedImportItem);
             }
         } catch (PersistenceException e) {
             log.error(e.getMessage(), e);
         }
     }
 
-    protected void update(IRepositoryViewObject object, ItemRecord selectedItemRecord) throws PersistenceException {
+    protected void update(IRepositoryViewObject object, ImportItem selectedImportItem) throws PersistenceException {
         Property property = object.getProperty();
         Item item = property.getItem();
         boolean needSave = false;
@@ -59,11 +59,11 @@ public class MdmImportHandler extends ImportRepTypeHandler {
         if (needSave) {
             factory.save(item, true);
         }
-        if (selectedItemRecord.isValid()) {
-            String[] split = selectedItemRecord.getLabel().split(" "); //$NON-NLS-1$
+        if (selectedImportItem.isValid()) {
+            String[] split = selectedImportItem.getLabel().split(" "); //$NON-NLS-1$
             String name = split.length > 0 ? split[0] : null;
             if (name != null) {
-                CommandManager.getInstance().pushCommand(ICommand.CMD_ADD, selectedItemRecord.getItemId(), name);
+                CommandManager.getInstance().pushCommand(ICommand.CMD_ADD, selectedImportItem.getItemId(), name);
             }
         }
     }
