@@ -23,6 +23,7 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
 import org.talend.commons.exception.LoginException;
 import org.talend.commons.exception.PersistenceException;
+import org.talend.commons.utils.VersionUtils;
 import org.talend.core.GlobalServiceRegister;
 import org.talend.core.model.properties.Item;
 import org.talend.core.model.repository.IRepositoryViewObject;
@@ -127,7 +128,8 @@ public class MDMOpenExistVersionProcessWizard extends OpenExistVersionProcessWiz
 
             private boolean isLatestVersion(final IRepositoryViewObject viewObj) {
                 String selectedVersion = viewObj.getProperty().getVersion();
-                return selectedVersion.equals(getOriginVersion());
+                int compare = VersionUtils.compareTo(selectedVersion, getOriginVersion());
+                return compare >= 0;
             }
         });
 
