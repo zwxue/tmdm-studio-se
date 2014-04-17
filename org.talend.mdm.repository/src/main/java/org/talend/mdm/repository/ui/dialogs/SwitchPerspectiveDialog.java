@@ -25,8 +25,10 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IPerspectiveDescriptor;
+import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.internal.WorkbenchPlugin;
+import org.talend.designer.core.ui.views.contexts.Contexts;
 import org.talend.mdm.repository.i18n.Messages;
 
 /**
@@ -111,7 +113,11 @@ public class SwitchPerspectiveDialog extends MessageDialog {
         IPerspectiveDescriptor perspective = WorkbenchPlugin.getDefault().getPerspectiveRegistry()
                 .findPerspectiveWithId(perspectiveId);
         if (perspective != null) {
-            PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().setPerspective(perspective);
+            IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+            if (activePage != null) {
+                activePage.setPerspective(perspective);
+                Contexts.switchToCurContextsView();
+            }
         }
     }
 
