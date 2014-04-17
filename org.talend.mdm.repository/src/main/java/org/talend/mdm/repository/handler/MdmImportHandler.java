@@ -14,7 +14,7 @@ import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 import org.talend.repository.items.importexport.handlers.imports.ImportRepTypeHandler;
-import org.talend.repository.items.importexport.handlers.model.ItemRecord;
+import org.talend.repository.items.importexport.handlers.model.ImportItem;
 import org.talend.repository.items.importexport.manager.ResourcesManager;
 
 public class MdmImportHandler extends ImportRepTypeHandler {
@@ -24,8 +24,8 @@ public class MdmImportHandler extends ImportRepTypeHandler {
     private static Logger log = Logger.getLogger(MdmImportHandler.class);
 
     @Override
-    public void afterImportingItemRecords(IProgressMonitor monitor, ResourcesManager resManager, ItemRecord selectedItemRecord) {
-        super.afterImportingItemRecords(monitor, resManager, selectedItemRecord);
+    public void afterImportingItems(IProgressMonitor monitor, ResourcesManager resManager, ImportItem selectedItemRecord) {
+        super.afterImportingItems(monitor, resManager, selectedItemRecord);
 
         try {
             IRepositoryViewObject object = factory.getSpecificVersion(selectedItemRecord.getItemId(),
@@ -38,7 +38,7 @@ public class MdmImportHandler extends ImportRepTypeHandler {
         }
     }
 
-    protected void update(IRepositoryViewObject object, ItemRecord selectedItemRecord) throws PersistenceException {
+    protected void update(IRepositoryViewObject object, ImportItem selectedItemRecord) throws PersistenceException {
         Property property = object.getProperty();
         Item item = property.getItem();
         boolean needSave = false;
