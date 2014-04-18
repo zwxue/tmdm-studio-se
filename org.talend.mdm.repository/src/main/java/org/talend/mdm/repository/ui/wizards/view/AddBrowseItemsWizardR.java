@@ -208,7 +208,7 @@ public class AddBrowseItemsWizardR extends AddBrowseItemsWizard {
                         XSDParticle xSDCom = particles.get(k);
                         if ((xSDCom != null && xSDCom.getContent() != null)
                                 && xSDCom.getContent() instanceof XSDElementDeclaration) {
-                            labelValue = ((XSDElementDeclaration) xSDCom.getContent()).getName();
+                            labelValue = getFieldName(xSDCom);
                             String field = decl.getName();
                             field = field.replaceFirst("#.*", "");//$NON-NLS-1$//$NON-NLS-2$
                             field += "/" + labelValue;//$NON-NLS-1$
@@ -225,6 +225,17 @@ public class AddBrowseItemsWizardR extends AddBrowseItemsWizard {
         }
         return fields;
 
+    }
+
+    private static String getFieldName(XSDParticle xSDCom) {
+        XSDElementDeclaration xsdElementDeclaration = (XSDElementDeclaration) xSDCom.getContent();
+        String labelValue = xsdElementDeclaration.getName();
+        if (xsdElementDeclaration.getTypeDefinition() == null) {
+            if (xSDCom.getTerm() instanceof XSDElementDeclaration) {
+                labelValue = ((XSDElementDeclaration) xSDCom.getTerm()).getName();
+            }
+        }
+        return labelValue;
     }
 
     @Override
