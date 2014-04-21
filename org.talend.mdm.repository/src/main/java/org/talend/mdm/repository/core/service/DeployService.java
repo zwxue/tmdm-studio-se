@@ -183,6 +183,7 @@ public class DeployService {
             CommandManager manager = CommandManager.getInstance();
             List<AbstractDeployCommand> commands = manager.getDeployCommands(validObjects, defaultCmdType);
             // insert impact dialog
+            List<AbstractDeployCommand> canceledCommandAfterImpactAnalysis = new LinkedList<AbstractDeployCommand>(commands);
             try {
                 Map<IRepositoryViewObject, ImpactOperation> analyzeModelImpact = ModelImpactAnalyseService.analyzeCommandImpact(
                         serverDef, commands);
@@ -193,9 +194,7 @@ public class DeployService {
                     manager.attachParameterToCommand(commands, paramMap);
                 }
 
-                if (commands.size() == 0) {
-                    return Status.CANCEL_STATUS;
-                }
+                canceledCommandAfterImpactAnalysis.removeAll(commands);
             } catch (InterruptedException ex) {
                 return Status.CANCEL_STATUS;
             }
@@ -211,7 +210,11 @@ public class DeployService {
             }
             //
             generateValidationFailedDeployStatus(mainStatus, invalidObjects);
-            generateConsistencyCancelDeployStatus(mainStatus, consistencyCheckResult.getToSkipObjects());
+            generateConsistencyCancelDeployStatus(mainStatus, consistencyCheckResult.getToSkipObjects().toArray(new IRepositoryViewObject[0]));
+
+            for(AbstractDeployCommand cmd:canceledCommandAfterImpactAnalysis) {
+                generateConsistencyCancelDeployStatus(mainStatus, cmd.getViewObject());
+            }
             return mainStatus;
         } catch (Exception e) {
             log.error(e.getMessage(), e);
@@ -277,15 +280,16 @@ public class DeployService {
 
     }
 
-    public void generateConsistencyCancelDeployStatus(IStatus mainStatus, List<IRepositoryViewObject> cancelViewObjs) {
-        for (IRepositoryViewObject viewObj : cancelViewObjs) {
-            ICommand cancelCmd = CommandManager.getInstance().getNewCommand(ICommand.CMD_NOP);
-            cancelCmd.updateViewObject(viewObj);
-            DeployStatus cancelStatus = DeployStatus.getInfoStatus(cancelCmd, Messages.DeployService_conflictCancelStatus
-                    + viewObj.getLabel());
-            ((MultiStatus) mainStatus).add(cancelStatus);
+    public void generateConsistencyCancelDeployStatus(IStatus mainStatus, IRepositoryViewObject... cancelViewObjs) {
+        if (cancelViewObjs != null) {
+            for (IRepositoryViewObject viewObj : cancelViewObjs) {
+                ICommand cancelCmd = CommandManager.getInstance().getNewCommand(ICommand.CMD_NOP);
+                cancelCmd.updateViewObject(viewObj);
+                DeployStatus cancelStatus = DeployStatus.getInfoStatus(cancelCmd, Messages.DeployService_conflictCancelStatus
+                        + viewObj.getLabel());
+                ((MultiStatus) mainStatus).add(cancelStatus);
+            }
         }
-
     }
 
     /**

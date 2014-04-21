@@ -12,6 +12,7 @@
 // ============================================================================
 package org.talend.mdm.repository.ui.actions;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -123,6 +124,8 @@ public class DeployAllAction extends AbstractDeployAction {
                     }
                     lockDirtyDialog.saveDirtyObjects();
                     // insert impact dialog
+                    List<AbstractDeployCommand> canceledCommandAfterImpactAnalysis = new LinkedList<AbstractDeployCommand>(
+                            selectededCommands);
                     try {
                         Map<IRepositoryViewObject, ImpactOperation> analyzeModelImpact = ModelImpactAnalyseService
                                 .analyzeCommandImpact(serverDef, selectededCommands);
@@ -132,6 +135,7 @@ public class DeployAllAction extends AbstractDeployAction {
                             paramMap = ModelImpactAnalyseService.convertToParameters(analyzeModelImpact);
                             CommandManager.getInstance().attachParameterToCommand(selectededCommands, paramMap);
                         }
+                        canceledCommandAfterImpactAnalysis.removeAll(selectededCommands);
                     } catch (InterruptedException ex) {
                         return;
                     }
@@ -146,7 +150,11 @@ public class DeployAllAction extends AbstractDeployAction {
                     }
                     // add canceled object to status
                     deployService.generateValidationFailedDeployStatus(status, invalidObjects);
-                    deployService.generateConsistencyCancelDeployStatus(status, consistencyCheckResult.getToSkipObjects());
+                    deployService.generateConsistencyCancelDeployStatus(status, consistencyCheckResult.getToSkipObjects()
+                            .toArray(new IRepositoryViewObject[0]));
+                    for (AbstractDeployCommand cmd : canceledCommandAfterImpactAnalysis) {
+                        deployService.generateConsistencyCancelDeployStatus(status, cmd.getViewObject());
+                    }
                     //
                     updateChangedStatus(status);
                     if (status.isMultiStatus()) {
