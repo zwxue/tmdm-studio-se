@@ -634,7 +634,9 @@ public class RepositoryResourceUtil {
             List<IRepositoryViewObject> allObjs = factory.getAll(type, withDeleted);
             List<IRepositoryViewObject> viewObjects = new LinkedList<IRepositoryViewObject>();
             for (IRepositoryViewObject viewObj : allObjs) {
+                viewObj = assertViewObject(viewObj);
                 Item item = viewObj.getProperty().getItem();
+
                 ItemState state = item.getState();
                 if (!state.isDeleted() || withDeleted) {
                     try {
@@ -901,7 +903,18 @@ public class RepositoryResourceUtil {
             if (!useRepositoryViewObject) {
                 ((RepositoryObject) cacheViewObj).setProperty(viewObj.getProperty());
             }
+            Property cacheProp = cacheViewObj.getProperty();
+            if (cacheProp.eIsProxy() && (cacheProp.eResource() == null || cacheProp.eResource().getResourceSet() == null)) {
+                if (useRepositoryViewObject) {
+                    cacheViewObj = new RepositoryViewObject(property);
+                } else {
+                    cacheViewObj = viewObj;
+                }
+                ContainerCacheService.put(property, cacheViewObj);
+            }
+
         }
+
         return cacheViewObj;
     }
 
@@ -916,7 +929,7 @@ public class RepositoryResourceUtil {
             if (property != null) {
                 Item item = property.getItem();
                 Resource eResource = item.eResource();
-                reload = eResource == null;
+                reload = eResource == null || eResource.getResourceSet() == null;
             } else {
                 reload = true;
             }
@@ -924,6 +937,16 @@ public class RepositoryResourceUtil {
                 IProxyRepositoryFactory factory = CoreRuntimePlugin.getInstance().getProxyRepositoryFactory();
                 try {
                     IRepositoryViewObject newViewObj = factory.getLastVersion(viewObj.getId());
+                    property = viewObj.getProperty();
+                    if (property != null) {
+                        Item item = property.getItem();
+                        Resource eResource = item.eResource();
+                        reload = eResource == null || eResource.getResourceSet() == null;
+                        if (reload) {
+                            property = factory.reload(property);
+                            newViewObj = new RepositoryViewObject(property);
+                        }
+                    }
                     if (newViewObj != null) {
                         ContainerCacheService.put(newViewObj);
                     }
@@ -947,10 +970,18 @@ public class RepositoryResourceUtil {
         if (property != null) {
 
             Resource eResource = item.eResource();
-            if (eResource == null) {
+            if (eResource == null || eResource.getResourceSet() == null) {
                 IProxyRepositoryFactory factory = CoreRuntimePlugin.getInstance().getProxyRepositoryFactory();
                 try {
                     IRepositoryViewObject newViewObj = factory.getLastVersion(property.getId());
+                    property = newViewObj.getProperty();
+                    if (property != null) {
+                        eResource = property.getItem().eResource();
+                        if (eResource == null || eResource.getResourceSet() == null) {
+                            property = factory.reload(property);
+                            newViewObj = new RepositoryViewObject(property);
+                        }
+                    }
                     ContainerCacheService.put(newViewObj);
                     return newViewObj.getProperty().getItem();
                 } catch (PersistenceException e) {

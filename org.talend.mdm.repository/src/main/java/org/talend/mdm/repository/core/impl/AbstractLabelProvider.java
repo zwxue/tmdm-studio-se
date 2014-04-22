@@ -162,6 +162,7 @@ public abstract class AbstractLabelProvider implements IRepositoryNodeLabelProvi
     }
 
     protected String getServerObjectItemText(Item item) {
+        item = RepositoryResourceUtil.assertItem(item);
         MDMServerObject serverObject = ((MDMServerObjectItem) item).getMDMServerObject();
         if (serverObject != null) {
             return serverObject.getName();
