@@ -33,6 +33,7 @@ import org.talend.core.model.properties.FolderType;
 import org.talend.core.model.properties.Item;
 import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.core.model.repository.IRepositoryViewObject;
+import org.talend.core.repository.model.ProxyRepositoryFactory;
 import org.talend.mdm.repository.core.AbstractRepositoryAction;
 import org.talend.mdm.repository.core.IRepositoryNodeActionProvider;
 import org.talend.mdm.repository.core.IRepositoryViewGlobalActionHandler;
@@ -65,6 +66,7 @@ import org.talend.mdm.repository.ui.actions.process.MDMEventManagerAction;
 import org.talend.mdm.repository.ui.editors.IRepositoryViewEditorInput;
 import org.talend.mdm.repository.ui.editors.XObjectBrowserInput2;
 import org.talend.mdm.repository.ui.editors.XObjectEditorInput2;
+import org.talend.repository.ProjectManager;
 
 import com.amalto.workbench.exadapter.ExAdapterManager;
 import com.amalto.workbench.models.TreeObject;
@@ -289,10 +291,16 @@ public class RepositoryNodeActionProviderAdapter implements IRepositoryNodeActio
 
     private IRepositoryNodeActionProvider[] getExtendActionProviders() {
         if (extendActionProviders == null) {
-            IRepositoryNodeActionProvider svnProvider = ActionProviderManager.getActionProvider(SVN_ACTION_PROVIDER_ID);
-            if (svnProvider != null) {
-                extendActionProviders = new IRepositoryNodeActionProvider[] { svnProvider };
-            } else {
+            boolean isLocalProj = ProjectManager.getInstance().getCurrentProject().isLocal();
+            boolean isOffline = ProxyRepositoryFactory.getInstance().getRepositoryContext().isOffline();
+            if (!isLocalProj && !isOffline) {
+                IRepositoryNodeActionProvider svnProvider = ActionProviderManager.getActionProvider(SVN_ACTION_PROVIDER_ID);
+                if (svnProvider != null) {
+                    extendActionProviders = new IRepositoryNodeActionProvider[] { svnProvider };
+                }
+            }
+
+            if (extendActionProviders == null) {
                 extendActionProviders = new IRepositoryNodeActionProvider[0];
             }
         }
