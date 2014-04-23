@@ -329,14 +329,20 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
     /**
      * Returns a boolean indicating whether the directory portion of the passed pathname is valid and available for use.
      */
-    protected boolean ensureTargetDirectoryIsValid(String fullPathname) {
-        int separatorIndex = fullPathname.lastIndexOf(File.separator);
+    protected boolean ensureTargetDirectoryIsValid(final String fullPathname) {
+        final int separatorIndex = fullPathname.lastIndexOf(File.separator);
 
         if (separatorIndex == -1) {
             return true;
         }
+        final List<Boolean> result = new ArrayList<Boolean>();
+        Display.getDefault().syncExec(new Runnable() {
 
-        return ensureTargetIsValid(new File(fullPathname.substring(0, separatorIndex)));
+            public void run() {
+                result.add(ensureTargetIsValid(new File(fullPathname.substring(0, separatorIndex))));
+            }
+        });
+        return result.isEmpty() ? false : result.get(0);
     }
 
     /**
@@ -463,6 +469,8 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
                                 break;
                             }
                         }
+                    } else {
+                        isOK = false;
                     }
                 }
 
