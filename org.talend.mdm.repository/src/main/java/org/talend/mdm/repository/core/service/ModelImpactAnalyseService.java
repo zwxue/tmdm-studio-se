@@ -34,6 +34,7 @@ import org.talend.core.model.properties.Item;
 import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.IServerObjectRepositoryType;
+import org.talend.mdm.repository.core.command.ICommand;
 import org.talend.mdm.repository.core.command.deploy.AbstractDeployCommand;
 import org.talend.mdm.repository.core.command.param.DataModelCmdParam;
 import org.talend.mdm.repository.core.command.param.ICommandParameter;
@@ -195,7 +196,8 @@ public class ModelImpactAnalyseService {
             List<AbstractDeployCommand> commands) throws InterruptedException {
         List<IRepositoryViewObject> viewObjs = new LinkedList<IRepositoryViewObject>();
         for (AbstractDeployCommand cmd : commands) {
-            if (cmd.getViewObject() != null) {
+            int commandType = cmd.getCommandType();
+            if ((commandType == ICommand.CMD_MODIFY || commandType == ICommand.CMD_ADD) && cmd.getViewObject() != null) {
                 viewObjs.add(cmd.getViewObject());
             }
         }
