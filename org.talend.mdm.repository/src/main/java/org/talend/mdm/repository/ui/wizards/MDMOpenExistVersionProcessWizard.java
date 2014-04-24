@@ -17,9 +17,11 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
 import org.talend.commons.exception.PersistenceException;
+import org.talend.commons.utils.VersionUtils;
 import org.talend.core.GlobalServiceRegister;
 import org.talend.core.model.properties.Item;
 import org.talend.core.model.repository.IRepositoryViewObject;
@@ -37,9 +39,8 @@ import org.talend.repository.model.ERepositoryStatus;
 import org.talend.repository.model.IProxyRepositoryFactory;
 import org.talend.repository.model.RepositoryNode;
 
-
 /**
- * DOC achen  class global comment. Detailled comment
+ * DOC achen class global comment. Detailled comment
  */
 public class MDMOpenExistVersionProcessWizard extends OpenExistVersionProcessWizard {
 
@@ -49,16 +50,15 @@ public class MDMOpenExistVersionProcessWizard extends OpenExistVersionProcessWiz
 
     /**
      * DOC achen MDMOpenExistVersionProcessWizard constructor comment.
-     *
+     * 
      * @param processObject
      */
     public MDMOpenExistVersionProcessWizard(IRepositoryViewObject processObject) {
         super(processObject);
 
         ERepositoryStatus status = processObject.getRepositoryStatus();
-        if ( status.equals(ERepositoryStatus.LOCK_BY_USER)
-                && RepositoryResourceUtil.isOpenedItemInEditor(processObject)) {
-        	alreadyEditedByUser = true;
+        if (status.equals(ERepositoryStatus.LOCK_BY_USER) && RepositoryResourceUtil.isOpenedItemInEditor(processObject)) {
+            alreadyEditedByUser = true;
         }
         this.viewObject = processObject;
     }
@@ -69,38 +69,50 @@ public class MDMOpenExistVersionProcessWizard extends OpenExistVersionProcessWiz
         addPage(mainPage);
         setWindowTitle(Messages.MDMOpenExistVersionProcessWizard_NewObject);
     }
+
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see
      * org.talend.designer.core.ui.wizards.OpenExistVersionProcessWizard#openAnotherVersion(org.talend.repository.model
      * .RepositoryNode, boolean)
      */
     @Override
-    protected void openAnotherVersion(RepositoryNode node, boolean readonly) {
+    protected void openAnotherVersion(final RepositoryNode node, boolean readonly) {
+        Display.getCurrent().asyncExec(new Runnable() {
 
-        IRepositoryViewObject viewObject = node.getObject();
-        Item item = viewObject.getProperty().getItem();
-        IRepositoryNodeConfiguration configuration = RepositoryNodeConfigurationManager.getConfiguration(item);
-        if (configuration != null) {
-            IRepositoryNodeActionProvider actionProvider = configuration.getActionProvider();
-            if (actionProvider != null) {
-                IRepositoryViewEditorInput editorInput = actionProvider.getOpenEditorInput(viewObject);
-                editorInput.setReadOnly(readonly);
-                if (editorInput != null) {
+            public void run() {
+                IRepositoryViewObject viewObject = node.getObject();
+                Item item = viewObject.getProperty().getItem();
+                boolean latestVersion = isLatestVersion(viewObject);
+                IRepositoryNodeConfiguration configuration = RepositoryNodeConfigurationManager.getConfiguration(item);
+                if (configuration != null) {
+                    IRepositoryNodeActionProvider actionProvider = configuration.getActionProvider();
+                    if (actionProvider != null) {
+                        IRepositoryViewEditorInput editorInput = actionProvider.getOpenEditorInput(viewObject);
+                        editorInput.setReadOnly(latestVersion);
+                        if (editorInput != null) {
 
-                    IWorkbenchPage page = MDMRepositoryView.show().getCommonViewer().getCommonNavigator().getSite()
-                            .getWorkbenchWindow().getActivePage();
-                    try {
-                        updateEditorInputVersionInfo(editorInput, viewObject);
-                        page.openEditor(editorInput, editorInput.getEditorId(), readonly);
-                        this.viewObject=viewObject;
-                    } catch (PartInitException e) {
-                        log.error(e.getMessage(), e);
+                            IWorkbenchPage page = MDMRepositoryView.show().getCommonViewer().getCommonNavigator().getSite()
+                                    .getWorkbenchWindow().getActivePage();
+                            try {
+                                updateEditorInputVersionInfo(editorInput, viewObject);
+                                page.openEditor(editorInput, editorInput.getEditorId(), !latestVersion);
+                                setViewObj(viewObject);
+                            } catch (PartInitException e) {
+                                log.error(e.getMessage(), e);
+                            }
+                        }
                     }
                 }
             }
-        }
+
+            private boolean isLatestVersion(final IRepositoryViewObject viewObj) {
+                String selectedVersion = viewObj.getProperty().getVersion();
+                int compare = VersionUtils.compareTo(selectedVersion, getOriginVersion());
+                return compare >= 0;
+            }
+        });
     }
 
     private void updateEditorInputVersionInfo(IRepositoryViewEditorInput editorInput, IRepositoryViewObject viewObject) {
@@ -127,8 +139,13 @@ public class MDMOpenExistVersionProcessWizard extends OpenExistVersionProcessWiz
 
         editorInput.setVersion(version);
     }
-    public IRepositoryViewObject getViewObj(){
+
+    public IRepositoryViewObject getViewObj() {
         return this.viewObject;
+    }
+
+    private void setViewObj(IRepositoryViewObject viewObj) {
+        this.viewObject = viewObj;
     }
 
     @Override
