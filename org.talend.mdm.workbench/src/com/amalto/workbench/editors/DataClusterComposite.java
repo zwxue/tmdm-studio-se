@@ -216,7 +216,9 @@ public class DataClusterComposite extends Composite implements IPagingListener {
 
         createSearchPart(compSecondLine);
 
-        createShowTaskIdPart(compSecondLine);
+        if (Util.IsEnterPrise()) {
+            createShowTaskIdPart(compSecondLine);
+        }
         return compSecondLine;
     }
 
@@ -290,7 +292,7 @@ public class DataClusterComposite extends Composite implements IPagingListener {
     }
 
     public void doSearch() {
-        if (showTaskIdCB.getSelection()) {
+        if (showTaskId()) {
             if (resultsViewer.getTable().getColumnCount() != 4) {
                 final TableColumn column3 = new TableColumn(resultsViewer.getTable(), SWT.LEFT, 3);
                 column3.setText(Messages.DataClusterBrowserMainPage_12);
@@ -310,6 +312,10 @@ public class DataClusterComposite extends Composite implements IPagingListener {
 
         doSearchSort();//
         readjustViewerHeight();
+    }
+
+    private boolean showTaskId() {
+        return Util.IsEnterPrise() && showTaskIdCB.getSelection();
     }
 
     /**
@@ -359,7 +365,7 @@ public class DataClusterComposite extends Composite implements IPagingListener {
                 Matcher matcher = pattern.matcher(dateTimeText);
                 if (!matcher.matches()) {
                     MessageDialog
-                            .openWarning(this.getSite().getShell(), Messages.Warning, Messages.DataClusterBrowserMainPage_21);
+                    .openWarning(this.getSite().getShell(), Messages.Warning, Messages.DataClusterBrowserMainPage_21);
                     return new LineItem[0];
                 }
 
@@ -375,7 +381,7 @@ public class DataClusterComposite extends Composite implements IPagingListener {
                 Matcher matcher = pattern.matcher(dateTimeText);
                 if (!matcher.matches()) {
                     MessageDialog
-                            .openWarning(this.getSite().getShell(), Messages.Warning, Messages.DataClusterBrowserMainPage_23);
+                    .openWarning(this.getSite().getShell(), Messages.Warning, Messages.DataClusterBrowserMainPage_23);
                     return new LineItem[0];
                 }
 
@@ -863,7 +869,7 @@ public class DataClusterComposite extends Composite implements IPagingListener {
                 break;
             case 2:
                 res = Util
-                        .joinStrings(li1.getIds(), ".").compareToIgnoreCase(Util.joinStrings(li2.getIds(), Messages.DataClusterBrowserMainPage_130)); //$NON-NLS-1$
+                .joinStrings(li1.getIds(), ".").compareToIgnoreCase(Util.joinStrings(li2.getIds(), Messages.DataClusterBrowserMainPage_130)); //$NON-NLS-1$
                 break;
             default:
                 res = 0;

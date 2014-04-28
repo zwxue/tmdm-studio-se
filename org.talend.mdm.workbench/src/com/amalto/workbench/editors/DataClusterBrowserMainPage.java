@@ -251,8 +251,11 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                 if (selection.size() == 1) {
                     manager.appendToGroup(IWorkbenchActionConstants.MB_ADDITIONS, new EditItemAction(
                             DataClusterBrowserMainPage.this.getSite().getShell(), DataClusterBrowserMainPage.this.resultsViewer));
-                    manager.appendToGroup(IWorkbenchActionConstants.MB_ADDITIONS, new EditTaskIdAction(
-                            DataClusterBrowserMainPage.this.getSite().getShell(), DataClusterBrowserMainPage.this.resultsViewer));
+                    if (Util.IsEnterPrise()) {
+                        manager.appendToGroup(IWorkbenchActionConstants.MB_ADDITIONS, new EditTaskIdAction(
+                                DataClusterBrowserMainPage.this.getSite().getShell(),
+                                DataClusterBrowserMainPage.this.resultsViewer));
+                    }
                 }
                 if (selection.size() > 0) {
                     manager.appendToGroup(IWorkbenchActionConstants.MB_ADDITIONS, new PhysicalDeleteItemsAction(
@@ -410,7 +413,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 
         private String updateAutoIncrement(String cluster, String content, Map<String, String> conceptRevisions,
                 Map<String, String> results)
-                throws Exception {
+                        throws Exception {
             Map<String, String> keyvalues = new HashMap<String, String>();
             for(String concept:results.keySet()) {
                 String revision = conceptRevisions.get(concept);
@@ -807,13 +810,13 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                         Messages.DataClusterBrowserMainPage_65, lineItems.size()), Messages.DataClusterBrowserMainPage_67,
                         new IInputValidator() {
 
-                            public String isValid(String newText) {
-                                if ((newText == null) || !newText.matches("^\\/.*$")) { //$NON-NLS-1$
-                                    return Messages.DataClusterBrowserMainPage_68;
-                                }
-                                return null;
-                            };
-                        });
+                    public String isValid(String newText) {
+                        if ((newText == null) || !newText.matches("^\\/.*$")) { //$NON-NLS-1$
+                            return Messages.DataClusterBrowserMainPage_68;
+                        }
+                        return null;
+                    };
+                });
 
                 id.setBlockOnOpen(true);
                 int ret = id.open();
@@ -1316,7 +1319,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                 break;
             case 2:
                 res = Util
-                        .joinStrings(li1.getIds(), ".").compareToIgnoreCase(Util.joinStrings(li2.getIds(), Messages.DataClusterBrowserMainPage_130)); //$NON-NLS-1$
+                .joinStrings(li1.getIds(), ".").compareToIgnoreCase(Util.joinStrings(li2.getIds(), Messages.DataClusterBrowserMainPage_130)); //$NON-NLS-1$
                 break;
             default:
                 res = 0;
