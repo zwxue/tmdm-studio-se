@@ -185,6 +185,15 @@ public class MdmmetadataPackageImpl extends EPackageImpl implements MdmmetadataP
 
     /**
      * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EAttribute getMDMServerDef_Algorithm() {
+        return (EAttribute)mdmServerDefEClass.getEStructuralFeatures().get(9);
+    }
+
+    /**
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
      * @generated
      */
@@ -221,6 +230,7 @@ public class MdmmetadataPackageImpl extends EPackageImpl implements MdmmetadataP
         createEAttribute(mdmServerDefEClass, MDM_SERVER_DEF__URL);
         createEAttribute(mdmServerDefEClass, MDM_SERVER_DEF__USER);
         createEAttribute(mdmServerDefEClass, MDM_SERVER_DEF__ENABLED);
+        createEAttribute(mdmServerDefEClass, MDM_SERVER_DEF__ALGORITHM);
     }
 
 	/**
@@ -267,6 +277,7 @@ public class MdmmetadataPackageImpl extends EPackageImpl implements MdmmetadataP
         initEAttribute(getMDMServerDef_Url(), ecorePackage.getEString(), "url", null, 0, 1, MDMServerDef.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
         initEAttribute(getMDMServerDef_User(), ecorePackage.getEString(), "user", null, 0, 1, MDMServerDef.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
         initEAttribute(getMDMServerDef_Enabled(), ecorePackage.getEBoolean(), "enabled", "true", 0, 1, MDMServerDef.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+        initEAttribute(getMDMServerDef_Algorithm(), ecorePackage.getEString(), "algorithm", null, 0, 1, MDMServerDef.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
         EOperation op = addEOperation(mdmServerDefEClass, ecorePackage.getEBoolean(), "validate", 0, 1, IS_UNIQUE, IS_ORDERED);
         addEParameter(op, ecorePackage.getEString(), "url", 0, 1, IS_UNIQUE, IS_ORDERED);

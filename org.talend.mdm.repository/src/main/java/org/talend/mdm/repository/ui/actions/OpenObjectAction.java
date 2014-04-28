@@ -251,7 +251,7 @@ public class OpenObjectAction extends AbstractRepositoryAction implements IIntro
                     if (!checkMissingJar(serverObject)) {
                         return;
                     }
-                    boolean selected = doSelectServer(serverObject, editorInput);
+                    boolean selected = doSelectServer(item, editorInput);
                     if (!selected) {
                         return;
                     }
@@ -341,9 +341,11 @@ public class OpenObjectAction extends AbstractRepositoryAction implements IIntro
         return true;
     }
 
-    public boolean doSelectServer(MDMServerObject serverObject, IRepositoryViewEditorInput editorInput) {
+    public boolean doSelectServer(Item item, IRepositoryViewEditorInput editorInput) {
+        MDMServerObject serverObject = ((MDMServerObjectItem) item).getMDMServerObject();
         if (serverObject.getType() == TreeObject.DATA_CLUSTER) {// Data Cluster
-            MDMServerDef serverDef = openServerDialog(serverObject.getLastServerDef());
+            MDMServerDef lastServerDef = RepositoryResourceUtil.getLastServerDef(item);
+            MDMServerDef serverDef = openServerDialog(lastServerDef);
             if (serverDef != null) {
                 XObjectBrowserInput input = (XObjectBrowserInput) editorInput;
                 TreeObject xobject = (TreeObject) input.getModel();

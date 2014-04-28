@@ -296,6 +296,10 @@ public class MDMImportRepositoryItemsWizard extends ImportItemsWizard {
                                 if (item instanceof MDMServerObjectItem) {
 
                                     serverObj = ((MDMServerObjectItem) item).getMDMServerObject();
+                                    if (serverObj.getLastServerName() != null) {
+                                        serverObj.setLastServerName(null);
+                                        needSave = true;
+                                    }
                                     if (serverObj.getLastServerDef() != null) {
                                         serverObj.setLastServerDef(null);
                                         needSave = true;

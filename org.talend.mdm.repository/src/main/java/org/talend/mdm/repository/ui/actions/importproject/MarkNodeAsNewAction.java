@@ -41,8 +41,9 @@ public class MarkNodeAsNewAction implements IAfterImportProjectAction {
     private static Logger log = Logger.getLogger(MarkNodeAsNewAction.class);
 
     public void run(Project project) {
-        if (project == null)
+        if (project == null) {
             return;
+        }
         List<ERepositoryObjectType> types = new ArrayList<ERepositoryObjectType>();
         types.add(IServerObjectRepositoryType.TYPE_DATAMODEL);
         types.add(IServerObjectRepositoryType.TYPE_CUSTOM_FORM);
@@ -78,7 +79,7 @@ public class MarkNodeAsNewAction implements IAfterImportProjectAction {
                     if (item instanceof MDMServerObjectItem) {
 
                         serverObj = ((MDMServerObjectItem) item).getMDMServerObject();
-                        if (serverObj.getLastServerDef() != null) {
+                        if (serverObj.getLastServerName() != null || serverObj.getLastServerDef() != null) {
                             needRemoved = true;
                         }
                     } else {

@@ -39,6 +39,7 @@ import org.talend.mdm.repository.core.command.CommandManager;
 import org.talend.mdm.repository.core.command.ICommand;
 import org.talend.mdm.repository.core.impl.transformerV2.ITransformerV2NodeConsDef;
 import org.talend.mdm.repository.i18n.Messages;
+import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.model.mdmproperties.WSResourceItem;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
@@ -57,7 +58,7 @@ public class MdmPropertiesWizard extends PropertiesWizard {
 
     /**
      * DOC achen MdmPropertiesWizard constructor comment.
-     *
+     * 
      * @param repositoryViewObject
      * @param path
      * @param useLastVersion
@@ -95,7 +96,8 @@ public class MdmPropertiesWizard extends PropertiesWizard {
                     item = RepositoryResourceUtil.assertItem(item);
                     factory.save(item, false);
                     afterSave(object, oldVersion);
-                    if (!oldName.equals(newName) && serverObject.getLastServerDef() != null) {
+                    MDMServerDef lastServerDef = RepositoryResourceUtil.getLastServerDef(item);
+                    if (!oldName.equals(newName) && lastServerDef != null) {
                         CommandManager.getInstance().pushCommand(ICommand.CMD_RENAME, object.getId(),
                                 new String[] { oldName, newName });
                     }
@@ -122,7 +124,7 @@ public class MdmPropertiesWizard extends PropertiesWizard {
 
     /**
      * DOC HHB Comment method "afterSave".
-     *
+     * 
      * @param object
      * @param oldVersion
      */
@@ -254,7 +256,7 @@ public class MdmPropertiesWizard extends PropertiesWizard {
 
     /**
      * DOC HHB Comment method "canEditObjectName".
-     *
+     * 
      * @return
      */
     protected boolean canEditObjectName() {

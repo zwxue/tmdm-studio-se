@@ -39,8 +39,8 @@ import org.talend.mdm.repository.core.service.DeployService;
 import org.talend.mdm.repository.core.service.IModelValidationService;
 import org.talend.mdm.repository.core.service.IModelValidationService.IModelValidateResult;
 import org.talend.mdm.repository.i18n.Messages;
-import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
-import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
+import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
+import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 
 import com.amalto.workbench.editors.DataModelMainPage;
 import com.amalto.workbench.editors.xsdeditor.XSDEditor;
@@ -183,7 +183,6 @@ public class XSDEditor2 extends XSDEditor implements ISvnHistory {
         super.doSave(monitor);
         IRepositoryViewObject viewObject = getCurrentViewObject();
         Item item = viewObject.getProperty().getItem();
-        MDMServerObject serverObject = ((MDMServerObjectItem) item).getMDMServerObject();
         if (isEE()) {
             exAdapter.doSave(item, dMainPage, monitor);
         }
@@ -191,8 +190,11 @@ public class XSDEditor2 extends XSDEditor implements ISvnHistory {
         DeployService deployService = DeployService.getInstance();
         if (deployService.isAutoDeploy()) {
             deployService.autoDeploy(getSite().getShell(), viewObject);
-        } else if (serverObject.getLastServerDef() != null) {
-            CommandManager.getInstance().pushCommand(ICommand.CMD_MODIFY, viewObject);
+        } else {
+            MDMServerDef lastServerDef = RepositoryResourceUtil.getLastServerDef(item);
+            if (lastServerDef != null) {
+                CommandManager.getInstance().pushCommand(ICommand.CMD_MODIFY, viewObject);
+            }
         }
     }
 

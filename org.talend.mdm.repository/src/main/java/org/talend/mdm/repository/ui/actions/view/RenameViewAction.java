@@ -30,6 +30,7 @@ import org.talend.mdm.repository.core.command.ICommand;
 import org.talend.mdm.repository.core.impl.view.IViewNodeConstDef;
 import org.talend.mdm.repository.core.service.ContainerCacheService;
 import org.talend.mdm.repository.i18n.Messages;
+import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
 import org.talend.mdm.repository.ui.actions.RenameObjectAction;
@@ -115,7 +116,8 @@ public class RenameViewAction extends AbstractRepositoryAction implements IViewN
                         viewObj.getProperty().setDisplayName(newName);
 
                         factory.save(viewObj.getProperty().getItem(), false);
-                        if (serverObject.getLastServerDef() != null) {
+                        MDMServerDef lastServerDef = RepositoryResourceUtil.getLastServerDef(viewObj);
+                        if (lastServerDef != null) {
                             CommandManager.getInstance().pushCommand(ICommand.CMD_RENAME, viewObj.getId(),
                                     new String[] { oldName, newName });
                         }

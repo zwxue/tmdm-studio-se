@@ -36,8 +36,6 @@ import org.talend.mdm.repository.core.service.DeployService;
 import org.talend.mdm.repository.core.service.RepositoryQueryService;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
-import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
-import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
 import org.talend.mdm.repository.ui.navigator.MDMRepositoryView;
 import org.talend.mdm.repository.ui.widgets.TisTableViewerR;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
@@ -59,7 +57,7 @@ public class ViewMainPage2 extends ViewMainPage {
 
     /**
      * DOC hbhong ViewMainPage2 constructor comment.
-     *
+     * 
      * @param editor
      */
     public ViewMainPage2(FormEditor editor) {
@@ -133,9 +131,7 @@ public class ViewMainPage2 extends ViewMainPage {
     private MDMServerDef getLastServerDef() {
         XObjectEditorInput2 input = (XObjectEditorInput2) getEditor().getEditorInput();
         Item item = input.getInputItem();
-        MDMServerObject serverObject = ((MDMServerObjectItem) item).getMDMServerObject();
-
-        MDMServerDef lastServerDef = serverObject.getLastServerDef();
+        MDMServerDef lastServerDef = RepositoryResourceUtil.getLastServerDef(item);
         if (lastServerDef != null) {
             lastServerDef = lastServerDef.getDecryptedServerDef();
         }
@@ -174,7 +170,7 @@ public class ViewMainPage2 extends ViewMainPage {
     }
 
     private void autoDeployProcess(DeployService deployService) {
-        XObjectEditorInput2 theInput = (XObjectEditorInput2)getEditorInput();
+        XObjectEditorInput2 theInput = (XObjectEditorInput2) getEditorInput();
         IRepositoryViewObject viewObj = theInput.getViewObject();
         deployService.autoDeploy(getSite().getShell(), viewObj);
     }

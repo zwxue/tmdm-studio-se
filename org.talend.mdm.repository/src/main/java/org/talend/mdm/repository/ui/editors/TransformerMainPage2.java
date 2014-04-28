@@ -30,10 +30,9 @@ import org.talend.mdm.repository.core.service.RepositoryWebServiceAdapter;
 import org.talend.mdm.repository.core.service.wsimpl.transformplugin.AbstractPluginDetail;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
-import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
-import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
 import org.talend.mdm.repository.ui.navigator.MDMRepositoryView;
 import org.talend.mdm.repository.ui.widgets.xmleditor.infoholder.RepositoryExternalInfoHolder;
+import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 
 import com.amalto.workbench.editors.TransformerMainPage;
 import com.amalto.workbench.models.TreeObject;
@@ -176,9 +175,7 @@ public class TransformerMainPage2 extends TransformerMainPage {
     private MDMServerDef getLastServerDef() {
         XObjectEditorInput2 input = (XObjectEditorInput2) editor2.getEditorInput();
         Item item = input.getInputItem();
-        MDMServerObject serverObject = ((MDMServerObjectItem) item).getMDMServerObject();
-        MDMServerDef lastServerDef = serverObject.getLastServerDef();
-
+        MDMServerDef lastServerDef = RepositoryResourceUtil.getLastServerDef(item);
         return lastServerDef;
     }
 

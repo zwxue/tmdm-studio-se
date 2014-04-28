@@ -25,6 +25,7 @@ import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
  *   <li>{@link org.talend.mdm.repository.model.mdmserverobject.MDMServerObject#getTimestamp <em>Timestamp</em>}</li>
  *   <li>{@link org.talend.mdm.repository.model.mdmserverobject.MDMServerObject#getDigestValue <em>Digest Value</em>}</li>
  *   <li>{@link org.talend.mdm.repository.model.mdmserverobject.MDMServerObject#getCurrentDigestValue <em>Current Digest Value</em>}</li>
+ *   <li>{@link org.talend.mdm.repository.model.mdmserverobject.MDMServerObject#getLastServerName <em>Last Server Name</em>}</li>
  * </ul>
  * </p>
  *
@@ -240,6 +241,32 @@ public interface MDMServerObject extends EObject {
      * @generated
      */
     void setCurrentDigestValue(String value);
+
+    /**
+     * Returns the value of the '<em><b>Last Server Name</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <p>
+     * If the meaning of the '<em>Last Server Name</em>' attribute isn't clear,
+     * there really should be more of a description here...
+     * </p>
+     * <!-- end-user-doc -->
+     * @return the value of the '<em>Last Server Name</em>' attribute.
+     * @see #setLastServerName(String)
+     * @see org.talend.mdm.repository.model.mdmserverobject.MdmserverobjectPackage#getMDMServerObject_LastServerName()
+     * @model
+     * @generated
+     */
+    String getLastServerName();
+
+    /**
+     * Sets the value of the '{@link org.talend.mdm.repository.model.mdmserverobject.MDMServerObject#getLastServerName <em>Last Server Name</em>}' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @param value the new value of the '<em>Last Server Name</em>' attribute.
+     * @see #getLastServerName()
+     * @generated
+     */
+    void setLastServerName(String value);
 
     /**
      * <!-- begin-user-doc -->

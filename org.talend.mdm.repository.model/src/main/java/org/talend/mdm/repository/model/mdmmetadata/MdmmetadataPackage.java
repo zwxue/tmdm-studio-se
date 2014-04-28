@@ -385,13 +385,22 @@ public interface MdmmetadataPackage extends EPackage {
     int MDM_SERVER_DEF__ENABLED = ConnectionPackage.ABSTRACT_METADATA_OBJECT_FEATURE_COUNT + 8;
 
     /**
+     * The feature id for the '<em><b>Algorithm</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int MDM_SERVER_DEF__ALGORITHM = ConnectionPackage.ABSTRACT_METADATA_OBJECT_FEATURE_COUNT + 9;
+
+    /**
      * The number of structural features of the '<em>MDM Server Def</em>' class.
      * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
      * @generated
      * @ordered
      */
-	int MDM_SERVER_DEF_FEATURE_COUNT = ConnectionPackage.ABSTRACT_METADATA_OBJECT_FEATURE_COUNT + 9;
+	int MDM_SERVER_DEF_FEATURE_COUNT = ConnectionPackage.ABSTRACT_METADATA_OBJECT_FEATURE_COUNT + 10;
 
 
 	/**
@@ -504,6 +513,17 @@ public interface MdmmetadataPackage extends EPackage {
     EAttribute getMDMServerDef_Enabled();
 
     /**
+     * Returns the meta object for the attribute '{@link org.talend.mdm.repository.model.mdmmetadata.MDMServerDef#getAlgorithm <em>Algorithm</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for the attribute '<em>Algorithm</em>'.
+     * @see org.talend.mdm.repository.model.mdmmetadata.MDMServerDef#getAlgorithm()
+     * @see #getMDMServerDef()
+     * @generated
+     */
+    EAttribute getMDMServerDef_Algorithm();
+
+    /**
      * Returns the factory that creates the instances of the model.
      * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -606,6 +626,14 @@ public interface MdmmetadataPackage extends EPackage {
          * @generated
          */
         EAttribute MDM_SERVER_DEF__ENABLED = eINSTANCE.getMDMServerDef_Enabled();
+
+        /**
+         * The meta object literal for the '<em><b>Algorithm</b></em>' attribute feature.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @generated
+         */
+        EAttribute MDM_SERVER_DEF__ALGORITHM = eINSTANCE.getMDMServerDef_Algorithm();
 
 	}
 

@@ -30,6 +30,7 @@ import org.talend.mdm.repository.core.command.CommandManager;
 import org.talend.mdm.repository.core.command.ICommand;
 import org.talend.mdm.repository.core.service.DeployService;
 import org.talend.mdm.repository.i18n.Messages;
+import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
 import org.talend.mdm.repository.ui.navigator.MDMRepositoryView;
@@ -115,8 +116,11 @@ public class XObjectEditor2 extends XObjectEditor implements ISvnHistory {
                 DeployService deployService = DeployService.getInstance();
                 if (deployService.isAutoDeploy()) {
                     autoDeployProcess(deployService);
-                } else if (serverObject.getLastServerDef() != null) {
-                    CommandManager.getInstance().pushCommand(ICommand.CMD_MODIFY, editorInput.getViewObject());
+                } else {
+                    MDMServerDef lastServerDef = RepositoryResourceUtil.getLastServerDef(serverObjectItem);
+                    if (lastServerDef != null) {
+                        CommandManager.getInstance().pushCommand(ICommand.CMD_MODIFY, editorInput.getViewObject());
+                    }
                 }
                 return true;
             } catch (PersistenceException e) {

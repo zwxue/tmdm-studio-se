@@ -143,13 +143,22 @@ public interface MdmserverobjectPackage extends EPackage {
     int MDM_SERVER_OBJECT__CURRENT_DIGEST_VALUE = 7;
 
     /**
+     * The feature id for the '<em><b>Last Server Name</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int MDM_SERVER_OBJECT__LAST_SERVER_NAME = 8;
+
+    /**
      * The number of structural features of the '<em>MDM Server Object</em>' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      * @ordered
      */
-    int MDM_SERVER_OBJECT_FEATURE_COUNT = 8;
+    int MDM_SERVER_OBJECT_FEATURE_COUNT = 9;
 
     /**
      * The meta object id for the '{@link org.talend.mdm.repository.model.mdmserverobject.impl.WSMenuEImpl <em>WS Menu E</em>}' class.
@@ -232,6 +241,15 @@ public interface MdmserverobjectPackage extends EPackage {
      * @ordered
      */
     int WS_MENU_E__CURRENT_DIGEST_VALUE = MDM_SERVER_OBJECT__CURRENT_DIGEST_VALUE;
+
+    /**
+     * The feature id for the '<em><b>Last Server Name</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_MENU_E__LAST_SERVER_NAME = MDM_SERVER_OBJECT__LAST_SERVER_NAME;
 
     /**
      * The feature id for the '<em><b>Menu Entries</b></em>' containment reference list.
@@ -444,6 +462,15 @@ public interface MdmserverobjectPackage extends EPackage {
     int WS_ROLE_E__CURRENT_DIGEST_VALUE = MDM_SERVER_OBJECT__CURRENT_DIGEST_VALUE;
 
     /**
+     * The feature id for the '<em><b>Last Server Name</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_ROLE_E__LAST_SERVER_NAME = MDM_SERVER_OBJECT__LAST_SERVER_NAME;
+
+    /**
      * The feature id for the '<em><b>Specification</b></em>' containment reference list.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -634,6 +661,15 @@ public interface MdmserverobjectPackage extends EPackage {
      * @ordered
      */
     int WS_VIEW_E__CURRENT_DIGEST_VALUE = MDM_SERVER_OBJECT__CURRENT_DIGEST_VALUE;
+
+    /**
+     * The feature id for the '<em><b>Last Server Name</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_VIEW_E__LAST_SERVER_NAME = MDM_SERVER_OBJECT__LAST_SERVER_NAME;
 
     /**
      * The feature id for the '<em><b>Searchable Business Elements</b></em>' attribute list.
@@ -901,6 +937,15 @@ public interface MdmserverobjectPackage extends EPackage {
     int WS_DATA_MODEL_E__CURRENT_DIGEST_VALUE = MDM_SERVER_OBJECT__CURRENT_DIGEST_VALUE;
 
     /**
+     * The feature id for the '<em><b>Last Server Name</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_DATA_MODEL_E__LAST_SERVER_NAME = MDM_SERVER_OBJECT__LAST_SERVER_NAME;
+
+    /**
      * The feature id for the '<em><b>Xsd Schema</b></em>' attribute.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -1001,6 +1046,15 @@ public interface MdmserverobjectPackage extends EPackage {
     int WS_DATA_CLUSTER_E__CURRENT_DIGEST_VALUE = MDM_SERVER_OBJECT__CURRENT_DIGEST_VALUE;
 
     /**
+     * The feature id for the '<em><b>Last Server Name</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_DATA_CLUSTER_E__LAST_SERVER_NAME = MDM_SERVER_OBJECT__LAST_SERVER_NAME;
+
+    /**
      * The feature id for the '<em><b>Vocabulary</b></em>' attribute.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -1099,6 +1153,15 @@ public interface MdmserverobjectPackage extends EPackage {
      * @ordered
      */
     int WS_STORED_PROCEDURE_E__CURRENT_DIGEST_VALUE = MDM_SERVER_OBJECT__CURRENT_DIGEST_VALUE;
+
+    /**
+     * The feature id for the '<em><b>Last Server Name</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_STORED_PROCEDURE_E__LAST_SERVER_NAME = MDM_SERVER_OBJECT__LAST_SERVER_NAME;
 
     /**
      * The feature id for the '<em><b>Procedure</b></em>' attribute.
@@ -1208,6 +1271,15 @@ public interface MdmserverobjectPackage extends EPackage {
      * @ordered
      */
     int WS_UNIVERSE_E__CURRENT_DIGEST_VALUE = MDM_SERVER_OBJECT__CURRENT_DIGEST_VALUE;
+
+    /**
+     * The feature id for the '<em><b>Last Server Name</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_UNIVERSE_E__LAST_SERVER_NAME = MDM_SERVER_OBJECT__LAST_SERVER_NAME;
 
     /**
      * The feature id for the '<em><b>Default Items Revision ID</b></em>' attribute.
@@ -1400,6 +1472,15 @@ public interface MdmserverobjectPackage extends EPackage {
      * @ordered
      */
     int WS_SYNCHRONIZATION_PLAN_E__CURRENT_DIGEST_VALUE = MDM_SERVER_OBJECT__CURRENT_DIGEST_VALUE;
+
+    /**
+     * The feature id for the '<em><b>Last Server Name</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_SYNCHRONIZATION_PLAN_E__LAST_SERVER_NAME = MDM_SERVER_OBJECT__LAST_SERVER_NAME;
 
     /**
      * The feature id for the '<em><b>Remote System Name</b></em>' attribute.
@@ -1785,6 +1866,15 @@ public interface MdmserverobjectPackage extends EPackage {
     int WS_WORKFLOW_DEPLOY_E__CURRENT_DIGEST_VALUE = MDM_SERVER_OBJECT__CURRENT_DIGEST_VALUE;
 
     /**
+     * The feature id for the '<em><b>Last Server Name</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_WORKFLOW_DEPLOY_E__LAST_SERVER_NAME = MDM_SERVER_OBJECT__LAST_SERVER_NAME;
+
+    /**
      * The feature id for the '<em><b>Filename</b></em>' attribute.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -1883,6 +1973,15 @@ public interface MdmserverobjectPackage extends EPackage {
      * @ordered
      */
     int WS_TRANSFORMER_V2E__CURRENT_DIGEST_VALUE = MDM_SERVER_OBJECT__CURRENT_DIGEST_VALUE;
+
+    /**
+     * The feature id for the '<em><b>Last Server Name</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_TRANSFORMER_V2E__LAST_SERVER_NAME = MDM_SERVER_OBJECT__LAST_SERVER_NAME;
 
     /**
      * The feature id for the '<em><b>Process Steps</b></em>' containment reference list.
@@ -2178,6 +2277,15 @@ public interface MdmserverobjectPackage extends EPackage {
     int WS_ROUTING_RULE_E__CURRENT_DIGEST_VALUE = MDM_SERVER_OBJECT__CURRENT_DIGEST_VALUE;
 
     /**
+     * The feature id for the '<em><b>Last Server Name</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_ROUTING_RULE_E__LAST_SERVER_NAME = MDM_SERVER_OBJECT__LAST_SERVER_NAME;
+
+    /**
      * The feature id for the '<em><b>Synchronous</b></em>' attribute.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -2424,6 +2532,15 @@ public interface MdmserverobjectPackage extends EPackage {
     int WS_JOB_MODEL_E__CURRENT_DIGEST_VALUE = MDM_SERVER_OBJECT__CURRENT_DIGEST_VALUE;
 
     /**
+     * The feature id for the '<em><b>Last Server Name</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_JOB_MODEL_E__LAST_SERVER_NAME = MDM_SERVER_OBJECT__LAST_SERVER_NAME;
+
+    /**
      * The number of structural features of the '<em>WS Job Model E</em>' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -2515,6 +2632,15 @@ public interface MdmserverobjectPackage extends EPackage {
     int WS_EVENT_MANAGER_E__CURRENT_DIGEST_VALUE = MDM_SERVER_OBJECT__CURRENT_DIGEST_VALUE;
 
     /**
+     * The feature id for the '<em><b>Last Server Name</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_EVENT_MANAGER_E__LAST_SERVER_NAME = MDM_SERVER_OBJECT__LAST_SERVER_NAME;
+
+    /**
      * The number of structural features of the '<em>WS Event Manager E</em>' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -2604,6 +2730,15 @@ public interface MdmserverobjectPackage extends EPackage {
      * @ordered
      */
     int WS_SERVICE_CONFIGURATION_E__CURRENT_DIGEST_VALUE = MDM_SERVER_OBJECT__CURRENT_DIGEST_VALUE;
+
+    /**
+     * The feature id for the '<em><b>Last Server Name</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_SERVICE_CONFIGURATION_E__LAST_SERVER_NAME = MDM_SERVER_OBJECT__LAST_SERVER_NAME;
 
     /**
      * The feature id for the '<em><b>Service Put Configurations</b></em>' containment reference list.
@@ -2743,6 +2878,15 @@ public interface MdmserverobjectPackage extends EPackage {
     int WS_WORKFLOW_E__CURRENT_DIGEST_VALUE = MDM_SERVER_OBJECT__CURRENT_DIGEST_VALUE;
 
     /**
+     * The feature id for the '<em><b>Last Server Name</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_WORKFLOW_E__LAST_SERVER_NAME = MDM_SERVER_OBJECT__LAST_SERVER_NAME;
+
+    /**
      * The feature id for the '<em><b>File Content</b></em>' attribute.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -2841,6 +2985,15 @@ public interface MdmserverobjectPackage extends EPackage {
      * @ordered
      */
     int WS_RESOURCE_E__CURRENT_DIGEST_VALUE = MDM_SERVER_OBJECT__CURRENT_DIGEST_VALUE;
+
+    /**
+     * The feature id for the '<em><b>Last Server Name</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_RESOURCE_E__LAST_SERVER_NAME = MDM_SERVER_OBJECT__LAST_SERVER_NAME;
 
     /**
      * The feature id for the '<em><b>File Extension</b></em>' attribute.
@@ -2959,6 +3112,15 @@ public interface MdmserverobjectPackage extends EPackage {
      * @ordered
      */
     int WS_CUSTOM_FORM_E__CURRENT_DIGEST_VALUE = MDM_SERVER_OBJECT__CURRENT_DIGEST_VALUE;
+
+    /**
+     * The feature id for the '<em><b>Last Server Name</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_CUSTOM_FORM_E__LAST_SERVER_NAME = MDM_SERVER_OBJECT__LAST_SERVER_NAME;
 
     /**
      * The feature id for the '<em><b>Filename</b></em>' attribute.
@@ -3095,6 +3257,15 @@ public interface MdmserverobjectPackage extends EPackage {
      * @ordered
      */
     int WS_MATCH_RULE_E__CURRENT_DIGEST_VALUE = MDM_SERVER_OBJECT__CURRENT_DIGEST_VALUE;
+
+    /**
+     * The feature id for the '<em><b>Last Server Name</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_MATCH_RULE_E__LAST_SERVER_NAME = MDM_SERVER_OBJECT__LAST_SERVER_NAME;
 
     /**
      * The feature id for the '<em><b>Configuration Xml Content</b></em>' attribute.
@@ -3248,6 +3419,17 @@ public interface MdmserverobjectPackage extends EPackage {
      * @generated
      */
     EAttribute getMDMServerObject_CurrentDigestValue();
+
+    /**
+     * Returns the meta object for the attribute '{@link org.talend.mdm.repository.model.mdmserverobject.MDMServerObject#getLastServerName <em>Last Server Name</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for the attribute '<em>Last Server Name</em>'.
+     * @see org.talend.mdm.repository.model.mdmserverobject.MDMServerObject#getLastServerName()
+     * @see #getMDMServerObject()
+     * @generated
+     */
+    EAttribute getMDMServerObject_LastServerName();
 
     /**
      * Returns the meta object for class '{@link org.talend.mdm.repository.model.mdmserverobject.WSMenuE <em>WS Menu E</em>}'.
@@ -4911,6 +5093,14 @@ public interface MdmserverobjectPackage extends EPackage {
          * @generated
          */
         EAttribute MDM_SERVER_OBJECT__CURRENT_DIGEST_VALUE = eINSTANCE.getMDMServerObject_CurrentDigestValue();
+
+        /**
+         * The meta object literal for the '<em><b>Last Server Name</b></em>' attribute feature.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @generated
+         */
+        EAttribute MDM_SERVER_OBJECT__LAST_SERVER_NAME = eINSTANCE.getMDMServerObject_LastServerName();
 
         /**
          * The meta object literal for the '{@link org.talend.mdm.repository.model.mdmserverobject.impl.WSMenuEImpl <em>WS Menu E</em>}' class.

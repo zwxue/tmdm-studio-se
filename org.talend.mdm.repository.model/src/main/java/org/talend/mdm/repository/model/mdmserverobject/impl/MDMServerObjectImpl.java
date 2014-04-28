@@ -187,6 +187,26 @@ public class MDMServerObjectImpl extends EObjectImpl implements MDMServerObject 
     protected String currentDigestValue = CURRENT_DIGEST_VALUE_EDEFAULT;
 
     /**
+     * The default value of the '{@link #getLastServerName() <em>Last Server Name</em>}' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see #getLastServerName()
+     * @generated
+     * @ordered
+     */
+    protected static final String LAST_SERVER_NAME_EDEFAULT = null;
+
+    /**
+     * The cached value of the '{@link #getLastServerName() <em>Last Server Name</em>}' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see #getLastServerName()
+     * @generated
+     * @ordered
+     */
+    protected String lastServerName = LAST_SERVER_NAME_EDEFAULT;
+
+    /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
@@ -391,6 +411,27 @@ public class MDMServerObjectImpl extends EObjectImpl implements MDMServerObject 
     }
 
     /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public String getLastServerName() {
+        return lastServerName;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public void setLastServerName(String newLastServerName) {
+        String oldLastServerName = lastServerName;
+        lastServerName = newLastServerName;
+        if (eNotificationRequired())
+            eNotify(new ENotificationImpl(this, Notification.SET, MdmserverobjectPackage.MDM_SERVER_OBJECT__LAST_SERVER_NAME, oldLastServerName, lastServerName));
+    }
+
+    /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
      * 
      * @generated NOT
@@ -435,6 +476,8 @@ public class MDMServerObjectImpl extends EObjectImpl implements MDMServerObject 
                 return getDigestValue();
             case MdmserverobjectPackage.MDM_SERVER_OBJECT__CURRENT_DIGEST_VALUE:
                 return getCurrentDigestValue();
+            case MdmserverobjectPackage.MDM_SERVER_OBJECT__LAST_SERVER_NAME:
+                return getLastServerName();
         }
         return super.eGet(featureID, resolve, coreType);
     }
@@ -469,6 +512,9 @@ public class MDMServerObjectImpl extends EObjectImpl implements MDMServerObject 
                 return;
             case MdmserverobjectPackage.MDM_SERVER_OBJECT__CURRENT_DIGEST_VALUE:
                 setCurrentDigestValue((String)newValue);
+                return;
+            case MdmserverobjectPackage.MDM_SERVER_OBJECT__LAST_SERVER_NAME:
+                setLastServerName((String)newValue);
                 return;
         }
         super.eSet(featureID, newValue);
@@ -505,6 +551,9 @@ public class MDMServerObjectImpl extends EObjectImpl implements MDMServerObject 
             case MdmserverobjectPackage.MDM_SERVER_OBJECT__CURRENT_DIGEST_VALUE:
                 setCurrentDigestValue(CURRENT_DIGEST_VALUE_EDEFAULT);
                 return;
+            case MdmserverobjectPackage.MDM_SERVER_OBJECT__LAST_SERVER_NAME:
+                setLastServerName(LAST_SERVER_NAME_EDEFAULT);
+                return;
         }
         super.eUnset(featureID);
     }
@@ -532,6 +581,8 @@ public class MDMServerObjectImpl extends EObjectImpl implements MDMServerObject 
                 return DIGEST_VALUE_EDEFAULT == null ? digestValue != null : !DIGEST_VALUE_EDEFAULT.equals(digestValue);
             case MdmserverobjectPackage.MDM_SERVER_OBJECT__CURRENT_DIGEST_VALUE:
                 return CURRENT_DIGEST_VALUE_EDEFAULT == null ? currentDigestValue != null : !CURRENT_DIGEST_VALUE_EDEFAULT.equals(currentDigestValue);
+            case MdmserverobjectPackage.MDM_SERVER_OBJECT__LAST_SERVER_NAME:
+                return LAST_SERVER_NAME_EDEFAULT == null ? lastServerName != null : !LAST_SERVER_NAME_EDEFAULT.equals(lastServerName);
         }
         return super.eIsSet(featureID);
     }
@@ -560,6 +611,8 @@ public class MDMServerObjectImpl extends EObjectImpl implements MDMServerObject 
         result.append(digestValue);
         result.append(", currentDigestValue: ");
         result.append(currentDigestValue);
+        result.append(", lastServerName: ");
+        result.append(lastServerName);
         result.append(')');
         return result.toString();
     }

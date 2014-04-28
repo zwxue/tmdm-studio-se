@@ -15,6 +15,7 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="digestValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="currentDigestValue" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EString"
         transient="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="lastServerName" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EString"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="WSMenuE" eSuperTypes="#//MDMServerObject">
     <eStructuralFeatures xsi:type="ecore:EReference" name="menuEntries" upperBound="-1"

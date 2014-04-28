@@ -1255,6 +1255,8 @@ public class RepositoryResourceUtil {
 
     public static final String PROP_LAST_SERVER_DEF = "lastServerDef"; //$NON-NLS-1$
 
+    public static final String PROP_LAST_SERVER_NAME = "lastServerName"; //$NON-NLS-1$
+
     /**
      * 
      * @param viewObj
@@ -1276,16 +1278,25 @@ public class RepositoryResourceUtil {
     public static MDMServerDef getLastServerDef(Item item) {
         if (item != null) {
             if (item instanceof MDMServerObjectItem) {
-                MDMServerDef lastServerDef = ((MDMServerObjectItem) item).getMDMServerObject().getLastServerDef();
-                if (lastServerDef != null && lastServerDef.getName() != null) {
-                    return ServerDefService.findServerDefByName(lastServerDef.getName());
+                MDMServerObject mdmServerObject = ((MDMServerObjectItem) item).getMDMServerObject();
+                String lastServerName = mdmServerObject.getLastServerName();
+                if (lastServerName == null) {
+                    MDMServerDef lastServerDef = mdmServerObject.getLastServerDef();
+                    if (lastServerDef != null) {
+                        lastServerName = lastServerDef.getName();
+                    }
                 }
-            }
-            Property property = item.getProperty();
-            if (property != null) {
-                Object value = property.getAdditionalProperties().get(PROP_LAST_SERVER_DEF);
-                if (value != null) {
-                    return ServerDefService.findServerDefByName((String) value);
+                if (lastServerName != null) {
+                    return ServerDefService.findServerDefByName(lastServerName);
+                }
+
+            } else {
+                Property property = item.getProperty();
+                if (property != null) {
+                    Object value = property.getAdditionalProperties().get(PROP_LAST_SERVER_DEF);
+                    if (value != null) {
+                        return ServerDefService.findServerDefByName((String) value);
+                    }
                 }
             }
         }
@@ -1304,12 +1315,9 @@ public class RepositoryResourceUtil {
         }
         if (item instanceof MDMServerObjectItem) {
             MDMServerObject mdmServerObject = ((MDMServerObjectItem) item).getMDMServerObject();
-            if (def != null) {
-                MDMServerDef encryptedServerDef = def.getEncryptedServerDef();
-                mdmServerObject.setLastServerDef(encryptedServerDef);
-            } else {
-                mdmServerObject.setLastServerDef(null);
-            }
+            mdmServerObject.setLastServerName(def != null ? def.getName() : null);
+            // Not use lastServerDef property any more
+            mdmServerObject.setLastServerDef(null);
             return;
         }
         Property property = item.getProperty();

@@ -44,6 +44,10 @@ public class MdmImportHandler extends ImportRepTypeHandler {
         boolean needSave = false;
         if (item instanceof MDMServerObjectItem) {
             MDMServerObject serverObj = ((MDMServerObjectItem) item).getMDMServerObject();
+            if (serverObj.getLastServerName() != null) {
+                serverObj.setLastServerName(null);
+                needSave = true;
+            }
             if (serverObj.getLastServerDef() != null) {
                 serverObj.setLastServerDef(null);
                 needSave = true;

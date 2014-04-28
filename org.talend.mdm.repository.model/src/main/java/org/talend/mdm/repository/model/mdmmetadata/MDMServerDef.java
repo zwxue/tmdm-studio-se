@@ -25,6 +25,7 @@ import org.talend.core.model.metadata.builder.connection.AbstractMetadataObject;
  *   <li>{@link org.talend.mdm.repository.model.mdmmetadata.MDMServerDef#getUrl <em>Url</em>}</li>
  *   <li>{@link org.talend.mdm.repository.model.mdmmetadata.MDMServerDef#getUser <em>User</em>}</li>
  *   <li>{@link org.talend.mdm.repository.model.mdmmetadata.MDMServerDef#isEnabled <em>Enabled</em>}</li>
+ *   <li>{@link org.talend.mdm.repository.model.mdmmetadata.MDMServerDef#getAlgorithm <em>Algorithm</em>}</li>
  * </ul>
  * </p>
  *
@@ -268,6 +269,32 @@ public interface MDMServerDef extends AbstractMetadataObject {
      * @generated
      */
     void setEnabled(boolean value);
+
+    /**
+     * Returns the value of the '<em><b>Algorithm</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <p>
+     * If the meaning of the '<em>Algorithm</em>' attribute isn't clear,
+     * there really should be more of a description here...
+     * </p>
+     * <!-- end-user-doc -->
+     * @return the value of the '<em>Algorithm</em>' attribute.
+     * @see #setAlgorithm(String)
+     * @see org.talend.mdm.repository.model.mdmmetadata.MdmmetadataPackage#getMDMServerDef_Algorithm()
+     * @model
+     * @generated
+     */
+    String getAlgorithm();
+
+    /**
+     * Sets the value of the '{@link org.talend.mdm.repository.model.mdmmetadata.MDMServerDef#getAlgorithm <em>Algorithm</em>}' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @param value the new value of the '<em>Algorithm</em>' attribute.
+     * @see #getAlgorithm()
+     * @generated
+     */
+    void setAlgorithm(String value);
 
     /**
      * <!-- begin-user-doc -->

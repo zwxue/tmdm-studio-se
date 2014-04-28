@@ -135,6 +135,8 @@ public class SSLContextProvider {
         String trustpath = store.getString(PreferenceConstants.TRUSTSTORE_FILE);
         String trustpass = store.getString(PreferenceConstants.TRUSTSTORE_PASSWORD);
         String trusttype = store.getString(PreferenceConstants.TRUSTSTORE_TYPE);
+        keypass = PasswordUtil.decryptPassword(keypass);
+        trustpass = PasswordUtil.decryptPassword(trustpass);
         buildContext(algorithm, keypath, keypass, keytype, trustpath, trustpass, trusttype);
     }
 

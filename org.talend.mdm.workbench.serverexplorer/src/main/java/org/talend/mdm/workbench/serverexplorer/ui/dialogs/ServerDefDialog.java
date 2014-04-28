@@ -103,6 +103,7 @@ public class ServerDefDialog extends TitleAreaDialog {
             newName = serverDef.getName();
         } else {
             this.serverDef = MdmmetadataFactory.eINSTANCE.createMDMServerDef();
+            this.serverDef.setAlgorithm(PasswordUtil.ALGORITHM_COMMON);
         }
         exAdapter = ExAdapterManager.getAdapter(this, IServerDefDialogExAdapter.class);
 
@@ -119,7 +120,6 @@ public class ServerDefDialog extends TitleAreaDialog {
             setTitle(Messages.ServerDefDialog_UpdateServer);
         } else {
             setTitle(Messages.ServerDefDialog_AddServer);
-            this.serverDef = MdmmetadataFactory.eINSTANCE.createMDMServerDef();
         }
         //
         Composite area = (Composite) super.createDialogArea(parent);
@@ -286,6 +286,7 @@ public class ServerDefDialog extends TitleAreaDialog {
             }
 
             MDMServerDef tmpServerDef = MdmmetadataFactory.eINSTANCE.createMDMServerDef();
+            tmpServerDef.setAlgorithm(PasswordUtil.ALGORITHM_COMMON);
             updateUI2Model(tmpServerDef);
 
             try {
@@ -310,7 +311,7 @@ public class ServerDefDialog extends TitleAreaDialog {
             serverDef.setPasswd(null);
             serverDef.setTempPasswd(newPassword);
         } else {
-            String encryptedPassword = PasswordUtil.encryptPassword(newPassword);
+            String encryptedPassword = PasswordUtil.encryptPassword(newPassword, serverDef.getAlgorithm());
             serverDef.setPasswd(encryptedPassword);
             serverDef.setTempPasswd(null);
         }
@@ -331,7 +332,7 @@ public class ServerDefDialog extends TitleAreaDialog {
 
         String passwd = serverDef.getPasswd();
         if (passwd != null && passwd.length() > 0) {
-            passwordText.setText(PasswordUtil.decryptPassword(passwd));
+            passwordText.setText(PasswordUtil.decryptPassword(passwd, serverDef.getAlgorithm()));
             sharePwdBtn.setSelection(true);
         } else {
             if (isLocalMode()) {

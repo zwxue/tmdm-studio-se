@@ -25,6 +25,7 @@ import org.talend.mdm.repository.model.mdmproperties.WSViewItem;
 import org.talend.mdm.repository.model.mdmserverobject.WSViewE;
 import org.talend.mdm.repository.ui.editors.ViewBrowserInput;
 import org.talend.mdm.repository.ui.editors.XObjectBrowser2;
+import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 import org.talend.mdm.workbench.serverexplorer.ui.dialogs.SelectServerDefDialog;
 
 import com.amalto.workbench.image.EImage;
@@ -41,7 +42,7 @@ public class BrowseViewAction extends AbstractRepositoryAction {
 
     /**
      * DOC hbhong BrowseViewAction constructor comment.
-     *
+     * 
      * @param text
      */
     public BrowseViewAction() {
@@ -56,7 +57,8 @@ public class BrowseViewAction extends AbstractRepositoryAction {
             IRepositoryViewObject viewObject = (IRepositoryViewObject) obj;
             WSViewItem item = (WSViewItem) viewObject.getProperty().getItem();
             WSViewE wsView = item.getWsView();
-            MDMServerDef lastServerDef = wsView.getLastServerDef();
+
+            MDMServerDef lastServerDef = RepositoryResourceUtil.getLastServerDef(item);
             SelectServerDefDialog dlg = new SelectServerDefDialog(getShell());
             dlg.create();
             dlg.setSelectServer(lastServerDef);

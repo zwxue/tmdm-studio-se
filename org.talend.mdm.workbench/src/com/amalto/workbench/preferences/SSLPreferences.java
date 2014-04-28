@@ -38,6 +38,7 @@ import com.amalto.workbench.MDMWorbenchPlugin;
 import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.preferences.JSSEConstants.KEYSTORE_TYPE;
 import com.amalto.workbench.preferences.JSSEConstants.SSL_Algorithm;
+import com.amalto.workbench.utils.PasswordUtil;
 import com.amalto.workbench.utils.SSLContextProvider;
 
 /**
@@ -212,7 +213,9 @@ public class SSLPreferences extends PreferencePage implements IWorkbenchPreferen
             keyPath = createText(group, store.getString(PreferenceConstants.KEYSTORE_FILE), 1);
             createFilePicker(group, keyPath, parent.getShell());
             createLabel(group, Messages.keystorePassword);
-            keyPassword = createText(group, store.getString(PreferenceConstants.KEYSTORE_PASSWORD), 2, true);
+            String keystorePassword = store.getString(PreferenceConstants.KEYSTORE_PASSWORD);
+            keystorePassword = decryptPasswd(keystorePassword);
+            keyPassword = createText(group, keystorePassword, 2, true);
             createLabel(group, Messages.keyststoreType);
             keyType = createCombo(group, SSLPreferences.KEYSTORE_TYPES, store.getString(PreferenceConstants.KEYSTORE_TYPE), 2);
         }
@@ -222,11 +225,21 @@ public class SSLPreferences extends PreferencePage implements IWorkbenchPreferen
             trustPath = createText(group, store.getString(PreferenceConstants.TRUSTSTORE_FILE), 1);
             createFilePicker(group, trustPath, parent.getShell());
             createLabel(group, Messages.keystorePassword);
-            trustPassword = createText(group, store.getString(PreferenceConstants.TRUSTSTORE_PASSWORD), 2, true);
+            String truststorePassword = store.getString(PreferenceConstants.TRUSTSTORE_PASSWORD);
+            truststorePassword = decryptPasswd(truststorePassword);
+            trustPassword = createText(group, truststorePassword, 2, true);
             createLabel(group, Messages.keyststoreType);
             trustType = createCombo(group, SSLPreferences.KEYSTORE_TYPES, store.getString(PreferenceConstants.KEYSTORE_TYPE), 2);
         }
         return composite;
+    }
+
+    private String encryptPasswd(String passwd) {
+        return PasswordUtil.encryptPassword(passwd);
+    }
+
+    private String decryptPasswd(String passwd) {
+        return PasswordUtil.decryptPassword(passwd);
     }
 
     private void comboSelect(Combo combo, String str) {
@@ -285,10 +298,10 @@ public class SSLPreferences extends PreferencePage implements IWorkbenchPreferen
             store.setValue(PreferenceConstants.SSL_Algorithm, algorithm);
             store.setValue(PreferenceConstants.VERIFY_HOSTNAME, verificationType[1].getSelection());
             store.setValue(PreferenceConstants.KEYSTORE_FILE, keypath);
-            store.setValue(PreferenceConstants.KEYSTORE_PASSWORD, keypass);
+            store.setValue(PreferenceConstants.KEYSTORE_PASSWORD, encryptPasswd(keypass));
             store.setValue(PreferenceConstants.KEYSTORE_TYPE, keytype);
             store.setValue(PreferenceConstants.TRUSTSTORE_FILE, trustpath);
-            store.setValue(PreferenceConstants.TRUSTSTORE_PASSWORD, trustpass);
+            store.setValue(PreferenceConstants.TRUSTSTORE_PASSWORD, encryptPasswd(trustpass));
             store.setValue(PreferenceConstants.TRUSTSTORE_TYPE, trusttype);
             setErrorMessage(null);
             return super.performOk();

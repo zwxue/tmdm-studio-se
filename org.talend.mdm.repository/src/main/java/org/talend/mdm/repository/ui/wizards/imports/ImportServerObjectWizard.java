@@ -456,7 +456,7 @@ public class ImportServerObjectWizard extends Wizard {
                     }
                     eobj = (MDMServerObject) Bean2EObjUtil.getInstance().convertFromBean2EObj(treeObj.getWsObject(), null);
                 }
-                eobj.setLastServerDef(serverDef.getEncryptedServerDef());
+                eobj.setLastServerName(serverDef.getName());
 
                 ERepositoryObjectType type = RepositoryQueryService.getRepositoryObjectType(treeObj.getType());
                 String uniqueName = getUniqueName(treeObj, treeObjName);

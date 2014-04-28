@@ -279,6 +279,7 @@ public class ConsistencyService {
             // remove server def property
             MDMServerObject copiedMdmObj = (MDMServerObject) copy;
             copiedMdmObj.setLastServerDef(null);
+            copiedMdmObj.setLastServerName(null);
             copiedMdmObj.setCurrentDigestValue(null);
             copiedMdmObj.setDigestValue(null);
             // restore the timestamp to default

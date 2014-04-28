@@ -31,6 +31,7 @@ import org.talend.mdm.repository.core.command.ICommand;
 import org.talend.mdm.repository.core.impl.transformerV2.ITransformerV2NodeConsDef;
 import org.talend.mdm.repository.core.service.ContainerCacheService;
 import org.talend.mdm.repository.i18n.Messages;
+import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
@@ -109,7 +110,8 @@ public class RenameProcessAction extends AbstractRepositoryAction implements ITr
                         viewObj.getProperty().setDisplayName(newName);
 
                         factory.save(item, false);
-                        if (serverObject.getLastServerDef() != null) {
+                        MDMServerDef lastServerDef = RepositoryResourceUtil.getLastServerDef(item);
+                        if (lastServerDef != null) {
                             CommandManager.getInstance().pushCommand(ICommand.CMD_RENAME, viewObj.getId(),
                                     new String[] { oldName, newName });
                         }
@@ -233,7 +235,7 @@ public class RenameProcessAction extends AbstractRepositoryAction implements ITr
         String path = null;
 
         if (oldPrefix.isEmpty()) {
-            return RepositoryTransformUtil.getInstance().getProcessPath(newName,true);
+            return RepositoryTransformUtil.getInstance().getProcessPath(newName, true);
         }
 
         return path;

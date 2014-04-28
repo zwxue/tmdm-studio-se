@@ -34,6 +34,7 @@ import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
 import org.talend.mdm.repository.ui.dialogs.xpath.XpathSelectDialog2;
 import org.talend.mdm.repository.ui.widgets.TisTableViewerR;
 import org.talend.mdm.repository.ui.widgets.xmleditor.infoholder.RepositoryExternalInfoHolder;
+import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 import org.talend.mdm.workbench.serverexplorer.ui.dialogs.SelectServerDefDialog;
 
 import com.amalto.workbench.dialogs.XpathSelectDialog;
@@ -62,9 +63,10 @@ import com.amalto.workbench.widgets.xmleditor.infoholder.ExternalInfoHolder;
 public class RoutingRuleMainPage2 extends RoutingRuleMainPage {
 
     private static Log log = LogFactory.getLog(RoutingRuleMainPage2.class);
+
     /**
      * DOC hbhong RoutingRuleMainPage2 constructor comment.
-     *
+     * 
      * @param editor
      */
     public RoutingRuleMainPage2(FormEditor editor) {
@@ -171,12 +173,13 @@ public class RoutingRuleMainPage2 extends RoutingRuleMainPage {
                                 Messages.RoutingRuleMainPage2_NoRecordSelected);
                         return;
                     }
-                    WSRoutingRulePKArray routeItemV2 = port.routeItemV2(new WSRouteItemV2(new WSItemPK(new WSDataClusterPK(dataCluster), concept, Arrays
-                            .asList(recordIds))));
+                    WSRoutingRulePKArray routeItemV2 = port.routeItemV2(new WSRouteItemV2(new WSItemPK(new WSDataClusterPK(
+                            dataCluster), concept, Arrays.asList(recordIds))));
 
                     if (routeItemV2 == null || routeItemV2.getWsRoutingRulePKs() == null
                             || routeItemV2.getWsRoutingRulePKs().size() == 0) {
-                        MessageDialog.openInformation(getSite().getShell(), Messages.RoutingRuleMainPage2_fail, Messages.RoutingRuleMainPage2_noTriggerExecuted);
+                        MessageDialog.openInformation(getSite().getShell(), Messages.RoutingRuleMainPage2_fail,
+                                Messages.RoutingRuleMainPage2_noTriggerExecuted);
                         return;
                     }
 
@@ -200,7 +203,7 @@ public class RoutingRuleMainPage2 extends RoutingRuleMainPage {
             IRepositoryViewObject viewObject = editorInput.getViewObject();
             MDMServerObjectItem item = (MDMServerObjectItem) viewObject.getProperty().getItem();
             MDMServerObject mdmServerObject = item.getMDMServerObject();
-            MDMServerDef lastServerDef = mdmServerObject.getLastServerDef();
+            MDMServerDef lastServerDef = RepositoryResourceUtil.getLastServerDef(item);
             lastServerDef = openServerDialog(lastServerDef);
             if (lastServerDef == null) {
                 return null;
