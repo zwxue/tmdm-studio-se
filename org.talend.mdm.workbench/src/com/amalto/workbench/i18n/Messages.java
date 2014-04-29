@@ -1545,6 +1545,10 @@ public class Messages extends NLS {
 
     public static String DataModelFilterDialog_WriteAccess;
 
+    public static String DataModelMainPage_entity;
+
+    public static String DataModelMainPage_type;
+
     public static String HttpClientUtil_authorizationFail;
 
     public static String DataModelSelectDialog_Ok;
