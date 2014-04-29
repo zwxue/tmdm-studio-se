@@ -499,6 +499,8 @@ public class DataModelMainPage extends EditorPart implements ModifyListener, IGo
         return null;
     }
 
+ 
+
     protected void doImportSchema(final Collection<XSDSchemaContent> addtional) {
         if (null == addtional || addtional.isEmpty()) {
             return;
@@ -506,19 +508,21 @@ public class DataModelMainPage extends EditorPart implements ModifyListener, IGo
         try {
             int flag = ConflictDialog.NONE;
             boolean dialogPopup = false;
-            List<XSDSchemaContent> tmp = xsdSchema.getContents();
-            List<XSDSchemaContent> exists = new ArrayList<XSDSchemaContent>(tmp);
+            List<XSDSchemaContent> contents = xsdSchema.getContents();
+            List<XSDSchemaContent> exists = new ArrayList<XSDSchemaContent>(contents);
+
             for (XSDSchemaContent content : addtional) {
                 XSDSchemaContent exist = getContainedSchemaContent(exists, content);
                 if (null == exist) {
-                    exists.add(content);
+                    Node importElement = xsdSchema.getDocument().importNode(content.getElement(), true);
+                    xsdSchema.getElement().appendChild(importElement);
                 } else {
                     if (!dialogPopup) {
                         String type = null;
                         if (exist instanceof XSDElementDeclaration) {
-                            type = "Data Model Entity";
+                            type = Messages.DataModelMainPage_entity;
                         } else if (exist instanceof XSDTypeDefinition) {
-                            type = "Data Model Type";
+                            type = Messages.DataModelMainPage_type;
                         } else {
                             continue;
                         }
@@ -534,13 +538,14 @@ public class DataModelMainPage extends EditorPart implements ModifyListener, IGo
                         }
                     }
                     if (flag == ConflictDialog.OVERWRITE) {
-                        exists.remove(exist);
-                        exists.add(content);
+                        contents.remove(exist);
+                        Node importElement = xsdSchema.getDocument().importNode(content.getElement(), true);
+                        xsdSchema.getElement().appendChild(importElement);
                     }
                 }
             }
-            tmp.clear();
-            tmp.addAll(exists);
+
+            //
             validateSchema();
             markDirtyWithoutCommit();
             setXsdSchema(xsdSchema);
@@ -778,7 +783,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener, IGo
 
         /*
          * (non-Javadoc)
-         *
+         * 
          * @see org.eclipse.jface.viewers.IElementComparer#equals(java.lang.Object, java.lang.Object)
          */
         public boolean equals(Object a, Object b) {
@@ -792,7 +797,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener, IGo
 
         /*
          * (non-Javadoc)
-         *
+         * 
          * @see org.eclipse.jface.viewers.IElementComparer#hashCode(java.lang.Object)
          */
         public int hashCode(Object element) {
@@ -1654,7 +1659,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener, IGo
 
     /**
      * check whether the model field is UUID or AUTO_INCREMENT type.
-     *
+     * 
      * @param obj
      * @return
      */
@@ -1790,7 +1795,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener, IGo
 
     /**
      * Returns and XSDSchema Object from an xsd
-     *
+     * 
      * @param schema
      * @return
      * @throws Exception
@@ -2482,9 +2487,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener, IGo
 
                 @Override
                 public void widgetSelected(SelectionEvent e) {
-                    if (applyAll) {
-                        status = OVERWRITE;
-                    }
+                    status = OVERWRITE;
                     setReturnCode(Dialog.OK);
                     ConflictDialog.this.close();
                 }
@@ -2494,9 +2497,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener, IGo
 
                 @Override
                 public void widgetSelected(SelectionEvent e) {
-                    if (applyAll) {
-                        status = IGNORE;
-                    }
+                    status = IGNORE;
                     setReturnCode(Dialog.OK);
                     ConflictDialog.this.close();
                 }
@@ -3012,7 +3013,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener, IGo
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see org.eclipse.ui.ide.IGotoMarker#gotoMarker(org.eclipse.core.resources.IMarker)
      */
     public void gotoMarker(IMarker marker) {
