@@ -1,8 +1,14 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.talend.mdm</groupId>
+    <artifactId>org.talend.mdm.ws</artifactId>
+    <version>5.6-SNAPSHOT</version>
+
     <properties>
         <cxf.version>2.2.5</cxf.version>
+        <tom.server.location>${basedir}/..</tom.server.location>
     </properties>
 
     <build>
@@ -69,7 +75,7 @@
                             <wsdlOptions>
                                 <wsdlOption>
                                     <wsdl>
-                                        ../org.talend.mdm.core.open/src/META-INF/wsdl/webservices.wsdl
+                                        ${tom.server.location}/org.talend.mdm.core.open/src/META-INF/wsdl/webservices.wsdl
                                     </wsdl>
                                     <bindingFiles>
                                         <bindingFile>${basedir}/bind.xml</bindingFile>
@@ -88,11 +94,4 @@
 
         </plugins>
     </build>
-
-
-    <groupId>org.talend.mdm</groupId>
-    <version>5.3-SNAPSHOT</version>
-    <modelVersion>4.0.0</modelVersion>
-    <artifactId>org.talend.mdm.workbench</artifactId>
-
 </project>
