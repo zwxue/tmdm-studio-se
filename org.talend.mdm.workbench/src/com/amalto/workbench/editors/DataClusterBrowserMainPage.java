@@ -56,7 +56,6 @@ import org.eclipse.jface.viewers.ListViewer;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerSorter;
-import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
@@ -87,6 +86,7 @@ import com.amalto.workbench.dialogs.DOMViewDialog;
 import com.amalto.workbench.dialogs.datacontainer.AutoIncrementHelper;
 import com.amalto.workbench.dialogs.datacontainer.DataContainerDOMViewDialog;
 import com.amalto.workbench.dialogs.datacontainer.UpdateAutoIncrementDialog;
+import com.amalto.workbench.exadapter.ExAdapterManager;
 import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
@@ -122,7 +122,6 @@ import com.amalto.workbench.webservices.WSRouteItemV2;
 import com.amalto.workbench.webservices.WSStringArray;
 import com.amalto.workbench.webservices.WSUniverse;
 import com.amalto.workbench.webservices.WSUniversePK;
-import com.amalto.workbench.webservices.WSUpdateMetadataItem;
 import com.amalto.workbench.webservices.XtentisPort;
 
 public class DataClusterBrowserMainPage extends AMainPage implements IXObjectModelListener {
@@ -137,11 +136,19 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 
     private DataClusterComposite clusterComp;
 
+    private IDataClusterBrowserMainPageExAdapter exAdapter;
+
     public DataClusterBrowserMainPage(FormEditor editor) {
         super(editor, DataClusterBrowserMainPage.class.getName(), Messages.bind(Messages.DataClusterBrowserMainPage_0,
                 ((XObjectBrowserInput) editor.getEditorInput()).getName()));
         // listen to events
         ((XObjectBrowserInput) editor.getEditorInput()).addListener(this);
+
+        initAdapter();
+    }
+
+    private void initAdapter() {
+        exAdapter = ExAdapterManager.getAdapter(this, IDataClusterBrowserMainPageExAdapter.class);
     }
 
     @Override
@@ -251,10 +258,10 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                 if (selection.size() == 1) {
                     manager.appendToGroup(IWorkbenchActionConstants.MB_ADDITIONS, new EditItemAction(
                             DataClusterBrowserMainPage.this.getSite().getShell(), DataClusterBrowserMainPage.this.resultsViewer));
-                    if (Util.IsEnterPrise()) {
-                        manager.appendToGroup(IWorkbenchActionConstants.MB_ADDITIONS, new EditTaskIdAction(
-                                DataClusterBrowserMainPage.this.getSite().getShell(),
-                                DataClusterBrowserMainPage.this.resultsViewer));
+                    if (exAdapter != null) {
+                        exAdapter.menuAboutToShow(manager, IWorkbenchActionConstants.MB_ADDITIONS,
+                                    DataClusterBrowserMainPage.this.resultsViewer, DataClusterBrowserMainPage.this.getSite()
+                                        .getShell(), getXObject());
                     }
                 }
                 if (selection.size() > 0) {
@@ -635,61 +642,6 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
         @Override
         public void runWithEvent(Event event) {
             super.runWithEvent(event);
-        }
-
-    }
-
-    class EditTaskIdAction extends Action {
-
-        protected Shell shell = null;
-
-        protected Viewer viewer;
-
-        public EditTaskIdAction(Shell shell, Viewer viewer) {
-            super();
-            this.shell = shell;
-            this.viewer = viewer;
-            setImageDescriptor(ImageCache.getImage("icons/default.gif"));//$NON-NLS-1$
-            setText(Messages.DataClusterBrowserMainPage_37);
-            setToolTipText(Messages.DataClusterBrowserMainPage_38);
-        }
-
-        @Override
-        public void run() {
-            try {
-                super.run();
-                final XtentisPort port = Util.getPort(getXObject());
-                IStructuredSelection selection = ((IStructuredSelection) viewer.getSelection());
-                LineItem li = (LineItem) selection.getFirstElement();
-
-                InputDialog input = new InputDialog(DataClusterBrowserMainPage.this.getSite().getShell(),
-                        Messages.DataClusterBrowserMainPage_39, Messages.DataClusterBrowserMainPage_40, li.getTaskId(), null);
-                input.setBlockOnOpen(true);
-
-                if (input.open() == Window.OK) {
-                    input.getValue();
-                    li.setTaskId(input.getValue());
-                    // @temp yguo, save the taskid to db.
-                    WSUpdateMetadataItem wsUpdateMetadataItem = new WSUpdateMetadataItem();
-                    WSItemPK wsItemPK = new WSItemPK();
-                    wsItemPK.setWsDataClusterPK((WSDataClusterPK) getXObject().getWsKey());
-                    wsItemPK.setConceptName(li.getConcept());
-                    wsItemPK.getIds().addAll(Arrays.asList(li.getIds()));
-                    wsUpdateMetadataItem.setWsItemPK(wsItemPK);
-                    wsUpdateMetadataItem.setTaskId(input.getValue());
-                    port.updateItemMetadata(wsUpdateMetadataItem);
-                    // @temp yguo, refresh the data
-                    viewer.refresh();
-                }
-            } catch (Exception e) {
-                log.error(e.getMessage(), e);
-                if (!Util.handleConnectionException(shell, e, Messages.DataClusterBrowserMainPage_41)) {
-                    MessageDialog.openError(shell, Messages.DataClusterBrowserMainPage_41,
-                            Messages.bind(Messages.DataClusterBrowserMainPage_42, e.getLocalizedMessage()));
-
-                }
-                return;
-            }
         }
 
     }

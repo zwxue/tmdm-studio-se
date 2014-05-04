@@ -62,6 +62,7 @@ import org.eclipse.ui.IWorkbenchPartSite;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import com.amalto.workbench.dialogs.DataModelSelectDialog;
+import com.amalto.workbench.exadapter.ExAdapterManager;
 import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
@@ -115,8 +116,6 @@ public class DataClusterComposite extends Composite implements IPagingListener {
 
     private Button checkFTSearchButton;
 
-    protected Button showTaskIdCB;
-
     private PageingToolBar pageToolBar;
 
     private TableViewer resultsViewer;
@@ -132,10 +131,13 @@ public class DataClusterComposite extends Composite implements IPagingListener {
 
     private Map<MDMServerDef, TreeParent> serverMap = new HashMap<MDMServerDef, TreeParent>();
 
+    private IDataClusterCompositeExAdapter exAdapter;
+
     public DataClusterComposite(Composite parent, int style, TreeObject model, IWorkbenchPartSite site) {
         super(parent, style);
         this.model = model;
         this.site = site;
+        initAdapter();
 
         setLayout(new GridLayout());
         create(this);
@@ -146,9 +148,14 @@ public class DataClusterComposite extends Composite implements IPagingListener {
         this.page = page;
         this.site = site;
         this.model = model;
+        initAdapter();
 
         setLayout(new GridLayout());
         create(this);
+    }
+
+    private void initAdapter() {
+        exAdapter = ExAdapterManager.getAdapter(this, IDataClusterCompositeExAdapter.class);
     }
 
     private void create(Composite composite) {
@@ -216,9 +223,10 @@ public class DataClusterComposite extends Composite implements IPagingListener {
 
         createSearchPart(compSecondLine);
 
-        if (Util.IsEnterPrise()) {
-            createShowTaskIdPart(compSecondLine);
+        if (exAdapter != null) {
+            exAdapter.createSecondPart(compSecondLine);
         }
+
         return compSecondLine;
     }
 
@@ -243,15 +251,6 @@ public class DataClusterComposite extends Composite implements IPagingListener {
 
         checkFTSearchButton = toolkit.createButton(compSecondLine, Messages.DataClusterBrowserMainPage_7, SWT.CHECK);
         checkFTSearchButton.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
-    }
-
-    protected void createShowTaskIdPart(Composite compSecondLine) {
-        FormToolkit toolkit = WidgetFactory.getWidgetFactory();
-        Label fill = toolkit.createLabel(compSecondLine, "", SWT.NULL);//$NON-NLS-1$
-        fill.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 8, 1));
-
-        showTaskIdCB = toolkit.createButton(compSecondLine, Messages.DataClusterBrowserMainPage_8, SWT.CHECK);
-        showTaskIdCB.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
     }
 
     protected void createPageToolbar(Composite composite) {
@@ -292,12 +291,8 @@ public class DataClusterComposite extends Composite implements IPagingListener {
     }
 
     public void doSearch() {
-        if (showTaskId()) {
-            if (resultsViewer.getTable().getColumnCount() != 4) {
-                final TableColumn column3 = new TableColumn(resultsViewer.getTable(), SWT.LEFT, 3);
-                column3.setText(Messages.DataClusterBrowserMainPage_12);
-                column3.setWidth(150);
-            }
+        if (exAdapter != null) {
+            exAdapter.doSearch(resultsViewer);
         } else {
             if (resultsViewer.getTable().getColumnCount() == 4) {
                 resultsViewer.getTable().getColumn(3).dispose();
@@ -312,10 +307,6 @@ public class DataClusterComposite extends Composite implements IPagingListener {
 
         doSearchSort();//
         readjustViewerHeight();
-    }
-
-    private boolean showTaskId() {
-        return Util.IsEnterPrise() && showTaskIdCB.getSelection();
     }
 
     /**

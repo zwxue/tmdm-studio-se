@@ -1315,8 +1315,6 @@ public class Messages extends NLS {
 
     public static String DataClusterBrowserMainPage_119;
 
-    public static String DataClusterBrowserMainPage_12;
-
     public static String DataClusterBrowserMainPage_120;
 
     public static String DataClusterBrowserMainPage_121;
@@ -1377,19 +1375,7 @@ public class Messages extends NLS {
 
     public static String DataClusterBrowserMainPage_36;
 
-    public static String DataClusterBrowserMainPage_37;
-
-    public static String DataClusterBrowserMainPage_38;
-
-    public static String DataClusterBrowserMainPage_39;
-
     public static String DataClusterBrowserMainPage_4;
-
-    public static String DataClusterBrowserMainPage_40;
-
-    public static String DataClusterBrowserMainPage_41;
-
-    public static String DataClusterBrowserMainPage_42;
 
     public static String DataClusterBrowserMainPage_43;
 
@@ -1448,8 +1434,6 @@ public class Messages extends NLS {
     public static String DataClusterBrowserMainPage_78;
 
     public static String DataClusterBrowserMainPage_79;
-
-    public static String DataClusterBrowserMainPage_8;
 
     public static String DataClusterBrowserMainPage_80;
 
