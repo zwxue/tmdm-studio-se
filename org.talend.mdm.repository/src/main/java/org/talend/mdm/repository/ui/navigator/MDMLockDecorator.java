@@ -16,6 +16,8 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.IDecoration;
 import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.jface.viewers.ILightweightLabelDecorator;
+import org.talend.core.context.Context;
+import org.talend.core.context.RepositoryContext;
 import org.talend.core.model.properties.Item;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.core.runtime.CoreRuntimePlugin;
@@ -34,6 +36,14 @@ public class MDMLockDecorator implements ILightweightLabelDecorator {
 
     IProxyRepositoryFactory factory = CoreRuntimePlugin.getInstance().getProxyRepositoryFactory();
 
+    private boolean editableAsReadOnly;
+
+    public MDMLockDecorator() {
+        Context ctx = CoreRuntimePlugin.getInstance().getContext();
+        RepositoryContext rc = (RepositoryContext) ctx.getProperty(Context.REPOSITORY_CONTEXT_KEY);
+        this.editableAsReadOnly = rc.isEditableAsReadOnly();
+    }
+
     private static final ImageDescriptor IMG_G_LOCK = EclipseResourceManager.getImageDescriptor(RepositoryPlugin.PLUGIN_ID,
             "icons/locked_green_overlay.gif"); //$NON-NLS-1$
 
@@ -50,6 +60,11 @@ public class MDMLockDecorator implements ILightweightLabelDecorator {
     private void decorateLockImage(IRepositoryViewObject viewObj, IDecoration decoration) {
 
         ERepositoryStatus status = factory.getStatus(viewObj.getProperty().getItem());
+        if (editableAsReadOnly) {
+            if (status == ERepositoryStatus.LOCK_BY_USER) {
+                status = ERepositoryStatus.DEFAULT;
+            }
+        }
         if (status == ERepositoryStatus.LOCK_BY_USER) {
             decoration.addOverlay(IMG_G_LOCK, IDecoration.BOTTOM_LEFT);
         } else {
