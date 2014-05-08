@@ -26,6 +26,7 @@ import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.ui.PlatformUI;
 import org.talend.core.model.properties.Item;
+import org.talend.core.model.properties.Property;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.core.repository.model.ProxyRepositoryFactory;
 import org.talend.mdm.repository.plugin.RepositoryPlugin;
@@ -71,6 +72,9 @@ public class RepositoryViewObjectResourceChangeManager implements PropertyChange
             if (newValue != null) {
                 if (newValue instanceof IRepositoryViewObject) {
                     newValue = ((IRepositoryViewObject) newValue).getProperty().getItem();
+                }
+                if (newValue instanceof Property) {
+                    newValue = ((Property) newValue).getItem();
                 }
                 if (newValue instanceof Item) {
                     Item item = (Item) newValue;

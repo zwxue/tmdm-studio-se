@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
@@ -337,31 +338,19 @@ public class RepositoryResourceUtil {
 
         ByteArrayOutputStream os = null;
         try {
-            file.refreshLocal(0, null);
             os = new ByteArrayOutputStream();
-            inputStream = file.getContents();
+            inputStream = new FileInputStream(osfile);
             byte[] ba = new byte[inputStream.available()];
             inputStream.read(ba);
             os.write(ba);
             return os.toString(encode);
 
-        } catch (CoreException e) {
-            log.error(e.getMessage(), e);
         } catch (IOException e) {
             log.error(e.getMessage(), e);
         } finally {
-            if (inputStream != null) {
-                try {
-                    inputStream.close();
-                } catch (IOException e) {
-                }
-            }
-            if (os != null) {
-                try {
-                    os.close();
-                } catch (IOException e) {
-                }
-            }
+            IOUtils.closeQuietly(inputStream);
+            IOUtils.closeQuietly(os);
+
         }
 
         return null;
