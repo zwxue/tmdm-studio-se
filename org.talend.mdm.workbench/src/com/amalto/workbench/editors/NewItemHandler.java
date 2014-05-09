@@ -42,7 +42,13 @@ public class NewItemHandler {
 
     private static final Log log = LogFactory.getLog(NewItemHandler.class);
 
-    public static void createItemRecord(final XtentisPort port, final Shell ashell, final WSDataClusterPK dataClusterPk) {
+    private boolean created = false;
+
+    public static NewItemHandler getNewInstance() {
+        return new NewItemHandler();
+    }
+
+    public boolean createItemRecord(final XtentisPort port, final Shell ashell, final WSDataClusterPK dataClusterPk) {
         if (port == null || dataClusterPk == null) {
             throw new IllegalArgumentException();
         }
@@ -78,6 +84,7 @@ public class NewItemHandler {
                             } else {
                                 port.putItem(putItem);
                             }
+                            created = true;
 
                         } catch (Exception e) {
                             log.error(e.getMessage(), e);
@@ -103,5 +110,7 @@ public class NewItemHandler {
                         Messages.bind(Messages.DataClusterBrowserMainPage_103, e.getLocalizedMessage()));
             }
         }
+
+        return created;
     }
 }

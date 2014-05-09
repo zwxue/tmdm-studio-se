@@ -120,6 +120,8 @@ public class DataClusterComposite extends Composite implements IPagingListener {
 
     private TableViewer resultsViewer;
 
+    private boolean isMaster; // show master data or staging data
+
     // //
     protected boolean[] ascending = { true, false, false };
 
@@ -133,21 +135,24 @@ public class DataClusterComposite extends Composite implements IPagingListener {
 
     private IDataClusterCompositeExAdapter exAdapter;
 
-    public DataClusterComposite(Composite parent, int style, TreeObject model, IWorkbenchPartSite site) {
+    public DataClusterComposite(Composite parent, int style, TreeObject model, boolean isMaster, IWorkbenchPartSite site) {
         super(parent, style);
         this.model = model;
         this.site = site;
+        this.isMaster = isMaster;
         initAdapter();
 
         setLayout(new GridLayout());
         create(this);
     }
 
-    public DataClusterComposite(Composite parent, int style, AFormPage page, IWorkbenchPartSite site, TreeObject model) {
+    public DataClusterComposite(Composite parent, int style, TreeObject model, boolean isMaster, AFormPage page,
+            IWorkbenchPartSite site) {
         super(parent, style);
         this.page = page;
         this.site = site;
         this.model = model;
+        this.isMaster = isMaster;
         initAdapter();
 
         setLayout(new GridLayout());
@@ -405,7 +410,7 @@ public class DataClusterComposite extends Composite implements IPagingListener {
             int limit = pageToolBar.getLimit();
             // see 0015909
             String clusterName = URLEncoder.encode(getXObject().toString(), "utf-8");//$NON-NLS-1$
-            WSDataClusterPK clusterPk = new WSDataClusterPK(clusterName);
+            WSDataClusterPK clusterPk = new WSDataClusterPK(clusterName + getPkAddition());
             // @temp yguo, get item with taskid or get taskid by specify wsitempk.
             List<Results> results = port.getItemPKsByFullCriteria(
                     new WSGetItemPKsByFullCriteria(new WSGetItemPKsByCriteria(clusterPk, concept, search, keys, from, to, start,
@@ -781,6 +786,14 @@ public class DataClusterComposite extends Composite implements IPagingListener {
 
     public TableViewer getResultsViewer() {
         return resultsViewer;
+    }
+
+    private String getPkAddition() {
+        if (isMaster) {
+            return ""; //$NON-NLS-1$
+        }
+
+        return IDataClusterConstants.PK_ADDITION;
     }
 
     /***************************************************************

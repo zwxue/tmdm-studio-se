@@ -70,6 +70,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.editor.FormEditor;
+import org.eclipse.ui.forms.editor.IFormPage;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.talend.mdm.commmon.metadata.ComplexTypeMetadata;
 import org.talend.mdm.commmon.metadata.FieldMetadata;
@@ -136,7 +137,9 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 
     private DataClusterComposite clusterComp;
 
-    private IDataClusterBrowserMainPageExAdapter exAdapter;
+    protected IDataClusterBrowserMainPageExAdapter exAdapter;
+
+    private boolean isMaster = true;
 
     public DataClusterBrowserMainPage(FormEditor editor) {
         super(editor, DataClusterBrowserMainPage.class.getName(), Messages.bind(Messages.DataClusterBrowserMainPage_0,
@@ -162,7 +165,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
             // composite.setLayout(new GridLayout(9, false));
             composite.setLayout(new GridLayout());
 
-            clusterComp = new DataClusterComposite(composite, SWT.NONE, this, getSite(), getXObject());
+            clusterComp = new DataClusterComposite(composite, SWT.NONE, getXObject(), isMaster(), this, getSite());
             clusterComp.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
             resultsViewer = clusterComp.getResultsViewer();
 
@@ -213,22 +216,22 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
     protected void createActions() {
     }
 
-    private void hookDoubleClick() {
+    protected void hookDoubleClick() {
         resultsViewer.addDoubleClickListener(new IDoubleClickListener() {
 
             public void doubleClick(DoubleClickEvent event) {
                 resultsViewer.setSelection(event.getSelection());
                 try {
-                    new EditItemAction(DataClusterBrowserMainPage.this.getSite().getShell(), resultsViewer).run();
+                    new EditItemAction(getShell(), resultsViewer).run();
                 } catch (Exception e) {
-                    MessageDialog.openError(DataClusterBrowserMainPage.this.getSite().getShell(), Messages._Error, Messages.bind(
+                    MessageDialog.openError(getShell(), Messages._Error, Messages.bind(
                             Messages.DataClusterBrowserMainPage_10, e.getClass().getName(), e.getLocalizedMessage()));
                 }
             }
         });
     }
 
-    private void hookKeyboard() {
+    protected void hookKeyboard() {
         resultsViewer.getControl().addKeyListener(new KeyListener() {
 
             public void keyPressed(KeyEvent e) {
@@ -236,14 +239,13 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 
             public void keyReleased(KeyEvent e) {
                 if (e.keyCode == SWT.DEL) {
-                    new PhysicalDeleteItemsAction(DataClusterBrowserMainPage.this.getSite().getShell(),
-                            DataClusterBrowserMainPage.this.resultsViewer).run();
+                    new PhysicalDeleteItemsAction(getShell(), resultsViewer).run();
                 }
             }
         });
     }
 
-    private void hookContextMenu() {
+    protected void hookContextMenu() {
         MenuManager menuMgr = new MenuManager();
         menuMgr.setRemoveAllWhenShown(true);
         menuMgr.addMenuListener(new IMenuListener() {
@@ -251,31 +253,28 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
             public void menuAboutToShow(IMenuManager manager) {
                 // ViewBrowserMainPage.this.fillContextMenu(manager);
                 manager.add(new GroupMarker(IWorkbenchActionConstants.MB_ADDITIONS));
-                manager.appendToGroup(IWorkbenchActionConstants.MB_ADDITIONS, new NewItemAction(DataClusterBrowserMainPage.this
-                        .getSite().getShell(), DataClusterBrowserMainPage.this.resultsViewer));
+                manager.appendToGroup(IWorkbenchActionConstants.MB_ADDITIONS, new NewItemAction(getShell(), resultsViewer));
 
                 IStructuredSelection selection = ((IStructuredSelection) resultsViewer.getSelection());
                 if (selection.size() == 1) {
-                    manager.appendToGroup(IWorkbenchActionConstants.MB_ADDITIONS, new EditItemAction(
-                            DataClusterBrowserMainPage.this.getSite().getShell(), DataClusterBrowserMainPage.this.resultsViewer));
+                    manager.appendToGroup(IWorkbenchActionConstants.MB_ADDITIONS, new EditItemAction(getShell(), resultsViewer));
                     if (exAdapter != null) {
-                        exAdapter.menuAboutToShow(manager, IWorkbenchActionConstants.MB_ADDITIONS,
-                                    DataClusterBrowserMainPage.this.resultsViewer, DataClusterBrowserMainPage.this.getSite()
-                                        .getShell(), getXObject());
+                        exAdapter.menuAboutToShow(manager, IWorkbenchActionConstants.MB_ADDITIONS, resultsViewer, getShell(),
+                                getXObject());
                     }
                 }
                 if (selection.size() > 0) {
-                    manager.appendToGroup(IWorkbenchActionConstants.MB_ADDITIONS, new PhysicalDeleteItemsAction(
-                            DataClusterBrowserMainPage.this.getSite().getShell(), DataClusterBrowserMainPage.this.resultsViewer));
-                    manager.appendToGroup(IWorkbenchActionConstants.MB_ADDITIONS, new LogicalDeleteItemsAction(
-                            DataClusterBrowserMainPage.this.getSite().getShell(), DataClusterBrowserMainPage.this.resultsViewer));
-                    manager.appendToGroup(IWorkbenchActionConstants.MB_ADDITIONS, new SubmitItemsAction(
-                            DataClusterBrowserMainPage.this.getSite().getShell(), DataClusterBrowserMainPage.this.resultsViewer));
+                    manager.appendToGroup(IWorkbenchActionConstants.MB_ADDITIONS, new PhysicalDeleteItemsAction(getShell(),
+                            resultsViewer));
+                    manager.appendToGroup(IWorkbenchActionConstants.MB_ADDITIONS, new LogicalDeleteItemsAction(getShell(),
+                            resultsViewer));
+                    manager.appendToGroup(IWorkbenchActionConstants.MB_ADDITIONS,
+                            new SubmitItemsAction(getShell(), resultsViewer));
                 }
                 // compare item with each other
                 if (selection.size() == 2) {
-                    manager.appendToGroup(IWorkbenchActionConstants.MB_ADDITIONS, new CompareItemWithEachOtherAction(getSite()
-                            .getShell(), getResultsViewer()));
+                    manager.appendToGroup(IWorkbenchActionConstants.MB_ADDITIONS, new CompareItemWithEachOtherAction(getShell(),
+                            resultsViewer));
                 }
 
                 // available models
@@ -292,7 +291,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
         getSite().registerContextMenu(menuMgr, resultsViewer);
     }
 
-    private void hookToolBarItem() {
+    protected void hookToolBarItem() {
         FormEditor editor = getEditor();
         if (editor instanceof XObjectBrowser) {
             XObjectBrowser xobjectEditor = (XObjectBrowser) editor;
@@ -316,6 +315,33 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
         refreshData();
     }
 
+
+    protected DataContainerDOMViewDialog getDomViewDialog(final XtentisPort port, final WSItem wsItem, String xml,
+            ArrayList<String> dataModels) throws Exception {
+        DataContainerDOMViewDialog d = new DataContainerDOMViewDialog(getShell(), port, Util.parse(xml), dataModels,
+                DOMViewDialog.TREE_VIEWER, wsItem.getDataModelName());
+        return d;
+    }
+
+    /*
+     * Empty string for 'Master' type data cluster,'#STAGING' for 'staging' type data cluster
+     */
+    protected String getPkAddition() {
+        return ""; //$NON-NLS-1$
+    }
+
+    protected Shell getShell() {
+        return getSite().getShell();
+    }
+
+    public boolean isMaster() {
+        return isMaster;
+    }
+
+    public void setMaster(boolean isMaster) {
+        this.isMaster = isMaster;
+    }
+
     class ManageAutoIncrementAction extends Action {
 
         public ManageAutoIncrementAction() {
@@ -325,8 +351,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 
         @Override
         public void run() {
-            UpdateAutoIncrementKeyCommand updateCommand = new UpdateAutoIncrementKeyCommand(getSite().getShell(),
-                    DataClusterBrowserMainPage.this.resultsViewer);
+            UpdateAutoIncrementKeyCommand updateCommand = new UpdateAutoIncrementKeyCommand(getShell(), resultsViewer);
             updateCommand.execute();
         }
     }
@@ -349,7 +374,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
         public void execute() {
             try {
                 TreeObject xObject = getXObject();
-                String dataContainer = xObject.getName();
+                String dataContainer = getDataContainer(xObject);
                 final XtentisPort port = Util.getPort(xObject);
 
                 Map<String, String> entityToRevisions = getAllEntityRevisionsInDataContainer(port, dataContainer);
@@ -374,6 +399,23 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                 log.error(e.getMessage(), e);
                 MessageDialog.openError(getSite().getShell(), Messages._Error, e.getLocalizedMessage());
             }
+        }
+
+        private String getDataContainer(TreeObject xObject) {
+            String dataContainer = xObject.getName();
+
+            FormEditor editor = getEditor();
+            if (editor instanceof XObjectBrowser) {
+                XObjectBrowser xobjectEditor = (XObjectBrowser) editor;
+                IFormPage activeMainPage = xobjectEditor.getActivePageInstance();
+                if (activeMainPage instanceof DataClusterBrowserMainPage) {
+                    DataClusterBrowserMainPage mainPage = (DataClusterBrowserMainPage) activeMainPage;
+                    String pkAddition = mainPage.getPkAddition();
+                    dataContainer = dataContainer + pkAddition;
+                }
+            }
+
+            return dataContainer;
         }
 
         private String getAutoIncrementRecord(final XtentisPort port) {
@@ -571,22 +613,24 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                 if (li == null) {
                     return;
                 }
-                final WSItem wsItem = port.getItem(new WSGetItem(new WSItemPK((WSDataClusterPK) getXObject().getWsKey(), li
+                
+                String pk = ((WSDataClusterPK) getXObject().getWsKey()).getPk();
+                final WSDataClusterPK dataClusterPk = new WSDataClusterPK(pk + getPkAddition());
+                final WSItem wsItem = port.getItem(new WSGetItem(new WSItemPK(dataClusterPk, li
                         .getConcept().trim(), Arrays.asList(li.getIds()))));
                 String xml = Util.formatXsdSource(wsItem.getContent());
 
                 List<WSDataModelPK> dmPKs = port.getDataModelPKs(new WSRegexDataModelPKs("*")).getWsDataModelPKs();//$NON-NLS-1$
                 ArrayList<String> dataModels = new ArrayList<String>();
                 if (dmPKs != null) {
-                    for (WSDataModelPK pk : dmPKs) {
-                        if (!"XMLSCHEMA---".equals(pk.getPk())) { //$NON-NLS-1$
-                            dataModels.add(pk.getPk());
+                    for (WSDataModelPK mpk : dmPKs) {
+                        if (!"XMLSCHEMA---".equals(mpk.getPk())) { //$NON-NLS-1$
+                            dataModels.add(mpk.getPk());
                         }
                     }
                 }
 
-                final DataContainerDOMViewDialog d = new DataContainerDOMViewDialog(DataClusterBrowserMainPage.this.getSite()
-                        .getShell(), port, Util.parse(xml), dataModels, DOMViewDialog.TREE_VIEWER, wsItem.getDataModelName());
+                final DataContainerDOMViewDialog d = getDomViewDialog(port, wsItem, xml, dataModels);
                 d.addListener(new Listener() {
 
                     public void handleEvent(Event event) {
@@ -595,25 +639,24 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                             try {
                                 // check the item is modified by others?
                                 boolean isModified = port.isItemModifiedByOther(new WSIsItemModifiedByOther(wsItem)).isTrue();
-                                WSPutItem putItem = new WSPutItem((WSDataClusterPK) getXObject().getWsKey(), d.getXML(),
-                                        "".equals(d //$NON-NLS-1$
-                                                .getDataModelName()) ? null : new WSDataModelPK(d.getDataModelName()), false);
+                                WSPutItem putItem = new WSPutItem(dataClusterPk, d.getXML(), "".equals(d //$NON-NLS-1$
+                                        .getDataModelName()) ? null : new WSDataModelPK(d.getDataModelName()), false);
                                 WSPutItemWithReport itemWithReport = new WSPutItemWithReport(putItem,
                                         "genericUI", d.isBeforeVerification());//$NON-NLS-1$
                                 if (isModified) {
-                                    if (MessageDialog.openConfirm(null, Messages.DataClusterBrowserMainPage_31,
+                                    if (MessageDialog.openConfirm(shell, Messages.DataClusterBrowserMainPage_31,
                                             Messages.DataClusterBrowserMainPage_32)) {
                                         if (d.isTriggerProcess()) {
-                                            Util.getPort(getXObject()).putItemWithReport(itemWithReport);
+                                            port.putItemWithReport(itemWithReport);
                                         } else {
-                                            Util.getPort(getXObject()).putItem(putItem);
+                                            port.putItem(putItem);
                                         }
                                     }
                                 } else {
                                     if (d.isTriggerProcess()) {
-                                        Util.getPort(getXObject()).putItemWithReport(itemWithReport);
+                                        port.putItemWithReport(itemWithReport);
                                     } else {
-                                        Util.getPort(getXObject()).putItem(putItem);
+                                        port.putItem(putItem);
                                     }
                                 }
                             } catch (Exception e) {
@@ -673,7 +716,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                 IStructuredSelection selection = ((IStructuredSelection) viewer.getSelection());
                 int selectSize = selection.size();
                 if (selectSize != 2) {
-                    MessageDialog.openWarning(null, Messages.Warning, Messages.DataClusterBrowserMainPage_46);
+                    MessageDialog.openWarning(shell, Messages.Warning, Messages.DataClusterBrowserMainPage_46);
                     return;
                 }
 
@@ -683,14 +726,17 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                 LineItem leftLineItem = liList.get(0);
                 LineItem rightLineItem = liList.get(1);
 
+                String pk = ((WSDataClusterPK) getXObject().getWsKey()).getPk();
+                WSDataClusterPK dataClusterPk = new WSDataClusterPK(pk + getPkAddition());
+
                 // left
-                WSItemPK leftWSItemPK = new WSItemPK((WSDataClusterPK) getXObject().getWsKey(), leftLineItem.getConcept().trim(),
+                WSItemPK leftWSItemPK = new WSItemPK(dataClusterPk, leftLineItem.getConcept().trim(),
                         Arrays.asList(leftLineItem.getIds()));
                 WSItem leftWSItem = Util.getPort(getXObject()).getItem(new WSGetItem(leftWSItemPK));
                 String leftItemXmlContent = leftWSItem.getContent();
 
                 // right
-                WSItemPK rightWSItemPK = new WSItemPK((WSDataClusterPK) getXObject().getWsKey(), rightLineItem.getConcept()
+                WSItemPK rightWSItemPK = new WSItemPK(dataClusterPk, rightLineItem.getConcept()
                         .trim(), Arrays.asList(rightLineItem.getIds()));
                 WSItem rightWSItem = Util.getPort(getXObject()).getItem(new WSGetItem(rightWSItemPK));
                 String rightItemXmlContent = rightWSItem.getContent();
@@ -784,7 +830,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                         true, // cancelable
                         diwp);
                 // refresh the search
-                DataClusterBrowserMainPage.this.resultsViewer.setInput(getResults(false));
+                resultsViewer.setInput(getResults(false));
 
             } catch (Exception e) {
                 log.error(e.getMessage(), e);
@@ -906,7 +952,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                         true, // cancelable
                         diwp);
                 // refresh the search
-                DataClusterBrowserMainPage.this.resultsViewer.setInput(getResults(false));
+                resultsViewer.setInput(getResults(false));
 
             } catch (Exception e) {
                 log.error(e.getMessage(), e);
@@ -1056,8 +1102,12 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
         public void run() {
             try {
                 XtentisPort port = Util.getPort(getXObject());
-                NewItemHandler.createItemRecord(port, shell, (WSDataClusterPK) getXObject().getWsKey());
-                doSearch();
+                String dataClusterPk = ((WSDataClusterPK) getXObject().getWsKey()).getPk();
+                boolean created = NewItemHandler.getNewInstance().createItemRecord(port, shell,
+                        new WSDataClusterPK(dataClusterPk + getPkAddition()));
+                if (created) {
+                    doSearch();
+                }
             } catch (XtentisException e) {
                 log.error(e.getMessage(), e);
             }

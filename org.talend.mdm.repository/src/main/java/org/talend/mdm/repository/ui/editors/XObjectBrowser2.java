@@ -13,21 +13,19 @@
 package org.talend.mdm.repository.ui.editors;
 
 import org.apache.log4j.Logger;
-import org.eclipse.ui.IEditorInput;
-import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.views.properties.IPropertySheetPage;
-import org.eclipse.ui.views.properties.tabbed.ITabbedPropertySheetPageContributor;
-import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
-import org.talend.commons.exception.PersistenceException;
-import org.talend.core.repository.model.ProxyRepositoryFactory;
+import org.talend.core.model.repository.ERepositoryObjectType;
+import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.commmon.util.webapp.XSystemObjects;
-import org.talend.mdm.repository.ui.contributor.SvnHistorySelectionProvider;
+import org.talend.mdm.repository.core.IServerObjectRepositoryType;
+import org.talend.mdm.repository.plugin.RepositoryPlugin;
+import org.talend.mdm.repository.utils.EclipseResourceManager;
 
 import com.amalto.workbench.editors.DataClusterBrowserMainPage;
+import com.amalto.workbench.editors.DataClusterStagingBrowserMainPage;
 import com.amalto.workbench.editors.ItemsTrashBrowserMainPage;
 import com.amalto.workbench.editors.XObjectBrowser;
 import com.amalto.workbench.models.TreeObject;
@@ -42,9 +40,10 @@ public class XObjectBrowser2 extends XObjectBrowser implements ISvnHistory {
 
     public static final String EDITOR_ID = "org.talend.mdm.repository.ui.editors.XObjectBrowser2"; //$NON-NLS-1$
 
+    private final String masterImgPath = "icons/dataclustermaster.png"; //$NON-NLS-1$
 
+    private final String stagingImgPath = "icons/dataclusterstaging.png"; //$NON-NLS-1$
 
- 
 
     private void refreshPropertyView() throws PartInitException {
 
@@ -84,7 +83,12 @@ public class XObjectBrowser2 extends XObjectBrowser implements ISvnHistory {
                 addPage(new ItemsTrashBrowserMainPage(this));
                 break;
             }
-            addPage(new DataClusterBrowserMainPage(this));
+            addPage(new DataClusterBrowserMainPage(this));// page index 0
+            setPageImage(0, EclipseResourceManager.getImage(RepositoryPlugin.PLUGIN_ID, masterImgPath));
+            if (!isSystemCluster()) {
+                addPage(new DataClusterStagingBrowserMainPage(this));// page index 1
+                setPageImage(1, EclipseResourceManager.getImage(RepositoryPlugin.PLUGIN_ID, stagingImgPath));
+            }
             break;
         case TreeObject.SUBSCRIPTION_ENGINE:
             try {
@@ -97,6 +101,21 @@ public class XObjectBrowser2 extends XObjectBrowser implements ISvnHistory {
         }// switch
     }
 
+    private boolean isSystemCluster() {
+        XObjectBrowserInput2 editorInput = (XObjectBrowserInput2) getEditorInput();
+        IRepositoryViewObject viewObject = editorInput.getViewObject();
+        ERepositoryObjectType objectType = viewObject.getRepositoryObjectType();
+        if (objectType == IServerObjectRepositoryType.TYPE_DATACLUSTER) {
+            String path = viewObject.getPath();
+            if (path.toLowerCase().startsWith("system") || path.toLowerCase().startsWith("/system")) { //$NON-NLS-1$ //$NON-NLS-2$
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    @Override
     public boolean isLocalInput() {
         return true;
     }

@@ -222,7 +222,7 @@ public class DataClusterDialog extends Dialog {
 
         SashForm splitter = new SashForm(group, SWT.VERTICAL);
         splitter.setSashWidth(8);
-        clusterComposite = new DataClusterComposite(splitter, SWT.NONE, model, site);
+        clusterComposite = new DataClusterComposite(splitter, SWT.NONE, model, true, site);
         clusterComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
         clusterComposite.setEnabled(false);
 
@@ -482,8 +482,11 @@ public class DataClusterDialog extends Dialog {
             try {
                 final XtentisPort port = Util.getPort(new URL(oldServerDef.getUrl()), oldServerDef.getUniverse(),
                         oldServerDef.getUser(), oldServerDef.getPasswd());
-                NewItemHandler.createItemRecord(port, shell, new WSDataClusterPK(getDataContainer()));
-                clusterComposite.doSearch();
+                boolean created = NewItemHandler.getNewInstance().createItemRecord(port, shell,
+                        new WSDataClusterPK(getDataContainer()));
+                if (created) {
+                    clusterComposite.doSearch();
+                }
             } catch (MalformedURLException e) {
                 log.error(e.getMessage(), e);
             } catch (XtentisException e) {
