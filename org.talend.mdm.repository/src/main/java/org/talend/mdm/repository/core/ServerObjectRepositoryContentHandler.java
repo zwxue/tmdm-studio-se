@@ -6,12 +6,12 @@ import org.eclipse.emf.ecore.resource.Resource;
 import org.talend.commons.exception.PersistenceException;
 import org.talend.commons.ui.runtime.image.IImage;
 import org.talend.core.model.properties.Item;
+import org.talend.core.model.properties.PropertiesPackage;
 import org.talend.core.model.repository.AbstractRepositoryContentHandler;
 import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.core.repository.model.ProxyRepositoryFactory;
 import org.talend.core.repository.utils.XmiResourceManager;
 import org.talend.mdm.repository.extension.RepositoryNodeConfigurationManager;
-import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 
@@ -30,7 +30,7 @@ public class ServerObjectRepositoryContentHandler extends AbstractRepositoryCont
 
     public ERepositoryObjectType getRepositoryObjectType(Item item) {
         // add quick fix to avoid one problem of palette
-        if (item.eClass().getName().equals(Messages._CamelProcessItem)) {
+        if (item.eClass() != PropertiesPackage.Literals.PROCESS_ITEM) {
             return null;
         }
 
