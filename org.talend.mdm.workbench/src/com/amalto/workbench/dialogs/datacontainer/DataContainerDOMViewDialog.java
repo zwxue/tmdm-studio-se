@@ -37,6 +37,8 @@ public class DataContainerDOMViewDialog extends DOMViewDialog {
 
     private Button beforeBtn;
 
+    private boolean isMaster;
+
     /**
      * DOC HHB DataContainerDOMViewDialog constructor comment.
      * 
@@ -49,8 +51,9 @@ public class DataContainerDOMViewDialog extends DOMViewDialog {
      * @param selectedDataModel
      */
     public DataContainerDOMViewDialog(Shell parentShell, XtentisPort port, Node node, Collection<String> dataModelNames,
-            int firstTab, String selectedDataModel) {
+            int firstTab, String selectedDataModel, boolean isMaster) {
         super(parentShell, port, node, true, dataModelNames, firstTab, selectedDataModel);
+        this.isMaster = isMaster;
     }
 
     /*
@@ -62,26 +65,28 @@ public class DataContainerDOMViewDialog extends DOMViewDialog {
     protected Control createDialogArea(Composite parent) {
 
         Composite composite = (Composite) super.createDialogArea(parent);
-        triggerBtn = new Button(composite, SWT.CHECK);
-        triggerBtn.setText(Messages.DOMViewDialog_TriggerBtnText);
-        triggerBtn.addSelectionListener(new SelectionAdapter() {
+        if (isMaster) {
+            triggerBtn = new Button(composite, SWT.CHECK);
+            triggerBtn.setText(Messages.DOMViewDialog_TriggerBtnText);
+            triggerBtn.addSelectionListener(new SelectionAdapter() {
 
-            @Override
-            public void widgetSelected(SelectionEvent e) {
-                beforeBtn.setEnabled(triggerBtn.getSelection());
-            }
-        });
-        beforeBtn = new Button(composite, SWT.CHECK);
-        beforeBtn.setText(Messages.DOMViewDialog_BeforeBtnText);
-        beforeBtn.setEnabled(triggerBtn.getSelection());
+                @Override
+                public void widgetSelected(SelectionEvent e) {
+                    beforeBtn.setEnabled(triggerBtn.getSelection());
+                }
+            });
+            beforeBtn = new Button(composite, SWT.CHECK);
+            beforeBtn.setText(Messages.DOMViewDialog_BeforeBtnText);
+            beforeBtn.setEnabled(triggerBtn.getSelection());
+        }
         return composite;
     }
 
     public boolean isTriggerProcess() {
-        return triggerBtn.getSelection();
+        return triggerBtn == null ? false : triggerBtn.getSelection();
     }
 
     public boolean isBeforeVerification() {
-        return beforeBtn.getSelection();
+        return beforeBtn == null ? false : beforeBtn.getSelection();
     }
 }

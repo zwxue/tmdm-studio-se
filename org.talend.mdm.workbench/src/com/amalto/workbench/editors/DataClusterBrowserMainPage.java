@@ -319,7 +319,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
     protected DataContainerDOMViewDialog getDomViewDialog(final XtentisPort port, final WSItem wsItem, String xml,
             ArrayList<String> dataModels) throws Exception {
         DataContainerDOMViewDialog d = new DataContainerDOMViewDialog(getShell(), port, Util.parse(xml), dataModels,
-                DOMViewDialog.TREE_VIEWER, wsItem.getDataModelName());
+                DOMViewDialog.TREE_VIEWER, wsItem.getDataModelName(), isMaster());
         return d;
     }
 
@@ -1104,7 +1104,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                 XtentisPort port = Util.getPort(getXObject());
                 String dataClusterPk = ((WSDataClusterPK) getXObject().getWsKey()).getPk();
                 boolean created = NewItemHandler.getNewInstance().createItemRecord(port, shell,
-                        new WSDataClusterPK(dataClusterPk + getPkAddition()));
+                        new WSDataClusterPK(dataClusterPk + getPkAddition()), isMaster());
                 if (created) {
                     doSearch();
                 }

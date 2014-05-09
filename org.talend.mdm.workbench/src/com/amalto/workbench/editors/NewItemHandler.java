@@ -48,7 +48,8 @@ public class NewItemHandler {
         return new NewItemHandler();
     }
 
-    public boolean createItemRecord(final XtentisPort port, final Shell ashell, final WSDataClusterPK dataClusterPk) {
+    public boolean createItemRecord(final XtentisPort port, final Shell ashell, final WSDataClusterPK dataClusterPk,
+            boolean isMaster) {
         if (port == null || dataClusterPk == null) {
             throw new IllegalArgumentException();
         }
@@ -69,7 +70,7 @@ public class NewItemHandler {
                 }
             }
             final DataContainerDOMViewDialog d = new DataContainerDOMViewDialog(shell, port, Util.parse(xml), dataModels,
-                    DOMViewDialog.SOURCE_VIEWER, null);
+                    DOMViewDialog.SOURCE_VIEWER, null, isMaster);
             d.addListener(new Listener() {
 
                 public void handleEvent(Event event) {

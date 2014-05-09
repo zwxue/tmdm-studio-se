@@ -483,7 +483,7 @@ public class DataClusterDialog extends Dialog {
                 final XtentisPort port = Util.getPort(new URL(oldServerDef.getUrl()), oldServerDef.getUniverse(),
                         oldServerDef.getUser(), oldServerDef.getPasswd());
                 boolean created = NewItemHandler.getNewInstance().createItemRecord(port, shell,
-                        new WSDataClusterPK(getDataContainer()));
+                        new WSDataClusterPK(getDataContainer()), true);
                 if (created) {
                     clusterComposite.doSearch();
                 }
