@@ -63,8 +63,6 @@ public class Messages extends NLS {
 
     public static String MDMServerMessageConsole_Forbidden_Message;
 
-    public static String MDMServerMessageConsole_MatchName;
-
     public static String MDMServerMessageConsole_MonitorAction_PauseText;
 
     public static String MDMServerMessageConsole_MonitorAction_ResumeText;
@@ -132,8 +130,6 @@ public class Messages extends NLS {
     public static String ServerExplorer_RemoveServer;
 
     public static String ServerExplorer_ViewLogAction_Text;
-
-    public static String ServerExplorer_ViewMatchLog;
 
     public static String ServerExplorer_EventManager;
 

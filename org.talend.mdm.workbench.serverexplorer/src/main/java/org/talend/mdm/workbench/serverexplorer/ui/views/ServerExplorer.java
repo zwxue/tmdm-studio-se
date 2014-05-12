@@ -60,17 +60,17 @@ import org.talend.core.IService;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerDefItem;
-import org.talend.mdm.workbench.serverexplorer.console.MDMServerLogConsoleFactory;
-import org.talend.mdm.workbench.serverexplorer.console.MDMServerMatchLogConsoleFactory;
 import org.talend.mdm.workbench.serverexplorer.core.ServerDefService;
 import org.talend.mdm.workbench.serverexplorer.i18n.Messages;
 import org.talend.mdm.workbench.serverexplorer.plugin.MDMServerExplorerPlugin;
 import org.talend.mdm.workbench.serverexplorer.ui.actions.IEventMgrService;
+import org.talend.mdm.workbench.serverexplorer.ui.actions.ShowServerConsoleAction;
 import org.talend.mdm.workbench.serverexplorer.ui.dialogs.ServerDefDialog;
 import org.talend.mdm.workbench.serverexplorer.ui.providers.ServerSorter;
 import org.talend.mdm.workbench.serverexplorer.ui.providers.TreeContentProvider;
 import org.talend.mdm.workbench.serverexplorer.ui.providers.ViewerLabelProvider;
 
+import com.amalto.workbench.exadapter.ExAdapterManager;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.service.MissingJarsException;
@@ -109,6 +109,8 @@ public class ServerExplorer extends ViewPart {
 
     private EnableServerDefAction toDisableServerAction;
 
+    private IServerExplorerExAdapter exAdapter;
+
     public AddServerDefAction getAddServerDefAction() {
         return this.addServerDefAction;
     }
@@ -146,6 +148,8 @@ public class ServerExplorer extends ViewPart {
         treeViewer.setContentProvider(new TreeContentProvider());
         treeViewer.setLabelProvider(new ViewerLabelProvider());
 
+        initAdapter();
+
         initializeToolBar();
         initializeMenu();
 
@@ -153,6 +157,10 @@ public class ServerExplorer extends ViewPart {
 
         reInputPassword();
 
+    }
+
+    private void initAdapter() {
+        exAdapter = ExAdapterManager.getAdapter(this, IServerExplorerExAdapter.class);
     }
 
     private void reInputPassword() {
@@ -211,8 +219,14 @@ public class ServerExplorer extends ViewPart {
         allActions.add(new CheckConnectionAction());
         allActions.add(new EventManageAction());
         allActions.add(new RefreshServerCacheAction());
-        allActions.add(new ShowServerConsoleAction());
-        allActions.add(new ShowServerMatchConsoleAction());
+
+        ShowServerConsoleAction showServerConsoleAction = new ShowServerConsoleAction();
+        showServerConsoleAction.initSelectionProvider(treeViewer);
+        allActions.add(showServerConsoleAction);
+        if (exAdapter != null) {
+            exAdapter.initAction(allActions, treeViewer);
+        }
+
         toEnableServerAction = new EnableServerDefAction(true);
         toDisableServerAction = new EnableServerDefAction(false);
 
@@ -513,41 +527,6 @@ public class ServerExplorer extends ViewPart {
                 ServerDefService.saveServeDef(serverDefItem);
                 refreshServerDefs();
             }
-        }
-    }
-
-    private class ShowServerConsoleAction extends Action {
-
-        public ShowServerConsoleAction() {
-            setText(Messages.ServerExplorer_ViewLogAction_Text);
-        }
-
-        @Override
-        public void run() {
-            IRepositoryViewObject viewObject = getCurSelectedViewObject();
-            if (viewObject != null) {
-                MDMServerDefItem serverDefItem = getMDMItem(viewObject);
-                MDMServerDef selectedServerDef = serverDefItem.getServerDef();
-                if (selectedServerDef != null) {
-                    showMDMServerConsole(selectedServerDef);
-                }
-            }
-        }
-
-        protected void showMDMServerConsole(MDMServerDef selectedServerDef) {
-            new MDMServerLogConsoleFactory().showMDMServerConsole(selectedServerDef.getDecryptedServerDef());
-        }
-    }
-
-    private class ShowServerMatchConsoleAction extends ShowServerConsoleAction {
-
-        public ShowServerMatchConsoleAction() {
-            setText(Messages.ServerExplorer_ViewMatchLog);
-        }
-
-        @Override
-        protected void showMDMServerConsole(MDMServerDef selectedServerDef) {
-            new MDMServerMatchLogConsoleFactory().showMDMServerConsole(selectedServerDef.getDecryptedServerDef());
         }
     }
 }

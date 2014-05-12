@@ -40,7 +40,7 @@ public class MDMServerExplorerPlugin extends AbstractUIPlugin {
 
     private Map<String, MDMServerMessageConsole> serverToConsole = null;
 
-    private Map<String, MDMServerMessageConsole> serverMatchToConsole = null;
+
 
     /**
      * The constructor
@@ -53,7 +53,7 @@ public class MDMServerExplorerPlugin extends AbstractUIPlugin {
         super.start(context);
         plugin = this;
         serverToConsole = new HashMap<String, MDMServerMessageConsole>();
-        serverMatchToConsole = new HashMap<String, MDMServerMessageConsole>();
+
 
         activateEEBundleIfExist();
     }
@@ -89,10 +89,7 @@ public class MDMServerExplorerPlugin extends AbstractUIPlugin {
             serverToConsole.clear();
             serverToConsole = null;
         }
-        if (serverMatchToConsole != null) {
-            serverMatchToConsole.clear();
-            serverMatchToConsole = null;
-        }
+
         plugin = null;
         super.stop(context);
     }
@@ -108,9 +105,5 @@ public class MDMServerExplorerPlugin extends AbstractUIPlugin {
 
     public Map<String, MDMServerMessageConsole> getServerToConsole() {
         return this.serverToConsole;
-    }
-
-    public Map<String, MDMServerMessageConsole> getServerMatchToConsole() {
-        return this.serverMatchToConsole;
     }
 }

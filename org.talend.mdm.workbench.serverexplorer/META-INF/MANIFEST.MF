@@ -24,7 +24,8 @@ Require-Bundle: org.eclipse.ui,
 Bundle-ActivationPolicy: lazy
 Eclipse-RegisterBuddy: org.talend.testutils
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Export-Package: org.talend.mdm.workbench.serverexplorer.core,
+Export-Package: org.talend.mdm.workbench.serverexplorer.console,
+ org.talend.mdm.workbench.serverexplorer.core,
  org.talend.mdm.workbench.serverexplorer.ui.actions,
  org.talend.mdm.workbench.serverexplorer.ui.dialogs,
  org.talend.mdm.workbench.serverexplorer.ui.views
