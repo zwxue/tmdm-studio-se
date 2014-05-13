@@ -59,6 +59,7 @@ import org.talend.mdm.repository.ui.dialogs.deploy.DeployStatusDialog;
 import org.talend.mdm.repository.ui.dialogs.message.MultiStatusDialog;
 import org.talend.mdm.repository.ui.preferences.PreferenceConstants;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
+import org.talend.mdm.repository.utils.UIUtil;
 
 import com.amalto.workbench.utils.XtentisException;
 
@@ -182,23 +183,25 @@ public class DeployService {
             //
             CommandManager manager = CommandManager.getInstance();
             List<AbstractDeployCommand> commands = manager.getDeployCommands(validObjects, defaultCmdType);
+
             // insert impact dialog
             List<AbstractDeployCommand> canceledCommandAfterImpactAnalysis = new LinkedList<AbstractDeployCommand>(commands);
-            try {
-                Map<IRepositoryViewObject, ImpactOperation> analyzeModelImpact = ModelImpactAnalyseService.analyzeCommandImpact(
-                        serverDef, commands);
-                Map<IRepositoryViewObject, ICommandParameter> paramMap = null;
-                if (analyzeModelImpact != null) {
-                    ModelImpactAnalyseService.shrinkDeployCommands(analyzeModelImpact, commands);
-                    paramMap = ModelImpactAnalyseService.convertToParameters(analyzeModelImpact);
-                    manager.attachParameterToCommand(commands, paramMap);
+            if (UIUtil.isWorkInUI()) {
+                try {
+                    Map<IRepositoryViewObject, ImpactOperation> analyzeModelImpact = ModelImpactAnalyseService
+                            .analyzeCommandImpact(serverDef, commands);
+                    Map<IRepositoryViewObject, ICommandParameter> paramMap = null;
+                    if (analyzeModelImpact != null) {
+                        ModelImpactAnalyseService.shrinkDeployCommands(analyzeModelImpact, commands);
+                        paramMap = ModelImpactAnalyseService.convertToParameters(analyzeModelImpact);
+                        manager.attachParameterToCommand(commands, paramMap);
+                    }
+
+                    canceledCommandAfterImpactAnalysis.removeAll(commands);
+                } catch (InterruptedException ex) {
+                    return Status.CANCEL_STATUS;
                 }
-
-                canceledCommandAfterImpactAnalysis.removeAll(commands);
-            } catch (InterruptedException ex) {
-                return Status.CANCEL_STATUS;
             }
-
             IStatus mainStatus = runCommands(commands, serverDef);
             // update consistency value
             try {
@@ -210,10 +213,13 @@ public class DeployService {
             }
             //
             generateValidationFailedDeployStatus(mainStatus, invalidObjects);
-            generateConsistencyCancelDeployStatus(mainStatus, consistencyCheckResult.getToSkipObjects().toArray(new IRepositoryViewObject[0]));
+            if (UIUtil.isWorkInUI()) {
+                generateConsistencyCancelDeployStatus(mainStatus,
+                        consistencyCheckResult.getToSkipObjects().toArray(new IRepositoryViewObject[0]));
 
-            for(AbstractDeployCommand cmd:canceledCommandAfterImpactAnalysis) {
-                generateConsistencyCancelDeployStatus(mainStatus, cmd.getViewObject());
+                for (AbstractDeployCommand cmd : canceledCommandAfterImpactAnalysis) {
+                    generateConsistencyCancelDeployStatus(mainStatus, cmd.getViewObject());
+                }
             }
             return mainStatus;
         } catch (Exception e) {
@@ -226,7 +232,10 @@ public class DeployService {
     }
 
     public void updateServerConsistencyStatus(MDMServerDef serverDef, IStatus mainStatus) throws XtentisException,
-    WebServiceException {
+            WebServiceException {
+        if (!UIUtil.isWorkInUI()) {
+            return;
+        }
         if (mainStatus.isMultiStatus()) {
             Set<IRepositoryViewObject> viewObjs = new HashSet<IRepositoryViewObject>();
             for (IStatus childStatus : mainStatus.getChildren()) {
