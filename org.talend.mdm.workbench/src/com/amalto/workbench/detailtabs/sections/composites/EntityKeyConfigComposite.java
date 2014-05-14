@@ -259,8 +259,9 @@ public class EntityKeyConfigComposite extends Composite {
         removeUIListeners();
 
         tvKeys.setInput(new ArrayList<KeyWrapper>());
-        if (entityWrapper != null)
+        if (entityWrapper != null) {
             tvKeys.setInput(Arrays.asList(entityWrapper.getKeys()));
+        }
 
         initUIContents();
 
@@ -325,13 +326,15 @@ public class EntityKeyConfigComposite extends Composite {
 
     private KeyWrapper[] getSelectedKeys() {
 
-        if (!isKeySelected())
+        if (!isKeySelected()) {
             return new KeyWrapper[0];
+        }
 
         List<KeyWrapper> results = new ArrayList<KeyWrapper>();
         for (Object eachSelectedObj : ((IStructuredSelection) tvKeys.getSelection()).toArray()) {
-            if (eachSelectedObj instanceof KeyWrapper)
+            if (eachSelectedObj instanceof KeyWrapper) {
                 results.add((KeyWrapper) eachSelectedObj);
+            }
         }
 
         return results.toArray(new KeyWrapper[0]);
@@ -342,13 +345,15 @@ public class EntityKeyConfigComposite extends Composite {
     }
 
     private FieldWrapper[] getSelectedFields() {
-        if (!isFieldSelected())
+        if (!isFieldSelected()) {
             return new FieldWrapper[0];
+        }
 
         List<FieldWrapper> results = new ArrayList<FieldWrapper>();
         for (Object eachSelectedObj : ((IStructuredSelection) tvFields.getSelection()).toArray()) {
-            if (eachSelectedObj instanceof FieldWrapper)
+            if (eachSelectedObj instanceof FieldWrapper) {
                 results.add((FieldWrapper) eachSelectedObj);
+            }
         }
 
         return results.toArray(new FieldWrapper[0]);
@@ -427,8 +432,9 @@ public class EntityKeyConfigComposite extends Composite {
             public void modifyText(ModifyEvent e) {
 
                 KeyWrapper[] selectedKeys = getSelectedKeys();
-                if (selectedKeys.length > 0 && selectedKeys[0].getName().equals(txtKeyName.getText().trim()))
+                if (selectedKeys.length > 0 && selectedKeys[0].getName().equals(txtKeyName.getText().trim())) {
                     return;
+                }
 
                 String errMsg = isKeyNameValid(txtKeyName.getText().trim(), selectedKeys[0]);
                 lblKeyNameErrIndicator.setVisible(errMsg != null);
@@ -437,7 +443,9 @@ public class EntityKeyConfigComposite extends Composite {
                 getSelectedKeys()[0].setName(txtKeyName.getText().trim());
                 tvKeys.refresh();
 
-		        if(section!=null)section.autoCommit();
+		        if(section!=null) {
+                    section.autoCommit();
+                }
             }
         };
     }
@@ -458,18 +466,22 @@ public class EntityKeyConfigComposite extends Composite {
             public void modifyText(ModifyEvent e) {
 
                 KeyWrapper[] selectedKeys = getSelectedKeys();
-                if (selectedKeys.length > 0 && selectedKeys[0].getSelector().equals(comboSelector.getText().trim()))
+                if (selectedKeys.length > 0 && selectedKeys[0].getSelector().equals(comboSelector.getText().trim())) {
                     return;
+                }
 
                 if (!isSelectorValid(comboSelector.getText().trim())) {
-                    if (selectedKeys.length > 0)
+                    if (selectedKeys.length > 0) {
                         comboSelector.setText(selectedKeys[0].getSelector());
+                    }
                     return;
                 }
 
                 getSelectedKeys()[0].setSelector(comboSelector.getText().trim());
 
-                if(section!=null)section.autoCommit();
+                if(section!=null) {
+                    section.autoCommit();
+                }
             }
         };
     }
@@ -482,17 +494,21 @@ public class EntityKeyConfigComposite extends Composite {
             public void widgetSelected(SelectionEvent e) {
 
                 KeyWrapper[] selectedKeys = getSelectedKeys();
-                if (selectedKeys.length == 0)
+                if (selectedKeys.length == 0) {
                     return;
+                }
 
-                for (KeyWrapper eachSelectedKey : selectedKeys)
+                for (KeyWrapper eachSelectedKey : selectedKeys) {
                     entityWrapper.removeKey(eachSelectedKey);
+                }
 
                 tvKeys.setInput(Arrays.asList(entityWrapper.getKeys()));
 
                 selectFirstKeyInCurKeyList();
 
-                if(section!=null)section.autoCommit();
+                if(section!=null) {
+                    section.autoCommit();
+                }
             }
 
         };
@@ -506,25 +522,30 @@ public class EntityKeyConfigComposite extends Composite {
             public void widgetSelected(SelectionEvent e) {
 
                 KeyWrapper[] selectedKeys = getSelectedKeys();
-                if (selectedKeys.length == 0)
+                if (selectedKeys.length == 0) {
                     return;
+                }
 
                 FieldWrapper[] selectedFields = getSelectedFields();
 
-                if (selectedFields.length == 0)
+                if (selectedFields.length == 0) {
                     return;
+                }
 
                 if (getAllFields().length == selectedFields.length) {
                     MessageDialog.openWarning(getShell(), Messages.Warning, Messages.EntityKeyConfigComposite_WarningMsg);
                     return;
                 }
 
-                for (FieldWrapper eachRemovedField : selectedFields)
+                for (FieldWrapper eachRemovedField : selectedFields) {
                     selectedKeys[0].removeField(eachRemovedField);
+                }
 
                 tvFields.setInput(Arrays.asList(selectedKeys[0].getFields()));
 
-                if(section!=null)section.autoCommit();
+                if(section!=null) {
+                    section.autoCommit();
+                }
             }
 
         };
@@ -538,8 +559,9 @@ public class EntityKeyConfigComposite extends Composite {
             public void widgetSelected(SelectionEvent e) {
 
                 FieldWrapper[] selectedFields = getSelectedFields();
-                if (selectedFields.length == 0)
+                if (selectedFields.length == 0) {
                     return;
+                }
 
                 try {
                     KeyWrapper[] selectedKeys = getSelectedKeys();
@@ -548,20 +570,24 @@ public class EntityKeyConfigComposite extends Composite {
                     // filter already exist fields
                     List<String> fieldNames = getFieldNames(selectedKeys[0].getSourceKey());
                     for (String fdv : fieldNames) {
-                        if (topChilds.contains(fdv))
+                        if (topChilds.contains(fdv)) {
                             topChilds.remove(fdv);
+                        }
                     }
 
                     SelectFieldDialog selectFieldDlg = new SelectFieldDialog(getShell(),
                             "Select one field", topChilds, selectedFields[0].getXPath());//$NON-NLS-1$
 
-                    if (selectFieldDlg.open() != Window.OK)
+                    if (selectFieldDlg.open() != Window.OK) {
                         return;
+                    }
 
                     selectedFields[0].setXPath(selectFieldDlg.getField().trim());
 
                     tvFields.refresh();
-                    if(section!=null)section.autoCommit();
+                    if(section!=null) {
+                        section.autoCommit();
+                    }
                 } catch (Exception exp) {
                     log.error(exp.getMessage(), exp);
                 }
@@ -580,27 +606,31 @@ public class EntityKeyConfigComposite extends Composite {
                 try {
 
                     KeyWrapper[] selectedKeys = getSelectedKeys();
-                    if (selectedKeys.length == 0)
+                    if (selectedKeys.length == 0) {
                         return;
+                    }
 
                     List<String> topChilds = getTopChildrenNames();
 
                     // filter already exist fields
                     List<String> fieldNames = getFieldNames(selectedKeys[0].getSourceKey());
                     for (String fdv : fieldNames) {
-                        if (topChilds.contains(fdv))
+                        if (topChilds.contains(fdv)) {
                             topChilds.remove(fdv);
+                        }
                     }
 
 
                     SelectFieldDialog selectFieldDlg = new SelectFieldDialog(getShell(),
                             Messages.EntityKeyConfigComposite_SelectOneField, topChilds, null);
 
-                    if (selectFieldDlg.open() != Window.OK)
+                    if (selectFieldDlg.open() != Window.OK) {
                         return;
+                    }
 
-                    if ("".equals(selectFieldDlg.getField().trim()))//$NON-NLS-1$
+                    if ("".equals(selectFieldDlg.getField().trim())) {
                         return;
+                    }
 
                     FieldWrapper newFieldWrapper = new FieldWrapper(selectFieldDlg.getField().trim());
 
@@ -610,7 +640,9 @@ public class EntityKeyConfigComposite extends Composite {
 
                     tvFields.setSelection(new StructuredSelection(newFieldWrapper));
 
-                    if(section!=null)section.autoCommit();
+                    if(section!=null) {
+                        section.autoCommit();
+                    }
                 } catch (Exception exp) {
                     log.error(exp.getMessage(), exp);
                 }
@@ -679,8 +711,9 @@ public class EntityKeyConfigComposite extends Composite {
                             entityWrapper.getSourceEntityName());
 
                     dialog.setInputValidator(new NewKeyWrapperValidator(entityWrapper));
-                    if (dialog.open() != Window.OK)
+                    if (dialog.open() != Window.OK) {
                         return;
+                    }
 
                     KeyWrapper newKeyWrapper = new KeyWrapper(dialog.getKeyName(), ".", dialog.getType(),//$NON-NLS-1$
                             new FieldWrapper[] { new FieldWrapper(dialog.getFieldName()) });
@@ -690,7 +723,9 @@ public class EntityKeyConfigComposite extends Composite {
                     tvKeys.setInput(Arrays.asList(entityWrapper.getKeys()));
 
                     tvKeys.setSelection(new StructuredSelection(newKeyWrapper));
-                    if(section!=null)section.autoCommit();
+                    if(section!=null) {
+                        section.autoCommit();
+                    }
 
                 } catch (Exception exp) {
                     log.error(exp.getMessage(), exp);
@@ -719,16 +754,18 @@ public class EntityKeyConfigComposite extends Composite {
 
     private boolean isSelectorValid(String selector) {
 
-        if (selector == null || "".equals(selector.trim()))//$NON-NLS-1$
+        if (selector == null || "".equals(selector.trim())) { //$NON-NLS-1$
             return false;
+        }
 
         return true;
     }
 
     private String isKeyNameValid(String keyName, KeyWrapper keyBeforeModified) {
 
-        if (entityWrapper == null)
+        if (entityWrapper == null) {
             return Messages.EntityKeyConfigComposite_EntityCannotbeNull;
+        }
 
         return new EditKeyWrapperNameValidator(entityWrapper, keyBeforeModified).isValid(keyName);
     }
@@ -761,29 +798,33 @@ public class EntityKeyConfigComposite extends Composite {
         @Override
         public String isValid(String newText) {
 
-            if (newText == null || "".equals(newText.trim()))//$NON-NLS-1$
+            if (newText == null || "".equals(newText.trim())) { //$NON-NLS-1$
                 return Messages.EntityKeyConfigComposite_KeyNamecannotbeEmpty;
+            }
 
             if (XSDIdentityConstraintCategory.UNIQUE_LITERAL.equals(targetKeyWrapper.getType())
                     && !entityWrapper.getName().equals(targetKeyWrapper.getName())) {
                 return Messages.EntityKeyConfigComposite_ValidInfo1;
             }
 
-            for (XSDIdentityConstraintDefinition eachKey : getSchema().getIdentityConstraintDefinitions()) {
+            if (getSchema() != null && getSchema().getIdentityConstraintDefinitions() != null) {
+                for (XSDIdentityConstraintDefinition eachKey : getSchema().getIdentityConstraintDefinitions()) {
 
-                if (eachKey.getContainer().equals(entityWrapper.getSourceEntity())) {
-                    continue;
-                }
+                    if (eachKey.getContainer().equals(entityWrapper.getSourceEntity())) {
+                        continue;
+                    }
 
-                if (eachKey.getName().equals(newText)) {
-                    return Messages.bind(Messages.EntityKeyConfigComposite_ValidInfo2, newText);
+                    if (eachKey.getName().equals(newText)) {
+                        return Messages.bind(Messages.EntityKeyConfigComposite_ValidInfo2, newText);
+                    }
                 }
             }
 
             for (KeyWrapper eachKeyWrapper : entityWrapper.getKeys()) {
 
-                if (eachKeyWrapper.equals(targetKeyWrapper))
+                if (eachKeyWrapper.equals(targetKeyWrapper)) {
                     continue;
+                }
 
                 if (eachKeyWrapper.getName().equals(newText)) {
                     return Messages.bind(Messages.EntityKeyConfigComposite_ValidInfo3, newText);
@@ -812,8 +853,9 @@ public class EntityKeyConfigComposite extends Composite {
         @Override
         public String isValid(String keyName, XSDIdentityConstraintCategory type, XSDElementDeclaration element) {
 
-            if (keyName == null || "".equals(keyName.trim()))//$NON-NLS-1$
+            if (keyName == null || "".equals(keyName.trim())) { //$NON-NLS-1$
                 return Messages.EntityKeyConfigComposite_ValidInfo4;
+            }
 
             for (XSDIdentityConstraintDefinition eachKey : getSchema().getIdentityConstraintDefinitions()) {
 
