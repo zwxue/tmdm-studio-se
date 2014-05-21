@@ -90,7 +90,7 @@ public class MDMOpenExistVersionProcessWizard extends OpenExistVersionProcessWiz
                     IRepositoryNodeActionProvider actionProvider = configuration.getActionProvider();
                     if (actionProvider != null) {
                         IRepositoryViewEditorInput editorInput = actionProvider.getOpenEditorInput(viewObject);
-                        editorInput.setReadOnly(latestVersion);
+                        editorInput.setReadOnly(!latestVersion);
                         if (editorInput != null) {
 
                             IWorkbenchPage page = MDMRepositoryView.show().getCommonViewer().getCommonNavigator().getSite()
