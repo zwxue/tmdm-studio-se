@@ -18,9 +18,7 @@ import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ArrayContentProvider;
-import org.eclipse.jface.viewers.CheckStateChangedEvent;
 import org.eclipse.jface.viewers.ComboViewer;
-import org.eclipse.jface.viewers.ICheckStateListener;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.LabelProvider;
@@ -127,12 +125,7 @@ public class DeployAllDialog extends Dialog {
 
         List<AbstractDeployCommand> commands = CommandManager.getInstance().getAllDeployCommands();
         treeViewer = new RepositoryViewObjectCheckedWidget(container, initType, commands);
-        treeViewer.addCheckStateListener(new ICheckStateListener() {
 
-            public void checkStateChanged(CheckStateChangedEvent event) {
-                // enableOkBun();
-            }
-        });
         treeViewer.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 3));
         Button selAllButton = new Button(container, SWT.NONE);
         selAllButton.addSelectionListener(new SelectionAdapter() {

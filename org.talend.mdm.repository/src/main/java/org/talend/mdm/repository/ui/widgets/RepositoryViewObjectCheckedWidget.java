@@ -78,6 +78,7 @@ import org.talend.mdm.repository.plugin.RepositoryPlugin;
 import org.talend.mdm.repository.ui.navigator.MDMRepositoryLabelProvider;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 
+import com.amalto.workbench.exadapter.ExAdapterManager;
 import com.amalto.workbench.utils.XtentisException;
 import com.amalto.workbench.webservices.WSDigest;
 import com.amalto.workbench.webservices.WSDigestKey;
@@ -88,6 +89,8 @@ import com.amalto.workbench.webservices.WSDigestKey;
 public class RepositoryViewObjectCheckedWidget extends Composite {
 
     protected static Log log = LogFactory.getLog(RepositoryViewObjectCheckedWidget.class);
+
+    IRepositoryViewObjectCheckedWidgetExAdapter adapter = null;
 
     class ContentProvider implements ITreeContentProvider {
 
@@ -151,7 +154,7 @@ public class RepositoryViewObjectCheckedWidget extends Composite {
      */
     public RepositoryViewObjectCheckedWidget(Composite parent, ERepositoryObjectType type, List<AbstractDeployCommand> commands) {
         super(parent, SWT.NONE);
-
+        adapter = ExAdapterManager.getAdapter(this, IRepositoryViewObjectCheckedWidgetExAdapter.class);
         initChangedViewObjects(commands);
         input = initInput(type);
         initWidget();
@@ -390,6 +393,14 @@ public class RepositoryViewObjectCheckedWidget extends Composite {
                 }
             }
         });
+        if (adapter != null) {
+            treeViewer.addCheckStateListener(new ICheckStateListener() {
+
+                public void checkStateChanged(CheckStateChangedEvent event) {
+                    updateSeverityCount();
+                }
+            });
+        }
 
         treeViewer.addFilter(new ViewerFilter() {
 
@@ -444,6 +455,16 @@ public class RepositoryViewObjectCheckedWidget extends Composite {
         treeViewer.setInput(input);
         selectAll(true);
         treeViewer.expandAll();
+        if (adapter != null) {
+            adapter.initSeverityControl(this);
+        }
+        updateSeverityCount();
+    }
+
+    private void updateSeverityCount() {
+        if (adapter != null) {
+            adapter.updateSeverityCount(getSelectededViewObjs());
+        }
     }
 
     private boolean isVisibleViewObj(IRepositoryViewObject viewObj) {
@@ -666,7 +687,7 @@ public class RepositoryViewObjectCheckedWidget extends Composite {
         for (IRepositoryViewObject lockObj : lockedViewObjs) {
             treeViewer.setChecked(lockObj, false);
         }
-
+        updateSeverityCount();
     }
 
     private void updateServerDef(IRepositoryViewObject viewObj) {
