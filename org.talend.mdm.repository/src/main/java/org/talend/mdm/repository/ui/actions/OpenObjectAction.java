@@ -27,6 +27,9 @@ import java.util.Properties;
 
 import org.apache.log4j.Logger;
 import org.eclipse.core.resources.IMarker;
+import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
@@ -237,6 +240,8 @@ public class OpenObjectAction extends AbstractRepositoryAction implements IIntro
     private void openItem(IRepositoryViewObject viewObject) {
         Item item = viewObject.getProperty().getItem();
         item = RepositoryResourceUtil.assertItem(item);
+        item = reloadIfResourceMissed(item);
+
         IRepositoryNodeConfiguration configuration = RepositoryNodeConfigurationManager.getConfiguration(item);
         if (configuration != null) {
             IRepositoryNodeActionProvider actionProvider = configuration.getActionProvider();
@@ -297,6 +302,33 @@ public class OpenObjectAction extends AbstractRepositoryAction implements IIntro
     @Override
     protected boolean needValidateLockedObject() {
         return true;
+    }
+
+    private Item reloadIfResourceMissed(Item item) {
+        Item result = item;
+        
+        boolean missed = false;
+        EList<?> referenceResources = item.getReferenceResources();
+        for (int i = 0; i < referenceResources.size(); i++) {
+            if(referenceResources.get(i) instanceof EObject) {
+                EObject ref = (EObject) referenceResources.get(i);
+                Resource eResource = ref.eResource();
+                if (eResource == null) {
+                    missed = true;
+                    break;
+                }
+            }
+        }
+
+        if (missed) {
+            try {
+                result = factory.reload(result.getProperty()).getItem();
+            } catch (PersistenceException e) {
+                log.error(e.getMessage(), e);
+            }
+        }
+
+        return result;
     }
 
     @Override
