@@ -131,6 +131,8 @@ public class Messages extends NLS {
 
     public static String XmlUtil_Loginfo2;
 
+    public static String XObjectBrowser_dataContainerBrowser;
+
     public static String XObjectBrowser_ErrorMsg;
 
     public static String XObjectBrowser_Refresh;
@@ -1494,6 +1496,8 @@ public class Messages extends NLS {
     public static String DataClusterMainPage_ErrorRefreshingPage;
 
     public static String DataClusterMainPage_ErrorRefreshingPageXX;
+
+    public static String DataClusterStagingBrowserMainPage_stagingDataContainer;
 
     public static String DescAnnotationComposite_AnnoBtnDesc;
 

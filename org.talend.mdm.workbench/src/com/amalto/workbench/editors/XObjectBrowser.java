@@ -65,6 +65,7 @@ public class XObjectBrowser extends FormEditor implements IXObjectModelListener 
      * 
      * @see org.eclipse.ui.forms.editor.FormEditor#addPages()
      */
+    @Override
     protected void addPages() {
         try {
 
@@ -72,8 +73,9 @@ public class XObjectBrowser extends FormEditor implements IXObjectModelListener 
 
             TreeObject xobject = (TreeObject) ((XObjectBrowserInput) this.getEditorInput()).getModel();
 
-            if (!xobject.isXObject())
+            if (!xobject.isXObject()) {
                 return;
+            }
 
             // register model listener in order to close the browser when object is removed
             xobject.addListener(this);
@@ -134,6 +136,7 @@ public class XObjectBrowser extends FormEditor implements IXObjectModelListener 
         });
     }
 
+    @Override
     protected Composite createPageContainer(Composite parent) {
         GridLayout gridLayout = new GridLayout();
         gridLayout.verticalSpacing = 0;
@@ -157,6 +160,7 @@ public class XObjectBrowser extends FormEditor implements IXObjectModelListener 
     }
 
     // Overloaded - Fixes issues with getEditor()
+    @Override
     public int addPage(IFormPage page) throws PartInitException {
         formPages.add(page);
         return super.addPage(page);
@@ -167,6 +171,7 @@ public class XObjectBrowser extends FormEditor implements IXObjectModelListener 
      * 
      * @see org.eclipse.ui.ISaveablePart#doSave(org.eclipse.core.runtime.IProgressMonitor)
      */
+    @Override
     public void doSave(IProgressMonitor monitor) {
         // NO saving on browsers
     }
@@ -176,10 +181,12 @@ public class XObjectBrowser extends FormEditor implements IXObjectModelListener 
      * 
      * @see org.eclipse.ui.ISaveablePart#isSaveAsAllowed()
      */
+    @Override
     public boolean isSaveAsAllowed() {
         return false;
     }
 
+    @Override
     public void doSaveAs() {
     }
 
@@ -189,6 +196,7 @@ public class XObjectBrowser extends FormEditor implements IXObjectModelListener 
         setContentDescription("");//$NON-NLS-1$
     }
 
+    @Override
     public void dispose() {
         // save space
         TreeObject xobject = (TreeObject) ((XObjectBrowserInput) this.getEditorInput()).getModel();
@@ -217,6 +225,7 @@ public class XObjectBrowser extends FormEditor implements IXObjectModelListener 
         return initialXObject;
     }
 
+    @Override
     protected void pageChange(int newPageIndex) {
         super.pageChange(newPageIndex);
         AFormPage page = (AFormPage) formPages.get(newPageIndex);
@@ -224,35 +233,46 @@ public class XObjectBrowser extends FormEditor implements IXObjectModelListener 
     }
 
     @Override
+    public String getPartName() {
+        TreeObject object = (TreeObject) ((XObjectBrowserInput) this.getEditorInput()).getModel();
+        if (object.getType() == TreeObject.DATA_CLUSTER) {
+            return Messages.bind(Messages.XObjectBrowser_dataContainerBrowser, getEditorInput().getName());
+        }
+
+        return super.getPartName();
+    }
+
+    @Override
     public Image getTitleImage() {
         TreeObject object = (TreeObject) ((XObjectBrowserInput) this.getEditorInput()).getModel();
 
-        if (object.getType() == TreeObject._SERVER_)
+        if (object.getType() == TreeObject._SERVER_) {
             return ImageCache.getCreatedImage(EImage.TALEND_PICTO_SMALL.getPath());
-        else if (object.getType() == TreeObject.DATA_CLUSTER)
+        } else if (object.getType() == TreeObject.DATA_CLUSTER) {
             return ImageCache.getCreatedImage(EImage.DATA_CLUSTER.getPath());
-        else if (object.getType() == TreeObject.DATA_MODEL)
+        } else if (object.getType() == TreeObject.DATA_MODEL) {
             return ImageCache.getCreatedImage(EImage.DATA_MODEL.getPath());
-        else if (object.getType() == TreeObject.MENU)
+        } else if (object.getType() == TreeObject.MENU) {
             return ImageCache.getCreatedImage(EImage.MENU.getPath());
-        else if (object.getType() == TreeObject.TRANSFORMER)
+        } else if (object.getType() == TreeObject.TRANSFORMER) {
             return ImageCache.getCreatedImage(EImage.TRANSFORMER.getPath());
-        else if (object.getType() == TreeObject.ROLE)
+        } else if (object.getType() == TreeObject.ROLE) {
             return ImageCache.getCreatedImage(EImage.ROLE.getPath());
-        else if (object.getType() == TreeObject.STORED_PROCEDURE)
+        } else if (object.getType() == TreeObject.STORED_PROCEDURE) {
             return ImageCache.getCreatedImage(EImage.STORED_PROCEDURE.getPath());
-        else if (object.getType() == TreeObject.ROUTING_RULE)
+        } else if (object.getType() == TreeObject.ROUTING_RULE) {
             return ImageCache.getCreatedImage(EImage.ROUTING_RULE.getPath());
-        else if (object.getType() == TreeObject.VIEW)
+        } else if (object.getType() == TreeObject.VIEW) {
             return ImageCache.getCreatedImage(EImage.VIEW.getPath());
-        else if (object.getType() == TreeObject.DOCUMENT)
+        } else if (object.getType() == TreeObject.DOCUMENT) {
             return ImageCache.getCreatedImage(EImage.DOCUMENTS.getPath());
-        else if (object.getType() == TreeObject.SUBSCRIPTION_ENGINE)
+        } else if (object.getType() == TreeObject.SUBSCRIPTION_ENGINE) {
             return ImageCache.getCreatedImage(EImage.SUBSCRIPTION_ENGINE.getPath());
-        else if (object.getType() == TreeObject.WORKFLOW_PROCESS)
+        } else if (object.getType() == TreeObject.WORKFLOW_PROCESS) {
             return ImageCache.getCreatedImage(EImage.WORKFLOW_PROCESS.getPath());
-        else if (object.getType() == TreeObject.JOB)
+        } else if (object.getType() == TreeObject.JOB) {
             return ImageCache.getCreatedImage(EImage.JOB.getPath());
+        }
         return ImageCache.getCreatedImage(EImage.ERROR.getPath());
     }
 
@@ -263,8 +283,9 @@ public class XObjectBrowser extends FormEditor implements IXObjectModelListener 
         TreeObject xobject = (TreeObject) ((XObjectBrowserInput) this.getEditorInput()).getModel();
         switch (type) {
         case IXObjectModelListener.DELETE:
-            if (xobject.equals(child))
+            if (xobject.equals(child)) {
                 this.close(false);
+            }
             break;
         /*
          * case IXObjectModelListener.SAVE: if (saveInProgress) this.editorDirtyStateChanged(); break; case

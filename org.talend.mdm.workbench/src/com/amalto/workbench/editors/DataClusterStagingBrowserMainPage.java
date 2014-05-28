@@ -23,6 +23,8 @@ import org.eclipse.ui.forms.editor.FormEditor;
 
 import com.amalto.workbench.availablemodel.AvailableModelUtil;
 import com.amalto.workbench.availablemodel.IAvailableModel;
+import com.amalto.workbench.i18n.Messages;
+import com.amalto.workbench.providers.XObjectBrowserInput;
 
 /**
  * created by liusongbo on 2014-5-6
@@ -31,6 +33,8 @@ public class DataClusterStagingBrowserMainPage extends DataClusterBrowserMainPag
 
     public DataClusterStagingBrowserMainPage(FormEditor editor) {
         super(editor);
+        setPartName(Messages.bind(Messages.DataClusterStagingBrowserMainPage_stagingDataContainer,
+                ((XObjectBrowserInput) editor.getEditorInput()).getName()));
         setMaster(false);
     }
 
