@@ -21,8 +21,6 @@ import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.forms.editor.FormEditor;
 
-import com.amalto.workbench.availablemodel.AvailableModelUtil;
-import com.amalto.workbench.availablemodel.IAvailableModel;
 import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.providers.XObjectBrowserInput;
 
@@ -62,14 +60,6 @@ public class DataClusterStagingBrowserMainPage extends DataClusterBrowserMainPag
                 if (selection.size() == 2) {
                     manager.appendToGroup(IWorkbenchActionConstants.MB_ADDITIONS, new CompareItemWithEachOtherAction(getShell(),
                             resultsViewer));
-                }
-
-                // available models
-                if (selection.size() == 1) {
-                    java.util.List<IAvailableModel> availablemodels = AvailableModelUtil.getAvailableModels();
-                    for (IAvailableModel model : availablemodels) {
-                        model.menuAboutToShow(manager, DataClusterStagingBrowserMainPage.this);
-                    }
                 }
             }
         });
