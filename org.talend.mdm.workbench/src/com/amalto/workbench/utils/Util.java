@@ -2927,12 +2927,17 @@ public class Util {
     }
 
     public static String formatXsdSource(String xsdSource) {
+        return formatXsdSource(xsdSource, false);
+    }
+
+    public static String formatXsdSource(String xsdSource, boolean suppressDeclaration) {
         try {
             SAXReader reader = new SAXReader();
             org.dom4j.Document document = reader.read(new StringReader(xsdSource));
             StringWriter writer = new StringWriter();
             OutputFormat format = OutputFormat.createPrettyPrint();
             format.setEncoding("UTF-8");//$NON-NLS-1$
+            format.setSuppressDeclaration(suppressDeclaration);
             XMLWriter xmlwriter = new XMLWriter(writer, format);
             xmlwriter.write(document);
             String str = writer.toString();

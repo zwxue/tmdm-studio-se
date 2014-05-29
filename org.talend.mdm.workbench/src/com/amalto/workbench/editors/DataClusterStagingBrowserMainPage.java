@@ -21,6 +21,7 @@ import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.forms.editor.FormEditor;
 
+import com.amalto.workbench.editors.actions.SimulateMatchAction;
 import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.providers.XObjectBrowserInput;
 
@@ -60,6 +61,11 @@ public class DataClusterStagingBrowserMainPage extends DataClusterBrowserMainPag
                 if (selection.size() == 2) {
                     manager.appendToGroup(IWorkbenchActionConstants.MB_ADDITIONS, new CompareItemWithEachOtherAction(getShell(),
                             resultsViewer));
+                }
+
+                if (selection.size() > 1) {
+                    manager.appendToGroup(IWorkbenchActionConstants.MB_ADDITIONS, new SimulateMatchAction(getShell(),
+                            resultsViewer, getXObject(), false));
                 }
             }
         });

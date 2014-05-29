@@ -59,6 +59,7 @@ import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.CoreConnectionPNames;
 import org.apache.http.params.HttpParams;
 import org.apache.http.params.HttpProtocolParams;
+import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
 
 import com.amalto.workbench.i18n.Messages;
@@ -147,22 +148,6 @@ public class HttpClientUtil {
         }
         request.setEntity(entity);
         return request;
-    }
-
-    private static HttpUriRequest createModelRequest(String url, boolean isUpdate, String content)
-            throws UnsupportedEncodingException {
-
-        HttpEntityEnclosingRequestBase request = null;
-        if (!isUpdate) {
-            request = new HttpPost(url);
-        } else {
-            request = new HttpPut(url);
-        }
-
-        StringEntity entity = new StringEntity(content, "UTF-8");
-        request.setEntity(entity);
-        return request;
-
     }
 
     public static String uploadFileToAppServer(String URL, String localFilename, String username, String password)
@@ -376,6 +361,47 @@ public class HttpClientUtil {
         } catch (SecurityException e) {
             log.error(e.getMessage(), e);
         }
+        return null;
+    }
+
+    private static HttpUriRequest createModelRequest(String url, boolean isUpdate, String content)
+            throws UnsupportedEncodingException {
+
+        HttpEntityEnclosingRequestBase request = null;
+        if (!isUpdate) {
+            request = new HttpPost(url);
+        } else {
+            request = new HttpPut(url);
+        }
+
+        StringEntity entity = new StringEntity(content, "UTF-8"); //$NON-NLS-1$
+        request.setEntity(entity);
+        return request;
+
+    }
+
+    public static String invokeMatchSimulation(String protocol, String host, int port, String userName, String password,
+            String modelName, String entityName, String records) throws XtentisException {
+        String url = protocol + host + ":" + port + "/datamanager/services/tasks/matching/explain/?model=" + modelName + "&type=" //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$
+                + entityName;
+        String contentType = "application/xml;charset=UTF-8"; //$NON-NLS-1$
+        try {
+            HttpPost request = new HttpPost(url);
+            request.setHeader(HTTP.CONTENT_TYPE, contentType);
+
+            StringEntity entity = new StringEntity(records, HTTP.UTF_8);
+            request.setEntity(entity);
+
+            DefaultHttpClient client = wrapAuthClient(url, userName, password);
+            String errMessage = Messages.Util_21 + "%s" + Messages.Util_22 + "%s"; //$NON-NLS-1$//$NON-NLS-2$
+            String content = getTextContent(client, request, errMessage);
+            return content;
+        } catch (UnsupportedEncodingException e) {
+            log.error(e.getMessage(), e);
+        } catch (SecurityException e) {
+            log.error(e.getMessage(), e);
+        }
+
         return null;
     }
 

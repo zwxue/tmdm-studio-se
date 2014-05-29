@@ -87,6 +87,7 @@ import com.amalto.workbench.dialogs.DOMViewDialog;
 import com.amalto.workbench.dialogs.datacontainer.AutoIncrementHelper;
 import com.amalto.workbench.dialogs.datacontainer.DataContainerDOMViewDialog;
 import com.amalto.workbench.dialogs.datacontainer.UpdateAutoIncrementDialog;
+import com.amalto.workbench.editors.actions.SimulateMatchAction;
 import com.amalto.workbench.exadapter.ExAdapterManager;
 import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.image.EImage;
@@ -276,6 +277,11 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                 if (selection.size() == 2) {
                     manager.appendToGroup(IWorkbenchActionConstants.MB_ADDITIONS, new CompareItemWithEachOtherAction(getShell(),
                             resultsViewer));
+                }
+
+                if (selection.size() > 1) {
+                    manager.appendToGroup(IWorkbenchActionConstants.MB_ADDITIONS, new SimulateMatchAction(getShell(),
+                            resultsViewer, getXObject(), true));
                 }
 
                 // available models

@@ -30,6 +30,8 @@ public class Line implements Cloneable {
      */
     public List<KeyValue> keyValues = new ArrayList<KeyValue>();
 
+    private List<String> keys;
+
     public Line(ComplexTableViewerColumn[] keys, String[] values) {
         for (int i = 0; i < keys.length && i < values.length; i++) {
             keyValues.add(new KeyValue(keys[i].getName(), values[i]));
@@ -40,6 +42,37 @@ public class Line implements Cloneable {
         this.keyValues = keyValues;
     }
 
+    public boolean containsKey(String key) {
+        initKeys();
+
+        return keys.contains(key);
+    }
+
+    public int indexOf(String key) {
+        initKeys();
+
+        return keys.indexOf(key);
+    }
+
+    public String getValue(String key) {
+        int index = indexOf(key);
+        if (index != -1) {
+            return keyValues.get(index).value;
+        }
+
+        return null;
+    }
+
+    private void initKeys() {
+        if (keys == null) {
+            keys = new ArrayList<String>();
+            for (KeyValue keyvalue : keyValues) {
+                keys.add(keyvalue.key);
+            }
+        }
+    }
+
+    @Override
     public Line clone() {
         List<KeyValue> copyKeyValues = new ArrayList<KeyValue>();
         for (KeyValue kv : keyValues) {
@@ -49,16 +82,19 @@ public class Line implements Cloneable {
         return new Line(copyKeyValues);
     }
 
+    @Override
     public boolean equals(Object obj) {
         if (obj == null || !(obj instanceof Line)) {
             return false;
         }
         Line other = (Line) obj;
-        if (keyValues.size() != other.keyValues.size())
+        if (keyValues.size() != other.keyValues.size()) {
             return false;
+        }
         for (int i = 0; i < keyValues.size(); i++) {
-            if (!keyValues.get(i).equals(other.keyValues.get(i)))
+            if (!keyValues.get(i).equals(other.keyValues.get(i))) {
                 return false;
+            }
         }
         return true;
     }
