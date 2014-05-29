@@ -233,16 +233,6 @@ public class XObjectBrowser extends FormEditor implements IXObjectModelListener 
     }
 
     @Override
-    public String getPartName() {
-        TreeObject object = (TreeObject) ((XObjectBrowserInput) this.getEditorInput()).getModel();
-        if (object.getType() == TreeObject.DATA_CLUSTER) {
-            return Messages.bind(Messages.XObjectBrowser_dataContainerBrowser, getEditorInput().getName());
-        }
-
-        return super.getPartName();
-    }
-
-    @Override
     public Image getTitleImage() {
         TreeObject object = (TreeObject) ((XObjectBrowserInput) this.getEditorInput()).getModel();
 

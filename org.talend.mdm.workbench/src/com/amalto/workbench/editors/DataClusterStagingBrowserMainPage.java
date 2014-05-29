@@ -31,7 +31,7 @@ public class DataClusterStagingBrowserMainPage extends DataClusterBrowserMainPag
 
     public DataClusterStagingBrowserMainPage(FormEditor editor) {
         super(editor);
-        setPartName(Messages.bind(Messages.DataClusterStagingBrowserMainPage_stagingDataContainer,
+        setPartName(Messages.bind(Messages.DataClusterStagingBrowserMainPage_stagingDataContainerBrowserTitle,
                 ((XObjectBrowserInput) editor.getEditorInput()).getName()));
         setMaster(false);
     }

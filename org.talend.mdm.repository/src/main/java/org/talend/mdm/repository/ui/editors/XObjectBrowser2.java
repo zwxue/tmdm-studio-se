@@ -21,6 +21,7 @@ import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.commmon.util.webapp.XSystemObjects;
 import org.talend.mdm.repository.core.IServerObjectRepositoryType;
+import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.plugin.RepositoryPlugin;
 import org.talend.mdm.repository.utils.EclipseResourceManager;
 
@@ -29,6 +30,7 @@ import com.amalto.workbench.editors.DataClusterStagingBrowserMainPage;
 import com.amalto.workbench.editors.ItemsTrashBrowserMainPage;
 import com.amalto.workbench.editors.XObjectBrowser;
 import com.amalto.workbench.models.TreeObject;
+import com.amalto.workbench.providers.XObjectBrowserInput;
 import com.amalto.workbench.views.MDMPerspective;
 
 /**
@@ -85,9 +87,13 @@ public class XObjectBrowser2 extends XObjectBrowser implements ISvnHistory {
             }
             addPage(new DataClusterBrowserMainPage(this));// page index 0
             setPageImage(0, EclipseResourceManager.getImage(RepositoryPlugin.PLUGIN_ID, masterImgPath));
+            setPageText(0,
+                    Messages.bind(Messages.DataClusterBrowserMainPage_masterDataContainer, ((XObjectBrowserInput) getEditorInput()).getName()));
             if (!isSystemCluster()) {
                 addPage(new DataClusterStagingBrowserMainPage(this));// page index 1
                 setPageImage(1, EclipseResourceManager.getImage(RepositoryPlugin.PLUGIN_ID, stagingImgPath));
+                setPageText(1, Messages.bind(Messages.DataClusterStagingBrowserMainPage_stagingDataContainer,
+                        ((XObjectBrowserInput) getEditorInput()).getName()));
             }
             break;
         case TreeObject.SUBSCRIPTION_ENGINE:

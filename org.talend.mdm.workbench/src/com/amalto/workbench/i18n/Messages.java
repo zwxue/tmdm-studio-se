@@ -131,8 +131,6 @@ public class Messages extends NLS {
 
     public static String XmlUtil_Loginfo2;
 
-    public static String XObjectBrowser_dataContainerBrowser;
-
     public static String XObjectBrowser_ErrorMsg;
 
     public static String XObjectBrowser_Refresh;
@@ -1285,8 +1283,6 @@ public class Messages extends NLS {
 
     public static String DataClusterBrowser_error;
 
-    public static String DataClusterBrowserMainPage_0;
-
     public static String DataClusterBrowserMainPage_1;
 
     public static String DataClusterBrowserMainPage_10;
@@ -1471,6 +1467,8 @@ public class Messages extends NLS {
 
     public static String DataClusterBrowserMainPage_ManageAutoIncrement;
 
+    public static String DataClusterBrowserMainPage_masterDataContainerBrowserTitle;
+
     public static String DataClusterDialog_0;
 
     public static String DataClusterDialog_1;
@@ -1497,7 +1495,7 @@ public class Messages extends NLS {
 
     public static String DataClusterMainPage_ErrorRefreshingPageXX;
 
-    public static String DataClusterStagingBrowserMainPage_stagingDataContainer;
+    public static String DataClusterStagingBrowserMainPage_stagingDataContainerBrowserTitle;
 
     public static String DescAnnotationComposite_AnnoBtnDesc;
 

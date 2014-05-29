@@ -142,7 +142,8 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
     private boolean isMaster = true;
 
     public DataClusterBrowserMainPage(FormEditor editor) {
-        super(editor, DataClusterBrowserMainPage.class.getName(), Messages.bind(Messages.DataClusterBrowserMainPage_0,
+        super(editor, DataClusterBrowserMainPage.class.getName(), Messages.bind(
+                Messages.DataClusterBrowserMainPage_masterDataContainerBrowserTitle,
                 ((XObjectBrowserInput) editor.getEditorInput()).getName()));
         // listen to events
         ((XObjectBrowserInput) editor.getEditorInput()).addListener(this);
