@@ -314,7 +314,7 @@ public class MDMImportRepositoryItemsWizard extends ImportItemsWizard {
                                 }
                                 try {
                                     if (needSave) {
-                                        factory.save(item);
+                                        factory.save(item, true);
                                     }
                                     if (itemRec.isValid()) {
 
