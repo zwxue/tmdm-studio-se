@@ -19,6 +19,7 @@ import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.IWorkbenchActionConstants;
+import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.editor.FormEditor;
 
 import com.amalto.workbench.editors.actions.SimulateMatchAction;
@@ -30,11 +31,20 @@ import com.amalto.workbench.providers.XObjectBrowserInput;
  */
 public class DataClusterStagingBrowserMainPage extends DataClusterBrowserMainPage {
 
-    public DataClusterStagingBrowserMainPage(FormEditor editor) {
+    private boolean stagingDBExist;
+
+    public DataClusterStagingBrowserMainPage(FormEditor editor, boolean stagingDBExist) {
         super(editor);
         setPartName(Messages.bind(Messages.DataClusterStagingBrowserMainPage_stagingDataContainerBrowserTitle,
                 ((XObjectBrowserInput) editor.getEditorInput()).getName()));
         setMaster(false);
+        this.stagingDBExist = stagingDBExist;
+    }
+
+    @Override
+    protected void createFormContent(IManagedForm managedForm) {
+        super.createFormContent(managedForm);
+        managedForm.getForm().getBody().setEnabled(stagingDBExist);
     }
 
     @Override

@@ -43,6 +43,12 @@ import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.IXObjectModelListener;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.providers.XObjectBrowserInput;
+import com.amalto.workbench.utils.Util;
+import com.amalto.workbench.utils.XtentisException;
+import com.amalto.workbench.webservices.WSBoolean;
+import com.amalto.workbench.webservices.WSDataClusterPK;
+import com.amalto.workbench.webservices.WSExistsDataCluster;
+import com.amalto.workbench.webservices.XtentisPort;
 
 public class XObjectBrowser extends FormEditor implements IXObjectModelListener {
 
@@ -55,6 +61,8 @@ public class XObjectBrowser extends FormEditor implements IXObjectModelListener 
     private TreeObject initialXObject = null; // backup
 
     private TdEditorToolBar toolBar;
+
+    protected boolean stagingDBExist;
 
     public void setName(String name) {
         setPartName(name);
@@ -70,6 +78,8 @@ public class XObjectBrowser extends FormEditor implements IXObjectModelListener 
         try {
 
             updateTitle();
+
+            checkStagingDBExistence();
 
             TreeObject xobject = (TreeObject) ((XObjectBrowserInput) this.getEditorInput()).getModel();
 
@@ -230,6 +240,15 @@ public class XObjectBrowser extends FormEditor implements IXObjectModelListener 
         super.pageChange(newPageIndex);
         AFormPage page = (AFormPage) formPages.get(newPageIndex);
         page.refreshPage();
+        refreshToolBarState(page);
+    }
+
+    private void refreshToolBarState(AFormPage page) {
+        if (page instanceof DataClusterBrowserMainPage) {
+            DataClusterBrowserMainPage clusterMainPage = (DataClusterBrowserMainPage) page;
+            boolean master = clusterMainPage.isMaster();
+            getToolBar().getToolbarControl().setEnabled(master || stagingDBExist);
+        }
     }
 
     @Override
@@ -288,6 +307,26 @@ public class XObjectBrowser extends FormEditor implements IXObjectModelListener 
 
     public boolean isLocalInput() {
         return false;
+    }
+
+    private void checkStagingDBExistence() {
+        stagingDBExist = true;
+
+        TreeObject xobject = (TreeObject) ((XObjectBrowserInput) this.getEditorInput()).getModel();
+        try {
+            XtentisPort port = Util.getPort(xobject);
+            if (port != null) {
+                WSBoolean existsDataCluster = port.existsDataCluster(new WSExistsDataCluster(new WSDataClusterPK(xobject
+                        .getName() + IDataClusterConstants.PK_ADDITION)));
+                stagingDBExist = existsDataCluster.isTrue();
+            }
+        } catch (XtentisException e) {
+            log.error(e.getMessage(), e);
+            stagingDBExist = false;
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            stagingDBExist = false;
+        }
     }
     private class RefreshSectionAction extends Action {
 

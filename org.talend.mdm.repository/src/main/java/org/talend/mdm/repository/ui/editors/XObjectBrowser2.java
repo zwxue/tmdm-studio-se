@@ -90,10 +90,17 @@ public class XObjectBrowser2 extends XObjectBrowser implements ISvnHistory {
             setPageText(0,
                     Messages.bind(Messages.DataClusterBrowserMainPage_masterDataContainer, ((XObjectBrowserInput) getEditorInput()).getName()));
             if (!isSystemCluster()) {
-                addPage(new DataClusterStagingBrowserMainPage(this));// page index 1
+                String pageText = null;
+                if (stagingDBExist) {
+                    pageText = Messages.bind(Messages.DataClusterStagingBrowserMainPage_stagingDataContainer,
+                            ((XObjectBrowserInput) getEditorInput()).getName());
+                } else {
+                    pageText = Messages.XObjectBrowser2_StagingAreaNotAvailable;
+                }
+
+                addPage(new DataClusterStagingBrowserMainPage(this, stagingDBExist));// page index 1
                 setPageImage(1, EclipseResourceManager.getImage(RepositoryPlugin.PLUGIN_ID, stagingImgPath));
-                setPageText(1, Messages.bind(Messages.DataClusterStagingBrowserMainPage_stagingDataContainer,
-                        ((XObjectBrowserInput) getEditorInput()).getName()));
+                setPageText(1, pageText);
             }
             break;
         case TreeObject.SUBSCRIPTION_ENGINE:

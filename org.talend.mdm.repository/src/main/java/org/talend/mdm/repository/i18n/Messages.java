@@ -378,6 +378,8 @@ public class Messages extends NLS {
 
     public static String StoredProcedureMainPage2_noDataContainer;
 
+    public static String XObjectBrowser2_StagingAreaNotAvailable;
+
     public static String XObjectEditor2_saving;
 
     public static String XObjectEditor2_unableOpenEditor;
