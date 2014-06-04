@@ -109,7 +109,7 @@ public class DataModelNodeResourceProvider extends AbstractRepositoryNodeResourc
 
             IProxyRepositoryFactory factory = CoreRuntimePlugin.getInstance().getProxyRepositoryFactory();
 
-            factory.save(item);
+            factory.save(item, true);
 
         } catch (UnsupportedEncodingException e) {
             log.error(e.getMessage(), e);

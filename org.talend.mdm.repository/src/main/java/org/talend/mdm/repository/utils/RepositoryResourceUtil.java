@@ -183,6 +183,10 @@ public class RepositoryResourceUtil {
     }
 
     public static void saveItem(Item item) {
+        saveItem(item, true);
+    }
+
+    public static void saveItem(Item item, boolean triggerEvent) {
         IRepositoryNodeConfiguration configuration = RepositoryNodeConfigurationManager.getConfiguration(item);
         if (configuration != null) {
             IRepositoryNodeResourceProvider resourceProvider = configuration.getResourceProvider();
@@ -193,7 +197,7 @@ public class RepositoryResourceUtil {
             // save
             IProxyRepositoryFactory factory = CoreRuntimePlugin.getInstance().getProxyRepositoryFactory();
             try {
-                factory.save(item);
+                factory.save(item, !triggerEvent);
             } catch (PersistenceException e) {
                 log.error(e);
             }
@@ -205,6 +209,10 @@ public class RepositoryResourceUtil {
     }
 
     public static boolean createItem(Item item, String propLabel, String version, boolean pushCommandStack) {
+        return createItem(item, propLabel, version, pushCommandStack, true);
+    }
+
+    public static boolean createItem(Item item, String propLabel, String version, boolean pushCommandStack, boolean triggerEvent) {
         String name = propLabel;
         IProxyRepositoryFactory factory = CoreRuntimePlugin.getInstance().getProxyRepositoryFactory();
         RepositoryContext context = factory.getRepositoryContext();
@@ -233,7 +241,7 @@ public class RepositoryResourceUtil {
                         log.error(e.getMessage(), e);
                     }
                 }
-                factory.save(item);
+                factory.save(item, !triggerEvent);
 
             }
             if (pushCommandStack) {

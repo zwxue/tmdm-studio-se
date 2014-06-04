@@ -27,6 +27,7 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.ui.IWorkbenchWindowActionDelegate;
 import org.talend.core.model.properties.Item;
+import org.talend.core.model.properties.Property;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.AbstractRepositoryAction;
 import org.talend.mdm.repository.core.bridge.AbstractBridgeRepositoryAction;
@@ -34,6 +35,7 @@ import org.talend.mdm.repository.core.service.ContainerCacheService;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.ui.navigator.MDMRepositoryView;
 import org.talend.mdm.repository.ui.wizards.imports.MDMImportRepositoryItemsWizard;
+import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 import org.talend.repository.ui.actions.AContextualAction;
 
 import com.amalto.workbench.exadapter.ExAdapterManager;
@@ -121,8 +123,16 @@ public class ImportObjectAction {
                         for (String id : importedIds) {
                             IRepositoryViewObject viewObject = ContainerCacheService.get(id);
                             if (viewObject != null) {
-                                Item item = viewObject.getProperty().getItem();
-                                exAdapter.updateRelation(item);
+                                viewObject = RepositoryResourceUtil.assertViewObject(viewObject);
+                                if (viewObject != null) {
+                                    Property property = viewObject.getProperty();
+                                    if (property != null) {
+                                        Item item = property.getItem();
+                                        if (item != null) {
+                                            exAdapter.updateRelation(item);
+                                        }
+                                    }
+                                }
                             }
 
                         }

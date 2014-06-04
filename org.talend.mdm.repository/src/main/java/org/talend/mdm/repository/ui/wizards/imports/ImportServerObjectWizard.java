@@ -421,13 +421,11 @@ public class ImportServerObjectWizard extends Wizard {
         return true;
     }
 
-    public void doImport(Object[] objs, IProgressMonitor monitor) {
+    public List<String> doImport(Object[] objs, IProgressMonitor monitor) {
         monitor.beginTask(Messages.Import_Objects, IProgressMonitor.UNKNOWN);
+        List<String> importedIds = new LinkedList<String>();
         ImportService.setImporting(true);
-        // if (!showLockedObjDialog(objs)) {
-        // ImportService.setImporting(false);
-        // return;
-        // }
+
         List<Integer> types = new ArrayList<Integer>();
         types.add(TreeObject.CUSTOM_FORM);
         types.add(TreeObject.DATA_CLUSTER);
@@ -468,7 +466,7 @@ public class ImportServerObjectWizard extends Wizard {
                             int result = isOveride(treeObj.getName(), TreeObject.getTypeName(treeObj.getType()));
                             if (result == IDialogConstants.CANCEL_ID) {
                                 ImportService.setImporting(false);
-                                return;
+                                return importedIds;
                             }
                             if (result == IDialogConstants.YES_TO_ALL_ID) {
                                 isOverrideAll = true;
@@ -481,7 +479,8 @@ public class ImportServerObjectWizard extends Wizard {
                             item.setMDMServerObject(eobj);
                             item.getState().setDeleted(false);
                             // save
-                            RepositoryResourceUtil.saveItem(item);
+                            RepositoryResourceUtil.saveItem(item, false);
+
                             try {
                                 factory.unlock(item);
                             } catch (PersistenceException e) {
@@ -489,6 +488,7 @@ public class ImportServerObjectWizard extends Wizard {
                             } catch (LoginException e) {
                                 log.error(e.getMessage(), e);
                             }
+                            importedIds.add(item.getProperty().getId());
                         }
 
                         CommandManager.getInstance().removeCommandStack(item.getProperty().getId());
@@ -504,7 +504,9 @@ public class ImportServerObjectWizard extends Wizard {
                     item.setState(itemState);
                     String version = getVersion(treeObj);
 
-                    RepositoryResourceUtil.createItem(item, uniqueName, version, false);
+                    if (RepositoryResourceUtil.createItem(item, uniqueName, version, false, false)) {
+                        importedIds.add(item.getProperty().getId());
+                    }
 
                 }
             } catch (IOException e) {
@@ -513,6 +515,7 @@ public class ImportServerObjectWizard extends Wizard {
         }
         ImportService.setImporting(false);
         monitor.done();
+        return importedIds;
     }
 
     /**
@@ -699,11 +702,12 @@ public class ImportServerObjectWizard extends Wizard {
                 @Override
                 public IStatus runInUIThread(IProgressMonitor monitor) {
                     // isOverrideAll = btnOverwrite.getSelection();
-                    doImport(selectedObjects, monitor);
+                    List<String> importedIds = doImport(selectedObjects, monitor);
                     commonViewer.refresh();
                     if (exAdapter != null) {
                         // sync workflow object to bonita
                         exAdapter.syncWorkflow();
+                        exAdapter.updateRelations(importedIds);
                     }
                     return Status.OK_STATUS;
                 }

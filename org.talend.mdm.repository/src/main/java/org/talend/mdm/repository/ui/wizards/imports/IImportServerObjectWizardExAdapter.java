@@ -12,6 +12,8 @@
 // ============================================================================
 package org.talend.mdm.repository.ui.wizards.imports;
 
+import java.util.List;
+
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.swt.widgets.Group;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
@@ -33,4 +35,6 @@ public interface IImportServerObjectWizardExAdapter extends IExAdapter<ImportSer
     void initVersionCombo(final MDMServerDef serverDef, WidgetFactory toolkit, Group serverGroup);
 
     void refreshUniverseCombo(MDMServerDef serverDef);
+
+    void updateRelations(List<String> importedIds);
 }
