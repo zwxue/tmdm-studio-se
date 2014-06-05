@@ -165,9 +165,7 @@ public class SimpleTypeConfigComposite extends Composite {
             uuidTypes.add(current.getName());
         }
 
-        if (uuidTypes.contains(name)) {
-            txtName.setEditable(false);
-        }
+        txtName.setEditable(!uuidTypes.contains(name));
 
 		if (name != null) {
 			int length = name.length();
