@@ -51,6 +51,7 @@ import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchPartReference;
+import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PerspectiveAdapter;
 import org.eclipse.ui.PlatformUI;
@@ -287,15 +288,24 @@ public class MDMRepositoryView extends CommonNavigator implements ITabbedPropert
     }
 
     public static MDMRepositoryView show() {
-        IViewPart part = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().findView(VIEW_ID);
-        if (part == null) {
-            try {
-                part = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().showView(VIEW_ID);
-            } catch (Exception e) {
-                log.error(e.getMessage(), e);
+        IWorkbenchWindow activeWorkbenchWindow = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
+        if (activeWorkbenchWindow != null) {
+            IWorkbenchPage activePage = activeWorkbenchWindow.getActivePage();
+            if (activePage != null) {
+                IViewPart part = activePage.findView(VIEW_ID);
+                if (part == null) {
+                    try {
+                        part = activeWorkbenchWindow.getActivePage().showView(VIEW_ID);
+                    } catch (Exception e) {
+                        log.error(e.getMessage(), e);
+                    }
+                }
+                if (part != null && part instanceof MDMRepositoryView) {
+                    return (MDMRepositoryView) part;
+                }
             }
         }
-        return (MDMRepositoryView) part;
+        return null;
     }
 
     private IPartListener2 partListener = new IPartListener2() {
