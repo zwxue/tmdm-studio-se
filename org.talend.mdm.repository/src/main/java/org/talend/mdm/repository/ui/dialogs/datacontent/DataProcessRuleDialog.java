@@ -93,7 +93,7 @@ public class DataProcessRuleDialog extends Dialog {
     public DataProcessRuleDialog(Shell parentShell, DataProcessRule rule) {
         super(parentShell);
         this.rule = rule;
-        setShellStyle(SWT.RESIZE);
+        setShellStyle(getShellStyle() | SWT.RESIZE);
     }
 
     /**
@@ -285,7 +285,7 @@ public class DataProcessRuleDialog extends Dialog {
      */
     @Override
     protected Point getInitialSize() {
-        return new Point(450, 300);
+        return new Point(500, 300);
     }
 
 }
