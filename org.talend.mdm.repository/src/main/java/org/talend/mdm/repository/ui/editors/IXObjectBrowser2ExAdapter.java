@@ -10,23 +10,29 @@
 // 9 rue Pages 92150 Suresnes, France
 //
 // ============================================================================
-package com.amalto.workbench.editors;
+package org.talend.mdm.repository.ui.editors;
 
-import org.eclipse.jface.action.IMenuManager;
-import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.viewers.TableViewer;
-import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.graphics.Image;
+import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.PartInitException;
 
+import com.amalto.workbench.editors.XObjectBrowser;
 import com.amalto.workbench.exadapter.IExAdapter;
 import com.amalto.workbench.models.TreeObject;
 
 
 /**
- * created by liusongbo on 2014-4-29
+ * created by liusongbo on 2014-6-6
  */
-public interface IDataClusterBrowserMainPageExAdapter extends IExAdapter<DataClusterBrowserMainPage> {
+public interface IXObjectBrowser2ExAdapter extends IExAdapter<XObjectBrowser2> {
 
-    public void menuAboutToShow(IMenuManager manager, String menuGroupName, TableViewer resultsViewer,
-            IStructuredSelection selection, Shell shell, TreeObject treeObject);
+    public boolean addPageForXObject(XObjectBrowser editor, IEditorInput editorInput, TreeObject xobject)
+            throws PartInitException;
+
+    public String getPageText();
+
+    public Image getPageImage();
+
+    public boolean isStagingDBExist();
 
 }

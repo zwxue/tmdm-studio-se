@@ -17,18 +17,16 @@ import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
-import org.talend.core.model.repository.ERepositoryObjectType;
-import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.commmon.util.webapp.XSystemObjects;
-import org.talend.mdm.repository.core.IServerObjectRepositoryType;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.plugin.RepositoryPlugin;
 import org.talend.mdm.repository.utils.EclipseResourceManager;
 
+import com.amalto.workbench.editors.AFormPage;
 import com.amalto.workbench.editors.DataClusterBrowserMainPage;
-import com.amalto.workbench.editors.DataClusterStagingBrowserMainPage;
 import com.amalto.workbench.editors.ItemsTrashBrowserMainPage;
 import com.amalto.workbench.editors.XObjectBrowser;
+import com.amalto.workbench.exadapter.ExAdapterManager;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.providers.XObjectBrowserInput;
 import com.amalto.workbench.views.MDMPerspective;
@@ -44,8 +42,9 @@ public class XObjectBrowser2 extends XObjectBrowser implements ISvnHistory {
 
     private final String masterImgPath = "icons/dataclustermaster.png"; //$NON-NLS-1$
 
-    private final String stagingImgPath = "icons/dataclusterstaging.png"; //$NON-NLS-1$
+    protected boolean stagingDBExist;
 
+    private IXObjectBrowser2ExAdapter exAdapter;
 
     private void refreshPropertyView() throws PartInitException {
 
@@ -59,6 +58,7 @@ public class XObjectBrowser2 extends XObjectBrowser implements ISvnHistory {
 
         page.showView(MDMPerspective.VIEWID_PROPERTYVIEW);
     }
+
     /*
      * (non-Javadoc)
      * 
@@ -89,18 +89,15 @@ public class XObjectBrowser2 extends XObjectBrowser implements ISvnHistory {
             setPageImage(0, EclipseResourceManager.getImage(RepositoryPlugin.PLUGIN_ID, masterImgPath));
             setPageText(0,
                     Messages.bind(Messages.DataClusterBrowserMainPage_masterDataContainer, ((XObjectBrowserInput) getEditorInput()).getName()));
-            if (!isSystemCluster()) {
-                String pageText = null;
-                if (stagingDBExist) {
-                    pageText = Messages.bind(Messages.DataClusterStagingBrowserMainPage_stagingDataContainer,
-                            ((XObjectBrowserInput) getEditorInput()).getName());
-                } else {
-                    pageText = Messages.XObjectBrowser2_StagingAreaNotAvailable;
-                }
 
-                addPage(new DataClusterStagingBrowserMainPage(this, stagingDBExist));// page index 1
-                setPageImage(1, EclipseResourceManager.getImage(RepositoryPlugin.PLUGIN_ID, stagingImgPath));
-                setPageText(1, pageText);
+            exAdapter = ExAdapterManager.getAdapter(this, IXObjectBrowser2ExAdapter.class);
+            if (exAdapter != null) {
+                boolean pageAdded = exAdapter.addPageForXObject(this, getEditorInput(), xobject);
+                if (pageAdded) {
+                    setPageText(1, exAdapter.getPageText());
+                    setPageImage(1, exAdapter.getPageImage());
+                    stagingDBExist = exAdapter.isStagingDBExist();
+                }
             }
             break;
         case TreeObject.SUBSCRIPTION_ENGINE:
@@ -114,18 +111,24 @@ public class XObjectBrowser2 extends XObjectBrowser implements ISvnHistory {
         }// switch
     }
 
-    private boolean isSystemCluster() {
-        XObjectBrowserInput2 editorInput = (XObjectBrowserInput2) getEditorInput();
-        IRepositoryViewObject viewObject = editorInput.getViewObject();
-        ERepositoryObjectType objectType = viewObject.getRepositoryObjectType();
-        if (objectType == IServerObjectRepositoryType.TYPE_DATACLUSTER) {
-            String path = viewObject.getPath();
-            if (path.toLowerCase().startsWith("system") || path.toLowerCase().startsWith("/system")) { //$NON-NLS-1$ //$NON-NLS-2$
-                return true;
-            }
-        }
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.amalto.workbench.editors.XObjectBrowser#pageChange(int)
+     */
+    @Override
+    protected void pageChange(int newPageIndex) {
+        super.pageChange(newPageIndex);
+        AFormPage page = (AFormPage) getPage(newPageIndex);
+        refreshToolBarState(page);
+    }
 
-        return false;
+    private void refreshToolBarState(AFormPage page) {
+        if (page instanceof DataClusterBrowserMainPage) {
+            DataClusterBrowserMainPage clusterMainPage = (DataClusterBrowserMainPage) page;
+            boolean master = clusterMainPage.isMaster();
+            getToolBar().getToolbarControl().setEnabled(master || stagingDBExist);
+        }
     }
 
     @Override

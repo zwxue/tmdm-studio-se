@@ -168,8 +168,6 @@ public class Messages extends NLS {
 
     public static String DataClusterBrowserMainPage_masterDataContainer;
 
-    public static String DataClusterStagingBrowserMainPage_stagingDataContainer;
-
     public static String DataModelInteractiveHandler_label;
 
     public static String DataProcessRuleDialog_selectAll;
