@@ -57,6 +57,7 @@ import org.talend.commons.exception.LoginException;
 import org.talend.commons.exception.PersistenceException;
 import org.talend.commons.ui.runtime.exception.ExceptionHandler;
 import org.talend.commons.utils.VersionUtils;
+import org.talend.commons.utils.data.container.RootContainer;
 import org.talend.commons.utils.workbench.resources.ResourceUtils;
 import org.talend.core.context.RepositoryContext;
 import org.talend.core.model.general.Project;
@@ -72,10 +73,10 @@ import org.talend.core.model.repository.IRepositoryEditorInput;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.core.model.repository.RepositoryObject;
 import org.talend.core.model.repository.RepositoryViewObject;
+import org.talend.core.repository.model.IRepositoryFactory;
 import org.talend.core.repository.model.ProxyRepositoryFactory;
 import org.talend.core.repository.model.ResourceModelUtils;
 import org.talend.core.repository.utils.ResourceFilenameHelper;
-import org.talend.core.repository.utils.XmiResourceManager;
 import org.talend.core.runtime.CoreRuntimePlugin;
 import org.talend.designer.core.ui.editor.ProcessEditorInput;
 import org.talend.mdm.repository.core.IRepositoryNodeConfiguration;
@@ -130,8 +131,6 @@ public class RepositoryResourceUtil {
     private static final String UNDERLINE = "_"; //$NON-NLS-1$
 
     static Logger log = Logger.getLogger(RepositoryResourceUtil.class);
-
-    static XmiResourceManager resourceManager = new XmiResourceManager();
 
     private static IRepositoryResourceUtilExAdapter exAdapter;
 
@@ -689,7 +688,7 @@ public class RepositoryResourceUtil {
             try {
                 viewObject = factory.getLastVersion(id);
                 if (viewObject != null) {
-                    ContainerCacheService.put(viewObject);
+                    viewObject = ContainerCacheService.put(viewObject);
                 }
 
             } catch (PersistenceException e) {
@@ -920,7 +919,8 @@ public class RepositoryResourceUtil {
             throw new IllegalArgumentException();
         }
         if (viewObj instanceof IRepositoryViewObject
-                && !(viewObj instanceof FolderRepositoryObject || viewObj instanceof WSRootRepositoryObject)) {
+                && !(viewObj instanceof FolderRepositoryObject || viewObj instanceof WSRootRepositoryObject)
+                && viewObj instanceof RepositoryObject) {
             boolean reload = false;
             Property property = viewObj.getProperty();
             if (property != null) {
@@ -933,6 +933,7 @@ public class RepositoryResourceUtil {
             if (reload) {
                 IProxyRepositoryFactory factory = CoreRuntimePlugin.getInstance().getProxyRepositoryFactory();
                 try {
+
                     IRepositoryViewObject newViewObj = factory.getLastVersion(viewObj.getId());
                     property = viewObj.getProperty();
                     if (property != null) {
@@ -993,42 +994,30 @@ public class RepositoryResourceUtil {
 
     public static List<IRepositoryViewObject> findViewObjectsInFolder(ERepositoryObjectType type, Item parentItem,
             boolean useRepositoryViewObject, boolean withDeleted) {
-        // because the IProxyRepositoryFactory doesn't expose the getSerializableFromFolder method ,so only through the
-        // following to get object
-        List<IRepositoryViewObject> viewObjects = new LinkedList<IRepositoryViewObject>();
-        String parentPath = parentItem.getState().getPath();
-        String parentPath2 = parentPath;
-        if (parentPath.length() > 1) {
-            if (parentPath.startsWith(DIVIDE)) {
-                parentPath2 = parentPath.substring(1);
-            } else {
-                parentPath2 = DIVIDE + parentPath;
-            }
-        }
         IProxyRepositoryFactory factory = CoreRuntimePlugin.getInstance().getProxyRepositoryFactory();
+        String parentPath = parentItem.getState().getPath();
+        int option = IRepositoryFactory.OPTION_DYNAMIC_OBJECTS | IRepositoryFactory.OPTION_NOT_INCLUDE_CHILDRENS
+                | IRepositoryFactory.OPTION_ONLY_LAST_VERSION;
+        if (!withDeleted) {
+            option |= IRepositoryFactory.OPTION_SKIP_DELETED;
+        }
+
         try {
+            RootContainer<String, IRepositoryViewObject> container = factory.getObjectFromFolder(ProjectManager.getInstance()
+                    .getCurrentProject(), type, parentPath, option);
 
-            List<IRepositoryViewObject> allObjs = factory.getAll(type, withDeleted);
-            for (IRepositoryViewObject viewObj : allObjs) {
-                Property property = viewObj.getProperty();
-
-                ItemState state = property.getItem().getState();
-                if ((!state.isDeleted() || withDeleted)
-                        && (state.getPath().equalsIgnoreCase(parentPath) || state.getPath().equalsIgnoreCase(parentPath2))) {
-                    IRepositoryViewObject cacheViewObj = getCacheViewObject(property, viewObj, useRepositoryViewObject);
-
-                    viewObjects.add(cacheViewObj);
-                }
-            }
+            List<IRepositoryViewObject> viewObjs = container.getMembers();
+            ContainerCacheService.put(viewObjs);
+            return viewObjs;
         } catch (PersistenceException e) {
             log.error(e.getMessage(), e);
         }
-        return viewObjects;
+        return Collections.EMPTY_LIST;
 
     }
 
     public static IRepositoryViewObject findViewObjectByName(ContainerItem parentItem, String objName, boolean caseSensitive) {
-        List<IRepositoryViewObject> viewObjects = findViewObjectsInFolder(parentItem.getRepObjType(), parentItem, false);
+        List<IRepositoryViewObject> viewObjects = findViewObjectsInFolder(parentItem.getRepObjType(), parentItem, true);
         for (IRepositoryViewObject viewObj : viewObjects) {
             boolean result = caseSensitive ? viewObj.getLabel().equalsIgnoreCase(objName) : viewObj.getLabel().equals(objName);
             if (result) {

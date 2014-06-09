@@ -12,6 +12,7 @@
 // ============================================================================
 package org.talend.mdm.repository.core.service;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -22,6 +23,8 @@ import org.talend.core.model.properties.Item;
 import org.talend.core.model.properties.Property;
 import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.core.model.repository.IRepositoryViewObject;
+import org.talend.core.model.repository.RepositoryObject;
+import org.talend.core.model.repository.RepositoryViewObject;
 import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
 import org.talend.mdm.repository.models.FolderRepositoryObject;
 
@@ -63,14 +66,27 @@ public class ContainerCacheService {
         if (prop == null || viewObj == null) {
             throw new IllegalArgumentException();
         }
+        if (viewObj instanceof RepositoryObject) {
+            viewObj = new RepositoryViewObject(viewObj.getProperty());
+        }
         viewObjMap.put(prop.getId(), viewObj);
     }
 
-    public static void put(IRepositoryViewObject viewObj) {
+    public static IRepositoryViewObject put(IRepositoryViewObject viewObj) {
         if (viewObj == null) {
             throw new IllegalArgumentException();
         }
+        if (viewObj instanceof RepositoryObject) {
+            viewObj = new RepositoryViewObject(viewObj.getProperty());
+        }
         viewObjMap.put(viewObj.getId(), viewObj);
+        return viewObj;
+    }
+
+    public static void put(Collection<IRepositoryViewObject> viewObjs) {
+        for (IRepositoryViewObject viewObj : viewObjs) {
+            put(viewObj);
+        }
     }
 
     public static void remove(Property prop) {
