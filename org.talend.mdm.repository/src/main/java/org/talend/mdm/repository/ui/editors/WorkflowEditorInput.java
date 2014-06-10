@@ -76,6 +76,9 @@ public class WorkflowEditorInput extends URIEditorInput implements IRepositoryVi
 
     public void setReadOnly(boolean readOnly) {
         this.readOnly = readOnly;
+        if (file != null) {
+            file.setReadOnly(readOnly);
+        }
     }
 
     @Override
