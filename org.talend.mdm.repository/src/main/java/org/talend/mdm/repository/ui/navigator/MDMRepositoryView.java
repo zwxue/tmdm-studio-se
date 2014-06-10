@@ -26,6 +26,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.apache.commons.logging.Log;
@@ -43,6 +44,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.IMemento;
 import org.eclipse.ui.IPartListener;
 import org.eclipse.ui.IPartListener2;
@@ -64,6 +66,7 @@ import org.eclipse.ui.views.properties.tabbed.ITabbedPropertySheetPageContributo
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 import org.talend.commons.exception.LoginException;
 import org.talend.commons.exception.PersistenceException;
+import org.talend.commons.utils.VersionUtils;
 import org.talend.core.model.general.Project;
 import org.talend.core.model.properties.Item;
 import org.talend.core.model.properties.Property;
@@ -491,6 +494,7 @@ public class MDMRepositoryView extends CommonNavigator implements ITabbedPropert
             if (part instanceof IEditorPart) {
                 if (RepositoryWorkflowUtil.isWorkflowEditorFromBPM((IEditorPart) part)) {
                     refreshLockState((IEditorPart) part);
+                    refreshEditorState((IEditorPart) part);
                 }
             }
         }
@@ -501,6 +505,33 @@ public class MDMRepositoryView extends CommonNavigator implements ITabbedPropert
                 lock(workflowViewObject);
 
                 refreshViewObject(workflowViewObject);
+            }
+        }
+
+        private void refreshEditorState(IEditorPart workflowEditorPart) {
+            IFileEditorInput fileInput = (IFileEditorInput) workflowEditorPart.getEditorInput();
+            IFile file = fileInput.getFile();
+            String name = file.getName();
+            int lastIndexOf = name.lastIndexOf("_"); //$NON-NLS-1$
+            int lastIndexOf2 = name.lastIndexOf("."); //$NON-NLS-1$
+            String version = name.substring(lastIndexOf + 1, lastIndexOf2);
+            name = name.substring(0, lastIndexOf);
+            try {
+                String maxversion = version;
+                List<IRepositoryViewObject> workflows = factory.getAll(IServerObjectRepositoryType.TYPE_WORKFLOW);
+                for (IRepositoryViewObject viewObj : workflows) {
+                    if (viewObj.getProperty().getLabel().equals(name)) {
+                        if (VersionUtils.compareTo(version, viewObj.getVersion()) < 0) {
+                            maxversion = viewObj.getVersion();
+                        }
+                    }
+                }
+
+                if (VersionUtils.compareTo(version, maxversion) < 0) {
+                    file.setReadOnly(true);
+                }
+            } catch (PersistenceException e) {
+                log.error(e.getMessage(), e);
             }
         }
 
