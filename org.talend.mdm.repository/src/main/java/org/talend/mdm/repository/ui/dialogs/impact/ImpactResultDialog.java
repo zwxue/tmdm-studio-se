@@ -398,10 +398,4 @@ public class ImpactResultDialog extends Dialog {
     public Map<IRepositoryViewObject, ImpactOperation> getImpactConfiguration() {
         return result;
     }
-
-    @Override
-    protected boolean canHandleShellCloseEvent() {
-        return false;
-    }
-
 }

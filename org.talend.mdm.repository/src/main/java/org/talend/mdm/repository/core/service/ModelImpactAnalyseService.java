@@ -215,7 +215,13 @@ public class ModelImpactAnalyseService {
                     Map<IRepositoryViewObject, ImpactOperation> configuration = dialog.getImpactConfiguration();
                     return configuration;
                 } else {
-                    throw new InterruptedException();
+                    Map<IRepositoryViewObject, ImpactOperation> configuration = new HashMap<IRepositoryViewObject, ModelImpactAnalyseService.ImpactOperation>(
+                            changes.size());
+                    for (IRepositoryViewObject viewObj : changes.keySet()) {
+                        configuration.put(viewObj, ImpactOperation.CANCEL);
+                    }
+
+                    return configuration;
                 }
             }
         } catch (XtentisException e) {
