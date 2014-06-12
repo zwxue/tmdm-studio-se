@@ -86,4 +86,12 @@ public class BrowseViewAction extends AbstractRepositoryAction {
         return GROUP_EDIT;
     }
 
+    @Override
+    public boolean isVisible(IRepositoryViewObject viewObj) {
+        if (getSelectedObject().size() > 1) {
+            return false;
+        }
+
+        return super.isVisible(viewObj);
+    }
 }

@@ -90,7 +90,7 @@ public class ViewActionProvider extends RepositoryNodeActionProviderAdapter {
             }
 
             addAction(actions, renameViewAction, viewObj);
-            actions.add(browseViewAction);
+            addAction(actions, browseViewAction, viewObj);
             // deploy
             actions.add(deployToAction);
             addAction(actions, deployToLastServerAction, viewObj);

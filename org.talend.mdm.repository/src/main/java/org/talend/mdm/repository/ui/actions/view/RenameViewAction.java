@@ -225,4 +225,13 @@ public class RenameViewAction extends AbstractRepositoryAction implements IViewN
 
         return inputValidator;
     }
+
+    @Override
+    public boolean isVisible(IRepositoryViewObject viewObj) {
+        if (getSelectedObject().size() > 1) {
+            return false;
+        }
+
+        return super.isVisible(viewObj);
+    }
 }
