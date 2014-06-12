@@ -12,7 +12,7 @@
 // ============================================================================
 package org.talend.mdm.repository.ui.actions.job;
 
-import org.talend.designer.core.ui.action.EditProcess;
+import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.bridge.AbstractBridgeRepositoryAction;
 
 /**
@@ -46,4 +46,12 @@ public class OpenExistVersionProcessAction extends AbstractBridgeRepositoryActio
         return GROUP_EDIT;
     }
 
+    @Override
+    public boolean isVisible(IRepositoryViewObject viewObj) {
+        if (getSelectedObject().size() > 1) {
+            return false;
+        }
+
+        return super.isVisible(viewObj);
+    }
 }

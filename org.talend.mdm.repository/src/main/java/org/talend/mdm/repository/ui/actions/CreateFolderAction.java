@@ -99,4 +99,13 @@ public class CreateFolderAction extends AbstractRepositoryAction {
             }
         }
     }
+
+    @Override
+    public boolean isVisible(IRepositoryViewObject viewObj) {
+        if (getSelectedObject().size() > 1) {
+            return false;
+        }
+
+        return super.isVisible(viewObj);
+    }
 }

@@ -72,6 +72,7 @@ public class GenerateJobTransformerAction extends AbstractRepositoryAction {
         return GROUP_EDIT;
     }
 
+    @Override
     protected void doRun() {
 
         selectObj = getSelectedObject().get(0);
@@ -80,8 +81,9 @@ public class GenerateJobTransformerAction extends AbstractRepositoryAction {
                 Execution.EMBEDDED);
         dialog.setBlockOnOpen(true);
         int ret = dialog.open();
-        if (ret == Dialog.CANCEL)
+        if (ret == Dialog.CANCEL) {
             return;
+        }
 
         String jobName = ""; //$NON-NLS-1$
         String jobVersion = ""; //$NON-NLS-1$
@@ -97,8 +99,9 @@ public class GenerateJobTransformerAction extends AbstractRepositoryAction {
         if (validateService != null) {
             boolean result = validateService.validateAndAlertObjectExistence(IServerObjectRepositoryType.TYPE_TRANSFORMERV2,
                     getNewProcessName(jobName), null);
-            if (!result)
+            if (!result) {
                 return;
+            }
         }
         WSTransformerV2E transformer = createTransformer(jobName, jobVersion, dialog);
         RepositoryResourceUtil.removeViewObjectPhysically(IServerObjectRepositoryType.TYPE_TRANSFORMERV2, PREFIX + jobName,
@@ -217,7 +220,7 @@ public class GenerateJobTransformerAction extends AbstractRepositoryAction {
                 steps3.getOutputMappings().addAll(outItems3);
                 steps3.setDisabled(false);
 
-                parameter = "<configuration>\n" + "<url>" + url + "</url>\n" + "<contextParam>\n"//$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+                parameter = "<configuration>\n" + "<url>" + url + "</url>\n" + "<contextParam>\n"//$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ 
                         + "<name>xmlInput</name>\n" + "<value>{decode_xml}</value>\n" + "</contextParam>\n"//$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ 
                         + "</configuration>\n";//$NON-NLS-1$ 
                 steps3.setParameters(parameter);
@@ -292,4 +295,12 @@ public class GenerateJobTransformerAction extends AbstractRepositoryAction {
         getCommonViewer().refresh();
     }
 
+    @Override
+    public boolean isVisible(IRepositoryViewObject viewObj) {
+        if (getSelectedObject().size() > 1) {
+            return false;
+        }
+
+        return super.isVisible(viewObj);
+    }
 }

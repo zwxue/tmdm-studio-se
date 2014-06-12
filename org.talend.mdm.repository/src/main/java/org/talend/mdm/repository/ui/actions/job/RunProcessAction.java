@@ -24,6 +24,7 @@ import org.talend.commons.exception.PersistenceException;
 import org.talend.commons.ui.runtime.exception.ExceptionHandler;
 import org.talend.core.model.general.Project;
 import org.talend.core.model.properties.Property;
+import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.core.runtime.CoreRuntimePlugin;
 import org.talend.designer.core.ui.action.RunProcess;
 import org.talend.mdm.repository.core.bridge.AbstractBridgeRepositoryAction;
@@ -44,8 +45,9 @@ public class RunProcessAction extends AbstractBridgeRepositoryAction {
         @Override
         protected RepositoryNode getCurrentRepositoryNode() {
             ISelection selection = getSelection();
-            if (selection == null || selection.isEmpty() || !(selection instanceof IStructuredSelection))
+            if (selection == null || selection.isEmpty() || !(selection instanceof IStructuredSelection)) {
                 return null;
+            }
             Object object = ((IStructuredSelection) selection).getFirstElement();
             if (object instanceof IRepositoryNode) {
                 RepositoryNode node = (RepositoryNode) object;
@@ -109,4 +111,12 @@ public class RunProcessAction extends AbstractBridgeRepositoryAction {
         return GROUP_EDIT;
     }
 
+    @Override
+    public boolean isVisible(IRepositoryViewObject viewObj) {
+        if (getSelectedObject().size() > 1) {
+            return false;
+        }
+
+        return super.isVisible(viewObj);
+    }
 }

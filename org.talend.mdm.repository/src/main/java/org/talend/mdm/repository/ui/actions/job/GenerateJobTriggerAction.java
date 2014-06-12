@@ -62,6 +62,7 @@ public class GenerateJobTriggerAction extends AbstractRepositoryAction {
         return GROUP_EDIT;
     }
 
+    @Override
     protected void doRun() {
         selectObj = getSelectedObject().get(0);
 
@@ -69,8 +70,9 @@ public class GenerateJobTriggerAction extends AbstractRepositoryAction {
                 Execution.EMBEDDED);
         dialog.setBlockOnOpen(true);
         int ret = dialog.open();
-        if (ret == Dialog.CANCEL)
+        if (ret == Dialog.CANCEL) {
             return;
+        }
 
         String jobName = ""; //$NON-NLS-1$
         String jobVersion = ""; //$NON-NLS-1$
@@ -86,8 +88,9 @@ public class GenerateJobTriggerAction extends AbstractRepositoryAction {
         if (validateService != null) {
             boolean result = validateService.validateAndAlertObjectExistence(IServerObjectRepositoryType.TYPE_ROUTINGRULE,
                     getNewTriggerName(jobName), null);
-            if (!result)
+            if (!result) {
                 return;
+            }
         }
         //
         WSRoutingRuleE routingRule = createTrigger(jobName, jobVersion, dialog);
@@ -124,7 +127,7 @@ public class GenerateJobTriggerAction extends AbstractRepositoryAction {
             String parameter = ""; //$NON-NLS-1$
             switch (executionParameter) {
             case CONTEXT_VARIABLE:
-                parameter = "<configuration>\n" + "<url>" + url + "</url><contextParam>\n"//$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+                parameter = "<configuration>\n" + "<url>" + url + "</url><contextParam>\n"//$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ 
                         + "<name>xmlInput</name>\n" + "<value>{exchange_data}</value>\n" + "</contextParam>\n"//$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ 
                         + "</configuration>\n";//$NON-NLS-1$
                 break;
@@ -206,4 +209,12 @@ public class GenerateJobTriggerAction extends AbstractRepositoryAction {
         getCommonViewer().refresh();
     }
 
+    @Override
+    public boolean isVisible(IRepositoryViewObject viewObj) {
+        if (getSelectedObject().size() > 1) {
+            return false;
+        }
+
+        return super.isVisible(viewObj);
+    }
 }

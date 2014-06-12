@@ -180,13 +180,4 @@ public class MDMEditViewProcessPropertyAction extends MDMEditPropertyAction {
         IProxyRepositoryFactory factory = CoreRuntimePlugin.getInstance().getProxyRepositoryFactory();
         return factory;
     }
-
-    @Override
-    public boolean isVisible(IRepositoryViewObject viewObj) {
-        if (getSelectedObject().size() > 1) {
-            return false;
-        }
-
-        return super.isVisible(viewObj);
-    }
 }
