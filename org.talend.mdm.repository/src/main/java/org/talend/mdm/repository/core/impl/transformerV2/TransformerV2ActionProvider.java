@@ -75,9 +75,9 @@ public class TransformerV2ActionProvider extends RepositoryNodeActionProviderAda
         }
 
         if (RepositoryResourceUtil.hasContainerItem(viewObj, FolderType.SYSTEM_FOLDER_LITERAL, FolderType.FOLDER_LITERAL)) {
-            actions.add(addAction);
-
+            addAction(actions, addAction, viewObj);
         }
+        
         if (viewObj.getProperty().getItem() instanceof MDMServerObjectItem) {
             int index = actions.indexOf(mdmEditPropertyAction);
             if (index != -1) {
@@ -87,12 +87,12 @@ public class TransformerV2ActionProvider extends RepositoryNodeActionProviderAda
 
             addAction(actions, renameProcessAction, viewObj);
             // deploy
-            actions.add(deployToAction);
+            addAction(actions, deployToAction, viewObj);
             addAction(actions, deployToLastServerAction, viewObj);
             addAction(actions, deployAnotherToAction, viewObj);
             addAction(actions, undeployAction, viewObj);
         }
-        actions.add(deployAllAction);
+        addAction(actions, deployAllAction, viewObj);
         return actions;
     }
 
@@ -112,7 +112,7 @@ public class TransformerV2ActionProvider extends RepositoryNodeActionProviderAda
         List<String> paths = Arrays.asList(ITransformerV2NodeConsDef.PATH_BEFOREDEL, ITransformerV2NodeConsDef.PATH_BEFORESAVE,
                 ITransformerV2NodeConsDef.PATH_ENTITYACTION, ITransformerV2NodeConsDef.PATH_WELCOMEACTION,
                 ITransformerV2NodeConsDef.PATH_SMARTVIEW, ITransformerV2NodeConsDef.PATH_OTHER);
-        if (path.startsWith("/")) {
+        if (path.startsWith("/")) { //$NON-NLS-1$
             path = path.substring(1);
         }
         boolean canDel = !paths.contains(path);

@@ -109,31 +109,30 @@ public class TISProcessActionProvider extends RepositoryNodeActionProviderAdapte
             FolderType type = ((FolderItem) item).getType();
             switch (type.getValue()) {
             case FolderType.SYSTEM_FOLDER:
-                actions.add(createProcessAction);
+                addAction(actions, createProcessAction, viewObj);
                 break;
             case FolderType.STABLE_SYSTEM_FOLDER:
                 break;
 
             case FolderType.FOLDER:
-                actions.add(createProcessAction);
-                actions.add(renameFolderAction);
-                actions.add(deleteAction);
+                addAction(actions, createProcessAction, viewObj);
+                addAction(actions, renameFolderAction, viewObj);
+                addAction(actions, deleteAction, viewObj);
                 break;
             }
 
         } else if (item instanceof ProcessItem) {
 
-            actions.add(editProcessAction);
-            actions.add(readProcessAction);
-            actions.add(runProcessAction);
-            actions.add(openExistVersionProcessAction);
-            actions.add(editPropAction);
-            // actions.add(exportJobScriptAction);
-            actions.add(deleteAction);
-            actions.add(generateTransformerAction);
-            actions.add(generateTriggerAction);
-            // deploy
+            addAction(actions, editProcessAction, viewObj);
+            addAction(actions, readProcessAction, viewObj);
+            addAction(actions, runProcessAction, viewObj);
+            addAction(actions, openExistVersionProcessAction, viewObj);
+            addAction(actions, editPropAction, viewObj);
+            addAction(actions, deleteAction, viewObj);
+            addAction(actions, generateTransformerAction, viewObj);
+            addAction(actions, generateTriggerAction, viewObj);
 
+            // deploy
             actions.add(deployToAction);
             addAction(actions, deployToLastServerAction, viewObj);
             addAction(actions, deployAnotherToAction, viewObj);

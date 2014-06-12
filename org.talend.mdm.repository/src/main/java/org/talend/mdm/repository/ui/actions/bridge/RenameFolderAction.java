@@ -12,6 +12,7 @@
 // ============================================================================
 package org.talend.mdm.repository.ui.actions.bridge;
 
+import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.bridge.AbstractBridgeRepositoryAction;
 
 /**
@@ -23,12 +24,23 @@ public class RenameFolderAction extends AbstractBridgeRepositoryAction {
         super(new org.talend.repository.ui.actions.RenameFolderAction());
     }
 
+    @Override
     public String getGroupName() {
         return GROUP_EDIT;
     }
 
+    @Override
     protected void doRun() {
         super.doRun();
         refreshParentContainer();
+    }
+
+    @Override
+    public boolean isVisible(IRepositoryViewObject viewObj) {
+        if (getSelectedObject().size() > 1) {
+            return false;
+        }
+
+        return super.isVisible(viewObj);
     }
 }

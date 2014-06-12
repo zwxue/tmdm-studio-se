@@ -59,12 +59,13 @@ public class DataClusterActionProvider extends RepositoryNodeActionProviderAdapt
     public List<AbstractRepositoryAction> getActions(IRepositoryViewObject viewObj) {
         List<AbstractRepositoryAction> actions = super.getActions(viewObj);
         if (RepositoryResourceUtil.hasContainerItem(viewObj, FolderType.SYSTEM_FOLDER_LITERAL, FolderType.FOLDER_LITERAL)) {
-            actions.add(addAction);
+            addAction(actions, addAction, viewObj);
         }
+
         if (viewObj.getProperty().getItem() instanceof MDMServerObjectItem) {
             actions.remove(openVersionAction);
             addAction(actions, renameAction, viewObj);
-            actions.add(deployToAction);
+            addAction(actions, deployToAction, viewObj);
 
             addAction(actions, deployToLastServerAction, viewObj);
             addAction(actions, deployAnotherToAction, viewObj);
@@ -72,7 +73,7 @@ public class DataClusterActionProvider extends RepositoryNodeActionProviderAdapt
             addAction(actions, exportDataClusterAction, viewObj);
             addAction(actions, importDataClusterAction, viewObj);
         }
-        actions.add(deployAllAction);
+        addAction(actions, deployAllAction, viewObj);
 
         return actions;
     }

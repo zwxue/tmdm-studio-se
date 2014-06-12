@@ -190,7 +190,7 @@ public class RepositoryNodeActionProviderAdapter implements IRepositoryNodeActio
                 FolderType type = ((FolderItem) item).getType();
                 switch (type.getValue()) {
                 case FolderType.SYSTEM_FOLDER:
-                    actions.add(createFolderAction);
+                    addAction(actions, createFolderAction, viewObj);
                     addAction(actions, pasteAction, viewObj);
 
                     actions.add(importServerObjectAction);
@@ -202,7 +202,7 @@ public class RepositoryNodeActionProviderAdapter implements IRepositoryNodeActio
                     break;
 
                 case FolderType.FOLDER:
-                    actions.add(createFolderAction);
+                    addAction(actions, createFolderAction, viewObj);
                     if (!((ContainerItem) item).getRepObjType().equals(ERepositoryObjectType.PROCESS)) {
                         actions.add(removeFromRepositoryAction);
                     }

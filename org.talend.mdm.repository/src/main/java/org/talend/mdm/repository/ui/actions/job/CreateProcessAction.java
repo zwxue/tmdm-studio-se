@@ -12,6 +12,7 @@
 // ============================================================================
 package org.talend.mdm.repository.ui.actions.job;
 
+import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.designer.core.ui.action.CreateProcess;
 import org.talend.mdm.repository.core.bridge.AbstractBridgeRepositoryAction;
 
@@ -34,9 +35,19 @@ public class CreateProcessAction extends AbstractBridgeRepositoryAction {
         return GROUP_EDIT;
     }
 
+    @Override
     protected void doRun() {
         //
         super.doRun();
         refreshCurrentContainer();
+    }
+
+    @Override
+    public boolean isVisible(IRepositoryViewObject viewObj) {
+        if (getSelectedObject().size() > 1) {
+            return false;
+        }
+
+        return super.isVisible(viewObj);
     }
 }

@@ -55,18 +55,18 @@ public class StoredProcedureActionProvider extends RepositoryNodeActionProviderA
         List<AbstractRepositoryAction> actions = super.getActions(viewObj);
 
         if (RepositoryResourceUtil.hasContainerItem(viewObj, FolderType.SYSTEM_FOLDER_LITERAL, FolderType.FOLDER_LITERAL)) {
-            actions.add(addAction);
-
+            addAction(actions, addAction, viewObj);
         }
+
         if (viewObj.getProperty().getItem() instanceof MDMServerObjectItem) {
             addAction(actions, renameAction, viewObj);
             // deploy
-            actions.add(deployToAction);
+            addAction(actions, deployToAction, viewObj);
             addAction(actions, deployToLastServerAction, viewObj);
             addAction(actions, deployAnotherToAction, viewObj);
             addAction(actions, undeployAction, viewObj);
         }
-        actions.add(deployAllAction);
+        addAction(actions, deployAllAction, viewObj);
         return actions;
     }
 

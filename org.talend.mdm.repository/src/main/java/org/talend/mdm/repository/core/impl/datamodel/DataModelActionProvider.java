@@ -69,16 +69,17 @@ public class DataModelActionProvider extends RepositoryNodeActionProviderAdapter
     public List<AbstractRepositoryAction> getActions(IRepositoryViewObject viewObj) {
         List<AbstractRepositoryAction> actions = super.getActions(viewObj);
         if (RepositoryResourceUtil.hasContainerItem(viewObj, FolderType.SYSTEM_FOLDER_LITERAL, FolderType.FOLDER_LITERAL)) {
-            actions.add(addAction);
+            addAction(actions, addAction, viewObj);
         }
+
         if (viewObj.getProperty().getItem() instanceof MDMServerObjectItem) {
             addAction(actions, renameAction, viewObj);
             // validate
             if (validateAction != null) {
-                actions.add(validateAction);
+                addAction(actions, validateAction, viewObj);
             }
             // deploy
-            actions.add(deployToAction);
+            addAction(actions, deployToAction, viewObj);
             addAction(actions, deployToLastServerAction, viewObj);
             addAction(actions, deployAnotherToAction, viewObj);
             addAction(actions, undeployAction, viewObj);
@@ -88,7 +89,7 @@ public class DataModelActionProvider extends RepositoryNodeActionProviderAdapter
             //
             // }
         }
-        actions.add(deployAllAction);
+        addAction(actions, deployAllAction, viewObj);
         return actions;
     }
 

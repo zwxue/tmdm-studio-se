@@ -79,9 +79,9 @@ public class ViewActionProvider extends RepositoryNodeActionProviderAdapter {
         }
 
         if (RepositoryResourceUtil.hasContainerItem(viewObj, FolderType.SYSTEM_FOLDER_LITERAL, FolderType.FOLDER_LITERAL)) {
-            actions.add(addAction);
-
+            addAction(actions, addAction, viewObj);
         }
+
         if (viewObj.getProperty().getItem() instanceof MDMServerObjectItem) {
             int index = actions.indexOf(mdmEditPropertyAction);
             if (index != -1) {
@@ -92,12 +92,12 @@ public class ViewActionProvider extends RepositoryNodeActionProviderAdapter {
             addAction(actions, renameViewAction, viewObj);
             addAction(actions, browseViewAction, viewObj);
             // deploy
-            actions.add(deployToAction);
+            addAction(actions, deployToAction, viewObj);
             addAction(actions, deployToLastServerAction, viewObj);
             addAction(actions, deployAnotherToAction, viewObj);
             addAction(actions, undeployAction, viewObj);
         }
-        actions.add(deployAllAction);
+        addAction(actions, deployAllAction, viewObj);
         return actions;
     }
 
