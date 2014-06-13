@@ -725,9 +725,7 @@ public class RepositoryResourceUtil {
                     foundViewObjs.add(viewObj);
                 }
             }
-            if (!foundViewObjs.isEmpty()) {
-                return foundViewObjs;
-            }
+            return foundViewObjs;
         }
         return null;
     }
