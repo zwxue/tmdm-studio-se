@@ -256,6 +256,7 @@ public class DataClusterComposite extends Composite implements IPagingListener {
 
         checkFTSearchButton = toolkit.createButton(compSecondLine, Messages.DataClusterBrowserMainPage_7, SWT.CHECK);
         checkFTSearchButton.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
+        checkFTSearchButton.setEnabled(isMaster);
     }
 
     protected void createPageToolbar(Composite composite) {
@@ -400,7 +401,7 @@ public class DataClusterComposite extends Composite implements IPagingListener {
                 keys = null;
             }
 
-            boolean useFTSearch = checkFTSearchButton.getSelection();
+            boolean useFTSearch = isMaster ? checkFTSearchButton.getSelection() : false;
             String search = searchText.getText();
             if ("*".equals(search) | "".equals(search)) { //$NON-NLS-1$ //$NON-NLS-2$
                 search = null;
