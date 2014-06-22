@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mdmserverobject:WSRoutingRuleE xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:mdmserverobject="http://www.talend.org/mdmserverobject" xmi:id="_ifub4KsQEeG4CbSrdZtHRA" name="GoogleMap" description="Complete with Google Map" synchronous="true" concept="Update" serviceJNDI="amalto/local/service/callJob" parameters="&lt;configuration>&#xA;  &lt;url>ltj://GoogleMap/0.1&lt;/url>&#xA;  &lt;contextParam>&#xA;    &lt;name>xmlInput&lt;/name>&#xA;    &lt;value>{exchange_data}&lt;/value>&#xA;  &lt;/contextParam>&#xA;&lt;/configuration>" condition="Store And DM And (CR Or (UP And DoNotLoop And Address))">
+  <wsRoutingRuleExpressions xmi:id="_ifub4qsQEeG4CbSrdZtHRA" name="Store" xpath="Update/Concept" value="Store">
+    <wsOperator xmi:id="_ifub46sQEeG4CbSrdZtHRA" value="EQUALS"/>
+  </wsRoutingRuleExpressions>
+  <wsRoutingRuleExpressions xmi:id="_ifub5KsQEeG4CbSrdZtHRA" name="DM" xpath="Update/DataModel" value="Product">
+    <wsOperator xmi:id="_ifub5asQEeG4CbSrdZtHRA" value="EQUALS"/>
+  </wsRoutingRuleExpressions>
+  <wsRoutingRuleExpressions xmi:id="_ifub5qsQEeG4CbSrdZtHRA" name="CR" xpath="Update/OperationType" value="CREATE">
+    <wsOperator xmi:id="_ifub56sQEeG4CbSrdZtHRA" value="EQUALS"/>
+  </wsRoutingRuleExpressions>
+  <wsRoutingRuleExpressions xmi:id="_ifub6KsQEeG4CbSrdZtHRA" name="UP" xpath="Update/OperationType" value="UPDATE">
+    <wsOperator xmi:id="_ifub6asQEeG4CbSrdZtHRA" value="EQUALS"/>
+  </wsRoutingRuleExpressions>
+  <wsRoutingRuleExpressions xmi:id="_ifub6qsQEeG4CbSrdZtHRA" name="DoNotLoop" xpath="Update/Source" value="GoogleMap">
+    <wsOperator xmi:id="_ifub66sQEeG4CbSrdZtHRA" value="NOT_EQUALS"/>
+  </wsRoutingRuleExpressions>
+  <wsRoutingRuleExpressions xmi:id="_ifub7KsQEeG4CbSrdZtHRA" name="Address" xpath="Update/Item/path" value="Address">
+    <wsOperator xmi:id="_ifub7asQEeG4CbSrdZtHRA" value="CONTAINS"/>
+  </wsRoutingRuleExpressions>
+</mdmserverobject:WSRoutingRuleE>
