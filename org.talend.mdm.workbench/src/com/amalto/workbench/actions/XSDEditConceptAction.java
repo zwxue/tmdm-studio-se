@@ -1,0 +1,123 @@
+// ============================================================================
+//
+// Copyright (C) 2006-2012 Talend Inc. - www.talend.com
+//
+// This source code is available under agreement available at
+// %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
+//
+// You should have received a copy of the agreement
+// along with this program; if not, write to Talend SA
+// 9 rue Pages 92150 Suresnes, France
+//
+// ============================================================================
+package com.amalto.workbench.actions;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.regex.Pattern;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.emf.common.util.EList;
+import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.jface.dialogs.IInputValidator;
+import org.eclipse.jface.dialogs.InputDialog;
+import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.IStructuredContentProvider;
+import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.swt.widgets.Event;
+import org.eclipse.xsd.XSDElementDeclaration;
+import org.eclipse.xsd.XSDIdentityConstraintDefinition;
+
+import com.amalto.workbench.editors.DataModelMainPage;
+import com.amalto.workbench.i18n.Messages;
+import com.amalto.workbench.image.EImage;
+import com.amalto.workbench.image.ImageCache;
+import com.amalto.workbench.utils.Util;
+
+public class XSDEditConceptAction extends UndoAction {
+
+    private static Log log = LogFactory.getLog(XSDEditConceptAction.class);
+
+    public XSDEditConceptAction(DataModelMainPage page) {
+        super(page);
+        setImageDescriptor(ImageCache.getImage(EImage.EDIT_OBJ.getPath()));
+        setText(Messages.Text);
+        setToolTipText(Messages.XSDEditConceptAction_ActionTip);
+    }
+
+    public IStatus doAction() {
+        try {
+            ISelection selection = page.getTreeViewer().getSelection();
+            XSDElementDeclaration decl = (XSDElementDeclaration) ((IStructuredSelection) selection).getFirstElement();
+            ArrayList<Object> objList = new ArrayList<Object>();
+            IStructuredContentProvider provider = (IStructuredContentProvider) page.getTreeViewer().getContentProvider();
+            Object[] objs = Util.getAllObject(page.getSite(), objList, provider);
+            String oldName = decl.getName();
+
+            InputDialog id = new InputDialog(page.getSite().getShell(), Messages.XSDEditConceptAction_Text, Messages.XSDEditConceptAction_DialogTip,
+                    oldName, new IInputValidator() {
+
+                        public String isValid(String newText) {
+                            if ((newText == null) || "".equals(newText))//$NON-NLS-1$
+                                return Messages.XSDEditConceptAction_NameCannotBeEmpty;
+
+                            if (Pattern.compile("^\\s+\\w+\\s*").matcher(newText).matches()//$NON-NLS-1$
+                                    || newText.trim().replaceAll("\\s", "").length() != newText.trim().length())//$NON-NLS-1$//$NON-NLS-2$
+                                return Messages.XSDEditConceptAction_NameCannotContainEmpty;
+
+                            EList list = schema.getElementDeclarations();
+                            for (Iterator iter = list.iterator(); iter.hasNext();) {
+                                XSDElementDeclaration d = (XSDElementDeclaration) iter.next();
+                                if (d.getName().equals(newText.trim()))
+                                    return Messages.XSDEditConceptAction_EntityAlreadyExist;
+                            }
+                            return null;
+                        };
+                    });
+
+            id.setBlockOnOpen(true);
+            int ret = id.open();
+            if (ret == Dialog.CANCEL) {
+                return Status.CANCEL_STATUS;
+            }
+
+            decl.setName(id.getValue().trim());
+            decl.updateElement();
+            Util.updateReference(decl, objs, oldName, id.getValue());
+
+            // change unique key with new name of concept
+            EList list = decl.getIdentityConstraintDefinitions();
+            XSDIdentityConstraintDefinition toUpdate = null;
+            for (Iterator iter = list.iterator(); iter.hasNext();) {
+                XSDIdentityConstraintDefinition icd = (XSDIdentityConstraintDefinition) iter.next();
+                if (icd.getName().equals(oldName)) {
+                    toUpdate = icd;
+                    break;
+                }
+            }
+            if (toUpdate != null) {
+                toUpdate.setName(id.getValue());
+                toUpdate.updateElement();
+            }
+
+            page.refresh();
+            page.markDirty();
+            // page.refreshPage();
+
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            MessageDialog.openError(page.getSite().getShell(), Messages._Error,
+                    Messages.bind(Messages.XSDEditConceptAction_ErrorMsg, e.getLocalizedMessage()));
+            return Status.CANCEL_STATUS;
+        }
+        return Status.OK_STATUS;
+    }
+
+    public void runWithEvent(Event event) {
+        super.runWithEvent(event);
+    }
+}
