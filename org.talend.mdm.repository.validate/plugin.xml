@@ -1,0 +1,343 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension-point id="openMarkerHandler" name="openMarkerHandler" schema="schema/openMarkerHandler.exsd"/>
+   <extension
+         id="dataModel"
+         name="DataModel Validator"
+         point="org.eclipse.wst.validation.validatorV2">
+      <validator
+            build="false"
+            class="org.talend.mdm.repository.core.validate.datamodel.wstext.DataModelDelegatingValidator"
+            manual="true"
+            markerId="org.talend.mdm.error.datamodel.model"
+            version="2">
+         <include>
+            <rules>
+               <fileext
+                     caseSensitive="false"
+                     ext="xsd">
+               </fileext>
+            </rules>
+         </include>
+      </validator>
+   </extension>
+  
+   <extension
+         point="org.eclipse.wst.validation.validatorDelegates">
+      <delegate
+            class="org.talend.mdm.repository.core.validate.datamodel.wstext.DataModelValidator"
+            name="DataModel  Delegate Validator"
+            target="org.talend.mdm.repository.core.validate.datamodel.wstext.DataModelDelegatingValidator">
+      </delegate>
+   </extension>
+   
+    <extension
+         id="matchRuleMapInfo"
+         name="MatchRule MapInfo Validator"
+         point="org.eclipse.wst.validation.validatorV2">
+      <validator
+            build="false"
+            class="org.talend.mdm.repository.core.validate.datamodel.wstext.MatchRuleMapInfoDelegatingValidator"
+            manual="true"
+            markerId="org.talend.mdm.error.datamodel.model"
+            version="2">
+         <include>
+            <rules>
+               <fileext
+                     caseSensitive="false"
+                     ext="mapinfo">
+               </fileext>
+            </rules>
+         </include>
+      </validator>
+   </extension>
+  
+   <extension
+         point="org.eclipse.wst.validation.validatorDelegates">
+      <delegate
+            class="org.talend.mdm.repository.core.validate.datamodel.wstext.MatchRuleMapInfoValidator"
+            name="DataModel  Delegate Validator"
+            target="org.talend.mdm.repository.core.validate.datamodel.wstext.MatchRuleMapInfoDelegatingValidator">
+      </delegate>
+   </extension>
+   <extension
+         id="org.talend.mdm.problemmarker"
+         name="MDM Problem"
+         point="org.eclipse.core.resources.markers">
+      <super
+            type="org.eclipse.core.resources.problemmarker">
+      </super>
+   </extension>
+   <!--
+   <extension
+         id="org.talend.mdm.error.datamodel.xsdparse"
+         name="MDM XSD parsing"
+         point="org.eclipse.core.resources.markers">
+      <super
+            type="org.talend.mdm.problemmarker">
+      </super>
+      <persistent
+            value="false">
+      </persistent>
+   </extension>-->
+   <extension
+         id="org.talend.mdm.error.datamodel.model"
+         name="MDM Model"
+         point="org.eclipse.core.resources.markers">
+      <super
+            type="org.talend.mdm.problemmarker">
+      </super>
+      <persistent
+            value="false">
+      </persistent>
+   </extension>
+   <extension
+         point="org.eclipse.ui.ide.markerSupport">
+        <!--
+      <markerTypeCategory
+            name="Talend MDM Problem">
+         <markerTypeReference
+               id="org.eclipse.xsd.diagnostic">
+         </markerTypeReference>
+         <markerTypeReference
+               id="org.talend.mdm.problemmarker">
+         </markerTypeReference>
+      </markerTypeCategory>
+      -->
+      <markerContentGenerator
+            defaultMarkerGrouping="org.eclipse.ui.ide.type"
+            id="org.talend.mdm.problemsGenerator"
+            name="MDM Problems">
+         <markerTypeReference
+               id="org.eclipse.xsd.diagnostic">
+         </markerTypeReference>
+         <markerTypeReference
+               id="org.talend.mdm.problemmarker">
+         </markerTypeReference>
+         <markerFieldReference
+               id="org.eclipse.ui.ide.severityAndDescriptionField"
+               visible="true">
+         </markerFieldReference>
+         <markerFieldReference
+               id="org.talend.mdm.repository.ui.markers.ModelField"
+               visible="true">
+         </markerFieldReference>
+         <markerFieldReference
+               id="org.talend.mdm.repository.ui.markers.EntityField"
+               visible="true">
+         </markerFieldReference>
+                  <markerFieldReference
+               id="org.talend.mdm.repository.ui.markers.ElementTypeField"
+               visible="true">
+         </markerFieldReference>
+         <markerFieldReference
+               id="org.talend.mdm.repository.ui.markers.ElementPathField"
+               visible="true">
+         </markerFieldReference>
+         <markerFieldReference
+               id="org.eclipse.ui.ide.locationField">
+         </markerFieldReference>
+         
+         
+         <markerFieldReference
+               id="org.eclipse.ui.ide.markerType"
+               visible="true">
+         </markerFieldReference>
+         <markerFieldConfiguration
+               enabled="true"
+               id="org.talend.mdm.repository.ext.markerFieldConfiguration3"
+               name="All Errors"
+               scope="ON_ANY"
+               values="org.eclipse.ui.internal.views.markers.AllErrorsParameters">
+         </markerFieldConfiguration>
+        <markerGrouping
+               id="org.eclipse.ui.ide.allMarkers.severity"
+               label="Severity">
+            <markerGroupingEntry
+                  id="org.eclipse.ui.ide.allMarkers.errorSeverity"
+                  label="Errors"
+                  priority="30">
+            </markerGroupingEntry>
+            <markerGroupingEntry
+                  id="org.eclipse.ui.ide.allMarkers.warningSeverity"
+                  label="Warnings"
+                  priority="20">
+            </markerGroupingEntry>
+            <markerGroupingEntry
+                  id="org.eclipse.ui.ide.allMarkers.other"
+                  label="Other"
+                  priority="10">
+            </markerGroupingEntry>
+            <markerAttributeGrouping
+                  attribute="severity"
+                  markerType="org.eclipse.core.resources.marker">
+               <markerAttributeMapping
+                     markerGroupingEntry="org.eclipse.ui.ide.allMarkers.warningSeverity"
+                     value="1">
+               </markerAttributeMapping>
+               <markerAttributeMapping
+                     markerGroupingEntry="org.eclipse.ui.ide.allMarkers.errorSeverity"
+                     value="2">
+               </markerAttributeMapping>
+               <markerAttributeMapping
+                     markerGroupingEntry="org.eclipse.ui.ide.allMarkers.other"
+                     value="0">
+               </markerAttributeMapping>
+               <markerAttributeMapping
+                     markerGroupingEntry="org.eclipse.ui.ide.allMarkers.other"
+                     value="-1">
+               </markerAttributeMapping>
+            </markerAttributeGrouping>
+         </markerGrouping>
+        <markerGrouping
+              id="org.eclipse.ui.ide.type"
+              label="Type">
+        </markerGrouping>
+       <!--    <markerGrouping
+               id="org.talend.mdm.error.datamodel.groupby.model"
+               label="Model">
+             
+            <markerGroupingEntry
+                  id="org.talend.mdm.repository.validate.markerGrouping.model"
+                  label="Model"
+                  markerGrouping="org.talend.mdm.error.datamodel.groupby.model"
+                  priority="10">
+            </markerGroupingEntry>
+            <markerAttributeGrouping
+                  attribute="dataModel"
+                  defaultGroupingEntry="org.talend.mdm.repository.validate.markerGrouping.model"
+                  markerType="org.talend.mdm.error.datamodel.model">
+            </markerAttributeGrouping>
+         
+         </markerGrouping>   -->
+      </markerContentGenerator>
+      <markerField
+            class="org.talend.mdm.repository.ui.markers.datamodel.EntityField"
+            id="org.talend.mdm.repository.ui.markers.EntityField"
+            name="Model Entity">
+      </markerField>
+      <markerField
+            class="org.talend.mdm.repository.ui.markers.datamodel.ModelField"
+            id="org.talend.mdm.repository.ui.markers.ModelField"
+            name="Model">
+      </markerField>
+      <markerField
+            class="org.talend.mdm.repository.ui.markers.datamodel.ElementTypeField"
+            id="org.talend.mdm.repository.ui.markers.ElementTypeField"
+            name="Model Type">
+      </markerField>
+      <markerField
+            class="org.talend.mdm.repository.ui.markers.datamodel.ElementPathField"
+            id="org.talend.mdm.repository.ui.markers.ElementPathField"
+            name="XPath">
+      </markerField>
+      
+   </extension>
+   <extension
+         point="org.eclipse.ui.views">
+      <view
+            category="org.talend.core.root"
+            class="org.talend.mdm.repository.ui.views.MDMProblemView"
+            icon="icons/problems_view.gif"
+            id="org.talend.mdm.repository.ui.views.MDMProblemView"
+            name="MDM Problems"
+            restorable="true">
+      </view>
+   </extension>
+   <extension
+         point="org.eclipse.ui.menus">
+      <menuContribution
+            locationURI="menu:org.talend.mdm.repository.ui.views.MDMProblemView">
+         <command
+               commandId="org.eclipse.ui.ide.configureFilters"
+            label="Configure Content...."
+               style="push">
+         </command>
+                  <menu
+               id="mdmProblemsGroupByMenu"
+               label="GroupBy">
+            <dynamic
+                  class="org.eclipse.ui.internal.views.markers.GroupsContribution"
+                  id="org.talend.mdm.problemView.groupBy">
+            </dynamic>
+         </menu>
+                  <menu
+               id="org.talend.mdm.problemView.markerSortMenu"
+               label="Sort">
+            <dynamic
+                  class="org.eclipse.ui.internal.views.markers.SortFieldContribution"
+                  id="org.talend.mdm.problemView.sortEntries">
+            </dynamic>
+         </menu>
+         
+      </menuContribution>
+      <menuContribution
+            locationURI="toolbar:org.talend.mdm.repository.ui.views.MDMProblemView">
+         <command
+               commandId="org.talend.mdm.repository.ui.validate.ClearAllMarkers"
+               disabledIcon="icons/delete_disable.gif"
+               icon="icons/delete.gif"
+               label="Clear all"
+               style="push">
+         </command>
+      </menuContribution>
+      <menuContribution
+            allPopups="false"
+            locationURI="popup:org.talend.mdm.repository.ui.views.MDMProblemView">
+         <command
+               commandId="org.talend.mdm.repository.ui.validate.ClearAllMarkers"
+               label="Clear all"
+               style="push">
+         </command>
+         <command
+               commandId="org.talend.mdm.repository.ui.validate.JumpToSourceLineHandler"
+               label="Jump to Source Line"
+               style="push">
+         </command>
+      </menuContribution>
+   </extension>
+
+   <extension
+         point="org.talend.core.runtime.service">
+      <Service
+            class="org.talend.mdm.repository.core.validate.MDMValidationService"
+            serviceId="IModelValidationService">
+      </Service>
+   </extension>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            category="org.talend.mdm.repository.ui.preferences.AutoDeployPreferencePage"
+            class="org.talend.mdm.repository.ui.preferences.ValidationPreferencePage"
+            id="org.talend.mdm.repository.ui.validate.rightclickPrefPage"
+            name="Data Model Validation">
+      </page>
+   </extension>
+   <extension
+         point="org.eclipse.ui.commands">
+      <command
+            defaultHandler="org.talend.mdm.repository.ui.validate.ClearAllMarkersHandler"
+            id="org.talend.mdm.repository.ui.validate.ClearAllMarkers"
+            name="Clear all markers">
+      </command>
+      <command
+            defaultHandler="org.talend.mdm.repository.ui.validate.JumpToSourceLineHandler"
+            id="org.talend.mdm.repository.ui.validate.JumpToSourceLineHandler"
+            name="Jump to Source Line">
+      </command>
+   </extension>
+   <extension
+         point="org.talend.mdm.repository.validate.openMarkerHandler">
+      <handler
+            class="org.talend.mdm.repository.ui.markers.datamodel.OpenXSDMarkerHandler"
+            name="Open XSD Error">
+      </handler>
+      <handler
+            class="org.talend.mdm.repository.ui.markers.datamodel.OpenDataModelMarkerHandler"
+            name="Open DataModel Error">
+      </handler>
+   </extension>
+ 
+  
+</plugin>

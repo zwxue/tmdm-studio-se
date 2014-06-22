@@ -1,0 +1,39 @@
+<!DOCTYPE databases PUBLIC
+"-//EXOLAB/Castor Mapping DTD Version 1.0//EN"
+"http://castor.exolab.org/mapping.dtd">
+<mapping>
+    <class name="com.amalto.workbench.webservices.WSItem">
+        <map-to xml="WSItem" />
+        <field name="insertionTime">
+            <bind-xml name="insertion-time" node="attribute" />
+        </field>
+        <field name="wsDataClusterPK"
+            type="com.amalto.workbench.webservices.WSDataClusterPK">
+            <bind-xml name="ws-data-cluster-pK" node="element" />
+        </field>
+        <field name="conceptName">
+            <bind-xml name="concept-name" node="element" />
+        </field>
+        <field name="taskId">
+            <bind-xml name="task-id" node="element" />
+        </field>
+        <field name="dataModelName">
+            <bind-xml name="data-model-name" node="element" />
+        </field>
+        <field name="dataModelRevision">
+            <bind-xml name="data-model-revision" node="element" />
+        </field>
+        <field name="content">
+            <bind-xml name="content" node="element" />
+        </field>
+        <field name="ids" collection="arraylist" type="java.lang.String">
+            <bind-xml name="ids" node="element" />
+        </field>
+    </class>
+    <class name="com.amalto.workbench.webservices.WSDataClusterPK">
+        <map-to xml="ws-data-cluster-pK" />
+        <field name="pk">
+            <bind-xml name="pk" node="element" />
+        </field>
+    </class>
+</mapping>
