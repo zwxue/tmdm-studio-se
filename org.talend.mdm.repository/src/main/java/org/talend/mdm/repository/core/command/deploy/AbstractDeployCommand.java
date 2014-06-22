@@ -1,0 +1,95 @@
+// ============================================================================
+//
+// Copyright (C) 2006-2014 Talend Inc. - www.talend.com
+//
+// This source code is available under agreement available at
+// %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
+//
+// You should have received a copy of the agreement
+// along with this program; if not, write to Talend SA
+// 9 rue Pages 92150 Suresnes, France
+//
+// ============================================================================
+package org.talend.mdm.repository.core.command.deploy;
+
+import java.rmi.RemoteException;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.MultiStatus;
+import org.eclipse.core.runtime.Status;
+import org.talend.core.model.repository.ERepositoryObjectType;
+import org.talend.mdm.repository.core.command.AbstractCommand;
+import org.talend.mdm.repository.core.command.ICommand;
+import org.talend.mdm.repository.core.service.DeployService.DeployStatus;
+import org.talend.mdm.repository.i18n.Messages;
+import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
+import org.talend.mdm.repository.plugin.RepositoryPlugin;
+import org.talend.mdm.repository.utils.UserExceptionStackFilter;
+
+/**
+ * DOC hbhong class global comment. Detailled comment
+ */
+public abstract class AbstractDeployCommand extends AbstractCommand {
+
+    protected MDMServerDef serverDef;
+
+    public MDMServerDef getServerDef() {
+        return this.serverDef;
+    }
+
+    public void setServerDef(MDMServerDef serverDef) {
+        this.serverDef = serverDef;
+    }
+
+    protected ERepositoryObjectType getViewObjectType() {
+        return viewObject.getRepositoryObjectType();
+    }
+
+    @Override
+    public int getToRunPhase() {
+        return ICommand.PHASE_DEPLOY;
+    }
+
+    protected IStatus getDetailErrorMsg(String bindMsg, String typeLabel, String objectName, Exception e) {
+        Throwable cause = null;
+
+        if (e instanceof RemoteException) {
+            cause = ((RemoteException) e).detail;
+        } else {
+            cause = e.getCause();
+        }
+
+        IStatus status = null;
+        if (cause == null) {
+            status = buildErrorStatus(bindMsg, typeLabel, objectName, e);
+        } else {
+            status = DeployStatus.getErrorStatus(this, Messages.bind(bindMsg, typeLabel, objectName, e.getMessage()), e);
+        }
+
+
+        return status;
+    }
+
+    private IStatus buildErrorStatus(String bindMsg, String typeLabel, String objectName, Exception e) {
+        String msg = e.getMessage();
+
+        String[] exceptionMsgs = UserExceptionStackFilter.filterExceptionMsg(msg);
+
+        IStatus status = null;
+        if (exceptionMsgs.length == 1) {
+            status = DeployStatus.getErrorStatus(this,
+                    Messages.bind(bindMsg, typeLabel, objectName, exceptionMsgs[0]), e);
+
+            return status;
+        }
+
+        status = new MultiStatus(RepositoryPlugin.PLUGIN_ID, Status.ERROR, exceptionMsgs[0], null);
+        for (int i = 1; i < exceptionMsgs.length; i++) {
+            DeployStatus errorStatus = DeployStatus.getErrorStatus(this, exceptionMsgs[i]);
+            ((MultiStatus) status).add(errorStatus);
+        }
+
+        return status;
+    }
+
+}
+

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mdmserverobject:WSViewE xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:mdmserverobject="http://www.talend.org/mdmserverobject" xmi:id="_t8tME3dIEeGMK_tLGnzsJg" name="Browse_items_Product#Unavailable" description="[EN:Unavailable Products][FR:Produits non disponible]" transformerPK="">
+  <searchableBusinessElements>Product/Id</searchableBusinessElements>
+  <searchableBusinessElements>Product/Name</searchableBusinessElements>
+  <viewableBusinessElements>Product/Id</viewableBusinessElements>
+  <viewableBusinessElements>Product/Name</viewableBusinessElements>
+  <viewableBusinessElements>Product/Description</viewableBusinessElements>
+  <viewableBusinessElements>Product/Price</viewableBusinessElements>
+  <viewableBusinessElements>Product/Availability</viewableBusinessElements>
+  <whereConditions xmi:id="_t8tMFHdIEeGMK_tLGnzsJg" leftPath="Product/Availability" rightValueOrPath="false">
+    <stringPredicate xmi:id="_t8tMFXdIEeGMK_tLGnzsJg" value="NONE"/>
+    <operator xmi:id="_t8tMFndIEeGMK_tLGnzsJg" value="EQUALS"/>
+  </whereConditions>
+  <isTransformerActive xmi:id="_t8tMF3dIEeGMK_tLGnzsJg"/>
+</mdmserverobject:WSViewE>
