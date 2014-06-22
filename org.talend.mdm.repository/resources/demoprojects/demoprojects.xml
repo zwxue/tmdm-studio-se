@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<projects>
+	<project pluginId="org.talend.mdm.repository" name="MDMPRODUCTDEMO" language="java" demoProjectFileType="folder" demoFilePath="resources/demoprojects/java/PRODUCTDEMO" descriptionFilePath="resources/demoprojects/java/productcedemo.html"/>
+</projects>
