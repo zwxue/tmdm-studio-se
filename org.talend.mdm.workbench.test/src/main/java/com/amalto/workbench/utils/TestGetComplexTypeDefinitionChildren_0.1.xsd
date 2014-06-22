@@ -1,0 +1,32 @@
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">  
+  <xsd:import namespace="http://www.w3.org/2001/XMLSchema"/>  
+  <xsd:complexType name="AA"> 
+    <xsd:sequence> 
+      <xsd:element name="subelement" type="xsd:string"/> 
+    </xsd:sequence> 
+  </xsd:complexType>  
+  <xsd:complexType name="BB"> 
+    <xsd:complexContent> 
+      <xsd:extension base="AA"> 
+        <xsd:sequence> 
+          <xsd:element name="subelement" type="xsd:string"/> 
+        </xsd:sequence> 
+      </xsd:extension> 
+    </xsd:complexContent> 
+  </xsd:complexType>  
+  <xsd:complexType name="CC"> 
+    <xsd:complexContent> 
+      <xsd:extension base="BB"> 
+        <xsd:sequence> 
+          <xsd:element name="subelement" type="xsd:string"/> 
+        </xsd:sequence> 
+      </xsd:extension> 
+    </xsd:complexContent> 
+  </xsd:complexType>  
+  <xsd:element name="Root" type="CC"> 
+    <xsd:unique name="Root"> 
+      <xsd:selector xpath="."/>  
+      <xsd:field xpath="subelement"/> 
+    </xsd:unique> 
+  </xsd:element> 
+</xsd:schema>
