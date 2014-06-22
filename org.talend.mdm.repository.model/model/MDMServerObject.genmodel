@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<genmodel:GenModel xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
+    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/org.talend.mdm.repository.model/src/main/java"
+    modelPluginID="org.talend.mdm.repository.model" modelName="MDMServerObject" importerID="org.eclipse.emf.importer.ecore"
+    complianceLevel="6.0" copyrightFields="false" usedGenPackages="../../org.talend.cwm.mip/model/cwm_mip.genmodel#//orgomg MDMMetadata.genmodel#//mdmmetadata ../../org.talend.model/model/metadata.genmodel#//connection">
+  <foreignModel>MDMServerObject.ecore</foreignModel>
+  <genPackages prefix="Mdmserverobject" basePackage="org.talend.mdm.repository.model"
+      disposableProviderFactory="true" ecorePackage="MDMServerObject.ecore#/">
+    <genClasses ecoreClass="MDMServerObject.ecore#//MDMServerObject">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//MDMServerObject/name"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//MDMServerObject/description"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//MDMServerObject/system"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EReference MDMServerObject.ecore#//MDMServerObject/lastServerDef"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//MDMServerObject/type"/>
+      <genOperations ecoreOperation="MDMServerObject.ecore#//MDMServerObject/getUniqueName"/>
+    </genClasses>
+    <genClasses ecoreClass="MDMServerObject.ecore#//WSMenuE">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference MDMServerObject.ecore#//WSMenuE/menuEntries"/>
+    </genClasses>
+    <genClasses ecoreClass="MDMServerObject.ecore#//WSMenuEntryE">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//WSMenuEntryE/id"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//WSMenuEntryE/application"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//WSMenuEntryE/context"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//WSMenuEntryE/icon"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference MDMServerObject.ecore#//WSMenuEntryE/descriptions"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference MDMServerObject.ecore#//WSMenuEntryE/subMenus"/>
+    </genClasses>
+    <genClasses ecoreClass="MDMServerObject.ecore#//WSMenuMenuEntriesDescriptionsE">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//WSMenuMenuEntriesDescriptionsE/language"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//WSMenuMenuEntriesDescriptionsE/label"/>
+    </genClasses>
+    <genClasses ecoreClass="MDMServerObject.ecore#//WSRoleE">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference MDMServerObject.ecore#//WSRoleE/specification"/>
+    </genClasses>
+    <genClasses ecoreClass="MDMServerObject.ecore#//WSRoleSpecificationE">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//WSRoleSpecificationE/admin"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//WSRoleSpecificationE/objectType"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference MDMServerObject.ecore#//WSRoleSpecificationE/instance"/>
+    </genClasses>
+    <genClasses ecoreClass="MDMServerObject.ecore#//WSRoleSpecificationInstanceE">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//WSRoleSpecificationInstanceE/instanceName"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//WSRoleSpecificationInstanceE/writable"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//WSRoleSpecificationInstanceE/parameter"/>
+    </genClasses>
+    <genClasses ecoreClass="MDMServerObject.ecore#//WSViewE">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//WSViewE/searchableBusinessElements"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//WSViewE/viewableBusinessElements"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//WSViewE/transformerActive"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference MDMServerObject.ecore#//WSViewE/whereConditions"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference MDMServerObject.ecore#//WSViewE/isTransformerActive"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//WSViewE/transformerPK"/>
+    </genClasses>
+    <genClasses ecoreClass="MDMServerObject.ecore#//WSWhereConditionE">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//WSWhereConditionE/leftPath"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//WSWhereConditionE/rightValueOrPath"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference MDMServerObject.ecore#//WSWhereConditionE/stringPredicate"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference MDMServerObject.ecore#//WSWhereConditionE/operator"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//WSWhereConditionE/spellCheck"/>
+    </genClasses>
+    <genClasses ecoreClass="MDMServerObject.ecore#//WSWhereOperatorE">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//WSWhereOperatorE/value"/>
+    </genClasses>
+    <genClasses ecoreClass="MDMServerObject.ecore#//WSStringPredicateE">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//WSStringPredicateE/value"/>
+    </genClasses>
+    <genClasses ecoreClass="MDMServerObject.ecore#//WSDataModelE">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//WSDataModelE/xsdSchema"/>
+    </genClasses>
+    <genClasses ecoreClass="MDMServerObject.ecore#//WSDataClusterE">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//WSDataClusterE/vocabulary"/>
+    </genClasses>
+    <genClasses ecoreClass="MDMServerObject.ecore#//WSStoredProcedureE">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//WSStoredProcedureE/procedure"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//WSStoredProcedureE/refreshCache"/>
+    </genClasses>
+    <genClasses ecoreClass="MDMServerObject.ecore#//WSUniverseE">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//WSUniverseE/defaultItemsRevisionID"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference MDMServerObject.ecore#//WSUniverseE/xtentisObjectsRevisionIDs"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference MDMServerObject.ecore#//WSUniverseE/itemsRevisionIDs"/>
+    </genClasses>
+    <genClasses ecoreClass="MDMServerObject.ecore#//WSUniverseXtentisObjectsRevisionIDsE">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//WSUniverseXtentisObjectsRevisionIDsE/xtentisObjectName"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//WSUniverseXtentisObjectsRevisionIDsE/revisionID"/>
+    </genClasses>
+    <genClasses ecoreClass="MDMServerObject.ecore#//WSUniverseItemsRevisionIDsE">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//WSUniverseItemsRevisionIDsE/conceptPattern"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//WSUniverseItemsRevisionIDsE/revisionID"/>
+    </genClasses>
+    <genClasses ecoreClass="MDMServerObject.ecore#//WSSynchronizationPlanE">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//WSSynchronizationPlanE/remoteSystemName"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//WSSynchronizationPlanE/remoteSystemURL"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//WSSynchronizationPlanE/remoteSystemUsername"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//WSSynchronizationPlanE/remoteSystemPassword"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//WSSynchronizationPlanE/tisURL"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//WSSynchronizationPlanE/tisUsername"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//WSSynchronizationPlanE/tisPassword"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//WSSynchronizationPlanE/tisParameters"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference MDMServerObject.ecore#//WSSynchronizationPlanE/xtentisObjectsSynchronizations"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference MDMServerObject.ecore#//WSSynchronizationPlanE/itemsSynchronizations"/>
+    </genClasses>
+    <genClasses ecoreClass="MDMServerObject.ecore#//WSSynchronizationPlanItemsSynchronizationsE">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//WSSynchronizationPlanItemsSynchronizationsE/conceptName"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//WSSynchronizationPlanItemsSynchronizationsE/idsPattern"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//WSSynchronizationPlanItemsSynchronizationsE/localCluster"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//WSSynchronizationPlanItemsSynchronizationsE/localRevisionID"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//WSSynchronizationPlanItemsSynchronizationsE/remoteCluster"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//WSSynchronizationPlanItemsSynchronizationsE/remoteRevisionID"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//WSSynchronizationPlanItemsSynchronizationsE/algorithm"/>
+    </genClasses>
+    <genClasses ecoreClass="MDMServerObject.ecore#//WSSynchronizationPlanXtentisObjectsSynchronizationsE">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//WSSynchronizationPlanXtentisObjectsSynchronizationsE/xtentisObjectName"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference MDMServerObject.ecore#//WSSynchronizationPlanXtentisObjectsSynchronizationsE/synchronizations"/>
+    </genClasses>
+    <genClasses ecoreClass="MDMServerObject.ecore#//WSSynchronizationPlanXtentisObjectsSynchronizationsSynchronizationsE">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//WSSynchronizationPlanXtentisObjectsSynchronizationsSynchronizationsE/instancePattern"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//WSSynchronizationPlanXtentisObjectsSynchronizationsSynchronizationsE/localRevisionID"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//WSSynchronizationPlanXtentisObjectsSynchronizationsSynchronizationsE/remoteRevisionID"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//WSSynchronizationPlanXtentisObjectsSynchronizationsSynchronizationsE/algorithm"/>
+    </genClasses>
+    <genClasses ecoreClass="MDMServerObject.ecore#//WSBooleanE">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//WSBooleanE/_true"/>
+    </genClasses>
+    <genClasses ecoreClass="MDMServerObject.ecore#//WSWorkflowDeployE">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//WSWorkflowDeployE/filename"/>
+    </genClasses>
+    <genClasses ecoreClass="MDMServerObject.ecore#//WSTransformerV2E">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference MDMServerObject.ecore#//WSTransformerV2E/processSteps"/>
+    </genClasses>
+    <genClasses ecoreClass="MDMServerObject.ecore#//WSTransformerProcessStepE">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//WSTransformerProcessStepE/pluginJNDI"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//WSTransformerProcessStepE/description"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//WSTransformerProcessStepE/parameters"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//WSTransformerProcessStepE/disabled"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference MDMServerObject.ecore#//WSTransformerProcessStepE/inputMappings"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference MDMServerObject.ecore#//WSTransformerProcessStepE/outputMappings"/>
+    </genClasses>
+    <genClasses ecoreClass="MDMServerObject.ecore#//WSTransformerVariablesMappingE">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//WSTransformerVariablesMappingE/pipelineVariable"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//WSTransformerVariablesMappingE/pluginVariable"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference MDMServerObject.ecore#//WSTransformerVariablesMappingE/hardCoding"/>
+    </genClasses>
+    <genClasses ecoreClass="MDMServerObject.ecore#//WSTypedContentE">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//WSTypedContentE/url"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//WSTypedContentE/contentType"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference MDMServerObject.ecore#//WSTypedContentE/wsBytes"/>
+    </genClasses>
+    <genClasses ecoreClass="MDMServerObject.ecore#//WSByteArrayE">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//WSByteArrayE/bytes"/>
+    </genClasses>
+    <genClasses ecoreClass="MDMServerObject.ecore#//WSRoutingRuleE">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//WSRoutingRuleE/synchronous"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//WSRoutingRuleE/concept"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//WSRoutingRuleE/serviceJNDI"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//WSRoutingRuleE/parameters"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//WSRoutingRuleE/condition"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//WSRoutingRuleE/deactive"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference MDMServerObject.ecore#//WSRoutingRuleE/wsRoutingRuleExpressions"/>
+    </genClasses>
+    <genClasses ecoreClass="MDMServerObject.ecore#//WSRoutingRuleExpressionE">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//WSRoutingRuleExpressionE/name"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//WSRoutingRuleExpressionE/xpath"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//WSRoutingRuleExpressionE/value"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference MDMServerObject.ecore#//WSRoutingRuleExpressionE/wsOperator"/>
+    </genClasses>
+    <genClasses ecoreClass="MDMServerObject.ecore#//WSRoutingRuleOperatorE">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//WSRoutingRuleOperatorE/value"/>
+    </genClasses>
+    <genClasses ecoreClass="MDMServerObject.ecore#//WSJobModelE"/>
+    <genClasses ecoreClass="MDMServerObject.ecore#//WSEventManagerE"/>
+    <genClasses ecoreClass="MDMServerObject.ecore#//WSServiceConfigurationE">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference MDMServerObject.ecore#//WSServiceConfigurationE/servicePutConfigurations"/>
+    </genClasses>
+    <genClasses ecoreClass="MDMServerObject.ecore#//WSServicePutConfigurationE">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//WSServicePutConfigurationE/jndiName"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//WSServicePutConfigurationE/configuration"/>
+    </genClasses>
+    <genClasses ecoreClass="MDMServerObject.ecore#//WSWorkflowE"/>
+    <genClasses ecoreClass="MDMServerObject.ecore#//WSResourceE">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//WSResourceE/fileExtension"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//WSResourceE/fileContent"/>
+    </genClasses>
+    <genClasses ecoreClass="MDMServerObject.ecore#//WSCustomFormE">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//WSCustomFormE/filename"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//WSCustomFormE/datamodel"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//WSCustomFormE/entity"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//WSCustomFormE/xml"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//WSCustomFormE/role"/>
+    </genClasses>
+  </genPackages>
+</genmodel:GenModel>
