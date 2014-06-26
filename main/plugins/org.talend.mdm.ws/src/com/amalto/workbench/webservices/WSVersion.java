@@ -45,7 +45,7 @@ public class WSVersion {
     protected int major;
     protected int minor;
     protected int revision;
-    protected int build;
+    protected String build;
     @XmlElement(required = true, nillable = true)
     protected String description;
     @XmlElement(required = true, nillable = true)
@@ -63,7 +63,7 @@ public class WSVersion {
      * Fully-initialising value constructor
      * 
      */
-    public WSVersion(final int major, final int minor, final int revision, final int build, final String description, final String date) {
+    public WSVersion(final int major, final int minor, final int revision, final String build, final String description, final String date) {
         this.major = major;
         this.minor = minor;
         this.revision = revision;
@@ -124,7 +124,7 @@ public class WSVersion {
      * Gets the value of the build property.
      * 
      */
-    public int getBuild() {
+    public String getBuild() {
         return build;
     }
 
@@ -132,7 +132,7 @@ public class WSVersion {
      * Sets the value of the build property.
      * 
      */
-    public void setBuild(int value) {
+    public void setBuild(String value) {
         this.build = value;
     }
 
