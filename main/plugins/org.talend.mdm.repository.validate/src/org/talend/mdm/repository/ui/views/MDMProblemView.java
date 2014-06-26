@@ -13,7 +13,11 @@
 package org.talend.mdm.repository.ui.views;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -28,12 +32,16 @@ import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.IOpenListener;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredViewer;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IMemento;
+import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.OpenAndLinkWithEditorHelper;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.internal.PartSite;
@@ -44,10 +52,12 @@ import org.eclipse.ui.menus.IMenuService;
 import org.eclipse.ui.views.markers.MarkerSupportView;
 import org.eclipse.ui.views.markers.internal.ContentGeneratorDescriptor;
 import org.eclipse.ui.views.markers.internal.MarkerGroup;
+import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.marker.IValidationMarker;
 import org.talend.mdm.repository.ui.markers.IOpenMarkerHandler;
 import org.talend.mdm.repository.ui.markers.OpenMarkerHandlerRegister;
 import org.talend.mdm.repository.ui.markers.datamodel.ModelNameMarkerGroup;
+import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 
 /**
  * created by HHB on 2013-1-5 Detailled comment
@@ -61,6 +71,8 @@ public class MDMProblemView extends MarkerSupportView implements IValidationMark
 
     public static final String VIEW_ID = "org.talend.mdm.repository.ui.views.MDMProblemView"; //$NON-NLS-1$
 
+    private ISelectionListener pageSelectionListener;
+
     /**
      * DOC HHB MDMProblemView constructor comment.
      * 
@@ -68,6 +80,64 @@ public class MDMProblemView extends MarkerSupportView implements IValidationMark
      */
     public MDMProblemView() {
         super(GENERATOR_ID);
+    }
+
+    private class ViewerPageSelectionListener implements ISelectionListener {
+
+        private ExtendedMarkersView view;
+
+        ViewerPageSelectionListener(ExtendedMarkersView view) {
+            this.view = view;
+        }
+
+        @Override
+        public void selectionChanged(IWorkbenchPart part, ISelection selection) {
+
+            // Do not respond to our own selections or if we are not
+            // visible
+            if (part == MDMProblemView.this || !(getSite().getPage().isPartVisible(part))) {
+                return;
+            }
+
+            // get Objects to adapt
+            List objectsToAdapt = new ArrayList();
+            if (part instanceof IEditorPart) {
+                IEditorPart editor = (IEditorPart) part;
+                objectsToAdapt.add(editor.getEditorInput());
+            } else {
+                if (selection instanceof IStructuredSelection) {
+                    for (Iterator iterator = ((IStructuredSelection) selection).iterator(); iterator.hasNext();) {
+                        Object object = iterator.next();
+                        objectsToAdapt.add(object);
+                    }
+                }
+            }
+
+            // try to adapt them in resources and add it to the
+            // selectedElements
+            List selectedElements = new ArrayList();
+            for (Iterator iterator = objectsToAdapt.iterator(); iterator.hasNext();) {
+                Object object = iterator.next();
+                if (object instanceof IRepositoryViewObject) {
+                    Object[] resElements = RepositoryResourceUtil.adapt2ResourceElement((IRepositoryViewObject) object);
+                    if (resElements != null) {
+                        for (Object obj : resElements) {
+                            selectedElements.add(obj);
+                        }
+                    }
+                }
+            }
+            MarkerContentGenerator generator = getGenerator();
+            updateSelectedResource(generator, selectedElements.toArray());
+        }
+    }
+
+    private void addPageAndPartSelectionListener() {
+        // Initialise any selection based filtering
+        pageSelectionListener = new ViewerPageSelectionListener(this);
+        getSite().getPage().addPostSelectionListener(pageSelectionListener);
+
+        pageSelectionListener.selectionChanged(getSite().getPage().getActivePart(), getSite().getPage().getSelection());
     }
 
     /*
@@ -134,6 +204,46 @@ public class MDMProblemView extends MarkerSupportView implements IValidationMark
             if (viewerField != null) {
                 viewerField.setAccessible(true);
                 return (TreeViewer) viewerField.get(this);
+            }
+        } catch (SecurityException e) {
+            log.error(e.getMessage(), e);
+        } catch (IllegalArgumentException e) {
+            log.error(e.getMessage(), e);
+        } catch (NoSuchFieldException e) {
+            log.error(e.getMessage(), e);
+        } catch (IllegalAccessException e) {
+            log.error(e.getMessage(), e);
+        }
+        return null;
+    }
+
+    private void updateSelectedResource(MarkerContentGenerator generator, Object[] selectedElements) {
+        try {
+            Method method = MarkerContentGenerator.class.getDeclaredMethod("updateSelectedResource", Object[].class); //$NON-NLS-1$
+            if (method != null) {
+                method.setAccessible(true);
+                Object param = selectedElements;
+                method.invoke(generator, param);
+            }
+        } catch (SecurityException e) {
+            log.error(e.getMessage(), e);
+        } catch (IllegalArgumentException e) {
+            log.error(e.getMessage(), e);
+        } catch (NoSuchMethodException e) {
+            log.error(e.getMessage(), e);
+        } catch (IllegalAccessException e) {
+            log.error(e.getMessage(), e);
+        } catch (InvocationTargetException e) {
+            log.error(e.getMessage(), e);
+        }
+    }
+
+    private MarkerContentGenerator getGenerator() {
+        try {
+            Field generatorField = ExtendedMarkersView.class.getDeclaredField("generator"); //$NON-NLS-1$
+            if (generatorField != null) {
+                generatorField.setAccessible(true);
+                return (MarkerContentGenerator) generatorField.get(this);
             }
         } catch (SecurityException e) {
             log.error(e.getMessage(), e);
@@ -294,6 +404,13 @@ public class MDMProblemView extends MarkerSupportView implements IValidationMark
         uninstallViewListener(treeViewer);
         removeGotoCmd();
         addLinkWithEditorSupport(treeViewer);
+        addPageAndPartSelectionListener();
+    }
+
+    @Override
+    public void dispose() {
+        getSite().getPage().removePostSelectionListener(pageSelectionListener);
+        super.dispose();
     }
 
 }

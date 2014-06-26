@@ -325,6 +325,10 @@ public class RepositoryResourceUtil {
 
             String path = ERepositoryObjectType.getFolderName(type);
             if (!path.isEmpty()) {
+
+                if (!path.endsWith(DIVIDE) || !state.getPath().startsWith(DIVIDE)) {
+                    path += DIVIDE;
+                }
                 path += state.getPath();
             }
 
@@ -1404,5 +1408,51 @@ public class RepositoryResourceUtil {
             }
         }
         return null;
+    }
+
+    public static Object[] adapt2ResourceElement(IRepositoryViewObject viewObj) {
+        if (viewObj == null) {
+            return null;
+        }
+
+        try {
+            if (viewObj instanceof WSRootRepositoryObject) {
+                Project project = ProjectManager.getInstance().getCurrentProject();
+                IProject prj = ResourceModelUtils.getProject(project);
+                return new Object[] { prj };
+            } else {
+                ERepositoryObjectType type = viewObj.getRepositoryObjectType();
+                if (viewObj instanceof FolderRepositoryObject) {
+                    if (type == IServerObjectRepositoryType.TYPE_EVENTMANAGER) {
+                        return new Object[] { getFolder(IServerObjectRepositoryType.TYPE_TRANSFORMERV2),
+                                getFolder(IServerObjectRepositoryType.TYPE_ROUTINGRULE) };
+                    } else {
+                        return new Object[] { getFolder(viewObj) };
+                    }
+                } else {
+                    Item item = viewObj.getProperty().getItem();
+                    IFile itemFile = findReferenceFile(type, item, "item"); //$NON-NLS-1$
+                    if (type == IServerObjectRepositoryType.TYPE_DATAMODEL) {
+                        IFile xsdFile = findReferenceFile(type, item, "xsd"); //$NON-NLS-1$
+                        return new Object[] { xsdFile, itemFile };
+                    } else {
+                        return new Object[] { itemFile };
+                    }
+
+                }
+            }
+        } catch (PersistenceException e) {
+            log.error(e.getMessage(), e);
+        }
+        return null;
+    }
+
+    private static IFolder getFolder(FolderRepositoryObject viewObj) {
+        ERepositoryObjectType type = viewObj.getRepositoryObjectType();
+        IFolder folder = getFolder(type);
+        Item item = viewObj.getProperty().getItem();
+        String path = item.getState().getPath();
+
+        return folder.getFolder(path);
     }
 }
