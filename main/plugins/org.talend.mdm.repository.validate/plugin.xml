@@ -147,9 +147,9 @@
          <markerFieldConfiguration
                enabled="true"
                id="org.talend.mdm.repository.ext.markerFieldConfiguration3"
-               name="All Errors"
-               scope="ON_ANY"
-               values="org.eclipse.ui.internal.views.markers.AllErrorsParameters">
+               name="All Errors And Warnings"
+               scope="ON_SELECTED_AND_CHILDREN"
+               values="org.eclipse.ui.internal.views.markers.ErrorsWarningsParameters">
          </markerFieldConfiguration>
         <markerGrouping
                id="org.eclipse.ui.ide.allMarkers.severity"
