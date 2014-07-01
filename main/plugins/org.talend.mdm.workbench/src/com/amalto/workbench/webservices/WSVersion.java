@@ -10,14 +10,14 @@ public class WSVersion {
     protected int major;
     protected int minor;
     protected int revision;
-    protected int build;
+    protected String build;
     protected java.lang.String description;
     protected java.lang.String date;
     
     public WSVersion() {
     }
     
-    public WSVersion(int major, int minor, int revision, int build, java.lang.String description, java.lang.String date) {
+    public WSVersion(int major, int minor, int revision, String build, java.lang.String description, java.lang.String date) {
         this.major = major;
         this.minor = minor;
         this.revision = revision;
@@ -50,11 +50,11 @@ public class WSVersion {
         this.revision = revision;
     }
     
-    public int getBuild() {
+    public String getBuild() {
         return build;
     }
     
-    public void setBuild(int build) {
+    public void setBuild(String build) {
         this.build = build;
     }
     
