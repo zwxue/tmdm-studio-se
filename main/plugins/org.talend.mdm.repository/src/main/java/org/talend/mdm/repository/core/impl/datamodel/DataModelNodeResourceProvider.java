@@ -36,14 +36,12 @@ import org.eclipse.emf.ecore.resource.Resource;
 import org.talend.commons.exception.PersistenceException;
 import org.talend.core.model.properties.Item;
 import org.talend.core.model.repository.ERepositoryObjectType;
-import org.talend.core.runtime.CoreRuntimePlugin;
 import org.talend.mdm.repository.core.IServerObjectRepositoryType;
 import org.talend.mdm.repository.core.impl.AbstractRepositoryNodeResourceProvider;
 import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
 import org.talend.mdm.repository.model.mdmproperties.MdmpropertiesFactory;
 import org.talend.mdm.repository.model.mdmproperties.WSDataModelItem;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
-import org.talend.repository.model.IProxyRepositoryFactory;
 
 /**
  * DOC hbhong class global comment. Detailled comment <br/>
@@ -107,17 +105,12 @@ public class DataModelNodeResourceProvider extends AbstractRepositoryNodeResourc
                 linkReferenceFile(item, mapInfoFile);
             }
 
-            IProxyRepositoryFactory factory = CoreRuntimePlugin.getInstance().getProxyRepositoryFactory();
-
-            factory.save(item, true);
-
         } catch (UnsupportedEncodingException e) {
             log.error(e.getMessage(), e);
         } catch (CoreException e) {
             log.error(e.getMessage(), e);
-        } catch (PersistenceException e) {
-            log.error(e.getMessage(), e);
         }
+
     }
 
     protected IFile createOrUpdateFile(Item item, IFile file) throws UnsupportedEncodingException, CoreException {
