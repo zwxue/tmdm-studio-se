@@ -106,6 +106,11 @@ public class HttpClientUtil {
         return commonGetRequest(url, String.class);
     }
 
+    public static String getStringContentByHttpget(String url, String username, String password) throws XtentisException {
+        DefaultHttpClient client = wrapAuthClient(url, username, password);
+        return commonGetRequest(client, url, "", String.class); //$NON-NLS-1$
+    }
+
     public static byte[] getByteArrayContentByHttpget(String url) throws XtentisException {
         return commonGetRequest(url, byte[].class);
     }
@@ -117,11 +122,12 @@ public class HttpClientUtil {
     }
 
     private static <T> T commonGetRequest(String url, Class<T> t) throws XtentisException {
-        return commonGetRequest(url, "", t); //$NON-NLS-1$
+        DefaultHttpClient client = createClient();
+        return commonGetRequest(client, url, "", t); //$NON-NLS-1$
     }
 
-    private static <T> T commonGetRequest(String url, String message, Class<T> t) throws XtentisException {
-        DefaultHttpClient client = createClient();
+    private static <T> T commonGetRequest(DefaultHttpClient client, String url, String message, Class<T> t)
+            throws XtentisException {
         HttpGet get = new HttpGet(url);
         return getResponseContent(client, get, message, t);
     }
