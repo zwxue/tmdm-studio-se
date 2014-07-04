@@ -190,12 +190,14 @@ public class RepositoryResourceUtil {
         if (configuration != null) {
             IRepositoryNodeResourceProvider resourceProvider = configuration.getResourceProvider();
             if (resourceProvider.needSaveReferenceFile()) {
+                item = assertItem(item);
                 resourceProvider.handleReferenceFile(item);
             }
 
             // save
             IProxyRepositoryFactory factory = CoreRuntimePlugin.getInstance().getProxyRepositoryFactory();
             try {
+                item = assertItem(item);
                 factory.save(item, !triggerEvent);
             } catch (PersistenceException e) {
                 log.error(e);

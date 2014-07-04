@@ -244,7 +244,7 @@ public class MDMRepositoryView extends CommonNavigator implements ITabbedPropert
                     IFile ifile = targetFolder.getFile(file2.getName());
                     String fileExtension = ifile.getFileExtension();
 
-                    if ("item".equals(fileExtension) || "properties".equals(fileExtension) || "xsd".equals(fileExtension)) //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
+                    if ("item".equals(fileExtension) || "properties".equals(fileExtension) || "xsd".equals(fileExtension) || "mapinfo".equals(fileExtension)) //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$ //$NON-NLS-4$
                     {
                         FileInputStream fileInputStream = null;
                         File sunfile = ifile.getLocation().toFile();
