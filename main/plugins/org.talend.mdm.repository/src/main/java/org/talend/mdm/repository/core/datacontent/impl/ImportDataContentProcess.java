@@ -189,7 +189,7 @@ public class ImportDataContentProcess extends AbstractDataContentProcess {
             private Pattern pattern;
 
             public RuleFilter(String concept) {
-                String regex = dName + "\\." + concept + "\\.\\w+?"; //$NON-NLS-1$ //$NON-NLS-2$
+                String regex = dName + "\\." + concept + "\\.\\S+"; //$NON-NLS-1$ //$NON-NLS-2$
                 pattern = Pattern.compile(regex);
             }
 
