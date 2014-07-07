@@ -1501,8 +1501,6 @@ public class Messages extends NLS {
 
     public static String DataClusterMainPage_ErrorRefreshingPageXX;
 
-    public static String DataClusterStagingBrowserMainPage_stagingDataContainerBrowserTitle;
-
     public static String DescAnnotationComposite_AnnoBtnDesc;
 
     public static String DescriptionText;
