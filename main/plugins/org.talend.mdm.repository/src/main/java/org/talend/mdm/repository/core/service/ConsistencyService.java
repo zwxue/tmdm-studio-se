@@ -15,9 +15,11 @@ package org.talend.mdm.repository.core.service;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -32,17 +34,23 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.EMap;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.util.FeatureMap;
 import org.eclipse.emf.ecore.util.FeatureMapUtil;
+import org.eclipse.emf.ecore.util.InternalEList;
+import org.eclipse.emf.ecore.xmi.XMLHelper;
+import org.eclipse.emf.ecore.xmi.XMLSave;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceImpl;
+import org.eclipse.emf.ecore.xmi.impl.XMLSaveImpl;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.widgets.Display;
@@ -292,17 +300,89 @@ public class ConsistencyService {
         }
         if (copy != null) {
             //
-            Resource resource = new XMIResourceImpl();
+            Resource resource = new SortResourceImpl();
             resource.getContents().add(copy);
             return calculateDigestValueByEMFResource(resource);
         }
         return null;
     }
 
-    private String calculateDigestValueByRefFile(Item item) {
+    class SortResourceImpl extends XMIResourceImpl {
 
-        IFile file = getReferenceFile(item);
-        if (file.exists()) {
+        @Override
+        protected XMLSave createXMLSave() {
+
+            return new SortXMLSave(createXMLHelper());
+        }
+
+    }
+
+    class SortXMLSave extends XMLSaveImpl {
+
+        public SortXMLSave(XMLHelper helper) {
+            super(helper);
+        }
+
+        @Override
+        protected void saveContainedMany(EObject o, EStructuralFeature f) {
+            List<InternalEObject> values = (List<InternalEObject>) ((InternalEList<? extends InternalEObject>) helper.getValue(o,
+                    f)).basicList();
+            List<InternalEObject> copyList = new ArrayList<InternalEObject>();
+            copyList.addAll(values);
+            int size = copyList.size();
+            Collections.sort(copyList, new Comparator<InternalEObject>() {
+
+                public int compare(InternalEObject o1, InternalEObject o2) {
+                    String[] values1 = getValues(o1);
+                    String[] values2 = getValues(o2);
+                    for (int i = 0; i < values1.length; i++) {
+                        String v1 = values1[i];
+                        String v2 = values2[i];
+                        if (v1 != null && v2 != null) {
+                            int result = v1.compareTo(v2);
+                            if (result == 0) {
+                                continue;
+                            }
+                            return result;
+                        } else if (v1 != null && v2 == null) {
+                            return 1;
+                        } else if (v1 == null && v2 != null) {
+                            return -1;
+                        }
+                    }
+                    return 0;
+
+                }
+
+            });
+            for (int i = 0; i < size; i++) {
+                InternalEObject value = copyList.get(i);
+                if (value != null) {
+                    saveElement(value, f);
+                }
+            }
+        }
+
+        private String[] getValues(InternalEObject o) {
+            EList<EAttribute> attributes = o.eClass().getEAllAttributes();
+            String[] values = new String[attributes.size()];
+            int i = 0;
+            for (EAttribute attribute : attributes) {
+                Object valueO = o.eGet(attribute);
+                if (valueO != null) {
+                    values[i] = valueO.toString();
+                }
+                i++;
+            }
+            return values;
+        }
+
+    }
+
+    private String calculateDigestValueByRefFile(Item item, ERepositoryObjectType type) {
+
+        IFile file = getReferenceFile(item, type);
+        if (file != null && file.exists()) {
             InputStream in = null;
             ByteArrayOutputStream out = null;
             try {
@@ -329,11 +409,11 @@ public class ConsistencyService {
         return null;
     }
 
-    private String calculateDigestValueBySortedObject(Item item) {
+    private String calculateDigestValueBySortedObject(Item item, ERepositoryObjectType type) {
         if (item.eClass().getClassifierID() == MdmpropertiesPackage.WS_WORKFLOW_ITEM) {
 
-            IFile file = getReferenceFile(item);
-            if (file.exists()) {
+            IFile file = getReferenceFile(item, type);
+            if (file != null && file.exists()) {
                 try {
                     URI uri = URI.createPlatformResourceURI(file.getFullPath().toString(), true);
                     Resource rawResource = new XMIResourceImpl(uri);
@@ -508,14 +588,14 @@ public class ConsistencyService {
             if (!ld.equals(rd)) {
                 return CompareResultEnum.CONFLICT;
             } else {
-                if (cd.equals(ld)) {
+                if (cd != null && cd.equals(ld)) {
                     return CompareResultEnum.SAME;
                 } else {
                     return CompareResultEnum.MODIFIED_LOCALLY;
                 }
             }
         } else {
-            if (!cd.equals(rd)) {
+            if (cd != null && !cd.equals(rd)) {
                 return CompareResultEnum.POTENTIAL_CONFLICT;
             } else {
                 return CompareResultEnum.SAME;
@@ -523,15 +603,15 @@ public class ConsistencyService {
         }
     }
 
-    public String calculateDigestValue(Item item) {
+    public String calculateDigestValue(Item item, ERepositoryObjectType type) {
         DigestCalStrategyEnum strategy = getDigetValueCaculateStrategy(item);
         switch (strategy) {
         case OBJ_RESOURCE:
             return calculateDigestValueByObjectResource(item);
         case REF_FILE:
-            return calculateDigestValueByRefFile(item);
+            return calculateDigestValueByRefFile(item, type);
         case SORTED_OBJ_RESOURCE:
-            return calculateDigestValueBySortedObject(item);
+            return calculateDigestValueBySortedObject(item, type);
 
         }
         return null;
@@ -598,19 +678,22 @@ public class ConsistencyService {
         throw new UnsupportedOperationException();
     }
 
-    private IFile getReferenceFile(Item item) {
+    private IFile getReferenceFile(Item item, ERepositoryObjectType type) {
         item = RepositoryResourceUtil.assertItem(item);
         List refResources = item.getReferenceResources();
         if (refResources != null && !refResources.isEmpty()) {
             ReferenceFileItem fileItem = (ReferenceFileItem) refResources.get(0);
             ByteArray content = fileItem.getContent();
-
-            URI uri = content.eResource().getURI();
-            if (uri.isPlatformResource()) {
-                IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
-                IPath path = new Path(uri.toPlatformString(true));
-                IFile file = root.getFile(path);
-                return file;
+            if (content.eResource() != null) {
+                URI uri = content.eResource().getURI();
+                if (uri.isPlatformResource()) {
+                    IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
+                    IPath path = new Path(uri.toPlatformString(true));
+                    IFile file = root.getFile(path);
+                    return file;
+                }
+            } else {
+                return RepositoryResourceUtil.findReferenceFile(type, item, fileItem.getExtension());
             }
         }
         return null;
@@ -761,13 +844,13 @@ public class ConsistencyService {
      */
     public void updateLocalDigestValue(IRepositoryViewObject viewObj) {
         Item item = viewObj.getProperty().getItem();
-        String digestValue = calculateDigestValue(item);
+        String digestValue = calculateDigestValue(item, viewObj.getRepositoryObjectType());
         updateLocalDigestValue(item, digestValue);
     }
 
     public void updateCurrentDigestValue(IRepositoryViewObject viewObj) {
         Item item = viewObj.getProperty().getItem();
-        String digestValue = calculateDigestValue(item);
+        String digestValue = calculateDigestValue(item, viewObj.getRepositoryObjectType());
         updateCurrentDigestValue(item, digestValue);
     }
 
