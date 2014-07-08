@@ -48,7 +48,7 @@ public class DebugDigestValueAction extends AbstractRepositoryAction {
         if (!selectedObject.isEmpty()) {
             IRepositoryViewObject viewObj = (IRepositoryViewObject) selectedObject.get(0);
             Item item = viewObj.getProperty().getItem();
-            String digestValue = service.calculateDigestValue(item);
+            String digestValue = service.calculateDigestValue(item, viewObj.getRepositoryObjectType());
             System.out.println("DigestValue:(" + item.getProperty().getLabel() + ") = " + digestValue); //$NON-NLS-1$ //$NON-NLS-2$
         }
 
