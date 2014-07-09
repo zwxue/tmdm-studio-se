@@ -53,7 +53,6 @@ import org.eclipse.ui.progress.IProgressService;
 import org.eclipse.xsd.XSDIdentityConstraintDefinition;
 import org.eclipse.xsd.XSDSchema;
 import org.eclipse.xsd.XSDXPathDefinition;
-import org.talend.commons.exception.LoginException;
 import org.talend.commons.exception.PersistenceException;
 import org.talend.commons.ui.runtime.exception.ExceptionHandler;
 import org.talend.commons.utils.VersionUtils;
@@ -234,13 +233,7 @@ public class RepositoryResourceUtil {
             if (configuration != null) {
                 IRepositoryNodeResourceProvider resourceProvider = configuration.getResourceProvider();
                 if (resourceProvider.needSaveReferenceFile() && factory.isEditableAndLockIfPossible(item)) {
-
                     resourceProvider.handleReferenceFile(item);
-                    try {
-                        factory.unlock(item);
-                    } catch (LoginException e) {
-                        log.error(e.getMessage(), e);
-                    }
                 }
                 factory.save(item, !triggerEvent);
 
