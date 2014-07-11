@@ -8,7 +8,6 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -75,8 +74,8 @@ public class BeanClassUtilTest {
 
         // verify the method
         List<Method> mapList = new ArrayList<Method>();
-        for (Iterator<Method[]> it = fieldMap.values().iterator(); it.hasNext();) {
-            mapList.addAll(Arrays.asList(it.next()));
+        for (Method[] name : fieldMap.values()) {
+            mapList.addAll(Arrays.asList(name));
         }
         List<Method> asList = Arrays.asList(cls.getDeclaredMethods());
         if (!(asList.containsAll(mapList) && mapList.containsAll(asList))) {
@@ -104,8 +103,8 @@ public class BeanClassUtilTest {
         // verify the method
         List<Method> asList = Arrays.asList(cls.getDeclaredMethods());
         List<Method> mapList = new ArrayList<Method>();
-        for (Iterator<Method[]> it = fieldMap.values().iterator(); it.hasNext();) {
-            mapList.addAll(Arrays.asList(it.next()));
+        for (Method[] name : fieldMap.values()) {
+            mapList.addAll(Arrays.asList(name));
         }
         if (!(asList.containsAll(mapList) && mapList.containsAll(asList))) {
             fail(" the method is inconsistent");
@@ -128,9 +127,10 @@ public class BeanClassUtilTest {
         }
 
         fields = ObjectClass.class.getFields();
-        for (int i = 0; i < fields.length; i++) {
-            if (!fields[i].getType().getName().equals("boolean")) {
-                String getMethod = Whitebox.invokeMethod(spy, "calGetMethodName", fields[i]);
+        for (Field field : fields) {
+            String fieldTypeName = field.getType().getName();
+            if (!fieldTypeName.equals("java.lang.Boolean")) {
+                String getMethod = Whitebox.invokeMethod(spy, "calGetMethodName", field);
                 if (!getMethod.startsWith(prefix)) {
                     fail("there exists method that's not started with " + prefix);
                 }
@@ -145,16 +145,16 @@ public class BeanClassUtilTest {
         BeanClassUtil spy = PowerMockito.spy(bClassUtil);
 
         Field[] fields = BaseTypeClass.class.getFields();
-        for (int i = 0; i < fields.length; i++) {
-            String getMethod = Whitebox.invokeMethod(spy, "calSetMethodName", fields[i]);
+        for (Field field : fields) {
+            String getMethod = Whitebox.invokeMethod(spy, "calSetMethodName", field);
             if (!getMethod.startsWith(prefix)) {
                 fail("method name is not started with " + prefix);
             }
         }
 
         fields = ObjectClass.class.getFields();
-        for (int i = 0; i < fields.length; i++) {
-            String getMethod = Whitebox.invokeMethod(spy, "calSetMethodName", fields[i]);
+        for (Field field : fields) {
+            String getMethod = Whitebox.invokeMethod(spy, "calSetMethodName", field);
             if (!getMethod.startsWith(prefix)) {
                 fail("method name is not started with " + prefix);
             }
@@ -162,60 +162,68 @@ public class BeanClassUtilTest {
     }
 
     @Test
-    public void testIsColletionField() throws SecurityException, NoSuchFieldException {
+    public void testIsArrayField() throws SecurityException, NoSuchFieldException {
         Field field = null;
 
         field = BaseTypeArrayClass.class.getField("intA");
-        assertTrue(bClassUtil.isCollectionField(field));
+        assertTrue(bClassUtil.isArrayField(field));
 
         field = BaseTypeArrayClass.class.getField("longA");
-        assertTrue(bClassUtil.isCollectionField(field));
+        assertTrue(bClassUtil.isArrayField(field));
 
         field = BaseTypeArrayClass.class.getField("floatA");
-        assertTrue(bClassUtil.isCollectionField(field));
+        assertTrue(bClassUtil.isArrayField(field));
 
         field = BaseTypeArrayClass.class.getField("doubleA");
-        assertTrue(bClassUtil.isCollectionField(field));
+        assertTrue(bClassUtil.isArrayField(field));
 
         field = BaseTypeArrayClass.class.getField("intA");
-        assertTrue(bClassUtil.isCollectionField(field));
+        assertTrue(bClassUtil.isArrayField(field));
 
         field = BaseTypeArrayClass.class.getField("charA");
-        assertTrue(bClassUtil.isCollectionField(field));
+        assertTrue(bClassUtil.isArrayField(field));
 
         field = BaseTypeArrayClass.class.getField("byteA");
-        assertTrue(bClassUtil.isCollectionField(field));
+        assertTrue(bClassUtil.isArrayField(field));
 
         field = BaseTypeArrayClass.class.getField("booleanA");
-        assertTrue(bClassUtil.isCollectionField(field));
+        assertTrue(bClassUtil.isArrayField(field));
 
         field = ObjectArrayClass.class.getField("objA");
-        assertTrue(bClassUtil.isCollectionField(field));
+        assertTrue(bClassUtil.isArrayField(field));
         field = ObjectArrayClass.class.getField("beanClassUtilA");
-        assertTrue(bClassUtil.isCollectionField(field));
+        assertTrue(bClassUtil.isArrayField(field));
         field = ObjectArrayClass.class.getField("swtA");
-        assertTrue(bClassUtil.isCollectionField(field));
+        assertTrue(bClassUtil.isArrayField(field));
         field = ObjectArrayClass.class.getField("collectA");
-        assertTrue(bClassUtil.isCollectionField(field));
+        assertTrue(bClassUtil.isArrayField(field));
         field = ObjectArrayClass.class.getField("inputStreamA");
-        assertTrue(bClassUtil.isCollectionField(field));
+        assertTrue(bClassUtil.isArrayField(field));
         field = ObjectArrayClass.class.getField("clazzA");
-        assertTrue(bClassUtil.isCollectionField(field));
+        assertTrue(bClassUtil.isArrayField(field));
 
         field = ObjectArrayClass.class.getField("stringAA");
-        assertTrue(bClassUtil.isCollectionField(field));
+        assertTrue(bClassUtil.isArrayField(field));
+    }
+
+    @Test
+    public void testInCollectionField() throws SecurityException, NoSuchFieldException {
+        Field[] fields = CollectionFieldClass.class.getFields();
+        for (Field f : fields) {
+            assertTrue(bClassUtil.isCollectionField(f));
+        }
     }
 
     @Test
     public void testIsJavaField() throws SecurityException, NoSuchFieldException {
         Field[] fields = BaseTypeClass.class.getFields();
-        for (int i = 0; i < fields.length; i++) {
-            assertTrue(bClassUtil.isJavaField(fields[i]));
+        for (Field field : fields) {
+            assertTrue(bClassUtil.isJavaField(field));
         }
 
         fields = BaseTypeArrayClass.class.getFields();
-        for (int i = 0; i < fields.length; i++) {
-            assertFalse(bClassUtil.isJavaField(fields[i]));
+        for (Field field : fields) {
+            assertFalse(bClassUtil.isJavaField(field));
         }
 
         Field field = ObjectClass.class.getField("obj");
@@ -244,14 +252,14 @@ public class BeanClassUtilTest {
     public void testIsJavaClass() {
         // base type field
         Field[] fields = BaseTypeClass.class.getFields();
-        for (int i = 0; i < fields.length; i++) {
-            assertTrue(fields[i].getType().getName(), bClassUtil.isJavaClass(fields[i].getType()));
+        for (Field field : fields) {
+            assertTrue(field.getType().getName(), bClassUtil.isJavaClass(field.getType()));
         }
 
         // base type array field
         fields = BaseTypeArrayClass.class.getFields();
-        for (int i = 0; i < fields.length; i++) {
-            assertFalse(fields[i].getType().getName(), bClassUtil.isJavaClass(fields[i].getType()));
+        for (Field field : fields) {
+            assertFalse(field.getType().getName(), bClassUtil.isJavaClass(field.getType()));
         }
 
         // any jdk class
@@ -297,45 +305,59 @@ public class BeanClassUtilTest {
 
         public BaseTypeClass() {
         }
+
         public int getIntField() {
             return intField;
         }
+
         public void setIntField(int intField) {
             this.intField = intField;
         }
+
         public long getLongField() {
             return longField;
         }
+
         public void setLongField(long longField) {
             this.longField = longField;
         }
+
         public float getFloatField() {
             return floatField;
         }
+
         public void setFloatField(float floatField) {
             this.floatField = floatField;
         }
+
         public double getDoubleField() {
             return doubleField;
         }
+
         public void setDoubleField(double doubleField) {
             this.doubleField = doubleField;
         }
+
         public char getCharField() {
             return charField;
         }
+
         public void setCharField(char charField) {
             this.charField = charField;
         }
+
         public byte getByteField() {
             return byteField;
         }
+
         public void setByteField(byte byteField) {
             this.byteField = byteField;
         }
+
         public boolean isBooleanField() {
             return booleanField;
         }
+
         public void setBooleanField(boolean booleanField) {
             this.booleanField = booleanField;
         }
@@ -359,73 +381,119 @@ public class BeanClassUtilTest {
     }
 
     class ObjectClass {
+
         public Object obj;
+
         public BeanClassUtil beanClassUtil;
+
         public SWT swt;
+
         public Collection collect;
+
         public InputStream inputStream;
+
         public Class clazz;
+
         public Boolean bolezn;
+
         public WSMenu wsmenu;
 
         public Object getObj() {
             return obj;
         }
+
         public void setObj(Object obj) {
             this.obj = obj;
         }
+
         public BeanClassUtil getBeanClassUtil() {
             return beanClassUtil;
         }
+
         public void setBeanClassUtil(BeanClassUtil beanClassUtil) {
             this.beanClassUtil = beanClassUtil;
         }
+
         public SWT getSwt() {
             return swt;
         }
+
         public void setSwt(SWT swt) {
             this.swt = swt;
         }
+
         public Collection getCollect() {
             return collect;
         }
+
         public void setCollect(Collection collect) {
             this.collect = collect;
         }
+
         public InputStream getInputStream() {
             return inputStream;
         }
+
         public void setInputStream(InputStream inputStream) {
             this.inputStream = inputStream;
         }
+
         public Class getClazz() {
             return clazz;
         }
+
         public void setClazz(Class clazz) {
             this.clazz = clazz;
         }
-        public Boolean getBolezn() {
+
+        public Boolean isBolezn() {
             return bolezn;
         }
+
         public void setBolezn(Boolean bolezn) {
             this.bolezn = bolezn;
         }
+
         public WSMenu getWsmenu() {
             return wsmenu;
         }
+
         public void setWsmenu(WSMenu wsmenu) {
             this.wsmenu = wsmenu;
         }
     }
 
     class ObjectArrayClass {
+
         public Object[] objA;
+
         public BeanClassUtil[] beanClassUtilA;
+
         public SWT[] swtA;
+
         public Collection[] collectA;
+
         public InputStream[] inputStreamA;
+
         public Class[] clazzA;
+
         public Boolean[] boleznA;
+
         public String[][] stringAA;
+    }
+
+    class CollectionFieldClass {
+
+        public List<Object> objA;
+
+        public List<Double> doubleA;
+
+        public List<Collection> collectA;
+
+        public List<Class> clazzA;
+
+        public List<Boolean> boleznA;
+
+        public List<String[]> stringAA;
     }
 }
