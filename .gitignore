@@ -1,5 +1,5 @@
-bin
-class
-*.class
+bin/
+target/
+class/
 Thumbs.db
 .project
