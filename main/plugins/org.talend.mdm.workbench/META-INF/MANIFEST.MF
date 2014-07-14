@@ -6,7 +6,8 @@ Bundle-Version: 3.2.0.qualifier
 Bundle-Activator: com.amalto.workbench.MDMWorbenchPlugin
 Bundle-Vendor: Talend
 Bundle-Localization: plugin
-Require-Bundle: org.eclipse.ui,
+Require-Bundle: javax.xml.rpc,
+ org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.jface.text,
  org.eclipse.ui.editors,
@@ -133,8 +134,6 @@ Export-Package: com.amalto.workbench,
  com.amalto.workbench.widgets.xmleditor.util,
  com.sun.xml.rpc.client,
  javax.xml.namespace,
- javax.xml.rpc.handler,
- javax.xml.rpc.handler.soap,
  org.apache.axis.utils,
  org.apache.commons.digester,
  org.apache.commons.digester.rss,

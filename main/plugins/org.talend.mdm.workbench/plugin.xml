@@ -565,13 +565,6 @@
             context="MDM"
             language="java"
             message="Required for using this component."
-            name="jaxrpc.jar"
-            required="true">
-      </libraryNeeded>
-            <libraryNeeded
-            context="MDM"
-            language="java"
-            message="Required for using this component."
             name="jta-spec1_0_1.jar"
             required="true">
       </libraryNeeded>
