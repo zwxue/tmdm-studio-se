@@ -62,10 +62,12 @@ import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
 import org.talend.mdm.repository.models.FolderRepositoryObject;
+import org.talend.mdm.repository.utils.IRepositoryResourceUtilExAdapter;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 import org.talend.repository.ProjectManager;
 import org.talend.repository.model.IProxyRepositoryFactory;
 
+import com.amalto.workbench.exadapter.ExAdapterManager;
 import com.amalto.workbench.image.ImageCache;
 
 /**
@@ -76,7 +78,7 @@ import com.amalto.workbench.image.ImageCache;
         ImageCache.class, ItemState.class, CoreRuntimePlugin.class, ProjectManager.class,
         RepositoryNodeConfigurationManager.class, IProxyRepositoryFactory.class, ProxyRepositoryFactory.class,
         MessageDialog.class, RepositoryResourceUtil.class, ContainerCacheService.class,
-        RepositoryNodeProviderRegistryReader.class })
+        RepositoryNodeProviderRegistryReader.class, ExAdapterManager.class })
 public class RemoveFromRepositoryActionTest {
 
     @Rule
@@ -95,6 +97,11 @@ public class RemoveFromRepositoryActionTest {
         when(JFaceResources.getImageRegistry()).thenReturn(registry);
         PowerMockito.mockStatic(DefaultMessagesImpl.class);
         when(DefaultMessagesImpl.getString(anyString())).thenReturn("anyString()");
+
+        IRepositoryResourceUtilExAdapter mockAdapter = PowerMockito.mock(IRepositoryResourceUtilExAdapter.class);
+        PowerMockito.mockStatic(ExAdapterManager.class);
+        PowerMockito.when(ExAdapterManager.getAdapter(new RepositoryResourceUtil(), IRepositoryResourceUtilExAdapter.class))
+                .thenReturn(mockAdapter);
 
         PowerMockito.mockStatic(ImageCache.class);
         ImageDescriptor imgDesc = mock(ImageDescriptor.class);

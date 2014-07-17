@@ -1,12 +1,10 @@
 package org.talend.mdm.repository.ui.actions.serviceconfiguration;
 
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.junit.Assert.assertThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.when;
-import static org.powermock.api.support.membermodification.MemberMatcher.method;
-import static org.powermock.api.support.membermodification.MemberModifier.stub;
+import static org.hamcrest.CoreMatchers.*;
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
+import static org.powermock.api.support.membermodification.MemberMatcher.*;
+import static org.powermock.api.support.membermodification.MemberModifier.*;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.resource.JFaceResources;
@@ -23,13 +21,16 @@ import org.talend.mdm.repository.extension.RepositoryNodeConfigurationManager;
 import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
 import org.talend.mdm.repository.model.mdmproperties.MdmpropertiesFactory;
 import org.talend.mdm.repository.ui.actions.AbstractSimpleAddActionTest;
+import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 import org.talend.repository.ProjectManager;
 
 import com.amalto.workbench.editors.ServiceConfigrationMainPage;
+import com.amalto.workbench.exadapter.ExAdapterManager;
 import com.amalto.workbench.image.ImageCache;
 
 @PrepareForTest({ ImageDescriptor.class, JFaceResources.class, ImageCache.class, ItemState.class, CoreRuntimePlugin.class,
-        ProjectManager.class, RepositoryNodeConfigurationManager.class, ProxyRepositoryFactory.class })
+        ProjectManager.class, RepositoryNodeConfigurationManager.class, ProxyRepositoryFactory.class,
+        RepositoryResourceUtil.class, ExAdapterManager.class })
 public class NewServiceConfigurationActionTest extends AbstractSimpleAddActionTest {
 
     @Rule
