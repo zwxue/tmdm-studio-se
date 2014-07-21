@@ -14,7 +14,6 @@ package com.amalto.workbench.dialogs;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.logging.Log;
@@ -91,7 +90,7 @@ public class AnnotationOrderedListsDialog extends Dialog {
     private boolean recursive = true;
 
     private boolean lock;
-    
+
     private boolean retrieveFKinfos = true;
 
     public boolean isRetrieveFKinfos() {
@@ -142,7 +141,7 @@ public class AnnotationOrderedListsDialog extends Dialog {
     }
 
     private List<String> getConceptElements() {
-        DataModelMainPage page = (DataModelMainPage) parentPage;
+        DataModelMainPage page = parentPage;
         IStructuredSelection selection = (IStructuredSelection) page.getTreeViewer().getSelection();
         List<String> childNames = new ArrayList<String>();
         XSDElementDeclaration decl = null;
@@ -171,6 +170,8 @@ public class AnnotationOrderedListsDialog extends Dialog {
     protected List<String> getAllRolesStr() {
         return Util.getChildren(this.xObject.getServerRoot(), TreeObject.ROLE);
     }
+
+    @Override
     protected Control createDialogArea(Composite parent) {
 
         // Should not really be here but well,....
@@ -211,8 +212,9 @@ public class AnnotationOrderedListsDialog extends Dialog {
         } else {
             if (actionType == AnnotationOrderedListsDialog.AnnotationSchematron_ActionType) {
                 textControl.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 2, 7));
-            } else
+            } else {
                 textControl.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 2, 1));
+            }
         }
 
         ((GridData) textControl.getLayoutData()).minimumWidth = 400;
@@ -245,9 +247,9 @@ public class AnnotationOrderedListsDialog extends Dialog {
                     XpathSelectDialog dlg = getNewXpathSelectDialog(parentPage, dataModelName);
 
                     dlg.setLock(lock);
-                    
+
                     dlg.setBlockOnOpen(true);
-                    
+
                     dlg.open();
 
                     if (dlg.getReturnCode() == Window.OK) {
@@ -273,12 +275,14 @@ public class AnnotationOrderedListsDialog extends Dialog {
 
             public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
                 boolean exist = false;
-                for (Iterator<String> it = xPaths.iterator(); it.hasNext();) {
-                    if (it.next().equals(getControlText(textControl)))
+                for (String string : xPaths) {
+                    if (string.equals(getControlText(textControl))) {
                         exist = true;
+                    }
                 }
-                if (!exist && getControlText(textControl) != null && getControlText(textControl) != "") //$NON-NLS-1$
+                if (!exist && getControlText(textControl) != null && getControlText(textControl) != "") {
                     xPaths.add(getControlText(textControl));
+                }
                 viewer.refresh();
             };
         });
@@ -326,8 +330,7 @@ public class AnnotationOrderedListsDialog extends Dialog {
                 @SuppressWarnings("unchecked")
                 ArrayList<String> xPaths = (ArrayList<String>) inputElement;
                 ArrayList<DescriptionLine> lines = new ArrayList<DescriptionLine>();
-                for (Iterator<String> iter = xPaths.iterator(); iter.hasNext();) {
-                    String xPath = iter.next();
+                for (String xPath : xPaths) {
                     DescriptionLine line = new DescriptionLine(xPath);
                     lines.add(line);
                 }
@@ -380,6 +383,7 @@ public class AnnotationOrderedListsDialog extends Dialog {
             }
 
             public void modify(Object element, String property, Object value) {
+
                 TableItem item = (TableItem) element;
                 DescriptionLine line = (DescriptionLine) item.getData();
                 String orgValue = line.getLabel();
@@ -391,12 +395,18 @@ public class AnnotationOrderedListsDialog extends Dialog {
                         xPaths.add(value.toString());
                         viewer.update(line, null);
                     } else if (targetPos >= 0 && !value.toString().equals(orgValue)) {
-                        MessageDialog.openInformation(null, Messages.Warning, Messages.AnnotationOrderedListsDialog_ValueAlreadyExists);
+                        MessageDialog.openInformation(null, Messages.Warning,
+                                Messages.AnnotationOrderedListsDialog_ValueAlreadyExists);
                     }
                     return;
                 } else {
+
                     String[] attrs = roles.toArray(new String[] {});
-                    value = attrs[Integer.parseInt(value.toString())];
+                    int index = Integer.parseInt(value.toString());
+                    if (index == -1) {
+                        return;
+                    }
+                    value = attrs[index];
                     int pos = xPaths.indexOf(value.toString());
                     if (pos >= 0 && !(orgValue.equals(value))) {
                         MessageDialog.openInformation(null, Messages.Warning, Messages.AnnotationOrderedListsDialog_);
@@ -476,11 +486,11 @@ public class AnnotationOrderedListsDialog extends Dialog {
 
             public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
                 DescriptionLine line = (DescriptionLine) ((IStructuredSelection) viewer.getSelection()).getFirstElement();
-                if (line == null)
+                if (line == null) {
                     return;
+                }
                 int i = 0;
-                for (Iterator<String> iter = xPaths.iterator(); iter.hasNext();) {
-                    String xPath = iter.next();
+                for (String xPath : xPaths) {
                     if (xPath.equals(line.getLabel())) {
                         if (i > 0) {
                             xPaths.remove(i);
@@ -506,11 +516,11 @@ public class AnnotationOrderedListsDialog extends Dialog {
 
             public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
                 DescriptionLine line = (DescriptionLine) ((IStructuredSelection) viewer.getSelection()).getFirstElement();
-                if (line == null)
+                if (line == null) {
                     return;
+                }
                 int i = 0;
-                for (Iterator<String> iter = xPaths.iterator(); iter.hasNext();) {
-                    String xPath = iter.next();
+                for (String xPath : xPaths) {
                     if (xPath.equals(line.getLabel())) {
                         if (i < xPaths.size() - 1) {
                             xPaths.remove(i);
@@ -590,6 +600,7 @@ public class AnnotationOrderedListsDialog extends Dialog {
         return composite;
     }
 
+    @Override
     protected void createButtonsForButtonBar(Composite parent) {
         super.createButtonsForButtonBar(parent);
 
@@ -598,9 +609,10 @@ public class AnnotationOrderedListsDialog extends Dialog {
     }
 
     protected XpathSelectDialog getNewXpathSelectDialog(DataModelMainPage parentPage, String dataModelName) {
-        return new XpathSelectDialog(parentPage.getSite().getShell(), xObject.getParent(), Messages.AnnotationOrderedListsDialog_SelectXPathXX,
-                parentPage.getSite(), false, dataModelName);
+        return new XpathSelectDialog(parentPage.getSite().getShell(), xObject.getParent(),
+                Messages.AnnotationOrderedListsDialog_SelectXPathXX, parentPage.getSite(), false, dataModelName);
     }
+
     @Override
     protected void okPressed() {
         setReturnCode(OK);
@@ -643,14 +655,14 @@ public class AnnotationOrderedListsDialog extends Dialog {
     }
 
     public boolean isLock() {
-		return lock;
-	}
+        return lock;
+    }
 
-	public void setLock(boolean lock) {
-		this.lock = lock;
-	}
+    public void setLock(boolean lock) {
+        this.lock = lock;
+    }
 
-	/**************************************************************************************************
+    /**************************************************************************************************
      * A table viewer line
      ***************************************************************************************************/
     class DescriptionLine {
