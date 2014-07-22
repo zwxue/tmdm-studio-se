@@ -102,7 +102,7 @@ public class UpdateAutoIncrementDialog extends Dialog {
     }
 
     private void createTable(Composite mainComp) {
-        int style = SWT.MULTI | SWT.BORDER | SWT.H_SCROLL | SWT.FULL_SELECTION | SWT.HIDE_SELECTION;
+        int style = SWT.MULTI | SWT.BORDER | SWT.H_SCROLL | SWT.FULL_SELECTION;
         resultsViewer = new TableViewer(mainComp, style);
         resultsViewer.getTable().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
         resultsViewer.getTable().setHeaderVisible(true);
