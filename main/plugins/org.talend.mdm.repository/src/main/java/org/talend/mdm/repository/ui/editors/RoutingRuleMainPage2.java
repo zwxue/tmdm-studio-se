@@ -22,6 +22,7 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.talend.core.GlobalServiceRegister;
@@ -242,6 +243,23 @@ public class RoutingRuleMainPage2 extends RoutingRuleMainPage {
             ILegendServerDefService serverDefService = (ILegendServerDefService) GlobalServiceRegister.getDefault().getService(
                     ILegendServerDefService.class);
             return serverDefService.checkServerDefConnection(endpointaddress, username, password, universe);
+        }
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.amalto.workbench.editors.AMainPageV2#markDirtyWithoutCommit()
+     */
+    @Override
+    public void markDirtyWithoutCommit() {
+        IEditorInput editorInput = getEditorInput();
+        boolean isReadOnly = false;
+        if (editorInput instanceof IRepositoryViewEditorInput) {
+            isReadOnly = ((IRepositoryViewEditorInput) editorInput).isReadOnly();
+        }
+        if (!isReadOnly) {
+            super.markDirtyWithoutCommit();
         }
     }
 

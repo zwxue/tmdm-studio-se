@@ -257,12 +257,13 @@ public class OpenObjectAction extends AbstractRepositoryAction implements IIntro
                     }
                     try { // svn lock
                         ERepositoryStatus status = factory.getStatus(item);
-                        if (factory.isEditableAndLockIfPossible(item)) {
+                        boolean isEditable = factory.isEditableAndLockIfPossible(item);
+                        if (isEditable) {
                             getCommonViewer().refresh(viewObject);
                         }
                         //
                         editorInput.setReadOnly(status == ERepositoryStatus.LOCK_BY_OTHER
-                                || status == ERepositoryStatus.READ_ONLY);
+                                || status == ERepositoryStatus.READ_ONLY || !isEditable);
 
                         if (!editorInput.isReadOnly()) {
                             editorInput.setReadOnly(item.getState().isDeleted());
