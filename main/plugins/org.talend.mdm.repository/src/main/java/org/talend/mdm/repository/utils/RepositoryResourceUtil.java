@@ -1057,8 +1057,11 @@ public class RepositoryResourceUtil {
     public static Item getItemFromRepViewObj(Object element) {
         synchronized (element) {
             if (element instanceof IRepositoryViewObject) {
-                Item item = ((IRepositoryViewObject) element).getProperty().getItem();
-                return item;
+                Property property = ((IRepositoryViewObject) element).getProperty();
+                if (property != null) {
+                    Item item = property.getItem();
+                    return item;
+                }
             }
             return null;
         }

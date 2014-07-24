@@ -36,13 +36,14 @@ public class MDMServerDecorator implements ILightweightLabelDecorator {
     public void decorate(Object element, IDecoration decoration) {
         IRepositoryViewObject viewObj = (IRepositoryViewObject) element;
         Item item = RepositoryResourceUtil.getItemFromRepViewObj(viewObj);
-        if (isDeleted(viewObj.getRepositoryObjectType(), item)) {
-            decorateRecycleBin(item, decoration);
-        } else {
-            decorateRepositoryObject(item, decoration);
+        if (item != null) {
+            if (isDeleted(viewObj.getRepositoryObjectType(), item)) {
+                decorateRecycleBin(item, decoration);
+            } else {
+                decorateRepositoryObject(item, decoration);
+            }
+            decorateModifiedObject(viewObj, decoration);
         }
-        decorateModifiedObject(viewObj, decoration);
-
     }
 
     private void decorateModifiedObject(IRepositoryViewObject viewObj, IDecoration decoration) {
@@ -75,15 +76,16 @@ public class MDMServerDecorator implements ILightweightLabelDecorator {
 
     private void decorateRepositoryObject(Item item, IDecoration decoration) {
         if (item != null) {
-            
+
             String version = item.getProperty().getVersion();
-            if(item instanceof WSResourceItem){
-                //resource image show catalog
-                WSResourceItem ritem=(WSResourceItem)item;
-                String imageCatalog=ritem.getResource().getImageCatalog();
-                if(imageCatalog!=null)
+            if (item instanceof WSResourceItem) {
+                // resource image show catalog
+                WSResourceItem ritem = (WSResourceItem) item;
+                String imageCatalog = ritem.getResource().getImageCatalog();
+                if (imageCatalog != null) {
                     decoration.addSuffix(" " + imageCatalog); //$NON-NLS-1$
-            }else if (version != null){
+                }
+            } else if (version != null) {
                 decoration.addSuffix(" " + version); //$NON-NLS-1$
             }
             MDMServerDef serverDef = RepositoryResourceUtil.getLastServerDef(item);

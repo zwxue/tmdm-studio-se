@@ -5,6 +5,7 @@ import java.util.Collection;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 import org.talend.core.model.properties.Item;
+import org.talend.core.model.properties.Property;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.IRepositoryNodeConfiguration;
 import org.talend.mdm.repository.core.IRepositoryNodeContentProvider;
@@ -50,10 +51,13 @@ public class MDMRepositoryContentProvider implements ITreeContentProvider {
 
     private IRepositoryNodeContentProvider getContentProvider(Object element) {
         if (element instanceof IRepositoryViewObject) {
-            Item item = ((IRepositoryViewObject) element).getProperty().getItem();
-            IRepositoryNodeConfiguration conf = RepositoryNodeConfigurationManager.getConfiguration(item);
-            if (conf != null) {
-                return conf.getContentProvider();
+            Property property = ((IRepositoryViewObject) element).getProperty();
+            if (property != null) {
+                Item item = property.getItem();
+                IRepositoryNodeConfiguration conf = RepositoryNodeConfigurationManager.getConfiguration(item);
+                if (conf != null) {
+                    return conf.getContentProvider();
+                }
             }
         }
         return null;
