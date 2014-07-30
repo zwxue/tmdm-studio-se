@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
-      id="org.talend.tom_feature"
+      id="org.talend.tom-feature"
       label="Tom workbench"
       version="1.0.0.qualifier"
       provider-name=".Talend SA.">
@@ -21,7 +21,7 @@
       <import plugin="org.talend.core.runtime"/>
       <import plugin="org.eclipse.wst.xsl.ui" version="1.1.1" match="greaterOrEqual"/>
       <import plugin="org.talend.core.repository" version="1.0.0" match="greaterOrEqual"/>
-      <import plugin="org.talend.commons.runtime" version="2.2.0" match="greaterOrEqual"/>
+      <import plugin="org.talend.commons.runtime" version="1.0.0" match="greaterOrEqual"/>
       <import plugin="org.eclipse.core.runtime" version="3.2.0" match="compatible"/>
       <import plugin="org.eclipse.swt" version="3.5.0" match="compatible"/>
       <import plugin="org.eclipse.jface" version="3.5.0" match="compatible"/>
@@ -338,7 +338,7 @@
       <import plugin="javax.xml.rpc" version="1.1.0" match="compatible"/>
       <import plugin="org.apache.commons.codec" version="1.2.0" match="compatible"/>
       <import plugin="org.apache.xerces" version="2.8.0" match="compatible"/>
-      <import plugin="org.talend.commons"/>
+      <!--<import plugin="org.talend.commons"/>-->
       <import plugin="org.talend.commons.ui"/>
       <import plugin="org.talend.core"/>
       <import plugin="org.talend.designer.core"/>
