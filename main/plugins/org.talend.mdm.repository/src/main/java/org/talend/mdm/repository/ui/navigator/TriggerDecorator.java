@@ -20,7 +20,7 @@ public class TriggerDecorator implements ILightweightLabelDecorator {
     public void decorate(Object element, IDecoration decoration) {
         IRepositoryViewObject viewObj = (IRepositoryViewObject) element;
         Item item = RepositoryResourceUtil.getItemFromRepViewObj(viewObj);
-        if (item instanceof WSRoutingRuleItem) {
+        if (item != null && item instanceof WSRoutingRuleItem) {
             WSRoutingRuleE routing = ((WSRoutingRuleItem) item).getWsRoutingRule();
             if (routing.isDeactive()) {
                 decoration.addOverlay(IMG_TRIGGER_DEACTIVE, IDecoration.BOTTOM_LEFT);

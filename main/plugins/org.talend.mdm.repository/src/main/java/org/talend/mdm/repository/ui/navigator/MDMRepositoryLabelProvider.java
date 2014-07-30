@@ -39,6 +39,7 @@ import org.eclipse.ui.navigator.IDescriptionProvider;
 import org.talend.commons.exception.PersistenceException;
 import org.talend.core.GlobalServiceRegister;
 import org.talend.core.model.properties.Item;
+import org.talend.core.model.properties.Property;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.core.runtime.CoreRuntimePlugin;
 import org.talend.mdm.repository.core.IRepositoryNodeConfiguration;
@@ -111,10 +112,13 @@ public class MDMRepositoryLabelProvider extends ColumnLabelProvider implements I
         if (element instanceof IRepositoryViewObject) {
             IRepositoryViewObject viewObject = (IRepositoryViewObject) element;
             viewObject = RepositoryResourceUtil.assertViewObject(viewObject);
-            Item item = viewObject.getProperty().getItem();
-            IRepositoryNodeConfiguration conf = RepositoryNodeConfigurationManager.getConfiguration(item);
-            if (conf != null) {
-                return conf.getLabelProvider();
+            Property property = viewObject.getProperty();
+            if (property != null) {
+                Item item = property.getItem();
+                IRepositoryNodeConfiguration conf = RepositoryNodeConfigurationManager.getConfiguration(item);
+                if (conf != null) {
+                    return conf.getLabelProvider();
+                }
             }
         }
         return null;
