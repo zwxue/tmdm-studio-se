@@ -108,9 +108,8 @@ public class NewDataModelAction extends AbstractSimpleAddAction implements IIntr
         if (parentItem != null) {
             item.getState().setPath(parentItem.getState().getPath());
             RepositoryResourceUtil.createItem(item, key);
+            createMatchRuleMapInfo(item);
         }
-
-        createMatchRuleMapInfo(item);
 
         if (needCreateDataContainer) {
             createDataContainerObject(key);
