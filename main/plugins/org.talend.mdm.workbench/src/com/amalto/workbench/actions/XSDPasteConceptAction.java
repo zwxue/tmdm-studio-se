@@ -111,7 +111,7 @@ public class XSDPasteConceptAction extends UndoAction {
                                         }
                                         EList<XSDElementDeclaration> list = schema.getElementDeclarations();
                                         for (XSDElementDeclaration d : list) {
-                                            if (d.getName().equals(newText)) {
+                                            if (d.getName().equalsIgnoreCase(newText)) {
                                                 return Messages.XSDPasteConceptAction_EntityAlreadyExists;
                                             }
                                         }

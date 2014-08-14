@@ -177,7 +177,7 @@ public class NewConceptOrElementDialog extends Dialog implements ModifyListener,
             EList list = schema.getElementDeclarations();
             for (Iterator iter = list.iterator(); iter.hasNext();) {
                 XSDElementDeclaration decl = (XSDElementDeclaration) iter.next();
-                if (decl.getName().equals(typeNameText.getText())) {
+                if (decl.getName().equalsIgnoreCase(typeNameText.getText())) {
                     infoLabel.setText(Messages.NewConceptOrElementDialog_ElementEntityAlreadyExists);
                     getButton(IDialogConstants.OK_ID).setEnabled(false);
                     return;
@@ -201,10 +201,11 @@ public class NewConceptOrElementDialog extends Dialog implements ModifyListener,
         infoLabel.setText("");//$NON-NLS-1$
 
         for (XSDTypeDefinition specType : schema.getTypeDefinitions()) {
-            if (forConcept && specType instanceof XSDSimpleTypeDefinition)
+            if (forConcept && specType instanceof XSDSimpleTypeDefinition) {
                 continue;
-            else if (!forConcept && specType instanceof XSDComplexTypeDefinition)
+            } else if (!forConcept && specType instanceof XSDComplexTypeDefinition) {
                 continue;
+            }
 
             String typeToCompare = typeName;
             int delimiter = typeToCompare.indexOf(" : ");//$NON-NLS-1$
