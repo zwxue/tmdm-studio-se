@@ -63,7 +63,7 @@ public class UndeployAction extends AbstractBridgeRepositoryAction {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see org.eclipse.jface.action.Action#getImageDescriptor()
      */
     @Override
@@ -73,7 +73,7 @@ public class UndeployAction extends AbstractBridgeRepositoryAction {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see org.talend.mdm.repository.core.AbstractRepositoryAction#getGroupName()
      */
     @Override
@@ -83,7 +83,7 @@ public class UndeployAction extends AbstractBridgeRepositoryAction {
 
     @Override
     public boolean isVisible(IRepositoryViewObject viewObj) {
-        if (getSelectedObject().size() == 1) {
+        if (getSelectedObject().size() > 0) {
             String path = viewObj.getPath();
             if (path != null && path.equalsIgnoreCase("system")) {//$NON-NLS-1$
                 return false;
@@ -95,7 +95,7 @@ public class UndeployAction extends AbstractBridgeRepositoryAction {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see org.talend.mdm.repository.core.bridge.AbstractBridgeRepositoryAction#doRun()
      */
     @Override
