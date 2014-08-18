@@ -63,12 +63,6 @@ public class Messages extends NLS {
 
     public static String EditAComplexTypeTip;
 
-    public static String EditRecordDialog_atLeastOneRecordNotValid;
-
-    public static String EditRecordDialog_editRecords;
-
-    public static String EditRecordDialog_requiredAtLeastTwoRecords;
-
     public static String EditXObjectAction_ActionTip;
 
     public static String EditXObjectAction_Edit;
@@ -2029,16 +2023,6 @@ public class Messages extends NLS {
 
     public static String SimpleTypeNameCommitHandler_TypeNameCannotContainEmpty;
 
-    public static String SimulateMatchAction_errorToGetRecordContent;
-
-    public static String SimulateMatchAction_errorToMatchRecords;
-
-    public static String SimulateMatchAction_matchSimulation;
-
-    public static String SimulateMatchAction_notBelongToSameEntity;
-
-    public static String SimulateMatchAction_requireAtLeastTwoRecords;
-
     public static String FileSelectWidget_ToolTip;
 
     public static String FilteredCheckboxTree_typeFilterText;
@@ -2830,12 +2814,6 @@ public class Messages extends NLS {
     public static String DOMViewDialog_XMLInvalid;
 
     public static String DOMViewDialog_XMLInvalidInfo;
-
-    public static String MatchResultDialog_detailsColumn;
-
-    public static String MatchResultDialog_groupColumn;
-
-    public static String MatchResultDialog_matchResult;
 
     public static String MenuEntryDialog_Add;
 

@@ -13,10 +13,13 @@
 package org.talend.mdm.repository.core.bridge;
 
 import org.eclipse.swt.graphics.Image;
+import org.talend.core.context.Context;
+import org.talend.core.context.RepositoryContext;
 import org.talend.core.model.properties.Item;
 import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.core.model.repository.RepositoryViewObject;
+import org.talend.core.runtime.CoreRuntimePlugin;
 import org.talend.core.ui.images.CoreImageProvider;
 import org.talend.core.ui.images.OverlayImageProvider;
 import org.talend.mdm.repository.core.impl.AbstractLabelProvider;
@@ -28,15 +31,24 @@ import org.talend.repository.model.ERepositoryStatus;
  */
 public class AbstractBridgeLabelProvider extends AbstractLabelProvider {
 
+    private boolean editableAsReadOnly;
+
+    public AbstractBridgeLabelProvider() {
+        Context ctx = CoreRuntimePlugin.getInstance().getContext();
+        RepositoryContext rc = (RepositoryContext) ctx.getProperty(Context.REPOSITORY_CONTEXT_KEY);
+        this.editableAsReadOnly = rc.isEditableAsReadOnly();
+    }
 
     public String getCategoryLabel(ERepositoryObjectType type) {
         return type.toString();
     }
 
+    @Override
     protected String getServerObjectItemText(Item item) {
         return ""; //$NON-NLS-1$
     }
 
+    @Override
     public Image getCategoryImage(Item item) {
         if (item instanceof ContainerItem) {
             ERepositoryObjectType repObjType = ((ContainerItem) item).getRepObjType();
@@ -45,6 +57,7 @@ public class AbstractBridgeLabelProvider extends AbstractLabelProvider {
         return null;
     }
 
+    @Override
     public Image getImage(Object element) {
         Image img = super.getImage(element);
         if (img == null && element instanceof IRepositoryViewObject) {
@@ -64,6 +77,12 @@ public class AbstractBridgeLabelProvider extends AbstractLabelProvider {
         }
 
         ERepositoryStatus repositoryStatus = object.getRepositoryStatus();
+        // For offline mode,its item is locked by default but need show the default image.
+        if (editableAsReadOnly) {
+            if (repositoryStatus == ERepositoryStatus.LOCK_BY_USER) {
+                repositoryStatus = ERepositoryStatus.DEFAULT;
+            }
+        }
 
         Image image = OverlayImageProvider.getImageWithStatus(img, repositoryStatus);
 

@@ -46,6 +46,7 @@ import org.talend.core.repository.model.ProxyRepositoryFactory;
 import org.talend.core.ui.branding.IBrandingConfiguration;
 import org.talend.mdm.repository.core.IServerObjectRepositoryType;
 import org.talend.mdm.repository.core.service.ContainerCacheService;
+import org.talend.mdm.repository.core.service.IMatchRuleMapInfoService;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
 import org.talend.mdm.repository.model.mdmproperties.MdmpropertiesFactory;
@@ -56,6 +57,7 @@ import org.talend.mdm.repository.models.FolderRepositoryObject;
 import org.talend.mdm.repository.ui.actions.AbstractSimpleAddAction;
 import org.talend.mdm.repository.ui.actions.datacontainer.NewDataContainerAction;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
+import org.talend.mdm.repository.utils.ServiceUtil;
 import org.talend.repository.model.IProxyRepositoryFactory;
 
 /**
@@ -106,11 +108,20 @@ public class NewDataModelAction extends AbstractSimpleAddAction implements IIntr
         if (parentItem != null) {
             item.getState().setPath(parentItem.getState().getPath());
             RepositoryResourceUtil.createItem(item, key);
+            createMatchRuleMapInfo(item);
         }
+
         if (needCreateDataContainer) {
             createDataContainerObject(key);
         }
         return item;
+    }
+
+    private void createMatchRuleMapInfo(WSDataModelItem item) {
+        IMatchRuleMapInfoService mapInfoService = ServiceUtil.getService(IMatchRuleMapInfoService.class);
+        if (mapInfoService != null) {
+            mapInfoService.loadMatchRuleMapInfo(item);
+        }
     }
 
     protected void createDataContainerObject(final String key) {
