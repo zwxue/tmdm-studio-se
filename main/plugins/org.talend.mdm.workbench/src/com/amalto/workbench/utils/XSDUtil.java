@@ -87,11 +87,11 @@ public class XSDUtil {
         if (pattern1.matcher(newText).matches()) {
             return false;
         }
-        Pattern pattern2 = Pattern.compile("(\\.+|\\-+)\\w*"); //$NON-NLS-1$
+        Pattern pattern2 = Pattern.compile("(\\.+|\\-+|/)\\w*"); //$NON-NLS-1$
         if (pattern2.matcher(newText).matches()) {
             return false;
         }
-        Pattern pattern3 = Pattern.compile("\\w*(-|\\.|\\w*)+\\w*"); //$NON-NLS-1$
+        Pattern pattern3 = Pattern.compile("\\w*(-|\\.|\\w*|^/)+\\w*"); //$NON-NLS-1$
         return pattern3.matcher(newText).matches();
     }
 
