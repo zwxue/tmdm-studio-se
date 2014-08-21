@@ -389,7 +389,7 @@ public class SelectImportedModulesDialog extends Dialog {
         }
     }
 
-    private static final String DEFAULT_PROTOCAL = "(http|https|file|ftp):(\\//|\\\\)(.*):(.*)";//$NON-NLS-1$
+    private static final String DEFAULT_PROTOCAL = "[http|https|file|ftp].*+";//$NON-NLS-1$
 
     private Pattern urlPattern = Pattern.compile(DEFAULT_PROTOCAL);
 
