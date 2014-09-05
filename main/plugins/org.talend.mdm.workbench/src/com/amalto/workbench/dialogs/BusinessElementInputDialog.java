@@ -206,6 +206,7 @@ public class BusinessElementInputDialog extends Dialog {
             public void modifyText(ModifyEvent e) {
                 String text = elementNameText.getText().trim();
                 boolean isValid = XSDUtil.isValidatedXSDName(text);
+                isValid = isValid || !refCombo.getText().trim().isEmpty();
                 msgLabel.setText(isValid ? "" : Messages.InvalidName_Message); //$NON-NLS-1$
                 msgLabel.getParent().layout();
                 getButton(IDialogConstants.OK_ID).setEnabled(isValid);

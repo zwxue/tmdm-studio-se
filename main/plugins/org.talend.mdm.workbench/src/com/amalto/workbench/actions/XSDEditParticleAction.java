@@ -80,11 +80,13 @@ public class XSDEditParticleAction extends UndoAction implements SelectionListen
             IStructuredSelection selection = (IStructuredSelection) page.getTreeViewer().getSelection();
 
             String originalXpath = getOriginalXpath();
+            String entity = originalXpath.substring(0, originalXpath.indexOf("/")); //$NON-NLS-1$
 
             selParticle = (XSDParticle) selection.getFirstElement();
 
-            if (!(selParticle.getTerm() instanceof XSDElementDeclaration))
+            if (!(selParticle.getTerm() instanceof XSDElementDeclaration)) {
                 return Status.CANCEL_STATUS;
+            }
 
             XSDElementDeclaration decl = (XSDElementDeclaration) selParticle.getContent();
 
@@ -99,9 +101,14 @@ public class XSDEditParticleAction extends UndoAction implements SelectionListen
             ArrayList<String> elementDeclarations = new ArrayList<String>();
             for (Iterator iter = eDecls.iterator(); iter.hasNext();) {
                 XSDElementDeclaration d = (XSDElementDeclaration) iter.next();
-                if (d.getTargetNamespace() != null && d.getTargetNamespace().equals(IConstants.DEFAULT_NAME_SPACE))
+                if (d.getTargetNamespace() != null && d.getTargetNamespace().equals(IConstants.DEFAULT_NAME_SPACE)) {
                     continue;
-                elementDeclarations.add(d.getQName() + (d.getTargetNamespace() != null ? " : " + d.getTargetNamespace() : "")); //$NON-NLS-1$ //$NON-NLS-2$
+                }
+
+                if (!d.getQName().equals(entity)) {
+                    elementDeclarations
+                            .add(d.getQName() + (d.getTargetNamespace() != null ? " : " + d.getTargetNamespace() : "")); //$NON-NLS-1$ //$NON-NLS-2$
+                }
             }
             elementDeclarations.add(""); //$NON-NLS-1$
 
@@ -150,8 +157,10 @@ public class XSDEditParticleAction extends UndoAction implements SelectionListen
                 decl.setResolvedElementDeclaration(newRef);
                 decl.setTypeDefinition(null);
                 Element elem = decl.getElement();
-                if (elem.getAttributes().getNamedItem("type") != null)//$NON-NLS-1$
+                if (elem.getAttributes().getNamedItem("type") != null)
+                 {
                     elem.getAttributes().removeNamedItem("type");//$NON-NLS-1$
+                }
                 decl.updateElement();
             } else if (ref != null) {
                 // fliu
@@ -185,9 +194,9 @@ public class XSDEditParticleAction extends UndoAction implements SelectionListen
             if (maxOccurs > -1) {
                 selParticle.setMaxOccurs(this.maxOccurs);
             } else {
-                if (selParticle.getElement().getAttributeNode("maxOccurs") != null)//$NON-NLS-1$
+                if (selParticle.getElement().getAttributeNode("maxOccurs") != null) {
                     selParticle.getElement().getAttributeNode("maxOccurs").setNodeValue("unbounded");//$NON-NLS-1$//$NON-NLS-2$
-                else {
+                } else {
                     selParticle.getElement().setAttribute("maxOccurs", "unbounded");//$NON-NLS-1$//$NON-NLS-2$
                 }
             }
@@ -241,7 +250,9 @@ public class XSDEditParticleAction extends UndoAction implements SelectionListen
 
     public void widgetSelected(SelectionEvent e) {
         if (dialog.getReturnCode() == -1)
+         {
             return; // there was a validation error
+        }
         elementName = dialog.getElementName();
         refName = dialog.getRefName();
         minOccurs = dialog.getMinOccurs();
