@@ -16,7 +16,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.dialogs.IDialogConstants;
+import org.talend.commons.utils.VersionUtils;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.service.DeployService;
 import org.talend.mdm.repository.i18n.Messages;
@@ -46,6 +48,8 @@ public class DeployAnotherVersionAction extends AbstractDeployAction {
         if (viewObjs.size() == 0) {
             return;
         }
+
+        String originVersion = viewObjs.get(0).getProperty().getVersion();
         // open the version dialog
         SelectVersionDialog versionDialog = new SelectVersionDialog(getShell(),
                 Messages.DeployAnotherVersionAction_selectAnother, viewObjs.get(0));
@@ -74,9 +78,20 @@ public class DeployAnotherVersionAction extends AbstractDeployAction {
                     if (status.isMultiStatus()) {
                         showDeployStatus(status);
                     }
+
+                    if (isLatestVersion(viewObjs.get(0), originVersion)) {
+                        updateChangedStatus(status);
+                        updateLastServer(status, new NullProgressMonitor());
+                    }
                 }
             }
         }
+    }
+
+    private boolean isLatestVersion(IRepositoryViewObject viewObject, String originalVersion) {
+        String openVersion = viewObject.getProperty().getVersion();
+
+        return VersionUtils.compareTo(openVersion, originalVersion) >= 0;
     }
 
     @Override
