@@ -7,8 +7,8 @@
     <version>5.6-SNAPSHOT</version>
 
     <properties>
-        <cxf.version>2.2.5</cxf.version>
-        <tom.server.location>${basedir}/..</tom.server.location>
+        <cxf.version>2.6.15</cxf.version>
+        <tom.server.location>${basedir}/../../../../tmdm-server-se</tom.server.location>
     </properties>
 
     <build>
