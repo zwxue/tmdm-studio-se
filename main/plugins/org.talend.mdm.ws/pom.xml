@@ -64,6 +64,7 @@
                         <configuration>
                             <sourceRoot>${basedir}/src</sourceRoot>
                             <defaultOptions>
+                                <frontEnd>jaxws21</frontEnd>
                                 <extraargs>
                                     <extraarg>-client</extraarg>
                                     <extraarg>-verbose</extraarg>
