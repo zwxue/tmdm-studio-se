@@ -20,7 +20,7 @@ import javax.xml.bind.annotation.XmlType;
  *         &lt;element name="major" type="{http://www.w3.org/2001/XMLSchema}int"/>
  *         &lt;element name="minor" type="{http://www.w3.org/2001/XMLSchema}int"/>
  *         &lt;element name="revision" type="{http://www.w3.org/2001/XMLSchema}int"/>
- *         &lt;element name="build" type="{http://www.w3.org/2001/XMLSchema}int"/>
+ *         &lt;element name="build" type="{http://www.w3.org/2001/XMLSchema}string"/>
  *         &lt;element name="description" type="{http://www.w3.org/2001/XMLSchema}string"/>
  *         &lt;element name="date" type="{http://www.w3.org/2001/XMLSchema}string"/>
  *       &lt;/sequence>
@@ -45,6 +45,7 @@ public class WSVersion {
     protected int major;
     protected int minor;
     protected int revision;
+    @XmlElement(required = true)
     protected String build;
     @XmlElement(required = true, nillable = true)
     protected String description;
@@ -123,6 +124,10 @@ public class WSVersion {
     /**
      * Gets the value of the build property.
      * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
      */
     public String getBuild() {
         return build;
@@ -131,6 +136,10 @@ public class WSVersion {
     /**
      * Sets the value of the build property.
      * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
      */
     public void setBuild(String value) {
         this.build = value;

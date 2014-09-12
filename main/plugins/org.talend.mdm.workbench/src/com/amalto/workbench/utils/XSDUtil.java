@@ -83,16 +83,9 @@ public class XSDUtil {
     }
 
     public static boolean isValidatedXSDName(String newText) {
-        Pattern pattern1 = Pattern.compile("\\d(\\.|\\-)*\\w*"); //$NON-NLS-1$
-        if (pattern1.matcher(newText).matches()) {
-            return false;
-        }
-        Pattern pattern2 = Pattern.compile("(\\.+|\\-+)\\w*"); //$NON-NLS-1$
-        if (pattern2.matcher(newText).matches()) {
-            return false;
-        }
-        Pattern pattern3 = Pattern.compile("\\w*(-|\\.|\\w*)+\\w*"); //$NON-NLS-1$
-        return pattern3.matcher(newText).matches();
+        Pattern pattern = Pattern.compile("([a-zA-Z][-|\\.|\\w]*\\w)|[a-zA-Z]"); //$NON-NLS-1$
+        boolean result = pattern.matcher(newText).matches();
+        return result;
     }
 
     private static List<String> builtInTypes = null;

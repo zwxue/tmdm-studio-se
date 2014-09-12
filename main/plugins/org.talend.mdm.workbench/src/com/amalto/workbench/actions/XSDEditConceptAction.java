@@ -64,20 +64,23 @@ public class XSDEditConceptAction extends UndoAction {
                     oldName, new IInputValidator() {
 
                         public String isValid(String newText) {
-                            if ((newText == null) || "".equals(newText))//$NON-NLS-1$
+                            if ((newText == null) || "".equals(newText)) {
                                 return Messages.XSDEditConceptAction_NameCannotBeEmpty;
+                            }
 
                             if (Pattern.compile("^\\s+\\w+\\s*").matcher(newText).matches()//$NON-NLS-1$
-                                    || newText.trim().replaceAll("\\s", "").length() != newText.trim().length())//$NON-NLS-1$//$NON-NLS-2$
+                                    || newText.trim().replaceAll("\\s", "").length() != newText.trim().length()) {
                                 return Messages.XSDEditConceptAction_NameCannotContainEmpty;
+                            }
                             if (!XSDUtil.isValidatedXSDName(newText)) {
                                 return Messages.InvalidName_Message;
                             }
                             EList list = schema.getElementDeclarations();
                             for (Iterator iter = list.iterator(); iter.hasNext();) {
                                 XSDElementDeclaration d = (XSDElementDeclaration) iter.next();
-                                if (d.getName().equals(newText.trim()))
+                                if (d.getName().equalsIgnoreCase(newText.trim())) {
                                     return Messages.XSDEditConceptAction_EntityAlreadyExist;
+                                }
                             }
                             return null;
                         };

@@ -31,20 +31,23 @@ public class EditXSDEleDecNameValidator implements IInputValidator {
 
     // @Override
     public String isValid(String newText) {
-        if (newText == null || "".equals(newText.trim()))//$NON-NLS-1$
+        if (newText == null || "".equals(newText.trim())) {
             return Messages.EditXSDEleDecNameValidator_EntityNameCannotbeEmpty;
+        }
 
         if (Pattern.compile("^\\s+\\w+\\s*").matcher(newText).matches()//$NON-NLS-1$
-                || newText.trim().replaceAll("\\s", "").length() != newText.trim().length())//$NON-NLS-1$//$NON-NLS-2$
+                || newText.trim().replaceAll("\\s", "").length() != newText.trim().length()) {
             return Messages.EditXSDEleDecNameValidator_EntityNameCannotContainEmpty;
+        }
 
         if (!XSDUtil.isValidatedXSDName(newText)) {
             return Messages.InvalidName_Message;
         }
 
         for (XSDElementDeclaration eachElement : schema.getElementDeclarations()) {
-            if (eachElement.getName().equals(newText.trim()))
+            if (eachElement.getName().equalsIgnoreCase(newText.trim())) {
                 return Messages.EditXSDEleDecNameValidator_EntityAlreadyExist;
+            }
         }
 
         return null;

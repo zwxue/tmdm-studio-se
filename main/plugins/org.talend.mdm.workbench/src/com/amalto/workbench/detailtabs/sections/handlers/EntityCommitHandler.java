@@ -144,8 +144,9 @@ public class EntityCommitHandler extends CommitHandler<EntityWrapper> {
 
         for (KeyWrapper eachKeyWrapper : getCommitedObj().getKeys()) {
 
-            if (eachKeyWrapper.isUserCreated())
+            if (eachKeyWrapper.isUserCreated()) {
                 continue;
+            }
 
             hasChanges = hasChanges | commitKeyUpdate_Selector(eachKeyWrapper) | commitKeyUpdate_Fields(eachKeyWrapper);
         }
@@ -159,8 +160,9 @@ public class EntityCommitHandler extends CommitHandler<EntityWrapper> {
 
         for (KeyWrapper eachKeyWrapper : getCommitedObj().getKeys()) {
 
-            if (!eachKeyWrapper.isUserCreated())
+            if (!eachKeyWrapper.isUserCreated()) {
                 continue;
+            }
 
             hasChanges = true;
 
@@ -191,8 +193,9 @@ public class EntityCommitHandler extends CommitHandler<EntityWrapper> {
 
     private boolean commitKeyUpdate_Selector(KeyWrapper keyWrapper) {
 
-        if (keyWrapper.getSourceKey().getSelector().getValue().equals(keyWrapper.getSelector()))
+        if (keyWrapper.getSourceKey().getSelector().getValue().equals(keyWrapper.getSelector())) {
             return false;
+        }
 
         XSDXPathDefinition newXpath = XSDSchemaBuildingTools.getXSDFactory().createXSDXPathDefinition();
         newXpath.setValue(keyWrapper.getSelector());
@@ -205,8 +208,9 @@ public class EntityCommitHandler extends CommitHandler<EntityWrapper> {
 
     private boolean commiKeyUpdate_Name(KeyWrapper keyWrapper) {
 
-        if (keyWrapper.getSourceKey().getName().equals(keyWrapper.getName()))
+        if (keyWrapper.getSourceKey().getName().equals(keyWrapper.getName())) {
             return false;
+        }
 
         keyWrapper.getSourceKey().setName(keyWrapper.getName());
         keyWrapper.getSourceKey().updateElement();
@@ -241,11 +245,13 @@ public class EntityCommitHandler extends CommitHandler<EntityWrapper> {
 
         for (FieldWrapper eachField : keyWrapper.getFields()) {
 
-            if (eachField.isUserCreated())
+            if (eachField.isUserCreated()) {
                 continue;
+            }
 
-            if (eachField.getSourceField().getValue().equals(eachField.getXPath()))
+            if (eachField.getSourceField().getValue().equals(eachField.getXPath())) {
                 continue;
+            }
 
             eachField.getSourceField().setValue(eachField.getXPath());
             eachField.getSourceField().updateElement();
@@ -261,8 +267,9 @@ public class EntityCommitHandler extends CommitHandler<EntityWrapper> {
         boolean hasChanges = false;
 
         for (FieldWrapper eachField : keyWrapper.getFields()) {
-            if (!eachField.isUserCreated())
+            if (!eachField.isUserCreated()) {
                 continue;
+            }
 
             XSDXPathDefinition newXpath = XSDSchemaBuildingTools.getXSDFactory().createXSDXPathDefinition();
             newXpath.setValue(eachField.getXPath());
@@ -324,15 +331,17 @@ public class EntityCommitHandler extends CommitHandler<EntityWrapper> {
             throw new CommitValidationException(ERR_ENTITY_NULLENTITYNAME);
         }
 
-        if (getCommitedObj().getName().replaceAll("\\s", "").length() != getCommitedObj().getName().length())//$NON-NLS-1$//$NON-NLS-2$
+        if (getCommitedObj().getName().replaceAll("\\s", "").length() != getCommitedObj().getName().length()) {
             throw new CommitValidationException(ERR_ENTITY_CONTAINEMPTY);
+        }
 
         for (XSDElementDeclaration eachElement : getCommitedObj().getSchema().getElementDeclarations()) {
 
-            if (eachElement.equals(getCommitedObj().getSourceEntity()))
+            if (eachElement.equals(getCommitedObj().getSourceEntity())) {
                 continue;
+            }
 
-            if (eachElement.getName().equals(getCommitedObj().getName())) {
+            if (eachElement.getName().equalsIgnoreCase(getCommitedObj().getName())) {
                 throw new CommitValidationException(ERR_ENTITY_DULPLICATEENTITYNAME + " : " + getCommitedObj().getName());//$NON-NLS-1$
             }
         }
@@ -405,8 +414,9 @@ public class EntityCommitHandler extends CommitHandler<EntityWrapper> {
         for (XSDIdentityConstraintDefinition eachId : getCommitedObj().getSchema().getIdentityConstraintDefinitions()) {
 
             if (eachId.equals(checkedKeyWrapper.getSourceKey())
-                    || eachId.getContainer().equals(getCommitedObj().getSourceEntity()))
+                    || eachId.getContainer().equals(getCommitedObj().getSourceEntity())) {
                 continue;
+            }
 
             if (eachId.getName().equals(checkedKeyWrapper.getName())) {
                 throw new CommitValidationException(ERR_KEY_DUPLICATEKEYNAME + " : " + checkedKeyWrapper.getName());//$NON-NLS-1$
