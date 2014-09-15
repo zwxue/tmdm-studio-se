@@ -278,7 +278,7 @@ public class WSBackgroundJob {
      *     byte[]
      */
     public void setSerializedObject(byte[] value) {
-        this.serializedObject = ((byte[]) value);
+        this.serializedObject = value;
     }
 
 }
