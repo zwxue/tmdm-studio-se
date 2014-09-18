@@ -102,7 +102,7 @@ import com.amalto.workbench.views.MDMPerspective;
 
 /**
  * DOC hbhong class global comment. Detailled comment <br/>
- * 
+ *
  */
 public class MDMRepositoryView extends CommonNavigator implements ITabbedPropertySheetPageContributor {
 
@@ -459,6 +459,7 @@ public class MDMRepositoryView extends CommonNavigator implements ITabbedPropert
                     if (item != null) {
                         try {
                             if (ERepositoryStatus.LOCK_BY_USER != factory.getStatus(item)) {
+                                removeReadOnlyStatus(part);
                                 return;
                             }
                             factory.unlock(item);
@@ -483,6 +484,15 @@ public class MDMRepositoryView extends CommonNavigator implements ITabbedPropert
                             log.error(e.getMessage(), e);
                         }
                     }
+                }
+            }
+        }
+
+        private void removeReadOnlyStatus(IWorkbenchPart part) {
+            if (part != null && part instanceof IEditorPart) {
+                IEditorInput input = ((IEditorPart) part).getEditorInput();
+                if (input != null && input instanceof IRepositoryViewEditorInput) {
+                    ((IRepositoryViewEditorInput) input).setReadOnly(false);
                 }
             }
         }
