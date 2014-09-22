@@ -12,6 +12,10 @@
 // ============================================================================
 package org.talend.mdm.repository.core.service;
 
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+
 /**
  * DOC hbhong class global comment. Detailled comment
  */
@@ -19,12 +23,43 @@ public class ImportService {
 
     private static boolean importing = false;
 
-    public synchronized static boolean isImporting() {
-        return importing;
+    private static Lock lock = new ReentrantLock();
+
+    private static Condition condition = lock.newCondition();
+
+    public static boolean isImporting() {
+        lock.lock();
+
+        try {
+            return importing;
+        } finally {
+            lock.unlock();
+        }
+
     }
 
-    public synchronized static void setImporting(boolean importing) {
-        ImportService.importing = importing;
+    public static void blockUntilFinish() throws InterruptedException {
+        lock.lock();
+
+        try {
+            if (importing) {
+                condition.await();
+            }
+        } finally {
+            lock.unlock();
+        }
+    }
+
+    public static void setImporting(boolean importing) {
+        lock.lock();
+        try {
+            ImportService.importing = importing;
+            if (!importing) {
+                condition.signal();
+            }
+        } finally {
+            lock.unlock();
+        }
     }
 
 }
