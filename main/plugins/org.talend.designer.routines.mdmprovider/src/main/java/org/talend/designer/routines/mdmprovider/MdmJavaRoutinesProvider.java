@@ -14,6 +14,7 @@ package org.talend.designer.routines.mdmprovider;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.core.runtime.FileLocator;
@@ -49,6 +50,6 @@ public class MdmJavaRoutinesProvider implements IRoutinesProvider {
     }
 
     public List<URL> getTalendRoutines() {
-        return FilesUtils.getFilesFromFolder(Activator.getDefault().getBundle(), "resources/java/routines", ".java"); //$NON-NLS-1$ //$NON-NLS-2$
+        return Collections.emptyList();
     }
 }
