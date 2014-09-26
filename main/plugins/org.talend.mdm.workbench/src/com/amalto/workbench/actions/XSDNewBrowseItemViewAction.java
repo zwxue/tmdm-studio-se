@@ -17,7 +17,6 @@ import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.WizardDialog;
@@ -34,7 +33,7 @@ import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.utils.Util;
 
-public class XSDNewBrowseItemViewAction extends Action {
+public class XSDNewBrowseItemViewAction extends AbstractXSDNewAction {
 
     private static Log log = LogFactory.getLog(XSDNewBrowseItemViewAction.class);
 
@@ -52,19 +51,18 @@ public class XSDNewBrowseItemViewAction extends Action {
     }
 
     @Override
-    public void run() {
-		IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow()
-				.getActivePage();
+    public void doRun() {
+        IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
         IEditorPart part = activePage.getActiveEditor();
-		if (part.isDirty()) {
+        if (part.isDirty()) {
             boolean save = MessageDialog.openConfirm(page.getSite().getShell(), Messages.SaveResource,
                     Messages.bind(Messages.modifiedChanges, page.getXObject().getDisplayName()));
-			if (save) {
+            if (save) {
                 activePage.saveEditor(part, false);
-			} else {
-				return;
-			}
-		}
+            } else {
+                return;
+            }
+        }
         IStructuredSelection selection = (IStructuredSelection) page.getTreeViewer().getSelection();
         declList.clear();
         List list = selection.toList();
