@@ -73,7 +73,7 @@ import com.amalto.workbench.webservices.WSDataClusterPK;
 
 /**
  * DOC hbhong class global comment. Detailled comment <br/>
- * 
+ *
  */
 public class OpenObjectAction extends AbstractRepositoryAction implements IIntroAction {
 
@@ -87,7 +87,7 @@ public class OpenObjectAction extends AbstractRepositoryAction implements IIntro
 
     /**
      * DOC hbhong OpenObjectAction constructor comment.
-     * 
+     *
      * @param text
      */
     public OpenObjectAction() {
@@ -239,12 +239,14 @@ public class OpenObjectAction extends AbstractRepositoryAction implements IIntro
                     }
                     try { // svn lock
                         ERepositoryStatus status = factory.getStatus(item);
-                        if (factory.isEditableAndLockIfPossible(item)) {
+                        boolean isEditable = factory.isEditableAndLockIfPossible(item);
+                        if (isEditable) {
+                            getCommonViewer().refresh(viewObject);
                             getCommonViewer().refresh(viewObject);
                         }
                         //
                         editorInput.setReadOnly(status == ERepositoryStatus.LOCK_BY_OTHER
-                                || status == ERepositoryStatus.READ_ONLY);
+                                || status == ERepositoryStatus.READ_ONLY || !isEditable);
 
                         if (!editorInput.isReadOnly()) {
                             editorInput.setReadOnly(item.getState().isDeleted());
@@ -343,7 +345,7 @@ public class OpenObjectAction extends AbstractRepositoryAction implements IIntro
 
     /**
      * return a decrypted server def
-     * 
+     *
      * @param serverObject
      * @return a decrypted server def
      */
