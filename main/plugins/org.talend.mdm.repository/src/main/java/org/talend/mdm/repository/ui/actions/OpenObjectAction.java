@@ -242,7 +242,6 @@ public class OpenObjectAction extends AbstractRepositoryAction implements IIntro
                         boolean isEditable = factory.isEditableAndLockIfPossible(item);
                         if (isEditable) {
                             getCommonViewer().refresh(viewObject);
-                            getCommonViewer().refresh(viewObject);
                         }
                         //
                         editorInput.setReadOnly(status == ERepositoryStatus.LOCK_BY_OTHER
