@@ -216,7 +216,7 @@ public class RepositoryResourceUtil {
             IRepositoryNodeConfiguration configuration = RepositoryNodeConfigurationManager.getConfiguration(item);
             if (configuration != null) {
                 IRepositoryNodeResourceProvider resourceProvider = configuration.getResourceProvider();
-                if (resourceProvider.needSaveReferenceFile() && factory.isEditableAndLockIfPossible(item)) {
+                if (resourceProvider.needSaveReferenceFile()) {
 
                     resourceProvider.handleReferenceFile(item);
                     try {
