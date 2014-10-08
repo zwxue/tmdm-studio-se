@@ -539,22 +539,29 @@
       <column comment="" key="false" name="Size" nullable="true" pattern="" sourceType="" type="id_String" usefulColumn="true"/>
     </metadata>
   </node>
-  <node componentName="tMDMRollback" componentVersion="0.102" offsetLabelX="0" offsetLabelY="0" posX="320" posY="288">
+  <node componentName="tMDMRollback" componentVersion="0.102" offsetLabelX="0" offsetLabelY="0" posX="352" posY="288">
     <elementParameter field="TEXT" name="UNIQUE_NAME" value="tMDMRollback_1"/>
     <elementParameter field="DIRECTORY" name="JAVA_LIBRARY_PATH" value="/Users/pascal/dev/talend/installs/nightlybuilds/TOS_MDM-Studio-20141007_0301-V6.0.0SNAP/configuration/lib/java"/>
     <elementParameter field="COMPONENT_LIST" name="CONNECTION" value="tMDMConnection_1"/>
     <elementParameter field="CHECK" name="CLOSE" value="true"/>
     <elementParameter field="TEXT" name="CONNECTION_FORMAT" value="row"/>
   </node>
-  <node componentName="tMDMCommit" componentVersion="0.102" offsetLabelX="0" offsetLabelY="0" posX="192" posY="672">
+  <node componentName="tMDMCommit" componentVersion="0.102" offsetLabelX="0" offsetLabelY="0" posX="192" posY="288">
     <elementParameter field="TEXT" name="UNIQUE_NAME" value="tMDMCommit_1"/>
+    <elementParameter field="DIRECTORY" name="JAVA_LIBRARY_PATH" value="/Users/pascal/dev/talend/installs/nightlybuilds/TOS_MDM-Studio-20141007_0301-V6.0.0SNAP/configuration/lib/java"/>
+    <elementParameter field="COMPONENT_LIST" name="CONNECTION" value="tMDMConnection_1"/>
+    <elementParameter field="CHECK" name="CLOSE" value="false"/>
+    <elementParameter field="TEXT" name="CONNECTION_FORMAT" value="row"/>
+  </node>
+  <node componentName="tMDMRollback" componentVersion="0.102" offsetLabelX="0" offsetLabelY="0" posX="352" posY="672">
+    <elementParameter field="TEXT" name="UNIQUE_NAME" value="tMDMRollback_2"/>
     <elementParameter field="DIRECTORY" name="JAVA_LIBRARY_PATH" value="/Users/pascal/dev/talend/installs/nightlybuilds/TOS_MDM-Studio-20141007_0301-V6.0.0SNAP/configuration/lib/java"/>
     <elementParameter field="COMPONENT_LIST" name="CONNECTION" value="tMDMConnection_1"/>
     <elementParameter field="CHECK" name="CLOSE" value="true"/>
     <elementParameter field="TEXT" name="CONNECTION_FORMAT" value="row"/>
   </node>
-  <node componentName="tMDMRollback" componentVersion="0.102" offsetLabelX="0" offsetLabelY="0" posX="352" posY="672">
-    <elementParameter field="TEXT" name="UNIQUE_NAME" value="tMDMRollback_2"/>
+  <node componentName="tMDMCommit" componentVersion="0.102" offsetLabelX="0" offsetLabelY="0" posX="192" posY="672">
+    <elementParameter field="TEXT" name="UNIQUE_NAME" value="tMDMCommit_2"/>
     <elementParameter field="DIRECTORY" name="JAVA_LIBRARY_PATH" value="/Users/pascal/dev/talend/installs/nightlybuilds/TOS_MDM-Studio-20141007_0301-V6.0.0SNAP/configuration/lib/java"/>
     <elementParameter field="COMPONENT_LIST" name="CONNECTION" value="tMDMConnection_1"/>
     <elementParameter field="CHECK" name="CLOSE" value="true"/>
@@ -574,11 +581,11 @@
     </elementParameter>
     <elementParameter field="TEXT" name="UNIQUE_NAME" value="row1"/>
   </connection>
-  <connection connectorName="SUBJOB_OK" label="OnSubjobOk" lineStyle="1" metaname="tFixedFlowInput_1" offsetLabelX="0" offsetLabelY="0" source="tFixedFlowInput_1" target="tFixedFlowInput_2">
-    <elementParameter field="TEXT" name="UNIQUE_NAME" value="OnSubjobOk2"/>
-  </connection>
   <connection connectorName="SUBJOB_ERROR" label="OnSubjobError" lineStyle="4" metaname="tFixedFlowInput_1" offsetLabelX="0" offsetLabelY="0" source="tFixedFlowInput_1" target="tMDMRollback_1">
     <elementParameter field="TEXT" name="UNIQUE_NAME" value="OnSubjobError1"/>
+  </connection>
+  <connection connectorName="SUBJOB_OK" label="OnSubjobOk" lineStyle="1" metaname="tFixedFlowInput_1" offsetLabelX="0" offsetLabelY="0" source="tFixedFlowInput_1" target="tMDMCommit_1">
+    <elementParameter field="TEXT" name="UNIQUE_NAME" value="OnSubjobOk2"/>
   </connection>
   <connection connectorName="FLOW" label="row4" lineStyle="8" metaname="tMDMInput_1" offsetLabelX="0" offsetLabelY="0" source="tMDMInput_1" target="tMap_1">
     <elementParameter field="TABLE" name="TRACES_CONNECTION_FILTER">
@@ -624,11 +631,11 @@
     </elementParameter>
     <elementParameter field="TEXT" name="UNIQUE_NAME" value="row3"/>
   </connection>
-  <connection connectorName="SUBJOB_OK" label="OnSubjobOk" lineStyle="1" metaname="tFixedFlowInput_2" offsetLabelX="0" offsetLabelY="0" source="tFixedFlowInput_2" target="tMDMCommit_1">
-    <elementParameter field="TEXT" name="UNIQUE_NAME" value="OnSubjobOk4"/>
-  </connection>
   <connection connectorName="SUBJOB_ERROR" label="OnSubjobError" lineStyle="4" metaname="tFixedFlowInput_2" offsetLabelX="0" offsetLabelY="0" source="tFixedFlowInput_2" target="tMDMRollback_2">
     <elementParameter field="TEXT" name="UNIQUE_NAME" value="OnSubjobError2"/>
+  </connection>
+  <connection connectorName="SUBJOB_OK" label="OnSubjobOk" lineStyle="1" metaname="tFixedFlowInput_2" offsetLabelX="0" offsetLabelY="0" source="tFixedFlowInput_2" target="tMDMCommit_2">
+    <elementParameter field="TEXT" name="UNIQUE_NAME" value="OnSubjobOk5"/>
   </connection>
   <connection connectorName="FLOW" label="row5" lineStyle="8" metaname="tMDMInput_2" offsetLabelX="0" offsetLabelY="0" source="tMDMInput_2" target="tMap_2">
     <elementParameter field="TABLE" name="TRACES_CONNECTION_FILTER">
@@ -663,6 +670,9 @@
     </elementParameter>
     <elementParameter field="TEXT" name="UNIQUE_NAME" value="row6"/>
   </connection>
+  <connection connectorName="SUBJOB_OK" label="OnSubjobOk" lineStyle="1" metaname="tMDMCommit_1" offsetLabelX="0" offsetLabelY="0" source="tMDMCommit_1" target="tFixedFlowInput_2">
+    <elementParameter field="TEXT" name="UNIQUE_NAME" value="OnSubjobOk4"/>
+  </connection>
   <note opaque="false" posX="736" posY="128" sizeHeight="97" sizeWidth="417" text="Tip: Create 1 single XML doc from repeating rows&#xD;&#xA;Group by key (id), loop on repeating element (color)">
     <elementParameter field="TEXT" name="NOTE_FONT" value="Arial"/>
   </note>
@@ -693,6 +703,11 @@
   </subjob>
   <subjob>
     <elementParameter field="TEXT" name="UNIQUE_NAME" value="tMDMRollback_2"/>
+    <elementParameter field="COLOR" name="SUBJOB_TITLE_COLOR" value="160;190;240"/>
+    <elementParameter field="COLOR" name="SUBJOB_COLOR" value="220;220;250"/>
+  </subjob>
+  <subjob>
+    <elementParameter field="TEXT" name="UNIQUE_NAME" value="tMDMCommit_2"/>
     <elementParameter field="COLOR" name="SUBJOB_TITLE_COLOR" value="160;190;240"/>
     <elementParameter field="COLOR" name="SUBJOB_COLOR" value="220;220;250"/>
   </subjob>
