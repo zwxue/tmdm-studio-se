@@ -13,7 +13,6 @@
     <elementParameter field="CHECK" name="IMPLICITCONTEXT_USE_PROJECT_SETTINGS" value="true"/>
     <elementParameter field="CHECK" name="STATANDLOG_USE_PROJECT_SETTINGS" value="false"/>
     <elementParameter field="CHECK" name="MULTI_THREAD_EXECATION" value="false"/>
-    <elementParameter field="TEXT" name="PARALLELIZE_UNIT_SIZE" value="25000"/>
     <elementParameter field="CHECK" name="IMPLICIT_TCONTEXTLOAD" value="false"/>
     <elementParameter field="RADIO" name="FROM_FILE_FLAG_IMPLICIT_CONTEXT" value="false"/>
     <elementParameter field="RADIO" name="FROM_DATABASE_FLAG_IMPLICIT_CONTEXT" value="false"/>
@@ -100,12 +99,12 @@
     <routinesParameter id="_WlB5QBUXEeG3pP_MwoiFtQ" name="MDM"/>
     <routinesParameter id="_WlEVgBUXEeG3pP_MwoiFtQ" name="SQLike"/>
   </parameters>
-  <node componentName="tMDMInput" componentVersion="0.101" offsetLabelX="0" offsetLabelY="0" posX="192" posY="192">
+  <node componentName="tMDMInput" componentVersion="0.101" offsetLabelX="0" offsetLabelY="0" posX="224" posY="192">
     <elementParameter field="TEXT" name="UNIQUE_NAME" value="tMDMInput_2"/>
-    <elementParameter field="DIRECTORY" name="JAVA_LIBRARY_PATH" value="/Users/pascal/dev/talend/installs/nightlybuilds/Talend-Studio-20140917_1931-V5.6.0SNAP/lib/java"/>
+    <elementParameter field="DIRECTORY" name="JAVA_LIBRARY_PATH" value="/Users/pascal/dev/talend/installs/nightlybuilds/TOS_MDM-Studio-20141007_0301-V6.0.0SNAP/configuration/lib/java"/>
     <elementParameter field="COLUMN_LIST" name="XMLFIELD" value="Id"/>
-    <elementParameter field="CHECK" name="USE_EXISTING_CONNECTION" value="false"/>
-    <elementParameter field="COMPONENT_LIST" name="CONNECTION" value=""/>
+    <elementParameter field="CHECK" name="USE_EXISTING_CONNECTION" value="true"/>
+    <elementParameter field="COMPONENT_LIST" name="CONNECTION" value="tMDMConnection_1"/>
     <elementParameter field="TEXT" name="MDMURL" value="&quot;http://&quot; + context.host + &quot;:&quot; + context.port + &quot;/talend/TalendPort&quot;"/>
     <elementParameter field="TEXT" name="USERNAME" value="context.user"/>
     <elementParameter field="PASSWORD" name="PASSWORD" value="4D9onkGJm3elS7/MEZC34fT3q6F0Z4TqEncrypt"/>
@@ -145,9 +144,9 @@
       <column defaultValue="" key="false" length="255" name="errorMessage" nullable="true" precision="0" sourceType="" type="id_String" usefulColumn="true"/>
     </metadata>
   </node>
-  <node componentName="tLogRow" componentVersion="0.101" offsetLabelX="0" offsetLabelY="0" posX="416" posY="192">
+  <node componentName="tLogRow" componentVersion="0.101" offsetLabelX="0" offsetLabelY="0" posX="448" posY="192">
     <elementParameter field="TEXT" name="UNIQUE_NAME" value="tLogRow_1"/>
-    <elementParameter field="DIRECTORY" name="JAVA_LIBRARY_PATH" value="/Users/pascal/dev/talend/installs/nightlybuilds/Talend-Studio-20140917_1931-V5.6.0SNAP/lib/java"/>
+    <elementParameter field="DIRECTORY" name="JAVA_LIBRARY_PATH" value="/Users/pascal/dev/talend/installs/nightlybuilds/TOS_MDM-Studio-20141007_0301-V6.0.0SNAP/configuration/lib/java"/>
     <elementParameter field="RADIO" name="BASIC_MODE" value="false"/>
     <elementParameter field="RADIO" name="TABLE_PRINT" value="true"/>
     <elementParameter field="RADIO" name="VERTICAL" value="false"/>
@@ -173,9 +172,9 @@
       <column comment="" key="false" name="Name" nullable="true" pattern="" sourceType="" type="id_String" usefulColumn="true"/>
     </metadata>
   </node>
-  <node componentName="tMDMDelete" componentVersion="0.101" offsetLabelX="0" offsetLabelY="0" posX="608" posY="192">
+  <node componentName="tMDMDelete" componentVersion="0.101" offsetLabelX="0" offsetLabelY="0" posX="640" posY="192">
     <elementParameter field="TEXT" name="UNIQUE_NAME" value="tMDMDelete_1"/>
-    <elementParameter field="DIRECTORY" name="JAVA_LIBRARY_PATH" value="/Users/pascal/dev/talend/installs/nightlybuilds/Talend-Studio-20140917_1931-V5.6.0SNAP/lib/java"/>
+    <elementParameter field="DIRECTORY" name="JAVA_LIBRARY_PATH" value="/Users/pascal/dev/talend/installs/nightlybuilds/TOS_MDM-Studio-20141007_0301-V6.0.0SNAP/configuration/lib/java"/>
     <elementParameter field="CHECK" name="USE_EXISTING_CONNECTION" value="true"/>
     <elementParameter field="COMPONENT_LIST" name="CONNECTION" value="tMDMConnection_1"/>
     <elementParameter field="TEXT" name="MDMURL" value="&quot;http://&quot; + context.host + &quot;:&quot; + context.port + &quot;/talend/TalendPort&quot;"/>
@@ -198,9 +197,9 @@
     <elementParameter field="TEXT" name="CONNECTION_FORMAT" value="row"/>
     <metadata connector="FLOW" name="tMDMDelete_1"/>
   </node>
-  <node componentName="tMsgBox" componentVersion="0.101" offsetLabelX="0" offsetLabelY="0" posX="32" posY="64">
+  <node componentName="tMsgBox" componentVersion="0.101" offsetLabelX="0" offsetLabelY="0" posX="64" posY="64">
     <elementParameter field="TEXT" name="UNIQUE_NAME" value="tMsgBox_1"/>
-    <elementParameter field="DIRECTORY" name="JAVA_LIBRARY_PATH" value="/Users/pascal/dev/talend/installs/nightlybuilds/Talend-Studio-20140917_1931-V5.6.0SNAP/lib/java"/>
+    <elementParameter field="DIRECTORY" name="JAVA_LIBRARY_PATH" value="/Users/pascal/dev/talend/installs/nightlybuilds/TOS_MDM-Studio-20141007_0301-V6.0.0SNAP/configuration/lib/java"/>
     <elementParameter field="TEXT" name="TITLE" value="&quot;Confirm Delete All&quot;"/>
     <elementParameter field="CLOSED_LIST" name="BUTTONS" value="1"/>
     <elementParameter field="CLOSED_LIST" name="ICON" value="WARNING_MESSAGE"/>
@@ -213,9 +212,9 @@
       <column comment="" key="false" name="newColumn" nullable="true" pattern="" sourceType="" type="id_String" usefulColumn="true"/>
     </metadata>
   </node>
-  <node componentName="tMDMConnection" componentVersion="0.102" offsetLabelX="0" offsetLabelY="0" posX="192" posY="64">
+  <node componentName="tMDMConnection" componentVersion="0.102" offsetLabelX="0" offsetLabelY="0" posX="224" posY="64">
     <elementParameter field="TEXT" name="UNIQUE_NAME" value="tMDMConnection_1"/>
-    <elementParameter field="DIRECTORY" name="JAVA_LIBRARY_PATH" value="/Users/pascal/dev/talend/installs/nightlybuilds/Talend-Studio-20140917_1931-V5.6.0SNAP/lib/java"/>
+    <elementParameter field="DIRECTORY" name="JAVA_LIBRARY_PATH" value="/Users/pascal/dev/talend/installs/nightlybuilds/TOS_MDM-Studio-20141007_0301-V6.0.0SNAP/configuration/lib/java"/>
     <elementParameter field="TEXT" name="MDMURL" value="&quot;http://&quot; + context.host + &quot;:&quot; + context.port + &quot;/talend/TalendPort&quot;"/>
     <elementParameter field="TEXT" name="USER" value="context.user"/>
     <elementParameter field="PASSWORD" name="PASS" value="4D9onkGJm3elS7/MEZC34fT3q6F0Z4TqEncrypt"/>
@@ -223,39 +222,29 @@
     <elementParameter field="CHECK" name="AUTO_COMMIT" value="false"/>
     <elementParameter field="TEXT" name="CONNECTION_FORMAT" value="row"/>
   </node>
-  <node componentName="tMDMCommit" componentVersion="0.102" offsetLabelX="0" offsetLabelY="0" posX="192" posY="320">
+  <node componentName="tMDMCommit" componentVersion="0.102" offsetLabelX="0" offsetLabelY="0" posX="224" posY="320">
     <elementParameter field="TEXT" name="UNIQUE_NAME" value="tMDMCommit_1"/>
-    <elementParameter field="DIRECTORY" name="JAVA_LIBRARY_PATH" value="/Users/pascal/dev/talend/installs/nightlybuilds/Talend-Studio-20140917_1931-V5.6.0SNAP/lib/java"/>
+    <elementParameter field="DIRECTORY" name="JAVA_LIBRARY_PATH" value="/Users/pascal/dev/talend/installs/nightlybuilds/TOS_MDM-Studio-20141007_0301-V6.0.0SNAP/configuration/lib/java"/>
     <elementParameter field="COMPONENT_LIST" name="CONNECTION" value="tMDMConnection_1"/>
     <elementParameter field="CHECK" name="CLOSE" value="true"/>
     <elementParameter field="TEXT" name="CONNECTION_FORMAT" value="row"/>
   </node>
-  <node componentName="tMDMRollback" componentVersion="0.102" offsetLabelX="0" offsetLabelY="0" posX="352" posY="320">
+  <node componentName="tMDMRollback" componentVersion="0.102" offsetLabelX="0" offsetLabelY="0" posX="416" posY="320">
     <elementParameter field="TEXT" name="UNIQUE_NAME" value="tMDMRollback_1"/>
-    <elementParameter field="DIRECTORY" name="JAVA_LIBRARY_PATH" value="/Users/pascal/dev/talend/installs/nightlybuilds/Talend-Studio-20140917_1931-V5.6.0SNAP/lib/java"/>
+    <elementParameter field="DIRECTORY" name="JAVA_LIBRARY_PATH" value="/Users/pascal/dev/talend/installs/nightlybuilds/TOS_MDM-Studio-20141007_0301-V6.0.0SNAP/configuration/lib/java"/>
     <elementParameter field="COMPONENT_LIST" name="CONNECTION" value="tMDMConnection_1"/>
     <elementParameter field="CHECK" name="CLOSE" value="true"/>
     <elementParameter field="TEXT" name="CONNECTION_FORMAT" value="row"/>
   </node>
-  <node componentName="tDie" componentVersion="0.101" offsetLabelX="0" offsetLabelY="0" posX="512" posY="320">
+  <node componentName="tDie" componentVersion="0.101" offsetLabelX="0" offsetLabelY="0" posX="576" posY="320">
     <elementParameter field="TEXT" name="UNIQUE_NAME" value="tDie_1"/>
-    <elementParameter field="DIRECTORY" name="JAVA_LIBRARY_PATH" value="/Users/pascal/dev/talend/installs/nightlybuilds/Talend-Studio-20140917_1931-V5.6.0SNAP/lib/java"/>
-    <elementParameter field="TEXT" name="MESSAGE" value="&quot;Transaction rolled back&quot;"/>
+    <elementParameter field="DIRECTORY" name="JAVA_LIBRARY_PATH" value="/Users/pascal/dev/talend/installs/nightlybuilds/TOS_MDM-Studio-20141007_0301-V6.0.0SNAP/configuration/lib/java"/>
+    <elementParameter field="TEXT" name="MESSAGE" value="&quot;Transaction is rolled back&quot;"/>
     <elementParameter field="TEXT" name="CODE" value="4"/>
     <elementParameter field="CLOSED_LIST" name="PRIORITY" value="5"/>
     <elementParameter field="CHECK" name="EXIT_JVM" value="false"/>
     <elementParameter field="TEXT" name="CONNECTION_FORMAT" value="row"/>
     <metadata connector="FLOW" name="tDie_1"/>
-  </node>
-  <node componentName="tDie" componentVersion="0.101" offsetLabelX="0" offsetLabelY="0" posX="512" posY="448">
-    <elementParameter field="TEXT" name="UNIQUE_NAME" value="tDie_2"/>
-    <elementParameter field="DIRECTORY" name="JAVA_LIBRARY_PATH" value="/Users/pascal/dev/talend/installs/nightlybuilds/Talend-Studio-20140917_1931-V5.6.0SNAP/lib/java"/>
-    <elementParameter field="TEXT" name="MESSAGE" value="&quot;Failed to rollback transaction&quot;"/>
-    <elementParameter field="TEXT" name="CODE" value="4"/>
-    <elementParameter field="CLOSED_LIST" name="PRIORITY" value="5"/>
-    <elementParameter field="CHECK" name="EXIT_JVM" value="false"/>
-    <elementParameter field="TEXT" name="CONNECTION_FORMAT" value="row"/>
-    <metadata connector="FLOW" name="tDie_2"/>
   </node>
   <connection connectorName="FLOW" label="row6" lineStyle="0" metaname="tMDMInput_2" offsetLabelX="0" offsetLabelY="0" source="tMDMInput_2" target="tLogRow_1">
     <elementParameter field="TABLE" name="TRACES_CONNECTION_FILTER">
@@ -268,11 +257,11 @@
     </elementParameter>
     <elementParameter field="TEXT" name="UNIQUE_NAME" value="row6"/>
   </connection>
+  <connection connectorName="SUBJOB_OK" label="OnSubjobOk" lineStyle="1" metaname="tMDMInput_2" offsetLabelX="0" offsetLabelY="0" source="tMDMInput_2" target="tMDMCommit_1">
+    <elementParameter field="TEXT" name="UNIQUE_NAME" value="OnSubjobOk3"/>
+  </connection>
   <connection connectorName="SUBJOB_ERROR" label="OnSubjobError" lineStyle="4" metaname="tMDMInput_2" offsetLabelX="0" offsetLabelY="0" source="tMDMInput_2" target="tMDMRollback_1">
     <elementParameter field="TEXT" name="UNIQUE_NAME" value="OnSubjobError1"/>
-  </connection>
-  <connection connectorName="SUBJOB_OK" label="OnSubjobOk" lineStyle="1" metaname="tMDMInput_2" offsetLabelX="0" offsetLabelY="0" source="tMDMInput_2" target="tMDMCommit_1">
-    <elementParameter field="TEXT" name="UNIQUE_NAME" value="OnSubjobOk2"/>
   </connection>
   <connection connectorName="FLOW" label="row1" lineStyle="0" metaname="tLogRow_1" offsetLabelX="0" offsetLabelY="0" source="tLogRow_1" target="tMDMDelete_1">
     <elementParameter field="TABLE" name="TRACES_CONNECTION_FILTER">
@@ -290,13 +279,10 @@
     <elementParameter field="TEXT" name="UNIQUE_NAME" value="If1"/>
   </connection>
   <connection connectorName="SUBJOB_OK" label="OnSubjobOk" lineStyle="1" metaname="tMDMConnection_1" offsetLabelX="0" offsetLabelY="0" source="tMDMConnection_1" target="tMDMInput_2">
-    <elementParameter field="TEXT" name="UNIQUE_NAME" value="OnSubjobOk1"/>
+    <elementParameter field="TEXT" name="UNIQUE_NAME" value="OnSubjobOk2"/>
   </connection>
   <connection connectorName="SUBJOB_OK" label="OnSubjobOk" lineStyle="1" metaname="tMDMRollback_1" offsetLabelX="0" offsetLabelY="0" source="tMDMRollback_1" target="tDie_1">
-    <elementParameter field="TEXT" name="UNIQUE_NAME" value="OnSubjobOk3"/>
-  </connection>
-  <connection connectorName="SUBJOB_ERROR" label="OnSubjobError" lineStyle="4" metaname="tMDMRollback_1" offsetLabelX="0" offsetLabelY="0" source="tMDMRollback_1" target="tDie_2">
-    <elementParameter field="TEXT" name="UNIQUE_NAME" value="OnSubjobError2"/>
+    <elementParameter field="TEXT" name="UNIQUE_NAME" value="OnSubjobOk1"/>
   </connection>
   <subjob>
     <elementParameter field="TEXT" name="UNIQUE_NAME" value="tMDMInput_2"/>
@@ -325,11 +311,6 @@
   </subjob>
   <subjob>
     <elementParameter field="TEXT" name="UNIQUE_NAME" value="tDie_1"/>
-    <elementParameter field="COLOR" name="SUBJOB_TITLE_COLOR" value="160;190;240"/>
-    <elementParameter field="COLOR" name="SUBJOB_COLOR" value="220;220;250"/>
-  </subjob>
-  <subjob>
-    <elementParameter field="TEXT" name="UNIQUE_NAME" value="tDie_2"/>
     <elementParameter field="COLOR" name="SUBJOB_TITLE_COLOR" value="160;190;240"/>
     <elementParameter field="COLOR" name="SUBJOB_COLOR" value="220;220;250"/>
   </subjob>
