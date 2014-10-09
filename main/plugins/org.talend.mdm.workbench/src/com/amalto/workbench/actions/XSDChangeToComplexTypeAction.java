@@ -13,7 +13,6 @@
 package com.amalto.workbench.actions;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.logging.Log;
@@ -213,8 +212,7 @@ public class XSDChangeToComplexTypeAction extends UndoAction implements Selectio
                 if (typeName.lastIndexOf(" : ") != -1) {//$NON-NLS-1$
                     typeName = typeName.substring(0, typeName.lastIndexOf(" : "));//$NON-NLS-1$
                 }
-                for (Iterator<XSDComplexTypeDefinition> iter = list.iterator(); iter.hasNext();) {
-                    XSDComplexTypeDefinition td = iter.next();
+                for (XSDComplexTypeDefinition td : list) {
                     if ((td.getName().equals(typeName))) {
                         alreadyExists = true;
                         complexType = td;
@@ -247,7 +245,6 @@ public class XSDChangeToComplexTypeAction extends UndoAction implements Selectio
                     }
                 }
 
-
                 if (superType != null) {
                     XSDModelGroup mdlGrp = (XSDModelGroup) partCnt.getTerm();
                     boolean status = updateCompositorType(superType, mdlGrp);
@@ -274,7 +271,15 @@ public class XSDChangeToComplexTypeAction extends UndoAction implements Selectio
 
                 // add an element declaration
                 subElement = factory.createXSDElementDeclaration();
-                subElement.setName("subelement");//$NON-NLS-1$
+                if (declNew != null) {
+                    // crate a new entity
+                    if (declNew.getName() != null) {
+                        subElement.setName(declNew.getName() + "Id");//$NON-NLS-1$
+                    }
+                } else {
+                    // create a complex element
+                    subElement.setName("subelement");//$NON-NLS-1$
+                }
                 subElement.setTypeDefinition(schema.resolveSimpleTypeDefinition(schema.getSchemaForSchemaNamespace(), "string"));//$NON-NLS-1$
 
                 subParticle = factory.createXSDParticle();
@@ -377,8 +382,7 @@ public class XSDChangeToComplexTypeAction extends UndoAction implements Selectio
     private void removeExistUniqueKey(XSDElementDeclaration declaration) {
         List<XSDIdentityConstraintDefinition> keys = new ArrayList<XSDIdentityConstraintDefinition>();
         EList<XSDIdentityConstraintDefinition> list = declaration.getIdentityConstraintDefinitions();
-        for (Iterator<XSDIdentityConstraintDefinition> iter = list.iterator(); iter.hasNext();) {
-            XSDIdentityConstraintDefinition icd = iter.next();
+        for (XSDIdentityConstraintDefinition icd : list) {
             if (icd.getIdentityConstraintCategory().equals(XSDIdentityConstraintCategory.UNIQUE_LITERAL)) {
                 keys.add(icd);
             }
@@ -414,7 +418,7 @@ public class XSDChangeToComplexTypeAction extends UndoAction implements Selectio
 
         if (fields.isEmpty()) {
             XSDElementDeclaration firstElement = getFirstElement((XSDComplexTypeDefinition) complexType.getRootType());
-            if(firstElement != null) {
+            if (firstElement != null) {
                 fields.add(firstElement.getName());
             }
         }
@@ -490,8 +494,7 @@ public class XSDChangeToComplexTypeAction extends UndoAction implements Selectio
                 XSDModelGroup group = (XSDModelGroup) ((XSDParticle) rootType.getContent()).getTerm();
                 EList<XSDParticle> gpl = group.getContents();
                 XSDElementDeclaration firstDecl = null;
-                for (Iterator<XSDParticle> iter = gpl.iterator(); iter.hasNext();) {
-                    XSDParticle part = iter.next();
+                for (XSDParticle part : gpl) {
                     if (part.getTerm() instanceof XSDElementDeclaration) {
                         firstDecl = (XSDElementDeclaration) part.getTerm();
                         return firstDecl;
@@ -525,8 +528,7 @@ public class XSDChangeToComplexTypeAction extends UndoAction implements Selectio
 
     private void checkConcept() {
         EList<XSDIdentityConstraintDefinition> l = decl.getIdentityConstraintDefinitions();
-        for (Iterator<XSDIdentityConstraintDefinition> iter = l.iterator(); iter.hasNext();) {
-            XSDIdentityConstraintDefinition icd = iter.next();
+        for (XSDIdentityConstraintDefinition icd : l) {
             if (icd.getIdentityConstraintCategory().equals(XSDIdentityConstraintCategory.UNIQUE_LITERAL)) {
                 isConcept = true;
                 break;
@@ -565,8 +567,7 @@ public class XSDChangeToComplexTypeAction extends UndoAction implements Selectio
     private boolean validateType() {
         if (!"".equals(typeName)) {//$NON-NLS-1$
             EList<XSDTypeDefinition> list = schema.getTypeDefinitions();
-            for (Iterator<XSDTypeDefinition> iter = list.iterator(); iter.hasNext();) {
-                XSDTypeDefinition td = iter.next();
+            for (XSDTypeDefinition td : list) {
                 if (td.getName().equals(typeName)) {
                     if (td instanceof XSDSimpleTypeDefinition) {
                         MessageDialog.openError(page.getSite().getShell(), Messages._Error,
