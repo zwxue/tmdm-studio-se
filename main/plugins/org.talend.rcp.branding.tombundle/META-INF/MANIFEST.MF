@@ -13,3 +13,4 @@ Require-Bundle: org.eclipse.ui,
  org.talend.core
 Bundle-ActivationPolicy: lazy
 Bundle-Vendor: .Talend SA.
+Eclipse-BundleShape: dir

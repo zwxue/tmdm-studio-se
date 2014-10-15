@@ -6,3 +6,4 @@ Bundle-Version: 5.6.0.qualifier
 Require-Bundle: org.talend.core.runtime
 Bundle-Localization: plugin
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Eclipse-BundleShape: dir

@@ -268,3 +268,4 @@ Export-Package: com.amalto.workbench,
  org.w3c.dom.xpath,
  org.xml.sax,
  org.xml.sax.ext
+Eclipse-BundleShape: dir
