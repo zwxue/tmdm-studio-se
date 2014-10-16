@@ -30,6 +30,7 @@ import org.talend.mdm.repository.core.AbstractRepositoryAction;
 import org.talend.mdm.repository.core.impl.RepositoryNodeActionProviderAdapter;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.ui.actions.trigger.NewTriggerAction;
+import org.talend.mdm.repository.ui.actions.trigger.TestTriggerAction;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 
 /**
@@ -40,6 +41,8 @@ public class RoutingRuleActionProvider extends RepositoryNodeActionProviderAdapt
 
     AbstractRepositoryAction addAction;
 
+    AbstractRepositoryAction testAction;
+
     @Override
     public void initCommonViewer(CommonViewer commonViewer) {
         super.initCommonViewer(commonViewer);
@@ -47,6 +50,9 @@ public class RoutingRuleActionProvider extends RepositoryNodeActionProviderAdapt
         addAction = new NewTriggerAction();
 
         addAction.initCommonViewer(commonViewer);
+
+        testAction = new TestTriggerAction();
+        testAction.initCommonViewer(commonViewer);
     }
 
     @Override
@@ -57,6 +63,10 @@ public class RoutingRuleActionProvider extends RepositoryNodeActionProviderAdapt
             addAction(actions, addAction, viewObj);
         }
         
+        if (RepositoryResourceUtil.hasContainerItem(viewObj, FolderType.SYSTEM_FOLDER_LITERAL)) {
+            addAction(actions, testAction, viewObj);
+        }
+
         if (viewObj.getProperty().getItem() instanceof MDMServerObjectItem) {
             addAction(actions, renameAction, viewObj);
             // deploy
