@@ -74,6 +74,8 @@ public class FireEventComposite extends Composite {
 
             @Override
             public void widgetSelected(SelectionEvent e) {
+                srcText.setText("genericUI"); //$NON-NLS-1$
+
                 boolean isFire = fireEvnBtn.getSelection();
                 if (!isFire) {
                     srcText.setText(""); //$NON-NLS-1$
