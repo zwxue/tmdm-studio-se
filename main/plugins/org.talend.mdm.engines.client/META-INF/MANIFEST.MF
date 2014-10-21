@@ -24,7 +24,6 @@ Require-Bundle: org.apache.commons.httpclient,
  org.talend.designer.runprocess,
  org.talend.designer.core
 Bundle-ActivationPolicy: lazy
-Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-Vendor: .Talend SA.
 Bundle-ClassPath: .
 Export-Package: org.talend.mdm.engines.client,
