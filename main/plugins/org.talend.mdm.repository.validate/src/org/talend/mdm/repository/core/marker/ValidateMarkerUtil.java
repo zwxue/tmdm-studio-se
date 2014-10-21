@@ -17,14 +17,24 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.IViewPart;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.PlatformUI;
 import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.mdm.repository.core.IServerObjectRepositoryType;
+import org.talend.mdm.repository.ui.views.MDMProblemView;
+import org.talend.mdm.repository.utils.UIUtil;
 
 /**
  * created by HHB on 2013-2-28 Detailled comment
  * 
  */
 public class ValidateMarkerUtil implements IValidationMarker {
+
+    static Logger log = Logger.getLogger(ValidateMarkerUtil.class);
 
     private static Map<ERepositoryObjectType, String[]> viewTypeMarkerMap = new HashMap<ERepositoryObjectType, String[]>();
     static {
@@ -57,5 +67,34 @@ public class ValidateMarkerUtil implements IValidationMarker {
             allMarkers = markers.toArray(new String[0]);
         }
         return allMarkers;
+    }
+
+    public static void updateProbleViewTitle() {
+        if (UIUtil.isWorkInUI()) {
+
+            Display.getDefault().asyncExec(new Runnable() {
+
+                @Override
+                public void run() {
+                    IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+                    if (page != null) {
+                        IViewPart view = null;
+                        try {
+                            view = page.findView(MDMProblemView.VIEW_ID);
+                            if (view == null) {
+                                view = page.showView(MDMProblemView.VIEW_ID);
+                            }
+                            if (view != null) {
+                                ((MDMProblemView) view).updateViewTitle();
+                            }
+                        } catch (PartInitException e) {
+                            log.error(e.getMessage(), e);
+                        }
+                    }
+
+                }
+            });
+
+        }
     }
 }

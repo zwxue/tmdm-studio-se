@@ -22,6 +22,9 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.eclipse.core.resources.IMarker;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.ListenerList;
 import org.eclipse.jface.action.IContributionItem;
 import org.eclipse.jface.action.IMenuListener;
@@ -35,6 +38,7 @@ import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredViewer;
 import org.eclipse.jface.viewers.TreeViewer;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IMemento;
@@ -52,12 +56,18 @@ import org.eclipse.ui.menus.IMenuService;
 import org.eclipse.ui.views.markers.MarkerSupportView;
 import org.eclipse.ui.views.markers.internal.ContentGeneratorDescriptor;
 import org.eclipse.ui.views.markers.internal.MarkerGroup;
+import org.talend.commons.exception.PersistenceException;
+import org.talend.core.model.general.Project;
 import org.talend.core.model.repository.IRepositoryViewObject;
+import org.talend.core.repository.model.ResourceModelUtils;
 import org.talend.mdm.repository.core.marker.IValidationMarker;
 import org.talend.mdm.repository.ui.markers.IOpenMarkerHandler;
 import org.talend.mdm.repository.ui.markers.OpenMarkerHandlerRegister;
 import org.talend.mdm.repository.ui.markers.datamodel.ModelNameMarkerGroup;
+import org.talend.mdm.repository.utils.EclipseResourceManager;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
+import org.talend.mdm.repository.validate.plugin.ValidatePlugin;
+import org.talend.repository.ProjectManager;
 
 /**
  * created by HHB on 2013-1-5 Detailled comment
@@ -405,6 +415,41 @@ public class MDMProblemView extends MarkerSupportView implements IValidationMark
         removeGotoCmd();
         addLinkWithEditorSupport(treeViewer);
         addPageAndPartSelectionListener();
+    }
+
+    private static final Image IMG_PROBLEM = EclipseResourceManager.getImage(ValidatePlugin.PLUGIN_ID, "icons/problems_view.gif");
+
+    private static final Image IMG_PROBLEM_ERR = EclipseResourceManager.getImage(ValidatePlugin.PLUGIN_ID,
+            "icons/problems_view_error.gif");
+
+    private static final Image IMG_PROBLEM_WARN = EclipseResourceManager.getImage(ValidatePlugin.PLUGIN_ID,
+            "icons/problems_view_warning.gif");
+
+    private void updateTitleImage(int severity) {
+        switch (severity) {
+        case IMarker.SEVERITY_ERROR:
+            setTitleImage(IMG_PROBLEM_ERR);
+            break;
+        case IMarker.SEVERITY_WARNING:
+            setTitleImage(IMG_PROBLEM_WARN);
+            break;
+        default:
+            setTitleImage(IMG_PROBLEM);
+            break;
+        }
+    }
+
+    public void updateViewTitle() {
+        try {
+            Project project = ProjectManager.getInstance().getCurrentProject();
+            IProject prj = ResourceModelUtils.getProject(project);
+            int severity = prj.findMaxProblemSeverity(IValidationMarker.MARKER_MDM, true, IResource.DEPTH_INFINITE);
+            updateTitleImage(severity);
+        } catch (PersistenceException e) {
+            log.error(e.getMessage(), e);
+        } catch (CoreException e) {
+            log.error(e.getMessage(), e);
+        }
     }
 
     @Override

@@ -43,7 +43,6 @@ import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.IInputValidator;
-import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
@@ -87,6 +86,8 @@ import com.amalto.workbench.dialogs.DOMViewDialog;
 import com.amalto.workbench.dialogs.datacontainer.AutoIncrementHelper;
 import com.amalto.workbench.dialogs.datacontainer.DataContainerDOMViewDialog;
 import com.amalto.workbench.dialogs.datacontainer.UpdateAutoIncrementDialog;
+import com.amalto.workbench.editors.dialog.ConfirmFireEventMessageDialog;
+import com.amalto.workbench.editors.dialog.ConfirmFireEventWithInputDialog;
 import com.amalto.workbench.exadapter.ExAdapterManager;
 import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.image.EImage;
@@ -805,7 +806,8 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                     return;
                 }
 
-                InputDialog id = new InputDialog(this.shell, Messages.DataClusterBrowserMainPage_64, Messages.bind(
+                ConfirmFireEventWithInputDialog id = new ConfirmFireEventWithInputDialog(this.shell,
+                        Messages.DataClusterBrowserMainPage_64, Messages.bind(
                         Messages.DataClusterBrowserMainPage_65, lineItems.size()), Messages.DataClusterBrowserMainPage_67,
                         new IInputValidator() {
 
@@ -825,7 +827,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 
                 // Instantiate the Monitor with actual deletes
                 LogicalDeleteItemsWithProgress diwp = new LogicalDeleteItemsWithProgress(getXObject(), lineItems, id.getValue(),
-                        this.shell);
+                        id.isFireEvent(), id.isInvokeBeforeProcess(), id.getSource(), this.shell);
                 // run
                 new ProgressMonitorDialog(this.shell).run(false, // fork
                         true, // cancelable
@@ -856,11 +858,21 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 
             Shell parentShell;
 
-            public LogicalDeleteItemsWithProgress(TreeObject object, Collection<LineItem> lineItems, String partPath, Shell shell) {
+            private boolean fireEvent;
+
+            private boolean invokeBeforeProcess;
+
+            private String source;
+
+            public LogicalDeleteItemsWithProgress(TreeObject object, Collection<LineItem> lineItems, String partPath,
+                    boolean fireEvent, boolean invokeBeforeProcess, String source, Shell shell) {
                 super();
                 this.xObject = object;
                 this.lineItems = lineItems;
                 this.partPath = partPath;
+                this.fireEvent = fireEvent;
+                this.invokeBeforeProcess = invokeBeforeProcess;
+                this.source = source;
                 this.parentShell = shell;
             }
 
@@ -882,8 +894,12 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                         }
                         WSItemPK itempk = new WSItemPK((WSDataClusterPK) xObject.getWsKey(), lineItem.getConcept(),
                                 Arrays.asList(lineItem.getIds()));
-                        port.deleteItemWithReport(new WSDeleteItemWithReport(itempk,
-                                "genericUI", "LOGIC_DELETE", partPath, getXObject().getUsername(), false, true, false));//$NON-NLS-1$ //$NON-NLS-2$
+                        if (source.isEmpty()) {
+                            source = "genericUI"; //$NON-NLS-1$
+                        }
+
+                        port.deleteItemWithReport(new WSDeleteItemWithReport(itempk, source,
+                                "LOGIC_DELETE", partPath, getXObject().getUsername(), invokeBeforeProcess, fireEvent, false));//$NON-NLS-1$ 
 
                         // port.dropItem(new WSDropItem(new WSItemPK((WSDataClusterPK) xObject.getWsKey(),
                         // lineItem.getConcept(),
@@ -941,13 +957,16 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                     return;
                 }
 
-                if (!MessageDialog.openConfirm(this.shell, Messages.DataClusterBrowserMainPage_64,
-                        Messages.bind(Messages.DataClusterBrowserMainPage_85, lineItems.size()))) {
+                ConfirmFireEventMessageDialog confirmDlg = ConfirmFireEventMessageDialog.createConfirmDialog(shell,
+                        Messages.DataClusterBrowserMainPage_64,
+                        Messages.bind(Messages.DataClusterBrowserMainPage_85, lineItems.size()));
+                if (confirmDlg.open() != Dialog.OK) {
                     return;
                 }
 
                 // Instantiate the Monitor with actual deletes
-                PhysicalDeleteItemsWithProgress diwp = new PhysicalDeleteItemsWithProgress(getXObject(), lineItems, this.shell);
+                PhysicalDeleteItemsWithProgress diwp = new PhysicalDeleteItemsWithProgress(getXObject(), lineItems,
+                        confirmDlg.isFireEvent(), confirmDlg.isInvokeBeforeProcess(), confirmDlg.getSource(), this.shell);
                 // run
                 new ProgressMonitorDialog(this.shell).run(false, // fork
                         true, // cancelable
@@ -976,10 +995,20 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 
             Shell parentShell;
 
-            public PhysicalDeleteItemsWithProgress(TreeObject object, Collection<LineItem> lineItems, Shell shell) {
+            private boolean fireEvent;
+
+            private boolean invokeBeforeProcess;
+
+            private String source;
+
+            public PhysicalDeleteItemsWithProgress(TreeObject object, Collection<LineItem> lineItems, boolean fireEvent,
+                    boolean invokeBeforeProcess, String source, Shell shell) {
                 super();
                 this.xObject = object;
                 this.lineItems = lineItems;
+                this.fireEvent = fireEvent;
+                this.invokeBeforeProcess = invokeBeforeProcess;
+                this.source = source;
                 this.parentShell = shell;
             }
 
@@ -1038,8 +1067,13 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                         }
                         WSItemPK itempk = new WSItemPK((WSDataClusterPK) getXObject().getWsKey(), lineItem.getConcept(),
                                 Arrays.asList(lineItem.getIds()));
-                        port.deleteItemWithReport(new WSDeleteItemWithReport(itempk,
-                                "genericUI", "PHYSICAL_DELETE", null, getXObject().getUsername(), false, true, false));//$NON-NLS-1$ //$NON-NLS-2$
+                        if (source.isEmpty()) {
+                            source = "genericUI"; //$NON-NLS-1$
+                        }
+
+                        port.deleteItemWithReport(new WSDeleteItemWithReport(itempk, source,
+                                "PHYSICAL_DELETE", null, getXObject().getUsername(), invokeBeforeProcess, fireEvent, false));//$NON-NLS-1$ 
+
                         monitor.worked(1);
                     }// for
 

@@ -22,7 +22,6 @@ import org.apache.log4j.Logger;
 import org.talend.core.model.properties.Item;
 import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.core.model.repository.IRepositoryViewObject;
-import org.talend.mdm.commmon.util.core.ICoreConstants;
 import org.talend.mdm.repository.core.IServerObjectRepositoryType;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
@@ -32,6 +31,7 @@ import org.talend.mdm.repository.model.mdmserverobject.WSRoleE;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 
 import com.amalto.workbench.models.TreeObject;
+import com.amalto.workbench.utils.IConstants;
 
 /**
  * DOC hbhong class global comment. Detailled comment
@@ -181,8 +181,8 @@ public class RepositoryQueryService {
                     MDMServerObject sObject = ((MDMServerObjectItem) item).getMDMServerObject();
                     if (sObject instanceof WSCustomFormE) {
                         WSCustomFormE sForm = (WSCustomFormE) sObject;
-                        String name = sForm.getDatamodel() + ICoreConstants.ITEM_PK_SPLIT + sForm.getEntity()
-                                + ICoreConstants.ITEM_PK_SPLIT + sForm.getName();
+                        String name = sForm.getDatamodel() + IConstants.ITEM_PK_SPLIT + sForm.getEntity()
+                                + IConstants.ITEM_PK_SPLIT + sForm.getName();
                         if (name != null) {
                             names.add(name);
                         } else {
