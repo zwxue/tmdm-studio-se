@@ -2029,6 +2029,12 @@ public class Messages extends NLS {
 
     public static String FilterText;
 
+    public static String FireEventComposite_fireEvent;
+
+    public static String FireEventComposite_invokeBeforeDelete;
+
+    public static String FireEventComposite_sourceName;
+
     public static String ExceptionInfo;
 
     public static String ExpandText;
