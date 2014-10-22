@@ -1249,7 +1249,9 @@ public class RepositoryResourceUtil {
         if (typePathMap == null) {
             typePathMap = new HashMap<String, ERepositoryObjectType>();
             for (ERepositoryObjectType type : IServerObjectRepositoryType.ALL_TYPES) {
-                typePathMap.put(type.getFolder(), type);
+                if (type != null) {
+                    typePathMap.put(type.getFolder(), type);
+                }
             }
         }
         return typePathMap.get(path);
