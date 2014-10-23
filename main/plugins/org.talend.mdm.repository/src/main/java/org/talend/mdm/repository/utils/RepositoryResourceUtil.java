@@ -78,6 +78,7 @@ import org.talend.core.repository.model.ProxyRepositoryFactory;
 import org.talend.core.repository.model.ResourceModelUtils;
 import org.talend.core.repository.utils.ResourceFilenameHelper;
 import org.talend.core.runtime.CoreRuntimePlugin;
+import org.talend.dataquality.properties.TDQMatchRuleItem;
 import org.talend.designer.core.ui.editor.ProcessEditorInput;
 import org.talend.mdm.repository.core.IRepositoryNodeConfiguration;
 import org.talend.mdm.repository.core.IRepositoryNodeResourceProvider;
@@ -370,7 +371,11 @@ public class RepositoryResourceUtil {
 
     public static IFile getItemFile(IRepositoryViewObject viewObj) {
         Item item = viewObj.getProperty().getItem();
-        return findReferenceFile(viewObj.getRepositoryObjectType(), item, "item"); //$NON-NLS-1$
+        String extName = "item";//$NON-NLS-1$
+        if (item instanceof TDQMatchRuleItem) {
+            extName = "rules"; //$NON-NLS-1$
+        }
+        return findReferenceFile(viewObj.getRepositoryObjectType(), item, extName);
     }
 
     public static IFile findReferenceFile(ERepositoryObjectType type, Item item, String fileExtension) {
