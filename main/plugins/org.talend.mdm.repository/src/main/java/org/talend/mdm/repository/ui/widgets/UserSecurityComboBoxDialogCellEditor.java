@@ -41,7 +41,7 @@ import org.talend.mdm.repository.ui.navigator.MDMRepositoryView;
 import org.talend.mdm.workbench.serverexplorer.core.ServerDefService;
 import org.talend.mdm.workbench.serverexplorer.ui.dialogs.SelectServerDefDialog;
 
-import com.amalto.workbench.utils.Util;
+import com.amalto.workbench.exadapter.ExAdapterManager;
 import com.amalto.workbench.utils.XtentisException;
 import com.amalto.workbench.webservices.WSDataModel;
 import com.amalto.workbench.webservices.WSDataModelPK;
@@ -58,31 +58,25 @@ public class UserSecurityComboBoxDialogCellEditor extends EditableComboBoxDialog
 
     private static final List<String> SPECIAL_FIELDS = Arrays.asList("roles", "applications", "properties"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
-    private static String user_var = "${user_context}..."; //$NON-NLS-1$
-
     private IWorkbenchPartSite site;
 
     private String dataModelName = "PROVISIONING"; //$NON-NLS-1$
 
     private String conceptName = "User"; //$NON-NLS-1$
 
+    private IUserSecurityComboBoxDialogCellEditorExAdapter cellEditorAdapter;
+
     public UserSecurityComboBoxDialogCellEditor(Composite parent, IWorkbenchPartSite site) {
         super(parent, new String[0]);
         this.site = site;
-    }
-
-    @Override
-    protected Control createControl(Composite parent) {
-        Control control = super.createControl(parent);
         init();
-        return control;
     }
 
     private void init() {
-        if (Util.IsEnterPrise()) {
-            setItems(new String[] { user_var });
+        cellEditorAdapter = ExAdapterManager.getAdapter(this, IUserSecurityComboBoxDialogCellEditorExAdapter.class);
+        if (cellEditorAdapter != null) {
+            cellEditorAdapter.init(this);
         }
-
         getButton().setToolTipText(Messages.UserSecurityComboBoxDialogCellEditor_SelectXpath);
         getButton().setText("..."); //$NON-NLS-1$
     }
