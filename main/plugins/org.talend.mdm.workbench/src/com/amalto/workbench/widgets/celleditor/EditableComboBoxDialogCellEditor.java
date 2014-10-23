@@ -25,6 +25,8 @@ import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.MouseAdapter;
+import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
@@ -38,6 +40,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Layout;
+import org.eclipse.swt.widgets.Table;
 
 public abstract class EditableComboBoxDialogCellEditor extends CellEditor {
 
@@ -151,11 +154,23 @@ public abstract class EditableComboBoxDialogCellEditor extends CellEditor {
                     } else {
                         setErrorMessage(MessageFormat.format(getErrorMessage(), new Object[] { newValue.toString() }));
                     }
-                    fireApplyEditorValue();
                 }
             }
         });
 
+        if (parent instanceof Table) {
+
+            ((Table) parent).addMouseListener(new MouseAdapter() {
+
+                @Override
+                public void mouseUp(MouseEvent e) {
+                    if (!isMouseInControl(e)) {
+                        focusLost();
+                    }
+                }
+
+            });
+        }
         setValueValid(true);
 
         return editor;
@@ -240,6 +255,15 @@ public abstract class EditableComboBoxDialogCellEditor extends CellEditor {
         };
     }
 
+    private boolean isMouseInControl(MouseEvent e) {
+        if (e.widget instanceof Table) {
+            if (editor.getBounds().contains(e.x, e.y)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     @Override
     public void deactivate() {
         if (button != null && !button.isDisposed()) {
@@ -292,11 +316,6 @@ public abstract class EditableComboBoxDialogCellEditor extends CellEditor {
         deactivate();
     }
 
-    /**//*
-          * (non-Javadoc)
-          *
-          * @see org.eclipse.jface.viewers.CellEditor#focusLost()
-          */
     @Override
     protected void focusLost() {
         if (isActivated()) {
@@ -304,11 +323,6 @@ public abstract class EditableComboBoxDialogCellEditor extends CellEditor {
         }
     }
 
-    /**//*
-          * (non-Javadoc)
-          *
-          * @see org.eclipse.jface.viewers.CellEditor#keyReleaseOccured(org.eclipse.swt.events.KeyEvent)
-          */
     @Override
     protected void keyReleaseOccured(KeyEvent keyEvent) {
         if (keyEvent.character == '\r') { // Return key
