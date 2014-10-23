@@ -14,6 +14,7 @@ package org.talend.mdm.repository.ui.actions.job;
 
 import org.apache.log4j.Logger;
 import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.ui.IEditorPart;
 import org.talend.commons.ui.runtime.image.ECoreImage;
 import org.talend.commons.ui.runtime.image.ImageProvider;
 import org.talend.core.GlobalServiceRegister;
@@ -33,6 +34,7 @@ import org.talend.mdm.repository.ui.dialogs.job.JobOptionsDialog;
 import org.talend.mdm.repository.ui.dialogs.job.JobOptionsDialog.Execution;
 import org.talend.mdm.repository.ui.dialogs.job.JobOptionsDialog.Parameter;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
+import org.talend.mdm.repository.utils.UIUtil;
 
 import com.amalto.workbench.service.IValidateService;
 
@@ -94,6 +96,16 @@ public class GenerateJobTriggerAction extends AbstractRepositoryAction {
         }
         //
         WSRoutingRuleE routingRule = createTrigger(jobName, jobVersion, dialog);
+        // if the new objectect is opened ,than close it before regenerating
+        IRepositoryViewObject toDelete = RepositoryResourceUtil.findViewObjectByName(
+                IServerObjectRepositoryType.TYPE_ROUTINGRULE, PREFIX + jobName);
+        if (toDelete != null) {
+            IEditorPart openedEditor = UIUtil.findOpenedEditor(toDelete);
+            if (openedEditor != null) {
+                UIUtil.closeEditor(openedEditor, false);
+            }
+        }
+        // delete directly
         RepositoryResourceUtil.removeViewObjectPhysically(IServerObjectRepositoryType.TYPE_ROUTINGRULE, PREFIX + jobName,
                 jobVersion, null);
         AttachToTriggerView(jobName, routingRule);
