@@ -41,6 +41,7 @@ import org.talend.mdm.repository.ui.navigator.MDMRepositoryView;
 import org.talend.mdm.workbench.serverexplorer.core.ServerDefService;
 import org.talend.mdm.workbench.serverexplorer.ui.dialogs.SelectServerDefDialog;
 
+import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.XtentisException;
 import com.amalto.workbench.webservices.WSDataModel;
 import com.amalto.workbench.webservices.WSDataModelPK;
@@ -66,7 +67,7 @@ public class UserSecurityComboBoxDialogCellEditor extends EditableComboBoxDialog
     private String conceptName = "User"; //$NON-NLS-1$
 
     public UserSecurityComboBoxDialogCellEditor(Composite parent, IWorkbenchPartSite site) {
-        super(parent, new String[] { user_var });
+        super(parent, new String[0]);
         this.site = site;
     }
 
@@ -78,6 +79,10 @@ public class UserSecurityComboBoxDialogCellEditor extends EditableComboBoxDialog
     }
 
     private void init() {
+        if (Util.IsEnterPrise()) {
+            setItems(new String[] { user_var });
+        }
+
         getButton().setToolTipText(Messages.UserSecurityComboBoxDialogCellEditor_SelectXpath);
         getButton().setText("..."); //$NON-NLS-1$
     }
