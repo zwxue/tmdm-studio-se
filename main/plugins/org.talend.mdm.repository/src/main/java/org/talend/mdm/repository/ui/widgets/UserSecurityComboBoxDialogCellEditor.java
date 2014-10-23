@@ -55,7 +55,7 @@ public class UserSecurityComboBoxDialogCellEditor extends EditableComboBoxDialog
 
     private static Logger log = Logger.getLogger(UserSecurityComboBoxDialogCellEditor.class);
 
-    private static final List<String> SPECIAL_FIELDS = Arrays.asList("roles", "applications", "properties");        //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+    private static final List<String> SPECIAL_FIELDS = Arrays.asList("roles", "applications", "properties"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
     private static String user_var = "${user_context}..."; //$NON-NLS-1$
 
@@ -190,18 +190,7 @@ public class UserSecurityComboBoxDialogCellEditor extends EditableComboBoxDialog
 
             @Override
             public void focusLost(FocusEvent e) {
-                boolean isComboSelected = false;
-                CCombo comboBox = getComboBox();
-                int selectionIndex = comboBox.getSelectionIndex();
-                if (selectionIndex != -1 && selectionIndex < comboBox.getItemCount()) {
-                    if (comboBox.getItem(selectionIndex).equals(user_var)) {
-                        isComboSelected = true;
-                    }
-                }
-
-                if (!getButton().isFocusControl() && !isComboSelected) {
-                    UserSecurityComboBoxDialogCellEditor.this.focusLost();
-                }
+                // empty
             }
         };
     }
