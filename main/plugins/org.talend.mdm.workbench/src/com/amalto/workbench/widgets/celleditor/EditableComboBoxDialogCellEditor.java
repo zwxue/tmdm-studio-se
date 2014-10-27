@@ -25,8 +25,6 @@ import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
-import org.eclipse.swt.events.MouseAdapter;
-import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
@@ -40,7 +38,6 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Layout;
-import org.eclipse.swt.widgets.Table;
 
 public abstract class EditableComboBoxDialogCellEditor extends CellEditor {
 
@@ -94,6 +91,8 @@ public abstract class EditableComboBoxDialogCellEditor extends CellEditor {
     // Combo default style
     private static final int defaultStyle = SWT.NONE;
 
+    private FocusAdapter comboFocusListener;
+
     public EditableComboBoxDialogCellEditor() {
         setStyle(defaultStyle);
     }
@@ -144,8 +143,11 @@ public abstract class EditableComboBoxDialogCellEditor extends CellEditor {
             @Override
             public void widgetSelected(SelectionEvent event) {
                 button.removeFocusListener(getButtonFocusListener());
+                comboBox.removeFocusListener(getComboFocusListener());
                 Object newValue = openDialogBox(editor);
                 button.addFocusListener(getButtonFocusListener());
+                comboBox.addFocusListener(getComboFocusListener());
+
                 if (newValue != null) {
                     boolean newValidState = isCorrect(newValue);
                     if (newValidState) {
@@ -155,22 +157,10 @@ public abstract class EditableComboBoxDialogCellEditor extends CellEditor {
                         setErrorMessage(MessageFormat.format(getErrorMessage(), new Object[] { newValue.toString() }));
                     }
                 }
+                focusLost();
             }
         });
 
-        if (parent instanceof Table) {
-
-            ((Table) parent).addMouseListener(new MouseAdapter() {
-
-                @Override
-                public void mouseUp(MouseEvent e) {
-                    if (!isMouseInControl(e)) {
-                        focusLost();
-                    }
-                }
-
-            });
-        }
         setValueValid(true);
 
         return editor;
@@ -244,33 +234,18 @@ public abstract class EditableComboBoxDialogCellEditor extends CellEditor {
     }
 
     protected FocusListener getComboFocusListener() {
-        return new FocusAdapter() {
+        if (comboFocusListener == null) {
+            this.comboFocusListener = new FocusAdapter() {
 
-            @Override
-            public void focusLost(FocusEvent e) {
-                if (!button.isFocusControl()) {
-                    EditableComboBoxDialogCellEditor.this.focusLost();
+                @Override
+                public void focusLost(FocusEvent e) {
+                    if ((!comboBox.isFocusControl()) && !button.isFocusControl()) {
+                        EditableComboBoxDialogCellEditor.this.focusLost();
+                    }
                 }
-            }
-        };
-    }
-
-    private boolean isMouseInControl(MouseEvent e) {
-        if (e.widget instanceof Table) {
-            if (editor.getBounds().contains(e.x, e.y)) {
-                return true;
-            }
+            };
         }
-        return false;
-    }
-
-    @Override
-    public void deactivate() {
-        if (button != null && !button.isDisposed()) {
-            button.removeFocusListener(getButtonFocusListener());
-        }
-
-        super.deactivate();
+        return comboFocusListener;
     }
 
     @Override
@@ -351,17 +326,15 @@ public abstract class EditableComboBoxDialogCellEditor extends CellEditor {
 
     private FocusListener getButtonFocusListener() {
         if (buttonFocusListener == null) {
-            buttonFocusListener = new FocusListener() {
+            buttonFocusListener = new FocusAdapter() {
 
-                public void focusGained(FocusEvent e) {
-                };
-
+                @Override
                 public void focusLost(FocusEvent e) {
                     EditableComboBoxDialogCellEditor.this.focusLost();
                 }
             };
         }
-        ;
+
         return buttonFocusListener;
     }
 
