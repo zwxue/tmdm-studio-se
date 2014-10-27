@@ -222,7 +222,7 @@ public class RepositoryQueryService {
                 Item item = viewObj.getProperty().getItem();
                 if (item instanceof MDMServerObjectItem) {
                     MDMServerObject serverObject = ((MDMServerObjectItem) item).getMDMServerObject();
-                    if (name != null && name.equals(serverObject.getUniqueName())) {
+                    if (name != null && name.equals(serverObject.getName())) {
                         return (MDMServerObjectItem) item;
                     }
                 }
