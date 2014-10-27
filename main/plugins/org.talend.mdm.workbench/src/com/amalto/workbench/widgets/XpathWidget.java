@@ -14,10 +14,13 @@ package com.amalto.workbench.widgets;
 
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.events.TraverseEvent;
+import org.eclipse.swt.events.TraverseListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -58,7 +61,7 @@ public class XpathWidget implements SelectionListener {
     protected IWorkbenchPartSite site;
 
     protected String dataModelName;
-    
+
     protected boolean lock;
 
     protected boolean isMulti = true;
@@ -68,14 +71,14 @@ public class XpathWidget implements SelectionListener {
     private String context;
 
     public boolean isLock() {
-		return lock;
-	}
+        return lock;
+    }
 
-	public void setLock(boolean lock) {
-		this.lock = lock;
-	}
+    public void setLock(boolean lock) {
+        this.lock = lock;
+    }
 
-	public String getContext() {
+    public String getContext() {
         return context;
     }
 
@@ -89,8 +92,9 @@ public class XpathWidget implements SelectionListener {
 
     public void setConceptName(String conceptName) {
         this.conceptName = conceptName;
-        if (dlg != null)
+        if (dlg != null) {
             dlg.setConceptName(conceptName);
+        }
     }
 
     public String getDataModelName() {
@@ -122,8 +126,9 @@ public class XpathWidget implements SelectionListener {
 
         this.parent = parent;
         this.treeParent = treeParent;
-        if (toolkit == null)
+        if (toolkit == null) {
             toolkit = new FormToolkit(parent.getDisplay());
+        }
 
         xpathAntionHolder = toolkit.createComposite(parent, SWT.NO_FOCUS);
         xpathAntionHolder.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
@@ -142,8 +147,9 @@ public class XpathWidget implements SelectionListener {
             public void modifyText(ModifyEvent e) {
                 if (descriptionValue != null && !descriptionValue.equals(descriptionText.getText())) {
                     // accommodation.markDirty();
-                    if (accommodation != null)
+                    if (accommodation != null) {
                         accommodation.markDirtyWithoutCommit();
+                    }
                 }
                 descriptionValue = descriptionText.getText();
             }
@@ -172,6 +178,14 @@ public class XpathWidget implements SelectionListener {
             annotationButton.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
             annotationButton.addSelectionListener(this);
         }
+        descriptionText.addTraverseListener(new TraverseListener() {
+
+            public void keyTraversed(TraverseEvent e) {
+                if (e.detail == SWT.TRAVERSE_ESCAPE || e.detail == SWT.TRAVERSE_RETURN) {
+                    e.doit = false;
+                }
+            }
+        });
         annotationButton.setImage(ImageCache.getCreatedImage(EImage.DOTS_BUTTON.getPath()));
         annotationButton.setToolTipText(Messages.XpathWidget_DialogTitle);
 
@@ -179,8 +193,26 @@ public class XpathWidget implements SelectionListener {
 
     protected XpathSelectDialog dlg;
 
+    private FocusListener focusListener;
+
+    private FocusListener bunFocusListener;
+
     public void widgetDefaultSelected(SelectionEvent e) {
 
+    }
+
+    protected void disableFocusListener() {
+        if (bunFocusListener != null) {
+            annotationButton.removeFocusListener(bunFocusListener);
+            descriptionText.removeFocusListener(bunFocusListener);
+        }
+    }
+
+    protected void enableFocusListener() {
+        if (bunFocusListener != null) {
+            annotationButton.addFocusListener(bunFocusListener);
+            descriptionText.addFocusListener(bunFocusListener);
+        }
     }
 
     public void widgetSelected(SelectionEvent e) {
@@ -201,13 +233,16 @@ public class XpathWidget implements SelectionListener {
         }
         dlg.setLock(lock);
         dlg.setBlockOnOpen(true);
+        disableFocusListener();
         dlg.open();
-
+        enableFocusListener();
         if (dlg.getReturnCode() == Window.OK) {
             descriptionText.setText(dlg.getXpath());
             dataModelName = dlg.getDataModelName();
             dlg.close();
             setOutFocus();
+        } else {
+            lostFocus();
         }
     }
 
@@ -237,13 +272,39 @@ public class XpathWidget implements SelectionListener {
         return descriptionText;
     }
 
+    public Button getButton() {
+        return annotationButton;
+    }
+
+    public void addButtonFocusListener(FocusListener bunFocusListener) {
+        this.bunFocusListener = bunFocusListener;
+        enableFocusListener();
+    }
+
     public void setOutFocus() {
         descriptionText.setFocus();
         descriptionText.setText(descriptionText.getText().trim());
         int start = descriptionText.getText().length();
         // int end = descriptionText.getSelection().y;
         descriptionText.setSelection(start);
+        if (focusListener != null) {
+            focusListener.focusLost(null);
+        }
 
     }
 
+    public void lostFocus() {
+        if (focusListener != null) {
+            focusListener.focusLost(null);
+        }
+    }
+
+    /**
+     * only need implement focusLost method
+     * 
+     * @param focusListener
+     */
+    public void setAfterFocusAction(FocusListener focusListener) {
+        this.focusListener = focusListener;
+    }
 }

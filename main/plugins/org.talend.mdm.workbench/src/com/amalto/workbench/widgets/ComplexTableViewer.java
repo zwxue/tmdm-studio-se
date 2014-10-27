@@ -14,7 +14,6 @@ package com.amalto.workbench.widgets;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.core.runtime.IAdaptable;
@@ -116,17 +115,16 @@ public class ComplexTableViewer {
     protected boolean context;
 
     protected boolean modelLock;
-    
-    
+
     public boolean isModelLock() {
-		return modelLock;
-	}
+        return modelLock;
+    }
 
-	public void setModelLock(boolean modelLock) {
-		this.modelLock = modelLock;
-	}
+    public void setModelLock(boolean modelLock) {
+        this.modelLock = modelLock;
+    }
 
-	public boolean isContext() {
+    public boolean isContext() {
         return context;
     }
 
@@ -143,8 +141,9 @@ public class ComplexTableViewer {
     }
 
     protected TreeParent getCurrentTreeParent() {
-        if (treeParent != null)
+        if (treeParent != null) {
             return treeParent;
+        }
         if (mainPage != null) {
             return (TreeParent) ((IAdaptable) mainPage).getAdapter(TreeParent.class);
         }
@@ -171,8 +170,9 @@ public class ComplexTableViewer {
         for (XpathWidget xpath : xpaths) {
             xpath.setConceptName(conceptName);
         }
-        if (xpathDialog != null)
+        if (xpathDialog != null) {
             xpathDialog.setConceptName(conceptName);
+        }
     }
 
     public String getDatamodelName() {
@@ -181,8 +181,9 @@ public class ComplexTableViewer {
 
     public void setDatamodelName(String datamodelName) {
         this.datamodelName = datamodelName;
-        if (xpathDialog != null)
+        if (xpathDialog != null) {
             xpathDialog.dataModelName = datamodelName;
+        }
     }
 
     public AMainPageV2 getMainPage() {
@@ -230,8 +231,8 @@ public class ComplexTableViewer {
     }
 
     public ComplexTableViewerColumn getColumn(ComplexTableViewerColumn compareComplexTableViewerColumn) {
-        for (Iterator iterator = columns.iterator(); iterator.hasNext();) {
-            ComplexTableViewerColumn complexTableViewerColumn = (ComplexTableViewerColumn) iterator.next();
+        for (Object element : columns) {
+            ComplexTableViewerColumn complexTableViewerColumn = (ComplexTableViewerColumn) element;
             if (complexTableViewerColumn.equals(compareComplexTableViewerColumn)) {
                 return complexTableViewerColumn;
             }
@@ -312,13 +313,13 @@ public class ComplexTableViewer {
 
     protected void createTexts() {
 
-        for (Iterator<ComplexTableViewerColumn> iterator = columns.iterator(); iterator.hasNext();) {
-            ComplexTableViewerColumn column = iterator.next();
+        for (ComplexTableViewerColumn column : columns) {
             if (column.isCombo()) {
                 CCombo combo = new CCombo(mainComposite, SWT.BORDER | SWT.READ_ONLY);
                 GridData gd = new GridData(SWT.NONE, SWT.TOP, false, false, 1, 1);
-                if (column.getColumnWidth() > 0)
+                if (column.getColumnWidth() > 0) {
                     gd.widthHint = column.getColumnWidth();
+                }
                 combo.setLayoutData(gd);
                 combo.setItems(column.getComboValues());
                 if (column.getDefaultValue() == null || column.getDefaultValue().length() == 0) {
@@ -346,8 +347,9 @@ public class ComplexTableViewer {
         }
         text = toolkit.createText(parent, column.getDefaultValue(), style);
         GridData gdata = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
-        if (column.getTextLines() > 1)
+        if (column.getTextLines() > 1) {
             gdata.heightHint = text.getLineHeight() * column.getTextLines();
+        }
         text.setLayoutData(gdata);
         column.setControl(text);
         text.addFocusListener(new FocusAdapter() {
@@ -375,8 +377,7 @@ public class ComplexTableViewer {
                 String uniqueVal = "";//$NON-NLS-1$
                 String keyVal = "";//$NON-NLS-1$
                 // Make sure texts are not nill (empty) where not authorized
-                for (Iterator<ComplexTableViewerColumn> iterator = columns.iterator(); iterator.hasNext();) {
-                    ComplexTableViewerColumn column = iterator.next();
+                for (ComplexTableViewerColumn column : columns) {
                     String text = "";//$NON-NLS-1$
                     if (column.isCombo()) {
                         text = ((CCombo) column.getControl()).getText();
@@ -397,8 +398,10 @@ public class ComplexTableViewer {
                                 ((Text) column.getControl()).setText(text);
                             }
                         } else {
-                            MessageDialog.openError(ComplexTableViewer.this.getViewer().getControl().getShell(), Messages.ComplexTableViewer_InputError,
-                                    Messages.ComplexTableViewer_ErrorMsg + column.getName() + Messages.ComplexTableViewer_ErrorMsgA);
+                            MessageDialog.openError(ComplexTableViewer.this.getViewer().getControl().getShell(),
+                                    Messages.ComplexTableViewer_InputError,
+                                    Messages.ComplexTableViewer_ErrorMsg + column.getName()
+                                            + Messages.ComplexTableViewer_ErrorMsgA);
                             return;
                         }
                     }
@@ -560,8 +563,9 @@ public class ComplexTableViewer {
                     items.remove(index);
                     viewer.refresh();
                     int pos = index - 1;
-                    if (pos >= 0)
+                    if (pos >= 0) {
                         viewer.getTable().select(pos);
+                    }
                     markDirty();
                 }
             };
@@ -573,8 +577,7 @@ public class ComplexTableViewer {
             if (columns.get(i).isText()) {
                 editors[i] = new TextCellEditor(table);
             } else if (columns.get(i).isCombo()) {
-                editors[i] = new ComboBoxCellEditor(table, columns.get(i).getComboValues(),
-                        SWT.READ_ONLY);
+                editors[i] = new ComboBoxCellEditor(table, columns.get(i).getComboValues(), SWT.READ_ONLY);
             } else if (columns.get(i).isXPATH()) {
                 editors[i] = new XpathCellEditor(table);
             } else if (columns.get(i).isMultiMessage()) {
@@ -626,8 +629,9 @@ public class ComplexTableViewer {
                         if (keyvalue.key.equals(columns.get(columnIndex).getName())) {
                             String val = keyvalue.value;
                             if (columns.get(columnIndex).isNillable()) {
-                                if (columns.get(columnIndex).getNillValue().equals(val))
+                                if (columns.get(columnIndex).getNillValue().equals(val)) {
                                     val = columns.get(columnIndex).getNillDisplay();
+                                }
                             }
                             return val;
                         }
@@ -659,8 +663,9 @@ public class ComplexTableViewer {
             @SuppressWarnings("unchecked")
             public void modify(Object element, String property, Object value) {
                 if (value instanceof Integer) {
-                    if (Integer.valueOf(value.toString()) == -1)
+                    if (Integer.valueOf(value.toString()) == -1) {
                         return;
+                    }
                 }
                 // modify the text and combo cell value
                 TableItem item = (TableItem) element;
@@ -842,6 +847,7 @@ public class ComplexTableViewer {
         public void createValidationRuleWidget(Composite parent) {
             validationRule = new ValidationRuleWidget(parent, getCurrentTreeParent(), conceptName);
         }
+
         boolean isMouseInControl(MouseEvent e) {
             if (e.widget instanceof Table) {
                 if (validationRule.getComposite().getBounds().contains(e.x, e.y)) {
@@ -962,9 +968,10 @@ public class ComplexTableViewer {
 
     }
 
-    protected XpathWidget getNewXpathWidget(Composite parent) {
-        if (treeParent == null)
+    protected XpathWidget getNewXpathWidget(Composite parent, CellEditor cellEditor) {
+        if (treeParent == null) {
             treeParent = (TreeParent) ((IAdaptable) mainPage).getAdapter(TreeParent.class);
+        }
         return new XpathWidget(parent, treeParent, false);
     }
 
@@ -983,12 +990,17 @@ public class ComplexTableViewer {
         // Modified by hhb,to fix bug 21784
         @Override
         protected Control createControl(Composite parent) {
-            // if (mainPage != null)
-            // xpath = new XpathWidget(parent, mainPage, false);
-            // else
-            // xpath = new XpathWidget(parent, false);
 
             xpath = getNewXpathWidget(parent);
+            FocusAdapter afterFocusLost = new FocusAdapter() {
+
+                @Override
+                public void focusLost(FocusEvent e) {
+                    XpathCellEditor.this.focusLost();
+                }
+
+            };
+            xpath.setAfterFocusAction(afterFocusLost);
             // The ending| bug:21784
             xpath.setLock(modelLock);
             xpaths.add(xpath);
@@ -997,24 +1009,16 @@ public class ComplexTableViewer {
             ((GridData) xpath.getComposite().getChildren()[0].getLayoutData()).heightHint = 15;
             ((GridData) xpath.getComposite().getChildren()[1].getLayoutData()).heightHint = 15;
             if (parent instanceof Table) {
+                FocusAdapter focusListener = new FocusAdapter() {
 
-                ((Table) parent).addMouseListener(new MouseListener() {
-
-                    public void mouseDoubleClick(MouseEvent e) {
-
+                    @Override
+                    public void focusLost(FocusEvent e) {
+                        afterLostFocus();
                     }
+                };
 
-                    public void mouseDown(MouseEvent e) {
+                xpath.addButtonFocusListener(focusListener);
 
-                    }
-
-                    public void mouseUp(MouseEvent e) {
-                        if (!isMouseInControl(e)) {
-                            deactive();
-                        }
-                    }
-
-                });
                 // add by ymli, fix bug 0009441
                 xpath.getTextWidget().addKeyListener(new KeyListener() {
 
@@ -1036,20 +1040,23 @@ public class ComplexTableViewer {
             return xpath.getComposite();
         }
 
-        boolean isMouseInControl(MouseEvent e) {
-            if (e.widget instanceof Table) {
-                if (xpath.getComposite().getBounds().contains(e.x, e.y)) {
-                    return true;
+        private void afterLostFocus() {
+            Display.getDefault().asyncExec(new Runnable() {
+
+                public void run() {
+                    if ((!xpath.getTextWidget().isFocusControl()) && !xpath.getButton().isFocusControl()) {
+                        XpathCellEditor.this.focusLost();
+                    }
                 }
-            }
-            return false;
+            });
         }
 
         @Override
         protected Object doGetValue() {
-        	ComplexTableViewer.this.datamodelName = xpath.getDataModelName();
-            if (context)
+            ComplexTableViewer.this.datamodelName = xpath.getDataModelName();
+            if (context) {
                 XpathSelectDialog.setContext(null);
+            }
             return xpath.getText();
         }
 
@@ -1091,8 +1098,7 @@ public class ComplexTableViewer {
             if (columns.get(i).isText()) {
                 editors[i] = new TextCellEditor(table);
             } else if (columns.get(i).isCombo()) {
-                editors[i] = new ComboBoxCellEditor(table, columns.get(i).getComboValues(),
-                        SWT.READ_ONLY);
+                editors[i] = new ComboBoxCellEditor(table, columns.get(i).getComboValues(), SWT.READ_ONLY);
             } else if (columns.get(i).isXPATH()) {
                 editors[i] = new XpathCellEditor(table);
             } else if (columns.get(i).isMultiMessage()) {
@@ -1105,4 +1111,12 @@ public class ComplexTableViewer {
         }
 
     }
+
+    protected XpathWidget getNewXpathWidget(Composite parent) {
+        if (treeParent == null) {
+            treeParent = (TreeParent) ((IAdaptable) mainPage).getAdapter(TreeParent.class);
+        }
+        return new XpathWidget(parent, treeParent, false);
+    }
+
 }

@@ -21,9 +21,6 @@ import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CCombo;
-import org.eclipse.swt.events.FocusAdapter;
-import org.eclipse.swt.events.FocusEvent;
-import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -181,17 +178,6 @@ public class UserSecurityComboBoxDialogCellEditor extends EditableComboBoxDialog
         }
 
         return false;
-    }
-
-    @Override
-    protected FocusListener getComboFocusListener() {
-        return new FocusAdapter() {
-
-            @Override
-            public void focusLost(FocusEvent e) {
-                // empty
-            }
-        };
     }
 
     @Override
