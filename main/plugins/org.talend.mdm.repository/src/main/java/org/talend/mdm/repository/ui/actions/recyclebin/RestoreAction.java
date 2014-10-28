@@ -58,11 +58,12 @@ public class RestoreAction extends AbstractRepositoryAction {
         setImageDescriptor(ImageCache.getImage(EImage.ADD_OBJ.getPath()));
     }
 
-
+    @Override
     public String getGroupName() {
         return GROUP_EDIT;
     }
 
+    @Override
     protected void doRun() {
         for (Object obj : getSelectedObject()) {
             IRepositoryViewObject viewObj = (IRepositoryViewObject) obj;
@@ -152,6 +153,13 @@ public class RestoreAction extends AbstractRepositoryAction {
             ERepositoryObjectType type = parent.getRepositoryObjectType();
             if (RepositoryResourceUtil.isDeletedFolder(item, type)) {
                 item.getState().setDeleted(false);
+                String path = ERepositoryObjectType.getFolderName(type);
+                if (!path.isEmpty()) {
+                    path += item.getState().getPath();
+                }
+                List<String> deletedFolderPaths = ProjectManager.getInstance().getCurrentProject().getEmfProject()
+                        .getDeletedFolders();
+                deletedFolderPaths.remove(path);
                 restoreParent(parent);
             }
         }
