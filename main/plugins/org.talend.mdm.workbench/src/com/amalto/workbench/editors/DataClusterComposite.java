@@ -362,7 +362,7 @@ public class DataClusterComposite extends Composite implements IPagingListener {
                 Matcher matcher = pattern.matcher(dateTimeText);
                 if (!matcher.matches()) {
                     MessageDialog
-                    .openWarning(this.getSite().getShell(), Messages.Warning, Messages.DataClusterBrowserMainPage_21);
+                            .openWarning(this.getSite().getShell(), Messages.Warning, Messages.DataClusterBrowserMainPage_21);
                     return new LineItem[0];
                 }
 
@@ -378,7 +378,7 @@ public class DataClusterComposite extends Composite implements IPagingListener {
                 Matcher matcher = pattern.matcher(dateTimeText);
                 if (!matcher.matches()) {
                     MessageDialog
-                    .openWarning(this.getSite().getShell(), Messages.Warning, Messages.DataClusterBrowserMainPage_23);
+                            .openWarning(this.getSite().getShell(), Messages.Warning, Messages.DataClusterBrowserMainPage_23);
                     return new LineItem[0];
                 }
 
@@ -432,11 +432,6 @@ public class DataClusterComposite extends Composite implements IPagingListener {
                 if (i == 0) {
                     totalSize = Integer.parseInt(Util.parse(result.getWsItemPK().getConceptName()).getDocumentElement()
                             .getTextContent());
-                    continue;
-                }
-
-                if (!isMaster && result.getWsItemPK().getConceptName().equals("TALEND_TASK_EXECUTION")) { //$NON-NLS-1$
-                    totalSize--;
                     continue;
                 }
 
@@ -880,7 +875,7 @@ public class DataClusterComposite extends Composite implements IPagingListener {
                 break;
             case 2:
                 res = Util
-                .joinStrings(li1.getIds(), ".").compareToIgnoreCase(Util.joinStrings(li2.getIds(), Messages.DataClusterBrowserMainPage_130)); //$NON-NLS-1$
+                        .joinStrings(li1.getIds(), ".").compareToIgnoreCase(Util.joinStrings(li2.getIds(), Messages.DataClusterBrowserMainPage_130)); //$NON-NLS-1$
                 break;
             default:
                 res = 0;
