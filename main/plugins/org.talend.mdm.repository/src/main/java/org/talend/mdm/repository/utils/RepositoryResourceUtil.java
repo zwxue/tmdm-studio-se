@@ -230,6 +230,7 @@ public class RepositoryResourceUtil {
             property.setLabel(propLabel);
             //
             factory.create(item, new Path(item.getState().getPath()));
+            item = assertItem(item);
             //
             IRepositoryNodeConfiguration configuration = RepositoryNodeConfigurationManager.getConfiguration(item);
             if (configuration != null) {
