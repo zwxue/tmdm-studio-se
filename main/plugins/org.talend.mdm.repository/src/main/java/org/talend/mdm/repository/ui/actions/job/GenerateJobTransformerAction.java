@@ -118,10 +118,9 @@ public class GenerateJobTransformerAction extends AbstractRepositoryAction {
             if (openedEditor != null) {
                 UIUtil.closeEditor(openedEditor, false);
             }
+            // delete directly
+            RepositoryResourceUtil.removeViewObjectPhysically(toDelete, jobVersion);
         }
-        // delete directly
-        RepositoryResourceUtil.removeViewObjectPhysically(IServerObjectRepositoryType.TYPE_TRANSFORMERV2, PREFIX + jobName,
-                jobVersion, path);
         AttachToProcessView(jobName, transformer);
 
     }

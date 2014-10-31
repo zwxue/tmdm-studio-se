@@ -634,6 +634,30 @@ public class RepositoryResourceUtil {
         }
     }
 
+    public static void removeViewObjectPhysically(IRepositoryViewObject viewObj, String version) {
+        if (viewObj == null) {
+            throw new IllegalArgumentException();
+        }
+        if (version == null) {
+            Property property = viewObj.getProperty();
+            if (property != null) {
+                version = property.getVersion();
+            }
+            if (version == null) {
+                version = VersionUtils.DEFAULT_VERSION;
+            }
+        }
+
+        try {
+            IProxyRepositoryFactory factory = CoreRuntimePlugin.getInstance().getProxyRepositoryFactory();
+
+            factory.deleteObjectPhysical(viewObj, version);
+
+        } catch (PersistenceException e) {
+            log.error(e.getMessage(), e);
+        }
+    }
+
     public static List<IRepositoryViewObject> findAllViewObjects(ERepositoryObjectType type, boolean useRepositoryViewObject) {
         return findAllViewObjects(type, useRepositoryViewObject, false);
     }

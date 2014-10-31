@@ -104,10 +104,9 @@ public class GenerateJobTriggerAction extends AbstractRepositoryAction {
             if (openedEditor != null) {
                 UIUtil.closeEditor(openedEditor, false);
             }
+            // delete directly
+            RepositoryResourceUtil.removeViewObjectPhysically(toDelete, jobVersion);
         }
-        // delete directly
-        RepositoryResourceUtil.removeViewObjectPhysically(IServerObjectRepositoryType.TYPE_ROUTINGRULE, PREFIX + jobName,
-                jobVersion, null);
         AttachToTriggerView(jobName, routingRule);
 
     }
