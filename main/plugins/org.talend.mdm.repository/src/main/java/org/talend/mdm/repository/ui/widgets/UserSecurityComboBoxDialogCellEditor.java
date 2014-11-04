@@ -21,6 +21,9 @@ import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CCombo;
+import org.eclipse.swt.events.FocusAdapter;
+import org.eclipse.swt.events.FocusEvent;
+import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -76,6 +79,32 @@ public class UserSecurityComboBoxDialogCellEditor extends EditableComboBoxDialog
         }
         getButton().setToolTipText(Messages.UserSecurityComboBoxDialogCellEditor_SelectXpath);
         getButton().setText("..."); //$NON-NLS-1$
+    }
+
+    @Override
+    protected FocusListener getComboFocusListener() {
+        if (comboFocusListener == null) {
+            comboFocusListener = new FocusAdapter() {
+
+                @Override
+                public void focusLost(FocusEvent e) {
+                    boolean isComboSelected = false;
+                    CCombo comboBox = getComboBox();
+                    int selectionIndex = comboBox.getSelectionIndex();
+                    if (selectionIndex != -1 && selectionIndex < comboBox.getItemCount()) {
+                        if (!comboBox.getItem(selectionIndex).isEmpty()) {
+                            isComboSelected = true;
+                        }
+                    }
+
+                    if (!getButton().isFocusControl() && !isComboSelected) {
+                        UserSecurityComboBoxDialogCellEditor.this.focusLost();
+                    }
+                }
+
+            };
+        }
+        return comboFocusListener;
     }
 
     @Override

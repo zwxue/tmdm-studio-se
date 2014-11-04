@@ -91,7 +91,7 @@ public abstract class EditableComboBoxDialogCellEditor extends CellEditor {
     // Combo default style
     private static final int defaultStyle = SWT.NONE;
 
-    private FocusAdapter comboFocusListener;
+    protected FocusAdapter comboFocusListener;
 
     public EditableComboBoxDialogCellEditor() {
         setStyle(defaultStyle);
