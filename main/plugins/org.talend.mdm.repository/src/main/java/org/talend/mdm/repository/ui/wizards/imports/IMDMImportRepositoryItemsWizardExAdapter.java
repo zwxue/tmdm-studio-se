@@ -12,6 +12,8 @@
 // ============================================================================
 package org.talend.mdm.repository.ui.wizards.imports;
 
+import org.talend.core.model.properties.Item;
+
 import com.amalto.workbench.exadapter.IExAdapter;
 
 /**
@@ -21,4 +23,6 @@ import com.amalto.workbench.exadapter.IExAdapter;
 public interface IMDMImportRepositoryItemsWizardExAdapter extends IExAdapter<MDMImportRepositoryItemsWizard> {
 
     void syncWorkflow();
+
+    void handleDataModelItem(Item item);
 }
