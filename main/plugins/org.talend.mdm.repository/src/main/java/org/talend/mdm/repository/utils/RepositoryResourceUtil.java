@@ -979,14 +979,19 @@ public class RepositoryResourceUtil {
                         Resource eResource = item.eResource();
                         reload = eResource == null || eResource.getResourceSet() == null;
                         if (reload) {
-                            property = factory.reload(property);
-                            newViewObj = new RepositoryViewObject(property);
+                            if (property.eResource() != null && property.eResource().getURI() != null) {
+                                property = factory.reload(property);
+                                newViewObj = new RepositoryViewObject(property);
+                            } else {
+                                log.error("Can not reload property " + property.getLabel() //$NON-NLS-1$
+                                        + ", because property.eResource is null or eResource.getURI is null"); //$NON-NLS-1$
+                            }
                         }
                     }
                     if (newViewObj != null) {
                         ContainerCacheService.put(newViewObj);
+                        return newViewObj;
                     }
-                    return newViewObj;
                 } catch (PersistenceException e) {
                     log.error(e.getMessage(), e);
                 }
