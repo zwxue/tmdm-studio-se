@@ -220,6 +220,8 @@ public class Messages extends NLS {
 
     public static String DeployAnotherVersionAction_selectAnother;
 
+    public static String DeployToLastServerAction_askReselectServerMsg;
+
     public static String DeployToLastServerAction_deployToLastServer;
 
     public static String DumpAndGoPluginDetail_PlugDesc;
