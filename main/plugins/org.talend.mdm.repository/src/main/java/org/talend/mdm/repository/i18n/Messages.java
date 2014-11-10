@@ -18,6 +18,8 @@ public class Messages extends NLS {
 
     private static final String BUNDLE_NAME = "org.talend.mdm.repository.i18n.messages"; //$NON-NLS-1$
 
+    public static String TestTriggerAction_Close;
+
     public static String TestTriggerAction_Test;
 
     public static String TISCallJobPluginDetail_description;
