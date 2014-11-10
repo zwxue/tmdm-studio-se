@@ -395,7 +395,8 @@ public class InputProcessNamePage extends WizardPage implements ITransformerV2No
             }
         } else if (!ValidateUtil.matchViewProcessRegex(name)) {
             errorMsg = Messages.Common_nameInvalid;
-        } else if (RepositoryResourceUtil.isExistByName(IServerObjectRepositoryType.TYPE_TRANSFORMERV2, name)) {
+        }
+        if (RepositoryResourceUtil.isExistByName(IServerObjectRepositoryType.TYPE_TRANSFORMERV2, name)) {
             errorMsg = Messages.Common_nameIsUsed;
         }
         if (errorMsg != null) {
@@ -422,14 +423,12 @@ public class InputProcessNamePage extends WizardPage implements ITransformerV2No
             prefix += optionNameText.getText();
         } else if (type == TYPE_ENTITYACTION) {
             prefix += nameText.getText();
-            if (!optionNameText.getText().isEmpty())
-             {
+            if (!optionNameText.getText().isEmpty()) {
                 prefix += "#" + optionNameText.getText(); //$NON-NLS-1$
             }
         } else if (type == TYPE_SMARTVIEW) {
             prefix += nameText.getText();
-            if (!optionNameText.getText().isEmpty())
-             {
+            if (!optionNameText.getText().isEmpty()) {
                 prefix += "#" + optionNameText.getText(); //$NON-NLS-1$
             }
         } else {

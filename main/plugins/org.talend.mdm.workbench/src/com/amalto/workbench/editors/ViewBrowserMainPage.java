@@ -322,7 +322,8 @@ public class ViewBrowserMainPage extends AMainPage implements IXObjectModelListe
     protected void refreshData() {
         try {
 
-            if (viewableBEsList.isDisposed() || searchableBEsList.isDisposed() || wcListViewer.getList().isDisposed()) {
+            if (viewableBEsList.isDisposed() || searchableBEsList.isDisposed() || wcListViewer.getList().isDisposed()
+                    || searchItemCombo.isDisposed() || dataClusterCombo.isDisposed()) {
                 return;
             }
 
@@ -344,6 +345,7 @@ public class ViewBrowserMainPage extends AMainPage implements IXObjectModelListe
 
             paths = view.getSearchableBusinessElements();
             searchableBEsList.removeAll();
+            searchItemCombo.removeAll();
             if (paths != null) {
                 for (String path : paths) {
                     searchableBEsList.add(path);
@@ -442,10 +444,11 @@ public class ViewBrowserMainPage extends AMainPage implements IXObjectModelListe
             if (FULL_TEXT.equals(searchItemCombo.getText())) {
                 boolean matchAllWords = matchAllWordsBtn.getSelection();
                 results = port.quickSearch(
-                        new WSQuickSearch(new WSDataClusterPK(dataClusterCombo.getText()), getViewPK(), search, maxItem, // max Items
-                        0, // skip
-                        Integer.MAX_VALUE, // spell threshold
-                        matchAllWords, null, null)).getStrings();
+                        new WSQuickSearch(new WSDataClusterPK(dataClusterCombo.getText()), getViewPK(), search, maxItem, // max
+                                                                                                                         // Items
+                                0, // skip
+                                Integer.MAX_VALUE, // spell threshold
+                                matchAllWords, null, null)).getStrings();
 
             } else {
                 WSView wsview = (WSView) wcListViewer.getInput();

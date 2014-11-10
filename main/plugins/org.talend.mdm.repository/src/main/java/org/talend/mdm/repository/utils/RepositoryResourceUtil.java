@@ -78,6 +78,7 @@ import org.talend.core.repository.model.ProxyRepositoryFactory;
 import org.talend.core.repository.model.ResourceModelUtils;
 import org.talend.core.repository.utils.ResourceFilenameHelper;
 import org.talend.core.runtime.CoreRuntimePlugin;
+import org.talend.dataquality.properties.TDQMatchRuleItem;
 import org.talend.designer.core.ui.editor.ProcessEditorInput;
 import org.talend.mdm.repository.core.IRepositoryNodeConfiguration;
 import org.talend.mdm.repository.core.IRepositoryNodeResourceProvider;
@@ -229,6 +230,7 @@ public class RepositoryResourceUtil {
             property.setLabel(propLabel);
             //
             factory.create(item, new Path(item.getState().getPath()));
+            item = assertItem(item);
             //
             IRepositoryNodeConfiguration configuration = RepositoryNodeConfigurationManager.getConfiguration(item);
             if (configuration != null) {
@@ -370,7 +372,11 @@ public class RepositoryResourceUtil {
 
     public static IFile getItemFile(IRepositoryViewObject viewObj) {
         Item item = viewObj.getProperty().getItem();
-        return findReferenceFile(viewObj.getRepositoryObjectType(), item, "item"); //$NON-NLS-1$
+        String extName = "item";//$NON-NLS-1$
+        if (item instanceof TDQMatchRuleItem) {
+            extName = "rules"; //$NON-NLS-1$
+        }
+        return findReferenceFile(viewObj.getRepositoryObjectType(), item, extName);
     }
 
     public static IFile findReferenceFile(ERepositoryObjectType type, Item item, String fileExtension) {
@@ -624,6 +630,30 @@ public class RepositoryResourceUtil {
                     return;
                 }
             }
+        } catch (PersistenceException e) {
+            log.error(e.getMessage(), e);
+        }
+    }
+
+    public static void removeViewObjectPhysically(IRepositoryViewObject viewObj, String version) {
+        if (viewObj == null) {
+            throw new IllegalArgumentException();
+        }
+        if (version == null) {
+            Property property = viewObj.getProperty();
+            if (property != null) {
+                version = property.getVersion();
+            }
+            if (version == null) {
+                version = VersionUtils.DEFAULT_VERSION;
+            }
+        }
+
+        try {
+            IProxyRepositoryFactory factory = CoreRuntimePlugin.getInstance().getProxyRepositoryFactory();
+
+            factory.deleteObjectPhysical(viewObj, version);
+
         } catch (PersistenceException e) {
             log.error(e.getMessage(), e);
         }
@@ -949,14 +979,19 @@ public class RepositoryResourceUtil {
                         Resource eResource = item.eResource();
                         reload = eResource == null || eResource.getResourceSet() == null;
                         if (reload) {
-                            property = factory.reload(property);
-                            newViewObj = new RepositoryViewObject(property);
+                            if (property.eResource() != null && property.eResource().getURI() != null) {
+                                property = factory.reload(property);
+                                newViewObj = new RepositoryViewObject(property);
+                            } else {
+                                log.error("Can not reload property " + property.getLabel() //$NON-NLS-1$
+                                        + ", because property.eResource is null or eResource.getURI is null"); //$NON-NLS-1$
+                            }
                         }
                     }
                     if (newViewObj != null) {
                         ContainerCacheService.put(newViewObj);
+                        return newViewObj;
                     }
-                    return newViewObj;
                 } catch (PersistenceException e) {
                     log.error(e.getMessage(), e);
                 }
@@ -1244,7 +1279,9 @@ public class RepositoryResourceUtil {
         if (typePathMap == null) {
             typePathMap = new HashMap<String, ERepositoryObjectType>();
             for (ERepositoryObjectType type : IServerObjectRepositoryType.ALL_TYPES) {
-                typePathMap.put(type.getFolder(), type);
+                if (type != null) {
+                    typePathMap.put(type.getFolder(), type);
+                }
             }
         }
         return typePathMap.get(path);

@@ -12,10 +12,20 @@
 // ============================================================================
 package org.talend.mdm.repository.ui.actions.recyclebin;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.core.resources.IWorkspace;
+import org.eclipse.core.resources.IWorkspaceRunnable;
+import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.jobs.ISchedulingRule;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.operation.IRunnableWithProgress;
+import org.eclipse.ui.PlatformUI;
+import org.talend.commons.ui.runtime.exception.ExceptionHandler;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.i18n.Messages;
 
@@ -26,8 +36,6 @@ import com.amalto.workbench.image.ImageCache;
  * DOC hbhong class global comment. Detailled comment
  */
 public class RemovePhysicallyFromRepositoryAction extends AbstractRemoveCommandStackAction {
-
-
 
     /**
      * DOC hbhong RemoveFromRepositoryAction constructor comment.
@@ -44,27 +52,57 @@ public class RemovePhysicallyFromRepositoryAction extends AbstractRemoveCommandS
         return GROUP_EDIT;
     }
 
+    @Override
     protected void doRun() {
-        int size = getSelectedObject().size();
-        if (size > 0) {
-            if (!MessageDialog.openConfirm(getShell(), Messages.RemoveFromRepositoryAction_Title, Messages.bind(
-                    Messages.RemoveFromRepositoryAction_confirm, size, size > 1 ? Messages.RemoveFromRepositoryAction_instances
-                            : Messages.RemoveFromRepositoryAction_instance))) {
-                return;
+
+        final IWorkspaceRunnable op = new IWorkspaceRunnable() {
+
+            public void run(IProgressMonitor monitor) throws CoreException {
+                int size = getSelectedObject().size();
+                if (size > 0) {
+                    if (!MessageDialog.openConfirm(getShell(), Messages.RemoveFromRepositoryAction_Title, Messages.bind(
+                            Messages.RemoveFromRepositoryAction_confirm, size,
+                            size > 1 ? Messages.RemoveFromRepositoryAction_instances
+                                    : Messages.RemoveFromRepositoryAction_instance))) {
+                        return;
+                    }
+
+                }
+                List<IRepositoryViewObject> viewObjs = new ArrayList<IRepositoryViewObject>();
+                for (Object obj : getSelectedObject()) {
+                    if (obj instanceof IRepositoryViewObject) {
+                        IRepositoryViewObject viewObj = (IRepositoryViewObject) obj;
+
+                        viewObjs.add(viewObj);
+                    }
+                }
+                removeViewObjects(viewObjs);
             }
 
-        }
-        List<IRepositoryViewObject> viewObjs = new ArrayList<IRepositoryViewObject>();
-        for (Object obj : getSelectedObject()) {
-            if (obj instanceof IRepositoryViewObject) {
-                IRepositoryViewObject viewObj = (IRepositoryViewObject) obj;
+        };
+        //
+        IRunnableWithProgress iRunnableWithProgress = new IRunnableWithProgress() {
 
-                viewObjs.add(viewObj);
+            public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
+                IWorkspace workspace = ResourcesPlugin.getWorkspace();
+                try {
+                    ISchedulingRule schedulingRule = workspace.getRoot();
+
+                    workspace.run(op, schedulingRule, IWorkspace.AVOID_UPDATE, monitor);
+                } catch (CoreException e) {
+                    throw new InvocationTargetException(e);
+                }
+
             }
+        };
+
+        try {
+            PlatformUI.getWorkbench().getProgressService().run(false, false, iRunnableWithProgress);
+
+        } catch (Exception e) {
+            ExceptionHandler.process(e);
         }
-        removeViewObjects(viewObjs);
 
     }
-
 
 }

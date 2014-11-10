@@ -16,6 +16,7 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
@@ -27,6 +28,7 @@ import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 import org.talend.mdm.repository.models.FolderRepositoryObject;
 import org.talend.mdm.repository.ui.dialogs.lock.LockedDirtyObjectDialog;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
+import org.talend.mdm.workbench.serverexplorer.ui.dialogs.SelectServerDefDialog;
 
 import com.amalto.workbench.exadapter.ExAdapterManager;
 import com.amalto.workbench.service.MissingJarService;
@@ -69,6 +71,23 @@ public class DeployToLastServerAction extends AbstractDeployAction {
         lockDirtyDialog.saveDirtyObjects();
         //
         MDMServerDef currentServerDef = getLastServer(viewObjs);
+        // handle last server is null case
+        boolean isLostedServer = false;
+        if (currentServerDef == null) {
+            isLostedServer = true;
+            boolean isDeployToAnother = MessageDialog.openQuestion(getShell(), null,
+                    Messages.DeployToLastServerAction_askReselectServerMsg);
+            if (isDeployToAnother) {
+                SelectServerDefDialog dialog = new SelectServerDefDialog(getShell());
+                if (dialog.open() == IDialogConstants.OK_ID) {
+                    currentServerDef = dialog.getSelectedServerDef();
+                } else {
+                    return;
+                }
+            } else {
+                return;
+            }
+        }
         // check last server
         if (!currentServerDef.isEnabled()) {
             MessageDialog.openWarning(Display.getDefault().getActiveShell(), null,
@@ -81,6 +100,10 @@ public class DeployToLastServerAction extends AbstractDeployAction {
             if (status.isMultiStatus()) {
                 showDeployStatus(status);
             }
+            if (isLostedServer) {
+                updateLastServer(status, new NullProgressMonitor());
+            }
+
             DeployService.getInstance().updateChangedStatus(status, false);
             for (IRepositoryViewObject viewObject : viewObjs) {
                 commonViewer.refresh(viewObject);

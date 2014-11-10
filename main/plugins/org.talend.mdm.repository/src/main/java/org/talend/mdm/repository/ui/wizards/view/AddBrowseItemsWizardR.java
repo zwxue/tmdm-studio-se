@@ -261,8 +261,12 @@ public class AddBrowseItemsWizardR extends AddBrowseItemsWizard {
             for (XSDElementDeclaration decl : declList) {
                 String fullName = BROWSE_ITEMS + decl.getName();
                 if (browseItem.equals(fullName) || browseItem.startsWith(fullName + "#")) { //$NON-NLS-1$
-                    newViewAction.setXSDElementDeclaration(decl);
-                    newViewAction.createNewView(browseItem);
+                    try {
+                        newViewAction.setXSDElementDeclaration(decl);
+                        newViewAction.createNewView(browseItem);
+                    } catch (Exception e) {
+                        log.error("Error occurred when generating default view " + browseItem, e); //$NON-NLS-1$
+                    }
                 }
             }
         }

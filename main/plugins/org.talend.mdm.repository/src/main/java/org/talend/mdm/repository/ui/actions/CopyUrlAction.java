@@ -12,11 +12,12 @@
 // ============================================================================
 package org.talend.mdm.repository.ui.actions;
 
-import java.awt.Toolkit;
-import java.awt.datatransfer.Clipboard;
-import java.awt.datatransfer.StringSelection;
 import java.util.List;
 
+import org.eclipse.swt.dnd.Clipboard;
+import org.eclipse.swt.dnd.TextTransfer;
+import org.eclipse.swt.dnd.Transfer;
+import org.eclipse.swt.widgets.Display;
 import org.talend.core.model.properties.Item;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.AbstractRepositoryAction;
@@ -81,9 +82,11 @@ public class CopyUrlAction extends AbstractRepositoryAction {
         }
 
         // copy url to clipboard
-        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-        StringSelection text = new StringSelection(result.toString());
-        clipboard.setContents(text, null);
+        Clipboard cb = new Clipboard(Display.getCurrent());
+        String textData = result.toString();
+        TextTransfer transfer = TextTransfer.getInstance();
+        cb.setContents(new Object[] { textData }, new Transfer[] { transfer });
+        cb.dispose();
     }
 
 }

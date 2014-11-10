@@ -19,6 +19,9 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.ui.IWorkbenchPartSite;
 import org.talend.core.GlobalServiceRegister;
 import org.talend.mdm.repository.core.AbstractRepositoryAction;
@@ -43,9 +46,12 @@ import com.amalto.workbench.webservices.XtentisPort;
 /**
  * created by liusongbo on Oct 15, 2014
  */
-public class TestTriggerAction extends AbstractRepositoryAction {
+public class TestTriggerAction extends AbstractRepositoryAction implements SelectionListener {
 
     private static Logger log = Logger.getLogger(TestTriggerAction.class);
+    private DataClusterDialog dialog;
+
+    private XtentisPort port;
 
     public TestTriggerAction() {
         super(Messages.TestTriggerAction_Test);
@@ -61,45 +67,53 @@ public class TestTriggerAction extends AbstractRepositoryAction {
 
     @Override
     protected void doRun() {
+        com.amalto.workbench.utils.MDMServerDef serverDef = getServerDef();
+        if (serverDef == null) {
+            return;
+        }
+
+        boolean canConnect = checkConnection(serverDef.getUrl(), serverDef.getUser(), serverDef.getPasswd(),
+                serverDef.getUniverse());
+        if (!canConnect) {
+            MessageDialog.openError(getShell(), Messages.RoutingRuleMainPage2_CheckConnection,
+                    Messages.RoutingRuleMainPage2_UnableToConnect);
+            return;
+        }
+
         try {
-            com.amalto.workbench.utils.MDMServerDef serverDef = getServerDef();
-            if (serverDef == null) {
-                return;
-            }
-
-            boolean canConnect = checkConnection(serverDef.getUrl(), serverDef.getUser(), serverDef.getPasswd(),
-                    serverDef.getUniverse());
-            if (!canConnect) {
-                MessageDialog.openError(getShell(), Messages.RoutingRuleMainPage2_CheckConnection,
-                        Messages.RoutingRuleMainPage2_UnableToConnect);
-                return;
-            }
-
-            XtentisPort port = Util.getPort(new URL(serverDef.getUrl()), serverDef.getUniverse(), serverDef.getUser(),
-                    serverDef.getPasswd());
-
+            port = Util.getPort(new URL(serverDef.getUrl()), serverDef.getUniverse(), serverDef.getUser(), serverDef.getPasswd());
             IWorkbenchPartSite site = commonViewer.getCommonNavigator().getSite();
-            DataClusterDialog dialog = new DataClusterDialog(getShell(), new TreeObject(), site
-            // getSite()
-            );
+            dialog = new DataClusterDialog(getShell(), new TreeObject(), site);
             dialog.setDefaultServerDef(serverDef);
-            if (dialog.open() == IDialogConstants.OK_ID) {
-                String dataCluster = dialog.getDataContainer();
-                String concept = dialog.getConcept();
-                String[] recordIds = dialog.getRecordIds();
-                if (recordIds == null || recordIds.length == 0) {
-                    MessageDialog.openError(getShell(), Messages._Error, Messages.RoutingRuleMainPage2_NoRecordSelected);
-                    return;
-                }
-                WSRoutingRulePKArray routeItemV2 = port.routeItemV2(new WSRouteItemV2(new WSItemPK(new WSDataClusterPK(
-                        dataCluster), concept, Arrays.asList(recordIds))));
+            dialog.setOkLabel(Messages.TestTriggerAction_Test);
+            dialog.setCancelLabel(Messages.TestTriggerAction_Close);
+            dialog.setSelectionListener(this);
+            dialog.open();
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+        }
+    }
 
-                if (routeItemV2 == null || routeItemV2.getWsRoutingRulePKs() == null
-                        || routeItemV2.getWsRoutingRulePKs().size() == 0) {
-                    MessageDialog.openInformation(getShell(), Messages.RoutingRuleMainPage2_fail,
-                            Messages.RoutingRuleMainPage2_noTriggerExecuted);
-                    return;
-                }
+    protected void test() {
+        try {
+            String dataCluster = dialog.getDataContainer();
+            String concept = dialog.getConcept();
+            String[] recordIds = dialog.getRecordIds();
+            if (recordIds == null || recordIds.length == 0) {
+                MessageDialog.openError(getShell(), Messages._Error, Messages.RoutingRuleMainPage2_NoRecordSelected);
+                return;
+            }
+
+            WSRoutingRulePKArray routeItemV2 = port.routeItemV2(new WSRouteItemV2(new WSItemPK(new WSDataClusterPK(
+                    dataCluster), concept, Arrays.asList(recordIds))));
+
+            if (routeItemV2 == null || routeItemV2.getWsRoutingRulePKs() == null
+                    || routeItemV2.getWsRoutingRulePKs().size() == 0) {
+                MessageDialog.openInformation(getShell(), Messages.RoutingRuleMainPage2_Success,
+                        Messages.RoutingRuleMainPage2_noTriggerExecuted);
+                return;
+            }
+
 
                 List<WSRoutingRulePK> wsRoutingRulePKs = routeItemV2.getWsRoutingRulePKs();
                 StringBuilder builder = new StringBuilder(wsRoutingRulePKs.get(0).getPk());
@@ -109,7 +123,6 @@ public class TestTriggerAction extends AbstractRepositoryAction {
 
                 MessageDialog.openInformation(getShell(), Messages.RoutingRuleMainPage2_Success,
                         Messages.bind(Messages.RoutingRuleMainPage2_ExecuteTriggerSuccess, builder.toString()));
-            }
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             MessageDialog.openError(getShell(), Messages._Error, Messages.RoutingRuleMainPage2_ErrorTestTrigger);
@@ -155,6 +168,16 @@ public class TestTriggerAction extends AbstractRepositoryAction {
         ILegendServerDefService serverDefService = (ILegendServerDefService) GlobalServiceRegister.getDefault().getService(
                 ILegendServerDefService.class);
         return serverDefService.checkServerDefConnection(endpointaddress, username, password, universe);
+    }
+
+    public void widgetSelected(SelectionEvent e) {
+        Button btn = (Button) e.widget;
+        if (((Integer) btn.getData()).intValue() == IDialogConstants.OK_ID) {
+            test();
+        }
+    }
+
+    public void widgetDefaultSelected(SelectionEvent e) {
     }
 
 }
