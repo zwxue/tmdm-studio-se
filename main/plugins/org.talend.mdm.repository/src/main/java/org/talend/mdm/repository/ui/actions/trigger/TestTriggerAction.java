@@ -96,7 +96,7 @@ public class TestTriggerAction extends AbstractRepositoryAction {
 
                 if (routeItemV2 == null || routeItemV2.getWsRoutingRulePKs() == null
                         || routeItemV2.getWsRoutingRulePKs().size() == 0) {
-                    MessageDialog.openInformation(getShell(), Messages.RoutingRuleMainPage2_fail,
+                    MessageDialog.openInformation(getShell(), Messages.RoutingRuleMainPage2_Success,
                             Messages.RoutingRuleMainPage2_noTriggerExecuted);
                     return;
                 }
