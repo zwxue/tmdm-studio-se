@@ -31,14 +31,18 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
+import org.eclipse.core.resources.IFolder;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IPath;
 import org.talend.commons.exception.PersistenceException;
+import org.talend.core.model.general.Project;
 import org.talend.core.model.properties.Item;
 import org.talend.core.model.properties.ItemState;
 import org.talend.core.model.properties.Property;
 import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.core.model.repository.RepositoryViewObject;
+import org.talend.core.repository.model.ResourceModelUtils;
 import org.talend.core.runtime.CoreRuntimePlugin;
 import org.talend.mdm.repository.core.IServerObjectRepositoryType;
 import org.talend.mdm.repository.core.impl.AbstractContentProvider;
@@ -83,34 +87,42 @@ public class RecycleBinContentProvider extends AbstractContentProvider {
     }
 
     private void buildAllDeletedFolders(FolderRepositoryObject rootViewObj) {
-        List<String> paths = ProjectManager.getInstance().getCurrentProject().getEmfProject().getDeletedFolders();
+        Project currentProject = ProjectManager.getInstance().getCurrentProject();
+        List<String> paths = currentProject.getEmfProject().getDeletedFolders();
         String[] deletedFolderPaths = sortFolderPath(paths);
         containerMap.clear();
         rootViewObj.getChildren().clear();
+        IProject fsProject = null;
+        try {
+            fsProject = ResourceModelUtils.getProject(currentProject);
+
+        } catch (PersistenceException e) {
+            log.error(e.getMessage(), e);
+        }
 
         for (String path : deletedFolderPaths) {
-            Matcher matcher = null;
-            if (path.startsWith(MDM_PREFIX)) {
-                matcher = mdmPattern.matcher(path);
-            } else if (path.startsWith(JOB_PREFIX)) {
-                matcher = jobPattern.matcher(path);
-            } else if (path.startsWith(DQ_PREFIX)) {
-                matcher = matchRulePattern.matcher(path);
-            }
-            if (matcher != null && matcher.find()) {
-                String parentFolder = matcher.group(1);
-                String itemPath = matcher.group(2);
-                String folderName = matcher.group(4);
-                // for (int i = 0; i <= matcher.groupCount(); i++) {
-                // System.out.print(i + "=" + matcher.group(i) + "\t");
-                // }
-                // System.out.println();
-                ERepositoryObjectType type = RepositoryResourceUtil.getTypeByPath(parentFolder);
-                FolderRepositoryObject parentContainer = getParenContainer(rootViewObj, type, itemPath, true);
-                if (type != null && itemPath != null && folderName != null) {
-                    FolderRepositoryObject viewObj = RepositoryResourceUtil.createDeletedFolderViewObject(type, itemPath,
-                            folderName, parentContainer);
-                    addToMap(viewObj, itemPath);
+            IFolder folder = fsProject.getFolder(path);
+            if (folder != null && folder.getLocation().toFile().exists()) {
+                Matcher matcher = null;
+                if (path.startsWith(MDM_PREFIX)) {
+                    matcher = mdmPattern.matcher(path);
+                } else if (path.startsWith(JOB_PREFIX)) {
+                    matcher = jobPattern.matcher(path);
+                } else if (path.startsWith(DQ_PREFIX)) {
+                    matcher = matchRulePattern.matcher(path);
+                }
+                if (matcher != null && matcher.find()) {
+                    String parentFolder = matcher.group(1);
+                    String itemPath = matcher.group(2);
+                    String folderName = matcher.group(4);
+
+                    ERepositoryObjectType type = RepositoryResourceUtil.getTypeByPath(parentFolder);
+                    FolderRepositoryObject parentContainer = getParenContainer(rootViewObj, type, itemPath, true);
+                    if (type != null && itemPath != null && folderName != null) {
+                        FolderRepositoryObject viewObj = RepositoryResourceUtil.createDeletedFolderViewObject(type, itemPath,
+                                folderName, parentContainer);
+                        addToMap(viewObj, itemPath);
+                    }
                 }
             }
         }
