@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
-      id="org.talend.tom_feature"
+      id="org.talend.tom-feature"
       label="Tom workbench"
-      version="1.0.0.qualifier"
+      version="6.0.0.qualifier"
       provider-name=".Talend SA.">
 
    <description url="http://www.example.com/description">
@@ -338,7 +338,7 @@
       <import plugin="javax.xml.rpc" version="1.1.0" match="compatible"/>
       <import plugin="org.apache.commons.codec" version="1.2.0" match="compatible"/>
       <import plugin="org.apache.xerces" version="2.8.0" match="compatible"/>
-      <import plugin="org.talend.commons"/>
+      <!--<import plugin="org.talend.commons"/>-->
       <import plugin="org.talend.commons.ui"/>
       <import plugin="org.talend.core"/>
       <import plugin="org.talend.designer.core"/>
