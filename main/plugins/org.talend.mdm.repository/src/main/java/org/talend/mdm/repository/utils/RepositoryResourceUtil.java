@@ -680,9 +680,12 @@ public class RepositoryResourceUtil {
                         if (handler != null) {
                             handler.assertPropertyIsInited(item);
                         }
-                        IRepositoryViewObject cacheViewObj = getCacheViewObject(viewObj.getProperty(), viewObj,
-                                useRepositoryViewObject);
-                        viewObjects.add(cacheViewObj);
+                        if (useRepositoryViewObject) {
+                            IRepositoryViewObject cacheViewObj = getCacheViewObject(viewObj.getProperty(), viewObj);
+                            viewObjects.add(cacheViewObj);
+                        } else {
+                            viewObjects.add(viewObj);
+                        }
                     } catch (Exception e) {
                         log.error(e.getMessage(), e);
                     }
@@ -739,7 +742,7 @@ public class RepositoryResourceUtil {
     }
 
     public static IRepositoryViewObject findViewObjectByNameWithoutDeleted(ERepositoryObjectType type, String name) {
-        List<IRepositoryViewObject> viewObjects = findAllViewObjects(type, true, false);
+        List<IRepositoryViewObject> viewObjects = findAllViewObjects(type, false, false);
         if (viewObjects != null) {
             for (IRepositoryViewObject viewObj : viewObjects) {
                 if (viewObj.getProperty().getLabel().equalsIgnoreCase(name)) {
@@ -755,7 +758,7 @@ public class RepositoryResourceUtil {
         if (type == null || namePattern == null) {
             throw new IllegalArgumentException();
         }
-        List<IRepositoryViewObject> viewObjects = findAllViewObjects(type, true, withDeleted);
+        List<IRepositoryViewObject> viewObjects = findAllViewObjects(type, false, withDeleted);
         if (viewObjects != null) {
             List<IRepositoryViewObject> foundViewObjs = new LinkedList<IRepositoryViewObject>();
             Pattern pattern = Pattern.compile(namePattern);
@@ -923,27 +926,16 @@ public class RepositoryResourceUtil {
         return findViewObjectsInFolder(type, parentItem, useRepositoryViewObject, false);
     }
 
-    private static IRepositoryViewObject getCacheViewObject(Property property, IRepositoryViewObject viewObj,
-            boolean useRepositoryViewObject) {
+    private static IRepositoryViewObject getCacheViewObject(Property property, IRepositoryViewObject viewObj) {
         IRepositoryViewObject cacheViewObj = ContainerCacheService.get(property);
         if (cacheViewObj == null) {
-            if (useRepositoryViewObject) {
-                cacheViewObj = new RepositoryViewObject(property);
-            } else {
-                cacheViewObj = viewObj;
-            }
+            cacheViewObj = new RepositoryViewObject(property);
             ContainerCacheService.put(property, cacheViewObj);
         } else {
-            if (!useRepositoryViewObject) {
-                ((RepositoryObject) cacheViewObj).setProperty(viewObj.getProperty());
-            }
+
             Property cacheProp = cacheViewObj.getProperty();
             if (cacheProp.eIsProxy() && (cacheProp.eResource() == null || cacheProp.eResource().getResourceSet() == null)) {
-                if (useRepositoryViewObject) {
-                    cacheViewObj = new RepositoryViewObject(property);
-                } else {
-                    cacheViewObj = viewObj;
-                }
+                cacheViewObj = new RepositoryViewObject(property);
                 ContainerCacheService.put(property, cacheViewObj);
             }
 
