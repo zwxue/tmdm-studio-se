@@ -5,4 +5,3 @@ Bundle-SymbolicName: org.talend.mdm.repository.nl
 Bundle-Version: 6.0.0.qualifier
 Bundle-Vendor: Talend
 Fragment-Host: org.talend.mdm.repository
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6

@@ -50,7 +50,6 @@ Require-Bundle: org.eclipse.core.runtime,
  org.talend.dataprofiler.core,
  org.talend.repository.items.importexport
 Bundle-ActivationPolicy: lazy
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Eclipse-RegisterBuddy: org.talend.testutils
 Bundle-ClassPath: .,
  META-INF/lib/castor-1.1-xml.jar,
