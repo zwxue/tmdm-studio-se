@@ -412,6 +412,16 @@ public class DataClusterComposite extends Composite implements IPagingListener {
             // see 0015909
             String clusterName = URLEncoder.encode(getXObject().toString(), "utf-8");//$NON-NLS-1$
             WSDataClusterPK clusterPk = new WSDataClusterPK(clusterName + getPkAddition());
+
+            List<Results> results_TALEND_TASK_EXECUTION = port.getItemPKsByFullCriteria(
+                    new WSGetItemPKsByFullCriteria(new WSGetItemPKsByCriteria(clusterPk,
+                            "TALEND_TASK_EXECUTION", search, null, from, to, start, //$NON-NLS-1$
+                            limit), useFTSearch)).getResults();
+
+            int task_execution_size = Integer.parseInt(Util
+                    .parse(results_TALEND_TASK_EXECUTION.get(0).getWsItemPK().getConceptName()).getDocumentElement()
+                    .getTextContent());
+
             // @temp yguo, get item with taskid or get taskid by specify wsitempk.
             List<Results> results = port.getItemPKsByFullCriteria(
                     new WSGetItemPKsByFullCriteria(new WSGetItemPKsByCriteria(clusterPk, concept, search, keys, from, to, start,
@@ -432,6 +442,12 @@ public class DataClusterComposite extends Composite implements IPagingListener {
                 if (i == 0) {
                     totalSize = Integer.parseInt(Util.parse(result.getWsItemPK().getConceptName()).getDocumentElement()
                             .getTextContent());
+                    
+                    totalSize -= task_execution_size;
+                    continue;
+                }
+
+                if (!isMaster && result.getWsItemPK().getConceptName().equals("TALEND_TASK_EXECUTION")) { //$NON-NLS-1$    
                     continue;
                 }
 
