@@ -3,11 +3,12 @@ Bundle-ManifestVersion: 2
 Bundle-Name: org.talend.mdm.workbench.test
 Bundle-SymbolicName: org.talend.mdm.workbench.test
 Fragment-Host: org.talend.mdm.workbench
-Bundle-Version: 1.0.0
+Bundle-Version: 6.0.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Require-Bundle: org.junit4,
  org.talend.testutils,
  org.hamcrest,
- org.eclipse.osgi.services
+ org.eclipse.osgi.services,
+ org.talend.mdm.ws
 Bundle-ClassPath: .
 Export-Package: com.amalto.workbench.utils

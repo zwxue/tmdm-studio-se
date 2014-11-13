@@ -195,15 +195,19 @@ public class ExportDataContentProcess extends AbstractDataContentProcess {
                 monitor.beginTask(Messages.ExportDataClusterAction_exportContent, results.size() + 10);
                 monitor.subTask(Messages.ExportDataClusterAction_exporting);
                 int totalSize = 0;
-                if (results.size() > 0) {
+                int maxSize = results.size() - 1;
+                if (maxSize > 0) {
                     totalSize = Integer.parseInt(Util.parse(results.get(0).getWsItemPK().getConceptName()).getDocumentElement()
                             .getTextContent());
+                    if (maxSize > MAX_EXPORT_COUNT) {
+                        maxSize = MAX_EXPORT_COUNT;
+                    }
                 }
                 // Marshaller.marshal(wsitem, sw);
                 // replace with following to resolve serialize List type problem
                 Mapping mapping = getWSItemMapping();
 
-                for (int i = 1; i <= totalSize; i++) {
+                for (int i = 1; i <= maxSize; i++) {
                     Results item = results.get(i);
                     WSItem wsitem = port.getItem(new WSGetItem(item.getWsItemPK()));
 
