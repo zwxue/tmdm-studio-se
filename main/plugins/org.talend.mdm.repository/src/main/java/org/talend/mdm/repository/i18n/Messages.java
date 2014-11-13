@@ -98,6 +98,8 @@ public class Messages extends NLS {
 
     public static String ValidateService_ObjectExist;
 
+    public static String ViewBrowserMainPage2_Master;
+
     public static String ViewContentProvider_SearchFilter;
 
     public static String ViewContentProvider_WebFilter;
