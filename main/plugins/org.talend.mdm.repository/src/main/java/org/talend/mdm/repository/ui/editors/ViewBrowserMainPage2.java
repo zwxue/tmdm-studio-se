@@ -19,9 +19,11 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.eclipse.ui.forms.editor.FormEditor;
 import org.talend.mdm.repository.core.service.RepositoryWebServiceAdapter;
+import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 
 import com.amalto.workbench.editors.ViewBrowserMainPage;
+import com.amalto.workbench.exadapter.ExAdapterManager;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.XtentisException;
 import com.amalto.workbench.webservices.WSDataClusterPK;
@@ -35,6 +37,8 @@ public class ViewBrowserMainPage2 extends ViewBrowserMainPage {
 
     private static Logger log = Logger.getLogger(ViewBrowserMainPage2.class);
 
+    private IViewBrowserMainPage2Exadapter exAdapter;
+
     /**
      * DOC hbhong ViewBrowserMainPage2 constructor comment.
      *
@@ -42,6 +46,11 @@ public class ViewBrowserMainPage2 extends ViewBrowserMainPage {
      */
     public ViewBrowserMainPage2(FormEditor editor) {
         super(editor);
+        initAdapter();
+    }
+
+    private void initAdapter() {
+        exAdapter = ExAdapterManager.getAdapter(this, IViewBrowserMainPage2Exadapter.class);
     }
 
     @Override
@@ -71,6 +80,31 @@ public class ViewBrowserMainPage2 extends ViewBrowserMainPage {
 
         }
         return null;
+    }
+
+    @Override
+    protected String[] getClusterTypes() {
+        String[] clusterTypes = new String[] { Messages.ViewBrowserMainPage2_Master };
+        if (exAdapter != null) {
+            String dataClusterType = exAdapter.getDataClusterType();
+            String[] clusters = new String[clusterTypes.length + 1];
+            System.arraycopy(clusterTypes, 0, clusters, 0, clusterTypes.length);
+            clusters[clusterTypes.length] = dataClusterType;
+            clusterTypes = clusters;
+        }
+
+        return clusterTypes;
+    }
+
+    @Override
+    protected String getPkAddition() {
+
+        if (exAdapter != null) {
+            String pkAddition = exAdapter.getPkAddition(clusterTypeCombo.getText());
+            return pkAddition;
+        }
+
+        return super.getPkAddition();
     }
 
 }
