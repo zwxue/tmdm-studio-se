@@ -224,13 +224,18 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
             public void doubleClick(DoubleClickEvent event) {
                 resultsViewer.setSelection(event.getSelection());
                 try {
-                    new EditItemAction(getShell(), resultsViewer).run();
+                    editItem();
                 } catch (Exception e) {
                     MessageDialog.openError(getShell(), Messages._Error, Messages.bind(
                             Messages.DataClusterBrowserMainPage_10, e.getClass().getName(), e.getLocalizedMessage()));
                 }
             }
+
         });
+    }
+
+    protected void editItem() {
+        new EditItemAction(getShell(), resultsViewer).run();
     }
 
     protected void hookKeyboard() {
