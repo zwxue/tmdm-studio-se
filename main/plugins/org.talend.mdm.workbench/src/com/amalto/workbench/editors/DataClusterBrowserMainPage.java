@@ -226,8 +226,8 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                 try {
                     editItem();
                 } catch (Exception e) {
-                    MessageDialog.openError(getShell(), Messages._Error, Messages.bind(
-                            Messages.DataClusterBrowserMainPage_10, e.getClass().getName(), e.getLocalizedMessage()));
+                    MessageDialog.openError(getShell(), Messages._Error, Messages.bind(Messages.DataClusterBrowserMainPage_10, e
+                            .getClass().getName(), e.getLocalizedMessage()));
                 }
             }
 
@@ -302,6 +302,9 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
         FormEditor editor = getEditor();
         if (editor instanceof XObjectBrowser) {
             XObjectBrowser xobjectEditor = (XObjectBrowser) editor;
+            // remove refresh action
+            xobjectEditor.getToolBar().getToolBarManager().removeAll();
+            //
             ActionContributionItem manageAutoIncrementItem = new ActionContributionItem(new ManageAutoIncrementAction());
             manageAutoIncrementItem.setMode(ActionContributionItem.MODE_FORCE_TEXT);
             xobjectEditor.getToolBar().addActions(manageAutoIncrementItem);
@@ -321,7 +324,6 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
     public void handleEvent(int type, TreeObject parent, TreeObject child) {
         refreshData();
     }
-
 
     protected DataContainerDOMViewDialog getDomViewDialog(final XtentisPort port, final WSItem wsItem, String xml,
             ArrayList<String> dataModels) throws Exception {
@@ -392,7 +394,8 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                         entityToRevisions);
 
                 if (entityToAutoIncrementValues == null || entityToAutoIncrementValues.isEmpty()) {
-                    MessageDialog.openInformation(shell, Messages.Warnning, Messages.DataClusterBrowserMainPage_noAutoIncrementToManage);
+                    MessageDialog.openInformation(shell, Messages.Warnning,
+                            Messages.DataClusterBrowserMainPage_noAutoIncrementToManage);
                     return;
                 }
 
@@ -468,10 +471,9 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
         }
 
         private String updateAutoIncrement(String cluster, String content, Map<String, String> conceptRevisions,
-                Map<String, String> results)
-                        throws Exception {
+                Map<String, String> results) throws Exception {
             Map<String, String> keyvalues = new HashMap<String, String>();
-            for(String concept:results.keySet()) {
+            for (String concept : results.keySet()) {
                 String revision = conceptRevisions.get(concept);
                 String fieldName = getAutoIncrementKeyFieldNames(concept);
 
@@ -620,11 +622,11 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                 if (li == null) {
                     return;
                 }
-                
+
                 String pk = ((WSDataClusterPK) getXObject().getWsKey()).getPk();
                 final WSDataClusterPK dataClusterPk = new WSDataClusterPK(pk + getPkAddition());
-                final WSItem wsItem = port.getItem(new WSGetItem(new WSItemPK(dataClusterPk, li
-                        .getConcept().trim(), Arrays.asList(li.getIds()))));
+                final WSItem wsItem = port.getItem(new WSGetItem(new WSItemPK(dataClusterPk, li.getConcept().trim(), Arrays
+                        .asList(li.getIds()))));
                 String xml = Util.formatXsdSource(wsItem.getContent());
 
                 List<WSDataModelPK> dmPKs = port.getDataModelPKs(new WSRegexDataModelPKs("*")).getWsDataModelPKs();//$NON-NLS-1$
@@ -737,14 +739,14 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                 WSDataClusterPK dataClusterPk = new WSDataClusterPK(pk + getPkAddition());
 
                 // left
-                WSItemPK leftWSItemPK = new WSItemPK(dataClusterPk, leftLineItem.getConcept().trim(),
-                        Arrays.asList(leftLineItem.getIds()));
+                WSItemPK leftWSItemPK = new WSItemPK(dataClusterPk, leftLineItem.getConcept().trim(), Arrays.asList(leftLineItem
+                        .getIds()));
                 WSItem leftWSItem = Util.getPort(getXObject()).getItem(new WSGetItem(leftWSItemPK));
                 String leftItemXmlContent = leftWSItem.getContent();
 
                 // right
-                WSItemPK rightWSItemPK = new WSItemPK(dataClusterPk, rightLineItem.getConcept()
-                        .trim(), Arrays.asList(rightLineItem.getIds()));
+                WSItemPK rightWSItemPK = new WSItemPK(dataClusterPk, rightLineItem.getConcept().trim(),
+                        Arrays.asList(rightLineItem.getIds()));
                 WSItem rightWSItem = Util.getPort(getXObject()).getItem(new WSGetItem(rightWSItemPK));
                 String rightItemXmlContent = rightWSItem.getContent();
 
@@ -812,17 +814,16 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                 }
 
                 ConfirmFireEventWithInputDialog id = new ConfirmFireEventWithInputDialog(this.shell,
-                        Messages.DataClusterBrowserMainPage_64, Messages.bind(
-                        Messages.DataClusterBrowserMainPage_65, lineItems.size()), Messages.DataClusterBrowserMainPage_67,
-                        new IInputValidator() {
+                        Messages.DataClusterBrowserMainPage_64, Messages.bind(Messages.DataClusterBrowserMainPage_65,
+                                lineItems.size()), Messages.DataClusterBrowserMainPage_67, new IInputValidator() {
 
-                    public String isValid(String newText) {
-                        if ((newText == null) || !newText.matches("^\\/.*$")) { //$NON-NLS-1$
-                            return Messages.DataClusterBrowserMainPage_68;
-                        }
-                        return null;
-                    };
-                });
+                            public String isValid(String newText) {
+                                if ((newText == null) || !newText.matches("^\\/.*$")) { //$NON-NLS-1$
+                                    return Messages.DataClusterBrowserMainPage_68;
+                                }
+                                return null;
+                            };
+                        });
 
                 id.setBlockOnOpen(true);
                 int ret = id.open();
@@ -1153,8 +1154,6 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
             }
         }
 
-
-
         @Override
         public void runWithEvent(Event event) {
             super.runWithEvent(event);
@@ -1361,7 +1360,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                 break;
             case 2:
                 res = Util
-                .joinStrings(li1.getIds(), ".").compareToIgnoreCase(Util.joinStrings(li2.getIds(), Messages.DataClusterBrowserMainPage_130)); //$NON-NLS-1$
+                        .joinStrings(li1.getIds(), ".").compareToIgnoreCase(Util.joinStrings(li2.getIds(), Messages.DataClusterBrowserMainPage_130)); //$NON-NLS-1$
                 break;
             default:
                 res = 0;
