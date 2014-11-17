@@ -181,7 +181,7 @@ public class DataClusterComposite extends Composite implements IPagingListener {
         // We do not implement IFormPart: we do not care about lifecycle management
         Composite compFirstLine = toolkit.createComposite(composite, SWT.NONE);
         compFirstLine.setLayoutData(new GridData(SWT.FILL, SWT.NONE, true, false));
-        compFirstLine.setLayout(new GridLayout(9, false));
+        compFirstLine.setLayout(new GridLayout(10, false));
 
         // from
         Label fromLabel = toolkit.createLabel(compFirstLine, Messages.DataClusterBrowserMainPage_1, SWT.NULL);
@@ -204,6 +204,18 @@ public class DataClusterComposite extends Composite implements IPagingListener {
         conceptCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
         // ((GridData) conceptCombo.getLayoutData()).widthHint = 180;
         conceptCombo.addKeyListener(keylistener);
+        // refresh
+        // search
+        Button refreshBun = toolkit.createButton(compFirstLine, "", SWT.CENTER); //$NON-NLS-1$
+        refreshBun.setImage(ImageCache.getCreatedImage(EImage.REFRESH.getPath()));
+        refreshBun.setToolTipText(Messages.XObjectBrowser_Refresh);
+        refreshBun.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1));
+        refreshBun.addListener(SWT.Selection, new Listener() {
+
+            public void handleEvent(Event event) {
+                refreshData();
+            };
+        });
 
         // search
         Button bSearch = toolkit.createButton(compFirstLine, "", SWT.CENTER); //$NON-NLS-1$
@@ -433,7 +445,7 @@ public class DataClusterComposite extends Composite implements IPagingListener {
                 if (i == 0) {
                     totalSize = Integer.parseInt(Util.parse(result.getWsItemPK().getConceptName()).getDocumentElement()
                             .getTextContent());
-                    
+
                     continue;
                 }
 
