@@ -86,11 +86,13 @@ public class ViewBrowserMainPage2 extends ViewBrowserMainPage {
     protected String[] getClusterTypes() {
         String[] clusterTypes = new String[] { Messages.ViewBrowserMainPage2_Master };
         if (exAdapter != null) {
-            String dataClusterType = exAdapter.getDataClusterType();
-            String[] clusters = new String[clusterTypes.length + 1];
-            System.arraycopy(clusterTypes, 0, clusters, 0, clusterTypes.length);
-            clusters[clusterTypes.length] = dataClusterType;
-            clusterTypes = clusters;
+            String dataClusterType = exAdapter.getDataClusterType(dataClusterCombo.getText(), getServerDef());
+            if (dataClusterType != null) {
+                String[] clusters = new String[clusterTypes.length + 1];
+                System.arraycopy(clusterTypes, 0, clusters, 0, clusterTypes.length);
+                clusters[clusterTypes.length] = dataClusterType;
+                clusterTypes = clusters;
+            }
         }
 
         return clusterTypes;
