@@ -12,6 +12,8 @@
 // ============================================================================
 package org.talend.mdm.repository.ui.editors;
 
+import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
+
 import com.amalto.workbench.exadapter.IExAdapter;
 
 
@@ -20,7 +22,7 @@ import com.amalto.workbench.exadapter.IExAdapter;
  */
 public interface IViewBrowserMainPage2Exadapter extends IExAdapter<ViewBrowserMainPage2> {
 
-    public String getDataClusterType();
+    public String getDataClusterType(String dataCluster, MDMServerDef mdmServerDef);
 
     public String getPkAddition(String clusterType);
 

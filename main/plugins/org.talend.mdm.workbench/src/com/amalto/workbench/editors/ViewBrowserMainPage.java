@@ -319,6 +319,8 @@ public class ViewBrowserMainPage extends AMainPage implements IXObjectModelListe
 
             hookContextMenu();
 
+            addListener();
+
         } catch (Exception e) {
             log.error(e.getMessage(), e);
         }
@@ -377,6 +379,7 @@ public class ViewBrowserMainPage extends AMainPage implements IXObjectModelListe
             dataClusterCombo.select(0);
 
             clusterTypeCombo.setItems(getClusterTypes());
+            clusterTypeCombo.select(0);
 
             this.getManagedForm().reflow(true);
 
@@ -429,6 +432,17 @@ public class ViewBrowserMainPage extends AMainPage implements IXObjectModelListe
         Menu menu = menuMgr.createContextMenu(resultsViewer.getControl());
         resultsViewer.getControl().setMenu(menu);
         getSite().registerContextMenu(menuMgr, resultsViewer);
+    }
+
+    private void addListener() {
+        dataClusterCombo.addSelectionListener(new SelectionAdapter() {
+
+            @Override
+            public void widgetSelected(SelectionEvent e) {
+                clusterTypeCombo.setItems(getClusterTypes());
+                clusterTypeCombo.select(0);
+            }
+        });
     }
 
     protected void fillContextMenu(IMenuManager manager) {
