@@ -58,6 +58,8 @@ public class RemoveFromRepositoryAction extends AbstractRepositoryAction {
 
     private List<Object> lockedObjs;
 
+    private List<Object> removed = new LinkedList<Object>();
+
     /**
      * DOC hbhong RemoveFromRepositoryAction constructor comment.
      * 
@@ -123,6 +125,7 @@ public class RemoveFromRepositoryAction extends AbstractRepositoryAction {
         }
 
         commonViewer.refresh();
+        removed.clear();
 
         if (lockedObjs.size() > 0) {
             MessageDialog.openError(getShell(), Messages.AbstractRepositoryAction_lockedObjTitle, getAlertMsg());
@@ -196,6 +199,12 @@ public class RemoveFromRepositoryAction extends AbstractRepositoryAction {
     }
 
     private void removeServerObject(IRepositoryViewObject viewObj) {
+        if (removed.contains(viewObj.getId())) {
+            return;
+        }
+
+        removed.add(viewObj.getId());
+
         try {
             Item item = viewObj.getProperty().getItem();
             IEditorReference ref = RepositoryResourceUtil.isOpenedInEditor(viewObj);
@@ -217,6 +226,10 @@ public class RemoveFromRepositoryAction extends AbstractRepositoryAction {
     }
 
     private void removeFolderObject(IRepositoryViewObject viewObj) {
+        if (removed.contains(viewObj.getId())) {
+            return;
+        }
+
         for (IRepositoryViewObject childObj : viewObj.getChildren()) {
             if (childObj instanceof FolderRepositoryObject) {
                 removeFolderObject(childObj);
@@ -224,6 +237,8 @@ public class RemoveFromRepositoryAction extends AbstractRepositoryAction {
                 removeServerObject(childObj);
             }
         }
+
+        removed.add(viewObj.getId());
         //
         ContainerItem containerItem = (ContainerItem) viewObj.getProperty().getItem();
         String path = containerItem.getState().getPath();
