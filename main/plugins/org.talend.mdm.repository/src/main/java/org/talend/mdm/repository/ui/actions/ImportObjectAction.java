@@ -119,22 +119,24 @@ public class ImportObjectAction {
                 dialog.getShell().setText(Messages.ImportObjectAction_importRepositoryItem);
                 if (dialog.open() == IDialogConstants.OK_ID) {
                     if (exAdapter != null) {
-                        List<String> importedIds = wizard.getImportedIds();
-                        for (String id : importedIds) {
-                            IRepositoryViewObject viewObject = ContainerCacheService.get(id);
-                            if (viewObject != null) {
-                                viewObject = RepositoryResourceUtil.assertViewObject(viewObject);
+                        if (!exAdapter.isDisableDependencyChecking()) {
+                            List<String> importedIds = wizard.getImportedIds();
+                            for (String id : importedIds) {
+                                IRepositoryViewObject viewObject = ContainerCacheService.get(id);
                                 if (viewObject != null) {
-                                    Property property = viewObject.getProperty();
-                                    if (property != null) {
-                                        Item item = property.getItem();
-                                        if (item != null) {
-                                            exAdapter.updateRelation(item);
+                                    viewObject = RepositoryResourceUtil.assertViewObject(viewObject);
+                                    if (viewObject != null) {
+                                        Property property = viewObject.getProperty();
+                                        if (property != null) {
+                                            Item item = property.getItem();
+                                            if (item != null) {
+                                                exAdapter.updateRelation(item);
+                                            }
                                         }
                                     }
                                 }
-                            }
 
+                            }
                         }
                     }
                 }

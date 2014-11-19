@@ -27,6 +27,8 @@ import org.eclipse.ui.IWorkbenchPreferencePage;
 import org.eclipse.ui.PlatformUI;
 import org.talend.mdm.repository.i18n.Messages;
 
+import com.amalto.workbench.exadapter.ExAdapterManager;
+
 public class AutoDeployPreferencePage extends PreferencePage implements IWorkbenchPreferencePage {
 
     public AutoDeployPreferencePage() {
@@ -36,10 +38,12 @@ public class AutoDeployPreferencePage extends PreferencePage implements IWorkben
 
     private Button warnUserBun;
 
+    IAutoDeployPreferencePageExAdapter exAdapter = null;
+
     public void init(IWorkbench workbench) {
         IPreferenceStore store = PlatformUI.getPreferenceStore();
         setPreferenceStore(store);
-
+        exAdapter = ExAdapterManager.getAdapter(this, IAutoDeployPreferencePageExAdapter.class);
     }
 
     @Override
@@ -67,6 +71,9 @@ public class AutoDeployPreferencePage extends PreferencePage implements IWorkben
         gd_btnCheckButton.horizontalIndent = 20;
         warnUserBun.setLayoutData(gd_btnCheckButton);
         warnUserBun.setText(Messages.AutoDeployPreferencePage_btnCheckButton_text);
+        if (exAdapter != null) {
+            exAdapter.createContents(composite);
+        }
         //
         initCheckedBuns();
         return composite;
@@ -76,10 +83,14 @@ public class AutoDeployPreferencePage extends PreferencePage implements IWorkben
         warnUserBun.setEnabled(bAutoDeploy.getSelection());
     }
 
+    @Override
     public boolean performOk() {
         IPreferenceStore store = getPreferenceStore();
         store.setValue(PreferenceConstants.P_AUTO_DEPLOY, bAutoDeploy.getSelection());
         store.setValue(PreferenceConstants.P_WARN_USER_AUTO_DEPLOY, warnUserBun.getSelection());
+        if (exAdapter != null) {
+            exAdapter.performOk();
+        }
         return true;
     }
 
@@ -87,13 +98,20 @@ public class AutoDeployPreferencePage extends PreferencePage implements IWorkben
         IPreferenceStore store = getPreferenceStore();
         bAutoDeploy.setSelection(store.getBoolean(PreferenceConstants.P_AUTO_DEPLOY));
         warnUserBun.setSelection(store.getBoolean(PreferenceConstants.P_WARN_USER_AUTO_DEPLOY));
+        if (exAdapter != null) {
+            exAdapter.initCheckedBuns();
+        }
         updateWarnUserBun();
     }
 
+    @Override
     protected void performDefaults() {
         IPreferenceStore store = getPreferenceStore();
         store.setValue(PreferenceConstants.P_AUTO_DEPLOY, false);
         store.setValue(PreferenceConstants.P_WARN_USER_AUTO_DEPLOY, true);
+        if (exAdapter != null) {
+            exAdapter.performDefaults();
+        }
         initCheckedBuns();
     }
 

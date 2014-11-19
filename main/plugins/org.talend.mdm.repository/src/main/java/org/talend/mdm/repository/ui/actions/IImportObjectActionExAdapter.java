@@ -24,4 +24,5 @@ public interface IImportObjectActionExAdapter extends IExAdapter<ImportObjectAct
 
     void updateRelation(Item item);
 
+    boolean isDisableDependencyChecking();
 }
