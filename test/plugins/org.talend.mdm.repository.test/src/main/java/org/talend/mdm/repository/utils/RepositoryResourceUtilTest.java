@@ -20,6 +20,8 @@ import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.jface.resource.JFaceResources;
@@ -267,6 +269,11 @@ public class RepositoryResourceUtilTest {
         when(mockResourceProvider.needSaveReferenceFile()).thenReturn(true);
         when(repositoryFactory.isEditableAndLockIfPossible(mockItem)).thenReturn(true);
 
+        Resource mockResource = mock(Resource.class);
+        ResourceSet mockResourceSet = mock(ResourceSet.class);
+        when(mockResource.getResourceSet()).thenReturn(mockResourceSet);
+        when(mockItem.eResource()).thenReturn(mockResource);
+
         boolean createItem = RepositoryResourceUtil.createItem(mockItem, propLabel);
         verify(mockProperty, times(1)).setId(nextId);
         verify(mockProperty, times(1)).setVersion(Mockito.anyString());
@@ -480,8 +487,8 @@ public class RepositoryResourceUtilTest {
         boolean result = Whitebox.invokeMethod(RepositoryResourceUtil.class, "isSystemFolder", mockContainerItem, folderName);
         assertTrue(result);
 
-        for (int i = 0; i < folderTypes.length; i++) {
-            when(mockContainerItem.getType()).thenReturn(folderTypes[i]);
+        for (FolderType folderType : folderTypes) {
+            when(mockContainerItem.getType()).thenReturn(folderType);
             result = Whitebox.invokeMethod(RepositoryResourceUtil.class, "isSystemFolder", mockContainerItem, folderName);
             assertFalse(result);
         }
@@ -673,8 +680,8 @@ public class RepositoryResourceUtilTest {
 
         PowerMockito.mockStatic(RepositoryResourceUtil.class);
         IRepositoryViewObject mockResultViewObject = mock(IRepositoryViewObject.class);
-        PowerMockito.when(RepositoryResourceUtil.class, "getCacheViewObject", mockProperty, mockViewObject,
-                useRepositoryViewObject).thenReturn(mockResultViewObject);
+        PowerMockito.when(RepositoryResourceUtil.class, "getCacheViewObject", mockProperty, mockViewObject).thenReturn(
+                mockResultViewObject);
         PowerMockito.when(RepositoryResourceUtil.class, "assertViewObject", mockViewObject).thenReturn(mockViewObject);
 
         PowerMockito.doCallRealMethod().when(RepositoryResourceUtil.class, "findAllViewObjects", mockType,
