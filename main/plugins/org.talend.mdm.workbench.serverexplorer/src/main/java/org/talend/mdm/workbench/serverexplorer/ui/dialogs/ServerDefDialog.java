@@ -41,6 +41,7 @@ import org.talend.mdm.workbench.serverexplorer.i18n.Messages;
 import org.talend.repository.model.IProxyRepositoryFactory;
 
 import com.amalto.workbench.exadapter.ExAdapterManager;
+import com.amalto.workbench.service.MissingJarsException;
 import com.amalto.workbench.utils.PasswordUtil;
 import com.amalto.workbench.utils.XtentisException;
 
@@ -292,6 +293,8 @@ public class ServerDefDialog extends TitleAreaDialog {
             try {
                 ServerDefService.checkMDMConnection(tmpServerDef.getDecryptedServerDef());
                 setMessage(Messages.ServerExplorer_ConnectSuccessful);
+            } catch (MissingJarsException e) {
+                return;
             } catch (XtentisException e) {
                 setErrorMessage(Messages.ServerExplorer_ConnectFailed);
             } catch (MalformedURLException e) {
