@@ -14,7 +14,7 @@ package com.amalto.workbench.utils;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.log4j.Logger;
-import org.talend.commons.utils.PasswordEncryptUtil;
+import org.talend.utils.security.CryptoHelper;
 
 public class PasswordUtil {
 
@@ -28,7 +28,7 @@ public class PasswordUtil {
         }
         if (algorithm != null && algorithm.equals(ALGORITHM_COMMON)) {
             try {
-                return PasswordEncryptUtil.decryptPassword(encodedPassword);
+                return CryptoHelper.getDefault().decrypt(encodedPassword);
             } catch (Exception e) {
                 log.error(e.getMessage(), e);
             }
@@ -56,7 +56,7 @@ public class PasswordUtil {
         }
         if (algorithm != null && algorithm.equals(ALGORITHM_COMMON)) {
             try {
-                return PasswordEncryptUtil.encryptPassword(plainPassword);
+                return CryptoHelper.getDefault().encrypt(plainPassword);
             } catch (Exception e) {
                 log.error(e.getMessage(), e);
             }
