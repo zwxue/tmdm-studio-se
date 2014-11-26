@@ -265,6 +265,7 @@ public class DataClusterDialog extends Dialog {
 
                     changeWidgetColor(greyColor);
                 }
+                selectDefaultContainer();
             }
         });
 
@@ -314,21 +315,30 @@ public class DataClusterDialog extends Dialog {
 
     private void init() {
         if (hasdefaultServer) {
-            for (MDMServerDef serverDef : getAllServerDefs()) {
-                if (serverDef.getName().equals(oldServerDef.getName())) {
-                    serverComboViewer.setSelection(new StructuredSelection(serverDef), true);
-                    break;
-                }
-            }
+            selectDefaultServer();
 
-            for (TreeObject treeObj : dataContainers) {
-                if (treeObj.getName().equals("UpdateReport")) { //$NON-NLS-1$
-                    containerComboViewer.setSelection(new StructuredSelection(treeObj));
-                    break;
-                }
+            selectDefaultContainer();
+        }
+    }
+
+    private void selectDefaultServer() {
+        for (MDMServerDef serverDef : getAllServerDefs()) {
+            if (serverDef.getName().equals(oldServerDef.getName())) {
+                serverComboViewer.setSelection(new StructuredSelection(serverDef), true);
+                break;
             }
         }
     }
+
+    private void selectDefaultContainer() {
+        for (TreeObject treeObj : dataContainers) {
+            if (treeObj.getName().equals("UpdateReport")) { //$NON-NLS-1$
+                containerComboViewer.setSelection(new StructuredSelection(treeObj));
+                break;
+            }
+        }
+    }
+
     private void changeWidgetColor(Color color) {
         WidgetUtils.changeWidgetColor(clusterComposite, color, new boolean[] { true, false });
         if (!textViewer.getEditable()) {
