@@ -122,4 +122,16 @@
             name="%MDMServerPrefsPage.name">
       </page>
    </extension>
+     <extension
+        point="org.talend.core.migrationTask">
+     <projecttask
+           beforeLogon="false"
+           breaks="5.6.0"
+           class="org.talend.mdm.workbench.serverexplorer.migration.UnifyPasswordEncryption4MDMServerDefMigrationTask"
+           description="Unify the entryption for pass fields of parameters of MDM Server Definition"
+           id="org.talend.mdm.workbench.serverexplorer.migration.UnifyPasswordEncryption4MDMServerDefMigrationTask"
+           name="UnifyPasswordEncryption4MDMServerDefMigrationTask"
+           version="5.6.0">
+     </projecttask>
+  </extension>
 </plugin>

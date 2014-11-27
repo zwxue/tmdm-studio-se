@@ -8,6 +8,11 @@ Bundle-Localization: plugin
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.ui.forms,
+ org.apache.log4j,
+ org.eclipse.ui.console,
+ org.apache.commons.io,
+ org.apache.httpcomponents.httpclient,
+ org.apache.httpcomponents.httpcore,
  org.apache.commons.logging,
  org.talend.core.runtime,
  org.talend.core.repository,
@@ -16,11 +21,7 @@ Require-Bundle: org.eclipse.ui,
  org.talend.common.ui.runtime,
  org.talend.mdm.repository.model,
  org.talend.mdm.workbench,
- org.apache.log4j,
- org.eclipse.ui.console,
- org.apache.commons.io,
- org.apache.httpcomponents.httpclient,
- org.apache.httpcomponents.httpcore
+ org.talend.repository
 Bundle-ActivationPolicy: lazy
 Eclipse-RegisterBuddy: org.talend.testutils
 Export-Package: org.talend.mdm.workbench.serverexplorer.console,
