@@ -23,6 +23,8 @@ import org.talend.mdm.repository.core.IRepositoryNodeConfiguration;
 import org.talend.mdm.repository.extension.RepositoryNodeConfigurationManager;
 import org.talend.mdm.repository.ui.editors.IRepositoryViewEditorInput;
 
+import com.amalto.workbench.views.MDMPerspective;
+
 /**
  * created by HHB on 2013-3-6 Detailled comment
  * 
@@ -88,5 +90,10 @@ public class UIUtil {
         if (page != null) {
             page.closeEditor(editorPart, save);
         }
+    }
+
+    public static boolean isMDMPerspective(IWorkbenchPage page) {
+        String perspectiveId = page.getPerspective().getId();
+        return MDMPerspective.PERPECTIVE_ID.equals(perspectiveId);
     }
 }
