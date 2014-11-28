@@ -77,7 +77,7 @@ public class ValidateMarkerUtil implements IValidationMarker {
                 @Override
                 public void run() {
                     IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-                    if (page != null) {
+                    if (page != null && UIUtil.isMDMPerspective(page)) {
                         IViewPart view = null;
                         try {
                             view = page.findView(MDMProblemView.VIEW_ID);
