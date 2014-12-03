@@ -345,25 +345,28 @@ public class MDMRepositoryView extends CommonNavigator implements ITabbedPropert
                         return;
                     }
                     factory.unlock(item);
-                    Property property = item.getProperty();
-                    final String id = property.getId();
-
-                    Display.getDefault().asyncExec(new Runnable() {
-
-                        public void run() {
-                            if (!getCommonViewer().getTree().isDisposed()) {
-                                final IRepositoryViewObject viewObject = ContainerCacheService.get(id);
-                                if (viewObject != null) {
-                                    getCommonViewer().refresh(viewObject);
-                                }
-                            }
-                        }
-                    });
 
                 } catch (PersistenceException e) {
                     log.error(e.getMessage(), e);
                 } catch (LoginException e) {
                     log.error(e.getMessage(), e);
+                } finally {
+                    if (item != null) {
+                        Property property = item.getProperty();
+                        final String id = property.getId();
+
+                        Display.getDefault().asyncExec(new Runnable() {
+
+                            public void run() {
+                                if (!getCommonViewer().getTree().isDisposed()) {
+                                    final IRepositoryViewObject viewObject = ContainerCacheService.get(id);
+                                    if (viewObject != null) {
+                                        getCommonViewer().refresh(viewObject);
+                                    }
+                                }
+                            }
+                        });
+                    }
                 }
             }
 
