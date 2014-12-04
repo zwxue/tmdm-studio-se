@@ -28,6 +28,8 @@ import javax.xml.bind.annotation.XmlType;
  *         &lt;element name="keyXPath" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="startingPosition" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
  *         &lt;element name="overwrite" type="{http://www.w3.org/2001/XMLSchema}boolean" minOccurs="0"/>
+ *         &lt;element name="report" type="{http://www.w3.org/2001/XMLSchema}boolean"/>
+ *         &lt;element name="source" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -44,7 +46,9 @@ import javax.xml.bind.annotation.XmlType;
     "datamodel",
     "keyXPath",
     "startingPosition",
-    "overwrite"
+    "overwrite",
+    "report",
+    "source"
 })
 public class WSPartialPutItem {
 
@@ -60,6 +64,10 @@ public class WSPartialPutItem {
     protected Integer startingPosition;
     @XmlElement(defaultValue = "false")
     protected Boolean overwrite;
+    @XmlElement(defaultValue = "false")
+    protected boolean report;
+    @XmlElement(defaultValue = "false")
+    protected String source;
 
     /**
      * Default no-arg constructor
@@ -73,7 +81,7 @@ public class WSPartialPutItem {
      * Fully-initialising value constructor
      * 
      */
-    public WSPartialPutItem(final String xml, final String datacluster, final String pivot, final String datamodel, final String keyXPath, final Integer startingPosition, final Boolean overwrite) {
+    public WSPartialPutItem(final String xml, final String datacluster, final String pivot, final String datamodel, final String keyXPath, final Integer startingPosition, final Boolean overwrite, final boolean report, final String source) {
         this.xml = xml;
         this.datacluster = datacluster;
         this.pivot = pivot;
@@ -81,6 +89,8 @@ public class WSPartialPutItem {
         this.keyXPath = keyXPath;
         this.startingPosition = startingPosition;
         this.overwrite = overwrite;
+        this.report = report;
+        this.source = source;
     }
 
     /**
@@ -249,6 +259,46 @@ public class WSPartialPutItem {
      */
     public void setOverwrite(Boolean value) {
         this.overwrite = value;
+    }
+
+    /**
+     * Gets the value of the report property.
+     * 
+     */
+    public boolean isReport() {
+        return report;
+    }
+
+    /**
+     * Sets the value of the report property.
+     * 
+     */
+    public void setReport(boolean value) {
+        this.report = value;
+    }
+
+    /**
+     * Gets the value of the source property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getSource() {
+        return source;
+    }
+
+    /**
+     * Sets the value of the source property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setSource(String value) {
+        this.source = value;
     }
 
 }
