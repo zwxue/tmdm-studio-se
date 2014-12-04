@@ -252,7 +252,7 @@ public class MDMValidationRunner extends WorkspaceJob {
                     @Override
                     public void run() {
                         IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-                        if (page != null) {
+                        if (page != null && UIUtil.isMDMPerspective(page)) {
                             try {
                                 page.showView(MDMProblemView.VIEW_ID);
                             } catch (PartInitException e) {

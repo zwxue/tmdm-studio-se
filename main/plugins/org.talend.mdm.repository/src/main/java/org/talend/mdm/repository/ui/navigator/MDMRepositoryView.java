@@ -341,6 +341,7 @@ public class MDMRepositoryView extends CommonNavigator implements ITabbedPropert
             if (item != null) {
                 try {
                     if (ERepositoryStatus.LOCK_BY_USER != factory.getStatus(item)) {
+                        removeReadOnlyStatus(partRef.getPart(false));
                         return;
                     }
                     factory.unlock(item);
@@ -366,6 +367,15 @@ public class MDMRepositoryView extends CommonNavigator implements ITabbedPropert
                 }
             }
 
+        }
+
+        private void removeReadOnlyStatus(IWorkbenchPart part) {
+            if (part != null && part instanceof IEditorPart) {
+                IEditorInput input = ((IEditorPart) part).getEditorInput();
+                if (input != null && input instanceof IRepositoryViewEditorInput) {
+                    ((IRepositoryViewEditorInput) input).setReadOnly(false);
+                }
+            }
         }
 
         private Item getItem(IWorkbenchPart part) {

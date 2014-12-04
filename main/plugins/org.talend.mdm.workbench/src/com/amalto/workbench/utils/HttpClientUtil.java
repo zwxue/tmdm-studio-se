@@ -71,6 +71,8 @@ import com.amalto.workbench.i18n.Messages;
  */
 public class HttpClientUtil {
 
+    private static final String DEFAULT_CHARSET = "UTF-8"; //$NON-NLS-1$
+
     private static Log log = LogFactory.getLog(HttpClientUtil.class);
 
     private static final String STRING_CONTENT_TYPE = "text/plain"; //$NON-NLS-1$
@@ -227,7 +229,7 @@ public class HttpClientUtil {
                 }
             }
             if (clz.equals(String.class)) {
-                return (T) EntityUtils.toString(content);
+                return (T) EntityUtils.toString(content, DEFAULT_CHARSET);
             }
         }
         return null;
@@ -380,7 +382,7 @@ public class HttpClientUtil {
             request = new HttpPut(url);
         }
 
-        StringEntity entity = new StringEntity(content, "UTF-8"); //$NON-NLS-1$
+        StringEntity entity = new StringEntity(content, DEFAULT_CHARSET);
         request.setEntity(entity);
         return request;
 

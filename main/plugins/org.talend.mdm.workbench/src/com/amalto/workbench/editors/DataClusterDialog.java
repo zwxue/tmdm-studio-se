@@ -40,11 +40,13 @@ import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -112,6 +114,12 @@ public class DataClusterDialog extends Dialog {
     private List<MDMServerDef> allServerDefs;
 
     private boolean hasdefaultServer = false;
+
+    private String okLabel;
+
+    private String cancelLabel;
+
+    private SelectionListener additionSelectionListener;
 
     public DataClusterDialog(Shell parentShell, TreeObject treeObject, IWorkbenchPartSite site) {
         super(parentShell);
@@ -257,6 +265,7 @@ public class DataClusterDialog extends Dialog {
 
                     changeWidgetColor(greyColor);
                 }
+                selectDefaultContainer();
             }
         });
 
@@ -306,21 +315,30 @@ public class DataClusterDialog extends Dialog {
 
     private void init() {
         if (hasdefaultServer) {
-            for (MDMServerDef serverDef : getAllServerDefs()) {
-                if (serverDef.getName().equals(oldServerDef.getName())) {
-                    serverComboViewer.setSelection(new StructuredSelection(serverDef), true);
-                    break;
-                }
-            }
+            selectDefaultServer();
 
-            for (TreeObject treeObj : dataContainers) {
-                if (treeObj.getName().equals("UpdateReport")) { //$NON-NLS-1$
-                    containerComboViewer.setSelection(new StructuredSelection(treeObj));
-                    break;
-                }
+            selectDefaultContainer();
+        }
+    }
+
+    private void selectDefaultServer() {
+        for (MDMServerDef serverDef : getAllServerDefs()) {
+            if (serverDef.getName().equals(oldServerDef.getName())) {
+                serverComboViewer.setSelection(new StructuredSelection(serverDef), true);
+                break;
             }
         }
     }
+
+    private void selectDefaultContainer() {
+        for (TreeObject treeObj : dataContainers) {
+            if (treeObj.getName().equals("UpdateReport")) { //$NON-NLS-1$
+                containerComboViewer.setSelection(new StructuredSelection(treeObj));
+                break;
+            }
+        }
+    }
+
     private void changeWidgetColor(Color color) {
         WidgetUtils.changeWidgetColor(clusterComposite, color, new boolean[] { true, false });
         if (!textViewer.getEditable()) {
@@ -425,14 +443,38 @@ public class DataClusterDialog extends Dialog {
 
     @Override
     protected void createButtonsForButtonBar(Composite parent) {
-        createButton(parent, Dialog.OK, IDialogConstants.OK_LABEL, false);
-        createButton(parent, Dialog.CANCEL, IDialogConstants.CANCEL_LABEL, false);
+        Button okBtn = createButton(parent, Dialog.OK, okLabel != null ? okLabel : IDialogConstants.OK_LABEL, false);
+        createButton(parent, Dialog.CANCEL, cancelLabel != null ? cancelLabel : IDialogConstants.CANCEL_LABEL,
+                false);
+        if (additionSelectionListener != null) {
+            okBtn.addSelectionListener(additionSelectionListener);
+        }
     }
 
     @Override
     protected void okPressed() {
-        recordContent = textViewer.getText().trim();
-        super.okPressed();
+        if (additionSelectionListener == null) {
+            recordContent = textViewer.getText().trim();
+            super.okPressed();
+        }
+    }
+
+    public void setOkLabel(String okLabel) {
+        this.okLabel = okLabel;
+        if (getButton(Dialog.OK) != null) {
+            getButton(Dialog.OK).setText(okLabel);
+        }
+    }
+
+    public void setCancelLabel(String cancelLabel) {
+        this.cancelLabel = cancelLabel;
+        if (getButton(Dialog.CANCEL) != null) {
+            getButton(Dialog.CANCEL).setText(cancelLabel);
+        }
+    }
+
+    public void setSelectionListener(SelectionListener listener) {
+        this.additionSelectionListener = listener;
     }
 
     public Text getText() {

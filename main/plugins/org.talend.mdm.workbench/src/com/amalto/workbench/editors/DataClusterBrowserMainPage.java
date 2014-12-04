@@ -43,7 +43,6 @@ import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.IInputValidator;
-import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
@@ -87,6 +86,8 @@ import com.amalto.workbench.dialogs.DOMViewDialog;
 import com.amalto.workbench.dialogs.datacontainer.AutoIncrementHelper;
 import com.amalto.workbench.dialogs.datacontainer.DataContainerDOMViewDialog;
 import com.amalto.workbench.dialogs.datacontainer.UpdateAutoIncrementDialog;
+import com.amalto.workbench.editors.dialog.ConfirmFireEventMessageDialog;
+import com.amalto.workbench.editors.dialog.ConfirmFireEventWithInputDialog;
 import com.amalto.workbench.exadapter.ExAdapterManager;
 import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.image.EImage;
@@ -223,13 +224,18 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
             public void doubleClick(DoubleClickEvent event) {
                 resultsViewer.setSelection(event.getSelection());
                 try {
-                    new EditItemAction(getShell(), resultsViewer).run();
+                    editItem();
                 } catch (Exception e) {
-                    MessageDialog.openError(getShell(), Messages._Error, Messages.bind(
-                            Messages.DataClusterBrowserMainPage_10, e.getClass().getName(), e.getLocalizedMessage()));
+                    MessageDialog.openError(getShell(), Messages._Error, Messages.bind(Messages.DataClusterBrowserMainPage_10, e
+                            .getClass().getName(), e.getLocalizedMessage()));
                 }
             }
+
         });
+    }
+
+    protected void editItem() {
+        new EditItemAction(getShell(), resultsViewer).run();
     }
 
     protected void hookKeyboard() {
@@ -296,6 +302,9 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
         FormEditor editor = getEditor();
         if (editor instanceof XObjectBrowser) {
             XObjectBrowser xobjectEditor = (XObjectBrowser) editor;
+            // remove refresh action
+            xobjectEditor.getToolBar().getToolBarManager().removeAll();
+            //
             ActionContributionItem manageAutoIncrementItem = new ActionContributionItem(new ManageAutoIncrementAction());
             manageAutoIncrementItem.setMode(ActionContributionItem.MODE_FORCE_TEXT);
             xobjectEditor.getToolBar().addActions(manageAutoIncrementItem);
@@ -315,7 +324,6 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
     public void handleEvent(int type, TreeObject parent, TreeObject child) {
         refreshData();
     }
-
 
     protected DataContainerDOMViewDialog getDomViewDialog(final XtentisPort port, final WSItem wsItem, String xml,
             ArrayList<String> dataModels) throws Exception {
@@ -386,7 +394,8 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                         entityToRevisions);
 
                 if (entityToAutoIncrementValues == null || entityToAutoIncrementValues.isEmpty()) {
-                    MessageDialog.openInformation(shell, Messages.Warnning, Messages.DataClusterBrowserMainPage_noAutoIncrementToManage);
+                    MessageDialog.openInformation(shell, Messages.Warnning,
+                            Messages.DataClusterBrowserMainPage_noAutoIncrementToManage);
                     return;
                 }
 
@@ -462,10 +471,9 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
         }
 
         private String updateAutoIncrement(String cluster, String content, Map<String, String> conceptRevisions,
-                Map<String, String> results)
-                        throws Exception {
+                Map<String, String> results) throws Exception {
             Map<String, String> keyvalues = new HashMap<String, String>();
-            for(String concept:results.keySet()) {
+            for (String concept : results.keySet()) {
                 String revision = conceptRevisions.get(concept);
                 String fieldName = getAutoIncrementKeyFieldNames(concept);
 
@@ -614,11 +622,11 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                 if (li == null) {
                     return;
                 }
-                
+
                 String pk = ((WSDataClusterPK) getXObject().getWsKey()).getPk();
                 final WSDataClusterPK dataClusterPk = new WSDataClusterPK(pk + getPkAddition());
-                final WSItem wsItem = port.getItem(new WSGetItem(new WSItemPK(dataClusterPk, li
-                        .getConcept().trim(), Arrays.asList(li.getIds()))));
+                final WSItem wsItem = port.getItem(new WSGetItem(new WSItemPK(dataClusterPk, li.getConcept().trim(), Arrays
+                        .asList(li.getIds()))));
                 String xml = Util.formatXsdSource(wsItem.getContent());
 
                 List<WSDataModelPK> dmPKs = port.getDataModelPKs(new WSRegexDataModelPKs("*")).getWsDataModelPKs();//$NON-NLS-1$
@@ -731,14 +739,14 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                 WSDataClusterPK dataClusterPk = new WSDataClusterPK(pk + getPkAddition());
 
                 // left
-                WSItemPK leftWSItemPK = new WSItemPK(dataClusterPk, leftLineItem.getConcept().trim(),
-                        Arrays.asList(leftLineItem.getIds()));
+                WSItemPK leftWSItemPK = new WSItemPK(dataClusterPk, leftLineItem.getConcept().trim(), Arrays.asList(leftLineItem
+                        .getIds()));
                 WSItem leftWSItem = Util.getPort(getXObject()).getItem(new WSGetItem(leftWSItemPK));
                 String leftItemXmlContent = leftWSItem.getContent();
 
                 // right
-                WSItemPK rightWSItemPK = new WSItemPK(dataClusterPk, rightLineItem.getConcept()
-                        .trim(), Arrays.asList(rightLineItem.getIds()));
+                WSItemPK rightWSItemPK = new WSItemPK(dataClusterPk, rightLineItem.getConcept().trim(),
+                        Arrays.asList(rightLineItem.getIds()));
                 WSItem rightWSItem = Util.getPort(getXObject()).getItem(new WSGetItem(rightWSItemPK));
                 String rightItemXmlContent = rightWSItem.getContent();
 
@@ -805,17 +813,17 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                     return;
                 }
 
-                InputDialog id = new InputDialog(this.shell, Messages.DataClusterBrowserMainPage_64, Messages.bind(
-                        Messages.DataClusterBrowserMainPage_65, lineItems.size()), Messages.DataClusterBrowserMainPage_67,
-                        new IInputValidator() {
+                ConfirmFireEventWithInputDialog id = new ConfirmFireEventWithInputDialog(this.shell,
+                        Messages.DataClusterBrowserMainPage_64, Messages.bind(Messages.DataClusterBrowserMainPage_65,
+                                lineItems.size()), Messages.DataClusterBrowserMainPage_67, new IInputValidator() {
 
-                    public String isValid(String newText) {
-                        if ((newText == null) || !newText.matches("^\\/.*$")) { //$NON-NLS-1$
-                            return Messages.DataClusterBrowserMainPage_68;
-                        }
-                        return null;
-                    };
-                });
+                            public String isValid(String newText) {
+                                if ((newText == null) || !newText.matches("^\\/.*$")) { //$NON-NLS-1$
+                                    return Messages.DataClusterBrowserMainPage_68;
+                                }
+                                return null;
+                            };
+                        });
 
                 id.setBlockOnOpen(true);
                 int ret = id.open();
@@ -825,7 +833,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 
                 // Instantiate the Monitor with actual deletes
                 LogicalDeleteItemsWithProgress diwp = new LogicalDeleteItemsWithProgress(getXObject(), lineItems, id.getValue(),
-                        this.shell);
+                        id.isFireEvent(), id.isInvokeBeforeProcess(), id.getSource(), this.shell);
                 // run
                 new ProgressMonitorDialog(this.shell).run(false, // fork
                         true, // cancelable
@@ -856,11 +864,21 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 
             Shell parentShell;
 
-            public LogicalDeleteItemsWithProgress(TreeObject object, Collection<LineItem> lineItems, String partPath, Shell shell) {
+            private boolean fireEvent;
+
+            private boolean invokeBeforeProcess;
+
+            private String source;
+
+            public LogicalDeleteItemsWithProgress(TreeObject object, Collection<LineItem> lineItems, String partPath,
+                    boolean fireEvent, boolean invokeBeforeProcess, String source, Shell shell) {
                 super();
                 this.xObject = object;
                 this.lineItems = lineItems;
                 this.partPath = partPath;
+                this.fireEvent = fireEvent;
+                this.invokeBeforeProcess = invokeBeforeProcess;
+                this.source = source;
                 this.parentShell = shell;
             }
 
@@ -882,8 +900,12 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                         }
                         WSItemPK itempk = new WSItemPK((WSDataClusterPK) xObject.getWsKey(), lineItem.getConcept(),
                                 Arrays.asList(lineItem.getIds()));
-                        port.deleteItemWithReport(new WSDeleteItemWithReport(itempk,
-                                "genericUI", "LOGIC_DELETE", partPath, getXObject().getUsername(), false, true, false));//$NON-NLS-1$ //$NON-NLS-2$
+                        if (source.isEmpty()) {
+                            source = "genericUI"; //$NON-NLS-1$
+                        }
+
+                        port.deleteItemWithReport(new WSDeleteItemWithReport(itempk, source,
+                                "LOGIC_DELETE", partPath, getXObject().getUsername(), invokeBeforeProcess, fireEvent, false));//$NON-NLS-1$ 
 
                         // port.dropItem(new WSDropItem(new WSItemPK((WSDataClusterPK) xObject.getWsKey(),
                         // lineItem.getConcept(),
@@ -941,13 +963,16 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                     return;
                 }
 
-                if (!MessageDialog.openConfirm(this.shell, Messages.DataClusterBrowserMainPage_64,
-                        Messages.bind(Messages.DataClusterBrowserMainPage_85, lineItems.size()))) {
+                ConfirmFireEventMessageDialog confirmDlg = ConfirmFireEventMessageDialog.createConfirmDialog(shell,
+                        Messages.DataClusterBrowserMainPage_64,
+                        Messages.bind(Messages.DataClusterBrowserMainPage_85, lineItems.size()));
+                if (confirmDlg.open() != Dialog.OK) {
                     return;
                 }
 
                 // Instantiate the Monitor with actual deletes
-                PhysicalDeleteItemsWithProgress diwp = new PhysicalDeleteItemsWithProgress(getXObject(), lineItems, this.shell);
+                PhysicalDeleteItemsWithProgress diwp = new PhysicalDeleteItemsWithProgress(getXObject(), lineItems,
+                        confirmDlg.isFireEvent(), confirmDlg.isInvokeBeforeProcess(), confirmDlg.getSource(), this.shell);
                 // run
                 new ProgressMonitorDialog(this.shell).run(false, // fork
                         true, // cancelable
@@ -976,10 +1001,20 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 
             Shell parentShell;
 
-            public PhysicalDeleteItemsWithProgress(TreeObject object, Collection<LineItem> lineItems, Shell shell) {
+            private boolean fireEvent;
+
+            private boolean invokeBeforeProcess;
+
+            private String source;
+
+            public PhysicalDeleteItemsWithProgress(TreeObject object, Collection<LineItem> lineItems, boolean fireEvent,
+                    boolean invokeBeforeProcess, String source, Shell shell) {
                 super();
                 this.xObject = object;
                 this.lineItems = lineItems;
+                this.fireEvent = fireEvent;
+                this.invokeBeforeProcess = invokeBeforeProcess;
+                this.source = source;
                 this.parentShell = shell;
             }
 
@@ -1038,8 +1073,13 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                         }
                         WSItemPK itempk = new WSItemPK((WSDataClusterPK) getXObject().getWsKey(), lineItem.getConcept(),
                                 Arrays.asList(lineItem.getIds()));
-                        port.deleteItemWithReport(new WSDeleteItemWithReport(itempk,
-                                "genericUI", "PHYSICAL_DELETE", null, getXObject().getUsername(), false, true, false));//$NON-NLS-1$ //$NON-NLS-2$
+                        if (source.isEmpty()) {
+                            source = "genericUI"; //$NON-NLS-1$
+                        }
+
+                        port.deleteItemWithReport(new WSDeleteItemWithReport(itempk, source,
+                                "PHYSICAL_DELETE", null, getXObject().getUsername(), invokeBeforeProcess, fireEvent, false));//$NON-NLS-1$ 
+
                         monitor.worked(1);
                     }// for
 
@@ -1113,8 +1153,6 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                 log.error(e.getMessage(), e);
             }
         }
-
-
 
         @Override
         public void runWithEvent(Event event) {
@@ -1322,7 +1360,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                 break;
             case 2:
                 res = Util
-                .joinStrings(li1.getIds(), ".").compareToIgnoreCase(Util.joinStrings(li2.getIds(), Messages.DataClusterBrowserMainPage_130)); //$NON-NLS-1$
+                        .joinStrings(li1.getIds(), ".").compareToIgnoreCase(Util.joinStrings(li2.getIds(), Messages.DataClusterBrowserMainPage_130)); //$NON-NLS-1$
                 break;
             default:
                 res = 0;

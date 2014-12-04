@@ -41,6 +41,7 @@ import org.talend.mdm.repository.ui.navigator.MDMRepositoryView;
 import org.talend.mdm.workbench.serverexplorer.core.ServerDefService;
 import org.talend.mdm.workbench.serverexplorer.ui.dialogs.SelectServerDefDialog;
 
+import com.amalto.workbench.exadapter.ExAdapterManager;
 import com.amalto.workbench.utils.XtentisException;
 import com.amalto.workbench.webservices.WSDataModel;
 import com.amalto.workbench.webservices.WSDataModelPK;
@@ -55,9 +56,7 @@ public class UserSecurityComboBoxDialogCellEditor extends EditableComboBoxDialog
 
     private static Logger log = Logger.getLogger(UserSecurityComboBoxDialogCellEditor.class);
 
-    private static final List<String> SPECIAL_FIELDS = Arrays.asList("roles", "applications", "properties");        //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-
-    private static String user_var = "${user_context}..."; //$NON-NLS-1$
+    private static final List<String> SPECIAL_FIELDS = Arrays.asList("roles", "applications", "properties"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
     private IWorkbenchPartSite site;
 
@@ -65,21 +64,47 @@ public class UserSecurityComboBoxDialogCellEditor extends EditableComboBoxDialog
 
     private String conceptName = "User"; //$NON-NLS-1$
 
-    public UserSecurityComboBoxDialogCellEditor(Composite parent, IWorkbenchPartSite site) {
-        super(parent, new String[] { user_var });
-        this.site = site;
-    }
+    private IUserSecurityComboBoxDialogCellEditorExAdapter cellEditorAdapter;
 
-    @Override
-    protected Control createControl(Composite parent) {
-        Control control = super.createControl(parent);
+    public UserSecurityComboBoxDialogCellEditor(Composite parent, IWorkbenchPartSite site) {
+        super(parent, new String[0]);
+        this.site = site;
         init();
-        return control;
     }
 
     private void init() {
+        cellEditorAdapter = ExAdapterManager.getAdapter(this, IUserSecurityComboBoxDialogCellEditorExAdapter.class);
+        if (cellEditorAdapter != null) {
+            cellEditorAdapter.init(this);
+        }
         getButton().setToolTipText(Messages.UserSecurityComboBoxDialogCellEditor_SelectXpath);
         getButton().setText("..."); //$NON-NLS-1$
+    }
+
+    @Override
+    protected FocusListener getComboFocusListener() {
+        if (comboFocusListener == null) {
+            comboFocusListener = new FocusAdapter() {
+
+                @Override
+                public void focusLost(FocusEvent e) {
+                    boolean isComboSelected = false;
+                    CCombo comboBox = getComboBox();
+                    int selectionIndex = comboBox.getSelectionIndex();
+                    if (selectionIndex != -1 && selectionIndex < comboBox.getItemCount()) {
+                        if (!comboBox.getItem(selectionIndex).isEmpty()) {
+                            isComboSelected = true;
+                        }
+                    }
+
+                    if (!getButton().isFocusControl() && !isComboSelected) {
+                        UserSecurityComboBoxDialogCellEditor.this.focusLost();
+                    }
+                }
+
+            };
+        }
+        return comboFocusListener;
     }
 
     @Override
@@ -182,28 +207,6 @@ public class UserSecurityComboBoxDialogCellEditor extends EditableComboBoxDialog
         }
 
         return false;
-    }
-
-    @Override
-    protected FocusListener getComboFocusListener() {
-        return new FocusAdapter() {
-
-            @Override
-            public void focusLost(FocusEvent e) {
-                boolean isComboSelected = false;
-                CCombo comboBox = getComboBox();
-                int selectionIndex = comboBox.getSelectionIndex();
-                if (selectionIndex != -1 && selectionIndex < comboBox.getItemCount()) {
-                    if (comboBox.getItem(selectionIndex).equals(user_var)) {
-                        isComboSelected = true;
-                    }
-                }
-
-                if (!getButton().isFocusControl() && !isComboSelected) {
-                    UserSecurityComboBoxDialogCellEditor.this.focusLost();
-                }
-            }
-        };
     }
 
     @Override

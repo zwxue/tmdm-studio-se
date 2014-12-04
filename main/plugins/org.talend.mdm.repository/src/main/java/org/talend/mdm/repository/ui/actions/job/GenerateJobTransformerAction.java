@@ -19,11 +19,13 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.ui.IEditorPart;
 import org.talend.commons.ui.runtime.image.ECoreImage;
 import org.talend.commons.ui.runtime.image.ImageProvider;
 import org.talend.core.GlobalServiceRegister;
 import org.talend.core.model.properties.ItemState;
 import org.talend.core.model.properties.PropertiesFactory;
+import org.talend.core.model.properties.Property;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.AbstractRepositoryAction;
 import org.talend.mdm.repository.core.IServerObjectRepositoryType;
@@ -39,6 +41,7 @@ import org.talend.mdm.repository.ui.dialogs.job.JobOptionsDialog;
 import org.talend.mdm.repository.ui.dialogs.job.JobOptionsDialog.Execution;
 import org.talend.mdm.repository.ui.dialogs.job.JobOptionsDialog.Parameter;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
+import org.talend.mdm.repository.utils.UIUtil;
 
 import com.amalto.workbench.service.IValidateService;
 import com.amalto.workbench.webservices.WSTransformerVariablesMapping;
@@ -87,11 +90,14 @@ public class GenerateJobTransformerAction extends AbstractRepositoryAction {
 
         String jobName = ""; //$NON-NLS-1$
         String jobVersion = ""; //$NON-NLS-1$
+        String path = "/other"; //$NON-NLS-1$
 
         if (selectObj instanceof IRepositoryViewObject) {
-            jobName = ((IRepositoryViewObject) selectObj).getProperty().getLabel();
-            jobVersion = ((IRepositoryViewObject) selectObj).getProperty().getVersion();
-
+            Property property = ((IRepositoryViewObject) selectObj).getProperty();
+            if (property != null) {
+                jobName = property.getLabel();
+                jobVersion = property.getVersion();
+            }
         }
         // check exist
         IValidateService validateService = (IValidateService) GlobalServiceRegister.getDefault().getService(
@@ -104,8 +110,17 @@ public class GenerateJobTransformerAction extends AbstractRepositoryAction {
             }
         }
         WSTransformerV2E transformer = createTransformer(jobName, jobVersion, dialog);
-        RepositoryResourceUtil.removeViewObjectPhysically(IServerObjectRepositoryType.TYPE_TRANSFORMERV2, PREFIX + jobName,
-                jobVersion, null);
+        // if the new objectect is opened ,than close it before regenerating
+        IRepositoryViewObject toDelete = RepositoryResourceUtil.findViewObjectByName(
+                IServerObjectRepositoryType.TYPE_TRANSFORMERV2, PREFIX + jobName);
+        if (toDelete != null) {
+            IEditorPart openedEditor = UIUtil.findOpenedEditor(toDelete);
+            if (openedEditor != null) {
+                UIUtil.closeEditor(openedEditor, false);
+            }
+            // delete directly
+            RepositoryResourceUtil.removeViewObjectPhysically(toDelete, jobVersion);
+        }
         AttachToProcessView(jobName, transformer);
 
     }

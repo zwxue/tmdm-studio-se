@@ -14,7 +14,7 @@ package com.amalto.workbench.utils;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.log4j.Logger;
-import org.talend.commons.utils.PasswordEncryptUtil;
+import org.talend.utils.security.CryptoHelper;
 
 public class PasswordUtil {
 
@@ -22,22 +22,30 @@ public class PasswordUtil {
 
     public static final String ALGORITHM_COMMON = "Common"; //$NON-NLS-1$
 
+    public static final String ALGORITHM_COMMON_V2 = "CommonV2"; //$NON-NLS-1$
+
     public static String decryptPassword(String encodedPassword, String algorithm) {
         if (encodedPassword == null) {
             throw new IllegalArgumentException();
         }
-        if (algorithm != null && algorithm.equals(ALGORITHM_COMMON)) {
-            try {
-                return PasswordEncryptUtil.decryptPassword(encodedPassword);
-            } catch (Exception e) {
-                log.error(e.getMessage(), e);
+        if (algorithm != null) {
+            if (algorithm.equals(ALGORITHM_COMMON_V2)) {
+                try {
+                    String decryptedPassword = CryptoHelper.getDefault().decrypt(encodedPassword);
+                    return decryptedPassword;
+                } catch (Exception e) {
+                    log.error(e.getMessage(), e);
+                }
+            } else if (algorithm.equals(ALGORITHM_COMMON)) {
+                // not support ALGORITHM_COMMON ,it will be upgraded by migration task
+                return null;
             }
         }
         return decryptPasswordBase64(encodedPassword);
     }
 
     public static String decryptPassword(String encodedPassword) {
-        return decryptPassword(encodedPassword, ALGORITHM_COMMON);
+        return decryptPassword(encodedPassword, ALGORITHM_COMMON_V2);
     }
 
     public static String decryptPasswordBase64(String encodedPassword) {
@@ -54,19 +62,25 @@ public class PasswordUtil {
         if (plainPassword == null) {
             throw new IllegalArgumentException();
         }
-        if (algorithm != null && algorithm.equals(ALGORITHM_COMMON)) {
-            try {
-                return PasswordEncryptUtil.encryptPassword(plainPassword);
-            } catch (Exception e) {
-                log.error(e.getMessage(), e);
+        if (algorithm != null) {
+            if (algorithm.equals(ALGORITHM_COMMON_V2)) {
+                try {
+                    return CryptoHelper.getDefault().encrypt(plainPassword);
+                } catch (Exception e) {
+                    log.error(e.getMessage(), e);
+                }
+            } else if (algorithm.equals(ALGORITHM_COMMON)) {
+                // not support ALGORITHM_COMMON ,it will be upgraded by migration task
+                return null;
             }
         }
+
         return encryptPasswordBase64(plainPassword);
 
     }
 
     public static String encryptPassword(String plainPassword) {
-        return encryptPassword(plainPassword, ALGORITHM_COMMON);
+        return encryptPassword(plainPassword, ALGORITHM_COMMON_V2);
     }
 
     public static String encryptPasswordBase64(String plainPassword) {

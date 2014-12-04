@@ -54,7 +54,7 @@ public class XpathWidgetR extends XpathWidget {
     public XpathWidgetR(Composite parent, boolean isMulti) {
         super(parent, null, isMulti);
     }
-    
+
     @Override
     public void widgetSelected(SelectionEvent e) {
 
@@ -74,16 +74,18 @@ public class XpathWidgetR extends XpathWidget {
                 dlg.setConceptName(conceptName);
             }
         }
-
+        disableFocusListener();
         dlg.setLock(isLock());
         dlg.setBlockOnOpen(true);
         dlg.open();
-
+        enableFocusListener();
         if (dlg.getReturnCode() == Window.OK) {
             descriptionText.setText(dlg.getXpath());
             dataModelName = dlg.getDataModelName();
             dlg.close();
             setOutFocus();
+        } else {
+            lostFocus();
         }
     }
 

@@ -100,7 +100,7 @@ public abstract class AbstractRemoveCommandStackAction extends AbstractRepositor
             factory.deleteObjectPhysical(viewObj);
             CommandManager.getInstance().removeCommandStack(id);
 
-        } catch (PersistenceException e) {
+        } catch (Exception e) {
             log.error(e.getMessage(), e);
         }
     }

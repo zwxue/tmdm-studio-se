@@ -181,7 +181,7 @@ public class DataClusterComposite extends Composite implements IPagingListener {
         // We do not implement IFormPart: we do not care about lifecycle management
         Composite compFirstLine = toolkit.createComposite(composite, SWT.NONE);
         compFirstLine.setLayoutData(new GridData(SWT.FILL, SWT.NONE, true, false));
-        compFirstLine.setLayout(new GridLayout(9, false));
+        compFirstLine.setLayout(new GridLayout(10, false));
 
         // from
         Label fromLabel = toolkit.createLabel(compFirstLine, Messages.DataClusterBrowserMainPage_1, SWT.NULL);
@@ -204,6 +204,18 @@ public class DataClusterComposite extends Composite implements IPagingListener {
         conceptCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
         // ((GridData) conceptCombo.getLayoutData()).widthHint = 180;
         conceptCombo.addKeyListener(keylistener);
+        // refresh
+        // search
+        Button refreshBun = toolkit.createButton(compFirstLine, "", SWT.CENTER); //$NON-NLS-1$
+        refreshBun.setImage(ImageCache.getCreatedImage(EImage.REFRESH.getPath()));
+        refreshBun.setToolTipText(Messages.XObjectBrowser_Refresh);
+        refreshBun.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1));
+        refreshBun.addListener(SWT.Selection, new Listener() {
+
+            public void handleEvent(Event event) {
+                refreshData();
+            };
+        });
 
         // search
         Button bSearch = toolkit.createButton(compFirstLine, "", SWT.CENTER); //$NON-NLS-1$
@@ -362,7 +374,7 @@ public class DataClusterComposite extends Composite implements IPagingListener {
                 Matcher matcher = pattern.matcher(dateTimeText);
                 if (!matcher.matches()) {
                     MessageDialog
-                    .openWarning(this.getSite().getShell(), Messages.Warning, Messages.DataClusterBrowserMainPage_21);
+                            .openWarning(this.getSite().getShell(), Messages.Warning, Messages.DataClusterBrowserMainPage_21);
                     return new LineItem[0];
                 }
 
@@ -378,7 +390,7 @@ public class DataClusterComposite extends Composite implements IPagingListener {
                 Matcher matcher = pattern.matcher(dateTimeText);
                 if (!matcher.matches()) {
                     MessageDialog
-                    .openWarning(this.getSite().getShell(), Messages.Warning, Messages.DataClusterBrowserMainPage_23);
+                            .openWarning(this.getSite().getShell(), Messages.Warning, Messages.DataClusterBrowserMainPage_23);
                     return new LineItem[0];
                 }
 
@@ -412,6 +424,7 @@ public class DataClusterComposite extends Composite implements IPagingListener {
             // see 0015909
             String clusterName = URLEncoder.encode(getXObject().toString(), "utf-8");//$NON-NLS-1$
             WSDataClusterPK clusterPk = new WSDataClusterPK(clusterName + getPkAddition());
+
             // @temp yguo, get item with taskid or get taskid by specify wsitempk.
             List<Results> results = port.getItemPKsByFullCriteria(
                     new WSGetItemPKsByFullCriteria(new WSGetItemPKsByCriteria(clusterPk, concept, search, keys, from, to, start,
@@ -432,11 +445,7 @@ public class DataClusterComposite extends Composite implements IPagingListener {
                 if (i == 0) {
                     totalSize = Integer.parseInt(Util.parse(result.getWsItemPK().getConceptName()).getDocumentElement()
                             .getTextContent());
-                    continue;
-                }
 
-                if (!isMaster && result.getWsItemPK().getConceptName().equals("TALEND_TASK_EXECUTION")) { //$NON-NLS-1$
-                    totalSize--;
                     continue;
                 }
 
@@ -880,7 +889,7 @@ public class DataClusterComposite extends Composite implements IPagingListener {
                 break;
             case 2:
                 res = Util
-                .joinStrings(li1.getIds(), ".").compareToIgnoreCase(Util.joinStrings(li2.getIds(), Messages.DataClusterBrowserMainPage_130)); //$NON-NLS-1$
+                        .joinStrings(li1.getIds(), ".").compareToIgnoreCase(Util.joinStrings(li2.getIds(), Messages.DataClusterBrowserMainPage_130)); //$NON-NLS-1$
                 break;
             default:
                 res = 0;

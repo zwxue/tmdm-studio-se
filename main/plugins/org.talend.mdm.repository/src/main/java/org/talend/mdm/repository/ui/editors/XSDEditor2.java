@@ -30,9 +30,12 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.ide.IGotoMarker;
 import org.eclipse.xsd.XSDDiagnostic;
 import org.eclipse.xsd.XSDSchema;
+import org.talend.commons.exception.LoginException;
+import org.talend.commons.exception.PersistenceException;
 import org.talend.core.GlobalServiceRegister;
 import org.talend.core.model.properties.Item;
 import org.talend.core.model.repository.IRepositoryViewObject;
+import org.talend.core.runtime.CoreRuntimePlugin;
 import org.talend.mdm.repository.core.command.CommandManager;
 import org.talend.mdm.repository.core.command.ICommand;
 import org.talend.mdm.repository.core.service.DeployService;
@@ -41,6 +44,7 @@ import org.talend.mdm.repository.core.service.IModelValidationService.IModelVali
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
+import org.talend.repository.RepositoryWorkUnit;
 
 import com.amalto.workbench.editors.DataModelMainPage;
 import com.amalto.workbench.editors.xsdeditor.XSDEditor;
@@ -179,7 +183,19 @@ public class XSDEditor2 extends XSDEditor implements ISvnHistory {
     }
 
     @Override
-    public void doSave(IProgressMonitor monitor) {
+    public void doSave(final IProgressMonitor monitor) {
+        RepositoryWorkUnit<Object> repositoryWorkUnit = new RepositoryWorkUnit<Object>("", this) { //$NON-NLS-1$
+
+            @Override
+            protected void run() throws LoginException, PersistenceException {
+                innerSave(monitor);
+            }
+        };
+        repositoryWorkUnit.setAvoidUnloadResources(true);
+        CoreRuntimePlugin.getInstance().getProxyRepositoryFactory().executeRepositoryWorkUnit(repositoryWorkUnit);
+    }
+
+    private void innerSave(IProgressMonitor monitor) {
         super.doSave(monitor);
         IRepositoryViewObject viewObject = getCurrentViewObject();
         Item item = viewObject.getProperty().getItem();

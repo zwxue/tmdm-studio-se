@@ -103,6 +103,8 @@ public class ViewBrowserMainPage extends AMainPage implements IXObjectModelListe
 
     private final String FULL_TEXT = Messages.ViewBrowserMainPage_fullText;
 
+    protected Combo clusterTypeCombo;
+
     public ViewBrowserMainPage(FormEditor editor) {
         super(editor, ViewBrowserMainPage.class.getName(), Messages.ViewBrowserMainPage_ViewBrowser
                 + ((XObjectBrowserInput) editor.getEditorInput()).getName());
@@ -224,7 +226,7 @@ public class ViewBrowserMainPage extends AMainPage implements IXObjectModelListe
             resultsGroup.setLayout(new GridLayout(columns, false));
 
             Composite createComposite = toolkit.createComposite(resultsGroup);
-            GridLayout layout = new GridLayout(2, false);
+            GridLayout layout = new GridLayout(3, false);
             layout.marginWidth = 0;
             createComposite.setLayout(layout);
             createComposite.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 2, 1));
@@ -236,9 +238,14 @@ public class ViewBrowserMainPage extends AMainPage implements IXObjectModelListe
             dataClusterCombo.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1));
             ((GridData) dataClusterCombo.getLayoutData()).minimumWidth = 100;
 
+            clusterTypeCombo = new Combo(createComposite, SWT.READ_ONLY | SWT.SINGLE);
+            GridData typeLayout = new GridData(SWT.CENTER, SWT.CENTER, true, false, 1, 1);
+            typeLayout.horizontalIndent = 10;
+            clusterTypeCombo.setLayoutData(typeLayout);
+
             Label searchOnLabel = toolkit.createLabel(resultsGroup, Messages.ViewBrowserMainPage_SearchOn, SWT.NULL);
             GridData layoutData = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
-            layoutData.horizontalIndent = 30;
+            layoutData.horizontalIndent = 20;
             searchOnLabel.setLayoutData(layoutData);
 
             searchItemCombo = new Combo(resultsGroup, SWT.READ_ONLY | SWT.DROP_DOWN | SWT.SINGLE);
@@ -312,6 +319,8 @@ public class ViewBrowserMainPage extends AMainPage implements IXObjectModelListe
 
             hookContextMenu();
 
+            addListener();
+
         } catch (Exception e) {
             log.error(e.getMessage(), e);
         }
@@ -322,7 +331,8 @@ public class ViewBrowserMainPage extends AMainPage implements IXObjectModelListe
     protected void refreshData() {
         try {
 
-            if (viewableBEsList.isDisposed() || searchableBEsList.isDisposed() || wcListViewer.getList().isDisposed()) {
+            if (viewableBEsList.isDisposed() || searchableBEsList.isDisposed() || wcListViewer.getList().isDisposed()
+                    || searchItemCombo.isDisposed() || dataClusterCombo.isDisposed()) {
                 return;
             }
 
@@ -344,6 +354,7 @@ public class ViewBrowserMainPage extends AMainPage implements IXObjectModelListe
 
             paths = view.getSearchableBusinessElements();
             searchableBEsList.removeAll();
+            searchItemCombo.removeAll();
             if (paths != null) {
                 for (String path : paths) {
                     searchableBEsList.add(path);
@@ -367,6 +378,9 @@ public class ViewBrowserMainPage extends AMainPage implements IXObjectModelListe
             }
             dataClusterCombo.select(0);
 
+            clusterTypeCombo.setItems(getClusterTypes());
+            clusterTypeCombo.select(0);
+
             this.getManagedForm().reflow(true);
 
             searchText.setFocus();
@@ -378,6 +392,10 @@ public class ViewBrowserMainPage extends AMainPage implements IXObjectModelListe
                         Messages.bind(Messages.ViewBrowserMainPage_ErrorMsg2, e.getLocalizedMessage()));
             }
         }
+    }
+
+    protected String[] getClusterTypes() {
+        return new String[0];
     }
 
     protected java.util.List<WSDataClusterPK> getDataClusterPKs() throws MalformedURLException, XtentisException {
@@ -416,6 +434,17 @@ public class ViewBrowserMainPage extends AMainPage implements IXObjectModelListe
         getSite().registerContextMenu(menuMgr, resultsViewer);
     }
 
+    private void addListener() {
+        dataClusterCombo.addSelectionListener(new SelectionAdapter() {
+
+            @Override
+            public void widgetSelected(SelectionEvent e) {
+                clusterTypeCombo.setItems(getClusterTypes());
+                clusterTypeCombo.select(0);
+            }
+        });
+    }
+
     protected void fillContextMenu(IMenuManager manager) {
         return;
     }
@@ -439,13 +468,15 @@ public class ViewBrowserMainPage extends AMainPage implements IXObjectModelListe
             int maxItem = 10;
 
             String search = "".equals(searchText.getText()) ? "*" : searchText.getText(); //$NON-NLS-1$ //$NON-NLS-2$
+            WSDataClusterPK wsDataClusterPK = new WSDataClusterPK(dataClusterCombo.getText() + getPkAddition());
             if (FULL_TEXT.equals(searchItemCombo.getText())) {
                 boolean matchAllWords = matchAllWordsBtn.getSelection();
                 results = port.quickSearch(
-                        new WSQuickSearch(new WSDataClusterPK(dataClusterCombo.getText()), getViewPK(), search, maxItem, // max Items
-                        0, // skip
-                        Integer.MAX_VALUE, // spell threshold
-                        matchAllWords, null, null)).getStrings();
+                        new WSQuickSearch(wsDataClusterPK, getViewPK(), search, maxItem, // max
+                                                                                                                         // Items
+                                0, // skip
+                                Integer.MAX_VALUE, // spell threshold
+                                matchAllWords, null, null)).getStrings();
 
             } else {
                 WSView wsview = (WSView) wcListViewer.getInput();
@@ -465,7 +496,7 @@ public class ViewBrowserMainPage extends AMainPage implements IXObjectModelListe
                 WSWhereItem wi = new WSWhereItem(null, and, null);
 
                 results = port.viewSearch(
-                        new WSViewSearch(new WSDataClusterPK(dataClusterCombo.getText()), getViewPK(), wi, -1, 0, maxItem, null,
+                        new WSViewSearch(wsDataClusterPK, getViewPK(), wi, -1, 0, maxItem, null,
                                 "ascending")).getStrings(); //$NON-NLS-1$
             }
 
@@ -493,6 +524,10 @@ public class ViewBrowserMainPage extends AMainPage implements IXObjectModelListe
             }
         }
 
+    }
+
+    protected String getPkAddition() {
+        return ""; //$NON-NLS-1$
     }
 
     class DOMViewAction extends Action {

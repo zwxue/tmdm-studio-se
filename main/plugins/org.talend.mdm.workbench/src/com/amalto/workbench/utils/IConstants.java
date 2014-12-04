@@ -57,7 +57,6 @@ public interface IConstants {
 
     // public final static String OPERATIONTYPE_SYNCHRONIZE="SYNCHRONIZE";
 
-
     public final static String EXIST_PORT = "8180";//$NON-NLS-1$
 
     public final static String DEFAULT_NAME_SPACE = "http://www.w3.org/2001/XMLSchema";//$NON-NLS-1$
@@ -89,4 +88,9 @@ public interface IConstants {
     public static final String SIMPLETYPE_FACETNAME_MINEXCLUSIVE = "minExclusive";//$NON-NLS-1$
 
     public static final String SIMPLETYPE_FACETNAME_WHITESPACE = "whiteSpace";//$NON-NLS-1$
+
+    /**
+     * Item pk split
+     */
+    public static final String ITEM_PK_SPLIT = ".."; //$NON-NLS-1$
 }

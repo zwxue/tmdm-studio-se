@@ -41,6 +41,7 @@ import org.talend.mdm.workbench.serverexplorer.i18n.Messages;
 import org.talend.repository.model.IProxyRepositoryFactory;
 
 import com.amalto.workbench.exadapter.ExAdapterManager;
+import com.amalto.workbench.service.MissingJarsException;
 import com.amalto.workbench.utils.PasswordUtil;
 import com.amalto.workbench.utils.XtentisException;
 
@@ -103,7 +104,7 @@ public class ServerDefDialog extends TitleAreaDialog {
             newName = serverDef.getName();
         } else {
             this.serverDef = MdmmetadataFactory.eINSTANCE.createMDMServerDef();
-            this.serverDef.setAlgorithm(PasswordUtil.ALGORITHM_COMMON);
+            this.serverDef.setAlgorithm(PasswordUtil.ALGORITHM_COMMON_V2);
         }
         exAdapter = ExAdapterManager.getAdapter(this, IServerDefDialogExAdapter.class);
 
@@ -286,12 +287,14 @@ public class ServerDefDialog extends TitleAreaDialog {
             }
 
             MDMServerDef tmpServerDef = MdmmetadataFactory.eINSTANCE.createMDMServerDef();
-            tmpServerDef.setAlgorithm(PasswordUtil.ALGORITHM_COMMON);
+            tmpServerDef.setAlgorithm(PasswordUtil.ALGORITHM_COMMON_V2);
             updateUI2Model(tmpServerDef);
 
             try {
                 ServerDefService.checkMDMConnection(tmpServerDef.getDecryptedServerDef());
                 setMessage(Messages.ServerExplorer_ConnectSuccessful);
+            } catch (MissingJarsException e) {
+                return;
             } catch (XtentisException e) {
                 setErrorMessage(Messages.ServerExplorer_ConnectFailed);
             } catch (MalformedURLException e) {

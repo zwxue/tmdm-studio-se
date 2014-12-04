@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Ext
 Bundle-SymbolicName: org.talend.mdm.repository.validate;singleton:=true
-Bundle-Version: 1.0.0.qualifier
+Bundle-Version: 6.0.0.qualifier
 Bundle-Activator: org.talend.mdm.repository.validate.plugin.ValidatePlugin
 Require-Bundle: org.apache.commons.collections,
  org.apache.log4j,
@@ -20,8 +20,8 @@ Require-Bundle: org.apache.commons.collections,
  org.talend.model,
  org.eclipse.ui.forms,
  org.talend.mdm.commmon,
- org.eclipse.core.expressions
+ org.eclipse.core.expressions,
+ org.talend.core.repository
 Bundle-ActivationPolicy: lazy
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Export-Package: org.talend.mdm.repository.core.marker,
  org.talend.mdm.repository.ui.markers

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
-      id="org.talend.tom_feature"
+      id="org.talend.tom-feature"
       label="Tom workbench"
-      version="1.0.0.qualifier"
+      version="6.0.0.qualifier"
       provider-name=".Talend SA.">
 
    <description url="http://www.example.com/description">
@@ -803,6 +803,13 @@
          unpack="false"/>
 
    <plugin
+         id="org.eclipse.core.runtime.compatibility.auth"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
          id="org.eclipse.update.configurator"
          download-size="0"
          install-size="0"
@@ -873,6 +880,13 @@
 
    <plugin
          id="org.apache.commons.logging"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.apache.jasper"
          download-size="0"
          install-size="0"
          version="0.0.0"
@@ -967,6 +981,13 @@
          download-size="0"
          install-size="0"
          version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.google.collect"
+         download-size="0"
+         install-size="0"
+         version="0.8.0.v201008251220"
          unpack="false"/>
 
    <plugin
@@ -1283,7 +1304,14 @@
          version="0.0.0"
          unpack="false"/>
 
-      <plugin
+   <plugin
+         id="org.apache.commons.el"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
          id="org.eclipse.team.core"
          download-size="0"
          install-size="0"

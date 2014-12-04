@@ -305,6 +305,10 @@ public class MDMImportRepositoryItemsWizard extends ImportItemsWizard {
                                         needSave = true;
                                     }
 
+                                    if (item instanceof WSDataModelItem && exAdapter != null) {
+                                        exAdapter.handleDataModelItem(item);
+                                    }
+
                                 } else {
                                     EMap additionalProperties = property.getAdditionalProperties();
                                     if (additionalProperties != null) {

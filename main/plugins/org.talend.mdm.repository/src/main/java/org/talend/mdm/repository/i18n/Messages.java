@@ -18,6 +18,10 @@ public class Messages extends NLS {
 
     private static final String BUNDLE_NAME = "org.talend.mdm.repository.i18n.messages"; //$NON-NLS-1$
 
+    public static String TestTriggerAction_Close;
+
+    public static String TestTriggerAction_Test;
+
     public static String TISCallJobPluginDetail_description;
 
     public static String TISCallJobPluginDetail_doc_line1;
@@ -93,6 +97,8 @@ public class Messages extends NLS {
     public static String ValidateService_DeletedObjectExist;
 
     public static String ValidateService_ObjectExist;
+
+    public static String ViewBrowserMainPage2_Master;
 
     public static String ViewContentProvider_SearchFilter;
 
@@ -217,6 +223,8 @@ public class Messages extends NLS {
     public static String DeployAnotherVersionAction_deployAnother;
 
     public static String DeployAnotherVersionAction_selectAnother;
+
+    public static String DeployToLastServerAction_askReselectServerMsg;
 
     public static String DeployToLastServerAction_deployToLastServer;
 
@@ -353,8 +361,6 @@ public class Messages extends NLS {
     public static String RoutingRuleMainPage2_ErrorTestTrigger;
 
     public static String RoutingRuleMainPage2_ExecuteTriggerSuccess;
-
-    public static String RoutingRuleMainPage2_fail;
 
     public static String RoutingRuleMainPage2_NoRecordSelected;
 

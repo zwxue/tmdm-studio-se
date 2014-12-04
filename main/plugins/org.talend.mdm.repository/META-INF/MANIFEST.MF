@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Repository
 Bundle-SymbolicName: org.talend.mdm.repository;singleton:=true
-Bundle-Version: 4.3.0.qualifier
+Bundle-Version: 6.0.0.qualifier
 Bundle-Activator: org.talend.mdm.repository.plugin.RepositoryPlugin
 Bundle-Localization: plugin
 Require-Bundle: org.eclipse.core.runtime,
@@ -50,7 +50,6 @@ Require-Bundle: org.eclipse.core.runtime,
  org.talend.dataprofiler.core,
  org.talend.repository.items.importexport
 Bundle-ActivationPolicy: lazy
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Eclipse-RegisterBuddy: org.talend.testutils
 Bundle-ClassPath: .,
  META-INF/lib/castor-1.1-xml.jar,
@@ -82,6 +81,7 @@ Export-Package: org.talend.mdm.repository.core,
  org.talend.mdm.repository.ui.dialogs.xsd,
  org.talend.mdm.repository.ui.editors,
  org.talend.mdm.repository.ui.navigator,
+ org.talend.mdm.repository.ui.preferences,
  org.talend.mdm.repository.ui.starting.editor,
  org.talend.mdm.repository.ui.widgets,
  org.talend.mdm.repository.ui.wizards,
@@ -90,3 +90,4 @@ Export-Package: org.talend.mdm.repository.core,
  org.talend.mdm.repository.ui.wizards.process,
  org.talend.mdm.repository.utils
 Import-Package: com.amalto.workbench.webservices
+Eclipse-BundleShape: dir
