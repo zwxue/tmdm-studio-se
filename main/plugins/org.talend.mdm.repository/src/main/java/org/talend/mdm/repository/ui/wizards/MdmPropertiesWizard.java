@@ -45,9 +45,9 @@ import org.talend.mdm.repository.model.mdmproperties.WSResourceItem;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 import org.talend.mdm.repository.utils.ValidateUtil;
+import org.talend.metadata.managment.ui.wizard.PropertiesWizard;
+import org.talend.metadata.managment.ui.wizard.PropertiesWizardPage;
 import org.talend.repository.model.IProxyRepositoryFactory;
-import org.talend.repository.ui.wizards.PropertiesWizard;
-import org.talend.repository.ui.wizards.PropertiesWizardPage;
 
 /**
  * DOC achen class global comment. Detailled comment
