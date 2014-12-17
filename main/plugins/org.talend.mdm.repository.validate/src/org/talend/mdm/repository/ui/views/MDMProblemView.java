@@ -57,9 +57,9 @@ import org.eclipse.ui.views.markers.MarkerSupportView;
 import org.eclipse.ui.views.markers.internal.ContentGeneratorDescriptor;
 import org.eclipse.ui.views.markers.internal.MarkerGroup;
 import org.talend.commons.exception.PersistenceException;
+import org.talend.commons.utils.workbench.resources.ResourceUtils;
 import org.talend.core.model.general.Project;
 import org.talend.core.model.repository.IRepositoryViewObject;
-import org.talend.core.repository.model.ResourceModelUtils;
 import org.talend.mdm.repository.core.marker.IValidationMarker;
 import org.talend.mdm.repository.ui.markers.IOpenMarkerHandler;
 import org.talend.mdm.repository.ui.markers.OpenMarkerHandlerRegister;
@@ -442,7 +442,7 @@ public class MDMProblemView extends MarkerSupportView implements IValidationMark
     public void updateViewTitle() {
         try {
             Project project = ProjectManager.getInstance().getCurrentProject();
-            IProject prj = ResourceModelUtils.getProject(project);
+            IProject prj = ResourceUtils.getProject(project);
             int severity = prj.findMaxProblemSeverity(IValidationMarker.MARKER_MDM, true, IResource.DEPTH_INFINITE);
             updateTitleImage(severity);
         } catch (PersistenceException e) {

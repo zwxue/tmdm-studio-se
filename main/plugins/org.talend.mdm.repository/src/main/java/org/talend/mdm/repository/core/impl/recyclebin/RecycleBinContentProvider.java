@@ -35,6 +35,7 @@ import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IPath;
 import org.talend.commons.exception.PersistenceException;
+import org.talend.commons.utils.workbench.resources.ResourceUtils;
 import org.talend.core.model.general.Project;
 import org.talend.core.model.properties.Item;
 import org.talend.core.model.properties.ItemState;
@@ -42,7 +43,6 @@ import org.talend.core.model.properties.Property;
 import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.core.model.repository.RepositoryViewObject;
-import org.talend.core.repository.model.ResourceModelUtils;
 import org.talend.core.runtime.CoreRuntimePlugin;
 import org.talend.mdm.repository.core.IServerObjectRepositoryType;
 import org.talend.mdm.repository.core.impl.AbstractContentProvider;
@@ -94,7 +94,7 @@ public class RecycleBinContentProvider extends AbstractContentProvider {
         rootViewObj.getChildren().clear();
         IProject fsProject = null;
         try {
-            fsProject = ResourceModelUtils.getProject(currentProject);
+            fsProject = ResourceUtils.getProject(currentProject);
 
         } catch (PersistenceException e) {
             log.error(e.getMessage(), e);

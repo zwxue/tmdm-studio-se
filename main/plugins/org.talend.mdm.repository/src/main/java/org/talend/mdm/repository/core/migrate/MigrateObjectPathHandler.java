@@ -23,8 +23,8 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.NullProgressMonitor;
-import org.talend.commons.emf.EmfHelper;
 import org.talend.commons.exception.PersistenceException;
+import org.talend.commons.runtime.model.emf.EmfHelper;
 import org.talend.commons.ui.runtime.exception.ExceptionHandler;
 import org.talend.core.model.properties.Item;
 import org.talend.core.model.properties.ItemState;
@@ -98,8 +98,9 @@ public class MigrateObjectPathHandler {
                     path = IPath.SEPARATOR + path;
                 }
                 String prefix = rule.routeObject(item);
-                if (prefix != null)
+                if (prefix != null) {
                     path = IPath.SEPARATOR + prefix + path;
+                }
                 state.setPath(path);
 
                 EmfHelper.saveResource(item.eResource());
@@ -145,8 +146,9 @@ public class MigrateObjectPathHandler {
         IPath parentPath = parent.getFullPath();
         int segmentCount = parentPath.segmentCount();
         String[] paths = rule.routeFolderObject(viewObj);
-        if (paths == null)
+        if (paths == null) {
             return null;
+        }
         IFolder[] returnFolders = new IFolder[paths.length];
         for (int i = 0; i < paths.length; i++) {
             String path = paths[i] + IPath.SEPARATOR + viewObj.getFullPath().removeFirstSegments(segmentCount).toString();

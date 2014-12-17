@@ -23,6 +23,7 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
 import org.talend.commons.exception.LoginException;
 import org.talend.commons.exception.PersistenceException;
+import org.talend.commons.runtime.model.repository.ERepositoryStatus;
 import org.talend.commons.utils.VersionUtils;
 import org.talend.core.GlobalServiceRegister;
 import org.talend.core.model.properties.Item;
@@ -37,7 +38,6 @@ import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.ui.editors.IRepositoryViewEditorInput;
 import org.talend.mdm.repository.ui.navigator.MDMRepositoryView;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
-import org.talend.repository.model.ERepositoryStatus;
 import org.talend.repository.model.IProxyRepositoryFactory;
 import org.talend.repository.model.IRepositoryNode;
 import org.talend.repository.model.RepositoryNode;
@@ -45,14 +45,13 @@ import org.talend.repository.model.RepositoryNode;
 import com.amalto.workbench.exadapter.ExAdapterManager;
 
 /**
- * DOC achen  class global comment. Detailled comment
+ * DOC achen class global comment. Detailled comment
  */
 public class MDMOpenExistVersionProcessWizard extends OpenExistVersionProcessWizard {
 
     static Logger log = Logger.getLogger(MDMOpenExistVersionProcessWizard.class);
 
     IRepositoryViewObject viewObject;
-
 
     private IMDMOpenExistVersionProcessWizardExAdapter adapter;
 
@@ -65,8 +64,7 @@ public class MDMOpenExistVersionProcessWizard extends OpenExistVersionProcessWiz
         super(processObject);
 
         ERepositoryStatus status = processObject.getRepositoryStatus();
-        if ( status.equals(ERepositoryStatus.LOCK_BY_USER)
-                && RepositoryResourceUtil.isOpenedItemInEditor(processObject)) {
+        if (status.equals(ERepositoryStatus.LOCK_BY_USER) && RepositoryResourceUtil.isOpenedItemInEditor(processObject)) {
             alreadyEditedByUser = true;
         }
         this.viewObject = processObject;
@@ -79,9 +77,10 @@ public class MDMOpenExistVersionProcessWizard extends OpenExistVersionProcessWiz
         addPage(mainPage);
         setWindowTitle(Messages.MDMOpenExistVersionProcessWizard_NewObject);
     }
+
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see
      * org.talend.designer.core.ui.wizards.OpenExistVersionProcessWizard#openAnotherVersion(org.talend.repository.model
      * .RepositoryNode, boolean)
@@ -136,8 +135,8 @@ public class MDMOpenExistVersionProcessWizard extends OpenExistVersionProcessWiz
     }
 
     protected void openEditor(boolean readonly, IRepositoryViewObject viewObj, IRepositoryViewEditorInput editorInput) {
-        IWorkbenchPage page = MDMRepositoryView.show().getCommonViewer().getCommonNavigator().getSite()
-                .getWorkbenchWindow().getActivePage();
+        IWorkbenchPage page = MDMRepositoryView.show().getCommonViewer().getCommonNavigator().getSite().getWorkbenchWindow()
+                .getActivePage();
         try {
             updateEditorInputVersionInfo(editorInput, viewObj);
             page.openEditor(editorInput, editorInput.getEditorId(), readonly);
@@ -170,7 +169,8 @@ public class MDMOpenExistVersionProcessWizard extends OpenExistVersionProcessWiz
 
         editorInput.setVersion(version);
     }
-    public IRepositoryViewObject getViewObj(){
+
+    public IRepositoryViewObject getViewObj() {
         return this.viewObject;
     }
 

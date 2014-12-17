@@ -29,6 +29,7 @@ import org.talend.core.model.properties.ProcessItem;
 import org.talend.core.model.properties.Property;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.core.repository.model.ProxyRepositoryFactory;
+import org.talend.core.repository.ui.editor.RepositoryEditorInput;
 import org.talend.core.runtime.CoreRuntimePlugin;
 import org.talend.mdm.repository.core.command.AbstractCommand;
 import org.talend.mdm.repository.core.command.CommandManager;
@@ -37,7 +38,6 @@ import org.talend.mdm.repository.core.impl.RepositoryViewObjectResourceChangeMan
 import org.talend.mdm.repository.core.service.ContainerCacheService;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
-import org.talend.repository.editor.RepositoryEditorInput;
 import org.talend.repository.model.IProxyRepositoryFactory;
 import org.talend.repository.model.RepositoryNode;
 
@@ -74,7 +74,7 @@ public class UpdateLastServerCommand extends AbstractCommand {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see org.talend.mdm.repository.core.command.AbstractCommand#getCommandType()
      */
     @Override
@@ -84,7 +84,7 @@ public class UpdateLastServerCommand extends AbstractCommand {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see org.talend.mdm.repository.core.command.AbstractCommand#execute(java.lang.Object,
      * org.eclipse.core.runtime.IProgressMonitor)
      */
