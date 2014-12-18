@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
-      id="org.talend.mdm.tom.test_feature"
+      id="org.talend.mdm.tom.test-feature"
       label="org.talend.mdm.tom.test.feature Feature"
       version="6.0.0.qualifier">
 
