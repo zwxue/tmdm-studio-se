@@ -7,7 +7,6 @@ Bundle-Version: 6.0.0.qualifier
 Require-Bundle: org.junit4,
  org.talend.testutils,
  org.hamcrest,
- org.eclipse.osgi.services,
- org.talend.mdm.ws
+ org.eclipse.osgi.services
 Bundle-ClassPath: .
 Export-Package: com.amalto.workbench.utils
