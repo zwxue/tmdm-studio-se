@@ -17,10 +17,10 @@
    </license>
 
    <requires>
-      <import plugin="org.junit4"/>
       <import plugin="org.talend.mdm.repository"/>
       <import plugin="org.eclipse.xsd"/>
       <import plugin="org.talend.mdm.workbench"/>
+      <import plugin="org.junit"/>
    </requires>
 
    <plugin

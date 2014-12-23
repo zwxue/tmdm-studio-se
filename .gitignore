@@ -3,3 +3,5 @@ target/
 class/
 Thumbs.db
 .project
+.settings/
+
