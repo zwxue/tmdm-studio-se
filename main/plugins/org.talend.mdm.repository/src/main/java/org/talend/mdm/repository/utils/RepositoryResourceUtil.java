@@ -55,6 +55,7 @@ import org.eclipse.xsd.XSDSchema;
 import org.eclipse.xsd.XSDXPathDefinition;
 import org.talend.commons.exception.LoginException;
 import org.talend.commons.exception.PersistenceException;
+import org.talend.commons.runtime.model.repository.ERepositoryStatus;
 import org.talend.commons.ui.runtime.exception.ExceptionHandler;
 import org.talend.commons.utils.VersionUtils;
 import org.talend.commons.utils.data.container.RootContainer;
@@ -75,7 +76,6 @@ import org.talend.core.model.repository.RepositoryObject;
 import org.talend.core.model.repository.RepositoryViewObject;
 import org.talend.core.repository.model.IRepositoryFactory;
 import org.talend.core.repository.model.ProxyRepositoryFactory;
-import org.talend.core.repository.model.ResourceModelUtils;
 import org.talend.core.repository.utils.ResourceFilenameHelper;
 import org.talend.core.runtime.CoreRuntimePlugin;
 import org.talend.dataquality.properties.TDQMatchRuleItem;
@@ -104,7 +104,6 @@ import org.talend.mdm.repository.models.WSRootRepositoryObject;
 import org.talend.mdm.repository.ui.editors.IRepositoryViewEditorInput;
 import org.talend.mdm.workbench.serverexplorer.core.ServerDefService;
 import org.talend.repository.ProjectManager;
-import org.talend.repository.model.ERepositoryStatus;
 import org.talend.repository.model.IProxyRepositoryFactory;
 import org.talend.repository.model.IRepositoryNode.ENodeType;
 import org.talend.repository.model.IRepositoryNode.EProperties;
@@ -275,7 +274,7 @@ public class RepositoryResourceUtil {
         }
         if (prj == null) {
             Project project = ProjectManager.getInstance().getCurrentProject();
-            prj = ResourceModelUtils.getProject(project);
+            prj = ResourceUtils.getProject(project);
         }
         if (version == null) {
             version = VersionUtils.DEFAULT_VERSION;
@@ -323,7 +322,7 @@ public class RepositoryResourceUtil {
     public static IFolder getFolder(ERepositoryObjectType type, Item item) {
         try {
             Project project = ProjectManager.getInstance().getCurrentProject();
-            IProject fsProject = ResourceModelUtils.getProject(project);
+            IProject fsProject = ResourceUtils.getProject(project);
             ItemState state = item.getState();
 
             String path = ERepositoryObjectType.getFolderName(type);
@@ -397,7 +396,7 @@ public class RepositoryResourceUtil {
         IFolder objectFolder = null;
         try {
             Project currentProject = ProjectManager.getInstance().getCurrentProject();
-            IProject fsProject = ResourceModelUtils.getProject(currentProject);
+            IProject fsProject = ResourceUtils.getProject(currentProject);
             if (fsProject == null) {
                 return null;
             }
@@ -443,7 +442,7 @@ public class RepositoryResourceUtil {
 
             if (!isSystem) {
                 Project project = ProjectManager.getInstance().getCurrentProject();
-                IProject fsProject = ResourceModelUtils.getProject(project);
+                IProject fsProject = ResourceUtils.getProject(project);
                 ItemState state = pItem.getState();
                 itemState.setPath(state.getPath() + IPath.SEPARATOR + folderName);
                 String path = ERepositoryObjectType.getFolderName(type);
@@ -852,7 +851,7 @@ public class RepositoryResourceUtil {
             boolean useRepositoryViewObject, boolean withDeleted) {
         try {
             Project project = ProjectManager.getInstance().getCurrentProject();
-            IProject fsProject = ResourceModelUtils.getProject(project);
+            IProject fsProject = ResourceUtils.getProject(project);
 
             String path = ERepositoryObjectType.getFolderName(type);
             if (!path.isEmpty()) {
@@ -1070,7 +1069,7 @@ public class RepositoryResourceUtil {
             boolean useRepositoryViewObject) {
         try {
             Project project = ProjectManager.getInstance().getCurrentProject();
-            IProject fsProject = ResourceModelUtils.getProject(project);
+            IProject fsProject = ResourceUtils.getProject(project);
             IFolder stableFolder = fsProject.getFolder(((ContainerItem) parentItem).getRepObjType().getFolder());
             List<IRepositoryViewObject> viewObjects = findViewObjects(type, parentItem, stableFolder, useRepositoryViewObject,
                     false);
@@ -1456,7 +1455,7 @@ public class RepositoryResourceUtil {
         try {
             if (viewObj instanceof WSRootRepositoryObject) {
                 Project project = ProjectManager.getInstance().getCurrentProject();
-                IProject prj = ResourceModelUtils.getProject(project);
+                IProject prj = ResourceUtils.getProject(project);
                 return new Object[] { prj };
             } else {
                 ERepositoryObjectType type = viewObj.getRepositoryObjectType();

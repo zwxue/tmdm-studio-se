@@ -20,14 +20,16 @@ import org.talend.mdm.repository.core.bridge.AbstractBridgeRepositoryAction;
 public class CreateFolderAction extends AbstractBridgeRepositoryAction {
 
     public CreateFolderAction() {
-        super(new org.talend.repository.ui.actions.CreateFolderAction());
+        super(new org.talend.core.repository.ui.actions.CreateFolderAction());
 
     }
 
+    @Override
     public String getGroupName() {
         return GROUP_EDIT;
     }
 
+    @Override
     protected void doRun() {
         super.doRun();
         refreshCurrentContainer();

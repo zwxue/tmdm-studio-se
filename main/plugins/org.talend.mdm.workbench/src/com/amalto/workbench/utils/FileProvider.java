@@ -21,8 +21,8 @@ import org.apache.commons.logging.LogFactory;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.Path;
+import org.talend.commons.utils.workbench.resources.ResourceUtils;
 import org.talend.core.model.general.Project;
-import org.talend.core.repository.model.ResourceModelUtils;
 import org.talend.repository.ProjectManager;
 
 /**
@@ -37,7 +37,7 @@ public class FileProvider {
         if (templateString != null) {
             try {
                 Project project = ProjectManager.getInstance().getCurrentProject();
-                IProject prj = ResourceModelUtils.getProject(project);
+                IProject prj = ResourceUtils.getProject(project);
                 file = prj.getFile(new Path("temp/" + fileNameWithExtension)); //$NON-NLS-1$
 
                 ByteArrayOutputStream outputStream = new ByteArrayOutputStream();

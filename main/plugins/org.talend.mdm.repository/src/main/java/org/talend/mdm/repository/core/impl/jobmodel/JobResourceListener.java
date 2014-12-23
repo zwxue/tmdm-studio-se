@@ -27,6 +27,7 @@ import org.talend.core.model.properties.Property;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.core.model.repository.RepositoryViewObject;
 import org.talend.core.repository.model.ProxyRepositoryFactory;
+import org.talend.core.repository.ui.editor.RepositoryEditorInput;
 import org.talend.mdm.repository.core.command.CommandManager;
 import org.talend.mdm.repository.core.command.ICommand;
 import org.talend.mdm.repository.core.impl.AbstractRepositoryResourceChangeListener;
@@ -35,7 +36,6 @@ import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 import org.talend.mdm.repository.ui.navigator.MDMRepositoryView;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 import org.talend.repository.documentation.ERepositoryActionName;
-import org.talend.repository.editor.RepositoryEditorInput;
 
 /**
  * DOC hbhong class global comment. Detailled comment

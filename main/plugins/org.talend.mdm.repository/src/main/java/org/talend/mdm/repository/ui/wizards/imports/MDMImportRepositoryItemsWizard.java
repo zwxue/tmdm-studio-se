@@ -52,6 +52,7 @@ import org.eclipse.ui.internal.wizards.datatransfer.ZipLeveledStructureProvider;
 import org.eclipse.ui.progress.UIJob;
 import org.talend.commons.exception.LoginException;
 import org.talend.commons.exception.PersistenceException;
+import org.talend.commons.runtime.model.repository.ERepositoryStatus;
 import org.talend.core.model.properties.Item;
 import org.talend.core.model.properties.ItemState;
 import org.talend.core.model.properties.JobDocumentationItem;
@@ -89,7 +90,6 @@ import org.talend.repository.imports.ImportItemUtil;
 import org.talend.repository.imports.ItemRecord;
 import org.talend.repository.imports.ResourcesManager;
 import org.talend.repository.imports.ResourcesManagerFactory;
-import org.talend.repository.model.ERepositoryStatus;
 
 import com.amalto.workbench.dialogs.ImportExchangeOptionsDialog;
 import com.amalto.workbench.exadapter.ExAdapterManager;

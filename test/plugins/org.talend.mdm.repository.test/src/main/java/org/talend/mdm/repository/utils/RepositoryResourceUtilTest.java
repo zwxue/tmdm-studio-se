@@ -37,6 +37,7 @@ import org.powermock.modules.junit4.rule.PowerMockRule;
 import org.powermock.reflect.Whitebox;
 import org.talend.commons.exception.PersistenceException;
 import org.talend.commons.i18n.internal.DefaultMessagesImpl;
+import org.talend.commons.runtime.model.repository.ERepositoryStatus;
 import org.talend.commons.utils.VersionUtils;
 import org.talend.commons.utils.data.container.RootContainer;
 import org.talend.commons.utils.workbench.resources.ResourceUtils;
@@ -51,8 +52,8 @@ import org.talend.core.model.properties.User;
 import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.core.model.repository.RepositoryNodeProviderRegistryReader;
+import org.talend.core.model.repository.ResourceModelUtils;
 import org.talend.core.repository.model.IRepositoryFactory;
-import org.talend.core.repository.model.ResourceModelUtils;
 import org.talend.core.runtime.CoreRuntimePlugin;
 import org.talend.mdm.repository.core.IRepositoryNodeConfiguration;
 import org.talend.mdm.repository.core.IRepositoryNodeLabelProvider;
@@ -67,7 +68,6 @@ import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
 import org.talend.mdm.repository.models.FolderRepositoryObject;
 import org.talend.mdm.workbench.serverexplorer.core.ServerDefService;
 import org.talend.repository.ProjectManager;
-import org.talend.repository.model.ERepositoryStatus;
 import org.talend.repository.model.IProxyRepositoryFactory;
 import org.talend.repository.model.IRepositoryNode.ENodeType;
 import org.talend.repository.model.IRepositoryNode.EProperties;
@@ -81,8 +81,7 @@ import com.amalto.workbench.image.ImageCache;
         ImageCache.class, ItemState.class, ProjectManager.class, CoreRuntimePlugin.class, InteractiveService.class,
         ResourceModelUtils.class, FolderType.class, RepositoryNodeConfigurationManager.class, ResourceUtils.class,
         ContainerCacheService.class, RepositoryQueryService.class, RepositoryNodeProviderRegistryReader.class,
- ServerDefService.class,
-        ERepositoryStatus.class, ExAdapterManager.class })
+        ServerDefService.class, ERepositoryStatus.class, ExAdapterManager.class })
 public class RepositoryResourceUtilTest {
 
     @Rule
@@ -434,7 +433,7 @@ public class RepositoryResourceUtilTest {
         FileInputStream mockFileInputStream = PowerMockito.mock(FileInputStream.class);
         PowerMockito.whenNew(FileInputStream.class).withArguments(file).thenReturn(mockFileInputStream);
         PowerMockito.when(mockFileInputStream.available()).thenReturn(0);
-        
+
         ByteArrayOutputStream spyOutputStream = Mockito.spy(new ByteArrayOutputStream());
         PowerMockito.whenNew(ByteArrayOutputStream.class).withNoArguments().thenReturn(spyOutputStream);
         spyOutputStream.write(buf);
@@ -528,8 +527,8 @@ public class RepositoryResourceUtilTest {
         ERepositoryObjectType mockType = mock(ERepositoryObjectType.class);
         when(mockType.getType()).thenReturn("mockType");
         when(ERepositoryObjectType.getFolderName(mockType)).thenReturn(processFolder);
-        IRepositoryViewObject folderViewObject = RepositoryResourceUtil.createFolderViewObject(mockType,
-                folderName, mockParentItem, isSystem);
+        IRepositoryViewObject folderViewObject = RepositoryResourceUtil.createFolderViewObject(mockType, folderName,
+                mockParentItem, isSystem);
 
         assertNotNull(folderViewObject);
 
@@ -570,16 +569,14 @@ public class RepositoryResourceUtilTest {
         when(mockConfiguration.getResourceProvider()).thenReturn(mockResourceProvider);
 
         ERepositoryObjectType mockType = mock(ERepositoryObjectType.class);
-        when(mockConfiguration.getResourceProvider().getRepositoryObjectType(Mockito.any(Item.class)))
-                .thenReturn(mockType);
+        when(mockConfiguration.getResourceProvider().getRepositoryObjectType(Mockito.any(Item.class))).thenReturn(mockType);
 
         IRepositoryNodeLabelProvider mockLabelProvider = mock(IRepositoryNodeLabelProvider.class);
         when(mockConfiguration.getLabelProvider()).thenReturn(mockLabelProvider);
         when(mockLabelProvider.getCategoryLabel(Mockito.any(ERepositoryObjectType.class))).thenReturn("anystring");
 
         PowerMockito.mockStatic(ContainerCacheService.class);
-        PowerMockito.doNothing().when(ContainerCacheService.class, "putContainer",
-                Mockito.any(IRepositoryViewObject.class));
+        PowerMockito.doNothing().when(ContainerCacheService.class, "putContainer", Mockito.any(IRepositoryViewObject.class));
 
         IRepositoryViewObject categoryViewObject = RepositoryResourceUtil.getCategoryViewObject(mockConfiguration);
         assertNotNull(categoryViewObject);
@@ -848,9 +845,7 @@ public class RepositoryResourceUtilTest {
 
         int option = IRepositoryFactory.OPTION_DYNAMIC_OBJECTS | IRepositoryFactory.OPTION_NOT_INCLUDE_CHILDRENS
                 | IRepositoryFactory.OPTION_ONLY_LAST_VERSION | IRepositoryFactory.OPTION_SKIP_DELETED;
-        PowerMockito.when(mockFactory.getObjectFromFolder(mockProject, mockType, path, option))
-                .thenReturn(mockContainer);
-
+        PowerMockito.when(mockFactory.getObjectFromFolder(mockProject, mockType, path, option)).thenReturn(mockContainer);
 
         List<IRepositoryViewObject> allViewObjectsInFolder = RepositoryResourceUtil.findViewObjectsInFolder(mockType,
                 mockParentItem, useRepositoryViewObject, withDeleted);

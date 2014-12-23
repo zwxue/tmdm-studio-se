@@ -13,6 +13,8 @@
 package org.talend.mdm.repository.core.bridge;
 
 import org.eclipse.swt.graphics.Image;
+import org.talend.commons.runtime.model.repository.ERepositoryStatus;
+import org.talend.commons.ui.runtime.image.OverlayImageProvider;
 import org.talend.core.context.Context;
 import org.talend.core.context.RepositoryContext;
 import org.talend.core.model.properties.Item;
@@ -21,10 +23,8 @@ import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.core.model.repository.RepositoryViewObject;
 import org.talend.core.runtime.CoreRuntimePlugin;
 import org.talend.core.ui.images.CoreImageProvider;
-import org.talend.core.ui.images.OverlayImageProvider;
 import org.talend.mdm.repository.core.impl.AbstractLabelProvider;
 import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
-import org.talend.repository.model.ERepositoryStatus;
 
 /**
  * DOC hbhong class global comment. Detailled comment

@@ -18,17 +18,17 @@ import java.util.List;
 
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.talend.commons.runtime.model.repository.ERepositoryStatus;
 import org.talend.core.model.repository.IRepositoryViewObject;
+import org.talend.core.repository.model.ItemReferenceBean;
+import org.talend.core.repository.ui.actions.DeleteActionCache;
 import org.talend.core.repository.utils.RepositoryNodeDeleteManager;
 import org.talend.mdm.repository.core.bridge.AbstractBridgeRepositoryAction;
 import org.talend.mdm.repository.core.command.CommandManager;
 import org.talend.mdm.repository.core.command.ICommand;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.models.FolderRepositoryObject;
-import org.talend.repository.model.ERepositoryStatus;
 import org.talend.repository.model.IRepositoryNode;
-import org.talend.repository.model.ItemReferenceBean;
-import org.talend.repository.ui.actions.DeleteActionCache;
 
 /**
  * DOC hbhong class global comment. Detailled comment
@@ -36,7 +36,7 @@ import org.talend.repository.ui.actions.DeleteActionCache;
 public class DeleteAction extends AbstractBridgeRepositoryAction {
 
     public DeleteAction() {
-        super(new org.talend.repository.ui.actions.DeleteAction());
+        super(new org.talend.core.repository.ui.actions.DeleteAction());
         setText(Messages.RemoveFromRepositoryAction_removeFromRepository);
     }
 
