@@ -23,7 +23,6 @@ import org.talend.commons.ui.runtime.exception.ExceptionHandler;
 import org.talend.commons.utils.workbench.resources.ResourceUtils;
 import org.talend.core.model.general.Project;
 import org.talend.core.model.repository.ERepositoryObjectType;
-import org.talend.core.repository.model.ResourceModelUtils;
 import org.talend.mdm.repository.core.migrate.impl.ProcessMigrateObjectPathRule;
 import org.talend.mdm.repository.core.migrate.impl.ViewMigrateObjectPathRule;
 import org.talend.repository.ProjectManager;
@@ -50,7 +49,7 @@ public class AssertFolderLogonTask implements IRunnableWithProgress {
     public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
         Project project = ProjectManager.getInstance().getCurrentProject();
         try {
-            IProject prj = ResourceModelUtils.getProject(project);
+            IProject prj = ResourceUtils.getProject(project);
             for (MigrateObjectPathHandler handler : handlers) {
                 IFolder folder = ResourceUtils.getFolder(prj,
                         ERepositoryObjectType.getFolderName(handler.getRule().getRepositoryObjectType()), true);

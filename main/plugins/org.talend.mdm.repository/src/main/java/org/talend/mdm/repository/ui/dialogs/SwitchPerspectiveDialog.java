@@ -27,7 +27,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IPerspectiveDescriptor;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
-import org.talend.designer.core.ui.views.contexts.Contexts;
+import org.talend.core.ui.context.view.Contexts;
 import org.talend.mdm.repository.i18n.Messages;
 
 /**
