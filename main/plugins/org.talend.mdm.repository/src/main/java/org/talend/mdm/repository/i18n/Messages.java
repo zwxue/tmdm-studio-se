@@ -1002,6 +1002,8 @@ public class Messages extends NLS {
 
     public static String ConsistencyConflictt_NotDeployed;
 
+    public static String UnableConnectToServer;
+
     // //////////////////////////////////////////////////////////////////////////
     //
     // Constructor
