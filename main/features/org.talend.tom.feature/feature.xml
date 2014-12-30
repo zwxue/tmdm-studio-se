@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
-      id="org.talend.tom-feature"
+      id="org.talend.tom.feature"
       label="Tom workbench"
       version="6.0.0.qualifier"
       provider-name=".Talend SA.">

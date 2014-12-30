@@ -36,9 +36,9 @@
     <module>i18n/plugins/org.talend.mdm.repository.nl</module>
     <module>i18n/plugins/org.talend.mdm.workbench.nl</module>
     <module>i18n/plugins/org.talend.mdm.workbench.serverexplorer.nl</module>
-    <module>main/features/org.talend.mdm.tom.test-feature</module>
-    <module>main/features/org.talend.rcp.branding.tombundle-feature</module>
-    <module>main/features/org.talend.tom-feature</module>
+    <module>main/features/org.talend.mdm.tom.test.feature</module>
+    <module>main/features/org.talend.rcp.branding.tombundle.feature</module>
+    <module>main/features/org.talend.tom.feature</module>
     <module>main/plugins/org.talend.designer.routines.mdmprovider</module>
     <module>main/plugins/org.talend.mdm.demo</module>
     <module>main/plugins/org.talend.mdm.engines.client</module>
