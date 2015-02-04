@@ -252,7 +252,7 @@
    </plugins>
 
    <features>
-      <feature id="org.talend.rcp.branding.tombundle_feature" version="1.0.0.qualifier"/>
+      <feature id="org.talend.rcp.branding.tombundle.feature" version="1.0.0.qualifier"/>
    </features>
 
 </product>
