@@ -111,7 +111,6 @@ import com.amalto.workbench.webservices.WSDeleteItemWithReport;
 import com.amalto.workbench.webservices.WSExistsItem;
 import com.amalto.workbench.webservices.WSGetConceptsInDataCluster;
 import com.amalto.workbench.webservices.WSGetConceptsInDataClusterWithRevisions;
-import com.amalto.workbench.webservices.WSGetCurrentUniverse;
 import com.amalto.workbench.webservices.WSGetDataModel;
 import com.amalto.workbench.webservices.WSGetItem;
 import com.amalto.workbench.webservices.WSIsItemModifiedByOther;
@@ -122,7 +121,6 @@ import com.amalto.workbench.webservices.WSPutItemWithReport;
 import com.amalto.workbench.webservices.WSRegexDataModelPKs;
 import com.amalto.workbench.webservices.WSRouteItemV2;
 import com.amalto.workbench.webservices.WSStringArray;
-import com.amalto.workbench.webservices.WSUniverse;
 import com.amalto.workbench.webservices.WSUniversePK;
 import com.amalto.workbench.webservices.XtentisPort;
 
@@ -386,7 +384,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                 String dataContainer = getDataContainer(xObject);
                 final XtentisPort port = Util.getPort(xObject);
 
-                Map<String, String> entityToRevisions = getAllEntityRevisionsInDataContainer(port, dataContainer);
+                List<String> entityToRevisions = getAllEntityInDataContainer(port, dataContainer);
 
                 String conent = getAutoIncrementRecord(port);
 
@@ -446,16 +444,15 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
         }
 
         private Map<String, String> getEntityAutoIncrementValues(String content, String dataContainer,
-                Map<String, String> entityToRevisions) {
+                List<String> entityToRevisions) {
 
-            Iterator<String> iterator = entityToRevisions.keySet().iterator();
+            Iterator<String> iterator = entityToRevisions.iterator();
             Map<String, String> entityToKeys = new HashMap<String, String>();
             while (iterator.hasNext()) {
                 String entity = iterator.next();
                 String fieldName = getAutoIncrementKeyFieldNames(entity);
                 if (fieldName != null) {
-                    String crevision = entityToRevisions.get(entity);
-                    String key = formKey(dataContainer, entity, crevision, fieldName);
+                    String key = formKey(dataContainer, entity, fieldName);
                     entityToKeys.put(entity, key);
                 }
             }
@@ -470,14 +467,13 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
             return entityValues;
         }
 
-        private String updateAutoIncrement(String cluster, String content, Map<String, String> conceptRevisions,
+        private String updateAutoIncrement(String cluster, String content, List<String> entityToRevisions,
                 Map<String, String> results) throws Exception {
             Map<String, String> keyvalues = new HashMap<String, String>();
             for (String concept : results.keySet()) {
-                String revision = conceptRevisions.get(concept);
                 String fieldName = getAutoIncrementKeyFieldNames(concept);
 
-                String key = formKey(cluster, concept, revision, fieldName);
+                String key = formKey(cluster, concept, fieldName);
                 String value = results.get(concept);
 
                 if (value.isEmpty()) {
@@ -491,24 +487,13 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
             return updatedValue;
         }
 
-        private String formKey(String cluster, String concept, String revision, String fieldName) {
-            if ("HEAD".equals(revision)) { //$NON-NLS-1$
-                revision = "[" + revision + "]"; //$NON-NLS-1$ //$NON-NLS-2$
-            }
-
-            return revision + "." + cluster + "." + concept + "." + fieldName; //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
+        private String formKey(String cluster, String concept, String fieldName) {
+            return cluster + "." + concept + "." + fieldName; //$NON-NLS-1$//$NON-NLS-2$
         }
 
-        private Map<String, String> getAllEntityRevisionsInDataContainer(final XtentisPort port, String dataContainer) {
-            Map<String, String> entityToRevisions = new HashMap<String, String>();
-            WSUniverse currentUniverse = port.getCurrentUniverse(new WSGetCurrentUniverse());
+        private List<String> getAllEntityInDataContainer(final XtentisPort port, String dataContainer) {
+            List<String> entityToRevisions = new ArrayList<String>();
             String currentUniverseName = "";//$NON-NLS-1$
-            if (currentUniverse != null) {
-                currentUniverseName = currentUniverse.getName();
-            }
-            if (currentUniverseName != null && currentUniverseName.equals("[HEAD]")) { //$NON-NLS-1$
-                currentUniverseName = "";//$NON-NLS-1$
-            }
             WSConceptRevisionMap conceptsRevisionMap = port
                     .getConceptsInDataClusterWithRevisions(new WSGetConceptsInDataClusterWithRevisions(new WSDataClusterPK(
                             dataContainer), new WSUniversePK(currentUniverseName)));
@@ -518,16 +503,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 
                 for (MapEntry entry : wsConceptRevisionMapMapEntries) {
                     String entity = entry.getConcept();
-                    String revision = entry.getRevision();
-                    if ((revision == null && currentUniverseName == null) || currentUniverseName.equals(revision)) {
-                        if (revision == null || revision.equals("")) { //$NON-NLS-1$
-                            revision = "HEAD";//$NON-NLS-1$
-                        }
-
-                        if (getAutoIncrementKeyFieldNames(entity) != null) {
-                            entityToRevisions.put(entity, revision);
-                        }
-                    }
+                    entityToRevisions.add(entity);
                 }
             }
 
