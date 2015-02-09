@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2014 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2015 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -68,14 +68,21 @@ public class DeployAllDialog extends Dialog {
      */
     @Override
     protected Control createDialogArea(Composite parent) {
-        Composite mainContainer = (Composite) super.createDialogArea(parent);
-        GridLayout gridLayout = (GridLayout) mainContainer.getLayout();
+        mainContainer = (Composite) super.createDialogArea(parent);
+        GridLayout mainContainerLayout = (GridLayout) mainContainer.getLayout();
         mainContainer.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
-        gridLayout.numColumns = 2;
+        mainContainerLayout.numColumns = 2;
 
         Label lblNewLabel_selserver = new Label(mainContainer, SWT.NONE);
         lblNewLabel_selserver.setText(Messages.DeployAllDialog_label_selectserver);
         lblNewLabel_selserver.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false, 2, 1));
+
+        errorLabel = new Label(mainContainer, SWT.NONE);
+        errorLabelLayoutData = new GridData(SWT.FILL, SWT.TOP, true, false, 2, 1);
+        errorLabelLayoutData.exclude = true;
+        errorLabel.setLayoutData(errorLabelLayoutData);
+        errorLabel.setForeground(getShell().getDisplay().getSystemColor(SWT.COLOR_RED));
+
         comboViewer = new ComboViewer(mainContainer, SWT.DROP_DOWN | SWT.READ_ONLY);
 
         Combo combo = comboViewer.getCombo();
@@ -101,7 +108,8 @@ public class DeployAllDialog extends Dialog {
 
             public void selectionChanged(SelectionChangedEvent event) {
                 serverDef = (MDMServerDef) ((IStructuredSelection) comboViewer.getSelection()).getFirstElement();
-                treeViewer.updateCurrentServerDef(serverDef);
+                treeViewer.updateCurrentServerDef(null, serverDef);
+                updateErrorMsgArea(treeViewer.isServerOk());
             }
         });
         final Button reconciliationBun = new Button(mainContainer, SWT.CHECK);
@@ -195,6 +203,15 @@ public class DeployAllDialog extends Dialog {
         return null;
     }
 
+    private void updateErrorMsgArea(boolean isServerOk) {
+        errorLabelLayoutData.exclude = isServerOk;
+        errorLabel.setVisible(!isServerOk);
+        if (!isServerOk) {
+            errorLabel.setText(Messages.bind(Messages.UnableConnectToServer, serverDef.getUrl()));
+        }
+        mainContainer.layout();
+    }
+
     /**
      * Create contents of the button bar.
      * 
@@ -221,6 +238,12 @@ public class DeployAllDialog extends Dialog {
     private Button okBun;
 
     private ComboViewer comboViewer;
+
+    private Label errorLabel;
+
+    private GridData errorLabelLayoutData;
+
+    private Composite mainContainer;
 
     public List<AbstractDeployCommand> getSelectedCommands() {
         return this.selectedCommands;

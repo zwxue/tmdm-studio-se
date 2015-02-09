@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2014 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2015 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -52,6 +52,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.ui.dialogs.ContainerCheckedTreeViewer;
@@ -174,8 +175,8 @@ public class RepositoryViewObjectCheckedWidget extends Composite {
         return this.lastServerDef;
     }
 
-    public void updateCurrentServerDef(final MDMServerDef curServerDef) {
-        doCheckServerConnection(curServerDef);
+    public void updateCurrentServerDef(Shell shell, final MDMServerDef curServerDef) {
+        doCheckServerConnection(shell, curServerDef);
 
         new UIJob("Switch Server") { //$NON-NLS-1$
 
@@ -191,8 +192,12 @@ public class RepositoryViewObjectCheckedWidget extends Composite {
 
     }
 
-    private void doCheckServerConnection(MDMServerDef serverDef) {
-        isServerOk = RepositoryResourceUtil.checkServerConnection(getShell(), serverDef);
+    private void doCheckServerConnection(Shell shell, MDMServerDef serverDef) {
+        isServerOk = RepositoryResourceUtil.checkServerConnection(shell, serverDef);
+    }
+
+    public boolean isServerOk() {
+        return isServerOk;
     }
 
     public List<AbstractDeployCommand> getSelectedCommands() {
