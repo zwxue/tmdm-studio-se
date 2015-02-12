@@ -2,7 +2,7 @@
 //
 // Talend Community Edition
 //
-// Copyright (C) 2006-2014 Talend ¨C www.talend.com
+// Copyright (C) 2006-2014 Talend ï¿½C www.talend.com
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
@@ -33,8 +33,7 @@ import org.talend.mdm.repository.core.IServerObjectRepositoryType;
 import org.talend.mdm.repository.core.impl.AbstractRepositoryNodeResourceProvider;
 import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
 import org.talend.mdm.repository.model.mdmproperties.MdmpropertiesFactory;
-import org.talend.mdm.repository.model.mdmproperties.WSDataClusterItem;
-
+import org.talend.mdm.repository.model.mdmproperties.WsDataClusterItem;
 
 /**
  * DOC hbhong class global comment. Detailled comment <br/>
@@ -43,7 +42,7 @@ import org.talend.mdm.repository.model.mdmproperties.WSDataClusterItem;
 public class DataClusterNodeResourceProvider extends AbstractRepositoryNodeResourceProvider {
 
     public ERepositoryObjectType getRepositoryObjectType(Item item) {
-        if (item instanceof WSDataClusterItem || item instanceof ContainerItem) {
+        if (item instanceof WsDataClusterItem || item instanceof ContainerItem) {
             return IServerObjectRepositoryType.TYPE_DATACLUSTER;
         }
         return null;
@@ -54,25 +53,26 @@ public class DataClusterNodeResourceProvider extends AbstractRepositoryNodeResou
         if (repositoryType != null) {
             Resource itemResource = createCommonItemResource(project, item, repositoryType, path);
             EList<EObject> contents = itemResource.getContents();
-            contents.add(((WSDataClusterItem) item).getWsDataCluster());
+            contents.add(((WsDataClusterItem) item).getWsDataCluster());
             return itemResource;
         }
         return null;
     }
 
+    @Override
     public Resource save(Item item) throws PersistenceException {
-        if (item instanceof WSDataClusterItem) {
+        if (item instanceof WsDataClusterItem) {
             Resource resource = xmiResourceManager.getItemResource(item);
             resource.getContents().clear();
-            resource.getContents().add(((WSDataClusterItem) item).getWsDataCluster());
-            Resource eResource = ((WSDataClusterItem) item).getWsDataCluster().eResource();
+            resource.getContents().add(((WsDataClusterItem) item).getWsDataCluster());
+            Resource eResource = ((WsDataClusterItem) item).getWsDataCluster().eResource();
             return resource;
         }
         return null;
     }
 
     public Item createNewItem(ERepositoryObjectType type) {
-        return MdmpropertiesFactory.eINSTANCE.createWSDataClusterItem();
+        return MdmpropertiesFactory.eINSTANCE.createWsDataClusterItem();
     }
 
     public boolean canHandleRepObjType(ERepositoryObjectType type) {

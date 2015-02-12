@@ -83,13 +83,13 @@ import com.amalto.workbench.providers.XObjectEditorInput;
 import com.amalto.workbench.service.MissingJarService;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.WidgetUtils;
-import com.amalto.workbench.webservices.WSDataClusterPK;
-import com.amalto.workbench.webservices.WSExecuteStoredProcedure;
-import com.amalto.workbench.webservices.WSPutStoredProcedure;
-import com.amalto.workbench.webservices.WSStoredProcedure;
-import com.amalto.workbench.webservices.WSStoredProcedurePK;
-import com.amalto.workbench.webservices.WSStringArray;
-import com.amalto.workbench.webservices.XtentisPort;
+import com.amalto.workbench.webservices.TMDMService;
+import com.amalto.workbench.webservices.WsDataClusterPK;
+import com.amalto.workbench.webservices.WsExecuteStoredProcedure;
+import com.amalto.workbench.webservices.WsPutStoredProcedure;
+import com.amalto.workbench.webservices.WsStoredProcedure;
+import com.amalto.workbench.webservices.WsStoredProcedurePK;
+import com.amalto.workbench.webservices.WsStringArray;
 
 public class StoredProcedureMainPage extends AMainPage implements ITextListener {
 
@@ -127,7 +127,7 @@ public class StoredProcedureMainPage extends AMainPage implements ITextListener 
 
         try {
 
-            WSStoredProcedure wsStoredProcedure = (WSStoredProcedure) (getXObject().getWsObject());
+            WsStoredProcedure wsStoredProcedure = (WsStoredProcedure) (getXObject().getWsObject());
 
             // description
             Label descriptionLabel = toolkit.createLabel(charComposite, Messages.StoredProcedureMainPage_4, SWT.NULL);
@@ -185,7 +185,7 @@ public class StoredProcedureMainPage extends AMainPage implements ITextListener 
                     if (!isLocalInput()) {
                         TreeParent serverRoot = StoredProcedureMainPage.this.getXObject().getServerRoot();
                         TreeObject iaObject = new TreeObject(StoredProcedureMainPage.this.dataClusterCombo.getText(), serverRoot,
-                                TreeObject.DATA_CLUSTER, new WSDataClusterPK(StoredProcedureMainPage.this.dataClusterCombo
+                                TreeObject.DATA_CLUSTER, new WsDataClusterPK(StoredProcedureMainPage.this.dataClusterCombo
                                         .getText()), null);
                         (new EditXObjectAction(iaObject, StoredProcedureMainPage.this.getSite().getPage())).run();
                     }
@@ -249,7 +249,7 @@ public class StoredProcedureMainPage extends AMainPage implements ITextListener 
 
         this.refreshing = true;
 
-        WSStoredProcedure wsStoredProcedure = (WSStoredProcedure) (getXObject().getWsObject());
+        WsStoredProcedure wsStoredProcedure = (WsStoredProcedure) (getXObject().getWsObject());
         String s;
 
         s = wsStoredProcedure.getDescription() == null ? "" : wsStoredProcedure.getDescription();//$NON-NLS-1$
@@ -268,7 +268,7 @@ public class StoredProcedureMainPage extends AMainPage implements ITextListener 
 
     protected void initDataClusterCombo() {
         dataClusterCombo.removeAll();
-        List<WSDataClusterPK> dataClusterPKs;
+        List<WsDataClusterPK> dataClusterPKs;
         try {
             dataClusterPKs = Util.getAllDataClusterPKs(new URL(getXObject().getEndpointAddress()), getXObject().getUniverse(),
                     getXObject().getUsername(), getXObject().getPassword());
@@ -302,7 +302,7 @@ public class StoredProcedureMainPage extends AMainPage implements ITextListener 
 
         this.comitting = true;
 
-        WSStoredProcedure wsStoredProcedure = (WSStoredProcedure) (getXObject().getWsObject());
+        WsStoredProcedure wsStoredProcedure = (WsStoredProcedure) (getXObject().getWsObject());
         wsStoredProcedure.setDescription(descriptionText.getText());
         wsStoredProcedure.setProcedure(procedureViewer.getDocument().get());
         wsStoredProcedure.setRefreshCache(refreshCacheBtn.getSelection());
@@ -345,9 +345,9 @@ public class StoredProcedureMainPage extends AMainPage implements ITextListener 
         BusyIndicator.showWhile(this.getPartControl().getDisplay(), new Runnable() {
 
             public void run() {
-                WSDataClusterPK dcpk = null;
+                WsDataClusterPK dcpk = null;
                 if (!"[ALL]".equals(dataClusterCombo.getText())) {
-                    dcpk = new WSDataClusterPK(dataClusterCombo.getText());
+                    dcpk = new WsDataClusterPK(dataClusterCombo.getText());
                 }
                 try {
                     String proc = procedureViewer.getDocument().get();
@@ -394,12 +394,12 @@ public class StoredProcedureMainPage extends AMainPage implements ITextListener 
                         }
                     }
                     // perform call
-                    XtentisPort port = getPort();
-                    if (port != null) {
-                        WSStoredProcedure wsStoredProcedure = (WSStoredProcedure) (getXObject().getWsObject());
-                        port.putStoredProcedure(new WSPutStoredProcedure(wsStoredProcedure));
-                        WSStringArray array = port.executeStoredProcedure(new WSExecuteStoredProcedure(new WSStoredProcedurePK(
-                                wsStoredProcedure.getName()), null, dcpk, currentParameters));
+                    TMDMService service = getMDMService();
+                    if (service != null) {
+                        WsStoredProcedure wsStoredProcedure = (WsStoredProcedure) (getXObject().getWsObject());
+                        service.putStoredProcedure(new WsPutStoredProcedure(wsStoredProcedure));
+                        WsStringArray array = service.executeStoredProcedure(new WsExecuteStoredProcedure(currentParameters, dcpk,
+                                new WsStoredProcedurePK(wsStoredProcedure.getName())));
                         List<String> results = array.getStrings();
                         resultsLabel.setText(Messages.StoredProcedureMainPage_15 + results.size()
                                 + Messages.StoredProcedureMainPage_16);

@@ -18,7 +18,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 
 import com.amalto.workbench.exadapter.IExAdapter;
 import com.amalto.workbench.models.TreeObject;
-import com.amalto.workbench.webservices.XtentisPort;
+import com.amalto.workbench.webservices.TMDMService;
 
 /**
  * created by HHB on 2014-1-3 Detailled comment
@@ -26,6 +26,6 @@ import com.amalto.workbench.webservices.XtentisPort;
  */
 public interface IExportItemsWizardAdapter extends IExAdapter<ExportItemsWizard> {
 
-    void doexport(XtentisPort port, int treeObjType, List<TreeObject> exports, TreeObject obj, IProgressMonitor monitor);
+    void doexport(TMDMService service, int treeObjType, List<TreeObject> exports, TreeObject obj, IProgressMonitor monitor);
 
 }

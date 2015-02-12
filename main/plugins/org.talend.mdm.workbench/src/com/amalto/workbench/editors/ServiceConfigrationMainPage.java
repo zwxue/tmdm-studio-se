@@ -51,14 +51,15 @@ import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.providers.XObjectEditorInput;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.XmlUtil;
-import com.amalto.workbench.webservices.WSCheckServiceConfigRequest;
-import com.amalto.workbench.webservices.WSCheckServiceConfigResponse;
-import com.amalto.workbench.webservices.WSGetServicesList;
-import com.amalto.workbench.webservices.WSServiceGetDocument;
-import com.amalto.workbench.webservices.WSServicePutConfiguration;
-import com.amalto.workbench.webservices.WSServicesList;
-import com.amalto.workbench.webservices.WSString;
-import com.amalto.workbench.webservices.XtentisPort;
+import com.amalto.workbench.webservices.TMDMService;
+import com.amalto.workbench.webservices.WsCheckServiceConfigRequest;
+import com.amalto.workbench.webservices.WsCheckServiceConfigResponse;
+import com.amalto.workbench.webservices.WsGetServicesList;
+import com.amalto.workbench.webservices.WsServiceGetDocument;
+import com.amalto.workbench.webservices.WsServicePutConfiguration;
+import com.amalto.workbench.webservices.WsServicesList;
+import com.amalto.workbench.webservices.WsServicesListItem;
+import com.amalto.workbench.webservices.WsString;
 
 public class ServiceConfigrationMainPage extends AMainPageV2 {
 
@@ -72,11 +73,11 @@ public class ServiceConfigrationMainPage extends AMainPageV2 {
 
     private Button checkButton;
 
-    protected XtentisPort port;
+    protected TMDMService service;
 
-    protected WSServiceGetDocument document;
+    protected WsServiceGetDocument document;
 
-    protected WSServicePutConfiguration ws = new WSServicePutConfiguration();
+    protected WsServicePutConfiguration ws = new WsServicePutConfiguration();
 
     protected Text errorLabel;
 
@@ -96,7 +97,7 @@ public class ServiceConfigrationMainPage extends AMainPageV2 {
     protected void setForConfigureContent(String serviceName) {
 
         if (serviceName != null && !"".equals(serviceName)) {//$NON-NLS-1$
-            document = port.getServiceDocument(new WSString(serviceName.trim()));
+            document = service.getServiceDocument(new WsString(serviceName.trim()));
             String documentConfigure = ServiceConfigrationMainPage.formartXml(document.getConfigure());
             serviceConfigurationsText.setText(documentConfigure);
             errorLabel.setText("");//$NON-NLS-1$
@@ -106,21 +107,21 @@ public class ServiceConfigrationMainPage extends AMainPageV2 {
 
     protected void setForServiceNameCombo() {
         try {
-            port = Util.getPort(getXObject());
-            WSServicesList list = port.getServicesList(new WSGetServicesList(""));//$NON-NLS-1$
-            List<WSServicesList.Item> items = list.getItem();
+            service = Util.getMDMService(getXObject());
+            WsServicesList list = service.getServicesList(new WsGetServicesList(""));//$NON-NLS-1$
+            List<WsServicesListItem> items = list.getItem();
             if (items != null) {
                 String[] sortedList = new String[items.size()];
                 for (int i = 0; i < items.size(); i++) {
                     sortedList[i] = items.get(i).getJndiName();
                 }
                 Arrays.sort(sortedList);
-                for (int i = 0; i < sortedList.length; i++) {
-                    WSServiceGetDocument doc = port.getServiceDocument(new WSString(sortedList[i].trim()));
+                for (String element : sortedList) {
+                    WsServiceGetDocument doc = service.getServiceDocument(new WsString(element.trim()));
                     if (doc.getConfigureSchema() == null || doc.getConfigureSchema().length() == 0) {
                         continue;
                     }
-                    serviceNameCombo.add(sortedList[i]);
+                    serviceNameCombo.add(element);
                 }
             }
         } catch (Exception e) {
@@ -134,7 +135,7 @@ public class ServiceConfigrationMainPage extends AMainPageV2 {
 
     protected String getDoc() {
         try {
-            WSServiceGetDocument doc = getServiceDocument(serviceNameCombo.getText());
+            WsServiceGetDocument doc = getServiceDocument(serviceNameCombo.getText());
             return doc.getDefaultConfig();
         } catch (WebServiceException e) {
             log.error(e.getMessage(), e);
@@ -144,7 +145,7 @@ public class ServiceConfigrationMainPage extends AMainPageV2 {
 
     protected String getDesc() {
         try {
-            WSServiceGetDocument doc = getServiceDocument(serviceNameCombo.getText());
+            WsServiceGetDocument doc = getServiceDocument(serviceNameCombo.getText());
             return doc.getDescription();
         } catch (WebServiceException e) {
             log.error(e.getMessage(), e);
@@ -152,10 +153,10 @@ public class ServiceConfigrationMainPage extends AMainPageV2 {
         return null;
     }
 
-    protected WSServiceGetDocument getServiceDocument(String jndiName) {
+    protected WsServiceGetDocument getServiceDocument(String jndiName) {
 
         // return port.getServiceDocument(new WSString(serviceNameCombo.getText().trim()));
-        return port.getServiceDocument(new WSString(jndiName.trim()));
+        return service.getServiceDocument(new WsString(jndiName.trim()));
     }
 
     @Override
@@ -285,7 +286,7 @@ public class ServiceConfigrationMainPage extends AMainPageV2 {
 
     protected void doSaveSVNChanges() {
         if (exAdapter != null) {
-            exAdapter.doSaveSVNChange(port, ws, serviceNameCombo.getText(), serviceConfigurationsText.getText());
+            exAdapter.doSaveSVNChange(service, ws, serviceNameCombo.getText(), serviceConfigurationsText.getText());
         }
 
     }
@@ -332,9 +333,9 @@ public class ServiceConfigrationMainPage extends AMainPageV2 {
             return CHECKMSG_NOSELECTION;
         }
 
-        WSCheckServiceConfigResponse result;
+        WsCheckServiceConfigResponse result;
 
-        result = port.checkServiceConfiguration(new WSCheckServiceConfigRequest(serviceNameCombo.getText().trim(),
+        result = service.checkServiceConfiguration(new WsCheckServiceConfigRequest(serviceNameCombo.getText().trim(),
                 serviceConfigurationsText.getText()));
 
         if (result.isCheckResult()) {

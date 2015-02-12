@@ -21,17 +21,17 @@ import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 
-import com.amalto.workbench.webservices.XtentisPort;
+import com.amalto.workbench.webservices.TMDMService;
 
 /**
  * DOC hbhong class global comment. Detailled comment
  */
 class RepositoryProcessesNamesHolder extends RepositoryExternalInfoHolder<String[]> {
 
-    private XtentisPort port;
+    private TMDMService service;
 
-    public RepositoryProcessesNamesHolder(XtentisPort port) {
-        this.port = port;
+    public RepositoryProcessesNamesHolder(TMDMService service) {
+        this.service = service;
     }
 
     @Override

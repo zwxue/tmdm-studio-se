@@ -27,13 +27,13 @@ import com.amalto.workbench.dialogs.DOMViewDialog;
 import com.amalto.workbench.dialogs.datacontainer.DataContainerDOMViewDialog;
 import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.utils.Util;
-import com.amalto.workbench.webservices.WSDataClusterPK;
-import com.amalto.workbench.webservices.WSDataModelPK;
-import com.amalto.workbench.webservices.WSDataModelPKArray;
-import com.amalto.workbench.webservices.WSPutItem;
-import com.amalto.workbench.webservices.WSPutItemWithReport;
-import com.amalto.workbench.webservices.WSRegexDataModelPKs;
-import com.amalto.workbench.webservices.XtentisPort;
+import com.amalto.workbench.webservices.TMDMService;
+import com.amalto.workbench.webservices.WsDataClusterPK;
+import com.amalto.workbench.webservices.WsDataModelPK;
+import com.amalto.workbench.webservices.WsDataModelPKArray;
+import com.amalto.workbench.webservices.WsPutItem;
+import com.amalto.workbench.webservices.WsPutItemWithReport;
+import com.amalto.workbench.webservices.WsRegexDataModelPKs;
 
 /**
  * created by liusongbo on 2014-2-19
@@ -48,9 +48,9 @@ public class NewItemHandler {
         return new NewItemHandler();
     }
 
-    public boolean createItemRecord(final XtentisPort port, final Shell ashell, final WSDataClusterPK dataClusterPk,
+    public boolean createItemRecord(final TMDMService service, final Shell ashell, final WsDataClusterPK wsDataClusterPK,
             boolean isMaster) {
-        if (port == null || dataClusterPk == null) {
+        if (service == null || wsDataClusterPK == null) {
             throw new IllegalArgumentException();
         }
 
@@ -59,17 +59,17 @@ public class NewItemHandler {
         try {
             String xml = "<NewItem><NewElement></NewElement></NewItem>"; //$NON-NLS-1$
 
-            WSDataModelPKArray dataModelPKs = port.getDataModelPKs(new WSRegexDataModelPKs("*")); //$NON-NLS-1$
-            List<WSDataModelPK> dmPKs = dataModelPKs.getWsDataModelPKs();
+            WsDataModelPKArray dataModelPKs = service.getDataModelPKs(new WsRegexDataModelPKs("*")); //$NON-NLS-1$
+            List<WsDataModelPK> dmPKs = dataModelPKs.getWsDataModelPKs();
             List<String> dataModels = new ArrayList<String>();
             if (dmPKs != null) {
-                for (WSDataModelPK pk : dmPKs) {
+                for (WsDataModelPK pk : dmPKs) {
                     if (!"XMLSCHEMA---".equals(pk.getPk())) { //$NON-NLS-1$
                         dataModels.add(pk.getPk());
                     }
                 }
             }
-            final DataContainerDOMViewDialog d = new DataContainerDOMViewDialog(shell, port, Util.parse(xml), dataModels,
+            final DataContainerDOMViewDialog d = new DataContainerDOMViewDialog(shell, service, Util.parse(xml), dataModels,
                     DOMViewDialog.SOURCE_VIEWER, null, isMaster);
             d.addListener(new Listener() {
 
@@ -77,13 +77,13 @@ public class NewItemHandler {
                     if (event.button == DOMViewDialog.BUTTON_SAVE) {
                         // attempt to save
                         try {
-                            WSPutItem putItem = new WSPutItem(dataClusterPk, d.getXML(), "".equals(d.getDataModelName()) ? null //$NON-NLS-1$
-                                    : new WSDataModelPK(d.getDataModelName()), false);
-                            WSPutItemWithReport item = new WSPutItemWithReport(putItem, "genericUI", d.isBeforeVerification());//$NON-NLS-1$
+                            WsPutItem putItem = new WsPutItem(false, wsDataClusterPK, "".equals(d.getDataModelName()) ? null //$NON-NLS-1$
+                                    : new WsDataModelPK(d.getDataModelName()), d.getXML());
+                            WsPutItemWithReport item = new WsPutItemWithReport(d.isBeforeVerification(), "genericUI", putItem);//$NON-NLS-1$
                             if (d.isTriggerProcess()) {
-                                port.putItemWithReport(item);
+                                service.putItemWithReport(item);
                             } else {
-                                port.putItem(putItem);
+                                service.putItem(putItem);
                             }
                             created = true;
 

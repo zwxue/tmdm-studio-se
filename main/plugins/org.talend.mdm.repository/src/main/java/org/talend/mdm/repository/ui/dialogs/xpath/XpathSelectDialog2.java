@@ -19,7 +19,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbenchPartSite;
 import org.eclipse.xsd.XSDSchema;
 import org.talend.mdm.repository.core.service.RepositoryQueryService;
-import org.talend.mdm.repository.model.mdmserverobject.WSDataModelE;
+import org.talend.mdm.repository.model.mdmserverobject.WsDataModelE;
 
 import com.amalto.workbench.dialogs.XpathSelectDialog;
 import com.amalto.workbench.dialogs.datamodel.IXPathSelectionFilter;
@@ -73,7 +73,7 @@ public class XpathSelectDialog2 extends XpathSelectDialog {
         try {
             XSDSchema xsd = Util.getXSDSchemaOfDirtyEditor(dataModelName);
             if (null == xsd) {
-                WSDataModelE wsDataModel = RepositoryQueryService.findDataModelByName(dataModelName);
+                WsDataModelE wsDataModel = RepositoryQueryService.findDataModelByName(dataModelName);
                 if (wsDataModel != null) {
                     String schema = wsDataModel.getXsdSchema();// Util.nodeToString(xsdSchema.getDocument());
                     xsd = Util.createXsdSchema(schema, pObject);

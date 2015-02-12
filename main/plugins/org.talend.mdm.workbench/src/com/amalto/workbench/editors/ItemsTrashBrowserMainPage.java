@@ -67,15 +67,15 @@ import com.amalto.workbench.models.IXObjectModelListener;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.providers.XObjectBrowserInput;
 import com.amalto.workbench.utils.Util;
-import com.amalto.workbench.webservices.WSDataClusterPK;
-import com.amalto.workbench.webservices.WSDroppedItem;
-import com.amalto.workbench.webservices.WSDroppedItemPK;
-import com.amalto.workbench.webservices.WSFindAllDroppedItemsPKs;
-import com.amalto.workbench.webservices.WSItemPK;
-import com.amalto.workbench.webservices.WSLoadDroppedItem;
-import com.amalto.workbench.webservices.WSRecoverDroppedItem;
-import com.amalto.workbench.webservices.WSRemoveDroppedItem;
-import com.amalto.workbench.webservices.XtentisPort;
+import com.amalto.workbench.webservices.TMDMService;
+import com.amalto.workbench.webservices.WsDataClusterPK;
+import com.amalto.workbench.webservices.WsDroppedItem;
+import com.amalto.workbench.webservices.WsDroppedItemPK;
+import com.amalto.workbench.webservices.WsFindAllDroppedItemsPKs;
+import com.amalto.workbench.webservices.WsItemPK;
+import com.amalto.workbench.webservices.WsLoadDroppedItem;
+import com.amalto.workbench.webservices.WsRecoverDroppedItem;
+import com.amalto.workbench.webservices.WsRemoveDroppedItem;
 import com.amalto.workbench.widgets.WidgetFactory;
 
 public class ItemsTrashBrowserMainPage extends AMainPage implements IXObjectModelListener {
@@ -422,13 +422,13 @@ public class ItemsTrashBrowserMainPage extends AMainPage implements IXObjectMode
             waitCursor = new Cursor(display, SWT.CURSOR_WAIT);
             this.getSite().getShell().setCursor(waitCursor);
 
-            XtentisPort port = Util.getPort(getXObject());
+            TMDMService service = Util.getMDMService(getXObject());
 
             String search = searchText.getText();
 
-            List<WSDroppedItemPK> results = null;
+            List<WsDroppedItemPK> results = null;
             if (search != null && search.length() > 0) {
-                results = port.findAllDroppedItemsPKs(new WSFindAllDroppedItemsPKs(search)).getWsDroppedItemPK();
+                results = service.findAllDroppedItemsPKs(new WsFindAllDroppedItemsPKs(search)).getWsDroppedItemPK();
             }
 
             if ((results == null) || (results.isEmpty())) {
@@ -440,14 +440,13 @@ public class ItemsTrashBrowserMainPage extends AMainPage implements IXObjectMode
             } else {
                 LineItem[] res = new LineItem[results.size()];
                 for (int i = 0; i < results.size(); i++) {
-                    WSDroppedItemPK wsDroppedItemPK = results.get(i);
-                    WSItemPK refWSItemPK = wsDroppedItemPK.getWsItemPK();
+                    WsDroppedItemPK wsDroppedItemPK = results.get(i);
+                    WsItemPK refWSItemPK = wsDroppedItemPK.getWsItemPK();
 
-                    String revison = wsDroppedItemPK.getRevisionId();
                     // if(revison==null||revison.equals(""))revison="head";
 
                     res[i] = new LineItem(refWSItemPK.getWsDataClusterPK().getPk(), refWSItemPK.getConceptName(), refWSItemPK
-                            .getIds().toArray(new String[0]), revison, wsDroppedItemPK.getPartPath());
+                            .getIds().toArray(new String[0]), null, wsDroppedItemPK.getPartPath());
                 }
                 return res;
             }
@@ -502,9 +501,9 @@ public class ItemsTrashBrowserMainPage extends AMainPage implements IXObjectMode
                 IStructuredSelection selection = ((IStructuredSelection) viewer.getSelection());
                 LineItem li = (LineItem) selection.getFirstElement();
 
-                WSDroppedItem wsDroppedItem = Util.getPort(getXObject()).loadDroppedItem(
-                        new WSLoadDroppedItem(new WSDroppedItemPK(new WSItemPK(new WSDataClusterPK(li.getDataCluster()), li
-                                .getConcept(), Arrays.asList(li.getIds())), li.getPartPath(), li.getRevision())
+                WsDroppedItem wsDroppedItem = Util.getMDMService(getXObject()).loadDroppedItem(
+                        new WsLoadDroppedItem(new WsDroppedItemPK(li.getPartPath(), new WsItemPK(li.getConcept(), Arrays
+                                .asList(li.getIds()), new WsDataClusterPK(li.getDataCluster())))
 
                         ));
 
@@ -587,10 +586,10 @@ public class ItemsTrashBrowserMainPage extends AMainPage implements IXObjectMode
                     return;
                 }
 
-                WSDroppedItemPK wsDroppedItemPK = new WSDroppedItemPK(new WSItemPK(new WSDataClusterPK(li.getDataCluster()),
-                        li.getConcept(), Arrays.asList(li.getIds())), li.getPartPath(), li.getRevision());
+                WsDroppedItemPK wsDroppedItemPK = new WsDroppedItemPK(li.getPartPath(), new WsItemPK(li.getConcept(),
+                        Arrays.asList(li.getIds()), new WsDataClusterPK(li.getDataCluster())));
 
-                Util.getPort(getXObject()).recoverDroppedItem(new WSRecoverDroppedItem(wsDroppedItemPK));
+                Util.getMDMService(getXObject()).recoverDroppedItem(new WsRecoverDroppedItem(wsDroppedItemPK));
 
                 // TODO response status deal
 
@@ -649,10 +648,10 @@ public class ItemsTrashBrowserMainPage extends AMainPage implements IXObjectMode
                     return;
                 }
 
-                WSDroppedItemPK wsDroppedItemPK = new WSDroppedItemPK(new WSItemPK(new WSDataClusterPK(li.getDataCluster()),
-                        li.getConcept(), Arrays.asList(li.getIds())), li.getPartPath(), li.getRevision());
+                WsDroppedItemPK wsDroppedItemPK = new WsDroppedItemPK(li.getPartPath(), new WsItemPK(li.getConcept(),
+                        Arrays.asList(li.getIds()), new WsDataClusterPK(li.getDataCluster())));
                 // run
-                Util.getPort(getXObject()).removeDroppedItem(new WSRemoveDroppedItem(wsDroppedItemPK));
+                Util.getMDMService(getXObject()).removeDroppedItem(new WsRemoveDroppedItem(wsDroppedItemPK));
                 // refresh the search
                 ItemsTrashBrowserMainPage.this.resultsViewer.setInput(getResults(false));
 

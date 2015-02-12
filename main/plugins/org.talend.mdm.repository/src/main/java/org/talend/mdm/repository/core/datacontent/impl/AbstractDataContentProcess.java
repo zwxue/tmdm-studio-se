@@ -25,7 +25,7 @@ import org.talend.mdm.repository.core.datacontent.DataProcessRule;
 import org.talend.mdm.repository.core.datacontent.IDataContentProcess;
 import org.talend.mdm.repository.plugin.RepositoryPlugin;
 
-import com.amalto.workbench.webservices.WSItem;
+import com.amalto.workbench.webservices.WsItem;
 
 /**
  * created by HHB on 2012-10-9 Detailled comment
@@ -60,7 +60,7 @@ public abstract class AbstractDataContentProcess implements IDataContentProcess 
     protected Mapping getWSItemMapping() throws IOException, MappingException {
 
         URL mappingUrl = this.getClass().getResource("mapping.xml"); //$NON-NLS-1$
-        Mapping mapping = new Mapping(WSItem.class.getClassLoader());
+        Mapping mapping = new Mapping(WsItem.class.getClassLoader());
         mapping.loadMapping(mappingUrl);
         return mapping;
 

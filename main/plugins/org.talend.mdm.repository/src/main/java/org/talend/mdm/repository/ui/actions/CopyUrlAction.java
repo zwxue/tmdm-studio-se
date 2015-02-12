@@ -23,8 +23,8 @@ import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.AbstractRepositoryAction;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
-import org.talend.mdm.repository.model.mdmproperties.WSResourceItem;
-import org.talend.mdm.repository.model.mdmserverobject.WSResourceE;
+import org.talend.mdm.repository.model.mdmproperties.WsResourceItem;
+import org.talend.mdm.repository.model.mdmserverobject.WsResourceE;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 
 import com.amalto.workbench.image.EImage;
@@ -57,11 +57,11 @@ public class CopyUrlAction extends AbstractRepositoryAction {
 
             // picture file info
             Item item = viewObject.getProperty().getItem();
-            WSResourceE wsItem = null;
-            if (!(item instanceof WSResourceItem)) {
+            WsResourceE wsItem = null;
+            if (!(item instanceof WsResourceItem)) {
                 continue;
             }
-            wsItem = ((WSResourceItem) item).getResource();
+            wsItem = ((WsResourceItem) item).getResource();
             String catalog = wsItem.getImageCatalog();
             if (catalog == null) {
                 continue;

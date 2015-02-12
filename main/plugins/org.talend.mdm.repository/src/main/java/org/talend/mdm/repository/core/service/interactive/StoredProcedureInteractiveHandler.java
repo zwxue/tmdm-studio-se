@@ -20,11 +20,11 @@ import org.talend.mdm.repository.i18n.Messages;
 import com.amalto.workbench.utils.EXtentisObjects;
 import com.amalto.workbench.utils.TreeObjectUtil;
 import com.amalto.workbench.utils.XtentisException;
-import com.amalto.workbench.webservices.WSDeleteStoredProcedure;
-import com.amalto.workbench.webservices.WSPutStoredProcedure;
-import com.amalto.workbench.webservices.WSStoredProcedure;
-import com.amalto.workbench.webservices.WSStoredProcedurePK;
-import com.amalto.workbench.webservices.XtentisPort;
+import com.amalto.workbench.webservices.TMDMService;
+import com.amalto.workbench.webservices.WsDeleteStoredProcedure;
+import com.amalto.workbench.webservices.WsPutStoredProcedure;
+import com.amalto.workbench.webservices.WsStoredProcedure;
+import com.amalto.workbench.webservices.WsStoredProcedurePK;
 
 /**
  * DOC hbhong class global comment. Detailled comment
@@ -41,21 +41,21 @@ public class StoredProcedureInteractiveHandler extends AbstractInteractiveHandle
     }
 
     @Override
-    public boolean doDeployWSObject(XtentisPort port, Object wsObj) {
+    public boolean doDeployWSObject(TMDMService service, Object wsObj) {
         if (wsObj != null) {
-            port.putStoredProcedure(new WSPutStoredProcedure((WSStoredProcedure) wsObj));
+            service.putStoredProcedure(new WsPutStoredProcedure((WsStoredProcedure) wsObj));
             return true;
         }
         return false;
     }
 
     @Override
-    public boolean doRemove(XtentisPort port, AbstractDeployCommand cmd) throws XtentisException {
-        WSStoredProcedurePK pk = new WSStoredProcedurePK();
+    public boolean doRemove(TMDMService service, AbstractDeployCommand cmd) throws XtentisException {
+        WsStoredProcedurePK pk = new WsStoredProcedurePK();
         String name = cmd.getObjName();
         pk.setPk(name);
-        port.deleteStoredProcedure(new WSDeleteStoredProcedure(pk));
-        TreeObjectUtil.deleteSpecificationFromAttachedRole(port, name, EXtentisObjects.StoredProcedure.getName());
+        service.deleteStoredProcedure(new WsDeleteStoredProcedure(pk));
+        TreeObjectUtil.deleteSpecificationFromAttachedRole(service, name, EXtentisObjects.StoredProcedure.getName());
         return true;
     }
 

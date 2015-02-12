@@ -54,33 +54,33 @@ import com.amalto.workbench.utils.HttpClientUtil;
 import com.amalto.workbench.utils.LocalTreeObjectRepository;
 import com.amalto.workbench.utils.ResourcesUtil;
 import com.amalto.workbench.utils.Util;
-import com.amalto.workbench.webservices.WSAutoIncrement;
-import com.amalto.workbench.webservices.WSDataCluster;
-import com.amalto.workbench.webservices.WSDataClusterPK;
-import com.amalto.workbench.webservices.WSDataModel;
-import com.amalto.workbench.webservices.WSDataModelPK;
-import com.amalto.workbench.webservices.WSGetDataCluster;
-import com.amalto.workbench.webservices.WSGetDataModel;
-import com.amalto.workbench.webservices.WSGetItem;
-import com.amalto.workbench.webservices.WSGetItemPKsByCriteria;
-import com.amalto.workbench.webservices.WSGetMenu;
-import com.amalto.workbench.webservices.WSGetRoutingRule;
-import com.amalto.workbench.webservices.WSGetStoredProcedure;
-import com.amalto.workbench.webservices.WSGetTransformerV2;
-import com.amalto.workbench.webservices.WSGetView;
-import com.amalto.workbench.webservices.WSItem;
-import com.amalto.workbench.webservices.WSItemPKsByCriteriaResponse.Results;
-import com.amalto.workbench.webservices.WSMenu;
-import com.amalto.workbench.webservices.WSMenuPK;
-import com.amalto.workbench.webservices.WSRoutingRule;
-import com.amalto.workbench.webservices.WSRoutingRulePK;
-import com.amalto.workbench.webservices.WSStoredProcedure;
-import com.amalto.workbench.webservices.WSStoredProcedurePK;
-import com.amalto.workbench.webservices.WSTransformerV2;
-import com.amalto.workbench.webservices.WSTransformerV2PK;
-import com.amalto.workbench.webservices.WSView;
-import com.amalto.workbench.webservices.WSViewPK;
-import com.amalto.workbench.webservices.XtentisPort;
+import com.amalto.workbench.webservices.TMDMService;
+import com.amalto.workbench.webservices.WsAutoIncrement;
+import com.amalto.workbench.webservices.WsDataCluster;
+import com.amalto.workbench.webservices.WsDataClusterPK;
+import com.amalto.workbench.webservices.WsDataModel;
+import com.amalto.workbench.webservices.WsDataModelPK;
+import com.amalto.workbench.webservices.WsGetDataCluster;
+import com.amalto.workbench.webservices.WsGetDataModel;
+import com.amalto.workbench.webservices.WsGetItem;
+import com.amalto.workbench.webservices.WsGetItemPKsByCriteria;
+import com.amalto.workbench.webservices.WsGetMenu;
+import com.amalto.workbench.webservices.WsGetRoutingRule;
+import com.amalto.workbench.webservices.WsGetStoredProcedure;
+import com.amalto.workbench.webservices.WsGetTransformerV2;
+import com.amalto.workbench.webservices.WsGetView;
+import com.amalto.workbench.webservices.WsItem;
+import com.amalto.workbench.webservices.WsItemPKsByCriteriaResponseResults;
+import com.amalto.workbench.webservices.WsMenu;
+import com.amalto.workbench.webservices.WsMenuPK;
+import com.amalto.workbench.webservices.WsRoutingRule;
+import com.amalto.workbench.webservices.WsRoutingRulePK;
+import com.amalto.workbench.webservices.WsStoredProcedure;
+import com.amalto.workbench.webservices.WsStoredProcedurePK;
+import com.amalto.workbench.webservices.WsTransformerV2;
+import com.amalto.workbench.webservices.WsTransformerV2PK;
+import com.amalto.workbench.webservices.WsView;
+import com.amalto.workbench.webservices.WsViewPK;
 import com.amalto.workbench.widgets.FileSelectWidget;
 import com.amalto.workbench.widgets.RepositoryCheckTreeViewer;
 
@@ -186,9 +186,9 @@ public class ExportItemsWizard extends Wizard {
         monitor.beginTask(Messages.ExportItemsWizard_Export, IProgressMonitor.UNKNOWN);
         Exports eps = new Exports();
         List<TreeObject> exports = new ArrayList<TreeObject>();
-        XtentisPort port;
+        TMDMService service;
         try {
-            port = Util.getPort(objs[0]);
+            service = Util.getMDMService(objs[0]);
             try {
                 LocalTreeObjectRepository.getInstance().parseElementForOutput(objs);
             } catch (Exception e) {
@@ -206,10 +206,10 @@ public class ExportItemsWizard extends Wizard {
                     items = new ArrayList<String>();
                     // dataclusters
 
-                    WSDataClusterPK pk = (WSDataClusterPK) obj.getWsKey();
+                    WsDataClusterPK pk = (WsDataClusterPK) obj.getWsKey();
 
                     try {
-                        WSDataCluster cluster = port.getDataCluster(new WSGetDataCluster(pk));
+                        WsDataCluster cluster = service.getDataCluster(new WsGetDataCluster(pk));
                         // Marshal
                         sw = new StringWriter();
                         Marshaller.marshal(cluster, sw);
@@ -226,7 +226,7 @@ public class ExportItemsWizard extends Wizard {
 
                     monitor.subTask(Messages.bind(Messages.ExportItemsWizard_3, pk.getPk()));
 
-                    exportCluster(exports, pk, port);
+                    exportCluster(exports, pk, service);
 
                     monitor.worked(1);
 
@@ -238,7 +238,7 @@ public class ExportItemsWizard extends Wizard {
                     items = new ArrayList<String>();
                     // datamodels
                     try {
-                        WSDataModel model = port.getDataModel(new WSGetDataModel((WSDataModelPK) obj.getWsKey()));
+                        WsDataModel model = service.getDataModel(new WsGetDataModel((WsDataModelPK) obj.getWsKey()));
                         sw = new StringWriter();
                         Marshaller.marshal(model, sw);
                         encodedID = URLEncoder.encode(model.getName(), "UTF-8");//$NON-NLS-1$
@@ -257,7 +257,7 @@ public class ExportItemsWizard extends Wizard {
                     items = new ArrayList<String>();
                     // menu
                     try {
-                        WSMenu menu = port.getMenu(new WSGetMenu((WSMenuPK) obj.getWsKey()));
+                        WsMenu menu = service.getMenu(new WsGetMenu((WsMenuPK) obj.getWsKey()));
                         // Marshal
                         sw = new StringWriter();
                         Marshaller.marshal(menu, sw);
@@ -304,7 +304,8 @@ public class ExportItemsWizard extends Wizard {
                     items = new ArrayList<String>();
                     // routing rule
                     try {
-                        WSRoutingRule RoutingRule = port.getRoutingRule(new WSGetRoutingRule((WSRoutingRulePK) obj.getWsKey()));
+                        WsRoutingRule RoutingRule = service
+                                .getRoutingRule(new WsGetRoutingRule((WsRoutingRulePK) obj.getWsKey()));
                         // Marshal
                         sw = new StringWriter();
                         Marshaller.marshal(RoutingRule, sw);
@@ -323,8 +324,8 @@ public class ExportItemsWizard extends Wizard {
                     items = new ArrayList<String>();
                     // stored procedure
                     try {
-                        WSStoredProcedure StoredProcedure = port.getStoredProcedure(new WSGetStoredProcedure(
-                                (WSStoredProcedurePK) obj.getWsKey()));
+                        WsStoredProcedure StoredProcedure = service.getStoredProcedure(new WsGetStoredProcedure(
+                                (WsStoredProcedurePK) obj.getWsKey()));
                         // Marshal
                         sw = new StringWriter();
                         Marshaller.marshal(StoredProcedure, sw);
@@ -346,8 +347,8 @@ public class ExportItemsWizard extends Wizard {
                     // transformer
                     // TODO:check the pk
                     try {
-                        WSTransformerV2 transformer = port.getTransformerV2(new WSGetTransformerV2(new WSTransformerV2PK(
-                                ((WSTransformerV2PK) obj.getWsKey()).getPk())));
+                        WsTransformerV2 transformer = service.getTransformerV2(new WsGetTransformerV2(new WsTransformerV2PK(
+                                ((WsTransformerV2PK) obj.getWsKey()).getPk())));
                         // Marshal
                         sw = new StringWriter();
                         Marshaller.marshal(transformer, sw);
@@ -368,7 +369,7 @@ public class ExportItemsWizard extends Wizard {
                     items = new ArrayList<String>();
                     // view
                     try {
-                        WSView View = port.getView(new WSGetView((WSViewPK) obj.getWsKey()));
+                        WsView View = service.getView(new WsGetView((WsViewPK) obj.getWsKey()));
                         // Marshal
                         sw = new StringWriter();
                         Marshaller.marshal(View, sw);
@@ -386,7 +387,7 @@ public class ExportItemsWizard extends Wizard {
                 default:
                     IExportItemsWizardAdapter exAdapter = ExAdapterManager.getAdapter(this, IExportItemsWizardAdapter.class);
                     if (exAdapter != null) {
-                        exAdapter.doexport(port, obj.getType(), exports, obj, monitor);
+                        exAdapter.doexport(service, obj.getType(), exports, obj, monitor);
                     }
                     break;
                 }
@@ -397,7 +398,7 @@ public class ExportItemsWizard extends Wizard {
             eps.setSchemas(LocalTreeObjectRepository.getInstance().outPutSchemas());
             // export autoincrement
             try {
-                WSAutoIncrement auto = port.getAutoIncrement(null);
+                WsAutoIncrement auto = service.getAutoIncrement(null);
                 if (auto != null && auto.getAutoincrement() != null) {
                     eps.setAutoIncrement(auto.getAutoincrement());
                 }
@@ -563,20 +564,19 @@ public class ExportItemsWizard extends Wizard {
         return returnComposite;
     }
 
-    protected TreeObject exportCluster(List<TreeObject> exports, WSDataClusterPK pk, XtentisPort port) {
+    protected TreeObject exportCluster(List<TreeObject> exports, WsDataClusterPK pk, TMDMService service) {
         String encodedID = null;
         try {
             List<String> items1 = new ArrayList<String>();
-            List<Results> results = port.getItemPKsByCriteria(
-                    new WSGetItemPKsByCriteria(pk, null, null, null, (long) -1, (long) -1, 0, Integer.MAX_VALUE)).getResults();
+            List<WsItemPKsByCriteriaResponseResults> results = service.getItemPKsByCriteria(new WsGetItemPKsByCriteria(null, encodedID, (long) -1, encodedID, encodedID, Integer.MAX_VALUE, 0, (long) -1, pk)).getResults();
             if (results == null) {
                 return null;
             }
-            for (Results item : results) {
+            for (WsItemPKsByCriteriaResponseResults item : results) {
                 if (item.getWsItemPK().getIds() == null) {
                     continue;
                 }
-                WSItem wsitem = port.getItem(new WSGetItem(item.getWsItemPK()));
+                WsItem wsitem = service.getItem(new WsGetItem(item.getWsItemPK()));
 
                 // Marshal
                 StringWriter sw1 = new StringWriter();

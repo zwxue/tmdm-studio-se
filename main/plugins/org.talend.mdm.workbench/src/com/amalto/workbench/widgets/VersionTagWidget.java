@@ -18,7 +18,6 @@ import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.jface.viewers.ITableLabelProvider;
-import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionListener;
@@ -32,7 +31,6 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
 import com.amalto.workbench.i18n.Messages;
-import com.amalto.workbench.webservices.WSVersioningUniverseVersions.TagStructure;
 
 /**
  * @author Starkey
@@ -58,7 +56,10 @@ public class VersionTagWidget {
 
     public VersionTagWidget(Composite parent, String resourcesName, String defaultTagText, boolean isTagEditable,
             SelectionListener tagSelectionListener, SelectionListener restoreSelectionListener,
-            IDoubleClickListener tagsViewerDoubleClickListener, List<TagStructure> hisEntries) {
+            // *** TMDM-8080, temp substituted start ***//
+            // IDoubleClickListener tagsViewerDoubleClickListener, List<TagStructure> hisEntries) {
+            IDoubleClickListener tagsViewerDoubleClickListener, List<Object> hisEntries) {
+        // *** TMDM-8080, temp substituted end ***//
         composite = new Composite(parent, SWT.FILL);
         GridLayout layout = new GridLayout();
         layout.numColumns = 1;
@@ -110,9 +111,12 @@ public class VersionTagWidget {
         tagsViewer.setLabelProvider(new ITableLabelProvider() {
 
             public String getColumnText(Object element, int columnIndex) {
-                TagStructure entry = (TagStructure) element;
-                return entry.getTagName() + " - " + entry.getLastComment() + "  [" + entry.getLastDate() + " "//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
-                        + entry.getLastAuthor() + "]";//$NON-NLS-1$
+                // *** TMDM-8080, temp substituted start ***//
+                // TagStructure entry = (TagStructure) element;
+                //                return entry.getTagName() + " - " + entry.getLastComment() + "  [" + entry.getLastDate() + " "//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
+                //                        + entry.getLastAuthor() + "]";//$NON-NLS-1$
+                return element.toString();
+                // *** TMDM-8080, temp substituted end ***//
             }
 
             public Image getColumnImage(Object element, int columnIndex) {
@@ -139,18 +143,22 @@ public class VersionTagWidget {
         restoreButton.setText(Messages.VersionTagWidget_Restore);
         restoreButton.addSelectionListener(restoreSelectionListener);
 
-        refreshData(hisEntries);
+        // *** TMDM-8080, temp omitted start ***//
+        // refreshData(hisEntries);
+        // *** TMDM-8080, temp omitted end ***//
     }
 
-    public void refreshData(List<TagStructure> hisEntries) {
-
-        if (hisEntries != null && hisEntries.size() > 0) {
-            tagsViewer.setInput(hisEntries.toArray(new TagStructure[hisEntries.size()]));
-            tagsViewer.setSelection(new StructuredSelection(hisEntries.get(0)));
-            restoreGroup.setEnabled(true);
-        }
-
-    }
+    // *** TMDM-8080, temp omitted start ***//
+    // public void refreshData(List<TagStructure> hisEntries) {
+    //
+    // if (hisEntries != null && hisEntries.size() > 0) {
+    // tagsViewer.setInput(hisEntries.toArray(new TagStructure[hisEntries.size()]));
+    // tagsViewer.setSelection(new StructuredSelection(hisEntries.get(0)));
+    // restoreGroup.setEnabled(true);
+    // }
+    //
+    // }
+    // *** TMDM-8080, temp omitted end ***//
 
     public Button getRestoreButton() {
         return restoreButton;

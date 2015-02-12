@@ -70,14 +70,14 @@ import com.amalto.workbench.utils.MDMServerDef;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.WidgetUtils;
 import com.amalto.workbench.utils.XtentisException;
-import com.amalto.workbench.webservices.WSDataCluster;
-import com.amalto.workbench.webservices.WSDataClusterPK;
-import com.amalto.workbench.webservices.WSGetDataCluster;
-import com.amalto.workbench.webservices.WSGetItem;
-import com.amalto.workbench.webservices.WSItem;
-import com.amalto.workbench.webservices.WSItemPK;
-import com.amalto.workbench.webservices.WSRegexDataClusterPKs;
-import com.amalto.workbench.webservices.XtentisPort;
+import com.amalto.workbench.webservices.TMDMService;
+import com.amalto.workbench.webservices.WsDataCluster;
+import com.amalto.workbench.webservices.WsDataClusterPK;
+import com.amalto.workbench.webservices.WsGetDataCluster;
+import com.amalto.workbench.webservices.WsGetItem;
+import com.amalto.workbench.webservices.WsItem;
+import com.amalto.workbench.webservices.WsItemPK;
+import com.amalto.workbench.webservices.WsRegexDataClusterPKs;
 
 /**
  * created by liusongbo on 2013-1-24
@@ -354,9 +354,9 @@ public class DataClusterDialog extends Dialog {
         }
 
         try {
-            final XtentisPort port = Util.getPort(model);
-            final WSItem wsItem = port.getItem(new WSGetItem(new WSItemPK((WSDataClusterPK) model.getWsKey(), lineItem
-                    .getConcept().trim(), Arrays.asList(lineItem.getIds()))));
+            final TMDMService service = Util.getMDMService(model);
+            final WsItem wsItem = service.getItem(new WsGetItem(new WsItemPK(lineItem.getConcept().trim(), Arrays.asList(lineItem
+                    .getIds()), (WsDataClusterPK) model.getWsKey())));
             recordContent = Util.formatXsdSource(wsItem.getContent());
             textViewer.setText(recordContent);
         } catch (WebServiceException e) {
@@ -392,22 +392,22 @@ public class DataClusterDialog extends Dialog {
             return false;
         }
 
-        List<WSDataClusterPK> xdcPKs = null;
+        List<WsDataClusterPK> xdcPKs = null;
         try {
-            XtentisPort port = Util.getPort(new URL(endpointaddress), universe, username, password);
+            TMDMService service = Util.getMDMService(new URL(endpointaddress), universe, username, password);
             TreeParent serverRoot = new TreeParent(serverName, null, TreeObject._SERVER_, endpointaddress,
                     ("".equals(universe) ? ""//$NON-NLS-1$//$NON-NLS-2$
                             : universe + "/") + username + ":" + (password == null ? "" : password));//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
 
-            xdcPKs = port.getDataClusterPKs(new WSRegexDataClusterPKs("")).getWsDataClusterPKs();//$NON-NLS-1$
-            for (WSDataClusterPK pk : xdcPKs) {
+            xdcPKs = service.getDataClusterPKs(new WsRegexDataClusterPKs("")).getWsDataClusterPKs();//$NON-NLS-1$
+            for (WsDataClusterPK pk : xdcPKs) {
                 String name = pk.getPk();
                 if (!("CACHE".equals(name))) { //$NON-NLS-1$
-                    WSDataCluster wsObject = null;
+                    WsDataCluster wsObject = null;
                     boolean retriveWSObject = false;
                     try {
                         if (retriveWSObject) {
-                            wsObject = port.getDataCluster(new WSGetDataCluster(pk));
+                            wsObject = service.getDataCluster(new WsGetDataCluster(pk));
                         }
                         TreeObject obj = new TreeObject(name, serverRoot, TreeObject.DATA_CLUSTER, pk, wsObject);
                         dataContainers.add(obj);
@@ -522,10 +522,10 @@ public class DataClusterDialog extends Dialog {
         @Override
         public void run() {
             try {
-                final XtentisPort port = Util.getPort(new URL(oldServerDef.getUrl()), oldServerDef.getUniverse(),
+                final TMDMService service = Util.getMDMService(new URL(oldServerDef.getUrl()), oldServerDef.getUniverse(),
                         oldServerDef.getUser(), oldServerDef.getPasswd());
-                boolean created = NewItemHandler.getNewInstance().createItemRecord(port, shell,
-                        new WSDataClusterPK(getDataContainer()), true);
+                boolean created = NewItemHandler.getNewInstance().createItemRecord(service, shell,
+                        new WsDataClusterPK(getDataContainer()), true);
                 if (created) {
                     clusterComposite.doSearch();
                 }

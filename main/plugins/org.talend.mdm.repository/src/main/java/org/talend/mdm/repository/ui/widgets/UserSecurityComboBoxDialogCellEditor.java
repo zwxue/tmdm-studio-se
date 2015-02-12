@@ -35,7 +35,7 @@ import org.talend.mdm.repository.core.service.RepositoryQueryService;
 import org.talend.mdm.repository.core.service.RepositoryWebServiceAdapter;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
-import org.talend.mdm.repository.model.mdmserverobject.WSDataModelE;
+import org.talend.mdm.repository.model.mdmserverobject.WsDataModelE;
 import org.talend.mdm.repository.ui.dialogs.xpath.XpathSelectDialog2;
 import org.talend.mdm.repository.ui.navigator.MDMRepositoryView;
 import org.talend.mdm.workbench.serverexplorer.core.ServerDefService;
@@ -43,10 +43,10 @@ import org.talend.mdm.workbench.serverexplorer.ui.dialogs.SelectServerDefDialog;
 
 import com.amalto.workbench.exadapter.ExAdapterManager;
 import com.amalto.workbench.utils.XtentisException;
-import com.amalto.workbench.webservices.WSDataModel;
-import com.amalto.workbench.webservices.WSDataModelPK;
-import com.amalto.workbench.webservices.WSGetDataModel;
-import com.amalto.workbench.webservices.XtentisPort;
+import com.amalto.workbench.webservices.TMDMService;
+import com.amalto.workbench.webservices.WsDataModel;
+import com.amalto.workbench.webservices.WsDataModelPK;
+import com.amalto.workbench.webservices.WsGetDataModel;
 import com.amalto.workbench.widgets.celleditor.EditableComboBoxDialogCellEditor;
 
 /**
@@ -151,7 +151,7 @@ public class UserSecurityComboBoxDialogCellEditor extends EditableComboBoxDialog
     private String getSchemaFromRepository() {
         String schema = null;
 
-        WSDataModelE wsDataModel = RepositoryQueryService.findDataModelByName(dataModelName);
+        WsDataModelE wsDataModel = RepositoryQueryService.findDataModelByName(dataModelName);
         if (wsDataModel != null) {
             schema = wsDataModel.getXsdSchema();
         }
@@ -164,8 +164,8 @@ public class UserSecurityComboBoxDialogCellEditor extends EditableComboBoxDialog
 
         MDMServerDef serverDef = getServerDef();
         if (isAccessible(serverDef)) {
-            XtentisPort port = getPort(serverDef);
-            WSDataModel wsDataModel = port.getDataModel(new WSGetDataModel(new WSDataModelPK(dataModelName)));
+            TMDMService service = getService(serverDef);
+            WsDataModel wsDataModel = service.getDataModel(new WsGetDataModel(new WsDataModelPK(dataModelName)));
             schema = wsDataModel.getXsdSchema();
         }
 
@@ -181,15 +181,15 @@ public class UserSecurityComboBoxDialogCellEditor extends EditableComboBoxDialog
         return null;
     }
 
-    private XtentisPort getPort(MDMServerDef serverDef) {
-        XtentisPort port = null;
+    private TMDMService getService(MDMServerDef serverDef) {
+        TMDMService service = null;
         try {
-            port = RepositoryWebServiceAdapter.getXtentisPort(serverDef);
+            service = RepositoryWebServiceAdapter.getMDMService(serverDef);
         } catch (XtentisException e) {
             log.error(e.getMessage(), e);
         }
 
-        return port;
+        return service;
     }
 
     private boolean isAccessible(MDMServerDef serverDef) {

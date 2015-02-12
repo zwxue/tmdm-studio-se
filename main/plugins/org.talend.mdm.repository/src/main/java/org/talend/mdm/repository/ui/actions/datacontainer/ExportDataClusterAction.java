@@ -36,8 +36,8 @@ import org.talend.mdm.workbench.serverexplorer.ui.dialogs.SelectServerDefDialog;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.utils.XtentisException;
-import com.amalto.workbench.webservices.WSPing;
-import com.amalto.workbench.webservices.XtentisPort;
+import com.amalto.workbench.webservices.TMDMService;
+import com.amalto.workbench.webservices.WsPing;
 
 /**
  * DOC hbhong class global comment. Detailled comment
@@ -73,17 +73,17 @@ public class ExportDataClusterAction extends AbstractDataClusterAction {
                     fd.setFilterExtensions(new String[] { "*.zip" }); //$NON-NLS-1$
                     String fPath = fd.open();
                     if (fPath != null) {
-                        XtentisPort port = RepositoryWebServiceAdapter.getXtentisPort(serverDef);
-                        port.ping(new WSPing(Messages.ExportDataClusterAction_exportContent));
+                        TMDMService service = RepositoryWebServiceAdapter.getMDMService(serverDef);
+                        service.ping(new WsPing(Messages.ExportDataClusterAction_exportContent));
                         DataClusterService dataClusterService = DataClusterService.getIntance();
-                        if (dataClusterService.isExistDataCluster(port, dName)) {
+                        if (dataClusterService.isExistDataCluster(service, dName)) {
                             File tempFolder = IOUtil.getTempFolder();
                             String tempFolderPath = tempFolder.getAbsolutePath();
                             dataClusterService.storeIndexFile(tempFolderPath, dName);
 
                             //
 
-                            IDataContentProcess process = dataClusterService.getNewExportContentProcess(port, tempFolderPath,
+                            IDataContentProcess process = dataClusterService.getNewExportContentProcess(service, tempFolderPath,
                                     dName, fPath);
                             try {
                                 process.run();

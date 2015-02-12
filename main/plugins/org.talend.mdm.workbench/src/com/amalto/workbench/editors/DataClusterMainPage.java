@@ -28,7 +28,7 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.providers.XObjectEditorInput;
-import com.amalto.workbench.webservices.WSDataCluster;
+import com.amalto.workbench.webservices.WsDataCluster;
 
 public class DataClusterMainPage extends AMainPageV2 implements ITextListener {
 
@@ -54,6 +54,7 @@ public class DataClusterMainPage extends AMainPageV2 implements ITextListener {
                 + ((XObjectEditorInput) editor.getEditorInput()).getName());
     }
 
+    @Override
     protected void createCharacteristicsContent(FormToolkit toolkit, Composite mainComposite) {
 
         try {
@@ -171,14 +172,16 @@ public class DataClusterMainPage extends AMainPageV2 implements ITextListener {
 
     }// createCharacteristicsContent
 
+    @Override
     protected void refreshData() {
         try {
-            if (this.comitting)
+            if (this.comitting) {
                 return;
+            }
 
             this.refreshing = true;
 
-            WSDataCluster wsObject = (WSDataCluster) (getXObject().getWsObject());
+            WsDataCluster wsObject = (WsDataCluster) (getXObject().getWsObject());
 
             descriptionText.setText(wsObject.getDescription() == null ? "" : wsObject.getDescription());//$NON-NLS-1$
 
@@ -220,15 +223,17 @@ public class DataClusterMainPage extends AMainPageV2 implements ITextListener {
         }
     }
 
+    @Override
     protected void commit() {
         try {
 
-            if (this.refreshing)
+            if (this.refreshing) {
                 return;
+            }
 
             this.comitting = true;
 
-            WSDataCluster wsObject = (WSDataCluster) (getXObject().getWsObject());
+            WsDataCluster wsObject = (WsDataCluster) (getXObject().getWsObject());
             wsObject.setDescription(descriptionText.getText());
             /*
              * if ("Cache".equals(dataClusterTypeCombo.getText()))
@@ -257,18 +262,22 @@ public class DataClusterMainPage extends AMainPageV2 implements ITextListener {
         }
     }
 
+    @Override
     protected void createActions() {
     }
 
     public void textChanged(TextEvent event) {
-        if (this.refreshing)
+        if (this.refreshing) {
             return;
+        }
         markDirty();
     }
 
+    @Override
     public void modifyText(ModifyEvent e) {
-        if (this.refreshing)
+        if (this.refreshing) {
             return;
+        }
         super.modifyText(e);
     }
 
@@ -278,6 +287,7 @@ public class DataClusterMainPage extends AMainPageV2 implements ITextListener {
      * private void fillContextMenu(IMenuManager manager) { }
      */
 
+    @Override
     public void dispose() {
         super.dispose();
     }

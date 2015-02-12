@@ -18,7 +18,7 @@ import org.talend.mdm.repository.core.command.deploy.AbstractDeployCommand;
 import org.talend.mdm.repository.i18n.Messages;
 
 import com.amalto.workbench.utils.XtentisException;
-import com.amalto.workbench.webservices.XtentisPort;
+import com.amalto.workbench.webservices.TMDMService;
 
 /**
  * DOC hbhong class global comment. Detailled comment
@@ -35,7 +35,7 @@ public class ServiceConfigurationInteractiveHandler extends AbstractInteractiveH
     }
 
     @Override
-    public boolean doDeployWSObject(XtentisPort port, Object wsObj) {
+    public boolean doDeployWSObject(TMDMService service, Object wsObj) {
         // TODO will not invoke it
         // if (wsObj != null) {
         // WSServiceConfiguration configurations = (WSServiceConfiguration) wsObj;

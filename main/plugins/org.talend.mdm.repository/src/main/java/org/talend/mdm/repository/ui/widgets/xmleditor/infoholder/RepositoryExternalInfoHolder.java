@@ -15,9 +15,9 @@ package org.talend.mdm.repository.ui.widgets.xmleditor.infoholder;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.models.infoextractor.IAllDataModelHolder;
 import com.amalto.workbench.utils.JobInfo;
-import com.amalto.workbench.webservices.WSMDMConfig;
-import com.amalto.workbench.webservices.WSTransformerV2;
-import com.amalto.workbench.webservices.XtentisPort;
+import com.amalto.workbench.webservices.TMDMService;
+import com.amalto.workbench.webservices.WsTransformerV2;
+import com.amalto.workbench.webservices.WsmdmConfig;
 import com.amalto.workbench.widgets.xmleditor.infoholder.ExternalInfoHolder;
 import com.amalto.workbench.widgets.xmleditor.infoholder.ProcessAllCallJobVariableCandidatesHolder;
 import com.amalto.workbench.widgets.xmleditor.util.WorkflowInfo;
@@ -29,23 +29,23 @@ import com.amalto.workbench.widgets.xmleditor.util.WorkflowInfo;
  */
 public abstract class RepositoryExternalInfoHolder<T> extends ExternalInfoHolder<T> {
 
-    public static ExternalInfoHolder<JobInfo[]> getAllJobInfosHolder(XtentisPort port) {
+    public static ExternalInfoHolder<JobInfo[]> getAllJobInfosHolder(TMDMService service) {
         return (ExternalInfoHolder<JobInfo[]>) getEnternalInfoHolder("job");
     }
 
-    public static ExternalInfoHolder<WSMDMConfig[]> getAllMDMServerInfoHolder2(XtentisPort port) {
-        return new RepositoryMDMServerInfoHolder(port);
+    public static ExternalInfoHolder<WsmdmConfig[]> getAllMDMServerInfoHolder2(TMDMService service) {
+        return new RepositoryMDMServerInfoHolder(service);
     }
 
     public static ExternalInfoHolder<IAllDataModelHolder> getAllDataModelInfoHolderProxy(TreeObject treeNode) {
     	 return (ExternalInfoHolder<IAllDataModelHolder>) getEnternalInfoHolder("datamodel");
     }
 
-	public static ExternalInfoHolder<WorkflowInfo[]> getAllWorkflowInfoHolder(XtentisPort port) {
+    public static ExternalInfoHolder<WorkflowInfo[]> getAllWorkflowInfoHolder(TMDMService service) {
         return (ExternalInfoHolder<WorkflowInfo[]>) getEnternalInfoHolder("workflow");
     }
 
-    public static ExternalInfoHolder<String[]> getProcessAllCallJobVarsCandidatesHolder(WSTransformerV2 service) {
+    public static ExternalInfoHolder<String[]> getProcessAllCallJobVarsCandidatesHolder(WsTransformerV2 service) {
         return new ProcessAllCallJobVariableCandidatesHolder(service);
     }
 
@@ -53,7 +53,7 @@ public abstract class RepositoryExternalInfoHolder<T> extends ExternalInfoHolder
     	return (ExternalInfoHolder<String[]>) getEnternalInfoHolder("callJobVariableCandidates");
     }
 
-    public static ExternalInfoHolder<String[]> getAllProcessesNamesHolder(XtentisPort port) {
-        return new RepositoryProcessesNamesHolder(port);
+    public static ExternalInfoHolder<String[]> getAllProcessesNamesHolder(TMDMService service) {
+        return new RepositoryProcessesNamesHolder(service);
     }
 }

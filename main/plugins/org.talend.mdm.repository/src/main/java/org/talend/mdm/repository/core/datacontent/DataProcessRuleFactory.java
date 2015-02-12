@@ -18,10 +18,10 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.amalto.workbench.webservices.WSDataClusterPK;
-import com.amalto.workbench.webservices.WSGetConceptsInDataCluster;
-import com.amalto.workbench.webservices.WSStringArray;
-import com.amalto.workbench.webservices.XtentisPort;
+import com.amalto.workbench.webservices.TMDMService;
+import com.amalto.workbench.webservices.WsDataClusterPK;
+import com.amalto.workbench.webservices.WsGetConceptsInDataCluster;
+import com.amalto.workbench.webservices.WsStringArray;
 
 /**
  * created by HHB on 2012-10-8 Detailled comment
@@ -36,10 +36,10 @@ public class DataProcessRuleFactory {
      * @param dataClusterName
      * @return
      */
-    public static DataProcessRule createProcessRouterFromRemote(XtentisPort port, String dataClusterName) {
+    public static DataProcessRule createProcessRouterFromRemote(TMDMService service, String dataClusterName) {
 
-        WSGetConceptsInDataCluster param = new WSGetConceptsInDataCluster(new WSDataClusterPK(dataClusterName));
-        WSStringArray concepts = port.getConceptsInDataCluster(param);
+        WsGetConceptsInDataCluster param = new WsGetConceptsInDataCluster(new WsDataClusterPK(dataClusterName));
+        WsStringArray concepts = service.getConceptsInDataCluster(param);
         if (concepts != null) {
             DataProcessRule rule = new DataProcessRule();
             for (String concept : concepts.getStrings()) {

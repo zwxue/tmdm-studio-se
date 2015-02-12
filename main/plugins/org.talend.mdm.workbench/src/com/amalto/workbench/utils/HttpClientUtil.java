@@ -353,7 +353,8 @@ public class HttpClientUtil {
     public static String invokeModelService(String protocol, String host, String port, String username, String password,
             String modelName, String xsd, boolean isUpdate, Boolean force) throws XtentisException {
         try {
-            String url = protocol + host + ":" + port + "/datamanager/services/system/models/" + modelName; //$NON-NLS-1$ //$NON-NLS-2$ 
+            String url = protocol + host
+                    + ":" + port + "/talendmdm-6.0-SNAPSHOT/services/rest/datamanager/system/models/" + modelName; //$NON-NLS-1$ //$NON-NLS-2$ 
             if (force != null) {
                 url += "?force=" + force.toString(); //$NON-NLS-1$
             }

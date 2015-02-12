@@ -39,16 +39,16 @@ import com.amalto.workbench.models.Line;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.utils.EContentType;
 import com.amalto.workbench.utils.EInputTemplate;
-import com.amalto.workbench.webservices.WSTransformerProcessStep;
-import com.amalto.workbench.webservices.WSTransformerV2;
-import com.amalto.workbench.webservices.WSTransformerVariablesMapping;
+import com.amalto.workbench.webservices.WsTransformerProcessStep;
+import com.amalto.workbench.webservices.WsTransformerV2;
+import com.amalto.workbench.webservices.WsTransformerVariablesMapping;
 import com.amalto.workbench.widgets.ComplexTableViewer;
 import com.amalto.workbench.widgets.ComplexTableViewerColumn;
 import com.amalto.workbench.widgets.ComplexTableViewerR;
 
 public class SetupTransformerInputVariablesDialog extends Dialog {
 
-    WSTransformerV2 transformer;
+    WsTransformerV2 transformer;
 
     FormToolkit toolkit;
 
@@ -63,7 +63,7 @@ public class SetupTransformerInputVariablesDialog extends Dialog {
         this.toolkit = toolkit;
         object = obj;
         this.page = page;
-        transformer = (WSTransformerV2) obj.getWsObject();
+        transformer = (WsTransformerV2) obj.getWsObject();
     }
 
     @Override
@@ -82,8 +82,8 @@ public class SetupTransformerInputVariablesDialog extends Dialog {
 
         // Get the input variable names
         Set<String> inputVariables = new HashSet<String>();
-        for (WSTransformerProcessStep step : transformer.getProcessSteps()) {
-            for (WSTransformerVariablesMapping mapping : step.getInputMappings()) {
+        for (WsTransformerProcessStep step : transformer.getProcessSteps()) {
+            for (WsTransformerVariablesMapping mapping : step.getInputMappings()) {
                 inputVariables.add(mapping.getPipelineVariable() == null ? TransformerMainPage.DEFAULT_VAR : mapping
                         .getPipelineVariable());
             }
@@ -166,8 +166,9 @@ public class SetupTransformerInputVariablesDialog extends Dialog {
     private void processOk() {
         // objectViewer.add();
         java.util.List<Line> list = (java.util.List<Line>) objectViewer.getViewer().getInput();
-        if (list.size() == 0)
+        if (list.size() == 0) {
             return;
+        }
 
         page.setCacheList(list);
         page.execute();

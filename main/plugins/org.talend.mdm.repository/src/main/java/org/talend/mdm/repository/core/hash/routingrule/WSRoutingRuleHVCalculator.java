@@ -16,9 +16,9 @@ import org.talend.mdm.commmon.util.hash.ArrayCollectionHashValueCalculator;
 import org.talend.mdm.commmon.util.hash.IHashValueCalculator;
 import org.talend.mdm.commmon.util.hash.impl.RoutingRuleHVCalculator;
 
-import com.amalto.workbench.webservices.WSRoutingRule;
-import com.amalto.workbench.webservices.WSRoutingRuleExpression;
-import com.amalto.workbench.webservices.WSRoutingRuleOperator;
+import com.amalto.workbench.webservices.WsRoutingRule;
+import com.amalto.workbench.webservices.WsRoutingRuleExpression;
+import com.amalto.workbench.webservices.WsRoutingRuleOperator;
 
 /**
  * DOC hbhong class global comment. Detailled comment
@@ -31,10 +31,10 @@ public class WSRoutingRuleHVCalculator extends RoutingRuleHVCalculator {
      */
     @Override
     public Object[] getPropertys(Object obj) {
-        if (obj == null || !(obj instanceof WSRoutingRule)) {
+        if (obj == null || !(obj instanceof WsRoutingRule)) {
             throw new IllegalArgumentException();
         }
-        WSRoutingRule rule = (WSRoutingRule) obj;
+        WsRoutingRule rule = (WsRoutingRule) obj;
         return new Object[] { rule.getName(), rule.getDescription(), rule.isSynchronous(), rule.getConcept(),
                 rule.getServiceJNDI(), rule.getParameters(), rule.getCondition(), rule.isDeactive(),
                 rule.getWsRoutingRuleExpressions() };
@@ -45,10 +45,10 @@ public class WSRoutingRuleHVCalculator extends RoutingRuleHVCalculator {
         // 1-name 2-xpath 3-value 4-wsOperator
         @Override
         public Object[] getPropertys(Object obj) {
-            if (obj == null || !(obj instanceof WSRoutingRuleExpression)) {
+            if (obj == null || !(obj instanceof WsRoutingRuleExpression)) {
                 throw new IllegalArgumentException();
             }
-            WSRoutingRuleExpression expression = (WSRoutingRuleExpression) obj;
+            WsRoutingRuleExpression expression = (WsRoutingRuleExpression) obj;
             return new Object[] { expression.getName(), expression.getXpath(), expression.getValue(), expression.getWsOperator() };
         }
     };
@@ -72,11 +72,14 @@ public class WSRoutingRuleHVCalculator extends RoutingRuleHVCalculator {
         // 1 value
         @Override
         public Object[] getPropertys(Object obj) {
-            if (obj == null || !(obj instanceof WSRoutingRuleOperator)) {
+            if (obj == null || !(obj instanceof WsRoutingRuleOperator)) {
                 throw new IllegalArgumentException();
             }
-            WSRoutingRuleOperator operator = (WSRoutingRuleOperator) obj;
-            return new Object[] { operator.value() };
+            WsRoutingRuleOperator operator = (WsRoutingRuleOperator) obj;
+            // *** TMDM-8080, temp substituted start ***//
+            // return new Object[] { operator.value() };
+            return new Object[0];
+            // *** TMDM-8080, temp substituted end ***//
         }
     };
 

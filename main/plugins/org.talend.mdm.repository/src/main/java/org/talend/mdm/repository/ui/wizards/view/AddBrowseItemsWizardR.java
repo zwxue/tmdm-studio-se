@@ -34,13 +34,13 @@ import org.talend.mdm.repository.core.command.CommandManager;
 import org.talend.mdm.repository.core.command.ICommand;
 import org.talend.mdm.repository.core.service.RepositoryQueryService;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
-import org.talend.mdm.repository.model.mdmproperties.WSRoleItem;
+import org.talend.mdm.repository.model.mdmproperties.WsRoleItem;
 import org.talend.mdm.repository.model.mdmserverobject.MdmserverobjectFactory;
-import org.talend.mdm.repository.model.mdmserverobject.WSBooleanE;
-import org.talend.mdm.repository.model.mdmserverobject.WSRoleE;
-import org.talend.mdm.repository.model.mdmserverobject.WSRoleSpecificationE;
-import org.talend.mdm.repository.model.mdmserverobject.WSRoleSpecificationInstanceE;
-import org.talend.mdm.repository.model.mdmserverobject.WSViewE;
+import org.talend.mdm.repository.model.mdmserverobject.WsBooleanE;
+import org.talend.mdm.repository.model.mdmserverobject.WsRoleE;
+import org.talend.mdm.repository.model.mdmserverobject.WsRoleSpecificationE;
+import org.talend.mdm.repository.model.mdmserverobject.WsRoleSpecificationInstanceE;
+import org.talend.mdm.repository.model.mdmserverobject.WsViewE;
 import org.talend.mdm.repository.ui.actions.view.NewViewAction;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 import org.talend.repository.model.IProxyRepositoryFactory;
@@ -53,9 +53,9 @@ import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.service.IValidateService;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.XSDAnnotationsStructure;
-import com.amalto.workbench.webservices.WSConceptKey;
-import com.amalto.workbench.webservices.WSDataModelPK;
-import com.amalto.workbench.webservices.WSGetBusinessConceptKey;
+import com.amalto.workbench.webservices.WsConceptKey;
+import com.amalto.workbench.webservices.WsDataModelPK;
+import com.amalto.workbench.webservices.WsGetBusinessConceptKey;
 
 /**
  * DOC hbhong class global comment. Detailled comment
@@ -93,13 +93,13 @@ public class AddBrowseItemsWizardR extends AddBrowseItemsWizard {
             if (roleItem != null) {
                 IProxyRepositoryFactory factory = CoreRuntimePlugin.getInstance().getProxyRepositoryFactory();
                 if (factory.isEditableAndLockIfPossible(roleItem)) {
-                    WSRoleE role = ((WSRoleItem) roleItem).getWsRole();
-                    for (WSRoleSpecificationE spec : role.getSpecification()) {
+                    WsRoleE role = ((WsRoleItem) roleItem).getWsRole();
+                    for (WsRoleSpecificationE spec : role.getSpecification()) {
                         if (spec.getObjectType().equals("View")) {//$NON-NLS-1$
-                            EList<WSRoleSpecificationInstanceE> specInstance = spec.getInstance();
+                            EList<WsRoleSpecificationInstanceE> specInstance = spec.getInstance();
                             //
-                            WSRoleSpecificationInstanceE newInstance = MdmserverobjectFactory.eINSTANCE
-                                    .createWSRoleSpecificationInstanceE();
+                            WsRoleSpecificationInstanceE newInstance = MdmserverobjectFactory.eINSTANCE
+                                    .createWsRoleSpecificationInstanceE();
                             newInstance.setInstanceName(browseItem);
                             newInstance.setWritable(keyValues.get(1).value.equals("Read Only") ? false : true);//$NON-NLS-1$
                             //
@@ -125,11 +125,11 @@ public class AddBrowseItemsWizardR extends AddBrowseItemsWizard {
     NewViewAction newViewAction = new NewViewAction() {
 
         @Override
-        protected WSViewE newView(String viewName) {
-            WSBooleanE wsBool = MdmserverobjectFactory.eINSTANCE.createWSBooleanE();
+        protected WsViewE newView(String viewName) {
+            WsBooleanE wsBool = MdmserverobjectFactory.eINSTANCE.createWsBooleanE();
             wsBool.set_true(false);
 
-            WSViewE view = MdmserverobjectFactory.eINSTANCE.createWSViewE();
+            WsViewE view = MdmserverobjectFactory.eINSTANCE.createWsViewE();
             view.setName(viewName);
             // description
             StringBuffer desc = new StringBuffer();
@@ -164,8 +164,8 @@ public class AddBrowseItemsWizardR extends AddBrowseItemsWizard {
 
     private static List<String> getKeyElements(String datamodel, String concept) {
         java.util.List<String> idList = new ArrayList<String>();
-        WSGetBusinessConceptKey wsGetBusinessConceptKey = new WSGetBusinessConceptKey(new WSDataModelPK(datamodel), concept);
-        WSConceptKey wsConceptKey;
+        WsGetBusinessConceptKey wsGetBusinessConceptKey = new WsGetBusinessConceptKey(concept, new WsDataModelPK(datamodel));
+        WsConceptKey wsConceptKey;
         try {
             wsConceptKey = RepositoryResourceUtil.getBusinessConceptKey(wsGetBusinessConceptKey);
         } catch (Exception e) {

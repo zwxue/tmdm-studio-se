@@ -51,7 +51,7 @@ import org.eclipse.ui.forms.widgets.TableWrapLayout;
 import com.amalto.workbench.utils.IConstants;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.XtentisException;
-import com.amalto.workbench.webservices.XtentisPort;
+import com.amalto.workbench.webservices.TMDMService;
 import com.amalto.workbench.widgets.ComplexTableViewerColumn;
 import com.amalto.workbench.widgets.TableViewWrapper;
 import com.amalto.workbench.widgets.TisTableViewer;
@@ -67,7 +67,7 @@ public abstract class AMainPageV2 extends AFormPage implements ModifyListener, O
 
     protected boolean isCompositeView = true;
 
-    private XtentisPort port;
+    private TMDMService port;
 
     public void setCompositeView(boolean isCompositeView) {
         this.isCompositeView = isCompositeView;
@@ -345,10 +345,10 @@ public abstract class AMainPageV2 extends AFormPage implements ModifyListener, O
 
     }
 
-    protected XtentisPort getPort() {
+    protected TMDMService getService() {
         if (port == null) {
             try {
-                port = Util.getPort(getXObject());
+                port = Util.getMDMService(getXObject());
             } catch (XtentisException e) {
                 log.error(e.getMessage(), e);
             }

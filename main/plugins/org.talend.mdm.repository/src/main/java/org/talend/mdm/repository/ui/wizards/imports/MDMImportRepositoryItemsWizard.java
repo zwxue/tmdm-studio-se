@@ -72,12 +72,12 @@ import org.talend.mdm.repository.core.service.ImportService;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.model.mdmproperties.MdmpropertiesFactory;
-import org.talend.mdm.repository.model.mdmproperties.WSDataModelItem;
-import org.talend.mdm.repository.model.mdmproperties.WSTransformerV2Item;
-import org.talend.mdm.repository.model.mdmproperties.WSViewItem;
+import org.talend.mdm.repository.model.mdmproperties.WsDataModelItem;
+import org.talend.mdm.repository.model.mdmproperties.WsTransformerV2Item;
+import org.talend.mdm.repository.model.mdmproperties.WsViewItem;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
 import org.talend.mdm.repository.model.mdmserverobject.MdmserverobjectFactory;
-import org.talend.mdm.repository.model.mdmserverobject.WSDataModelE;
+import org.talend.mdm.repository.model.mdmserverobject.WsDataModelE;
 import org.talend.mdm.repository.ui.dialogs.importexchange.ImportExchangeOptionsDialogR;
 import org.talend.mdm.repository.ui.dialogs.lock.LockedObjectDialog;
 import org.talend.mdm.repository.ui.navigator.MDMRepositoryView;
@@ -138,10 +138,10 @@ public class MDMImportRepositoryItemsWizard extends ImportItemsWizard {
                     MDMRepositoryView view = MDMRepositoryView.show();
                     for (File file : files) {
                         final String label = file.getName().substring(0, file.getName().lastIndexOf('.'));
-                        final WSDataModelItem item = MdmpropertiesFactory.eINSTANCE.createWSDataModelItem();
+                        final WsDataModelItem item = MdmpropertiesFactory.eINSTANCE.createWsDataModelItem();
                         ItemState itemState = PropertiesFactory.eINSTANCE.createItemState();
                         item.setState(itemState);
-                        WSDataModelE dataModel = MdmserverobjectFactory.eINSTANCE.createWSDataModelE();
+                        WsDataModelE dataModel = MdmserverobjectFactory.eINSTANCE.createWsDataModelE();
                         dataModel.setName(label);
                         InputStream stream = null;
                         try {
@@ -214,7 +214,7 @@ public class MDMImportRepositoryItemsWizard extends ImportItemsWizard {
         for (ItemRecord itemRecord : toImportItemRecords) {
             Item item = itemRecord.getProperty().getItem();
             String statePath = item.getState().getPath();
-            if (item instanceof WSViewItem) {
+            if (item instanceof WsViewItem) {
                 if (RepositoryTransformUtil.getInstance().getViewType(item.getProperty().getLabel()) == IViewNodeConstDef.TYPE_WEBFILTER) {
                     if (!statePath.startsWith(IPath.SEPARATOR + IViewNodeConstDef.PATH_WEBFILTER)) {
                         item.getState().setPath(IPath.SEPARATOR + IViewNodeConstDef.PATH_WEBFILTER + statePath);
@@ -226,7 +226,7 @@ public class MDMImportRepositoryItemsWizard extends ImportItemsWizard {
                 }
             }
 
-            if (item instanceof WSTransformerV2Item) {
+            if (item instanceof WsTransformerV2Item) {
                 String processName = item.getProperty().getLabel();
                 int processType = RepositoryTransformUtil.getInstance().getProcessType(processName);
                 switch (processType) {
@@ -305,7 +305,7 @@ public class MDMImportRepositoryItemsWizard extends ImportItemsWizard {
                                         needSave = true;
                                     }
 
-                                    if (item instanceof WSDataModelItem && exAdapter != null) {
+                                    if (item instanceof WsDataModelItem && exAdapter != null) {
                                         exAdapter.handleDataModelItem(item);
                                     }
 

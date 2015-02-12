@@ -45,12 +45,12 @@ import org.talend.repository.utils.ZipFileUtils;
 
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.utils.Util;
-import com.amalto.workbench.webservices.WSDataClusterPK;
-import com.amalto.workbench.webservices.WSGetItem;
-import com.amalto.workbench.webservices.WSGetItemPKsByCriteria;
-import com.amalto.workbench.webservices.WSItem;
-import com.amalto.workbench.webservices.WSItemPKsByCriteriaResponse.Results;
-import com.amalto.workbench.webservices.XtentisPort;
+import com.amalto.workbench.webservices.TMDMService;
+import com.amalto.workbench.webservices.WsDataClusterPK;
+import com.amalto.workbench.webservices.WsGetItem;
+import com.amalto.workbench.webservices.WsGetItemPKsByCriteria;
+import com.amalto.workbench.webservices.WsItem;
+import com.amalto.workbench.webservices.WsItemPKsByCriteriaResponseResults;
 
 /**
  * created by HHB on 2012-10-9 Detailled comment
@@ -60,7 +60,7 @@ public class ExportDataContentProcess extends AbstractDataContentProcess {
 
     private static Logger log = Logger.getLogger(ExportDataContentProcess.class);
 
-    private XtentisPort port;
+    private TMDMService service;
 
     private String tempFolderPath;
 
@@ -68,8 +68,8 @@ public class ExportDataContentProcess extends AbstractDataContentProcess {
 
     private String outputPath;
 
-    public ExportDataContentProcess(XtentisPort port, String tempFolderPath, String dName, String outputPath) {
-        this.port = port;
+    public ExportDataContentProcess(TMDMService service, String tempFolderPath, String dName, String outputPath) {
+        this.service = service;
         this.tempFolderPath = tempFolderPath;
         this.dName = dName;
         this.outputPath = outputPath;
@@ -95,7 +95,7 @@ public class ExportDataContentProcess extends AbstractDataContentProcess {
      */
     public DataProcessRule buildRule() throws InvocationTargetException {
         try {
-            DataProcessRule rule = DataProcessRuleFactory.createProcessRouterFromRemote(port, dName);
+            DataProcessRule rule = DataProcessRuleFactory.createProcessRouterFromRemote(service, dName);
             return rule;
         } catch (WebServiceException e) {
             throw new InvocationTargetException(e, Messages.ExportDataContentProcess_CanNotConnectServer);
@@ -172,7 +172,7 @@ public class ExportDataContentProcess extends AbstractDataContentProcess {
         /**
          * DOC hbhong ExprocessContentProcess constructor comment.
          * 
-         * @param port
+         * @param service
          * @param tempFolderPath
          * @param dName
          */
@@ -181,14 +181,16 @@ public class ExportDataContentProcess extends AbstractDataContentProcess {
 
         }
 
-        protected int exportCluster(XtentisPort port, String tempFolderPath, String dName, IProgressMonitor monitor) {
+        protected int exportCluster(TMDMService service, String tempFolderPath, String dName, IProgressMonitor monitor) {
 
             String encodedID = null;
-            WSDataClusterPK pk = new WSDataClusterPK(dName);
+            WsDataClusterPK pk = new WsDataClusterPK(dName);
             try {
                 List<String> items = new ArrayList<String>();
-                List<Results> results = port.getItemPKsByCriteria(
-                        new WSGetItemPKsByCriteria(pk, null, null, null, (long) -1, (long) -1, 0, MAX_EXPORT_COUNT)).getResults();
+                List<WsItemPKsByCriteriaResponseResults> results = service.getItemPKsByCriteria(
+                        new WsGetItemPKsByCriteria(null, null, (long) -1, null, null, MAX_EXPORT_COUNT, 0, (long) -1, pk))
+                        .getResults();
+
                 if (results == null) {
                     return -1;
                 }
@@ -208,8 +210,8 @@ public class ExportDataContentProcess extends AbstractDataContentProcess {
                 Mapping mapping = getWSItemMapping();
 
                 for (int i = 1; i <= maxSize; i++) {
-                    Results item = results.get(i);
-                    WSItem wsitem = port.getItem(new WSGetItem(item.getWsItemPK()));
+                    WsItemPKsByCriteriaResponseResults item = results.get(i);
+                    WsItem wsitem = service.getItem(new WsGetItem(item.getWsItemPK()));
 
                     // Marshal
                     StringWriter sw = new StringWriter();
@@ -234,7 +236,7 @@ public class ExportDataContentProcess extends AbstractDataContentProcess {
         }
 
         public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
-            final int totalSize = exportCluster(port, tempFolderPath, dName, monitor);
+            final int totalSize = exportCluster(service, tempFolderPath, dName, monitor);
             if (totalSize == -1) {
                 throw new InvocationTargetException(new RuntimeException(Messages.ExportDataContentProcess_exportContentError));
             }

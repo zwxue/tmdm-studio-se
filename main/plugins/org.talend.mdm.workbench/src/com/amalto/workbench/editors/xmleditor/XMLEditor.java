@@ -28,7 +28,7 @@ import com.amalto.workbench.editors.DataModelMainPage;
 import com.amalto.workbench.editors.XObjectEditor;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.utils.Util;
-import com.amalto.workbench.webservices.WSDataModel;
+import com.amalto.workbench.webservices.WsDataModel;
 
 public class XMLEditor extends TextEditor {
 
@@ -131,14 +131,14 @@ public class XMLEditor extends TextEditor {
     public void refresh(TreeObject xobject) {
         state = -1;
         this.xobject = xobject;
-        WSDataModel wsObject = (WSDataModel) (xobject.getWsObject());
+        WsDataModel wsObject = (WsDataModel) (xobject.getWsObject());
         Document doc = new Document(Util.formatXsdSource(wsObject.getXsdSchema()));
         setInput(new XMLEditorInput(doc));
     }
 
     public void refresh() {
         state = -1;
-        WSDataModel wsObject = (WSDataModel) (xobject.getWsObject());
+        WsDataModel wsObject = (WsDataModel) (xobject.getWsObject());
         IDocument doc = ((XMLEditorInput) this.getEditorInput()).getDocument();
         wsObject.setXsdSchema(doc.get());
     }

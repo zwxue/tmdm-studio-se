@@ -14,7 +14,7 @@ import org.talend.mdm.repository.core.command.CommandStack;
 import org.talend.mdm.repository.core.command.ICommand;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
-import org.talend.mdm.repository.model.mdmproperties.WSResourceItem;
+import org.talend.mdm.repository.model.mdmproperties.WsResourceItem;
 import org.talend.mdm.repository.plugin.RepositoryPlugin;
 import org.talend.mdm.repository.utils.EclipseResourceManager;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
@@ -78,9 +78,9 @@ public class MDMServerDecorator implements ILightweightLabelDecorator {
         if (item != null) {
 
             String version = item.getProperty().getVersion();
-            if (item instanceof WSResourceItem) {
+            if (item instanceof WsResourceItem) {
                 // resource image show catalog
-                WSResourceItem ritem = (WSResourceItem) item;
+                WsResourceItem ritem = (WsResourceItem) item;
                 String imageCatalog = ritem.getResource().getImageCatalog();
                 if (imageCatalog != null) {
                     decoration.addSuffix(" " + imageCatalog); //$NON-NLS-1$

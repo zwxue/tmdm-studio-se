@@ -67,9 +67,9 @@ import org.talend.mdm.repository.core.command.ICommand;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.model.mdmproperties.MdmpropertiesPackage;
-import org.talend.mdm.repository.model.mdmproperties.WSCustomFormItem;
+import org.talend.mdm.repository.model.mdmproperties.WsCustomFormItem;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
-import org.talend.mdm.repository.model.mdmserverobject.WSCustomFormE;
+import org.talend.mdm.repository.model.mdmserverobject.WsCustomFormE;
 import org.talend.mdm.repository.plugin.RepositoryPlugin;
 import org.talend.mdm.repository.ui.dialogs.consistency.ConfirmConflictMessageDialog;
 import org.talend.mdm.repository.ui.dialogs.consistency.ConsistencyConflictDialog;
@@ -77,15 +77,14 @@ import org.talend.mdm.repository.ui.preferences.PreferenceConstants;
 import org.talend.mdm.repository.utils.DigestUtil;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 import org.talend.mdm.repository.utils.UIUtil;
+import org.talend.mdm.webservice.WSCustomForm;
 
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.utils.XtentisException;
-import com.amalto.workbench.webservices.WSBoolean;
-import com.amalto.workbench.webservices.WSCustomForm;
-import com.amalto.workbench.webservices.WSDigest;
-import com.amalto.workbench.webservices.WSDigestKey;
-import com.amalto.workbench.webservices.WSLong;
-import com.amalto.workbench.webservices.XtentisPort;
+import com.amalto.workbench.webservices.TMDMService;
+import com.amalto.workbench.webservices.WsDigest;
+import com.amalto.workbench.webservices.WsDigestKey;
+import com.amalto.workbench.webservices.WsLong;
 
 /**
  * created by HHB on 2013-7-18 Detailled comment
@@ -116,21 +115,21 @@ public class ConsistencyService {
 
     public static class ConsistencyData {
 
-        private WSDigest localDigestTime;
+        private WsDigest localDigestTime;
 
-        public WSDigest getLocalDigestTime() {
+        public WsDigest getLocalDigestTime() {
             return this.localDigestTime;
         }
 
-        public void setLocalDigestTime(WSDigest localDigestTime) {
+        public void setLocalDigestTime(WsDigest localDigestTime) {
             this.localDigestTime = localDigestTime;
         }
 
-        public WSDigest getServerDigestTime() {
+        public WsDigest getServerDigestTime() {
             return this.serverDigestTime;
         }
 
-        public void setServerDigestTime(WSDigest serverDigestTime) {
+        public void setServerDigestTime(WsDigest serverDigestTime) {
             this.serverDigestTime = serverDigestTime;
         }
 
@@ -142,7 +141,7 @@ public class ConsistencyService {
             this.compareResult = compareResult;
         }
 
-        private WSDigest serverDigestTime;
+        private WsDigest serverDigestTime;
 
         private CompareResultEnum compareResult;
 
@@ -449,7 +448,7 @@ public class ConsistencyService {
         Collection<IRepositoryViewObject> viewObjs = viewObCmdOpjMap.keySet();
         if (UIUtil.isWorkInUI()) {
             updateCurrentlDigestValue(viewObjs);
-            Map<IRepositoryViewObject, WSDigest> viewObjMap = queryServerDigestValue(serverDef, viewObjs);
+            Map<IRepositoryViewObject, WsDigest> viewObjMap = queryServerDigestValue(serverDef, viewObjs);
             int conflictCount = getConflictCount(viewObjMap);
             if (conflictCount > 0) {
                 ConsistencyCheckResult result = null;
@@ -527,12 +526,12 @@ public class ConsistencyService {
         return returnObjs;
     }
 
-    private ConsistencyCheckResult getCheckResultByStrategy(int strategy, Map<IRepositoryViewObject, WSDigest> viewObjMap,
+    private ConsistencyCheckResult getCheckResultByStrategy(int strategy, Map<IRepositoryViewObject, WsDigest> viewObjMap,
             Map<IRepositoryViewObject, Integer> viewObCmdOpjMap) {
         List<IRepositoryViewObject> toDeployObjs = new LinkedList<IRepositoryViewObject>();
         List<IRepositoryViewObject> toSkipObjs = new LinkedList<IRepositoryViewObject>();
         for (IRepositoryViewObject viewObj : viewObjMap.keySet()) {
-            WSDigest dt = viewObjMap.get(viewObj);
+            WsDigest dt = viewObjMap.get(viewObj);
             if (dt == null) {
                 toDeployObjs.add(viewObj);
             } else {
@@ -703,10 +702,10 @@ public class ConsistencyService {
         return Display.getDefault().getActiveShell();
     }
 
-    private int getConflictCount(Map<IRepositoryViewObject, WSDigest> map) {
+    private int getConflictCount(Map<IRepositoryViewObject, WsDigest> map) {
         int total = 0;
         for (IRepositoryViewObject viewObj : map.keySet()) {
-            WSDigest digestTime = map.get(viewObj);
+            WsDigest digestTime = map.get(viewObj);
             if (digestTime == null) {
                 continue;
             }
@@ -725,17 +724,17 @@ public class ConsistencyService {
     }
 
     public void updateDigestValue(MDMServerDef serverDef, IRepositoryViewObject viewObj) throws XtentisException {
-        XtentisPort port = RepositoryWebServiceAdapter.getXtentisPort(serverDef);
+        TMDMService service = RepositoryWebServiceAdapter.getMDMService(serverDef);
         updateLocalDigestValue(viewObj);
         Item item = viewObj.getProperty().getItem();
 
         // key
         String type = viewObj.getRepositoryObjectType().getKey();
         String objectName = getObjectName(viewObj);
-        WSDigestKey key = new WSDigestKey(type, objectName);
+        WsDigestKey key = new WsDigestKey(type, objectName);
         // value
-        WSDigest value = new WSDigest(key, getLocalDigestValue(item), 0L);
-        WSLong timeValue = port.updateDigest(value);
+        WsDigest value = new WsDigest(getLocalDigestValue(item), 0L, key);
+        WsLong timeValue = service.updateDigest(value);
         //
         if (timeValue != null) {
             updateLocalTimestamp(item, timeValue.getValue());
@@ -754,8 +753,8 @@ public class ConsistencyService {
         ERepositoryObjectType type = viewObj.getRepositoryObjectType();
         String objectName = viewObj.getLabel();
         if (type == IServerObjectRepositoryType.TYPE_CUSTOM_FORM) {
-            WSCustomFormItem item = (WSCustomFormItem) viewObj.getProperty().getItem();
-            WSCustomFormE customForm = item.getCustomForm();
+            WsCustomFormItem item = (WsCustomFormItem) viewObj.getProperty().getItem();
+            WsCustomFormE customForm = item.getCustomForm();
             objectName = customForm.getDatamodel() + OBJ_NAME_DIVIDE + customForm.getEntity() + OBJ_NAME_DIVIDE + objectName;
         }
         return objectName;
@@ -772,10 +771,10 @@ public class ConsistencyService {
         return objectName;
     }
 
-    public <T> Map<T, WSDigest> queryServerDigestValue(MDMServerDef serverDef, Collection<T> objs) throws XtentisException {
-        Map<T, WSDigest> result = new LinkedHashMap<T, WSDigest>();
-        XtentisPort port = RepositoryWebServiceAdapter.getXtentisPort(serverDef);
-        if (isSupportConsistency(port)) {
+    public <T> Map<T, WsDigest> queryServerDigestValue(MDMServerDef serverDef, Collection<T> objs) throws XtentisException {
+        Map<T, WsDigest> result = new LinkedHashMap<T, WsDigest>();
+        TMDMService service = RepositoryWebServiceAdapter.getMDMService(serverDef);
+        if (isSupportConsistency(service)) {
             for (T obj : objs) {
                 String type = null;
                 String objectName = null;
@@ -796,7 +795,7 @@ public class ConsistencyService {
                 }
 
                 if (type != null && objectName != null) {
-                    WSDigest digest = port.getDigest(new WSDigestKey(type, objectName));
+                    WsDigest digest = service.getDigest(new WsDigestKey(type, objectName));
                     result.put(obj, digest);
                 }
 
@@ -886,8 +885,12 @@ public class ConsistencyService {
         return getPreferenceStore().getInt(PreferenceConstants.P_CONFLICT_STRATEGY);
     }
 
-    private boolean isSupportConsistency(XtentisPort port) {
-        WSBoolean isXmlDB = port.isXmlDB();
-        return !isXmlDB.isTrue();
+    private boolean isSupportConsistency(TMDMService service) {
+        // *** TMDM-8080, temp substituted start ***//
+        // WSBoolean isXmlDB = service.isXmlDB();
+        // return !isXmlDB.isTrue();
+        return true;
+        // *** TMDM-8080, temp substituted end ***//
+
     }
 }

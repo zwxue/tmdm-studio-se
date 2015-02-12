@@ -2,7 +2,7 @@
 //
 // Talend Community Edition
 //
-// Copyright (C) 2006-2014 Talend ¨C www.talend.com
+// Copyright (C) 2006-2014 Talend ï¿½C www.talend.com
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
@@ -33,7 +33,7 @@ import org.talend.mdm.repository.core.IServerObjectRepositoryType;
 import org.talend.mdm.repository.core.impl.AbstractRepositoryNodeResourceProvider;
 import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
 import org.talend.mdm.repository.model.mdmproperties.MdmpropertiesFactory;
-import org.talend.mdm.repository.model.mdmproperties.WSTransformerV2Item;
+import org.talend.mdm.repository.model.mdmproperties.WsTransformerV2Item;
 
 /**
  * DOC hbhong class global comment. Detailled comment <br/>
@@ -42,7 +42,7 @@ import org.talend.mdm.repository.model.mdmproperties.WSTransformerV2Item;
 public class TransformerV2NodeResourceProvider extends AbstractRepositoryNodeResourceProvider {
 
     public ERepositoryObjectType getRepositoryObjectType(Item item) {
-        if (item instanceof WSTransformerV2Item || item instanceof ContainerItem) {
+        if (item instanceof WsTransformerV2Item || item instanceof ContainerItem) {
             return IServerObjectRepositoryType.TYPE_TRANSFORMERV2;
         }
         return null;
@@ -53,25 +53,26 @@ public class TransformerV2NodeResourceProvider extends AbstractRepositoryNodeRes
         if (repositoryType != null) {
             Resource itemResource = createCommonItemResource(project, item, repositoryType, path);
             EList<EObject> contents = itemResource.getContents();
-            contents.add(((WSTransformerV2Item) item).getWsTransformerV2());
+            contents.add(((WsTransformerV2Item) item).getWsTransformerV2());
             return itemResource;
         }
         return null;
     }
 
+    @Override
     public Resource save(Item item) throws PersistenceException {
-        if (item instanceof WSTransformerV2Item) {
+        if (item instanceof WsTransformerV2Item) {
             Resource resource = xmiResourceManager.getItemResource(item);
             resource.getContents().clear();
-            resource.getContents().add(((WSTransformerV2Item) item).getWsTransformerV2());
-            Resource eResource = ((WSTransformerV2Item) item).getWsTransformerV2().eResource();
+            resource.getContents().add(((WsTransformerV2Item) item).getWsTransformerV2());
+            Resource eResource = ((WsTransformerV2Item) item).getWsTransformerV2().eResource();
             return resource;
         }
         return null;
     }
 
     public Item createNewItem(ERepositoryObjectType type) {
-        return MdmpropertiesFactory.eINSTANCE.createWSTransformerV2Item();
+        return MdmpropertiesFactory.eINSTANCE.createWsTransformerV2Item();
     }
 
     public boolean canHandleRepObjType(ERepositoryObjectType type) {

@@ -20,11 +20,11 @@ import org.talend.mdm.repository.i18n.Messages;
 import com.amalto.workbench.utils.EXtentisObjects;
 import com.amalto.workbench.utils.TreeObjectUtil;
 import com.amalto.workbench.utils.XtentisException;
-import com.amalto.workbench.webservices.WSDeleteMenu;
-import com.amalto.workbench.webservices.WSMenu;
-import com.amalto.workbench.webservices.WSMenuPK;
-import com.amalto.workbench.webservices.WSPutMenu;
-import com.amalto.workbench.webservices.XtentisPort;
+import com.amalto.workbench.webservices.TMDMService;
+import com.amalto.workbench.webservices.WsDeleteMenu;
+import com.amalto.workbench.webservices.WsMenu;
+import com.amalto.workbench.webservices.WsMenuPK;
+import com.amalto.workbench.webservices.WsPutMenu;
 
 /**
  * DOC hbhong class global comment. Detailled comment
@@ -41,21 +41,21 @@ public class MenuInteractiveHandler extends AbstractInteractiveHandler {
     }
 
     @Override
-    public boolean doDeployWSObject(XtentisPort port, Object wsObj) {
+    public boolean doDeployWSObject(TMDMService service, Object wsObj) {
         if (wsObj != null) {
-            port.putMenu(new WSPutMenu((WSMenu) wsObj));
+            service.putMenu(new WsPutMenu((WsMenu) wsObj));
             return true;
         }
         return false;
     }
 
     @Override
-    public boolean doRemove(XtentisPort port, AbstractDeployCommand cmd) throws XtentisException {
-        WSMenuPK pk = new WSMenuPK();
+    public boolean doRemove(TMDMService service, AbstractDeployCommand cmd) throws XtentisException {
+        WsMenuPK pk = new WsMenuPK();
         String name = cmd.getObjName();
         pk.setPk(name);
-        port.deleteMenu(new WSDeleteMenu(pk));
-        TreeObjectUtil.deleteSpecificationFromAttachedRole(port, name, EXtentisObjects.Menu.getName());
+        service.deleteMenu(new WsDeleteMenu(pk));
+        TreeObjectUtil.deleteSpecificationFromAttachedRole(service, name, EXtentisObjects.Menu.getName());
         return true;
     }
 

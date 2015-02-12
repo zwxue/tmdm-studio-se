@@ -21,11 +21,11 @@ import com.amalto.workbench.editors.XObjectBrowser;
 import com.amalto.workbench.editors.XObjectEditor;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.models.TreeParent;
-import com.amalto.workbench.webservices.XtentisPort;
+import com.amalto.workbench.webservices.TMDMService;
 
 public class AbstractAvailableModel implements IAvailableModel {
 
-    public void addTreeObjects(XtentisPort port, IProgressMonitor monitor, TreeParent serverRoot) {
+    public void addTreeObjects(TMDMService port, IProgressMonitor monitor, TreeParent serverRoot) {
 
     }
 
@@ -59,7 +59,7 @@ public class AbstractAvailableModel implements IAvailableModel {
 
     }
 
-    public void deleteTreeObject(XtentisPort port, TreeObject xobject) {
+    public void deleteTreeObject(TMDMService port, TreeObject xobject) {
         
 
     }

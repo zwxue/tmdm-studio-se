@@ -28,10 +28,12 @@ import java.io.StringWriter;
 import java.net.Authenticator;
 import java.net.ConnectException;
 import java.net.MalformedURLException;
+import java.net.PasswordAuthentication;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -60,6 +62,7 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.ws.BindingProvider;
 import javax.xml.ws.WebServiceException;
+import javax.xml.ws.handler.MessageContext;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.ObjectUtils;
@@ -128,6 +131,7 @@ import org.eclipse.xsd.util.XSDConstants;
 import org.eclipse.xsd.util.XSDSchemaLocator;
 import org.osgi.framework.Bundle;
 import org.talend.core.GlobalServiceRegister;
+import org.talend.mdm.commmon.util.core.Crypt;
 import org.talend.mdm.commmon.util.core.EUUIDCustomType;
 import org.talend.mdm.commmon.util.core.ICoreConstants;
 import org.talend.mdm.commmon.util.webapp.XSystemObjects;
@@ -154,24 +158,22 @@ import com.amalto.workbench.models.TreeParent;
 import com.amalto.workbench.service.IWebServiceHook;
 import com.amalto.workbench.service.MissingJarService;
 import com.amalto.workbench.service.MissingJarsException;
-import com.amalto.workbench.webservices.WSComponent;
-import com.amalto.workbench.webservices.WSDataClusterPK;
-import com.amalto.workbench.webservices.WSDataModel;
-import com.amalto.workbench.webservices.WSDataModelPK;
-import com.amalto.workbench.webservices.WSGetComponentVersion;
-import com.amalto.workbench.webservices.WSGetDataModel;
-import com.amalto.workbench.webservices.WSGetViewPKs;
-import com.amalto.workbench.webservices.WSRegexDataClusterPKs;
-import com.amalto.workbench.webservices.WSRegexDataModelPKs;
-import com.amalto.workbench.webservices.WSRoutingRuleExpression;
-import com.amalto.workbench.webservices.WSRoutingRuleOperator;
-import com.amalto.workbench.webservices.WSStringPredicate;
-import com.amalto.workbench.webservices.WSVersion;
-import com.amalto.workbench.webservices.WSViewPK;
-import com.amalto.workbench.webservices.WSWhereCondition;
-import com.amalto.workbench.webservices.WSWhereOperator;
-import com.amalto.workbench.webservices.XtentisPort;
-import com.amalto.workbench.webservices.XtentisService;
+import com.amalto.workbench.webservices.TMDMService;
+import com.amalto.workbench.webservices.TMDMService_Service;
+import com.amalto.workbench.webservices.WsDataClusterPK;
+import com.amalto.workbench.webservices.WsDataModel;
+import com.amalto.workbench.webservices.WsDataModelPK;
+import com.amalto.workbench.webservices.WsGetComponentVersion;
+import com.amalto.workbench.webservices.WsGetDataModel;
+import com.amalto.workbench.webservices.WsGetViewPKs;
+import com.amalto.workbench.webservices.WsPing;
+import com.amalto.workbench.webservices.WsRegexDataClusterPKs;
+import com.amalto.workbench.webservices.WsRegexDataModelPKs;
+import com.amalto.workbench.webservices.WsRoutingRuleExpression;
+import com.amalto.workbench.webservices.WsString;
+import com.amalto.workbench.webservices.WsVersion;
+import com.amalto.workbench.webservices.WsViewPK;
+import com.amalto.workbench.webservices.WsWhereCondition;
 import com.sun.org.apache.xpath.internal.XPathAPI;
 import com.sun.org.apache.xpath.internal.objects.XObject;
 import com.sun.xml.internal.ws.wsdl.parser.InaccessibleWSDLException;
@@ -348,33 +350,114 @@ public class Util {
     /*********************************************************************
      * WEB SERVICES
      *********************************************************************/
-
-    public static XtentisPort getPort(TreeObject xobject) throws XtentisException {
+    public static TMDMService getMDMService(TreeObject xobject) throws XtentisException {
         try {
             if (xobject == null) {
                 return null;
             }
-            return getPort(new URL(xobject.getEndpointAddress()), xobject.getUniverse(), xobject.getUsername(),
+            return getMDMService(new URL(xobject.getEndpointAddress()), xobject.getUniverse(), xobject.getUsername(),
                     xobject.getPassword());
         } catch (MalformedURLException e) {
             throw new XtentisException(Messages.Util_0 + xobject.getEndpointAddress());
         }
     }
 
-    public static XtentisPort getPort(String universe, String username, String password) throws XtentisException {
+    public static TMDMService getMDMService(String universe, String username, String password) throws XtentisException {
         try {
-            return getPort(new URL(default_endpoint_address), universe, username, password);
+            return getMDMService(new URL(default_endpoint_address), universe, username, password);
         } catch (MalformedURLException e) {
             String err = Messages.Util_1 + default_endpoint_address + Messages.Util_2;
             throw new XtentisException(err);
         }
     }
 
-    public static XtentisPort getPort(URL url, String universe, String username, String password) throws XtentisException {
-        return getPort(url, universe, username, password, true);
+    public static TMDMService getMDMService(URL url, String universe, String username, String password) throws XtentisException {
+        return getMDMService(url, universe, username, password, true);
     }
 
-    public static XtentisPort getPort(URL url, String universe, String username, String password, boolean showMissingJarDialog)
+    // ////////////////
+    public static void main(String[] args) {
+        try {
+            String end1 = "/services";
+            String end2 = "/soap";
+            TMDMService mdmService = getMDMServiceInner(new URL("http://localhost:8080/talendmdm-6.0-SNAPSHOT/services/soap"),
+                    "",
+                    "administrator", "administrator");
+            WsString ping = mdmService.ping(new WsPing("aass"));
+            System.out.println(ping.getValue());
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (XtentisException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static TMDMService getMDMServiceInner(URL url, String universe, final String username, final String password)
+            throws XtentisException {
+        try {
+            Authenticator.setDefault(new Authenticator() {
+
+                @Override
+                protected PasswordAuthentication getPasswordAuthentication() {
+                    return new PasswordAuthentication(username, password.toCharArray());
+                }
+            });
+
+            TMDMService_Service service_service = new TMDMService_Service(url);
+
+            TMDMService service = service_service.getTMDMPort();
+
+            BindingProvider stub = (BindingProvider) service;
+
+            stub.getRequestContext().put(BindingProvider.SESSION_MAINTAIN_PROPERTY, false);
+
+            Map<String, Object> context = stub.getRequestContext();
+
+            if (universe == null || universe.trim().length() == 0) {
+                context.put(BindingProvider.USERNAME_PROPERTY, username);
+            } else {
+                context.put(BindingProvider.USERNAME_PROPERTY, universe + '/' + username);
+            }
+
+            context.put(BindingProvider.PASSWORD_PROPERTY, password);
+            preRequestSendingHook(stub, username);
+
+            Authenticator.setDefault(null);
+            return service;
+        } catch (WebServiceException e) {
+            Throwable throwable = analyseWebServiceException(e);
+            String message = throwable.getMessage();
+            if (message == null) {
+                message = ""; //$NON-NLS-1$
+            }
+            log.error(message, throwable);
+
+            throw new XtentisException(Messages.bind(Messages.UnableAccessEndpoint, url, message), throwable);
+        }
+    }
+
+    final static String TOKEN_KEY = "t_stoken"; //$NON-NLS-1$
+
+    public static void preRequestSendingHook(BindingProvider provider, String username) {
+        Crypt crypt;
+        try {
+            crypt = Crypt.getDESCryptInstance("c1Stdio!"); //$NON-NLS-1$
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        String studioToken = crypt.encryptHexString(username);
+
+        Map<String, List<String>> headers = new HashMap<String, List<String>>();
+        List<String> values = Collections.singletonList(studioToken);
+        headers.put(TOKEN_KEY, values);
+
+        provider.getRequestContext().put(MessageContext.HTTP_REQUEST_HEADERS, headers);
+    }
+
+    // ///////////////////////////////////////////////////////
+
+    public static TMDMService getMDMService(URL url, String universe, final String username, final String password,
+            boolean showMissingJarDialog)
             throws XtentisException {
         boolean checkResult = MissingJarService.getInstance().checkMissingJar(showMissingJarDialog);
         if (!checkResult) {
@@ -385,11 +468,20 @@ public class Util {
             SSLContext sslContext = SSLContextProvider.getContext();
             HttpsURLConnection.setDefaultHostnameVerifier(SSLContextProvider.getHostnameVerifier());
             HttpsURLConnection.setDefaultSSLSocketFactory(sslContext.getSocketFactory());
-            XtentisService service = new XtentisService(url);
 
-            XtentisPort port = service.getXtentisPort();
+            Authenticator.setDefault(new Authenticator() {
 
-            BindingProvider stub = (BindingProvider) port;
+                @Override
+                protected PasswordAuthentication getPasswordAuthentication() {
+                    return new PasswordAuthentication(username, password.toCharArray());
+                }
+            });
+
+            TMDMService_Service service_service = new TMDMService_Service(url);
+
+            TMDMService service = service_service.getTMDMPort();
+
+            BindingProvider stub = (BindingProvider) service;
 
             // Do not maintain session via cookies
             stub.getRequestContext().put(BindingProvider.SESSION_MAINTAIN_PROPERTY, false);
@@ -411,8 +503,7 @@ public class Util {
                 wsHook.preRequestSendingHook(stub, username);
             }
 
-            Authenticator.setDefault(null);
-            return port;
+            return service;
         } catch (WebServiceException e) {
             Throwable throwable = analyseWebServiceException(e);
             String message = throwable.getMessage();
@@ -424,6 +515,86 @@ public class Util {
             throw new XtentisException(Messages.bind(Messages.UnableAccessEndpoint, url, message), throwable);
         }
     }
+
+
+    /************************** web service old implements ****************************/
+    // public static XtentisPort getPort(TreeObject xobject) throws XtentisException {
+    // try {
+    // if (xobject == null) {
+    // return null;
+    // }
+    // return getPort(new URL(xobject.getEndpointAddress()), xobject.getUniverse(), xobject.getUsername(),
+    // xobject.getPassword());
+    // } catch (MalformedURLException e) {
+    // throw new XtentisException(Messages.Util_0 + xobject.getEndpointAddress());
+    // }
+    // }
+    //
+    // public static XtentisPort getPort(String universe, String username, String password) throws XtentisException {
+    // try {
+    // return getPort(new URL(default_endpoint_address), universe, username, password);
+    // } catch (MalformedURLException e) {
+    // String err = Messages.Util_1 + default_endpoint_address + Messages.Util_2;
+    // throw new XtentisException(err);
+    // }
+    // }
+    //
+    // public static XtentisPort getPort(URL url, String universe, String username, String password) throws
+    // XtentisException {
+    // return getPort(url, universe, username, password, true);
+    // }
+    //
+    // public static XtentisPort getPort(URL url, String universe, String username, String password, boolean
+    // showMissingJarDialog)
+    // throws XtentisException {
+    // boolean checkResult = MissingJarService.getInstance().checkMissingJar(showMissingJarDialog);
+    // if (!checkResult) {
+    //            throw new MissingJarsException("Missing dependency libraries."); //$NON-NLS-1$
+    // }
+    // try {
+    //
+    // SSLContext sslContext = SSLContextProvider.getContext();
+    // HttpsURLConnection.setDefaultHostnameVerifier(SSLContextProvider.getHostnameVerifier());
+    // HttpsURLConnection.setDefaultSSLSocketFactory(sslContext.getSocketFactory());
+    // XtentisService service = new XtentisService(url);
+    //
+    // XtentisPort port = service.getXtentisPort();
+    //
+    // BindingProvider stub = (BindingProvider) port;
+    //
+    // // Do not maintain session via cookies
+    // stub.getRequestContext().put(BindingProvider.SESSION_MAINTAIN_PROPERTY, false);
+    //
+    // Map<String, Object> context = stub.getRequestContext();
+    // // // dynamic set endpointAddress
+    // // context.put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, endpointAddress);
+    //
+    // // authentication
+    // if (universe == null || universe.trim().length() == 0) {
+    // context.put(BindingProvider.USERNAME_PROPERTY, username);
+    // } else {
+    // context.put(BindingProvider.USERNAME_PROPERTY, universe + '/' + username);
+    // }
+    //
+    // context.put(BindingProvider.PASSWORD_PROPERTY, password);
+    // IWebServiceHook wsHook = getWebServiceHook();
+    // if (wsHook != null) {
+    // wsHook.preRequestSendingHook(stub, username);
+    // }
+    //
+    // Authenticator.setDefault(null);
+    // return port;
+    // } catch (WebServiceException e) {
+    // Throwable throwable = analyseWebServiceException(e);
+    // String message = throwable.getMessage();
+    // if (message == null) {
+    //                message = ""; //$NON-NLS-1$
+    // }
+    // log.error(message, throwable);
+    //
+    // throw new XtentisException(Messages.bind(Messages.UnableAccessEndpoint, url, message), throwable);
+    // }
+    // }
 
     public static XtentisException convertWebServiceException(WebServiceException wsEx) {
         Throwable throwable = analyseWebServiceException(wsEx);
@@ -457,36 +628,36 @@ public class Util {
         return webServceHook;
     }
 
-    public static List<WSDataModelPK> getAllDataModelPKs(URL url, String universe, String username, String password)
+    public static List<WsDataModelPK> getAllDataModelPKs(URL url, String universe, String username, String password)
             throws XtentisException {
         try {
-            XtentisPort port = Util.getPort(url, universe, username, password);
-            return port.getDataModelPKs(new WSRegexDataModelPKs("*")).getWsDataModelPKs();//$NON-NLS-1$
+            TMDMService port = Util.getMDMService(url, universe, username, password);
+            return port.getDataModelPKs(new WsRegexDataModelPKs("*")).getWsDataModelPKs();//$NON-NLS-1$
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             throw new XtentisException(Messages.Util_5 + Messages.Util_6 + e.getLocalizedMessage());
         }
     }
 
-    public static List<WSDataClusterPK> getAllDataClusterPKs(URL url, String universe, String username, String password)
+    public static List<WsDataClusterPK> getAllDataClusterPKs(URL url, String universe, String username, String password)
             throws XtentisException {
         try {
-            XtentisPort port = Util.getPort(url, universe, username, password);
-            return port.getDataClusterPKs(new WSRegexDataClusterPKs("*")).getWsDataClusterPKs();//$NON-NLS-1$
+            TMDMService port = Util.getMDMService(url, universe, username, password);
+            return port.getDataClusterPKs(new WsRegexDataClusterPKs("*")).getWsDataClusterPKs();//$NON-NLS-1$
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             throw new XtentisException(Messages.Util_7 + Messages.Util_8 + e.getLocalizedMessage());
         }
     }
 
-    public static List<WSViewPK> getAllViewPKs(URL url, String universe, String username, String password, String regex)
+    public static List<WsViewPK> getAllViewPKs(URL url, String universe, String username, String password, String regex)
             throws XtentisException {
         try {
             if ((regex == null) || ("".equals(regex))) {
                 regex = "*";//$NON-NLS-1$
             }
-            XtentisPort port = Util.getPort(url, universe, username, password);
-            return port.getViewPKs(new WSGetViewPKs(regex)).getWsViewPK();
+            TMDMService port = Util.getMDMService(url, universe, username, password);
+            return port.getViewPKs(new WsGetViewPKs(regex)).getWsViewPK();
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             throw new XtentisException(Messages.Util_9 + Messages.Util_10 + e.getLocalizedMessage());
@@ -1005,14 +1176,14 @@ public class Util {
      * @param parent
      * @throws Exception
      */
-    public static void getForeingKeyInDataModel(Set<String> list, TreeParent parent, XtentisPort port) throws Exception {
+    public static void getForeingKeyInDataModel(Set<String> list, TreeParent parent, TMDMService service) throws Exception {
         TreeObject[] children = parent.getChildren();
         for (TreeObject object : children) {
             if (object instanceof TreeParent) {
-                getForeingKeyInDataModel(list, (TreeParent) object, port);
+                getForeingKeyInDataModel(list, (TreeParent) object, service);
                 continue;
             }
-            WSDataModel wsDataModel = port.getDataModel(new WSGetDataModel(new WSDataModelPK(object.getDisplayName())));
+            WsDataModel wsDataModel = service.getDataModel(new WsGetDataModel(new WsDataModelPK(object.getDisplayName())));
             XSDSchema xsd = Util.createXsdSchema(wsDataModel.getXsdSchema(), object);
             getForeingKeyInSchema(list, xsd);
         }
@@ -1614,7 +1785,9 @@ public class Util {
 
     public static Version getVersion(TreeObject xobject) throws XtentisException {
         try {
-            WSVersion version = getPort(xobject).getComponentVersion(new WSGetComponentVersion(WSComponent.DATA_MANAGER, null));
+            // WsVersion version = getMDMService(xobject).getComponentVersion(
+            // new WsGetComponentVersion(WsComponent.DATA_MANAGER, null));
+            WsVersion version = getMDMService(xobject).getComponentVersion(new WsGetComponentVersion());
             return new Version(version.getMajor(), version.getMinor(), version.getRevision(), version.getBuild());
         } catch (XtentisException e) {
             throw (e);
@@ -1699,7 +1872,7 @@ public class Util {
         } else if (conceptName != null && !conceptName.contains("*")) {//$NON-NLS-1$
             for (String data : systemDataModelValues) {
                 try {
-                    WSDataModel dm = Util.getPort(obj).getDataModel(new WSGetDataModel(new WSDataModelPK(data)));
+                    WsDataModel dm = Util.getMDMService(obj).getDataModel(new WsGetDataModel(new WsDataModelPK(data)));
                     if (dm != null) {
                         // XSDSchema xsdSchema = Util.getXSDSchema(dm.getXsdSchema());
                         String schema = dm.getXsdSchema();
@@ -2484,175 +2657,182 @@ public class Util {
         }
     }
 
-    public static String[] convertWhereCondition(WSWhereCondition wc) {
+    public static String[] convertWhereCondition(WsWhereCondition wc) {
         List<String> list = new ArrayList<String>();
         list.add(wc.getLeftPath());
-        String operator = "";//$NON-NLS-1$
-        if (wc.getOperator().equals(WSWhereOperator.CONTAINS)) {
-            operator = "Contains";//$NON-NLS-1$
-        } else if (wc.getOperator().equals(WSWhereOperator.EQUALS)) {
-            operator = "=";//$NON-NLS-1$
-        } else if (wc.getOperator().equals(WSWhereOperator.GREATER_THAN)) {
-            operator = ">";//$NON-NLS-1$
-        } else if (wc.getOperator().equals(WSWhereOperator.GREATER_THAN_OR_EQUAL)) {
-            operator = ">=";//$NON-NLS-1$
-        } else if (wc.getOperator().equals(WSWhereOperator.CONTAINS_TEXT_OF)) {
-            operator = "Contains Text Of";//$NON-NLS-1$
-        } else if (wc.getOperator().equals(WSWhereOperator.JOIN)) {
-            operator = "Join With";//$NON-NLS-1$
-        } else if (wc.getOperator().equals(WSWhereOperator.LOWER_THAN)) {
-            operator = "<";//$NON-NLS-1$
-        } else if (wc.getOperator().equals(WSWhereOperator.LOWER_THAN_OR_EQUAL)) {
-            operator = "<=";//$NON-NLS-1$
-        } else if (wc.getOperator().equals(WSWhereOperator.NOT_EQUALS)) {
-            operator = "!=";//$NON-NLS-1$
-        } else if (wc.getOperator().equals(WSWhereOperator.STARTSWITH)) {
-            operator = "Starts With";//$NON-NLS-1$
-        } else if (wc.getOperator().equals(WSWhereOperator.STRICTCONTAINS)) {
-            operator = "Strict Contains";//$NON-NLS-1$
-        } else if (wc.getOperator().equals(WSWhereOperator.EMPTY_NULL)) {
-            operator = "Is Empty Or Null";//$NON-NLS-1$
-        }
-        list.add(operator);
-        list.add(wc.getRightValueOrPath());
-
-        String predicate = "";//$NON-NLS-1$
-        if (wc.getStringPredicate().equals(WSStringPredicate.AND)) {
-            predicate = "And";//$NON-NLS-1$
-        } else if (wc.getStringPredicate().equals(WSStringPredicate.EXACTLY)) {
-            predicate = "Exactly";//$NON-NLS-1$
-        } else if (wc.getStringPredicate().equals(WSStringPredicate.NONE)) {
-            predicate = "";//$NON-NLS-1$
-        } else if (wc.getStringPredicate().equals(WSStringPredicate.NOT)) {
-            predicate = "Not";//$NON-NLS-1$
-        } else if (wc.getStringPredicate().equals(WSStringPredicate.OR)) {
-            predicate = "Or";//$NON-NLS-1$
-        } else if (wc.getStringPredicate().equals(WSStringPredicate.STRICTAND)) {
-            predicate = "Strict And";//$NON-NLS-1$
-        }
-        list.add(predicate);
+        // *** TMDM-8080, temp omitted start ***//
+        //        String operator = "";//$NON-NLS-1$
+        // if (wc.getOperator().equals(WsWhereOperator.CONTAINS)) {
+        //            operator = "Contains";//$NON-NLS-1$
+        // } else if (wc.getOperator().equals(WsWhereOperator.EQUALS)) {
+        //            operator = "=";//$NON-NLS-1$
+        // } else if (wc.getOperator().equals(WsWhereOperator.GREATER_THAN)) {
+        //            operator = ">";//$NON-NLS-1$
+        // } else if (wc.getOperator().equals(WsWhereOperator.GREATER_THAN_OR_EQUAL)) {
+        //            operator = ">=";//$NON-NLS-1$
+        // } else if (wc.getOperator().equals(WsWhereOperator.CONTAINS_TEXT_OF)) {
+        //            operator = "Contains Text Of";//$NON-NLS-1$
+        // } else if (wc.getOperator().equals(WsWhereOperator.JOIN)) {
+        //            operator = "Join With";//$NON-NLS-1$
+        // } else if (wc.getOperator().equals(WsWhereOperator.LOWER_THAN)) {
+        //            operator = "<";//$NON-NLS-1$
+        // } else if (wc.getOperator().equals(WsWhereOperator.LOWER_THAN_OR_EQUAL)) {
+        //            operator = "<=";//$NON-NLS-1$
+        // } else if (wc.getOperator().equals(WsWhereOperator.NOT_EQUALS)) {
+        //            operator = "!=";//$NON-NLS-1$
+        // } else if (wc.getOperator().equals(WsWhereOperator.STARTSWITH)) {
+        //            operator = "Starts With";//$NON-NLS-1$
+        // } else if (wc.getOperator().equals(WsWhereOperator.STRICTCONTAINS)) {
+        //            operator = "Strict Contains";//$NON-NLS-1$
+        // } else if (wc.getOperator().equals(WsWhereOperator.EMPTY_NULL)) {
+        //            operator = "Is Empty Or Null";//$NON-NLS-1$
+        // }
+        // list.add(operator);
+        // list.add(wc.getRightValueOrPath());
+        //
+        //        String predicate = "";//$NON-NLS-1$
+        // if (wc.getStringPredicate().equals(WsStringPredicate.AND)) {
+        //            predicate = "And";//$NON-NLS-1$
+        // } else if (wc.getStringPredicate().equals(WsStringPredicate.EXACTLY)) {
+        //            predicate = "Exactly";//$NON-NLS-1$
+        // } else if (wc.getStringPredicate().equals(WsStringPredicate.NONE)) {
+        //            predicate = "";//$NON-NLS-1$
+        // } else if (wc.getStringPredicate().equals(WsStringPredicate.NOT)) {
+        //            predicate = "Not";//$NON-NLS-1$
+        // } else if (wc.getStringPredicate().equals(WsStringPredicate.OR)) {
+        //            predicate = "Or";//$NON-NLS-1$
+        // } else if (wc.getStringPredicate().equals(WsStringPredicate.STRICTAND)) {
+        //            predicate = "Strict And";//$NON-NLS-1$
+        // }
+        // list.add(predicate);
+        // *** TMDM-8080, temp omitted end ***//
         return list.toArray(new String[list.size()]);
     }
 
-    public static String[] convertRouteCondition(WSRoutingRuleExpression wc) {
+    public static String[] convertRouteCondition(WsRoutingRuleExpression wc) {
         List<String> list = new ArrayList<String>();
         list.add(wc.getXpath());
-        String operator = "";//$NON-NLS-1$
-        if (wc.getWsOperator().equals(WSRoutingRuleOperator.CONTAINS)) {
-            operator = "Contains";//$NON-NLS-1$
-        } else if (wc.getWsOperator().equals(WSRoutingRuleOperator.EQUALS)) {
-            operator = "=";//$NON-NLS-1$
-        } else if (wc.getWsOperator().equals(WSRoutingRuleOperator.GREATER_THAN)) {
-            operator = ">";//$NON-NLS-1$
-        } else if (wc.getWsOperator().equals(WSRoutingRuleOperator.GREATER_THAN_OR_EQUAL)) {
-            operator = ">=";//$NON-NLS-1$
-        } else if (wc.getWsOperator().equals(WSRoutingRuleOperator.MATCHES)) {
-            operator = "Matches";//$NON-NLS-1$
-        } else if (wc.getWsOperator().equals(WSRoutingRuleOperator.LOWER_THAN)) {
-            operator = "<";//$NON-NLS-1$
-        } else if (wc.getWsOperator().equals(WSRoutingRuleOperator.LOWER_THAN_OR_EQUAL)) {
-            operator = "<=";//$NON-NLS-1$
-        } else if (wc.getWsOperator().equals(WSRoutingRuleOperator.NOT_EQUALS)) {
-            operator = "!=";//$NON-NLS-1$
-        } else if (wc.getWsOperator().equals(WSRoutingRuleOperator.STARTSWITH)) {
-            operator = "Starts With";//$NON-NLS-1$
-        } else if (wc.getWsOperator().equals(WSRoutingRuleOperator.IS_NULL)) {
-            operator = "Is Null";//$NON-NLS-1$
-        } else if (wc.getWsOperator().equals(WSRoutingRuleOperator.IS_NOT_NULL)) {
-            operator = "Is Not Null";//$NON-NLS-1$
-        }
-        list.add(operator);
+        // *** TMDM-8080, temp omitted start ***//
+        //        String operator = "";//$NON-NLS-1$
+        // if (wc.getWsOperator().equals(WsRoutingRuleOperator.CONTAINS)) {
+        //            operator = "Contains";//$NON-NLS-1$
+        // } else if (wc.getWsOperator().equals(WsRoutingRuleOperator.EQUALS)) {
+        //            operator = "=";//$NON-NLS-1$
+        // } else if (wc.getWsOperator().equals(WsRoutingRuleOperator.GREATER_THAN)) {
+        //            operator = ">";//$NON-NLS-1$
+        // } else if (wc.getWsOperator().equals(WsRoutingRuleOperator.GREATER_THAN_OR_EQUAL)) {
+        //            operator = ">=";//$NON-NLS-1$
+        // } else if (wc.getWsOperator().equals(WsRoutingRuleOperator.MATCHES)) {
+        //            operator = "Matches";//$NON-NLS-1$
+        // } else if (wc.getWsOperator().equals(WsRoutingRuleOperator.LOWER_THAN)) {
+        //            operator = "<";//$NON-NLS-1$
+        // } else if (wc.getWsOperator().equals(WsRoutingRuleOperator.LOWER_THAN_OR_EQUAL)) {
+        //            operator = "<=";//$NON-NLS-1$
+        // } else if (wc.getWsOperator().equals(WsRoutingRuleOperator.NOT_EQUALS)) {
+        //            operator = "!=";//$NON-NLS-1$
+        // } else if (wc.getWsOperator().equals(WsRoutingRuleOperator.STARTSWITH)) {
+        //            operator = "Starts With";//$NON-NLS-1$
+        // } else if (wc.getWsOperator().equals(WsRoutingRuleOperator.IS_NULL)) {
+        //            operator = "Is Null";//$NON-NLS-1$
+        // } else if (wc.getWsOperator().equals(WsRoutingRuleOperator.IS_NOT_NULL)) {
+        //            operator = "Is Not Null";//$NON-NLS-1$
+        // }
+        // list.add(operator);
+        // *** TMDM-8080, temp omitted end ***//
         list.add(wc.getValue());
         list.add(wc.getName() == null ? "" : wc.getName());//$NON-NLS-1$
         return list.toArray(new String[list.size()]);
     }
 
-    public static WSRoutingRuleExpression convertLineRoute(String[] values) {
-        WSRoutingRuleExpression wc = new WSRoutingRuleExpression();
+    public static WsRoutingRuleExpression convertLineRoute(String[] values) {
+        WsRoutingRuleExpression wc = new WsRoutingRuleExpression();
 
         wc.setXpath(values[0]);
-
-        WSRoutingRuleOperator operator = null;
-        if (values[1].equals("Contains")) { //$NON-NLS-1$
-            operator = WSRoutingRuleOperator.CONTAINS;
-        } else if (values[1].equals("Matches")) { //$NON-NLS-1$
-            operator = WSRoutingRuleOperator.MATCHES;
-        } else if (values[1].equals("=")) { //$NON-NLS-1$
-            operator = WSRoutingRuleOperator.EQUALS;
-        } else if (values[1].equals(">")) { //$NON-NLS-1$
-            operator = WSRoutingRuleOperator.GREATER_THAN;
-        } else if (values[1].equals(">=")) { //$NON-NLS-1$
-            operator = WSRoutingRuleOperator.GREATER_THAN_OR_EQUAL;
-        } else if (values[1].equals("<")) { //$NON-NLS-1$
-            operator = WSRoutingRuleOperator.LOWER_THAN;
-        } else if (values[1].equals("<=")) { //$NON-NLS-1$
-            operator = WSRoutingRuleOperator.LOWER_THAN_OR_EQUAL;
-        } else if (values[1].equals("!=")) { //$NON-NLS-1$
-            operator = WSRoutingRuleOperator.NOT_EQUALS;
-        } else if (values[1].equals("Starts With")) { //$NON-NLS-1$
-            operator = WSRoutingRuleOperator.STARTSWITH;
-        } else if (values[1].equals("Is Null")) { //$NON-NLS-1$
-            operator = WSRoutingRuleOperator.IS_NULL;
-        } else if (values[1].equals("Is Not Null")) { //$NON-NLS-1$
-            operator = WSRoutingRuleOperator.IS_NOT_NULL;
-        }
-        wc.setWsOperator(operator);
+        // *** TMDM-8080, temp omitted start ***//
+        // WsRoutingRuleOperator operator = null;
+        //        if (values[1].equals("Contains")) { //$NON-NLS-1$
+        // operator = WsRoutingRuleOperator.CONTAINS;
+        //        } else if (values[1].equals("Matches")) { //$NON-NLS-1$
+        // operator = WsRoutingRuleOperator.MATCHES;
+        //        } else if (values[1].equals("=")) { //$NON-NLS-1$
+        // operator = WsRoutingRuleOperator.EQUALS;
+        //        } else if (values[1].equals(">")) { //$NON-NLS-1$
+        // operator = WsRoutingRuleOperator.GREATER_THAN;
+        //        } else if (values[1].equals(">=")) { //$NON-NLS-1$
+        // operator = WsRoutingRuleOperator.GREATER_THAN_OR_EQUAL;
+        //        } else if (values[1].equals("<")) { //$NON-NLS-1$
+        // operator = WsRoutingRuleOperator.LOWER_THAN;
+        //        } else if (values[1].equals("<=")) { //$NON-NLS-1$
+        // operator = WsRoutingRuleOperator.LOWER_THAN_OR_EQUAL;
+        //        } else if (values[1].equals("!=")) { //$NON-NLS-1$
+        // operator = WsRoutingRuleOperator.NOT_EQUALS;
+        //        } else if (values[1].equals("Starts With")) { //$NON-NLS-1$
+        // operator = WsRoutingRuleOperator.STARTSWITH;
+        //        } else if (values[1].equals("Is Null")) { //$NON-NLS-1$
+        // operator = WsRoutingRuleOperator.IS_NULL;
+        //        } else if (values[1].equals("Is Not Null")) { //$NON-NLS-1$
+        // operator = WsRoutingRuleOperator.IS_NOT_NULL;
+        // }
+        // wc.setWsOperator(operator);
+        // *** TMDM-8080, temp omitted end ***//
         wc.setValue((values[2]));
         wc.setName((values[3]));
         return wc;
     }
 
-    public static WSWhereCondition convertLine(String[] values) {
-        WSWhereCondition wc = new WSWhereCondition();
+    public static WsWhereCondition convertLine(String[] values) {
+        WsWhereCondition wc = new WsWhereCondition();
         wc.setLeftPath(values[0]);
-        WSWhereOperator operator = null;
-        if (values[1].equals("Contains")) { //$NON-NLS-1$
-            operator = WSWhereOperator.CONTAINS;
-        } else if (values[1].equals("Contains Text Of")) { //$NON-NLS-1$
-            operator = WSWhereOperator.CONTAINS_TEXT_OF;
-        } else if (values[1].equals("Join With")) {//$NON-NLS-1$
-            operator = WSWhereOperator.JOIN;
-        } else if (values[1].equals("=")) { //$NON-NLS-1$
-            operator = WSWhereOperator.EQUALS;
-        } else if (values[1].equals(">")) { //$NON-NLS-1$
-            operator = WSWhereOperator.GREATER_THAN;
-        } else if (values[1].equals(">=")) { //$NON-NLS-1$
-            operator = WSWhereOperator.GREATER_THAN_OR_EQUAL;
-        } else if (values[1].equals("<")) { //$NON-NLS-1$
-            operator = WSWhereOperator.LOWER_THAN;
-        } else if (values[1].equals("<=")) { //$NON-NLS-1$
-            operator = WSWhereOperator.LOWER_THAN_OR_EQUAL;
-        } else if (values[1].equals("!=")) { //$NON-NLS-1$
-            operator = WSWhereOperator.NOT_EQUALS;
-        } else if (values[1].equals("Starts With")) { //$NON-NLS-1$
-            operator = WSWhereOperator.STARTSWITH;
-        } else if (values[1].equals("Strict Contains")) { //$NON-NLS-1$
-            operator = WSWhereOperator.STRICTCONTAINS;
-        } else if (values[1].equals("Is Empty Or Null")) { //$NON-NLS-1$
-            operator = WSWhereOperator.EMPTY_NULL;
-        }
-        wc.setOperator(operator);
-        wc.setRightValueOrPath(values[2]);
-        WSStringPredicate predicate = null;
-        if (values[3].equals("")) { //$NON-NLS-1$
-            predicate = WSStringPredicate.NONE;
-        } else if (values[3].equals("Or")) { //$NON-NLS-1$
-            predicate = WSStringPredicate.OR;
-        }
-        if (values[3].equals("And")) { //$NON-NLS-1$
-            predicate = WSStringPredicate.AND;
-        }
-        if (values[3].equals("Strict And")) { //$NON-NLS-1$
-            predicate = WSStringPredicate.STRICTAND;
-        }
-        if (values[3].equals("Exactly")) { //$NON-NLS-1$
-            predicate = WSStringPredicate.EXACTLY;
-        }
-        if (values[3].equals("Not")) { //$NON-NLS-1$
-            predicate = WSStringPredicate.NOT;
-        }
-        wc.setStringPredicate(predicate);
+        // *** TMDM-8080, temp omitted start ***//
+        // WsWhereOperator operator = null;
+        //        if (values[1].equals("Contains")) { //$NON-NLS-1$
+        // operator = WsWhereOperator.CONTAINS;
+        //        } else if (values[1].equals("Contains Text Of")) { //$NON-NLS-1$
+        // operator = WsWhereOperator.CONTAINS_TEXT_OF;
+        //        } else if (values[1].equals("Join With")) {//$NON-NLS-1$
+        // operator = WsWhereOperator.JOIN;
+        //        } else if (values[1].equals("=")) { //$NON-NLS-1$
+        // operator = WsWhereOperator.EQUALS;
+        //        } else if (values[1].equals(">")) { //$NON-NLS-1$
+        // operator = WsWhereOperator.GREATER_THAN;
+        //        } else if (values[1].equals(">=")) { //$NON-NLS-1$
+        // operator = WsWhereOperator.GREATER_THAN_OR_EQUAL;
+        //        } else if (values[1].equals("<")) { //$NON-NLS-1$
+        // operator = WsWhereOperator.LOWER_THAN;
+        //        } else if (values[1].equals("<=")) { //$NON-NLS-1$
+        // operator = WsWhereOperator.LOWER_THAN_OR_EQUAL;
+        //        } else if (values[1].equals("!=")) { //$NON-NLS-1$
+        // operator = WsWhereOperator.NOT_EQUALS;
+        //        } else if (values[1].equals("Starts With")) { //$NON-NLS-1$
+        // operator = WsWhereOperator.STARTSWITH;
+        //        } else if (values[1].equals("Strict Contains")) { //$NON-NLS-1$
+        // operator = WsWhereOperator.STRICTCONTAINS;
+        //        } else if (values[1].equals("Is Empty Or Null")) { //$NON-NLS-1$
+        // operator = WsWhereOperator.EMPTY_NULL;
+        // }
+        // wc.setOperator(operator);
+        // wc.setRightValueOrPath(values[2]);
+        // WsStringPredicate predicate = null;
+        //        if (values[3].equals("")) { //$NON-NLS-1$
+        // predicate = WsStringPredicate.NONE;
+        //        } else if (values[3].equals("Or")) { //$NON-NLS-1$
+        // predicate = WsStringPredicate.OR;
+        // }
+        //        if (values[3].equals("And")) { //$NON-NLS-1$
+        // predicate = WsStringPredicate.AND;
+        // }
+        //        if (values[3].equals("Strict And")) { //$NON-NLS-1$
+        // predicate = WsStringPredicate.STRICTAND;
+        // }
+        //        if (values[3].equals("Exactly")) { //$NON-NLS-1$
+        // predicate = WsStringPredicate.EXACTLY;
+        // }
+        //        if (values[3].equals("Not")) { //$NON-NLS-1$
+        // predicate = WsStringPredicate.NOT;
+        // }
+        // wc.setStringPredicate(predicate);
 
+        // *** TMDM-8080, temp omitted end ***//
         return wc;
     }
 
@@ -3028,8 +3208,10 @@ public class Util {
             int major = Integer.parseInt(match.group(1));
             int minor = Integer.parseInt(match.group(2));
             int rev = match.group(4) != null && !match.group(4).equals("") ? Integer.parseInt(match.group(4)) : 0;//$NON-NLS-1$
-            XtentisPort port = Util.getPort(new URL(url), universe, username, password);
-            WSVersion wsVersion = port.getComponentVersion(new WSGetComponentVersion(WSComponent.DATA_MANAGER, null));
+            TMDMService port = Util.getMDMService(new URL(url), universe, username, password);
+            // WsVersion wsVersion = port.getComponentVersion(new WsGetComponentVersion(WsComponent.DATA_MANAGER,
+            // null));
+            WsVersion wsVersion = new WsVersion("", "", "", 1, 0, 0);//
             versionComp += Messages.Util_47 + wsVersion.getMajor() + Messages.Util_48 + wsVersion.getMinor() + Messages.Util_49
                     + wsVersion.getRevision();
             if (major != wsVersion.getMajor() || minor != wsVersion.getMinor()) {
@@ -3098,17 +3280,17 @@ public class Util {
 
         TreeObject dataModelFolder = treeObj.findServerFolder(TreeObject.DATA_MODEL);
 
-        XtentisPort port = null;
+        TMDMService port = null;
         try {
-            port = Util.getPort(dataModelFolder);
+            port = Util.getMDMService(dataModelFolder);
         } catch (XtentisException e3) {
             log.error(e3.getMessage(), e3);
         } catch (Exception e3) {
             log.error(e3.getMessage(), e3);
         }
-        WSDataModel wsDataModel = null;
+        WsDataModel wsDataModel = null;
         try {
-            wsDataModel = port.getDataModel(new WSGetDataModel(new WSDataModelPK(dataModelName)));
+            wsDataModel = port.getDataModel(new WsGetDataModel(new WsDataModelPK(dataModelName)));
             String schema = wsDataModel.getXsdSchema();
             return Util.createXsdSchema(schema, dataModelFolder);
         } catch (Exception e1) {

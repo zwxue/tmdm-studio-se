@@ -12,14 +12,11 @@
 // ============================================================================
 package com.amalto.workbench.editors;
 
-import java.lang.reflect.InvocationTargetException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Observable;
 import java.util.Set;
@@ -35,8 +32,6 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.IInputValidator;
 import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.jface.dialogs.ProgressMonitorDialog;
-import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.text.TextEvent;
 import org.eclipse.jface.viewers.ILabelProviderListener;
@@ -93,7 +88,6 @@ import org.eclipse.ui.forms.widgets.Section;
 import org.eclipse.ui.preferences.ScopedPreferenceStore;
 
 import com.amalto.workbench.dialogs.PluginDetailsDialog;
-import com.amalto.workbench.dialogs.ProcessResultsDialog;
 import com.amalto.workbench.dialogs.SetupTransformerInputVariablesDialog;
 import com.amalto.workbench.dialogs.VariableDefinitionDialog;
 import com.amalto.workbench.editors.xslteditor.PageRefresher;
@@ -111,28 +105,16 @@ import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.WidgetUtils;
 import com.amalto.workbench.utils.XmlUtil;
 import com.amalto.workbench.utils.XtentisException;
-import com.amalto.workbench.webservices.BackgroundJobStatusType;
-import com.amalto.workbench.webservices.WSBackgroundJob;
-import com.amalto.workbench.webservices.WSBackgroundJobPK;
-import com.amalto.workbench.webservices.WSByteArray;
-import com.amalto.workbench.webservices.WSExecuteTransformerV2AsJob;
-import com.amalto.workbench.webservices.WSExtractedContent;
-import com.amalto.workbench.webservices.WSGetBackgroundJob;
-import com.amalto.workbench.webservices.WSGetTransformerPluginV2Details;
-import com.amalto.workbench.webservices.WSGetTransformerPluginV2SList;
-import com.amalto.workbench.webservices.WSPipeline;
-import com.amalto.workbench.webservices.WSPipeline.TypedContentEntry;
-import com.amalto.workbench.webservices.WSTransformerContext;
-import com.amalto.workbench.webservices.WSTransformerPluginV2Details;
-import com.amalto.workbench.webservices.WSTransformerPluginV2SList;
-import com.amalto.workbench.webservices.WSTransformerPluginV2SList.Item;
-import com.amalto.workbench.webservices.WSTransformerPluginV2VariableDescriptor;
-import com.amalto.workbench.webservices.WSTransformerProcessStep;
-import com.amalto.workbench.webservices.WSTransformerV2;
-import com.amalto.workbench.webservices.WSTransformerV2PK;
-import com.amalto.workbench.webservices.WSTransformerVariablesMapping;
-import com.amalto.workbench.webservices.WSTypedContent;
-import com.amalto.workbench.webservices.XtentisPort;
+import com.amalto.workbench.webservices.TMDMService;
+import com.amalto.workbench.webservices.WsGetTransformerPluginV2Details;
+import com.amalto.workbench.webservices.WsGetTransformerPluginV2SList;
+import com.amalto.workbench.webservices.WsTransformerPluginV2Details;
+import com.amalto.workbench.webservices.WsTransformerPluginV2SList;
+import com.amalto.workbench.webservices.WsTransformerPluginV2SListItem;
+import com.amalto.workbench.webservices.WsTransformerPluginV2VariableDescriptor;
+import com.amalto.workbench.webservices.WsTransformerProcessStep;
+import com.amalto.workbench.webservices.WsTransformerV2;
+import com.amalto.workbench.webservices.WsTransformerVariablesMapping;
 import com.amalto.workbench.widgets.DescAnnotationComposite;
 import com.amalto.workbench.widgets.LabelCombo;
 import com.amalto.workbench.widgets.WidgetFactory;
@@ -198,13 +180,13 @@ public class TransformerMainPage extends AMainPageV2 {
 
     protected TreeMap<String, java.util.List<String>> outputVariablesMap = new TreeMap<String, java.util.List<String>>();
 
-    private XtentisPort port;
+    private TMDMService service;
 
     private TransformerStepWidget stepWidget;
 
     private Button disabledButton;
 
-    protected WSTransformerV2 transformer;
+    protected WsTransformerV2 transformer;
 
     private Composite specsComposite;
 
@@ -247,32 +229,31 @@ public class TransformerMainPage extends AMainPageV2 {
     }
 
     protected void initPlugin() {
-        WSTransformerPluginV2SList list = port.getTransformerPluginV2SList(new WSGetTransformerPluginV2SList("EN"));//$NON-NLS-1$
+        WsTransformerPluginV2SList list = service.getTransformerPluginV2SList(new WsGetTransformerPluginV2SList("EN"));//$NON-NLS-1$
 
-        java.util.List<Item> items = list.getItem();
+        java.util.List<WsTransformerPluginV2SListItem> items = list.getItem();
 
         if (items != null) {
-            for (Item item : items) {
+            for (WsTransformerPluginV2SListItem item : items) {
                 pluginDescriptions.put(item.getJndiName(), item.getDescription());
             }
             // get the sorted list and feed the combo
             Set<String> jndis = pluginDescriptions.keySet();
-            for (Iterator<String> iterator = jndis.iterator(); iterator.hasNext();) {
-                String jndi = iterator.next();
+            for (String jndi : jndis) {
                 pluginsCombo.add(jndi);
                 // add input variables and output variables
-                WSTransformerPluginV2Details details = port.getTransformerPluginV2Details(new WSGetTransformerPluginV2Details(
+                WsTransformerPluginV2Details details = service.getTransformerPluginV2Details(new WsGetTransformerPluginV2Details(
                         jndi.contains("/") ? jndi//$NON-NLS-1$
                                 : TRANSFORMER_PLUGIN + jndi, "en"));//$NON-NLS-1$
                 java.util.List<String> input = new ArrayList<String>();
-                for (WSTransformerPluginV2VariableDescriptor v : details.getInputVariableDescriptors()) {
+                for (WsTransformerPluginV2VariableDescriptor v : details.getInputVariableDescriptors()) {
                     input.add(v.getVariableName());
 
                 }
                 inputVariablesMap.put(jndi, input);
 
                 java.util.List<String> output = new ArrayList<String>();
-                for (WSTransformerPluginV2VariableDescriptor v : details.getOutputVariableDescriptors()) {
+                for (WsTransformerPluginV2VariableDescriptor v : details.getOutputVariableDescriptors()) {
                     output.add(v.getVariableName());
                 }
                 outputVariablesMap.put(jndi, output);
@@ -281,121 +262,124 @@ public class TransformerMainPage extends AMainPageV2 {
     }
 
     public void execute() {
-        try {
-            port = getPort();
-            if (port == null) {
-                return;
-            }
-            java.util.List<WSTransformerContext.Pipeline.PipelineItem> items = new ArrayList<WSTransformerContext.Pipeline.PipelineItem>();
-            for (Line line : cacheList) {
-                String variableName = line.keyValues.get(0).value;
-                String contentType = line.keyValues.get(1).value;
-                String value = line.keyValues.get(2).value;
-
-                items.add(new WSTransformerContext.Pipeline.PipelineItem(variableName, new WSTypedContent(null, new WSByteArray(
-                        value.getBytes("utf-8")), contentType))); //$NON-NLS-1$
-
-            }
-            final WSBackgroundJobPK jobPK = port.executeTransformerV2AsJob(new WSExecuteTransformerV2AsJob(
-                    new WSTransformerContext(new WSTransformerV2PK(transformer.getName()), new WSTransformerContext.Pipeline(
-                            items), null)));
-
-            IRunnableWithProgress progress = new IRunnableWithProgress() {
-
-                WSBackgroundJob job = null;
-
-                public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
-                    /******************************************
-                     * Watch the Background Job
-                     ******************************************/
-                    try {
-                        boolean firstTime = true;
-                        do {
-                            if (firstTime) {
-                                Thread.sleep(1500L);
-                                firstTime = false;
-                            } else {
-                                Thread.sleep(5000L);
-                            }
-
-                            if (monitor.isCanceled()) {
-                                throw new InterruptedException(Messages.TransformerMainPage_UserCancel);
-                            }
-
-                            job = port.getBackgroundJob(new WSGetBackgroundJob(jobPK.getPk()));
-                            monitor.subTask(job.getMessage());
-
-                        } while (job.getStatus().equals(BackgroundJobStatusType.RUNNING)
-                                || job.getStatus().equals(BackgroundJobStatusType.SCHEDULED));
-
-                        if (job.getStatus().equals(BackgroundJobStatusType.STOPPED)) {
-                            getSite().getShell().getDisplay().syncExec(new Runnable() {
-
-                                public void run() {
-                                    MessageDialog.openError(TransformerMainPage.this.getEditor().getSite().getShell(),
-                                            Messages.bind(Messages.TransformerMainPage_ErrorMsg, transformer.getName()),
-                                            job.getMessage());
-
-                                }
-                            });
-                            throw new XtentisException(Messages.bind(Messages.TransformerMainPage_JobWasStoped, job.getMessage()));
-                        }
-
-                        monitor.worked(1);
-                        monitor.done();
-
-                        /******************************************
-                         * Build the result console
-                         ******************************************/
-
-                        // Auto sorts the entries
-                        final TreeMap pipeline = new TreeMap<String, WSExtractedContent>();
-                        WSPipeline wsPipeline = job.getPipeline();
-                        java.util.List<TypedContentEntry> entries = wsPipeline.getTypedContentEntry();
-                        for (TypedContentEntry entry : entries) {
-                            pipeline.put(entry.getOutput(), entry.getWsExtractedContent());
-                        }
-                        getSite().getShell().getDisplay().asyncExec(new Runnable() {
-
-                            public void run() {
-                                try {
-                                    /*
-                                     * ProcessResultsPage page = new ProcessResultsPage(editor,pipeline);
-                                     * parent.editor.addPage(page); parent.editor.setActivePage(page.getId());
-                                     *
-                                     * parent.editor.getEditorSite().getShell()
-                                     */
-                                    // Shell shell = new Shell(SWT.DIALOG_TRIM | SWT.RESIZE | SWT.MAX | SWT.MIN);
-                                    ProcessResultsDialog dialog = new ProcessResultsDialog(getSite().getShell(), Messages.bind(
-                                            Messages.TransformerMainPage_DailogTitle,
-                                            sdf.format(new Date(System.currentTimeMillis()))), pipeline);
-                                    dialog.setBlockOnOpen(false);
-                                    dialog.open();
-                                } catch (Exception e) {
-                                    log.error(e.getMessage(), e);
-                                    throw new RuntimeException(e);
-                                }
-                            }
-                        });
-
-                    } catch (Exception e1) {
-                        log.error(e1.getMessage(), e1);
-                    }
-                }
-            };
-
-            new ProgressMonitorDialog(TransformerMainPage.this.getSite().getWorkbenchWindow().getShell()).run(true, // fork
-                    true, progress);
-
-        } catch (Exception e1) {
-            log.error(e1.getMessage(), e1);
-        }
+        // try {
+        // port = getPort();
+        // if (port == null) {
+        // return;
+        // }
+        // java.util.List<WSTransformerContext.Pipeline.PipelineItem> items = new
+        // ArrayList<WSTransformerContext.Pipeline.PipelineItem>();
+        // for (Line line : cacheList) {
+        // String variableName = line.keyValues.get(0).value;
+        // String contentType = line.keyValues.get(1).value;
+        // String value = line.keyValues.get(2).value;
+        //
+        // items.add(new WSTransformerContext.Pipeline.PipelineItem(variableName, new WSTypedContent(null, new
+        // WSByteArray(
+        //                        value.getBytes("utf-8")), contentType))); //$NON-NLS-1$
+        //
+        // }
+        // final WSBackgroundJobPK jobPK = port.executeTransformerV2AsJob(new WSExecuteTransformerV2AsJob(
+        // new WSTransformerContext(new WSTransformerV2PK(transformer.getName()), new WSTransformerContext.Pipeline(
+        // items), null)));
+        //
+        // IRunnableWithProgress progress = new IRunnableWithProgress() {
+        //
+        // WSBackgroundJob job = null;
+        //
+        // public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
+        // /******************************************
+        // * Watch the Background Job
+        // ******************************************/
+//                    try {
+//                        boolean firstTime = true;
+//                        do {
+//                            if (firstTime) {
+//                                Thread.sleep(1500L);
+//                                firstTime = false;
+//                            } else {
+//                                Thread.sleep(5000L);
+//                            }
+//
+//                            if (monitor.isCanceled()) {
+//                                throw new InterruptedException(Messages.TransformerMainPage_UserCancel);
+//                            }
+//
+//                            job = port.getBackgroundJob(new WSGetBackgroundJob(jobPK.getPk()));
+//                            monitor.subTask(job.getMessage());
+//
+//                        } while (job.getStatus().equals(BackgroundJobStatusType.RUNNING)
+//                                || job.getStatus().equals(BackgroundJobStatusType.SCHEDULED));
+//
+//                        if (job.getStatus().equals(BackgroundJobStatusType.STOPPED)) {
+//                            getSite().getShell().getDisplay().syncExec(new Runnable() {
+//
+//                                public void run() {
+//                                    MessageDialog.openError(TransformerMainPage.this.getEditor().getSite().getShell(),
+//                                            Messages.bind(Messages.TransformerMainPage_ErrorMsg, transformer.getName()),
+//                                            job.getMessage());
+//
+//                                }
+//                            });
+//                            throw new XtentisException(Messages.bind(Messages.TransformerMainPage_JobWasStoped, job.getMessage()));
+//                        }
+        //
+        // monitor.worked(1);
+        // monitor.done();
+        //
+        // /******************************************
+        // * Build the result console
+        // ******************************************/
+        //
+        // // Auto sorts the entries
+        // final TreeMap pipeline = new TreeMap<String, WSExtractedContent>();
+        // WSPipeline wsPipeline = job.getPipeline();
+        // java.util.List<TypedContentEntry> entries = wsPipeline.getTypedContentEntry();
+        // for (TypedContentEntry entry : entries) {
+        // pipeline.put(entry.getOutput(), entry.getWsExtractedContent());
+        // }
+        // getSite().getShell().getDisplay().asyncExec(new Runnable() {
+        //
+        // public void run() {
+        // try {
+        // /*
+        // * ProcessResultsPage page = new ProcessResultsPage(editor,pipeline);
+        // * parent.editor.addPage(page); parent.editor.setActivePage(page.getId());
+        // *
+        // * parent.editor.getEditorSite().getShell()
+        // */
+        // // Shell shell = new Shell(SWT.DIALOG_TRIM | SWT.RESIZE | SWT.MAX | SWT.MIN);
+        // ProcessResultsDialog dialog = new ProcessResultsDialog(getSite().getShell(), Messages.bind(
+        // Messages.TransformerMainPage_DailogTitle,
+        // sdf.format(new Date(System.currentTimeMillis()))), pipeline);
+        // dialog.setBlockOnOpen(false);
+        // dialog.open();
+        // } catch (Exception e) {
+        // log.error(e.getMessage(), e);
+        // throw new RuntimeException(e);
+        // }
+        // }
+        // });
+        //
+        // } catch (Exception e1) {
+        // log.error(e1.getMessage(), e1);
+        // }
+        // }
+        // };
+        //
+        // new ProgressMonitorDialog(TransformerMainPage.this.getSite().getWorkbenchWindow().getShell()).run(true, //
+        // fork
+        // true, progress);
+        //
+        // } catch (Exception e1) {
+        // log.error(e1.getMessage(), e1);
+        // }
 
     }
 
     protected void initTransformer() throws XtentisException {
-        port = Util.getPort(getXObject());
-        transformer = (WSTransformerV2) getXObject().getWsObject();
+        service = Util.getMDMService(getXObject());
+        transformer = (WsTransformerV2) getXObject().getWsObject();
     }
 
     @Override
@@ -538,9 +522,9 @@ public class TransformerMainPage extends AMainPageV2 {
                         TransformerMainPage.this.stepsList.remove(index);
                         TransformerMainPage.this.stepsList.add(val, index - 1);
                         TransformerMainPage.this.stepsList.select(index - 1);
-                        WSTransformerV2 wsTransformer = transformer;// (WSTransformerV2)getXObject().getWsObject();
-                        java.util.List<WSTransformerProcessStep> list = wsTransformer.getProcessSteps();
-                        WSTransformerProcessStep spec = list.get(index);
+                        WsTransformerV2 wsTransformer = transformer;// (WSTransformerV2)getXObject().getWsObject();
+                        java.util.List<WsTransformerProcessStep> list = wsTransformer.getProcessSteps();
+                        WsTransformerProcessStep spec = list.get(index);
                         list.remove(index);
                         list.add(index - 1, spec);
                         performSelect(index - 1);
@@ -569,9 +553,9 @@ public class TransformerMainPage extends AMainPageV2 {
                         TransformerMainPage.this.stepsList.remove(index);
                         TransformerMainPage.this.stepsList.add(val, index + 1);
                         TransformerMainPage.this.stepsList.select(index + 1);
-                        WSTransformerV2 wsTransformer = transformer;// (WSTransformerV2)getXObject().getWsObject();
-                        java.util.List<WSTransformerProcessStep> list = wsTransformer.getProcessSteps();
-                        WSTransformerProcessStep spec = list.get(index);
+                        WsTransformerV2 wsTransformer = transformer;// (WSTransformerV2)getXObject().getWsObject();
+                        java.util.List<WsTransformerProcessStep> list = wsTransformer.getProcessSteps();
+                        WsTransformerProcessStep spec = list.get(index);
                         list.remove(index);
                         list.add(index + 1, spec);
                         TransformerMainPage.this.comitting = false;
@@ -705,7 +689,7 @@ public class TransformerMainPage extends AMainPageV2 {
     protected void executeProcess(final FormToolkit toolkit) {
         try {
             // check if we have a step to perfom
-            java.util.List<WSTransformerProcessStep> steps = // ((WSTransformerV2)getXObject().getWsObject())
+            java.util.List<WsTransformerProcessStep> steps = // ((WSTransformerV2)getXObject().getWsObject())
             transformer.getProcessSteps();
             if ((steps == null) || (steps.size() == 0)) {
                 MessageDialog.openError(TransformerMainPage.this.getSite().getShell(), Messages.TransformerMainPage_ErrorTitle1,
@@ -795,10 +779,11 @@ public class TransformerMainPage extends AMainPageV2 {
             TransformerMainPage.this.stepText.getText()
 
             );
-            WSTransformerV2 wsTransformer = transformer;//
+            WsTransformerV2 wsTransformer = transformer;//
 
-            wsTransformer.getProcessSteps().add(new WSTransformerProcessStep("", TransformerMainPage.this.stepText.getText(), "", //$NON-NLS-1$ //$NON-NLS-2$
-                    new ArrayList(), new ArrayList(), false));
+            wsTransformer.getProcessSteps().add(
+                    new WsTransformerProcessStep(TransformerMainPage.this.stepText.getText(), false, new ArrayList(),
+                            new ArrayList(), "", ""));
 
             TransformerMainPage.this.comitting = false;
             int index = TransformerMainPage.this.stepsList.getItemCount() - 1;
@@ -818,8 +803,8 @@ public class TransformerMainPage extends AMainPageV2 {
         currentPlugin = index;
 
         if (index < 0) {
-            stepWidget.inputViewer.setInput(new ArrayList<WSTransformerVariablesMapping>());
-            stepWidget.outputViewer.setInput(new ArrayList<WSTransformerVariablesMapping>());
+            stepWidget.inputViewer.setInput(new ArrayList<WsTransformerVariablesMapping>());
+            stepWidget.outputViewer.setInput(new ArrayList<WsTransformerVariablesMapping>());
             return;
         }
         TransformerMainPage.this.refreshing = true;
@@ -904,7 +889,7 @@ public class TransformerMainPage extends AMainPageV2 {
     }
 
     protected void removeStep(int index) {
-        WSTransformerV2 wsTransformer = transformer;
+        WsTransformerV2 wsTransformer = transformer;
 
         // clean up boxes at the bottom
 
@@ -982,7 +967,7 @@ public class TransformerMainPage extends AMainPageV2 {
             if (list.size() == 0) {
                 return;
             }
-            java.util.List<WSTransformerVariablesMapping> items = (java.util.List<WSTransformerVariablesMapping>) viewer
+            java.util.List<WsTransformerVariablesMapping> items = (java.util.List<WsTransformerVariablesMapping>) viewer
                     .getInput();
             items.removeAll(list);
 
@@ -1009,15 +994,15 @@ public class TransformerMainPage extends AMainPageV2 {
 
             this.refreshing = true;
 
-            WSTransformerV2 wsTransformer = (WSTransformerV2) (getXObject().getWsObject());
+            WsTransformerV2 wsTransformer = (WsTransformerV2) (getXObject().getWsObject());
 
             desAntionComposite.getTextWidget().setText(
                     wsTransformer.getDescription() == null ? "" : wsTransformer.getDescription()); //$NON-NLS-1$
 
             stepsList.removeAll();
-            java.util.List<WSTransformerProcessStep> specs = wsTransformer.getProcessSteps();
+            java.util.List<WsTransformerProcessStep> specs = wsTransformer.getProcessSteps();
             if (specs != null) {
-                for (WSTransformerProcessStep step : specs) {
+                for (WsTransformerProcessStep step : specs) {
                     stepsList.add(step.getDescription());
                 }
             }
@@ -1078,8 +1063,8 @@ public class TransformerMainPage extends AMainPageV2 {
         if (processName.startsWith("beforeSaving_")) {//$NON-NLS-1$
             boolean has = false;
 
-            WSTransformerProcessStep processStep = stepWidget.getProcessStep();
-            for (WSTransformerVariablesMapping map : processStep.getOutputMappings()) {
+            WsTransformerProcessStep processStep = stepWidget.getProcessStep();
+            for (WsTransformerVariablesMapping map : processStep.getOutputMappings()) {
                 if ("output_report".equals(map.getPipelineVariable())) {//$NON-NLS-1$
                     has = true;
                     break;
@@ -1141,7 +1126,7 @@ public class TransformerMainPage extends AMainPageV2 {
 
         private Button outputLinkButton;
 
-        WSTransformerProcessStep processStep;
+        WsTransformerProcessStep processStep;
 
         private TableViewer inputViewer;
 
@@ -1159,11 +1144,11 @@ public class TransformerMainPage extends AMainPageV2 {
 
         }
 
-        public WSTransformerProcessStep getProcessStep() {
+        public WsTransformerProcessStep getProcessStep() {
             return processStep;
         }
 
-        public void setProcessStep(WSTransformerProcessStep processStep, int index) {
+        public void setProcessStep(WsTransformerProcessStep processStep, int index) {
             this.processStep = processStep;
             // reset the available variables
             availableVariables.clear();
@@ -1171,10 +1156,10 @@ public class TransformerMainPage extends AMainPageV2 {
                 if (transformer.getProcessSteps().get(i).isDisabled()) {
                     continue;
                 }
-                for (WSTransformerVariablesMapping mapping : transformer.getProcessSteps().get(i).getInputMappings()) {
+                for (WsTransformerVariablesMapping mapping : transformer.getProcessSteps().get(i).getInputMappings()) {
                     availableVariables.add(mapping.getPipelineVariable() == null ? DEFAULT_VAR : mapping.getPipelineVariable());
                 }
-                for (WSTransformerVariablesMapping mapping : transformer.getProcessSteps().get(i).getOutputMappings()) {
+                for (WsTransformerVariablesMapping mapping : transformer.getProcessSteps().get(i).getOutputMappings()) {
                     availableVariables.add(mapping.getPipelineVariable() == null ? DEFAULT_VAR : mapping.getPipelineVariable());
                 }
             }
@@ -1212,8 +1197,8 @@ public class TransformerMainPage extends AMainPageV2 {
                     if (inputElement == null) {
                         return null;
                     }
-                    java.util.List<WSTransformerVariablesMapping> lines = (java.util.List<WSTransformerVariablesMapping>) inputElement;
-                    return lines.toArray(new WSTransformerVariablesMapping[lines.size()]);
+                    java.util.List<WsTransformerVariablesMapping> lines = (java.util.List<WsTransformerVariablesMapping>) inputElement;
+                    return lines.toArray();
                 }
             });
 
@@ -1234,7 +1219,7 @@ public class TransformerMainPage extends AMainPageV2 {
                 }
 
                 public String getColumnText(Object element, int columnIndex) {
-                    WSTransformerVariablesMapping line = (WSTransformerVariablesMapping) element;
+                    WsTransformerVariablesMapping line = (WsTransformerVariablesMapping) element;
                     switch (columnIndex) {
 
                     case 0:
@@ -1259,14 +1244,14 @@ public class TransformerMainPage extends AMainPageV2 {
 
         void refreshViewers() {
             if (processStep != null) {
-                java.util.List<WSTransformerVariablesMapping> items = new ArrayList<WSTransformerVariablesMapping>();
-                for (WSTransformerVariablesMapping map : processStep.getInputMappings()) {
+                java.util.List<WsTransformerVariablesMapping> items = new ArrayList<WsTransformerVariablesMapping>();
+                for (WsTransformerVariablesMapping map : processStep.getInputMappings()) {
                     items.add(map);
                 }
                 inputViewer.setInput(items);
 
-                items = new ArrayList<WSTransformerVariablesMapping>();
-                for (WSTransformerVariablesMapping map : processStep.getOutputMappings()) {
+                items = new ArrayList<WsTransformerVariablesMapping>();
+                for (WsTransformerVariablesMapping map : processStep.getOutputMappings()) {
                     items.add(map);
                 }
                 outputViewer.setInput(items);
@@ -1290,8 +1275,8 @@ public class TransformerMainPage extends AMainPageV2 {
             outputVariables.setItems(availableVariables.toArray(new String[availableVariables.size()]));
         }
 
-        private boolean isExist(java.util.List<WSTransformerVariablesMapping> list, String parameterName) {
-            for (WSTransformerVariablesMapping map : list) {
+        private boolean isExist(java.util.List<WsTransformerVariablesMapping> list, String parameterName) {
+            for (WsTransformerVariablesMapping map : list) {
                 if (map.getPluginVariable().equals(parameterName)) {
                     MessageDialog.openInformation(null,
                             "", Messages.bind(Messages.TransformerMainPage_InfoContent, parameterName)); //$NON-NLS-1$
@@ -1324,13 +1309,13 @@ public class TransformerMainPage extends AMainPageV2 {
                     if (inputParams.getText().length() == 0) {
                         return;
                     }
-                    java.util.List<WSTransformerVariablesMapping> items = (java.util.List<WSTransformerVariablesMapping>) inputViewer
+                    java.util.List<WsTransformerVariablesMapping> items = (java.util.List<WsTransformerVariablesMapping>) inputViewer
                             .getInput();
                     if (isExist(items, inputParams.getText())) {
                         return;
                     }
 
-                    WSTransformerVariablesMapping line = new WSTransformerVariablesMapping();
+                    WsTransformerVariablesMapping line = new WsTransformerVariablesMapping();
                     if (inputVariables.getText().trim().length() > 0) {
                         line.setPipelineVariable(inputVariables.getText());
                     } else {
@@ -1384,13 +1369,13 @@ public class TransformerMainPage extends AMainPageV2 {
                     if (outputParams.getText().length() == 0) {
                         return;
                     }
-                    java.util.List<WSTransformerVariablesMapping> items = (java.util.List<WSTransformerVariablesMapping>) outputViewer
+                    java.util.List<WsTransformerVariablesMapping> items = (java.util.List<WsTransformerVariablesMapping>) outputViewer
                             .getInput();
                     if (isExist(items, outputParams.getText())) {
                         return;
                     }
 
-                    WSTransformerVariablesMapping line = new WSTransformerVariablesMapping();
+                    WsTransformerVariablesMapping line = new WsTransformerVariablesMapping();
                     if (outputVariables.getText().length() > 0) {
                         line.setPipelineVariable(outputVariables.getText());
                     } else {
@@ -1448,8 +1433,8 @@ public class TransformerMainPage extends AMainPageV2 {
                         transformer.getProcessSteps().get(stepsList.getSelectionIndex())
                                 .setPluginJNDI(TRANSFORMER_PLUGIN + pluginsCombo.getText());
                     }
-                    inputViewer.setInput(new ArrayList<WSTransformerVariablesMapping>());
-                    outputViewer.setInput(new ArrayList<WSTransformerVariablesMapping>());
+                    inputViewer.setInput(new ArrayList<WsTransformerVariablesMapping>());
+                    outputViewer.setInput(new ArrayList<WsTransformerVariablesMapping>());
                     String jndi = pluginsCombo.getText();
 
                     refreshParameterEditor();
@@ -1484,7 +1469,7 @@ public class TransformerMainPage extends AMainPageV2 {
                             return;
                         }
 
-                        WSTransformerPluginV2Details details = getWsTransformerPluginV2Details(jndi);
+                        WsTransformerPluginV2Details details = getWsTransformerPluginV2Details(jndi);
                         final PluginDetailsDialog dialog = new PluginDetailsDialog(getSite().getShell(),
                                 details.getDescription(), details.getDocumentation(), details.getParametersSchema(),
                                 Messages.TransformerMainPage_Documentation);
@@ -1570,11 +1555,13 @@ public class TransformerMainPage extends AMainPageV2 {
     protected void initExternalInfoHolder() {
 
         try {
-            ExternalInfoHolder<?> allJobInfosHolder = ExternalInfoHolder.getAllJobInfosHolder(Util.getPort(getXObject()));
-            ExternalInfoHolder<?> mdmServerInfoHolder = ExternalInfoHolder.getAllMDMServerInfoHolder(Util.getPort(getXObject()));
+            ExternalInfoHolder<?> allJobInfosHolder = ExternalInfoHolder.getAllJobInfosHolder(Util.getMDMService(getXObject()));
+            ExternalInfoHolder<?> mdmServerInfoHolder = ExternalInfoHolder.getAllMDMServerInfoHolder(Util
+                    .getMDMService(getXObject()));
             ExternalInfoHolder<?> allVarCandidatesHolder = ExternalInfoHolder
-                    .getProcessAllCallJobVarsCandidatesHolder((WSTransformerV2) getXObject().getWsObject());
-            ExternalInfoHolder<?> workflowInfoHolder = ExternalInfoHolder.getAllWorkflowInfoHolder(Util.getPort(getXObject()));
+                    .getProcessAllCallJobVarsCandidatesHolder((WsTransformerV2) getXObject().getWsObject());
+            ExternalInfoHolder<?> workflowInfoHolder = ExternalInfoHolder.getAllWorkflowInfoHolder(Util
+                    .getMDMService(getXObject()));
             ExternalInfoHolder<?> allDataModelHolderProxy = ExternalInfoHolder.getAllDataModelInfoHolderProxy(getXObject());
 
             initExternalInfoHolderForEachType("callJob", new ExternalInfoHolder<?>[] { allJobInfosHolder, mdmServerInfoHolder, //$NON-NLS-1$
@@ -1587,8 +1574,8 @@ public class TransformerMainPage extends AMainPageV2 {
 
     }
 
-    protected WSTransformerPluginV2Details getWsTransformerPluginV2Details(String jndi) {
-        WSTransformerPluginV2Details details = port.getTransformerPluginV2Details(new WSGetTransformerPluginV2Details(jndi
+    protected WsTransformerPluginV2Details getWsTransformerPluginV2Details(String jndi) {
+        WsTransformerPluginV2Details details = service.getTransformerPluginV2Details(new WsGetTransformerPluginV2Details(jndi
                 .contains("/") ? jndi //$NON-NLS-1$
                 : TRANSFORMER_PLUGIN + jndi, "en")); //$NON-NLS-1$
         return details;

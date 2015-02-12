@@ -68,9 +68,9 @@ import com.amalto.workbench.utils.EXtentisObjects;
 import com.amalto.workbench.utils.UserInfo;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.XtentisException;
-import com.amalto.workbench.webservices.WSServiceGetDocument;
-import com.amalto.workbench.webservices.WSTransformerPluginV2Details;
-import com.amalto.workbench.webservices.XtentisPort;
+import com.amalto.workbench.webservices.TMDMService;
+import com.amalto.workbench.webservices.WsServiceGetDocument;
+import com.amalto.workbench.webservices.WsTransformerPluginV2Details;
 
 /**
  * DOC hbhong class global comment. Detailled comment
@@ -83,8 +83,8 @@ public class RepositoryWebServiceAdapter {
 
     private static Map<String, AbstractGetDocument> documentServiceMap;
 
-    public static XtentisPort getXtentisPort(MDMServerDef serverDef) throws XtentisException {
-        return getXtentisPort(serverDef, true);
+    public static TMDMService getMDMService(MDMServerDef serverDef) throws XtentisException {
+        return getMDMService(serverDef, true);
     }
 
     /**
@@ -94,30 +94,30 @@ public class RepositoryWebServiceAdapter {
      * @return
      * @throws XtentisException
      */
-    public static XtentisPort getXtentisPort(MDMServerDef serverDef, boolean showMissingJarDialog) throws XtentisException {
+    public static TMDMService getMDMService(MDMServerDef serverDef, boolean showMissingJarDialog) throws XtentisException {
 
         try {
             if (serverDef == null) {
                 return null;
             }
 
-            XtentisPort port = Util.getPort(new URL(serverDef.getUrl()), serverDef.getUniverse(), serverDef.getUser(),
+            TMDMService service = Util.getMDMService(new URL(serverDef.getUrl()), serverDef.getUniverse(), serverDef.getUser(),
                     serverDef.getPasswd(), showMissingJarDialog);
 
-            return port;
+            return service;
         } catch (MalformedURLException e) {
             throw new XtentisException(Messages.bind(Messages.RepositoryWebServiceAdapter_InvalidEndpointAddress,
                     serverDef.getUrl()));
         }
     }
 
-    public static XtentisPort getXtentisPort(Shell shell) {
+    public static TMDMService getMDMService(Shell shell) {
         SelectServerDefDialog dialog = new SelectServerDefDialog(shell);
 
         try {
             if (dialog.open() == IDialogConstants.OK_ID) {
                 MDMServerDef serverDef = dialog.getSelectedServerDef();
-                return RepositoryWebServiceAdapter.getXtentisPort(serverDef);
+                return RepositoryWebServiceAdapter.getMDMService(serverDef);
             }
         } catch (XtentisException e) {
             log.error(e.getMessage(), e);
@@ -125,7 +125,7 @@ public class RepositoryWebServiceAdapter {
         return null;
     }
 
-    public static XtentisPort getXtentisPort(Shell shell, MDMServerDef lastserverDef) {
+    public static TMDMService getMDMService(Shell shell, MDMServerDef lastserverDef) {
         if (lastserverDef == null) {
             MessageDialog.openWarning(null, Messages.Warning_text, Messages.RepositoryWebServiceAdapter_DeployFirst);
             return null;
@@ -136,7 +136,7 @@ public class RepositoryWebServiceAdapter {
         try {
             if (dialog.open() == IDialogConstants.OK_ID) {
                 MDMServerDef serverDef = dialog.getSelectedServerDef();
-                XtentisPort port = RepositoryWebServiceAdapter.getXtentisPort(serverDef);
+                TMDMService port = RepositoryWebServiceAdapter.getMDMService(serverDef);
                 return port;
             }
         } catch (XtentisException e) {
@@ -145,7 +145,7 @@ public class RepositoryWebServiceAdapter {
         return null;
     }
 
-    public static WSTransformerPluginV2Details findTransformerPluginV2Detail(String jndiName) {
+    public static WsTransformerPluginV2Details findTransformerPluginV2Detail(String jndiName) {
         if (jndiName == null) {
             return null;
         }
@@ -158,7 +158,7 @@ public class RepositoryWebServiceAdapter {
         return transformerPluginMap.values();
     }
 
-    public static WSServiceGetDocument getServiceDocument(String jndiName) {
+    public static WsServiceGetDocument getServiceDocument(String jndiName) {
         if (jndiName == null) {
             return null;
         }

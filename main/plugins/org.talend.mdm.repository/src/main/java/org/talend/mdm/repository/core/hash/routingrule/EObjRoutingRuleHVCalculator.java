@@ -15,9 +15,9 @@ package org.talend.mdm.repository.core.hash.routingrule;
 import org.talend.mdm.commmon.util.hash.ArrayCollectionHashValueCalculator;
 import org.talend.mdm.commmon.util.hash.IHashValueCalculator;
 import org.talend.mdm.commmon.util.hash.impl.RoutingRuleHVCalculator;
-import org.talend.mdm.repository.model.mdmserverobject.WSRoutingRuleE;
-import org.talend.mdm.repository.model.mdmserverobject.WSRoutingRuleExpressionE;
-import org.talend.mdm.repository.model.mdmserverobject.WSRoutingRuleOperatorE;
+import org.talend.mdm.repository.model.mdmserverobject.WsRoutingRuleE;
+import org.talend.mdm.repository.model.mdmserverobject.WsRoutingRuleExpressionE;
+import org.talend.mdm.repository.model.mdmserverobject.WsRoutingRuleOperatorE;
 
 /**
  * DOC hbhong class global comment. Detailled comment
@@ -30,9 +30,10 @@ public class EObjRoutingRuleHVCalculator extends RoutingRuleHVCalculator {
      */
     @Override
     public Object[] getPropertys(Object obj) {
-        if (obj == null || !(obj instanceof WSRoutingRuleE))
+        if (obj == null || !(obj instanceof WsRoutingRuleE)) {
             throw new IllegalArgumentException();
-        WSRoutingRuleE rule = (WSRoutingRuleE) obj;
+        }
+        WsRoutingRuleE rule = (WsRoutingRuleE) obj;
         return new Object[] { rule.getName(), rule.getDescription(), rule.isSynchronous(), rule.getConcept(),
                 rule.getServiceJNDI(), rule.getParameters(), rule.getCondition(), rule.isDeactive(),
                 rule.getWsRoutingRuleExpressions() };
@@ -41,17 +42,19 @@ public class EObjRoutingRuleHVCalculator extends RoutingRuleHVCalculator {
     class EobjRoutinRuleExpressionHVCalculator extends RoutingRuleExpressionHVCalculator {
 
         // 1-name 2-xpath 3-value 4-wsOperator
+        @Override
         public Object[] getPropertys(Object obj) {
-            if (obj == null || !(obj instanceof WSRoutingRuleExpressionE))
+            if (obj == null || !(obj instanceof WsRoutingRuleExpressionE)) {
                 throw new IllegalArgumentException();
-            WSRoutingRuleExpressionE expression = (WSRoutingRuleExpressionE) obj;
+            }
+            WsRoutingRuleExpressionE expression = (WsRoutingRuleExpressionE) obj;
             return new Object[] { expression.getName(), expression.getXpath(), expression.getValue(), expression.getWsOperator() };
         }
     };
 
     IHashValueCalculator routinRuleArrayExpressionHVCalculator;
 
-
+    @Override
     protected IHashValueCalculator getRoutinRuleExpressionHVCalculator() {
         if (routinRuleArrayExpressionHVCalculator == null) {
 
@@ -66,14 +69,17 @@ public class EObjRoutingRuleHVCalculator extends RoutingRuleHVCalculator {
     class EobjRoutingRuleOperatorHVCalculator extends RoutingRuleOperatorHVCalculator {
 
         // 1 value
+        @Override
         public Object[] getPropertys(Object obj) {
-            if (obj == null || !(obj instanceof WSRoutingRuleOperatorE))
+            if (obj == null || !(obj instanceof WsRoutingRuleOperatorE)) {
                 throw new IllegalArgumentException();
-            WSRoutingRuleOperatorE operator = (WSRoutingRuleOperatorE) obj;
+            }
+            WsRoutingRuleOperatorE operator = (WsRoutingRuleOperatorE) obj;
             return new Object[] { operator.getValue() };
         }
     };
 
+    @Override
     protected IHashValueCalculator getRoutingRuleOperatorHVCalculator() {
         if (routingRuleOperatorHVCalculator == null) {
             routingRuleOperatorHVCalculator = new EobjRoutingRuleOperatorHVCalculator();

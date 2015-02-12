@@ -29,7 +29,7 @@ import org.talend.mdm.repository.ui.widgets.xmleditor.infoholder.RepositoryExter
 import com.amalto.workbench.dialogs.XpathSelectDialog;
 import com.amalto.workbench.editors.RoutingRuleMainPage;
 import com.amalto.workbench.utils.XtentisException;
-import com.amalto.workbench.webservices.WSServiceGetDocument;
+import com.amalto.workbench.webservices.WsServiceGetDocument;
 import com.amalto.workbench.widgets.TisTableViewer;
 import com.amalto.workbench.widgets.xmleditor.infoholder.ExternalInfoHolder;
 
@@ -97,7 +97,7 @@ public class RoutingRuleMainPage2 extends RoutingRuleMainPage {
     }
 
     @Override
-    protected WSServiceGetDocument getServiceDocument(String jndiName) {
+    protected WsServiceGetDocument getServiceDocument(String jndiName) {
         return RepositoryWebServiceAdapter.getServiceDocument(jndiName);
     }
 

@@ -13,8 +13,6 @@
 package com.amalto.workbench.providers;
 
 import com.amalto.workbench.exadapter.IExAdapter;
-import com.amalto.workbench.models.TreeParent;
-import com.amalto.workbench.webservices.WSUniverse;
 
 /**
  * created by HHB on 2014-1-7 Detailled comment
@@ -22,5 +20,7 @@ import com.amalto.workbench.webservices.WSUniverse;
  */
 public interface IXtentisServerObjectsRetrieverExAdapter extends IExAdapter<XtentisServerObjectsRetriever> {
 
-    void addRevision(WSUniverse universe, TreeParent serverRoot, String username);
+    // *** TMDM-8080, temp omitted start ***//
+    // void addRevision(WSUniverse universe, TreeParent serverRoot, String username);
+    // *** TMDM-8080, temp omitted end ***//
 }

@@ -26,10 +26,10 @@ import org.talend.core.model.properties.ItemState;
 import org.talend.core.model.properties.PropertiesFactory;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmproperties.MdmpropertiesFactory;
-import org.talend.mdm.repository.model.mdmproperties.WSServiceConfigurationItem;
+import org.talend.mdm.repository.model.mdmproperties.WsServiceConfigurationItem;
 import org.talend.mdm.repository.model.mdmserverobject.MdmserverobjectFactory;
-import org.talend.mdm.repository.model.mdmserverobject.WSServiceConfigurationE;
-import org.talend.mdm.repository.model.mdmserverobject.WSServicePutConfigurationE;
+import org.talend.mdm.repository.model.mdmserverobject.WsServiceConfigurationE;
+import org.talend.mdm.repository.model.mdmserverobject.WsServicePutConfigurationE;
 import org.talend.mdm.repository.ui.actions.AbstractSimpleAddAction;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 
@@ -41,20 +41,18 @@ import com.amalto.workbench.editors.ServiceConfigrationMainPage;
  */
 public class NewServiceConfigurationAction extends AbstractSimpleAddAction {
 
-
     public NewServiceConfigurationAction() {
         super();
     }
-
 
     @Override
     protected String getDialogTitle() {
         return Messages.NewServiceConfigurationAction_newServiceConfiguration;
     }
 
-    private WSServiceConfigurationE newServiceConfiguration(String key) {
+    private WsServiceConfigurationE newServiceConfiguration(String key) {
 
-        WSServicePutConfigurationE putConfig1 = MdmserverobjectFactory.eINSTANCE.createWSServicePutConfigurationE();
+        WsServicePutConfigurationE putConfig1 = MdmserverobjectFactory.eINSTANCE.createWsServicePutConfigurationE();
         putConfig1.setJndiName("smtp"); //$NON-NLS-1$
 
         String configContent1 = "<configuration> " + "\n" + "<host>localhost</host>  " + "\n" + "<port>25</port>  " + "\n" //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$
@@ -63,7 +61,7 @@ public class NewServiceConfigurationAction extends AbstractSimpleAddAction {
 
         putConfig1.setConfiguration(ServiceConfigrationMainPage.formartXml(configContent1));
 
-        WSServicePutConfigurationE putConfig2 = MdmserverobjectFactory.eINSTANCE.createWSServicePutConfigurationE();
+        WsServicePutConfigurationE putConfig2 = MdmserverobjectFactory.eINSTANCE.createWsServicePutConfigurationE();
         putConfig2.setJndiName("svn"); //$NON-NLS-1$
 
         String configContent2 = "<svn-configuration><url>https://localhost:8443/svn/starkeylib</url><password>admin</password><autocommit>false</autocommit>  " + //$NON-NLS-1$
@@ -72,14 +70,14 @@ public class NewServiceConfigurationAction extends AbstractSimpleAddAction {
 
         putConfig2.setConfiguration(ServiceConfigrationMainPage.formartXml(configContent2));
 
-        WSServicePutConfigurationE putConfig3 = MdmserverobjectFactory.eINSTANCE.createWSServicePutConfigurationE();
+        WsServicePutConfigurationE putConfig3 = MdmserverobjectFactory.eINSTANCE.createWsServicePutConfigurationE();
         putConfig3.setJndiName("workflow"); //$NON-NLS-1$
-        
+
         String configContent3 = "  <workflow-configuration> <api-type>EJB2</api-type> </workflow-configuration>"; //$NON-NLS-1$
 
         putConfig3.setConfiguration(ServiceConfigrationMainPage.formartXml(configContent3));
 
-        WSServiceConfigurationE serConfig = MdmserverobjectFactory.eINSTANCE.createWSServiceConfigurationE();
+        WsServiceConfigurationE serConfig = MdmserverobjectFactory.eINSTANCE.createWsServiceConfigurationE();
         serConfig.setName(key);
 
         serConfig.getServicePutConfigurations().add(putConfig1);
@@ -89,13 +87,14 @@ public class NewServiceConfigurationAction extends AbstractSimpleAddAction {
         return serConfig;
     }
 
+    @Override
     protected Item createServerObject(String key) {
 
-        WSServiceConfigurationItem item = MdmpropertiesFactory.eINSTANCE.createWSServiceConfigurationItem();
+        WsServiceConfigurationItem item = MdmpropertiesFactory.eINSTANCE.createWsServiceConfigurationItem();
         ItemState itemState = PropertiesFactory.eINSTANCE.createItemState();
         item.setState(itemState);
 
-        WSServiceConfigurationE serConfig = newServiceConfiguration(key);
+        WsServiceConfigurationE serConfig = newServiceConfiguration(key);
         item.setWsServiceConfiguration(serConfig);
 
         if (parentItem != null) {
@@ -104,7 +103,5 @@ public class NewServiceConfigurationAction extends AbstractSimpleAddAction {
         }
         return item;
     }
-
-
 
 }

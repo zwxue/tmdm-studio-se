@@ -31,7 +31,7 @@ import org.talend.mdm.workbench.serverexplorer.ui.dialogs.SelectServerDefDialog;
 import com.amalto.workbench.dialogs.SelectImportedModulesDialog;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.utils.XtentisException;
-import com.amalto.workbench.webservices.XtentisPort;
+import com.amalto.workbench.webservices.TMDMService;
 
 /**
  * DOC Administrator class global comment. Detailled comment
@@ -46,12 +46,12 @@ public class SelectImportedModulesDialog2 extends SelectImportedModulesDialog {
     }
 
     @Override
-    protected XtentisPort getPort() throws XtentisException {
+    protected TMDMService getPort() throws XtentisException {
         SelectServerDefDialog dialog = new SelectServerDefDialog(getShell());
         if (dialog.open() == IDialogConstants.OK_ID) {
             MDMServerDef serverDef = dialog.getSelectedServerDef();
             this.serverDef = serverDef;
-            return RepositoryWebServiceAdapter.getXtentisPort(serverDef);
+            return RepositoryWebServiceAdapter.getMDMService(serverDef);
         }
         return null;
     }

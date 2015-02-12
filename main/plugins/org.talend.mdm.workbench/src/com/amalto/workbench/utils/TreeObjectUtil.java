@@ -13,7 +13,7 @@
 package com.amalto.workbench.utils;
 
 import com.amalto.workbench.exadapter.ExAdapterManager;
-import com.amalto.workbench.webservices.XtentisPort;
+import com.amalto.workbench.webservices.TMDMService;
 
 public class TreeObjectUtil {
 
@@ -27,7 +27,7 @@ public class TreeObjectUtil {
 
     private static ITreeObjectUtilExAdapter exAdapter;
 
-    public static void deleteSpecificationFromAttachedRole(XtentisPort port, String displayName, String objectType) {
+    public static void deleteSpecificationFromAttachedRole(TMDMService port, String displayName, String objectType) {
 
         if (exAdapter != null) {
             exAdapter.deleteSpecificationFromAttachedRole(port, displayName, objectType);

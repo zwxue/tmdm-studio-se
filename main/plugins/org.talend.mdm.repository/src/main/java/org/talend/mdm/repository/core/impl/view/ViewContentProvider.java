@@ -30,7 +30,7 @@ import org.talend.mdm.repository.core.impl.AbstractContentProvider;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 
 import com.amalto.workbench.models.TreeObject;
-import com.amalto.workbench.webservices.WSView;
+import com.amalto.workbench.webservices.WsView;
 
 /**
  * DOC hbhong class global comment. Detailled comment <br/>
@@ -50,6 +50,6 @@ public class ViewContentProvider extends AbstractContentProvider {
 
 
     public Class<?> getWSObjectClass() {
-        return WSView.class;
+        return WsView.class;
     }
 }

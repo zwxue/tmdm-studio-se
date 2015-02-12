@@ -39,7 +39,7 @@ import com.amalto.workbench.providers.XObjectEditorInput;
 import com.amalto.workbench.utils.EXtentisObjects;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.views.MDMPerspective;
-import com.amalto.workbench.webservices.WSDataModel;
+import com.amalto.workbench.webservices.WsDataModel;
 
 public class XSDEditorUtil {
 
@@ -56,8 +56,10 @@ public class XSDEditorUtil {
     }
 
     public static IFile createFile(TreeObject xobject) throws Exception {
-        WSDataModel wsDataModel = (WSDataModel) xobject.getWsObject();
-        if(wsDataModel==null) return null;
+        WsDataModel wsDataModel = (WsDataModel) xobject.getWsObject();
+        if(wsDataModel==null) {
+            return null;
+        }
         String filename = xobject.getDisplayName().replace(" ", "") + ".xsd";//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
         String content = wsDataModel.getXsdSchema();
 
@@ -71,21 +73,24 @@ public class XSDEditorUtil {
         }
         IFile file = fold.getFile(filename);
 
-        if (!file.exists())
+        if (!file.exists()) {
             file.create(new ByteArrayInputStream(content.getBytes("utf-8")), IFile.FORCE, null);//$NON-NLS-1$
-        else
+        } else {
             sycFileContents(file, content);
+        }
 
         return file;
     }
 
     private static void sycFileContents(IFile file, String content) throws Exception {
         if (file.exists())
+         {
             file.setContents(new ByteArrayInputStream(content.getBytes("utf-8")), IFile.FORCE, new NullProgressMonitor());//$NON-NLS-1$
+        }
     }
 
     private static boolean isEditorOpened(TreeObject xobject) throws Exception {
-        WSDataModel wsDataModel = (WSDataModel) xobject.getWsObject();
+        WsDataModel wsDataModel = (WsDataModel) xobject.getWsObject();
 
         String filename = xobject.getDisplayName().replace(" ", "") + ".xsd";//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
         String content = wsDataModel.getXsdSchema();
@@ -100,8 +105,9 @@ public class XSDEditorUtil {
         }
         IFile file = fold.getFile(filename);
 
-        if (!file.exists())
+        if (!file.exists()) {
             return true;
+        }
         return false;
     }
 
@@ -167,8 +173,9 @@ public class XSDEditorUtil {
         folder.getItem(2).setText(xobject.getDisplayName() + " " + Util.getRevision(xobject));//$NON-NLS-1$
         folder.getItem(0).setText(Messages.XSDEditorUtil_SchemaDesign);
         folder.getItem(1).setText(Messages.XSDEditorUtil_SchemaSource);
-        if (markdirty)
+        if (markdirty) {
             dMainPage.markDirty();
+        }
 
         PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().showView(MDMPerspective.VIEWID_PROPERTYVIEW);
 

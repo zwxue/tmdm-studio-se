@@ -40,10 +40,8 @@ import org.talend.repository.model.IProxyRepositoryFactory;
 import com.amalto.workbench.service.ILegendServerDefService;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.XtentisException;
-import com.amalto.workbench.webservices.WSPing;
-import com.amalto.workbench.webservices.WSRefreshCache;
-import com.amalto.workbench.webservices.WSString;
-import com.amalto.workbench.webservices.XtentisPort;
+import com.amalto.workbench.webservices.TMDMService;
+import com.amalto.workbench.webservices.WsPing;
 
 /**
  * DOC hbhong class global comment. Detailled comment <br/>
@@ -258,8 +256,8 @@ public class ServerDefService implements ILegendServerDefService {
     public static void checkMDMConnection(String endpointaddress, String username, String password, String universe)
             throws MalformedURLException, XtentisException {
         try {
-            XtentisPort port = Util.getPort(new URL(endpointaddress), universe, username, password);
-            port.ping(new WSPing("ServerExplorer")); //$NON-NLS-1$
+            TMDMService port = Util.getMDMService(new URL(endpointaddress), universe, username, password);
+            port.ping(new WsPing("ServerExplorer")); //$NON-NLS-1$
         } catch (javax.xml.ws.WebServiceException e) {
             XtentisException xtentisException = Util.convertWebServiceException(e);
             if (xtentisException != null) {
@@ -282,19 +280,21 @@ public class ServerDefService implements ILegendServerDefService {
     }
 
     public static String refreshServerCache(MDMServerDef serverDef) {
-        String endpointaddress = serverDef.getUrl();
-        String username = serverDef.getUser();
-        String password = serverDef.getPasswd();
-        String universe = serverDef.getUniverse();
-        try {
-            XtentisPort port = Util.getPort(new URL(endpointaddress), universe, username, password);
-            WSString ret = port.refreshCache(new WSRefreshCache("ALL"));//$NON-NLS-1$
-            return ret.getValue();
-        } catch (MalformedURLException e) {
-            log.error(e.getMessage(), e);
-        } catch (XtentisException e) {
-            log.error(e.getMessage(), e);
-        }
+        // *** TMDM-8080, temp omitted start ***//
+        // String endpointaddress = serverDef.getUrl();
+        // String username = serverDef.getUser();
+        // String password = serverDef.getPasswd();
+        // String universe = serverDef.getUniverse();
+        // try {
+        // TMDMService port = Util.getMDMService(new URL(endpointaddress), universe, username, password);
+        // WsString ret = port.refreshCache();
+        // return ret.getValue();
+        // } catch (MalformedURLException e) {
+        // log.error(e.getMessage(), e);
+        // } catch (XtentisException e) {
+        // log.error(e.getMessage(), e);
+        // }
+        // *** TMDM-8080, temp omitted end ***//
         return null;
     }
 

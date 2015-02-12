@@ -15,22 +15,22 @@ package com.amalto.workbench.widgets.xmleditor.infoholder;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import com.amalto.workbench.webservices.WSMDMConfig;
-import com.amalto.workbench.webservices.XtentisPort;
+import com.amalto.workbench.webservices.TMDMService;
+import com.amalto.workbench.webservices.WsmdmConfig;
 
-public class MDMServerInfoHolder extends ExternalInfoHolder<WSMDMConfig> {
+public class MDMServerInfoHolder extends ExternalInfoHolder<WsmdmConfig> {
 
     private static Log log = LogFactory.getLog(MDMServerInfoHolder.class);
 
-    private XtentisPort port;
+    private TMDMService service;
 
-    public MDMServerInfoHolder(XtentisPort port) {
-        this.port = port;
+    public MDMServerInfoHolder(TMDMService service) {
+        this.service = service;
     }
 
     @Override
-    public WSMDMConfig getExternalInfo() {
-        return port.getMDMConfiguration();
+    public WsmdmConfig getExternalInfo() {
+        return service.getMDMConfiguration();
     }
 
     @Override

@@ -50,9 +50,9 @@ import org.talend.mdm.repository.core.service.IMatchRuleMapInfoService;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
 import org.talend.mdm.repository.model.mdmproperties.MdmpropertiesFactory;
-import org.talend.mdm.repository.model.mdmproperties.WSDataModelItem;
+import org.talend.mdm.repository.model.mdmproperties.WsDataModelItem;
 import org.talend.mdm.repository.model.mdmserverobject.MdmserverobjectFactory;
-import org.talend.mdm.repository.model.mdmserverobject.WSDataModelE;
+import org.talend.mdm.repository.model.mdmserverobject.WsDataModelE;
 import org.talend.mdm.repository.models.FolderRepositoryObject;
 import org.talend.mdm.repository.ui.actions.AbstractSimpleAddAction;
 import org.talend.mdm.repository.ui.actions.datacontainer.NewDataContainerAction;
@@ -82,9 +82,9 @@ public class NewDataModelAction extends AbstractSimpleAddAction implements IIntr
         return Messages.NewDataModelAction_newDataModel;
     }
 
-    private WSDataModelE newBlankDataModel(String key) {
+    private WsDataModelE newBlankDataModel(String key) {
 
-        WSDataModelE dataModel = MdmserverobjectFactory.eINSTANCE.createWSDataModelE();
+        WsDataModelE dataModel = MdmserverobjectFactory.eINSTANCE.createWsDataModelE();
         dataModel.setName(key);
         //
         String defaultXSD = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"//$NON-NLS-1$
@@ -98,11 +98,11 @@ public class NewDataModelAction extends AbstractSimpleAddAction implements IIntr
     @Override
     protected Item createServerObject(String key) {
 
-        WSDataModelItem item = MdmpropertiesFactory.eINSTANCE.createWSDataModelItem();
+        WsDataModelItem item = MdmpropertiesFactory.eINSTANCE.createWsDataModelItem();
         ItemState itemState = PropertiesFactory.eINSTANCE.createItemState();
         item.setState(itemState);
         //
-        WSDataModelE dataModel = newBlankDataModel(key);
+        WsDataModelE dataModel = newBlankDataModel(key);
         item.setWsDataModel(dataModel);
 
         if (parentItem != null) {
@@ -117,7 +117,7 @@ public class NewDataModelAction extends AbstractSimpleAddAction implements IIntr
         return item;
     }
 
-    private void createMatchRuleMapInfo(WSDataModelItem item) {
+    private void createMatchRuleMapInfo(WsDataModelItem item) {
         IMatchRuleMapInfoService mapInfoService = ServiceUtil.getService(IMatchRuleMapInfoService.class);
         if (mapInfoService != null) {
             mapInfoService.loadMatchRuleMapInfo(item);

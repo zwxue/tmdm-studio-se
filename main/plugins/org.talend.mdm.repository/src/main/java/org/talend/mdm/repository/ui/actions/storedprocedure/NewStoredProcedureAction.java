@@ -26,9 +26,9 @@ import org.talend.core.model.properties.ItemState;
 import org.talend.core.model.properties.PropertiesFactory;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmproperties.MdmpropertiesFactory;
-import org.talend.mdm.repository.model.mdmproperties.WSStoredProcedureItem;
+import org.talend.mdm.repository.model.mdmproperties.WsStoredProcedureItem;
 import org.talend.mdm.repository.model.mdmserverobject.MdmserverobjectFactory;
-import org.talend.mdm.repository.model.mdmserverobject.WSStoredProcedureE;
+import org.talend.mdm.repository.model.mdmserverobject.WsStoredProcedureE;
 import org.talend.mdm.repository.ui.actions.AbstractSimpleAddAction;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 
@@ -38,21 +38,18 @@ import org.talend.mdm.repository.utils.RepositoryResourceUtil;
  */
 public class NewStoredProcedureAction extends AbstractSimpleAddAction {
 
-
     public NewStoredProcedureAction() {
         super();
     }
-
 
     @Override
     protected String getDialogTitle() {
         return Messages.NewStoredProcedureAction_newStoredProcedure;
     }
 
-    private WSStoredProcedureE newStoredProcedure(String key) {
+    private WsStoredProcedureE newStoredProcedure(String key) {
 
-
-        WSStoredProcedureE storedProcedure = MdmserverobjectFactory.eINSTANCE.createWSStoredProcedureE();
+        WsStoredProcedureE storedProcedure = MdmserverobjectFactory.eINSTANCE.createWsStoredProcedureE();
 
         storedProcedure.setName(key);
         storedProcedure.setDescription(""); //$NON-NLS-1$
@@ -62,14 +59,15 @@ public class NewStoredProcedureAction extends AbstractSimpleAddAction {
         return storedProcedure;
     }
 
+    @Override
     protected Item createServerObject(String key) {
 
-        WSStoredProcedureItem item = MdmpropertiesFactory.eINSTANCE.createWSStoredProcedureItem();
+        WsStoredProcedureItem item = MdmpropertiesFactory.eINSTANCE.createWsStoredProcedureItem();
 
         ItemState itemState = PropertiesFactory.eINSTANCE.createItemState();
         item.setState(itemState);
 
-        WSStoredProcedureE storedProcedure = newStoredProcedure(key);
+        WsStoredProcedureE storedProcedure = newStoredProcedure(key);
         item.setWsStoredProcedure(storedProcedure);
 
         if (parentItem != null) {
@@ -78,6 +76,5 @@ public class NewStoredProcedureAction extends AbstractSimpleAddAction {
         }
         return item;
     }
-
 
 }

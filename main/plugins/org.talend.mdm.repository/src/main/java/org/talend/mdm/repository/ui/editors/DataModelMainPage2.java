@@ -21,8 +21,8 @@ import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.service.ContainerCacheService;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
-import org.talend.mdm.repository.model.mdmproperties.WSDataModelItem;
-import org.talend.mdm.repository.model.mdmserverobject.WSDataModelE;
+import org.talend.mdm.repository.model.mdmproperties.WsDataModelItem;
+import org.talend.mdm.repository.model.mdmserverobject.WsDataModelE;
 import org.talend.mdm.repository.ui.actions.xsd.XSDDeleteConceptActionR;
 import org.talend.mdm.repository.ui.actions.xsd.XSDSetAnnotationFKFilterActionR;
 import org.talend.mdm.repository.ui.actions.xsd.XSDSetAnnotationForeignKeyActionR;
@@ -44,7 +44,7 @@ import com.amalto.workbench.dialogs.SelectImportedModulesDialog;
 import com.amalto.workbench.editors.DataModelMainPage;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.providers.datamodel.SchemaTreeContentProvider;
-import com.amalto.workbench.webservices.WSDataModel;
+import com.amalto.workbench.webservices.WsDataModel;
 
 /**
  * DOC hbhong class global comment. Detailled comment
@@ -63,7 +63,7 @@ public class DataModelMainPage2 extends DataModelMainPage {
     }
 
     @Override
-    protected void doSave(WSDataModel wsObject) throws Exception {
+    protected void doSave(WsDataModel wsObject) throws Exception {
         XObjectEditorInput2 editorInput = (XObjectEditorInput2) getEditorInput();
 
         MDMServerObjectItem serverObjectItem = (MDMServerObjectItem) editorInput.getInputItem();
@@ -89,8 +89,8 @@ public class DataModelMainPage2 extends DataModelMainPage {
 
     //
     public Item updateSchemaToItem(Item item) {
-        WSDataModelE wsDataModelE = ((WSDataModelItem) item).getWsDataModel();
-        WSDataModel wsDataModel = (WSDataModel) xobject.getWsObject();
+        WsDataModelE wsDataModelE = ((WsDataModelItem) item).getWsDataModel();
+        WsDataModel wsDataModel = (WsDataModel) xobject.getWsObject();
         wsDataModelE.setXsdSchema(wsDataModel.getXsdSchema());
         return item;
     }

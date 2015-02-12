@@ -17,7 +17,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
@@ -66,10 +65,10 @@ import org.w3c.dom.NodeList;
 import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.utils.Util;
-import com.amalto.workbench.webservices.WSDataModel;
-import com.amalto.workbench.webservices.WSDataModelPK;
-import com.amalto.workbench.webservices.WSGetDataModel;
-import com.amalto.workbench.webservices.XtentisPort;
+import com.amalto.workbench.webservices.TMDMService;
+import com.amalto.workbench.webservices.WsDataModel;
+import com.amalto.workbench.webservices.WsDataModelPK;
+import com.amalto.workbench.webservices.WsGetDataModel;
 import com.amalto.workbench.widgets.xmlviewer.XMLConfiguration;
 import com.amalto.workbench.widgets.xmlviewer.XMLSourceViewer;
 import com.amalto.workbench.widgets.xmlviewer.XMLSourceViewerHelper;
@@ -117,7 +116,7 @@ public class DOMViewDialog extends Dialog implements IKeyWordProvider {
 
     private Collection<Listener> listeners = new ArrayList<Listener>();
 
-    private final XtentisPort port;
+    private final TMDMService port;
 
     public DOMViewDialog(Shell parentShell, Node node) {
         this(parentShell, null, node, false, null, TREE_VIEWER, null);
@@ -129,7 +128,7 @@ public class DOMViewDialog extends Dialog implements IKeyWordProvider {
         this.desc = desc;
     }
 
-    public DOMViewDialog(Shell parentShell, XtentisPort port, Node node, boolean editable, Collection<String> dataModelNames,
+    public DOMViewDialog(Shell parentShell, TMDMService port, Node node, boolean editable, Collection<String> dataModelNames,
             int firstTab, String selectedDataModel) {
         super(parentShell);
         this.port = port;
@@ -288,9 +287,9 @@ public class DOMViewDialog extends Dialog implements IKeyWordProvider {
             return;
         }
         if (keyWordMap.get(dataModelName) == null) {
-            WSGetDataModel wsGetModel = new WSGetDataModel(new WSDataModelPK(dataModelName));
+            WsGetDataModel wsGetModel = new WsGetDataModel(new WsDataModelPK(dataModelName));
             try {
-                WSDataModel dataModel = port.getDataModel(wsGetModel);
+                WsDataModel dataModel = port.getDataModel(wsGetModel);
                 String xsdSchemaStr = dataModel.getXsdSchema();
                 if (xsdSchemaStr != null) {
                     XSDSchema schema = Util.getXSDSchema(xsdSchemaStr);
@@ -414,8 +413,7 @@ public class DOMViewDialog extends Dialog implements IKeyWordProvider {
     }
 
     public void notifyListeners(Event e) {
-        for (Iterator<Listener> iter = listeners.iterator(); iter.hasNext();) {
-            Listener listener = iter.next();
+        for (Listener listener : listeners) {
             listener.handleEvent(e);
         }
     }

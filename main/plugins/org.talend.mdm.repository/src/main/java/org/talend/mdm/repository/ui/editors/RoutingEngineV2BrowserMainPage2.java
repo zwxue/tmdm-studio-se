@@ -19,7 +19,7 @@ import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 
 import com.amalto.workbench.editors.RoutingEngineV2BrowserMainPage;
 import com.amalto.workbench.utils.XtentisException;
-import com.amalto.workbench.webservices.XtentisPort;
+import com.amalto.workbench.webservices.TMDMService;
 
 public class RoutingEngineV2BrowserMainPage2 extends RoutingEngineV2BrowserMainPage {
 
@@ -35,8 +35,8 @@ public class RoutingEngineV2BrowserMainPage2 extends RoutingEngineV2BrowserMainP
     }
 
     @Override
-    protected XtentisPort getPort() throws XtentisException {
+    protected TMDMService getMDMService() throws XtentisException {
         MDMServerDef serverDef = getServerDef();
-        return RepositoryWebServiceAdapter.getXtentisPort(serverDef);
+        return RepositoryWebServiceAdapter.getMDMService(serverDef);
     }
 }

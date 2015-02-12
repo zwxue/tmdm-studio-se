@@ -20,11 +20,11 @@ import org.talend.mdm.repository.i18n.Messages;
 import com.amalto.workbench.utils.EXtentisObjects;
 import com.amalto.workbench.utils.TreeObjectUtil;
 import com.amalto.workbench.utils.XtentisException;
-import com.amalto.workbench.webservices.WSDeleteRoutingRule;
-import com.amalto.workbench.webservices.WSPutRoutingRule;
-import com.amalto.workbench.webservices.WSRoutingRule;
-import com.amalto.workbench.webservices.WSRoutingRulePK;
-import com.amalto.workbench.webservices.XtentisPort;
+import com.amalto.workbench.webservices.TMDMService;
+import com.amalto.workbench.webservices.WsDeleteRoutingRule;
+import com.amalto.workbench.webservices.WsPutRoutingRule;
+import com.amalto.workbench.webservices.WsRoutingRule;
+import com.amalto.workbench.webservices.WsRoutingRulePK;
 
 /**
  * DOC hbhong class global comment. Detailled comment
@@ -41,21 +41,21 @@ public class RoutingRuleInteractiveHandler extends AbstractInteractiveHandler {
     }
 
     @Override
-    public boolean doDeployWSObject(XtentisPort port, Object wsObj) {
+    public boolean doDeployWSObject(TMDMService service, Object wsObj) {
         if (wsObj != null) {
-            port.putRoutingRule(new WSPutRoutingRule((WSRoutingRule) wsObj));
+            service.putRoutingRule(new WsPutRoutingRule((WsRoutingRule) wsObj));
             return true;
         }
         return false;
     }
 
     @Override
-    public boolean doRemove(XtentisPort port, AbstractDeployCommand cmd) throws XtentisException {
-        WSRoutingRulePK pk = new WSRoutingRulePK();
+    public boolean doRemove(TMDMService service, AbstractDeployCommand cmd) throws XtentisException {
+        WsRoutingRulePK pk = new WsRoutingRulePK();
         String name = cmd.getObjName();
         pk.setPk(name);
-        port.deleteRoutingRule(new WSDeleteRoutingRule(pk));
-        TreeObjectUtil.deleteSpecificationFromAttachedRole(port, name, EXtentisObjects.RoutingRule.getName());
+        service.deleteRoutingRule(new WsDeleteRoutingRule(pk));
+        TreeObjectUtil.deleteSpecificationFromAttachedRole(service, name, EXtentisObjects.RoutingRule.getName());
         return true;
     }
 }

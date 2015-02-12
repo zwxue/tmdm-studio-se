@@ -25,7 +25,8 @@ import org.w3c.dom.Node;
 
 import com.amalto.workbench.dialogs.DOMViewDialog;
 import com.amalto.workbench.i18n.Messages;
-import com.amalto.workbench.webservices.XtentisPort;
+import com.amalto.workbench.webservices.TMDMService;
+import com.amalto.workbench.webservices.TMDMService;
 
 /**
  * created by HHB on 2012-11-19 Detailled comment
@@ -43,16 +44,16 @@ public class DataContainerDOMViewDialog extends DOMViewDialog {
      * DOC HHB DataContainerDOMViewDialog constructor comment.
      * 
      * @param parentShell
-     * @param port
+     * @param service
      * @param node
      * @param editable
      * @param dataModelNames
      * @param firstTab
      * @param selectedDataModel
      */
-    public DataContainerDOMViewDialog(Shell parentShell, XtentisPort port, Node node, Collection<String> dataModelNames,
+    public DataContainerDOMViewDialog(Shell parentShell, TMDMService service, Node node, Collection<String> dataModelNames,
             int firstTab, String selectedDataModel, boolean isMaster) {
-        super(parentShell, port, node, true, dataModelNames, firstTab, selectedDataModel);
+        super(parentShell, service, node, true, dataModelNames, firstTab, selectedDataModel);
         this.isMaster = isMaster;
     }
 

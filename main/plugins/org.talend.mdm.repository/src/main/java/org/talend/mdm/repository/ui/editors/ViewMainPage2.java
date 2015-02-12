@@ -42,9 +42,9 @@ import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 
 import com.amalto.workbench.editors.ViewMainPage;
 import com.amalto.workbench.utils.XtentisException;
-import com.amalto.workbench.webservices.WSConceptKey;
-import com.amalto.workbench.webservices.WSGetBusinessConceptKey;
-import com.amalto.workbench.webservices.WSView;
+import com.amalto.workbench.webservices.WsConceptKey;
+import com.amalto.workbench.webservices.WsGetBusinessConceptKey;
+import com.amalto.workbench.webservices.WsView;
 import com.amalto.workbench.widgets.ComplexTableViewerColumn;
 import com.amalto.workbench.widgets.TisTableViewer;
 
@@ -83,8 +83,8 @@ public class ViewMainPage2 extends ViewMainPage {
     }
 
     @Override
-    protected WSView getWsViewObject() {
-        return (WSView) getXObject().getWsObject();
+    protected WsView getWsViewObject() {
+        return (WsView) getXObject().getWsObject();
     }
 
     @Override
@@ -93,7 +93,7 @@ public class ViewMainPage2 extends ViewMainPage {
     }
 
     @Override
-    protected WSConceptKey getBusinessConceptKey(WSGetBusinessConceptKey businessConcepKey) throws XtentisException {
+    protected WsConceptKey getBusinessConceptKey(WsGetBusinessConceptKey businessConcepKey) throws XtentisException {
         return RepositoryResourceUtil.getBusinessConceptKey(businessConcepKey);
     }
 

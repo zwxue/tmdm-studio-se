@@ -32,42 +32,38 @@ import com.amalto.workbench.utils.IConstants;
 import com.amalto.workbench.utils.LocalTreeObjectRepository;
 import com.amalto.workbench.utils.UserInfo;
 import com.amalto.workbench.utils.Util;
-import com.amalto.workbench.webservices.WSComponent;
-import com.amalto.workbench.webservices.WSDataCluster;
-import com.amalto.workbench.webservices.WSDataClusterPK;
-import com.amalto.workbench.webservices.WSDataModel;
-import com.amalto.workbench.webservices.WSDataModelPK;
-import com.amalto.workbench.webservices.WSGetComponentVersion;
-import com.amalto.workbench.webservices.WSGetCurrentUniverse;
-import com.amalto.workbench.webservices.WSGetDataCluster;
-import com.amalto.workbench.webservices.WSGetDataModel;
-import com.amalto.workbench.webservices.WSGetMenu;
-import com.amalto.workbench.webservices.WSGetMenuPKs;
-import com.amalto.workbench.webservices.WSGetRoutingRule;
-import com.amalto.workbench.webservices.WSGetRoutingRulePKs;
-import com.amalto.workbench.webservices.WSGetStoredProcedure;
-import com.amalto.workbench.webservices.WSGetTransformerV2;
-import com.amalto.workbench.webservices.WSGetTransformerV2PKs;
-import com.amalto.workbench.webservices.WSGetView;
-import com.amalto.workbench.webservices.WSGetViewPKs;
-import com.amalto.workbench.webservices.WSMenu;
-import com.amalto.workbench.webservices.WSMenuPK;
-import com.amalto.workbench.webservices.WSPing;
-import com.amalto.workbench.webservices.WSRegexDataClusterPKs;
-import com.amalto.workbench.webservices.WSRegexDataModelPKs;
-import com.amalto.workbench.webservices.WSRegexStoredProcedure;
-import com.amalto.workbench.webservices.WSRoutingRule;
-import com.amalto.workbench.webservices.WSRoutingRulePK;
-import com.amalto.workbench.webservices.WSStoredProcedure;
-import com.amalto.workbench.webservices.WSStoredProcedurePK;
-import com.amalto.workbench.webservices.WSTransformerV2;
-import com.amalto.workbench.webservices.WSTransformerV2PK;
-import com.amalto.workbench.webservices.WSUniverse;
-import com.amalto.workbench.webservices.WSUniverse.XtentisObjectsRevisionIDs;
-import com.amalto.workbench.webservices.WSVersion;
-import com.amalto.workbench.webservices.WSView;
-import com.amalto.workbench.webservices.WSViewPK;
-import com.amalto.workbench.webservices.XtentisPort;
+import com.amalto.workbench.webservices.TMDMService;
+import com.amalto.workbench.webservices.WsDataCluster;
+import com.amalto.workbench.webservices.WsDataClusterPK;
+import com.amalto.workbench.webservices.WsDataModel;
+import com.amalto.workbench.webservices.WsDataModelPK;
+import com.amalto.workbench.webservices.WsGetComponentVersion;
+import com.amalto.workbench.webservices.WsGetDataCluster;
+import com.amalto.workbench.webservices.WsGetDataModel;
+import com.amalto.workbench.webservices.WsGetMenu;
+import com.amalto.workbench.webservices.WsGetMenuPKs;
+import com.amalto.workbench.webservices.WsGetRoutingRule;
+import com.amalto.workbench.webservices.WsGetRoutingRulePKs;
+import com.amalto.workbench.webservices.WsGetStoredProcedure;
+import com.amalto.workbench.webservices.WsGetTransformerV2;
+import com.amalto.workbench.webservices.WsGetTransformerV2PKs;
+import com.amalto.workbench.webservices.WsGetView;
+import com.amalto.workbench.webservices.WsGetViewPKs;
+import com.amalto.workbench.webservices.WsMenu;
+import com.amalto.workbench.webservices.WsMenuPK;
+import com.amalto.workbench.webservices.WsPing;
+import com.amalto.workbench.webservices.WsRegexDataClusterPKs;
+import com.amalto.workbench.webservices.WsRegexDataModelPKs;
+import com.amalto.workbench.webservices.WsRegexStoredProcedure;
+import com.amalto.workbench.webservices.WsRoutingRule;
+import com.amalto.workbench.webservices.WsRoutingRulePK;
+import com.amalto.workbench.webservices.WsStoredProcedure;
+import com.amalto.workbench.webservices.WsStoredProcedurePK;
+import com.amalto.workbench.webservices.WsTransformerV2;
+import com.amalto.workbench.webservices.WsTransformerV2PK;
+import com.amalto.workbench.webservices.WsVersion;
+import com.amalto.workbench.webservices.WsView;
+import com.amalto.workbench.webservices.WsViewPK;
 
 public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
 
@@ -131,14 +127,18 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
             LocalTreeObjectRepository.getInstance().setLazySaveStrategy(true, serverRoot);
             monitor.worked(1);
             // Access to server and get port
-            XtentisPort port = Util.getPort(new URL(endpointaddress), universe, username, password);
-            port.ping(new WSPing(Messages.XtentisServerObjectsRetriever_5));// viewer user can't use studio
+            TMDMService service = Util.getMDMService(new URL(endpointaddress), universe, username, password);
+            service.ping(new WsPing(Messages.XtentisServerObjectsRetriever_5));// viewer user can't use studio
 
             monitor.worked(1);
 
             // fetch version info
             try {
-                WSVersion version = port.getComponentVersion(new WSGetComponentVersion(WSComponent.DATA_MANAGER, null));
+                // *** TMDM-8080, temp substituted start ***//
+                // WsVersion version = service.getComponentVersion(new WsGetComponentVersion(WsComponent.DATA_MANAGER,
+                // null));
+                WsVersion version = service.getComponentVersion(new WsGetComponentVersion());
+                // *** TMDM-8080, temp substituted end ***//
                 String versionStr = version.getMajor() + "." + version.getMinor() + "." + version.getRevision() + "_" //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
                         + version.getBuild();
                 log.info("Server version = " + versionStr); //$NON-NLS-1$
@@ -164,21 +164,21 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
             // Data Models
             TreeParent models = new TreeParent(EXtentisObjects.DataMODEL.getDisplayName(), serverRoot, TreeObject.DATA_MODEL,
                     null, null);
-            List<WSDataModelPK> xdmPKs = null;
+            List<WsDataModelPK> xdmPKs = null;
             try {
-                xdmPKs = port.getDataModelPKs(new WSRegexDataModelPKs("")).getWsDataModelPKs(); //$NON-NLS-1$
+                xdmPKs = service.getDataModelPKs(new WsRegexDataModelPKs("")).getWsDataModelPKs(); //$NON-NLS-1$
             } catch (Exception e) {
 
                 log.error(e.getMessage(), e);
             }
             if (xdmPKs != null) {
                 monitor.subTask(Messages.XtentisServerObjectsRetriever_8);
-                for (WSDataModelPK pk : xdmPKs) {
+                for (WsDataModelPK pk : xdmPKs) {
                     String name = pk.getPk();
                     if (!name.startsWith("XMLSCHEMA")) {//$NON-NLS-1$
-                        WSDataModel wsobj = null;
+                        WsDataModel wsobj = null;
                         if (retriveWSObject) {
-                            wsobj = port.getDataModel(new WSGetDataModel(pk));
+                            wsobj = service.getDataModel(new WsGetDataModel(pk));
                         }
                         TreeObject obj = new TreeObject(name, serverRoot, TreeObject.DATA_MODEL, pk, wsobj);
                         models.addChild(obj);
@@ -193,21 +193,21 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
             // DataClusters
             TreeParent dataClusters = new TreeParent(EXtentisObjects.DataCluster.getDisplayName(), serverRoot,
                     TreeObject.DATA_CLUSTER, null, null);
-            List<WSDataClusterPK> xdcPKs = null;
+            List<WsDataClusterPK> xdcPKs = null;
             try {
-                xdcPKs = port.getDataClusterPKs(new WSRegexDataClusterPKs("")).getWsDataClusterPKs();//$NON-NLS-1$
+                xdcPKs = service.getDataClusterPKs(new WsRegexDataClusterPKs("")).getWsDataClusterPKs();//$NON-NLS-1$
             } catch (Exception e) {
                 log.error(e.getMessage(), e);
             }
             if (xdcPKs != null) {
                 monitor.subTask(Messages.XtentisServerObjectsRetriever_10);
-                for (WSDataClusterPK pk : xdcPKs) {
+                for (WsDataClusterPK pk : xdcPKs) {
                     String name = pk.getPk();
                     if (!("CACHE".equals(name))) { // FIXME: Hardcoded CACHE//$NON-NLS-1$
-                        WSDataCluster wsObject = null;
+                        WsDataCluster wsObject = null;
                         try {
                             if (retriveWSObject) {
-                                wsObject = port.getDataCluster(new WSGetDataCluster(pk));
+                                wsObject = service.getDataCluster(new WsGetDataCluster(pk));
                             }
                             TreeObject obj = new TreeObject(name, serverRoot, TreeObject.DATA_CLUSTER, pk, wsObject);
                             dataClusters.addChild(obj);
@@ -231,9 +231,9 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
             eventManagement.addChild(engine);
 
             // transformer
-            List<WSTransformerV2PK> transformerPKs = null;
+            List<WsTransformerV2PK> transformerPKs = null;
             try {
-                transformerPKs = port.getTransformerV2PKs(new WSGetTransformerV2PKs("")).getWsTransformerV2PK();//$NON-NLS-1$
+                transformerPKs = service.getTransformerV2PKs(new WsGetTransformerV2PKs("")).getWsTransformerV2PK();//$NON-NLS-1$
             } catch (Exception e) {
                 log.error(e.getMessage(), e);
             }
@@ -243,22 +243,22 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
             eventManagement.addChild(transformers);
             if (transformerPKs != null) {
                 monitor.subTask(Messages.XtentisServerObjectsRetriever_12);
-                for (WSTransformerV2PK pk : transformerPKs) {
+                for (WsTransformerV2PK pk : transformerPKs) {
                     String id = pk.getPk();
-                    WSTransformerV2 wsobject = null;
+                    WsTransformerV2 wsobject = null;
                     if (retriveWSObject) {
-                        wsobject = port.getTransformerV2(new WSGetTransformerV2(pk));
+                        wsobject = service.getTransformerV2(new WsGetTransformerV2(pk));
                     }
-                    TreeObject obj = new TreeObject(id, serverRoot, TreeObject.TRANSFORMER, new WSTransformerV2PK(id), wsobject);
+                    TreeObject obj = new TreeObject(id, serverRoot, TreeObject.TRANSFORMER, new WsTransformerV2PK(id), wsobject);
                     transformers.addChild(obj);
                 }
             }
             monitor.worked(1);
 
             // routing rule
-            List<WSRoutingRulePK> routingRulePKs = null;
+            List<WsRoutingRulePK> routingRulePKs = null;
             try {
-                routingRulePKs = port.getRoutingRulePKs(new WSGetRoutingRulePKs("")).getWsRoutingRulePKs();//$NON-NLS-1$
+                routingRulePKs = service.getRoutingRulePKs(new WsGetRoutingRulePKs("")).getWsRoutingRulePKs();//$NON-NLS-1$
             } catch (Exception e) {
                 log.error(e.getMessage(), e);
             }
@@ -267,13 +267,13 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
             eventManagement.addChild(rules);
             if (routingRulePKs != null) {
                 monitor.subTask(Messages.XtentisServerObjectsRetriever_13);
-                for (WSRoutingRulePK pk : routingRulePKs) {
+                for (WsRoutingRulePK pk : routingRulePKs) {
                     String id = pk.getPk();
-                    WSRoutingRule wsobject = null;
+                    WsRoutingRule wsobject = null;
                     if (retriveWSObject) {
-                        wsobject = port.getRoutingRule(new WSGetRoutingRule(pk));
+                        wsobject = service.getRoutingRule(new WsGetRoutingRule(pk));
                     }
-                    TreeObject obj = new TreeObject(id, serverRoot, TreeObject.ROUTING_RULE, new WSRoutingRulePK(id), wsobject);
+                    TreeObject obj = new TreeObject(id, serverRoot, TreeObject.ROUTING_RULE, new WsRoutingRulePK(id), wsobject);
                     rules.addChild(obj);
                 }
             }
@@ -284,22 +284,22 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
 
             // Views
             TreeParent views = new TreeParent(EXtentisObjects.View.getDisplayName(), serverRoot, TreeObject.VIEW, null, null);
-            List<WSViewPK> viewPKs = null;
+            List<WsViewPK> viewPKs = null;
             try {
-                viewPKs = port.getViewPKs((new WSGetViewPKs(""))).getWsViewPK();//$NON-NLS-1$
+                viewPKs = service.getViewPKs((new WsGetViewPKs(""))).getWsViewPK();//$NON-NLS-1$
             } catch (Exception e) {
                 log.error(e.getMessage(), e);
 
             }
             if (viewPKs != null) {
                 monitor.subTask(Messages.XtentisServerObjectsRetriever_14);
-                for (WSViewPK pk : viewPKs) {
+                for (WsViewPK pk : viewPKs) {
                     String name = pk.getPk();
-                    WSView wsobject = null;
+                    WsView wsobject = null;
                     if (retriveWSObject) {
-                        wsobject = port.getView(new WSGetView(pk));
+                        wsobject = service.getView(new WsGetView(pk));
                     }
-                    TreeObject obj = new TreeObject(name, serverRoot, TreeObject.VIEW, new WSViewPK(name), wsobject);
+                    TreeObject obj = new TreeObject(name, serverRoot, TreeObject.VIEW, new WsViewPK(name), wsobject);
                     views.addChild(obj);
                 }
             }
@@ -311,22 +311,22 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
             // Stored Procedures
             TreeParent storedProcedures = new TreeParent(EXtentisObjects.StoredProcedure.getDisplayName(), serverRoot,
                     TreeObject.STORED_PROCEDURE, null, null);
-            List<WSStoredProcedurePK> spk = null;
+            List<WsStoredProcedurePK> spk = null;
             try {
-                spk = port.getStoredProcedurePKs(new WSRegexStoredProcedure("")).getWsStoredProcedurePK();//$NON-NLS-1$
+                spk = service.getStoredProcedurePKs(new WsRegexStoredProcedure("")).getWsStoredProcedurePK();//$NON-NLS-1$
             } catch (Exception e) {
 
                 log.error(e.getMessage(), e);
             }
             if (spk != null) {
                 monitor.subTask(Messages.XtentisServerObjectsRetriever_16);
-                for (WSStoredProcedurePK pk : spk) {
+                for (WsStoredProcedurePK pk : spk) {
                     String name = pk.getPk();
-                    WSStoredProcedure wsobject = null;
+                    WsStoredProcedure wsobject = null;
                     if (retriveWSObject) {
-                        wsobject = port.getStoredProcedure(new WSGetStoredProcedure(pk));
+                        wsobject = service.getStoredProcedure(new WsGetStoredProcedure(pk));
                     }
-                    TreeObject obj = new TreeObject(name, serverRoot, TreeObject.STORED_PROCEDURE, new WSStoredProcedurePK(name),
+                    TreeObject obj = new TreeObject(name, serverRoot, TreeObject.STORED_PROCEDURE, new WsStoredProcedurePK(name),
                             wsobject);
                     storedProcedures.addChild(obj);
                 }
@@ -346,10 +346,10 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
             }
 
             // Menus
-            List<WSMenuPK> menuPKs = null;
+            List<WsMenuPK> menuPKs = null;
             boolean hasMenus = true;
             try {
-                menuPKs = port.getMenuPKs(new WSGetMenuPKs("*")).getWsMenuPK();//$NON-NLS-1$
+                menuPKs = service.getMenuPKs(new WsGetMenuPKs("*")).getWsMenuPK();//$NON-NLS-1$
             } catch (Exception e) {
                 log.error(e.getMessage(), e);
                 // This server IS old
@@ -360,14 +360,14 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
                 menus = new TreeParent(EXtentisObjects.Menu.getDisplayName(), serverRoot, TreeObject.MENU, null, null);
                 if (menuPKs != null) {
                     monitor.subTask(Messages.XtentisServerObjectsRetriever_19);
-                    for (WSMenuPK pk : menuPKs) {
+                    for (WsMenuPK pk : menuPKs) {
                         String id = pk.getPk();
-                        WSMenu wsobject = null;
+                        WsMenu wsobject = null;
                         try {
                             if (retriveWSObject) {
-                                wsobject = port.getMenu(new WSGetMenu(pk));
+                                wsobject = service.getMenu(new WsGetMenu(pk));
                             }
-                            TreeObject obj = new TreeObject(id, serverRoot, TreeObject.MENU, new WSMenuPK(id), wsobject);
+                            TreeObject obj = new TreeObject(id, serverRoot, TreeObject.MENU, new WsMenuPK(id), wsobject);
                             menus.addChild(obj);
                         } catch (Exception e) {
                             log.error(e.getMessage(), e);
@@ -402,11 +402,13 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
             // available models
             List<IAvailableModel> availablemodels = AvailableModelUtil.getAvailableModels();
             for (IAvailableModel model : availablemodels) {
-                model.addTreeObjects(port, monitor, serverRoot);
+                model.addTreeObjects(service, monitor, serverRoot);
             }
 
-            WSUniverse wUuniverse = port.getCurrentUniverse(new WSGetCurrentUniverse());
-            addRevision(wUuniverse);
+            // *** TMDM-8080, temp omitted start ***//
+            // WSUniverse wUuniverse = service.getCurrentUniverse(new WSGetCurrentUniverse());
+            // addRevision(wUuniverse);
+            // *** TMDM-8080, temp omitted end ***//
 
             monitor.done();
         } catch (Exception e) {
@@ -424,44 +426,48 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
      * 
      * @param universe
      */
-    private void addRevision(WSUniverse universe) {
-        if (universe == null) {
-            return;
-        }
-        if (exAdapter != null) {
-            exAdapter.addRevision(universe, serverRoot, username);
-        } else {
-            String name = serverRoot.getDisplayName() + " " + username;//$NON-NLS-1$
-            serverRoot.setDisplayName(name);
-        }
-    }
+    // *** TMDM-8080, temp omitted start ***//
+    // private void addRevision(WSUniverse universe) {
+    // if (universe == null) {
+    // return;
+    // }
+    // if (exAdapter != null) {
+    // exAdapter.addRevision(universe, serverRoot, username);
+    // } else {
+    //            String name = serverRoot.getDisplayName() + " " + username;//$NON-NLS-1$
+    // serverRoot.setDisplayName(name);
+    // }
+    // }
+    // *** TMDM-8080, temp omitted end ***//
 
     public TreeParent getServerRoot() {
         return serverRoot;
     }
 
-    public void resetDisplayName(TreeParent parent, List<XtentisObjectsRevisionIDs> ids) {
-        for (TreeObject node : parent.getChildren()) {
-            EXtentisObjects object = EXtentisObjects.getXtentisObjexts().get(String.valueOf(node.getType()));
-            if (object == null || !object.isRevision()) {
-                continue;
-            }
-            boolean isSet = false;
-            for (WSUniverse.XtentisObjectsRevisionIDs id : ids) {
-                if (id.getXtentisObjectName().equals(object.getName())) {
-                    if (id.getRevisionID() != null && id.getRevisionID().length() > 0) {
-                        node.setDisplayName(node.getDisplayName() + " ["//$NON-NLS-1$
-                                + id.getRevisionID().replaceAll("\\[", "").replaceAll("\\]", "").trim() + "]");//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$//$NON-NLS-5$
-                    } else {
-                        node.setDisplayName(node.getDisplayName() + " [" + IConstants.HEAD + "]");//$NON-NLS-1$//$NON-NLS-2$
-                    }
-                    isSet = true;
-                    break;
-                }
-            }
-            if (!isSet) {
-                node.setDisplayName(node.getDisplayName() + " [" + IConstants.HEAD + "]");//$NON-NLS-1$//$NON-NLS-2$
-            }
-        }
-    }
+    // *** TMDM-8080, temp omitted start ***//
+    // public void resetDisplayName(TreeParent parent, List<XtentisObjectsRevisionIDs> ids) {
+    // for (TreeObject node : parent.getChildren()) {
+    // EXtentisObjects object = EXtentisObjects.getXtentisObjexts().get(String.valueOf(node.getType()));
+    // if (object == null || !object.isRevision()) {
+    // continue;
+    // }
+    // boolean isSet = false;
+    // for (WSUniverse.XtentisObjectsRevisionIDs id : ids) {
+    // if (id.getXtentisObjectName().equals(object.getName())) {
+    // if (id.getRevisionID() != null && id.getRevisionID().length() > 0) {
+    //                        node.setDisplayName(node.getDisplayName() + " ["//$NON-NLS-1$
+    //                                + id.getRevisionID().replaceAll("\\[", "").replaceAll("\\]", "").trim() + "]");//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$//$NON-NLS-5$
+    // } else {
+    //                        node.setDisplayName(node.getDisplayName() + " [" + IConstants.HEAD + "]");//$NON-NLS-1$//$NON-NLS-2$
+    // }
+    // isSet = true;
+    // break;
+    // }
+    // }
+    // if (!isSet) {
+    //                node.setDisplayName(node.getDisplayName() + " [" + IConstants.HEAD + "]");//$NON-NLS-1$//$NON-NLS-2$
+    // }
+    // }
+    // }
+    // *** TMDM-8080, temp omitted end ***//
 }

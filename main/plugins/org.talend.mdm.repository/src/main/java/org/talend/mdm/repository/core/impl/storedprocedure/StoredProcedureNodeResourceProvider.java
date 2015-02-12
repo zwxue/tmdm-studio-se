@@ -2,7 +2,7 @@
 //
 // Talend Community Edition
 //
-// Copyright (C) 2006-2014 Talend ¨C www.talend.com
+// Copyright (C) 2006-2014 Talend ï¿½C www.talend.com
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
@@ -33,7 +33,7 @@ import org.talend.mdm.repository.core.IServerObjectRepositoryType;
 import org.talend.mdm.repository.core.impl.AbstractRepositoryNodeResourceProvider;
 import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
 import org.talend.mdm.repository.model.mdmproperties.MdmpropertiesFactory;
-import org.talend.mdm.repository.model.mdmproperties.WSStoredProcedureItem;
+import org.talend.mdm.repository.model.mdmproperties.WsStoredProcedureItem;
 
 /**
  * DOC hbhong class global comment. Detailled comment <br/>
@@ -42,7 +42,7 @@ import org.talend.mdm.repository.model.mdmproperties.WSStoredProcedureItem;
 public class StoredProcedureNodeResourceProvider extends AbstractRepositoryNodeResourceProvider {
 
     public ERepositoryObjectType getRepositoryObjectType(Item item) {
-        if (item instanceof WSStoredProcedureItem || item instanceof ContainerItem) {
+        if (item instanceof WsStoredProcedureItem || item instanceof ContainerItem) {
             return IServerObjectRepositoryType.TYPE_STOREPROCEDURE;
         }
         return null;
@@ -53,25 +53,26 @@ public class StoredProcedureNodeResourceProvider extends AbstractRepositoryNodeR
         if (repositoryType != null) {
             Resource itemResource = createCommonItemResource(project, item, repositoryType, path);
             EList<EObject> contents = itemResource.getContents();
-            contents.add(((WSStoredProcedureItem) item).getWsStoredProcedure());
+            contents.add(((WsStoredProcedureItem) item).getWsStoredProcedure());
             return itemResource;
         }
         return null;
     }
 
+    @Override
     public Resource save(Item item) throws PersistenceException {
-        if (item instanceof WSStoredProcedureItem) {
+        if (item instanceof WsStoredProcedureItem) {
             Resource resource = xmiResourceManager.getItemResource(item);
             resource.getContents().clear();
-            resource.getContents().add(((WSStoredProcedureItem) item).getWsStoredProcedure());
-            Resource eResource = ((WSStoredProcedureItem) item).getWsStoredProcedure().eResource();
+            resource.getContents().add(((WsStoredProcedureItem) item).getWsStoredProcedure());
+            Resource eResource = ((WsStoredProcedureItem) item).getWsStoredProcedure().eResource();
             return resource;
         }
         return null;
     }
 
     public Item createNewItem(ERepositoryObjectType type) {
-        return MdmpropertiesFactory.eINSTANCE.createWSStoredProcedureItem();
+        return MdmpropertiesFactory.eINSTANCE.createWsStoredProcedureItem();
     }
 
     public boolean canHandleRepObjType(ERepositoryObjectType type) {

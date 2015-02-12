@@ -13,8 +13,6 @@
 package org.talend.mdm.repository.ui.actions.trigger;
 
 import java.net.URL;
-import java.util.Arrays;
-import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.eclipse.jface.dialogs.IDialogConstants;
@@ -35,12 +33,9 @@ import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.service.ILegendServerDefService;
 import com.amalto.workbench.utils.Util;
-import com.amalto.workbench.webservices.WSDataClusterPK;
-import com.amalto.workbench.webservices.WSItemPK;
-import com.amalto.workbench.webservices.WSRouteItemV2;
-import com.amalto.workbench.webservices.WSRoutingRulePK;
-import com.amalto.workbench.webservices.WSRoutingRulePKArray;
-import com.amalto.workbench.webservices.XtentisPort;
+import com.amalto.workbench.webservices.TMDMService;
+import com.amalto.workbench.webservices.WsRoutingEngineV2Action;
+import com.amalto.workbench.webservices.WsRoutingEngineV2ActionCode;
 
 
 /**
@@ -51,7 +46,7 @@ public class TestTriggerAction extends AbstractRepositoryAction implements Selec
     private static Logger log = Logger.getLogger(TestTriggerAction.class);
     private DataClusterDialog dialog;
 
-    private XtentisPort port;
+    private TMDMService service;
 
     public TestTriggerAction() {
         super(Messages.TestTriggerAction_Test);
@@ -81,7 +76,8 @@ public class TestTriggerAction extends AbstractRepositoryAction implements Selec
         }
 
         try {
-            port = Util.getPort(new URL(serverDef.getUrl()), serverDef.getUniverse(), serverDef.getUser(), serverDef.getPasswd());
+            service = Util.getMDMService(new URL(serverDef.getUrl()), serverDef.getUniverse(), serverDef.getUser(),
+                    serverDef.getPasswd());
             IWorkbenchPartSite site = commonViewer.getCommonNavigator().getSite();
             dialog = new DataClusterDialog(getShell(), new TreeObject(), site);
             dialog.setDefaultServerDef(serverDef);
@@ -104,25 +100,34 @@ public class TestTriggerAction extends AbstractRepositoryAction implements Selec
                 return;
             }
 
-            WSRoutingRulePKArray routeItemV2 = port.routeItemV2(new WSRouteItemV2(new WSItemPK(new WSDataClusterPK(
-                    dataCluster), concept, Arrays.asList(recordIds))));
+            // *** TMDM-8080, temp substituted start ***//
+            // WsRoutingRulePKArray routeItemV2 = service.routeItemV2(new WSRouteItemV2(new WSItemPK(
+            // new WSDataClusterPK(
+            // dataCluster), concept, Arrays.asList(recordIds))));
+            //
+            //
+            //
+            // if (routeItemV2 == null || routeItemV2.getWsRoutingRulePKs() == null
+            // || routeItemV2.getWsRoutingRulePKs().size() == 0) {
+            // MessageDialog.openInformation(getShell(), Messages.RoutingRuleMainPage2_Success,
+            // Messages.RoutingRuleMainPage2_noTriggerExecuted);
+            // return;
+            // }
+            //
+            //
+            // List<WsRoutingRulePK> wsRoutingRulePKs = routeItemV2.getWsRoutingRulePKs();
+            // StringBuilder builder = new StringBuilder(wsRoutingRulePKs.get(0).getPk());
+            // for (int i = 1; i < wsRoutingRulePKs.size(); i++) {
+            //                    builder.append("," + wsRoutingRulePKs.get(i).getPk()); //$NON-NLS-1$
+            // }
+            //
+            // MessageDialog.openInformation(getShell(), Messages.RoutingRuleMainPage2_Success,
+            // Messages.bind(Messages.RoutingRuleMainPage2_ExecuteTriggerSuccess, builder.toString()));
 
-            if (routeItemV2 == null || routeItemV2.getWsRoutingRulePKs() == null
-                    || routeItemV2.getWsRoutingRulePKs().size() == 0) {
-                MessageDialog.openInformation(getShell(), Messages.RoutingRuleMainPage2_Success,
-                        Messages.RoutingRuleMainPage2_noTriggerExecuted);
-                return;
-            }
-
-
-                List<WSRoutingRulePK> wsRoutingRulePKs = routeItemV2.getWsRoutingRulePKs();
-                StringBuilder builder = new StringBuilder(wsRoutingRulePKs.get(0).getPk());
-                for (int i = 1; i < wsRoutingRulePKs.size(); i++) {
-                    builder.append("," + wsRoutingRulePKs.get(i).getPk()); //$NON-NLS-1$
-                }
-
-                MessageDialog.openInformation(getShell(), Messages.RoutingRuleMainPage2_Success,
-                        Messages.bind(Messages.RoutingRuleMainPage2_ExecuteTriggerSuccess, builder.toString()));
+            service.routingEngineV2Action(new WsRoutingEngineV2Action(new WsRoutingEngineV2ActionCode()));
+            MessageDialog.openInformation(getShell(), Messages.RoutingRuleMainPage2_Success,
+                    Messages.bind(Messages.RoutingRuleMainPage2_ExecuteTriggerSuccess, ""));
+            // *** TMDM-8080, temp substituted end ***//
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             MessageDialog.openError(getShell(), Messages._Error, Messages.RoutingRuleMainPage2_ErrorTestTrigger);

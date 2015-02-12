@@ -81,8 +81,8 @@ import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 
 import com.amalto.workbench.exadapter.ExAdapterManager;
 import com.amalto.workbench.utils.XtentisException;
-import com.amalto.workbench.webservices.WSDigest;
-import com.amalto.workbench.webservices.WSDigestKey;
+import com.amalto.workbench.webservices.WsDigest;
+import com.amalto.workbench.webservices.WsDigestKey;
 
 /**
  * DOC hbhong class global comment. Detailled comment
@@ -548,7 +548,7 @@ public class RepositoryViewObjectCheckedWidget extends Composite {
             if (element instanceof IRepositoryViewObject && curServerDef != null && !(element instanceof FolderRepositoryObject)) {
                 ConsistencyData consistencyData = getConsistencyData(curServerDef, (IRepositoryViewObject) element);
                 if (consistencyData != null) {
-                    WSDigest dt = isLocal ? consistencyData.getLocalDigestTime() : consistencyData.getServerDigestTime();
+                    WsDigest dt = isLocal ? consistencyData.getLocalDigestTime() : consistencyData.getServerDigestTime();
                     if (dt != null && dt.getTimeStamp() > 0) {
                         return DATE_FORMAT.format(new Date(dt.getTimeStamp()));
                     }
@@ -649,9 +649,9 @@ public class RepositoryViewObjectCheckedWidget extends Composite {
             } else {
                 List<IRepositoryViewObject> viewObjs = new ArrayList<IRepositoryViewObject>();
                 viewObjs.add(viewObj);
-                Map<IRepositoryViewObject, WSDigest> digestValueResult = consistencyService.queryServerDigestValue(serverDef,
+                Map<IRepositoryViewObject, WsDigest> digestValueResult = consistencyService.queryServerDigestValue(serverDef,
                         viewObjs);
-                WSDigest serverDigestTime = digestValueResult.get(viewObj);
+                WsDigest serverDigestTime = digestValueResult.get(viewObj);
                 consistencyData.setServerDigestTime(serverDigestTime);
                 consistencyService.updateCurrentDigestValue(viewObj);
                 Item item = viewObj.getProperty().getItem();
@@ -661,8 +661,8 @@ public class RepositoryViewObjectCheckedWidget extends Composite {
                 // key
                 String type = viewObj.getRepositoryObjectType().getKey();
                 String objectName = viewObj.getLabel();
-                WSDigestKey key = new WSDigestKey(type, objectName);
-                consistencyData.setLocalDigestTime(new WSDigest(key, ld, localTimestamp));
+                WsDigestKey key = new WsDigestKey(type, objectName);
+                consistencyData.setLocalDigestTime(new WsDigest(ld, localTimestamp, key));
 
                 // init compare result;
                 CompareResultEnum result;

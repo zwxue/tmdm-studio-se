@@ -21,20 +21,21 @@ import com.amalto.workbench.editors.XObjectBrowser;
 import com.amalto.workbench.editors.XObjectEditor;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.models.TreeParent;
-import com.amalto.workbench.webservices.XtentisPort;
+import com.amalto.workbench.webservices.TMDMService;
+import com.amalto.workbench.webservices.TMDMService;
 
 public interface IAvailableModel {
 
     /**
      * add treeobjects when refresh the serverroot treenode
      * 
-     * @param port
+     * @param service
      * @param monitor
      * @param serverRoot
      */
-    void addTreeObjects(XtentisPort port, IProgressMonitor monitor, TreeParent serverRoot);
+    void addTreeObjects(TMDMService service, IProgressMonitor monitor, TreeParent serverRoot);
 
-    void deleteTreeObject(XtentisPort port, TreeObject xobject);
+    void deleteTreeObject(TMDMService port, TreeObject xobject);
 
     /**
      * Fill the context menu when right click the object in the server tree

@@ -85,7 +85,7 @@ import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.providers.datamodel.SchemaTreeContentProvider;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.views.MDMPerspective;
-import com.amalto.workbench.webservices.WSDataModel;
+import com.amalto.workbench.webservices.WsDataModel;
 
 @SuppressWarnings("restriction")
 public class XSDEditor extends InternalXSDMultiPageEditor implements IServerObjectEditorState {
@@ -165,7 +165,7 @@ public class XSDEditor extends InternalXSDMultiPageEditor implements IServerObje
             }
             if (null != xsd) {
                 DataModelMainPage mainPage = getdMainPage();
-                WSDataModel wsDataModel = (WSDataModel) xobject.getWsObject();
+                WsDataModel wsDataModel = (WsDataModel) xobject.getWsObject();
                 wsDataModel.setXsdSchema(xsd);
                 if (mainPage != null) {
                     mainPage.save(xsd);
@@ -236,7 +236,7 @@ public class XSDEditor extends InternalXSDMultiPageEditor implements IServerObje
                 if (mainPage != null && mainPage.isDirty()) {
                     String xsd = mainPage.getXSDSchemaString();
                     xsd = Util.formatXsdSource(xsd);
-                    WSDataModel wsDataModel = (WSDataModel) xobject.getWsObject();
+                    WsDataModel wsDataModel = (WsDataModel) xobject.getWsObject();
                     wsDataModel.setXsdSchema(xsd);
                     IFile file = getXSDFile(xobject);
                     file.setCharset("utf-8", null);//$NON-NLS-1$

@@ -15,7 +15,6 @@ package com.amalto.workbench.dialogs;
 import java.io.File;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.util.Iterator;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.regex.Matcher;
@@ -50,7 +49,7 @@ import org.eclipse.ui.internal.browser.WebBrowserPreference;
 import com.amalto.workbench.editors.TransformerMainPage;
 import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.utils.FileProvider;
-import com.amalto.workbench.webservices.WSExtractedContent;
+import com.amalto.workbench.webservices.WsExtractedContent;
 
 public class ProcessResultsDialog extends Dialog {
 
@@ -66,12 +65,12 @@ public class ProcessResultsDialog extends Dialog {
 
     protected String title;
 
-    protected TreeMap<String, WSExtractedContent> resultsMap = null;
+    protected TreeMap<String, WsExtractedContent> resultsMap = null;
 
     /**
      * @param parentShell
      */
-    public ProcessResultsDialog(Shell parentShell, String title, TreeMap<String, WSExtractedContent> map) {
+    public ProcessResultsDialog(Shell parentShell, String title, TreeMap<String, WsExtractedContent> map) {
         super(parentShell);
         this.title = title;
         this.resultsMap = map;
@@ -141,7 +140,9 @@ public class ProcessResultsDialog extends Dialog {
                 public void modifyText(ModifyEvent e) {
                     String output = variablesCombo.getText();
                     if (output.startsWith(TransformerMainPage.DEFAULT_DISPLAY))
+                     {
                         output = DEFAULT_DISPLAY_TEXT;// TransformerMainPage.DEFAULT_VAR+output.substring(TransformerMainPage.DEFAULT_DISPLAY.length());
+                    }
                     String text = variablesCombo.getText();
                     if (text.equals(DEFAULT_DISPLAY_TEXT)) {
                         text = TransformerMainPage.DEFAULT_DISPLAY;
@@ -183,21 +184,27 @@ public class ProcessResultsDialog extends Dialog {
     private static Pattern p = Pattern.compile(".*charset\\s*=[\"|']?(.+)[\"|']([\\s|;].*)?");//$NON-NLS-1$
 
     protected String getText(String output) {
-        WSExtractedContent ct = resultsMap.get(output);
+        WsExtractedContent ct = resultsMap.get(output);
         if (ct == null)
+         {
             return "";//$NON-NLS-1$
+        }
         String contentType = ct.getContentType();
         byte[] bytes = ct.getWsByteArray().getBytes();
         if (bytes == null)
+         {
             return "";//$NON-NLS-1$
+        }
         // extract charset
         String charset = "UTF8";//$NON-NLS-1$
         Matcher m = p.matcher(contentType);
         if (m.matches()) {
             charset = m.group(1).trim().toUpperCase();
         }
-        if ("UTF-8".equals(charset))//$NON-NLS-1$
+        if ("UTF-8".equals(charset))
+         {
             charset = "UTF8";//$NON-NLS-1$
+        }
         // display
         try {
             return new String(bytes, charset);
@@ -212,10 +219,12 @@ public class ProcessResultsDialog extends Dialog {
         try {
 
             Set<String> outputs = resultsMap.keySet();
-            for (Iterator iter = outputs.iterator(); iter.hasNext();) {
-                String output = (String) iter.next();
+            for (Object element : outputs) {
+                String output = (String) element;
                 if (output.startsWith(TransformerMainPage.DEFAULT_VAR))
+                 {
                     output = DEFAULT_DISPLAY_TEXT;// TransformerMainPage.DEFAULT_DISPLAY+output.substring(TransformerMainPage.DEFAULT_VAR.length());
+                }
                 variablesCombo.add(output);
             }
             variablesCombo.select(0);

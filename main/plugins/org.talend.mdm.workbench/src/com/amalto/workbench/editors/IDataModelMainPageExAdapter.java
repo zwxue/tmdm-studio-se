@@ -18,7 +18,7 @@ import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 
 import com.amalto.workbench.exadapter.IExAdapter;
-import com.amalto.workbench.webservices.XtentisPort;
+import com.amalto.workbench.webservices.TMDMService;
 
 /**
  * created by HHB on 2014-1-6 Detailled comment
@@ -33,7 +33,7 @@ public interface IDataModelMainPageExAdapter extends IExAdapter<DataModelMainPag
      * @param name
      * @param dataModelText
      */
-    void doSave(XtentisPort port, String name, String dataModelText);
+    void doSave(TMDMService service, String name, String dataModelText);
 
     ToolItem createFilterToolItem(ToolBar parentToolBar, final TreeViewer tTreeViewer);
 

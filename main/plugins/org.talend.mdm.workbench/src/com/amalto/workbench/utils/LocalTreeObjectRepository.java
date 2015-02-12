@@ -47,8 +47,8 @@ import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.models.IXObjectModelListener;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.models.TreeParent;
-import com.amalto.workbench.webservices.WSCategoryData;
-import com.amalto.workbench.webservices.XtentisPort;
+import com.amalto.workbench.webservices.TMDMService;
+import com.amalto.workbench.webservices.WsCategoryData;
 
 public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeViewerListener {
 
@@ -116,7 +116,7 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
 
         public Document doc;
 
-        public XtentisPort port;
+        public TMDMService service;
 
         public boolean state;
 
@@ -128,41 +128,41 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
     }
 
     public void startUp(String ur, String user, String pwd) {
-        XtentisPort port = null;
+        TMDMService service = null;
         Document doc = null;
         SAXReader saxReader = new SAXReader();
 
         try {
-            port = Util.getPort(new URL(ur), "", user, pwd);//$NON-NLS-1$
-            WSCategoryData category = port.getMDMCategory(null);
+            service = Util.getMDMService(new URL(ur), "", user, pwd);//$NON-NLS-1$
+            WsCategoryData category = service.getMDMCategory(null);
             doc = saxReader.read(new StringReader(category.getCategorySchema()));
-            saveCredential(ur, user, pwd, doc, port, true);
+            saveCredential(ur, user, pwd, doc, service, true);
             doUpgrade(UnifyUrl(ur));
         } catch (Exception e) {
 
             log.error(e.getMessage(), e);
             String empty = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";//$NON-NLS-1$
             empty += "<" + ICoreConstants.DEFAULT_CATEGORY_ROOT + "/>";//$NON-NLS-1$//$NON-NLS-2$
-            WSCategoryData newData = new WSCategoryData();
+            WsCategoryData newData = new WsCategoryData();
             newData.setCategorySchema(empty);
             try {
-                newData = port.getMDMCategory(newData);
+                newData = service.getMDMCategory(newData);
                 doc = saxReader.read(new StringReader(newData.getCategorySchema()));
-                saveCredential(ur, user, pwd, doc, port, true);
+                saveCredential(ur, user, pwd, doc, service, true);
             } catch (Exception e1) {
-                saveCredential(ur, user, pwd, doc, port, false);
+                saveCredential(ur, user, pwd, doc, service, false);
             }
 
         }
     }
 
-    private void saveCredential(String ur, String user, String pwd, Document doc, XtentisPort port, boolean stat) {
+    private void saveCredential(String ur, String user, String pwd, Document doc, TMDMService service, boolean stat) {
         Credential credal = credentials.get(UnifyUrl(ur));
         if (credal == null) {
             credal = new Credential(user, pwd, doc);
         }
 
-        credal.port = port;
+        credal.service = service;
         if (credal.doc == null) {
             credal.doc = doc;
         }
@@ -277,10 +277,10 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
 
     private void saveDocument(String url) {
         if (credentials.get(url) != null) {
-            XtentisPort port = credentials.get(url).port;
+            TMDMService service = credentials.get(url).service;
             Document doc = credentials.get(url).doc;
             if (doc != null) {
-                port.getMDMCategory(new WSCategoryData(doc.asXML()));
+                service.getMDMCategory(new WsCategoryData(doc.asXML()));
             }
         }
     }

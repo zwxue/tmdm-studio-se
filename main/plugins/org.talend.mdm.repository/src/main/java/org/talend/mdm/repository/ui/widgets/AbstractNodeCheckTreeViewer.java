@@ -45,13 +45,12 @@ import org.talend.mdm.repository.core.service.RepositoryQueryService;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
-import org.talend.mdm.repository.model.mdmserverobject.WSResourceE;
+import org.talend.mdm.repository.model.mdmserverobject.WsResourceE;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.models.TreeParent;
 import com.amalto.workbench.utils.Util;
-import com.amalto.workbench.webservices.WSVersioningUniverseVersions.TagStructure;
 import com.amalto.workbench.widgets.FilteredCheckboxTree;
 import com.amalto.workbench.widgets.VersionTagWidget;
 
@@ -72,7 +71,9 @@ public abstract class AbstractNodeCheckTreeViewer {
 
     protected FilteredCheckboxTree filteredCheckboxTree;
 
-    private ArrayList<TagStructure> hisEntries;
+    // *** TMDM-8080, temp omitted start ***//
+    // private ArrayList<TagStructure> hisEntries;
+    // *** TMDM-8080, temp omitted end ***//
 
     protected boolean isTagEditable;
 
@@ -170,8 +171,13 @@ public abstract class AbstractNodeCheckTreeViewer {
         layout.marginLeft = 0;
         layout.marginRight = 0;
         versionComposite.setLayout(layout);
+
+        // *** TMDM-8080, temp substituted start ***//
+        //        vwidget = new VersionTagWidget(versionComposite, "Universe", defaultTagText, isTagEditable, tagSelectionListener,//$NON-NLS-1$
+        // restoreSelectionListener, tagsViewerDoubleClickListener, this.hisEntries);
         vwidget = new VersionTagWidget(versionComposite, "Universe", defaultTagText, isTagEditable, tagSelectionListener,//$NON-NLS-1$
-                restoreSelectionListener, tagsViewerDoubleClickListener, this.hisEntries);
+                restoreSelectionListener, tagsViewerDoubleClickListener, null);
+        // *** TMDM-8080, temp substituted end ***//
 
         sash.setWeights(new int[] { 20, 2, 21 });
         // add listner
@@ -358,7 +364,7 @@ public abstract class AbstractNodeCheckTreeViewer {
                 }
 
                 if (type == TreeObject.PICTURES_RESOURCE) {
-                    name = name + "_" + viewObject.getVersion() + "." + ((WSResourceE) serverObj).getFileExtension(); //$NON-NLS-1$ //$NON-NLS-2$
+                    name = name + "_" + viewObject.getVersion() + "." + ((WsResourceE) serverObj).getFileExtension(); //$NON-NLS-1$ //$NON-NLS-2$
                 }
                 if (serverObj != null && treeObjName.equals(name)) {
                     return true;
@@ -443,9 +449,11 @@ public abstract class AbstractNodeCheckTreeViewer {
 
     }
 
-    public void refreshHistoryTable(ArrayList<TagStructure> hisEntries) {
-        this.vwidget.refreshData(hisEntries);
-    }
+    // *** TMDM-8080, temp omitted start ***//
+    // public void refreshHistoryTable(ArrayList<TagStructure> hisEntries) {
+    // this.vwidget.refreshData(hisEntries);
+    // }
+    // *** TMDM-8080, temp omitted end ***//
 
     public void removeCheckStateListener(ICheckStateListener listener) {
         filteredCheckboxTree.getViewer().removeCheckStateListener(listener);
@@ -460,11 +468,13 @@ public abstract class AbstractNodeCheckTreeViewer {
         viewer = filteredCheckboxTree.getViewer();
     }
 
-    public void setHisEntries(ArrayList<TagStructure> hisEntries) {
-
-        this.hisEntries = hisEntries;
-
-    }
+    // *** TMDM-8080, temp omitted start ***//
+    // public void setHisEntries(ArrayList<TagStructure> hisEntries) {
+    //
+    // this.hisEntries = hisEntries;
+    //
+    // }
+    // *** TMDM-8080, temp omitted end ***//
 
     public void setItemText(String text) {
         itemLabel.setText(text);

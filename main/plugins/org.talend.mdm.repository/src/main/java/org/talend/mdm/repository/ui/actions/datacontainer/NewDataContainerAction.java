@@ -26,9 +26,9 @@ import org.talend.core.model.properties.ItemState;
 import org.talend.core.model.properties.PropertiesFactory;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmproperties.MdmpropertiesFactory;
-import org.talend.mdm.repository.model.mdmproperties.WSDataClusterItem;
+import org.talend.mdm.repository.model.mdmproperties.WsDataClusterItem;
 import org.talend.mdm.repository.model.mdmserverobject.MdmserverobjectFactory;
-import org.talend.mdm.repository.model.mdmserverobject.WSDataClusterE;
+import org.talend.mdm.repository.model.mdmserverobject.WsDataClusterE;
 import org.talend.mdm.repository.ui.actions.AbstractSimpleAddAction;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 
@@ -38,21 +38,18 @@ import org.talend.mdm.repository.utils.RepositoryResourceUtil;
  */
 public class NewDataContainerAction extends AbstractSimpleAddAction {
 
-
     public NewDataContainerAction() {
         super();
     }
-
 
     @Override
     protected String getDialogTitle() {
         return Messages.NewDataContainerAction_newDataContainer;
     }
 
-    private WSDataClusterE newDataContainer(String key) {
+    private WsDataClusterE newDataContainer(String key) {
 
-
-        WSDataClusterE datacontainer = MdmserverobjectFactory.eINSTANCE.createWSDataClusterE();
+        WsDataClusterE datacontainer = MdmserverobjectFactory.eINSTANCE.createWsDataClusterE();
 
         datacontainer.setName(key);
         datacontainer.setDescription(""); //$NON-NLS-1$
@@ -61,14 +58,15 @@ public class NewDataContainerAction extends AbstractSimpleAddAction {
         return datacontainer;
     }
 
+    @Override
     protected Item createServerObject(String key) {
 
-        WSDataClusterItem item = MdmpropertiesFactory.eINSTANCE.createWSDataClusterItem();
+        WsDataClusterItem item = MdmpropertiesFactory.eINSTANCE.createWsDataClusterItem();
 
         ItemState itemState = PropertiesFactory.eINSTANCE.createItemState();
         item.setState(itemState);
         //
-        WSDataClusterE datacontainer = newDataContainer(key);
+        WsDataClusterE datacontainer = newDataContainer(key);
         item.setWsDataCluster(datacontainer);
 
         if (parentItem != null) {
@@ -77,7 +75,6 @@ public class NewDataContainerAction extends AbstractSimpleAddAction {
         }
         return item;
     }
-
 
     @Override
     protected boolean runOpenActionAfterCreation(Item item) {

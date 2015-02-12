@@ -17,27 +17,28 @@ import java.util.HashSet;
 import java.util.Set;
 
 import com.amalto.workbench.editors.TransformerMainPage;
-import com.amalto.workbench.webservices.WSTransformerProcessStep;
-import com.amalto.workbench.webservices.WSTransformerV2;
-import com.amalto.workbench.webservices.WSTransformerVariablesMapping;
+import com.amalto.workbench.webservices.WsTransformerProcessStep;
+import com.amalto.workbench.webservices.WsTransformerV2;
+import com.amalto.workbench.webservices.WsTransformerVariablesMapping;
 
 public class ProcessAllCallJobVariableCandidatesHolder extends AllCallJobVariableCandidatesHolder {
 
-    private WSTransformerV2 service;
+    private WsTransformerV2 service;
 
-    public ProcessAllCallJobVariableCandidatesHolder(WSTransformerV2 service) {
+    public ProcessAllCallJobVariableCandidatesHolder(WsTransformerV2 service) {
         this.service = service;
     }
 
     @Override
     public String[] getExternalInfo() {
 
-        if (service == null)
+        if (service == null) {
             return new String[0];
+        }
 
         Set<String> inputVariables = new HashSet<String>();
-        for (WSTransformerProcessStep step : service.getProcessSteps()) {
-            for (WSTransformerVariablesMapping mapping : step.getInputMappings()) {
+        for (WsTransformerProcessStep step : service.getProcessSteps()) {
+            for (WsTransformerVariablesMapping mapping : step.getInputMappings()) {
                 inputVariables.add(mapping.getPipelineVariable() == null ? TransformerMainPage.DEFAULT_VAR : mapping
                         .getPipelineVariable());
             }

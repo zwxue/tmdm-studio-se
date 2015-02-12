@@ -26,9 +26,9 @@ import org.talend.core.model.properties.ItemState;
 import org.talend.core.model.properties.PropertiesFactory;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmproperties.MdmpropertiesFactory;
-import org.talend.mdm.repository.model.mdmproperties.WSRoutingRuleItem;
+import org.talend.mdm.repository.model.mdmproperties.WsRoutingRuleItem;
 import org.talend.mdm.repository.model.mdmserverobject.MdmserverobjectFactory;
-import org.talend.mdm.repository.model.mdmserverobject.WSRoutingRuleE;
+import org.talend.mdm.repository.model.mdmserverobject.WsRoutingRuleE;
 import org.talend.mdm.repository.ui.actions.AbstractSimpleAddAction;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 
@@ -38,19 +38,17 @@ import org.talend.mdm.repository.utils.RepositoryResourceUtil;
  */
 public class NewTriggerAction extends AbstractSimpleAddAction {
 
-
     public NewTriggerAction() {
         super();
     }
-
 
     @Override
     protected String getDialogTitle() {
         return Messages.NewTriggerAction_newTrigger;
     }
 
-    private WSRoutingRuleE newRoutingRule(String key) {
-        WSRoutingRuleE routingRule = MdmserverobjectFactory.eINSTANCE.createWSRoutingRuleE();
+    private WsRoutingRuleE newRoutingRule(String key) {
+        WsRoutingRuleE routingRule = MdmserverobjectFactory.eINSTANCE.createWsRoutingRuleE();
 
         routingRule.setName(key);
         routingRule.setDescription(""); //$NON-NLS-1$
@@ -65,14 +63,15 @@ public class NewTriggerAction extends AbstractSimpleAddAction {
         return routingRule;
     }
 
+    @Override
     protected Item createServerObject(String key) {
 
-        WSRoutingRuleItem item = MdmpropertiesFactory.eINSTANCE.createWSRoutingRuleItem();
+        WsRoutingRuleItem item = MdmpropertiesFactory.eINSTANCE.createWsRoutingRuleItem();
 
         ItemState itemState = PropertiesFactory.eINSTANCE.createItemState();
         item.setState(itemState);
 
-        WSRoutingRuleE routingRule = newRoutingRule(key);
+        WsRoutingRuleE routingRule = newRoutingRule(key);
         item.setWsRoutingRule(routingRule);
 
         if (parentItem != null) {
@@ -81,6 +80,5 @@ public class NewTriggerAction extends AbstractSimpleAddAction {
         }
         return item;
     }
-
 
 }

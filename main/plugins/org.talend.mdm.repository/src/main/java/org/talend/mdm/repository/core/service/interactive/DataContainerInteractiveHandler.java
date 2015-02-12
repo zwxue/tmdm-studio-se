@@ -20,11 +20,11 @@ import org.talend.mdm.repository.i18n.Messages;
 import com.amalto.workbench.utils.EXtentisObjects;
 import com.amalto.workbench.utils.TreeObjectUtil;
 import com.amalto.workbench.utils.XtentisException;
-import com.amalto.workbench.webservices.WSDataCluster;
-import com.amalto.workbench.webservices.WSDataClusterPK;
-import com.amalto.workbench.webservices.WSDeleteDataCluster;
-import com.amalto.workbench.webservices.WSPutDataCluster;
-import com.amalto.workbench.webservices.XtentisPort;
+import com.amalto.workbench.webservices.TMDMService;
+import com.amalto.workbench.webservices.WsDataCluster;
+import com.amalto.workbench.webservices.WsDataClusterPK;
+import com.amalto.workbench.webservices.WsDeleteDataCluster;
+import com.amalto.workbench.webservices.WsPutDataCluster;
 
 /**
  * DOC hbhong class global comment. Detailled comment
@@ -41,22 +41,22 @@ public class DataContainerInteractiveHandler extends AbstractInteractiveHandler 
     }
 
     @Override
-    public boolean doDeployWSObject(XtentisPort port, Object wsObj) {
+    public boolean doDeployWSObject(TMDMService service, Object wsObj) {
         if (wsObj != null) {
-            WSPutDataCluster wsPutDataCluster = new WSPutDataCluster((WSDataCluster) wsObj);
-            port.putDataCluster(wsPutDataCluster);
+            WsPutDataCluster wsPutDataCluster = new WsPutDataCluster((WsDataCluster) wsObj);
+            service.putDataCluster(wsPutDataCluster);
             return true;
         }
         return false;
     }
 
     @Override
-    public boolean doRemove(XtentisPort port, AbstractDeployCommand cmd) throws XtentisException {
-        WSDataClusterPK pk = new WSDataClusterPK();
+    public boolean doRemove(TMDMService service, AbstractDeployCommand cmd) throws XtentisException {
+        WsDataClusterPK pk = new WsDataClusterPK();
         String name = cmd.getObjName();
         pk.setPk(name);
-        port.deleteDataCluster(new WSDeleteDataCluster(pk));
-        TreeObjectUtil.deleteSpecificationFromAttachedRole(port, name, EXtentisObjects.DataCluster.getName());
+        service.deleteDataCluster(new WsDeleteDataCluster(pk));
+        TreeObjectUtil.deleteSpecificationFromAttachedRole(service, name, EXtentisObjects.DataCluster.getName());
         return true;
     }
 

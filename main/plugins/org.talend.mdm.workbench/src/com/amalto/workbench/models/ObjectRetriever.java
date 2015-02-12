@@ -28,7 +28,7 @@ import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.utils.IConstants;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.XtentisException;
-import com.amalto.workbench.webservices.XtentisPort;
+import com.amalto.workbench.webservices.TMDMService;
 
 public class ObjectRetriever implements IRunnableWithProgress {
 
@@ -76,7 +76,7 @@ public class ObjectRetriever implements IRunnableWithProgress {
                 objectName = "JobAvailableModel";//$NON-NLS-1$
                 break;
             }
-            XtentisPort port = Util.getPort(new URL(endpointaddress), universe, username, password);
+            TMDMService service = Util.getMDMService(new URL(endpointaddress), universe, username, password);
             // port.ping(new WSPing("Hello MDM!"));
             // monitor.worked(1);
 
@@ -97,7 +97,7 @@ public class ObjectRetriever implements IRunnableWithProgress {
             List<IAvailableModel> availablemodels = AvailableModelUtil.getAvailableModels();
             for (IAvailableModel model : availablemodels) {
                 if (model.toString().indexOf(objectName) > 0) {
-                    model.addTreeObjects(port, monitor, parentObject.getServerRoot());
+                    model.addTreeObjects(service, monitor, parentObject.getServerRoot());
                 }
             }
 

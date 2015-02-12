@@ -6,8 +6,8 @@ import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.jface.viewers.ILightweightLabelDecorator;
 import org.talend.core.model.properties.Item;
 import org.talend.core.model.repository.IRepositoryViewObject;
-import org.talend.mdm.repository.model.mdmproperties.WSRoutingRuleItem;
-import org.talend.mdm.repository.model.mdmserverobject.WSRoutingRuleE;
+import org.talend.mdm.repository.model.mdmproperties.WsRoutingRuleItem;
+import org.talend.mdm.repository.model.mdmserverobject.WsRoutingRuleE;
 import org.talend.mdm.repository.plugin.RepositoryPlugin;
 import org.talend.mdm.repository.utils.EclipseResourceManager;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
@@ -20,8 +20,8 @@ public class TriggerDecorator implements ILightweightLabelDecorator {
     public void decorate(Object element, IDecoration decoration) {
         IRepositoryViewObject viewObj = (IRepositoryViewObject) element;
         Item item = RepositoryResourceUtil.getItemFromRepViewObj(viewObj);
-        if (item != null && item instanceof WSRoutingRuleItem) {
-            WSRoutingRuleE routing = ((WSRoutingRuleItem) item).getWsRoutingRule();
+        if (item != null && item instanceof WsRoutingRuleItem) {
+            WsRoutingRuleE routing = ((WsRoutingRuleItem) item).getWsRoutingRule();
             if (routing.isDeactive()) {
                 decoration.addOverlay(IMG_TRIGGER_DEACTIVE, IDecoration.BOTTOM_LEFT);
             }

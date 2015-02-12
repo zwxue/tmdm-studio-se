@@ -72,9 +72,9 @@ import com.amalto.workbench.providers.datamodel.SchemaTreeContentProvider;
 import com.amalto.workbench.providers.datamodel.TypesTreeContentProvider;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.XtentisException;
-import com.amalto.workbench.webservices.WSDataModelPK;
-import com.amalto.workbench.webservices.WSRegexDataModelPKs;
-import com.amalto.workbench.webservices.XtentisPort;
+import com.amalto.workbench.webservices.TMDMService;
+import com.amalto.workbench.webservices.WsDataModelPK;
+import com.amalto.workbench.webservices.WsRegexDataModelPKs;
 
 public class SelectImportedModulesDialog extends Dialog {
 
@@ -431,14 +431,14 @@ public class SelectImportedModulesDialog extends Dialog {
     }
 
     protected boolean resolveSchemaList(List<String> schemaList) throws XtentisException {
-        XtentisPort port = getPort();
+        TMDMService port = getPort();
         if (port == null) {
             MessageDialog.openError(getShell(), Messages._Error, Messages.ServerNotNull);
             return false;
         }
-        List<WSDataModelPK> xdmPKs = port.getDataModelPKs(new WSRegexDataModelPKs("")).getWsDataModelPKs();//$NON-NLS-1$
+        List<WsDataModelPK> xdmPKs = port.getDataModelPKs(new WsRegexDataModelPKs("")).getWsDataModelPKs();//$NON-NLS-1$
         if (xdmPKs != null) {
-            for (WSDataModelPK xdmPK : xdmPKs) {
+            for (WsDataModelPK xdmPK : xdmPKs) {
                 String name = xdmPK.getPk();
                 if (!name.startsWith("XMLSCHEMA")) {//$NON-NLS-1$
                     schemaList.add(name);
@@ -471,8 +471,8 @@ public class SelectImportedModulesDialog extends Dialog {
         super.okPressed();
     }
 
-    protected XtentisPort getPort() throws XtentisException {
-        return Util.getPort(treeObject);
+    protected TMDMService getPort() throws XtentisException {
+        return Util.getMDMService(treeObject);
     }
 
     @Override

@@ -2,7 +2,7 @@
 //
 // Talend Community Edition
 //
-// Copyright (C) 2006-2014 Talend ¨C www.talend.com
+// Copyright (C) 2006-2014 Talend ï¿½C www.talend.com
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
@@ -25,7 +25,7 @@ import org.eclipse.swt.graphics.Image;
 import org.talend.core.model.properties.Item;
 import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.mdm.repository.core.impl.AbstractLabelProvider;
-import org.talend.mdm.repository.model.mdmproperties.WSServiceConfigurationItem;
+import org.talend.mdm.repository.model.mdmproperties.WsServiceConfigurationItem;
 import org.talend.mdm.repository.plugin.RepositoryPlugin;
 import org.talend.mdm.repository.utils.EclipseResourceManager;
 
@@ -52,7 +52,7 @@ public class ServiceConfigurationLabelProvider extends AbstractLabelProvider {
         if (img == null) {
             Item item = getItem(element);
             if (item != null) {
-                if (item instanceof WSServiceConfigurationItem) {
+                if (item instanceof WsServiceConfigurationItem) {
                     img = IMG;
                 }
             }

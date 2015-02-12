@@ -21,8 +21,8 @@ import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.AbstractRepositoryAction;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
-import org.talend.mdm.repository.model.mdmproperties.WSViewItem;
-import org.talend.mdm.repository.model.mdmserverobject.WSViewE;
+import org.talend.mdm.repository.model.mdmproperties.WsViewItem;
+import org.talend.mdm.repository.model.mdmserverobject.WsViewE;
 import org.talend.mdm.repository.ui.editors.ViewBrowserInput;
 import org.talend.mdm.repository.ui.editors.XObjectBrowser2;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
@@ -55,8 +55,8 @@ public class BrowseViewAction extends AbstractRepositoryAction {
         Object obj = getSelectedObject().get(0);
         if (obj instanceof IRepositoryViewObject) {
             IRepositoryViewObject viewObject = (IRepositoryViewObject) obj;
-            WSViewItem item = (WSViewItem) viewObject.getProperty().getItem();
-            WSViewE wsView = item.getWsView();
+            WsViewItem item = (WsViewItem) viewObject.getProperty().getItem();
+            WsViewE wsView = item.getWsView();
 
             MDMServerDef lastServerDef = RepositoryResourceUtil.getLastServerDef(item);
             SelectServerDefDialog dlg = new SelectServerDefDialog(getShell());

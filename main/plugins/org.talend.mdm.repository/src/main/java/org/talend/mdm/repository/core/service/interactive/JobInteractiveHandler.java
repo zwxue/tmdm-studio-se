@@ -38,7 +38,7 @@ import org.talend.repository.model.RepositoryNode;
 
 import com.amalto.workbench.utils.HttpClientUtil;
 import com.amalto.workbench.utils.XtentisException;
-import com.amalto.workbench.webservices.XtentisPort;
+import com.amalto.workbench.webservices.TMDMService;
 
 /**
  * DOC hbhong class global comment. Detailled comment
@@ -145,7 +145,7 @@ public class JobInteractiveHandler extends AbstractInteractiveHandler {
     }
 
     @Override
-    public boolean doRemove(XtentisPort port, AbstractDeployCommand cmd) throws XtentisException {
+    public boolean doRemove(TMDMService service, AbstractDeployCommand cmd) throws XtentisException {
         MDMServerDef serverDef = cmd.getServerDef();
         String name = cmd.getObjName();
         String version = cmd.getViewObject().getVersion();

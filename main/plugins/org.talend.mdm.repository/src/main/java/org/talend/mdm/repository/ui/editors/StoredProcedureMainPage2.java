@@ -21,7 +21,7 @@ import org.talend.mdm.repository.core.service.RepositoryWebServiceAdapter;
 import org.talend.mdm.repository.i18n.Messages;
 
 import com.amalto.workbench.editors.StoredProcedureMainPage;
-import com.amalto.workbench.webservices.XtentisPort;
+import com.amalto.workbench.webservices.TMDMService;
 
 /**
  * DOC hbhong class global comment. Detailled comment
@@ -37,6 +37,7 @@ public class StoredProcedureMainPage2 extends StoredProcedureMainPage {
         super(editor);
     }
 
+    @Override
     protected void initDataClusterCombo() {
         dataClusterCombo.removeAll();
         List<String> dataContainerNames = RepositoryQueryService.findAllDataContainerNames();
@@ -48,14 +49,15 @@ public class StoredProcedureMainPage2 extends StoredProcedureMainPage {
         dataClusterCombo.add("[ALL]");//$NON-NLS-1$
 
         for (String dataContainerName : dataContainerNames) {
-            if (!"CACHE".equals(dataContainerName)) // FIXME: hardcoded CACHE//$NON-NLS-1$
+            if (!"CACHE".equals(dataContainerName)) {
                 dataClusterCombo.add(dataContainerName);
+            }
         }
     }
 
     @Override
-    protected XtentisPort getPort() {
-        return RepositoryWebServiceAdapter.getXtentisPort(getSite().getShell());
+    protected TMDMService getMDMService() {
+        return RepositoryWebServiceAdapter.getMDMService(getSite().getShell());
     }
 
 }

@@ -31,12 +31,12 @@ import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 import org.talend.repository.utils.ZipFileUtils;
 
-import com.amalto.workbench.webservices.WSBoolean;
-import com.amalto.workbench.webservices.WSDataCluster;
-import com.amalto.workbench.webservices.WSDataClusterPK;
-import com.amalto.workbench.webservices.WSExistsDataCluster;
-import com.amalto.workbench.webservices.WSPutDataCluster;
-import com.amalto.workbench.webservices.XtentisPort;
+import com.amalto.workbench.webservices.TMDMService;
+import com.amalto.workbench.webservices.WsBoolean;
+import com.amalto.workbench.webservices.WsDataCluster;
+import com.amalto.workbench.webservices.WsDataClusterPK;
+import com.amalto.workbench.webservices.WsExistsDataCluster;
+import com.amalto.workbench.webservices.WsPutDataCluster;
 
 /**
  * DOC hbhong class global comment. Detailled comment
@@ -58,10 +58,10 @@ public class DataClusterService {
     private DataClusterService() {
     }
 
-    public boolean createDataCluster(XtentisPort port, String dName) {
+    public boolean createDataCluster(TMDMService service, String dName) {
         try {
-            WSPutDataCluster wsDataCluster = new WSPutDataCluster(new WSDataCluster(dName, "", "")); //$NON-NLS-1$ //$NON-NLS-2$
-            port.putDataCluster(wsDataCluster);
+            WsPutDataCluster wsDataCluster = new WsPutDataCluster(new WsDataCluster(dName, "", "")); //$NON-NLS-1$ //$NON-NLS-2$
+            service.putDataCluster(wsDataCluster);
             return true;
         } catch (WebServiceException ex) {
             log.error(ex.getMessage(), ex);
@@ -81,18 +81,18 @@ public class DataClusterService {
         return new ImportDataContentCommandProcess(serverDef, dName, path);
     }
 
-    public IDataContentProcess getNewExportContentProcess(XtentisPort port, String tempFolderPath, String dName, String fPath) {
-        return new ExportDataContentProcess(port, tempFolderPath, dName, fPath);
+    public IDataContentProcess getNewExportContentProcess(TMDMService service, String tempFolderPath, String dName, String fPath) {
+        return new ExportDataContentProcess(service, tempFolderPath, dName, fPath);
     }
 
-    public IDataContentProcess getNewExportContentCommandProcess(XtentisPort port, String tempFolderPath, String dName,
+    public IDataContentProcess getNewExportContentCommandProcess(TMDMService service, String tempFolderPath, String dName,
             String fPath) {
-        return new ExportDataContentCommandProcess(port, tempFolderPath, dName, fPath);
+        return new ExportDataContentCommandProcess(service, tempFolderPath, dName, fPath);
     }
 
-    public boolean isExistDataCluster(XtentisPort port, String dName) {
-        WSExistsDataCluster wsExistsDataCluster = new WSExistsDataCluster(new WSDataClusterPK(dName));
-        WSBoolean wsBoolean = port.existsDataCluster(wsExistsDataCluster);
+    public boolean isExistDataCluster(TMDMService service, String dName) {
+        WsExistsDataCluster wsExistsDataCluster = new WsExistsDataCluster(new WsDataClusterPK(dName));
+        WsBoolean wsBoolean = service.existsDataCluster(wsExistsDataCluster);
         return wsBoolean.isTrue();
     }
 

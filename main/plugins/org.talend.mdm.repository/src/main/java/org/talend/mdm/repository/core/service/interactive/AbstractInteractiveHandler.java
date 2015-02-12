@@ -27,15 +27,15 @@ import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
 import org.talend.mdm.repository.utils.Bean2EObjUtil;
 
 import com.amalto.workbench.utils.XtentisException;
-import com.amalto.workbench.webservices.XtentisPort;
+import com.amalto.workbench.webservices.TMDMService;
 
 /**
  * DOC hbhong class global comment. Detailled comment
  */
 public abstract class AbstractInteractiveHandler implements IInteractiveHandler {
 
-    protected XtentisPort getPort(MDMServerDef serverDef) throws XtentisException {
-        return RepositoryWebServiceAdapter.getXtentisPort(serverDef);
+    protected TMDMService getService(MDMServerDef serverDef) throws XtentisException {
+        return RepositoryWebServiceAdapter.getMDMService(serverDef);
     }
 
     /*
@@ -49,12 +49,12 @@ public abstract class AbstractInteractiveHandler implements IInteractiveHandler 
         return wsObj;
     }
 
-    public boolean doDeployWSObject(XtentisPort port, Object wsObj) {
+    public boolean doDeployWSObject(TMDMService service, Object wsObj) {
         return false;
         // do nothing
     }
 
-    public boolean doRemove(XtentisPort port, AbstractDeployCommand cmd) throws WebServiceException, XtentisException {
+    public boolean doRemove(TMDMService service, AbstractDeployCommand cmd) throws WebServiceException, XtentisException {
         return true;
         // do nothing
     }
@@ -71,13 +71,13 @@ public abstract class AbstractInteractiveHandler implements IInteractiveHandler 
         Item item = viewObj.getProperty().getItem();
         MDMServerObject serverObject = ((MDMServerObjectItem) item).getMDMServerObject();
         Object wsObj = convert(item, serverObject);
-        XtentisPort port = getPort(cmd.getServerDef());
-        return doDeployWSObject(port, wsObj);
+        TMDMService service = getService(cmd.getServerDef());
+        return doDeployWSObject(service, wsObj);
     }
 
     public boolean remove(AbstractDeployCommand cmd) throws XtentisException {
-        XtentisPort port = getPort(cmd.getServerDef());
-        return doRemove(port, cmd);
+        TMDMService service = getService(cmd.getServerDef());
+        return doRemove(service, cmd);
     }
 
     public void assertPropertyIsInited(Item item) {

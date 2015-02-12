@@ -26,7 +26,7 @@ import org.talend.mdm.repository.core.service.ModelImpactAnalyseService;
 import org.talend.mdm.repository.core.service.ModelImpactAnalyseService.ImpactOperation;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
-import org.talend.mdm.repository.model.mdmproperties.WSDataModelItem;
+import org.talend.mdm.repository.model.mdmproperties.WsDataModelItem;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 
@@ -34,11 +34,11 @@ import com.amalto.workbench.exadapter.ExAdapterManager;
 import com.amalto.workbench.utils.EXtentisObjects;
 import com.amalto.workbench.utils.TreeObjectUtil;
 import com.amalto.workbench.utils.XtentisException;
-import com.amalto.workbench.webservices.WSDataModel;
-import com.amalto.workbench.webservices.WSDataModelPK;
-import com.amalto.workbench.webservices.WSDeleteDataModel;
-import com.amalto.workbench.webservices.WSPutDataModel;
-import com.amalto.workbench.webservices.XtentisPort;
+import com.amalto.workbench.webservices.TMDMService;
+import com.amalto.workbench.webservices.WsDataModel;
+import com.amalto.workbench.webservices.WsDataModelPK;
+import com.amalto.workbench.webservices.WsDeleteDataModel;
+import com.amalto.workbench.webservices.WsPutDataModel;
 
 /**
  * DOC hbhong class global comment. Detailled comment
@@ -73,9 +73,9 @@ public class DataModelInteractiveHandler extends AbstractInteractiveHandler {
     }
 
     @Override
-    public boolean doDeployWSObject(XtentisPort port, Object wsObj) {
+    public boolean doDeployWSObject(TMDMService service, Object wsObj) {
         if (wsObj != null) {
-            port.putDataModel(new WSPutDataModel((WSDataModel) wsObj));
+            service.putDataModel(new WsPutDataModel((WsDataModel) wsObj));
             return true;
         }
         return false;
@@ -83,7 +83,7 @@ public class DataModelInteractiveHandler extends AbstractInteractiveHandler {
 
     @Override
     public Object convert(Item item, MDMServerObject serverObj) {
-        WSDataModel dataModel = (WSDataModel) super.convert(item, serverObj);
+        WsDataModel dataModel = (WsDataModel) super.convert(item, serverObj);
         IFile file = RepositoryResourceUtil.findReferenceFile(getRepositoryObjectType(), item, FILE_EXTENSION);
         String schema = RepositoryResourceUtil.getTextFileContent(file, ENCODE);
         dataModel.setXsdSchema(schema);
@@ -94,16 +94,16 @@ public class DataModelInteractiveHandler extends AbstractInteractiveHandler {
     public void assertPropertyIsInited(Item item) {
         IFile file = RepositoryResourceUtil.findReferenceFile(getRepositoryObjectType(), item, FILE_EXTENSION);
         String schema = RepositoryResourceUtil.getTextFileContent(file, ENCODE);
-        ((WSDataModelItem) item).getWsDataModel().setXsdSchema(schema);
+        ((WsDataModelItem) item).getWsDataModel().setXsdSchema(schema);
     }
 
     @Override
-    public boolean doRemove(XtentisPort port, AbstractDeployCommand cmd) throws XtentisException {
-        WSDataModelPK pk = new WSDataModelPK();
+    public boolean doRemove(TMDMService service, AbstractDeployCommand cmd) throws XtentisException {
+        WsDataModelPK pk = new WsDataModelPK();
         String name = cmd.getObjName();
         pk.setPk(name);
-        port.deleteDataModel(new WSDeleteDataModel(pk));
-        TreeObjectUtil.deleteSpecificationFromAttachedRole(port, name, EXtentisObjects.DataMODEL.getName());
+        service.deleteDataModel(new WsDeleteDataModel(pk));
+        TreeObjectUtil.deleteSpecificationFromAttachedRole(service, name, EXtentisObjects.DataMODEL.getName());
         return true;
     }
 
@@ -127,8 +127,8 @@ public class DataModelInteractiveHandler extends AbstractInteractiveHandler {
             callModelService(cmd);
             return true;
         } else {
-            XtentisPort port = getPort(cmd.getServerDef());
-            return doDeployWSObject(port, wsObj);
+            TMDMService service = getService(cmd.getServerDef());
+            return doDeployWSObject(service, wsObj);
         }
     }
 

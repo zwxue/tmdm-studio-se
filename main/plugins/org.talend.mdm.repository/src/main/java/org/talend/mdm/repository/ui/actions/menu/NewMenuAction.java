@@ -26,11 +26,11 @@ import org.talend.core.model.properties.ItemState;
 import org.talend.core.model.properties.PropertiesFactory;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmproperties.MdmpropertiesFactory;
-import org.talend.mdm.repository.model.mdmproperties.WSMenuItem;
+import org.talend.mdm.repository.model.mdmproperties.WsMenuItem;
 import org.talend.mdm.repository.model.mdmserverobject.MdmserverobjectFactory;
-import org.talend.mdm.repository.model.mdmserverobject.WSMenuE;
-import org.talend.mdm.repository.model.mdmserverobject.WSMenuEntryE;
-import org.talend.mdm.repository.model.mdmserverobject.WSMenuMenuEntriesDescriptionsE;
+import org.talend.mdm.repository.model.mdmserverobject.WsMenuE;
+import org.talend.mdm.repository.model.mdmserverobject.WsMenuEntryE;
+import org.talend.mdm.repository.model.mdmserverobject.WsMenuMenuEntriesDescriptionsE;
 import org.talend.mdm.repository.ui.actions.AbstractSimpleAddAction;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 
@@ -49,37 +49,37 @@ public class NewMenuAction extends AbstractSimpleAddAction {
         super();
     }
 
-
     @Override
     protected String getDialogTitle() {
         return Messages.NewMenuAction_newMenu;
     }
 
-    private WSMenuE newBlankMenu(String key) {
+    private WsMenuE newBlankMenu(String key) {
 
-        WSMenuMenuEntriesDescriptionsE descriptions = MdmserverobjectFactory.eINSTANCE.createWSMenuMenuEntriesDescriptionsE();
+        WsMenuMenuEntriesDescriptionsE descriptions = MdmserverobjectFactory.eINSTANCE.createWsMenuMenuEntriesDescriptionsE();
         descriptions.setLabel(key);
         descriptions.setLanguage("en"); //$NON-NLS-1$
         //
 
-        WSMenuEntryE entry = MdmserverobjectFactory.eINSTANCE.createWSMenuEntryE();
+        WsMenuEntryE entry = MdmserverobjectFactory.eINSTANCE.createWsMenuEntryE();
         entry.getDescriptions().add(descriptions);
         entry.setId(key);
         //
-        WSMenuE menu = MdmserverobjectFactory.eINSTANCE.createWSMenuE();
+        WsMenuE menu = MdmserverobjectFactory.eINSTANCE.createWsMenuE();
         menu.setName(key);
         menu.getMenuEntries().add(entry);
         //
         return menu;
     }
 
+    @Override
     protected Item createServerObject(String key) {
 
-        WSMenuItem item = MdmpropertiesFactory.eINSTANCE.createWSMenuItem();
+        WsMenuItem item = MdmpropertiesFactory.eINSTANCE.createWsMenuItem();
         ItemState itemState = PropertiesFactory.eINSTANCE.createItemState();
         item.setState(itemState);
         //
-        WSMenuE menu = newBlankMenu(key);
+        WsMenuE menu = newBlankMenu(key);
         item.setWsMenu(menu);
 
         if (parentItem != null) {
@@ -88,6 +88,5 @@ public class NewMenuAction extends AbstractSimpleAddAction {
         }
         return item;
     }
-
 
 }

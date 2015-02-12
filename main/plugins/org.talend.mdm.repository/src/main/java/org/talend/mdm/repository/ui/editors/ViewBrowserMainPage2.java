@@ -26,9 +26,9 @@ import com.amalto.workbench.editors.ViewBrowserMainPage;
 import com.amalto.workbench.exadapter.ExAdapterManager;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.XtentisException;
-import com.amalto.workbench.webservices.WSDataClusterPK;
-import com.amalto.workbench.webservices.WSViewPK;
-import com.amalto.workbench.webservices.XtentisPort;
+import com.amalto.workbench.webservices.TMDMService;
+import com.amalto.workbench.webservices.WsDataClusterPK;
+import com.amalto.workbench.webservices.WsViewPK;
 
 /**
  * DOC hbhong class global comment. Detailled comment
@@ -54,7 +54,7 @@ public class ViewBrowserMainPage2 extends ViewBrowserMainPage {
     }
 
     @Override
-    protected List<WSDataClusterPK> getDataClusterPKs() throws MalformedURLException, XtentisException {
+    protected List<WsDataClusterPK> getDataClusterPKs() throws MalformedURLException, XtentisException {
         MDMServerDef d = getServerDef();
         return Util.getAllDataClusterPKs(new URL(d.getUrl()), d.getUniverse(), d.getUser(), d.getPasswd());
     }
@@ -65,16 +65,16 @@ public class ViewBrowserMainPage2 extends ViewBrowserMainPage {
     }
 
     @Override
-    protected WSViewPK getViewPK() {
+    protected WsViewPK getViewPK() {
 
-        return new WSViewPK((String) getXObject().getWsKey());
+        return new WsViewPK((String) getXObject().getWsKey());
     }
 
     @Override
-    protected XtentisPort getPort() {
+    protected TMDMService getMDMService() {
         try {
             MDMServerDef serverDef = getServerDef();
-            return RepositoryWebServiceAdapter.getXtentisPort(serverDef);
+            return RepositoryWebServiceAdapter.getMDMService(serverDef);
         } catch (XtentisException e) {
             log.error(e.getMessage(), e);
 

@@ -36,10 +36,10 @@ import org.talend.mdm.repository.core.impl.view.IViewNodeConstDef;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
 import org.talend.mdm.repository.model.mdmproperties.MdmpropertiesFactory;
-import org.talend.mdm.repository.model.mdmproperties.WSViewItem;
+import org.talend.mdm.repository.model.mdmproperties.WsViewItem;
 import org.talend.mdm.repository.model.mdmserverobject.MdmserverobjectFactory;
-import org.talend.mdm.repository.model.mdmserverobject.WSBooleanE;
-import org.talend.mdm.repository.model.mdmserverobject.WSViewE;
+import org.talend.mdm.repository.model.mdmserverobject.WsBooleanE;
+import org.talend.mdm.repository.model.mdmserverobject.WsViewE;
 import org.talend.mdm.repository.ui.actions.AbstractSimpleAddAction;
 import org.talend.mdm.repository.ui.dialogs.ViewInputDialog2;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
@@ -125,12 +125,12 @@ public class NewViewAction extends AbstractSimpleAddAction implements IViewNodeC
     @Override
     protected Item createServerObject(String key) {
 
-        WSViewItem item = MdmpropertiesFactory.eINSTANCE.createWSViewItem();
+        WsViewItem item = MdmpropertiesFactory.eINSTANCE.createWsViewItem();
 
         ItemState itemState = PropertiesFactory.eINSTANCE.createItemState();
         item.setState(itemState);
         //
-        WSViewE view = newView(key);
+        WsViewE view = newView(key);
         item.setWsView(view);
         int viewType = RepositoryTransformUtil.getInstance().getViewType(key);
         if (parentItem != null) {
@@ -154,12 +154,12 @@ public class NewViewAction extends AbstractSimpleAddAction implements IViewNodeC
         return item;
     }
 
-    protected WSViewE newView(String key) {
+    protected WsViewE newView(String key) {
 
-        WSBooleanE wsBool = MdmserverobjectFactory.eINSTANCE.createWSBooleanE();
+        WsBooleanE wsBool = MdmserverobjectFactory.eINSTANCE.createWsBooleanE();
         wsBool.set_true(false);
 
-        WSViewE view = MdmserverobjectFactory.eINSTANCE.createWSViewE();
+        WsViewE view = MdmserverobjectFactory.eINSTANCE.createWsViewE();
         view.setName(key);
         view.setDescription(""); //$NON-NLS-1$
         view.setTransformerPK(null);

@@ -20,11 +20,11 @@ import org.talend.mdm.repository.i18n.Messages;
 import com.amalto.workbench.utils.EXtentisObjects;
 import com.amalto.workbench.utils.TreeObjectUtil;
 import com.amalto.workbench.utils.XtentisException;
-import com.amalto.workbench.webservices.WSDeleteView;
-import com.amalto.workbench.webservices.WSPutView;
-import com.amalto.workbench.webservices.WSView;
-import com.amalto.workbench.webservices.WSViewPK;
-import com.amalto.workbench.webservices.XtentisPort;
+import com.amalto.workbench.webservices.TMDMService;
+import com.amalto.workbench.webservices.WsDeleteView;
+import com.amalto.workbench.webservices.WsPutView;
+import com.amalto.workbench.webservices.WsView;
+import com.amalto.workbench.webservices.WsViewPK;
 
 /**
  * DOC hbhong class global comment. Detailled comment
@@ -41,21 +41,21 @@ public class ViewInteractiveHandler extends AbstractInteractiveHandler {
     }
 
     @Override
-    public boolean doDeployWSObject(XtentisPort port, Object wsObj) {
+    public boolean doDeployWSObject(TMDMService service, Object wsObj) {
         if (wsObj != null) {
-            port.putView(new WSPutView((WSView) wsObj));
+            service.putView(new WsPutView((WsView) wsObj));
             return true;
         }
         return false;
     }
 
     @Override
-    public boolean doRemove(XtentisPort port, AbstractDeployCommand cmd) throws XtentisException {
-        WSViewPK pk = new WSViewPK();
+    public boolean doRemove(TMDMService service, AbstractDeployCommand cmd) throws XtentisException {
+        WsViewPK pk = new WsViewPK();
         String name = cmd.getObjName();
         pk.setPk(name);
-        port.deleteView(new WSDeleteView(pk));
-        TreeObjectUtil.deleteSpecificationFromAttachedRole(port, name, EXtentisObjects.View.getName());
+        service.deleteView(new WsDeleteView(pk));
+        TreeObjectUtil.deleteSpecificationFromAttachedRole(service, name, EXtentisObjects.View.getName());
         return true;
     }
 

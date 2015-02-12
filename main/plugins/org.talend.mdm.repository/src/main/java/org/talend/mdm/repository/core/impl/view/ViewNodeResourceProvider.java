@@ -2,7 +2,7 @@
 //
 // Talend Community Edition
 //
-// Copyright (C) 2006-2014 Talend ¨C www.talend.com
+// Copyright (C) 2006-2014 Talend ï¿½C www.talend.com
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
@@ -33,7 +33,7 @@ import org.talend.mdm.repository.core.IServerObjectRepositoryType;
 import org.talend.mdm.repository.core.impl.AbstractRepositoryNodeResourceProvider;
 import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
 import org.talend.mdm.repository.model.mdmproperties.MdmpropertiesFactory;
-import org.talend.mdm.repository.model.mdmproperties.WSViewItem;
+import org.talend.mdm.repository.model.mdmproperties.WsViewItem;
 
 /**
  * DOC hbhong class global comment. Detailled comment <br/>
@@ -42,7 +42,7 @@ import org.talend.mdm.repository.model.mdmproperties.WSViewItem;
 public class ViewNodeResourceProvider extends AbstractRepositoryNodeResourceProvider {
 
     public ERepositoryObjectType getRepositoryObjectType(Item item) {
-        if (item instanceof WSViewItem || item instanceof ContainerItem) {
+        if (item instanceof WsViewItem || item instanceof ContainerItem) {
             return IServerObjectRepositoryType.TYPE_VIEW;
         }
         return null;
@@ -53,25 +53,26 @@ public class ViewNodeResourceProvider extends AbstractRepositoryNodeResourceProv
         if (repositoryType != null) {
             Resource itemResource = createCommonItemResource(project, item, repositoryType, path);
             EList<EObject> contents = itemResource.getContents();
-            contents.add(((WSViewItem) item).getWsView());
+            contents.add(((WsViewItem) item).getWsView());
             return itemResource;
         }
         return null;
     }
 
+    @Override
     public Resource save(Item item) throws PersistenceException {
-        if (item instanceof WSViewItem) {
+        if (item instanceof WsViewItem) {
             Resource resource = xmiResourceManager.getItemResource(item);
             resource.getContents().clear();
-            resource.getContents().add(((WSViewItem) item).getWsView());
-            Resource eResource = ((WSViewItem) item).getWsView().eResource();
+            resource.getContents().add(((WsViewItem) item).getWsView());
+            Resource eResource = ((WsViewItem) item).getWsView().eResource();
             return resource;
         }
         return null;
     }
 
     public Item createNewItem(ERepositoryObjectType type) {
-        return MdmpropertiesFactory.eINSTANCE.createWSViewItem();
+        return MdmpropertiesFactory.eINSTANCE.createWsViewItem();
     }
 
     public boolean canHandleRepObjType(ERepositoryObjectType type) {

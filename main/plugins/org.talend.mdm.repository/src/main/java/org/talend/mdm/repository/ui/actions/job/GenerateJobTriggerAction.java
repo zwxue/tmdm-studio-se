@@ -25,11 +25,11 @@ import org.talend.mdm.repository.core.AbstractRepositoryAction;
 import org.talend.mdm.repository.core.IServerObjectRepositoryType;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmproperties.MdmpropertiesFactory;
-import org.talend.mdm.repository.model.mdmproperties.WSRoutingRuleItem;
+import org.talend.mdm.repository.model.mdmproperties.WsRoutingRuleItem;
 import org.talend.mdm.repository.model.mdmserverobject.MdmserverobjectFactory;
-import org.talend.mdm.repository.model.mdmserverobject.WSRoutingRuleE;
-import org.talend.mdm.repository.model.mdmserverobject.WSRoutingRuleExpressionE;
-import org.talend.mdm.repository.model.mdmserverobject.WSRoutingRuleOperatorE;
+import org.talend.mdm.repository.model.mdmserverobject.WsRoutingRuleE;
+import org.talend.mdm.repository.model.mdmserverobject.WsRoutingRuleExpressionE;
+import org.talend.mdm.repository.model.mdmserverobject.WsRoutingRuleOperatorE;
 import org.talend.mdm.repository.ui.dialogs.job.JobOptionsDialog;
 import org.talend.mdm.repository.ui.dialogs.job.JobOptionsDialog.Execution;
 import org.talend.mdm.repository.ui.dialogs.job.JobOptionsDialog.Parameter;
@@ -95,7 +95,7 @@ public class GenerateJobTriggerAction extends AbstractRepositoryAction {
             }
         }
         //
-        WSRoutingRuleE routingRule = createTrigger(jobName, jobVersion, dialog);
+        WsRoutingRuleE routingRule = createTrigger(jobName, jobVersion, dialog);
         // if the new objectect is opened ,than close it before regenerating
         IRepositoryViewObject toDelete = RepositoryResourceUtil.findViewObjectByName(
                 IServerObjectRepositoryType.TYPE_ROUTINGRULE, PREFIX + jobName);
@@ -117,8 +117,8 @@ public class GenerateJobTriggerAction extends AbstractRepositoryAction {
      * @param dialog
      * @param jobVersion2
      */
-    private WSRoutingRuleE createTrigger(String jobName, String jobVersion, JobOptionsDialog dialog) {
-        WSRoutingRuleE routingRule = MdmserverobjectFactory.eINSTANCE.createWSRoutingRuleE();
+    private WsRoutingRuleE createTrigger(String jobName, String jobVersion, JobOptionsDialog dialog) {
+        WsRoutingRuleE routingRule = MdmserverobjectFactory.eINSTANCE.createWsRoutingRuleE();
 
         try {
             String server = "http://localhost:8180"; //$NON-NLS-1$
@@ -150,20 +150,20 @@ public class GenerateJobTriggerAction extends AbstractRepositoryAction {
 
             // Generate the job call
             // create default CREATE operation express
-            WSRoutingRuleExpressionE expression1 = MdmserverobjectFactory.eINSTANCE.createWSRoutingRuleExpressionE();
+            WsRoutingRuleExpressionE expression1 = MdmserverobjectFactory.eINSTANCE.createWsRoutingRuleExpressionE();
 
             expression1.setName("C1"); //$NON-NLS-1$
             expression1.setXpath("Update/OperationType"); //$NON-NLS-1$
             expression1.setWsOperator(newContainRoutingRuleOperator());
             expression1.setValue("CREATE"); //$NON-NLS-1$
 
-            WSRoutingRuleExpressionE expression2 = MdmserverobjectFactory.eINSTANCE.createWSRoutingRuleExpressionE();
+            WsRoutingRuleExpressionE expression2 = MdmserverobjectFactory.eINSTANCE.createWsRoutingRuleExpressionE();
             expression2.setName("C2"); //$NON-NLS-1$
             expression2.setXpath("Update/OperationType"); //$NON-NLS-1$
             expression2.setWsOperator(newContainRoutingRuleOperator());
             expression2.setValue("UPDATE"); //$NON-NLS-1$
 
-            WSRoutingRuleExpressionE expression3 = MdmserverobjectFactory.eINSTANCE.createWSRoutingRuleExpressionE();
+            WsRoutingRuleExpressionE expression3 = MdmserverobjectFactory.eINSTANCE.createWsRoutingRuleExpressionE();
             expression3.setName("C3"); //$NON-NLS-1$
             expression3.setXpath("Update/OperationType"); //$NON-NLS-1$
             expression3.setWsOperator(newContainRoutingRuleOperator());
@@ -197,8 +197,8 @@ public class GenerateJobTriggerAction extends AbstractRepositoryAction {
         return "CallJob_" + name; //$NON-NLS-1$
     }
 
-    private WSRoutingRuleOperatorE newContainRoutingRuleOperator() {
-        WSRoutingRuleOperatorE operator = MdmserverobjectFactory.eINSTANCE.createWSRoutingRuleOperatorE();
+    private WsRoutingRuleOperatorE newContainRoutingRuleOperator() {
+        WsRoutingRuleOperatorE operator = MdmserverobjectFactory.eINSTANCE.createWsRoutingRuleOperatorE();
         operator.setValue("CONTAINS");//$NON-NLS-1$
         return operator;
     }
@@ -209,9 +209,9 @@ public class GenerateJobTriggerAction extends AbstractRepositoryAction {
      * @param filename
      * @param trigger
      */
-    private void AttachToTriggerView(String filename, WSRoutingRuleE trigger) {
+    private void AttachToTriggerView(String filename, WsRoutingRuleE trigger) {
 
-        WSRoutingRuleItem item = MdmpropertiesFactory.eINSTANCE.createWSRoutingRuleItem();
+        WsRoutingRuleItem item = MdmpropertiesFactory.eINSTANCE.createWsRoutingRuleItem();
         ItemState itemState = PropertiesFactory.eINSTANCE.createItemState();
         item.setState(itemState);
         item.setWsRoutingRule(trigger);

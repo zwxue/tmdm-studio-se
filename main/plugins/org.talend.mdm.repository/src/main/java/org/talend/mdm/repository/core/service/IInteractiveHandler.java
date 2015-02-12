@@ -21,7 +21,7 @@ import org.talend.mdm.repository.core.command.deploy.AbstractDeployCommand;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
 
 import com.amalto.workbench.utils.XtentisException;
-import com.amalto.workbench.webservices.XtentisPort;
+import com.amalto.workbench.webservices.TMDMService;
 
 /**
  * DOC hbhong class global comment. Detailled comment
@@ -38,7 +38,7 @@ public interface IInteractiveHandler {
 
     boolean remove(AbstractDeployCommand cmd) throws XtentisException;
 
-    boolean doDeployWSObject(XtentisPort port, Object wsObj) throws XtentisException;
+    boolean doDeployWSObject(TMDMService service, Object wsObj) throws XtentisException;
 
     void assertPropertyIsInited(Item item);
 

@@ -34,8 +34,8 @@ import org.talend.mdm.workbench.serverexplorer.ui.dialogs.SelectServerDefDialog;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.utils.XtentisException;
-import com.amalto.workbench.webservices.WSPing;
-import com.amalto.workbench.webservices.XtentisPort;
+import com.amalto.workbench.webservices.TMDMService;
+import com.amalto.workbench.webservices.WsPing;
 
 /**
  * DOC hbhong class global comment. Detailled comment
@@ -76,12 +76,12 @@ public class ImportDataClusterAction extends AbstractDataClusterAction {
                 MDMServerDef serverDef = dialog.getSelectedServerDef();
                 try {
 
-                    XtentisPort port = RepositoryWebServiceAdapter.getXtentisPort(serverDef);
-                    port.ping(new WSPing(Messages.ImportDataClusterAction_importTitle));
-                    if (!dataClusterService.isExistDataCluster(port, dName)) {
+                    TMDMService service = RepositoryWebServiceAdapter.getMDMService(serverDef);
+                    service.ping(new WsPing(Messages.ImportDataClusterAction_importTitle));
+                    if (!dataClusterService.isExistDataCluster(service, dName)) {
                         if (MessageDialog.openQuestion(getShell(), Messages.ImportDataClusterAction_createDataClusterTitle,
                                 Messages.bind(Messages.ImportDataClusterAction_createConfirm, dName))) {
-                            dataClusterService.createDataCluster(port, dName);
+                            dataClusterService.createDataCluster(service, dName);
                         } else {
                             return;
                         }

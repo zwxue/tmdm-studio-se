@@ -2,7 +2,7 @@
 //
 // Talend Community Edition
 //
-// Copyright (C) 2006-2014 Talend ¨C www.talend.com
+// Copyright (C) 2006-2014 Talend ï¿½C www.talend.com
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
@@ -33,7 +33,7 @@ import org.talend.mdm.repository.core.IServerObjectRepositoryType;
 import org.talend.mdm.repository.core.impl.AbstractRepositoryNodeResourceProvider;
 import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
 import org.talend.mdm.repository.model.mdmproperties.MdmpropertiesFactory;
-import org.talend.mdm.repository.model.mdmproperties.WSMenuItem;
+import org.talend.mdm.repository.model.mdmproperties.WsMenuItem;
 
 /**
  * DOC hbhong class global comment. Detailled comment <br/>
@@ -42,7 +42,7 @@ import org.talend.mdm.repository.model.mdmproperties.WSMenuItem;
 public class MenuNodeResourceProvider extends AbstractRepositoryNodeResourceProvider {
 
     public ERepositoryObjectType getRepositoryObjectType(Item item) {
-        if (item instanceof WSMenuItem || item instanceof ContainerItem) {
+        if (item instanceof WsMenuItem || item instanceof ContainerItem) {
             return IServerObjectRepositoryType.TYPE_MENU;
         }
         return null;
@@ -53,25 +53,26 @@ public class MenuNodeResourceProvider extends AbstractRepositoryNodeResourceProv
         if (repositoryType != null) {
             Resource itemResource = createCommonItemResource(project, item, repositoryType, path);
             EList<EObject> contents = itemResource.getContents();
-            contents.add(((WSMenuItem) item).getWsMenu());
+            contents.add(((WsMenuItem) item).getWsMenu());
             return itemResource;
         }
         return null;
     }
 
+    @Override
     public Resource save(Item item) throws PersistenceException {
-        if (item instanceof WSMenuItem) {
+        if (item instanceof WsMenuItem) {
             Resource resource = xmiResourceManager.getItemResource(item);
             resource.getContents().clear();
-            resource.getContents().add(((WSMenuItem) item).getWsMenu());
-            Resource eResource = ((WSMenuItem) item).getWsMenu().eResource();
+            resource.getContents().add(((WsMenuItem) item).getWsMenu());
+            Resource eResource = ((WsMenuItem) item).getWsMenu().eResource();
             return resource;
         }
         return null;
     }
 
     public Item createNewItem(ERepositoryObjectType type) {
-        return MdmpropertiesFactory.eINSTANCE.createWSMenuItem();
+        return MdmpropertiesFactory.eINSTANCE.createWsMenuItem();
     }
 
     public boolean canHandleRepObjType(ERepositoryObjectType type) {

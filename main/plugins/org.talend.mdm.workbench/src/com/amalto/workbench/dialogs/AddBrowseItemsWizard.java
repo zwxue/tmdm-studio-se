@@ -67,13 +67,13 @@ import com.amalto.workbench.models.TreeParent;
 import com.amalto.workbench.providers.XObjectEditorInput;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.XSDAnnotationsStructure;
-import com.amalto.workbench.webservices.WSBoolean;
-import com.amalto.workbench.webservices.WSDeleteView;
-import com.amalto.workbench.webservices.WSGetView;
-import com.amalto.workbench.webservices.WSPutView;
-import com.amalto.workbench.webservices.WSView;
-import com.amalto.workbench.webservices.WSViewPK;
-import com.amalto.workbench.webservices.XtentisPort;
+import com.amalto.workbench.webservices.TMDMService;
+import com.amalto.workbench.webservices.WsBoolean;
+import com.amalto.workbench.webservices.WsDeleteView;
+import com.amalto.workbench.webservices.WsGetView;
+import com.amalto.workbench.webservices.WsPutView;
+import com.amalto.workbench.webservices.WsView;
+import com.amalto.workbench.webservices.WsViewPK;
 import com.amalto.workbench.widgets.ComplexTableViewer;
 import com.amalto.workbench.widgets.ComplexTableViewerColumn;
 
@@ -83,7 +83,7 @@ public class AddBrowseItemsWizard extends Wizard {
 
     protected DataModelMainPage page;
 
-    private XtentisPort port;
+    private TMDMService service;
 
     protected List<XSDElementDeclaration> declList = null;
 
@@ -138,17 +138,17 @@ public class AddBrowseItemsWizard extends Wizard {
         return false;
     }
 
-    private XtentisPort getXtentisPort() {
+    private TMDMService getXtentisPort() {
         try {
-            if (port == null) {
-                port = Util.getPort(new URL(page.getXObject().getEndpointAddress()), page.getXObject().getUniverse(), page
+            if (service == null) {
+                service = Util.getMDMService(new URL(page.getXObject().getEndpointAddress()), page.getXObject().getUniverse(), page
                         .getXObject().getUsername(), page.getXObject().getPassword());
             }
         } catch (Exception e) {
             log.error(e.getMessage(), e);
         }
 
-        return port;
+        return service;
     }
 
     protected void newBrowseItemView(String browseItem) {
@@ -185,8 +185,8 @@ public class AddBrowseItemsWizard extends Wizard {
     }
 
     private TreeObject createNewTreeObject(XSDElementDeclaration decl, String browseItem) {
-        WSView view = new WSView();
-        view.setIsTransformerActive(new WSBoolean(false));
+        WsView view = new WsView();
+        view.setIsTransformerActive(new WsBoolean(false));
         view.setTransformerPK("");//$NON-NLS-1$
         view.setName(browseItem);
         EList<XSDIdentityConstraintDefinition> idtylist = decl.getIdentityConstraintDefinitions();
@@ -218,17 +218,17 @@ public class AddBrowseItemsWizard extends Wizard {
         }
         view.setDescription(desc.toString());
 
-        WSPutView wrap = new WSPutView();
+        WsPutView wrap = new WsPutView();
         wrap.setWsView(view);
 
-        WSViewPK viewPk = new WSViewPK();
+        WsViewPK viewPk = new WsViewPK();
         viewPk.setPk(browseItem);
 
-        WSDeleteView delView = new WSDeleteView();
+        WsDeleteView delView = new WsDeleteView();
         delView.setWsViewPK(viewPk);
-        WSGetView getView = new WSGetView();
+        WsGetView getView = new WsGetView();
         getView.setWsViewPK(viewPk);
-        port.putView(wrap);
+        service.putView(wrap);
         // add node in the root
         TreeParent root = page.getXObject().getServerRoot();
         TreeObject obj = new TreeObject(browseItem, root, TreeObject.VIEW, viewPk, null // no storage to save

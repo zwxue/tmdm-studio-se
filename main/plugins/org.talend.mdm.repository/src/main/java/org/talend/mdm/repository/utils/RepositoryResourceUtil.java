@@ -98,7 +98,7 @@ import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.model.mdmproperties.MdmpropertiesFactory;
 import org.talend.mdm.repository.model.mdmproperties.WorkspaceRootItem;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
-import org.talend.mdm.repository.model.mdmserverobject.WSDataModelE;
+import org.talend.mdm.repository.model.mdmserverobject.WsDataModelE;
 import org.talend.mdm.repository.models.FolderRepositoryObject;
 import org.talend.mdm.repository.models.WSRootRepositoryObject;
 import org.talend.mdm.repository.ui.editors.IRepositoryViewEditorInput;
@@ -112,8 +112,8 @@ import org.talend.repository.model.RepositoryNode;
 import com.amalto.workbench.exadapter.ExAdapterManager;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.XtentisException;
-import com.amalto.workbench.webservices.WSConceptKey;
-import com.amalto.workbench.webservices.WSGetBusinessConceptKey;
+import com.amalto.workbench.webservices.WsConceptKey;
+import com.amalto.workbench.webservices.WsGetBusinessConceptKey;
 
 /**
  * DOC hbhong class global comment. Detailled comment <br/>
@@ -1415,17 +1415,17 @@ public class RepositoryResourceUtil {
         return false;
     }
 
-    public static WSConceptKey getBusinessConceptKey(WSGetBusinessConceptKey businessConcepKey) throws XtentisException {
+    public static WsConceptKey getBusinessConceptKey(WsGetBusinessConceptKey businessConcepKey) throws XtentisException {
         String pk = businessConcepKey.getWsDataModelPK().getPk();
         String concept = businessConcepKey.getConcept();
-        WSDataModelE dataModel = RepositoryQueryService.findDataModelByName(pk);
+        WsDataModelE dataModel = RepositoryQueryService.findDataModelByName(pk);
         if (dataModel != null) {
             try {
                 XSDSchema xsdSchema = Util.getXSDSchema(dataModel.getXsdSchema());
                 for (XSDIdentityConstraintDefinition idDef : xsdSchema.getIdentityConstraintDefinitions()) {
 
                     if (idDef.getName().equals(concept)) {
-                        WSConceptKey key = new WSConceptKey();
+                        WsConceptKey key = new WsConceptKey();
                         //
                         XSDXPathDefinition selector = idDef.getSelector();
                         key.setSelector(selector.getValue());

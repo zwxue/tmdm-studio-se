@@ -20,14 +20,14 @@ import org.eclipse.ui.forms.editor.FormEditor;
 import org.talend.mdm.repository.core.service.RepositoryWebServiceAdapter;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
-import org.talend.mdm.repository.model.mdmserverobject.WSServiceConfigurationE;
-import org.talend.mdm.repository.model.mdmserverobject.WSServicePutConfigurationE;
+import org.talend.mdm.repository.model.mdmserverobject.WsServiceConfigurationE;
+import org.talend.mdm.repository.model.mdmserverobject.WsServicePutConfigurationE;
 
 import com.amalto.workbench.editors.ServiceConfigrationMainPage;
-import com.amalto.workbench.webservices.WSCheckServiceConfigRequest;
-import com.amalto.workbench.webservices.WSCheckServiceConfigResponse;
-import com.amalto.workbench.webservices.WSServiceGetDocument;
-import com.amalto.workbench.webservices.XtentisPort;
+import com.amalto.workbench.webservices.TMDMService;
+import com.amalto.workbench.webservices.WsCheckServiceConfigRequest;
+import com.amalto.workbench.webservices.WsCheckServiceConfigResponse;
+import com.amalto.workbench.webservices.WsServiceGetDocument;
 
 /**
  * DOC jsxie class global comment. Detailled comment
@@ -47,7 +47,7 @@ public class MDMServiceConfigrationMainPage extends ServiceConfigrationMainPage 
     }
 
     @Override
-    protected WSServiceGetDocument getServiceDocument(String jndiName) {
+    protected WsServiceGetDocument getServiceDocument(String jndiName) {
         return RepositoryWebServiceAdapter.getServiceDocument(jndiName);
     }
 
@@ -57,8 +57,8 @@ public class MDMServiceConfigrationMainPage extends ServiceConfigrationMainPage 
     }
 
     @Override
-    protected XtentisPort getPort() {
-        return RepositoryWebServiceAdapter.getXtentisPort(getSite().getShell());
+    protected TMDMService getService() {
+        return RepositoryWebServiceAdapter.getMDMService(getSite().getShell());
     }
 
     @Override
@@ -74,9 +74,9 @@ public class MDMServiceConfigrationMainPage extends ServiceConfigrationMainPage 
                 MDMServerObject serverObject = serverObjectItem.getMDMServerObject();
 
                 String configContent = null;
-                if (serverObject instanceof WSServiceConfigurationE) {
-                    WSServiceConfigurationE object = (WSServiceConfigurationE) serverObject;
-                    for (WSServicePutConfigurationE config : object.getServicePutConfigurations()) {
+                if (serverObject instanceof WsServiceConfigurationE) {
+                    WsServiceConfigurationE object = (WsServiceConfigurationE) serverObject;
+                    for (WsServicePutConfigurationE config : object.getServicePutConfigurations()) {
                         if (config.getJndiName().equals(serviceName.trim())) {
                             configContent = config.getConfiguration();
                         }
@@ -129,13 +129,13 @@ public class MDMServiceConfigrationMainPage extends ServiceConfigrationMainPage 
             return CHECKMSG_NOSELECTION;
         }
 
-        WSCheckServiceConfigResponse result;
-        port = getPort();
-        if (port == null) {
+        WsCheckServiceConfigResponse result;
+        service = getService();
+        if (service == null) {
             return null;
         }
-        result = port.checkServiceConfiguration(new WSCheckServiceConfigRequest(serviceNameCombo.getText().trim(),
-                serviceConfigurationsText.getText()));
+        result = service.checkServiceConfiguration(new WsCheckServiceConfigRequest(serviceConfigurationsText.getText(),
+                serviceNameCombo.getText().trim()));
 
         if (result.isCheckResult()) {
             return CHECKMSG_SUCCESSFULCONN;
@@ -148,7 +148,7 @@ public class MDMServiceConfigrationMainPage extends ServiceConfigrationMainPage 
     @Override
     protected String getDoc() {
 
-        WSServiceGetDocument document = null;
+        WsServiceGetDocument document = null;
         try {
             document = getServiceDocument(serviceNameCombo.getText().trim());
         } catch (WebServiceException e) {
@@ -163,7 +163,7 @@ public class MDMServiceConfigrationMainPage extends ServiceConfigrationMainPage 
     @Override
     protected String getDesc() {
 
-        WSServiceGetDocument document = null;
+        WsServiceGetDocument document = null;
         try {
             document = getServiceDocument(serviceNameCombo.getText().trim());
         } catch (WebServiceException e) {

@@ -34,7 +34,7 @@ import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.providers.ISchemaContentProvider;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.XtentisException;
-import com.amalto.workbench.webservices.XtentisPort;
+import com.amalto.workbench.webservices.TMDMService;
 
 public class XSDDeleteConceptAction extends UndoAction {
 
@@ -91,8 +91,9 @@ public class XSDDeleteConceptAction extends UndoAction {
                     return Status.CANCEL_STATUS;
                 }
             }
-            if (schema == null)
+            if (schema == null) {
                 schema = ((ISchemaContentProvider) page.getTreeViewer().getContentProvider()).getXsdSchema();
+            }
             schema.getContents().remove(decl);
 
             schema.update();
@@ -132,14 +133,14 @@ public class XSDDeleteConceptAction extends UndoAction {
         // add by ymli. fix buy 0010029
         Set<String> list = Util.getForeignKeys();
         if (list == null) {
-            XtentisPort port = null;
+            TMDMService service = null;
             try {
-                port = Util.getPort(page.getXObject());
+                service = Util.getMDMService(page.getXObject());
             } catch (XtentisException e) {
                 log.error(e.getMessage(), e);
             }
             list = new HashSet<String>();
-            Util.getForeingKeyInDataModel(list, page.getXObject().getParent(), port);
+            Util.getForeingKeyInDataModel(list, page.getXObject().getParent(), service);
             Util.setForeignKeys(list);
         }
         return list.contains(fkName);

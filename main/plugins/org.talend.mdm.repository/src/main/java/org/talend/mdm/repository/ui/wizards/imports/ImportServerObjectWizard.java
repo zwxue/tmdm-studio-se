@@ -88,14 +88,15 @@ import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
 import org.talend.mdm.repository.model.mdmserverobject.MdmserverobjectFactory;
-import org.talend.mdm.repository.model.mdmserverobject.WSResourceE;
-import org.talend.mdm.repository.model.mdmserverobject.WSWorkflowE;
+import org.talend.mdm.repository.model.mdmserverobject.WsResourceE;
+import org.talend.mdm.repository.model.mdmserverobject.WsWorkflowE;
 import org.talend.mdm.repository.ui.dialogs.lock.LockedObjectDialog;
 import org.talend.mdm.repository.ui.wizards.imports.viewer.TreeObjectCheckTreeViewer;
 import org.talend.mdm.repository.utils.Bean2EObjUtil;
 import org.talend.mdm.repository.utils.IOUtil;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 import org.talend.mdm.repository.utils.RepositoryTransformUtil;
+import org.talend.mdm.webservice.WSWorkflowProcessDefinitionUUID;
 import org.talend.mdm.workbench.serverexplorer.ui.dialogs.SelectServerDefDialog;
 import org.talend.repository.model.IProxyRepositoryFactory;
 
@@ -105,7 +106,6 @@ import com.amalto.workbench.models.TreeParent;
 import com.amalto.workbench.providers.XtentisServerObjectsRetriever;
 import com.amalto.workbench.utils.HttpClientUtil;
 import com.amalto.workbench.utils.Util;
-import com.amalto.workbench.webservices.WSWorkflowProcessDefinitionUUID;
 import com.amalto.workbench.widgets.LabelCombo;
 import com.amalto.workbench.widgets.WidgetFactory;
 
@@ -248,9 +248,9 @@ public class ImportServerObjectWizard extends Wizard {
         return null;
     }
 
-    private WSWorkflowE handleWorkflowObject(TreeObject treeObj) throws IOException, ClientProtocolException,
+    private WsWorkflowE handleWorkflowObject(TreeObject treeObj) throws IOException, ClientProtocolException,
             UnsupportedEncodingException {
-        WSWorkflowProcessDefinitionUUID wsKey = (WSWorkflowProcessDefinitionUUID) treeObj.getWsKey();
+        // WSWorkflowProcessDefinitionUUID wsKey = (WSWorkflowProcessDefinitionUUID) treeObj.getWsKey();
         String workflowURL = treeObj.getEndpointIpAddress() + TreeObject.BARFILE_URI + treeObj.getDisplayName();
         // correct the URL to Bonita 5.8 version
         Pattern PATTERN_53 = Pattern.compile("(.+?)_(\\d+\\.\\d+)");
@@ -301,8 +301,9 @@ public class ImportServerObjectWizard extends Wizard {
                 try {
                     byte[] procBytes = extractBar(barFile);
                     if (procBytes != null) {
-                        WSWorkflowE workflow = MdmserverobjectFactory.eINSTANCE.createWSWorkflowE();
-                        workflow.setName(wsKey.getProcessName());
+                        WsWorkflowE workflow = MdmserverobjectFactory.eINSTANCE.createWsWorkflowE();
+                        // workflow.setName(wsKey.getProcessName());
+                        workflow.setName(treeObj.getName());
                         workflow.setFileContent(procBytes);
                         return workflow;
                     }
@@ -357,7 +358,7 @@ public class ImportServerObjectWizard extends Wizard {
      * @param treeObj
      * @throws IOException
      */
-    private WSResourceE handlePictureResourceObject(TreeObject treeObj) throws IOException {
+    private WsResourceE handlePictureResourceObject(TreeObject treeObj) throws IOException {
         if (treeObj != null) {
             if (treeObj instanceof TreeParent) {
                 return null;
@@ -372,7 +373,7 @@ public class ImportServerObjectWizard extends Wizard {
                 // encode the dirName and fileName
                 String encodedDirName = URLEncoder.encode(dirName, UTF8);
                 fileQName = URLEncoder.encode(fileQName, UTF8);
-                WSResourceE resource = MdmserverobjectFactory.eINSTANCE.createWSResourceE();
+                WsResourceE resource = MdmserverobjectFactory.eINSTANCE.createWsResourceE();
                 resource.setName(fileName);
                 resource.setFileExtension(fileExtension);
                 StringBuffer strBuf = new StringBuffer();

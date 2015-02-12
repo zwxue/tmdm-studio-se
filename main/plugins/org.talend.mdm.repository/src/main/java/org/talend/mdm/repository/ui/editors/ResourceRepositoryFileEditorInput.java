@@ -17,9 +17,9 @@ import org.talend.core.model.properties.Item;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.IServerObjectRepositoryType;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
-import org.talend.mdm.repository.model.mdmproperties.WSResourceItem;
+import org.talend.mdm.repository.model.mdmproperties.WsResourceItem;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
-import org.talend.mdm.repository.model.mdmserverobject.WSResourceE;
+import org.talend.mdm.repository.model.mdmserverobject.WsResourceE;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 
 import com.amalto.workbench.models.TreeObject;
@@ -36,12 +36,13 @@ public class ResourceRepositoryFileEditorInput extends XObjectEditorInput2 {
         super(viewObject);
     }
 
+    @Override
     protected void init(Item item) {
 
         MDMServerObject serverObject = ((MDMServerObjectItem) item).getMDMServerObject();
         String name = null;
-        if (serverObject instanceof WSResourceE) {
-            name = serverObject.getName() + "." + ((WSResourceE) serverObject).getFileExtension(); //$NON-NLS-1$
+        if (serverObject instanceof WsResourceE) {
+            name = serverObject.getName() + "." + ((WsResourceE) serverObject).getFileExtension(); //$NON-NLS-1$
         }
         Object treeObject = new TreeObject(name, null, TreeObject.RESOURCES, null, null, null);
 
@@ -52,7 +53,7 @@ public class ResourceRepositoryFileEditorInput extends XObjectEditorInput2 {
     public IFile getReferenceFile() {
         if (file == null) {
             Item item = getInputItem();
-            String fileExtension = ((WSResourceItem) item).getResource().getFileExtension();
+            String fileExtension = ((WsResourceItem) item).getResource().getFileExtension();
             file = RepositoryResourceUtil.findReferenceFile(IServerObjectRepositoryType.TYPE_RESOURCE, item, fileExtension);
         }
         return file;

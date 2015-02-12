@@ -14,7 +14,7 @@ package com.amalto.workbench.actions;
 
 import com.amalto.workbench.exadapter.IExAdapter;
 import com.amalto.workbench.models.TreeObject;
-import com.amalto.workbench.webservices.XtentisPort;
+import com.amalto.workbench.webservices.TMDMService;
 
 /**
  * created by HHB on 2014-1-7 Detailled comment
@@ -22,5 +22,5 @@ import com.amalto.workbench.webservices.XtentisPort;
  */
 public interface IEditXObjectActionExAdapter extends IExAdapter<EditXObjectAction> {
 
-    void run(XtentisPort port, TreeObject xobject);
+    void run(TMDMService port, TreeObject xobject);
 }

@@ -25,7 +25,7 @@ import com.amalto.workbench.detailtabs.sections.util.CommitBarListenerRegistry;
 import com.amalto.workbench.editors.DataModelMainPage;
 import com.amalto.workbench.editors.xsdeditor.XSDEditor;
 import com.amalto.workbench.models.TreeObject;
-import com.amalto.workbench.webservices.WSDataModel;
+import com.amalto.workbench.webservices.WsDataModel;
 
 public abstract class BasePropertySection extends AbstractPropertySection {
 
@@ -51,8 +51,9 @@ public abstract class BasePropertySection extends AbstractPropertySection {
         this.section = section;
         section.setLayout(new FillLayout());
 
-        if (hasTitleSeperator())
+        if (hasTitleSeperator()) {
             getWidgetFactory().createCompositeSeparator(section);
+        }
 
         Composite compSectionClient = getWidgetFactory().createComposite(section);
         compSectionClient.setLayout(new FillLayout());
@@ -158,7 +159,7 @@ public abstract class BasePropertySection extends AbstractPropertySection {
         return getDataModel().getName();
     }
 
-    protected WSDataModel getDataModel() {
+    protected WsDataModel getDataModel() {
         return getCurDataModelMainPage().getDataModel();
     }
 

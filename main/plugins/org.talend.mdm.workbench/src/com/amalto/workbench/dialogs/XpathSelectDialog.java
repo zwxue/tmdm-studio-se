@@ -59,10 +59,10 @@ import com.amalto.workbench.providers.XPathTreeContentProvider;
 import com.amalto.workbench.providers.XSDTreeLabelProvider;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.XtentisException;
-import com.amalto.workbench.webservices.WSDataModel;
-import com.amalto.workbench.webservices.WSDataModelPK;
-import com.amalto.workbench.webservices.WSGetDataModel;
-import com.amalto.workbench.webservices.XtentisPort;
+import com.amalto.workbench.webservices.TMDMService;
+import com.amalto.workbench.webservices.WsDataModel;
+import com.amalto.workbench.webservices.WsDataModelPK;
+import com.amalto.workbench.webservices.WsGetDataModel;
 
 public class XpathSelectDialog extends Dialog {
 
@@ -318,25 +318,25 @@ public class XpathSelectDialog extends Dialog {
         this.dataModelName = modelDisplay;
         // this.selectedDataModelName = modelDisplay;
         // xobject = pObject.findObject(TreeObject.DATA_MODEL, modelDisplay);
-        XtentisPort port = null;
+        TMDMService service = null;
         try {
-            port = Util.getPort(pObject);
+            service = Util.getMDMService(pObject);
         } catch (XtentisException e3) {
             log.error(e3.getMessage(), e3);
         } catch (Exception e3) {
             log.error(e3.getMessage(), e3);
         }
-        WSDataModel wsDataModel = null;
+        WsDataModel wsDataModel = null;
 
         String schema = null;
         XSDSchema xsd = null;
-        if (port == null) {
+        if (service == null) {
             xsd = MDMRepositoryViewExtensionService.getDataModelXsd(pObject, filter, dataModelName);
             provideViwerContent(xsd, filter);
         } else {
 
             try {
-                wsDataModel = port.getDataModel(new WSGetDataModel(new WSDataModelPK(dataModelName)));
+                wsDataModel = service.getDataModel(new WsGetDataModel(new WsDataModelPK(dataModelName)));
                 // XSDSchema xsdSchema = Util.getXSDSchema(wsDataModel.getXsdSchema());
                 schema = wsDataModel.getXsdSchema();// Util.nodeToString(xsdSchema.getDocument());
                 xsd = Util.createXsdSchema(schema, pObject);

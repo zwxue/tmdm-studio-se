@@ -28,7 +28,7 @@ import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.mdm.repository.core.impl.AbstractLabelProvider;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
-import org.talend.mdm.repository.model.mdmproperties.WSViewItem;
+import org.talend.mdm.repository.model.mdmproperties.WsViewItem;
 import org.talend.mdm.repository.plugin.RepositoryPlugin;
 import org.talend.mdm.repository.utils.EclipseResourceManager;
 import org.talend.mdm.repository.utils.RepositoryTransformUtil;
@@ -56,7 +56,7 @@ public class ViewLabelProvider extends AbstractLabelProvider {
         if (img == null) {
             Item item = getItem(element);
             if (item != null) {
-                if (item instanceof WSViewItem) {
+                if (item instanceof WsViewItem) {
                     img = IMG;
                 }
             }

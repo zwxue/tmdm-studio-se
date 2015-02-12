@@ -15,7 +15,7 @@ package org.talend.mdm.repository.core.datacontent.impl;
 import org.eclipse.ui.progress.IProgressService;
 import org.talend.mdm.repository.core.service.ConsoleProgressService;
 
-import com.amalto.workbench.webservices.XtentisPort;
+import com.amalto.workbench.webservices.TMDMService;
 
 /**
  * created by HHB on 2012-10-10 Detailled comment
@@ -31,8 +31,8 @@ public class ExportDataContentCommandProcess extends ExportDataContentProcess {
      * @param dName
      * @param outputPath
      */
-    public ExportDataContentCommandProcess(XtentisPort port, String tempFolderPath, String dName, String outputPath) {
-        super(port, tempFolderPath, dName, outputPath);
+    public ExportDataContentCommandProcess(TMDMService service, String tempFolderPath, String dName, String outputPath) {
+        super(service, tempFolderPath, dName, outputPath);
     }
 
     /*

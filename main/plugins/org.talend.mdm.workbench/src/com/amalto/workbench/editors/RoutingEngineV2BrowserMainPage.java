@@ -82,21 +82,15 @@ import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.providers.XObjectBrowserInput;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.XtentisException;
-import com.amalto.workbench.webservices.WSDeleteRoutingOrderV2;
-import com.amalto.workbench.webservices.WSExecuteRoutingOrderV2Asynchronously;
-import com.amalto.workbench.webservices.WSExecuteRoutingOrderV2Synchronously;
-import com.amalto.workbench.webservices.WSGetRoutingOrderV2ByCriteriaWithPaging;
-import com.amalto.workbench.webservices.WSGetServicesList;
-import com.amalto.workbench.webservices.WSRoutingEngineV2Action;
-import com.amalto.workbench.webservices.WSRoutingEngineV2ActionCode;
-import com.amalto.workbench.webservices.WSRoutingEngineV2Status;
-import com.amalto.workbench.webservices.WSRoutingOrderV2;
-import com.amalto.workbench.webservices.WSRoutingOrderV2PK;
-import com.amalto.workbench.webservices.WSRoutingOrderV2SearchCriteriaWithPaging;
-import com.amalto.workbench.webservices.WSRoutingOrderV2Status;
-import com.amalto.workbench.webservices.WSServicesList.Item;
-import com.amalto.workbench.webservices.WSString;
-import com.amalto.workbench.webservices.XtentisPort;
+import com.amalto.workbench.webservices.TMDMService;
+import com.amalto.workbench.webservices.WsGetRoutingOrderV2ByCriteriaWithPaging;
+import com.amalto.workbench.webservices.WsGetServicesList;
+import com.amalto.workbench.webservices.WsRoutingEngineV2Action;
+import com.amalto.workbench.webservices.WsRoutingEngineV2Status;
+import com.amalto.workbench.webservices.WsRoutingOrderV2;
+import com.amalto.workbench.webservices.WsRoutingOrderV2SearchCriteriaWithPaging;
+import com.amalto.workbench.webservices.WsRoutingOrderV2Status;
+import com.amalto.workbench.webservices.WsServicesListItem;
 import com.amalto.workbench.widgets.CalendarSelectWidget;
 import com.amalto.workbench.widgets.IPagingListener;
 import com.amalto.workbench.widgets.PageingToolBar;
@@ -330,7 +324,7 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
             serviceCombo.add(BLANK);
             // WSServicesListItem[] servicesList = Util.getPort(getXObject()).getServicesList(new
             // WSGetServicesList("en")).getItem();
-            List<Item> servicesList = getPort().getServicesList(new WSGetServicesList("en")).getItem(); //$NON-NLS-1$
+            List<WsServicesListItem> servicesList = getMDMService().getServicesList(new WsGetServicesList("en")).getItem(); //$NON-NLS-1$
 
             if ((servicesList != null) && (servicesList.size() > 0)) {
                 String[] services = new String[servicesList.size()];
@@ -531,8 +525,10 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
     @Override
     protected void refreshData() {
         try {
-            WSRoutingEngineV2Status status = getServerRoutingStatus();
-            statusLabel.setText(status.value());
+            WsRoutingEngineV2Status status = getServerRoutingStatus();
+            // *** TMDM-8080, temp omitted start ***//
+            // statusLabel.setText(status.value());
+            // *** TMDM-8080, temp omitted end ***//
 
             idText.setFocus();
 
@@ -547,20 +543,26 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
         }
     }
 
-    protected WSRoutingEngineV2Status getServerRoutingStatus() throws XtentisException {
-        XtentisPort port = getPort();
-        WSRoutingEngineV2Status status = port.routingEngineV2Action(new WSRoutingEngineV2Action(
-                WSRoutingEngineV2ActionCode.STATUS));
+    protected WsRoutingEngineV2Status getServerRoutingStatus() throws XtentisException {
+        TMDMService service = getMDMService();
+        // *** TMDM-8080, temp substituted start ***//
+        // WsRoutingEngineV2Status status = service.routingEngineV2Action(new WsRoutingEngineV2Action(
+        // WsRoutingEngineV2ActionCode.STATUS));
+        WsRoutingEngineV2Status status = service.routingEngineV2Action(new WsRoutingEngineV2Action());
+        // *** TMDM-8080, temp substituted end ***//
         return status;
     }
 
     protected void updateButtons() {
         try {
-            WSRoutingEngineV2Status status = getServerRoutingStatus();
-            startButton.setEnabled(status != WSRoutingEngineV2Status.RUNNING);
-            suspendButton.setEnabled(status != WSRoutingEngineV2Status.SUSPENDED);
-            stopButton.setEnabled(status != WSRoutingEngineV2Status.STOPPED);
-            statusLabel.setText(status.value());
+            WsRoutingEngineV2Status status = getServerRoutingStatus();
+
+            // *** TMDM-8080, temp omitted start ***//
+            // startButton.setEnabled(status != WsRoutingEngineV2Status.RUNNING);
+            // suspendButton.setEnabled(status != WsRoutingEngineV2Status.SUSPENDED);
+            // stopButton.setEnabled(status != WsRoutingEngineV2Status.STOPPED);
+            // statusLabel.setText(status.value());
+            // *** TMDM-8080, temp omitted end ***//
         } catch (XtentisException e) {
             startButton.setEnabled(true);
             suspendButton.setEnabled(false);
@@ -654,7 +656,7 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
         }
     }
 
-    protected WSRoutingOrderV2[] getResults() {
+    protected WsRoutingOrderV2[] getResults() {
 
         Cursor waitCursor = null;
 
@@ -663,7 +665,7 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
             Display display = getEditor().getSite().getPage().getWorkbenchWindow().getWorkbench().getDisplay();
             waitCursor = new Cursor(display, SWT.CURSOR_WAIT);
             this.getSite().getShell().setCursor(waitCursor);
-            XtentisPort port = getPort();
+            TMDMService service = getMDMService();
             long from = -1;
             long to = -1;
             Pattern pattern = Pattern.compile("^\\d{4}\\d{2}\\d{2} \\d{2}:\\d{2}:\\d{2}$");//$NON-NLS-1$
@@ -674,7 +676,7 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
                 if (!matcher.matches()) {
                     MessageDialog.openWarning(this.getSite().getShell(), Messages.Warning,
                             Messages.RoutingEngineV2BrowserMainPage_FormatIllegal);
-                    return new WSRoutingOrderV2[0];
+                    return new WsRoutingOrderV2[0];
                 }
                 try {
                     Date d = sdf.parse(fromText.getText());
@@ -689,7 +691,7 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
                 if (!matcher.matches()) {
                     MessageDialog.openWarning(this.getSite().getShell(), Messages.Warning,
                             Messages.RoutingEngineV2BrowserMainPage_FormatIllegal);
-                    return new WSRoutingOrderV2[0];
+                    return new WsRoutingOrderV2[0];
                 }
                 try {
                     Date d = sdf.parse(toText.getText());
@@ -706,25 +708,27 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
             long timeLastRunStartedMax = -1;
             long timeLastRunCompletedMin = -1;
             long timeLastRunCompletedMax = -1;
-            WSRoutingOrderV2Status status = null;
+            WsRoutingOrderV2Status status = null;
 
-            String statusText = statusCombo.getItem(statusCombo.getSelectionIndex());
-            if ("ACTIVE".equals(statusText)) {//$NON-NLS-1$
-                timeCreatedMin = from;
-                timeCreatedMax = to;
-                status = WSRoutingOrderV2Status.ACTIVE;
-            } else if ("COMPLETED".equals(statusText)) {//$NON-NLS-1$
-                timeLastRunCompletedMin = from;
-                timeLastRunCompletedMax = to;
-                status = WSRoutingOrderV2Status.COMPLETED;
-            } else if ("FAILED".equals(statusText)) {//$NON-NLS-1$
-                timeLastRunCompletedMin = from;
-                timeLastRunCompletedMax = to;
-                status = WSRoutingOrderV2Status.FAILED;
-            } else {
-                throw new XtentisException(Messages.RoutingEngineV2BrowserMainPage_ExceptionInfo + statusText
-                        + Messages.RoutingEngineV2BrowserMainPage_ExceptionInfoA);
-            }
+            // *** TMDM-8080, temp omitted start ***//
+            // String statusText = statusCombo.getItem(statusCombo.getSelectionIndex());
+            //            if ("ACTIVE".equals(statusText)) {//$NON-NLS-1$
+            // timeCreatedMin = from;
+            // timeCreatedMax = to;
+            // status = WsRoutingOrderV2Status.ACTIVE;
+            //            } else if ("COMPLETED".equals(statusText)) {//$NON-NLS-1$
+            // timeLastRunCompletedMin = from;
+            // timeLastRunCompletedMax = to;
+            // status = WsRoutingOrderV2Status.COMPLETED;
+            //            } else if ("FAILED".equals(statusText)) {//$NON-NLS-1$
+            // timeLastRunCompletedMin = from;
+            // timeLastRunCompletedMax = to;
+            // status = WsRoutingOrderV2Status.FAILED;
+            // } else {
+            // throw new XtentisException(Messages.RoutingEngineV2BrowserMainPage_ExceptionInfo + statusText
+            // + Messages.RoutingEngineV2BrowserMainPage_ExceptionInfoA);
+            // }
+            // *** TMDM-8080, temp omitted end ***//
 
             String serviceJNDI = serviceCombo.getItem(serviceCombo.getSelectionIndex());
             if (BLANK.equals(serviceJNDI)) {
@@ -733,28 +737,22 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
 
             int start = pageToolBar.getStart();
             int limit = pageToolBar.getLimit();
-            List<WSRoutingOrderV2> wsRoutingOrder = port
+            List<WsRoutingOrderV2> wsRoutingOrder = service
                     .getRoutingOrderV2ByCriteriaWithPaging(
-                            new WSGetRoutingOrderV2ByCriteriaWithPaging(
-                                    new WSRoutingOrderV2SearchCriteriaWithPaging(
-                                            status,
-                                            "*".equals(anyFieldText.getText()) || BLANK.equals(anyFieldText.getText()) ? null : anyFieldText.getText(), null,//$NON-NLS-1$
-                                            timeCreatedMin,
-                                            timeCreatedMax,
-                                            timeScheduledMin,
-                                            timeScheduledMax,
-                                            timeLastRunStartedMin,
-                                            timeLastRunStartedMax,
-                                            timeLastRunCompletedMin,
-                                            timeLastRunCompletedMax,
-                                            "*".equals(documentTypeText.getText()) || BLANK.equals(documentTypeText.getText()) ? null : documentTypeText.getText(), //$NON-NLS-1$
-                                            "*".equals(idText.getText()) || BLANK.equals(idText.getText()) ? null : idText.getText(),//$NON-NLS-1$
-                                            serviceJNDI, null, null, start, limit, true))).getWsRoutingOrder();
+                    new WsGetRoutingOrderV2ByCriteriaWithPaging(new WsRoutingOrderV2SearchCriteriaWithPaging("*" //$NON-NLS-1$
+                            .equals(anyFieldText.getText())
+                            || BLANK.equals(anyFieldText.getText()) ? null : anyFieldText.getText(),
+                            "*".equals(documentTypeText.getText()) || BLANK.equals(documentTypeText.getText()) ? null //$NON-NLS-1$
+                                    : documentTypeText.getText(),
+                            "*".equals(idText.getText()) || BLANK.equals(idText.getText()) ? null //$NON-NLS-1$
+                            : idText.getText(), limit, null, null, serviceJNDI, null, start, status, timeCreatedMax,
+                            timeCreatedMin, timeLastRunCompletedMax, timeLastRunCompletedMin, timeLastRunStartedMax,
+                            timeLastRunStartedMin, timeScheduledMax, timeScheduledMin, true))).getWsRoutingOrder();
 
             if (wsRoutingOrder.size() == 1) {
                 MessageDialog.openInformation(this.getSite().getShell(), Messages.RoutingEngineV2BrowserMainPage_Info,
                         Messages.RoutingEngineV2BrowserMainPage_SorryNoResult);
-                return new WSRoutingOrderV2[0];
+                return new WsRoutingOrderV2[0];
             }
 
             int totalSize = Integer.parseInt(wsRoutingOrder.get(0).getName());
@@ -762,8 +760,8 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
             pageToolBar.setTotalsize(totalSize);
             pageToolBar.refreshUI();
 
-            WSRoutingOrderV2[] resultOrderV2s = new WSRoutingOrderV2[wsRoutingOrder.size() - 1];
-            System.arraycopy(wsRoutingOrder.toArray(new WSRoutingOrderV2[0]), 1, resultOrderV2s, 0, resultOrderV2s.length);
+            WsRoutingOrderV2[] resultOrderV2s = new WsRoutingOrderV2[wsRoutingOrder.size() - 1];
+            System.arraycopy(wsRoutingOrder.toArray(new WsRoutingOrderV2[0]), 1, resultOrderV2s, 0, resultOrderV2s.length);
 
             return resultOrderV2s;
         } catch (Exception e) {
@@ -827,7 +825,7 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
                     return;
                 }
 
-                WSRoutingOrderV2 routingOrder = (WSRoutingOrderV2) selection.getFirstElement();
+                WsRoutingOrderV2 routingOrder = (WsRoutingOrderV2) selection.getFirstElement();
 
                 StringWriter sw = new StringWriter();
                 Marshaller.marshal(routingOrder, sw);
@@ -891,7 +889,7 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
 
                 // retrieve the list of items
                 IStructuredSelection selection = ((IStructuredSelection) viewer.getSelection());
-                List<WSRoutingOrderV2> lineItems = selection.toList();
+                List<WsRoutingOrderV2> lineItems = selection.toList();
 
                 if (lineItems.size() == 0) {
                     return;
@@ -928,11 +926,11 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
 
             TreeObject xObject;
 
-            Collection<WSRoutingOrderV2> lineItems;
+            Collection<WsRoutingOrderV2> lineItems;
 
             Shell parentShell;
 
-            public DeleteItemsWithProgress(TreeObject object, Collection<WSRoutingOrderV2> lineItems, Shell shell) {
+            public DeleteItemsWithProgress(TreeObject object, Collection<WsRoutingOrderV2> lineItems, Shell shell) {
                 super();
                 this.xObject = object;
                 this.lineItems = lineItems;
@@ -942,10 +940,10 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
             public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
                 try {
                     monitor.beginTask(Messages.RoutingEngineV2BrowserMainPage_DeletingItems, lineItems.size());
-                    XtentisPort port = getPort();
+                    TMDMService service = getMDMService();
 
                     int i = 0;
-                    for (WSRoutingOrderV2 lineItem : lineItems) {
+                    for (WsRoutingOrderV2 lineItem : lineItems) {
                         monitor.subTask(Messages.RoutingEngineV2BrowserMainPage_ProcessingItem + (i++));
                         if (monitor.isCanceled()) {
                             MessageDialog.openWarning(this.parentShell, Messages.RoutingEngineV2BrowserMainPage_UserCancelDel,
@@ -954,8 +952,12 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
                                             + Messages.RoutingEngineV2BrowserMainPage_WarningMsgB);
                             return;
                         }
-                        port.deleteRoutingOrderV2(new WSDeleteRoutingOrderV2(new WSRoutingOrderV2PK(lineItem.getName(), lineItem
-                                .getStatus())));
+                        // *** TMDM-8080, temp omitted start ***//
+                        // service.deleteRoutingOrderV2(new WSDeleteRoutingOrderV2(new
+                        // WsRoutingOrderV2PK(lineItem.getName(),
+                        // lineItem
+                        // .getStatus())));
+                        // *** TMDM-8080, temp omitted end ***//
                         monitor.worked(1);
                     }// for
 
@@ -1017,7 +1019,7 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
 
                 // retrieve the list of items
                 IStructuredSelection selection = ((IStructuredSelection) viewer.getSelection());
-                List<WSRoutingOrderV2> lineItems = selection.toList();
+                List<WsRoutingOrderV2> lineItems = selection.toList();
 
                 if (lineItems.size() == 0) {
                     return;
@@ -1058,11 +1060,11 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
 
             TreeObject xObject;
 
-            Collection<WSRoutingOrderV2> lineItems;
+            Collection<WsRoutingOrderV2> lineItems;
 
             Shell parentShell;
 
-            public ExecuteRoutingOrdersWithProgress(TreeObject object, Collection<WSRoutingOrderV2> lineItems, Shell shell) {
+            public ExecuteRoutingOrdersWithProgress(TreeObject object, Collection<WsRoutingOrderV2> lineItems, Shell shell) {
                 super();
                 this.xObject = object;
                 this.lineItems = lineItems;
@@ -1072,10 +1074,10 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
             public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 
                 monitor.beginTask(Messages.RoutingEngineV2BrowserMainPage_ExecutingRoutingOrders, lineItems.size());
-                XtentisPort port = null;
+                TMDMService service = null;
 
                 try {
-                    port = getPort();
+                    service = getMDMService();
                 } catch (Exception e) {
                     log.error(e.getMessage(), e);
                     MessageDialog.openError(shell, Messages.RoutingEngineV2BrowserMainPage_ErrorExecuting,
@@ -1083,7 +1085,7 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
                 }// try
 
                 String results = TEXT;
-                for (WSRoutingOrderV2 lineItem : lineItems) {
+                for (WsRoutingOrderV2 lineItem : lineItems) {
 
                     monitor.subTask(Messages.RoutingEngineV2BrowserMainPage_ExecutingRoutingOrder + lineItem.getName());
 
@@ -1096,16 +1098,19 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
                     }
 
                     try {
-                        if (synchronously) {
-                            WSString wsResult = port.executeRoutingOrderV2Synchronously(new WSExecuteRoutingOrderV2Synchronously(
-                                    new WSRoutingOrderV2PK(lineItem.getName(), lineItem.getStatus())));
-                            if (wsResult.getValue() != null) {
-                                results += lineItem.getName() + ": " + wsResult.getValue(); //$NON-NLS-1$
-                            }
-                        } else {
-                            port.executeRoutingOrderV2Asynchronously(new WSExecuteRoutingOrderV2Asynchronously(
-                                    new WSRoutingOrderV2PK(lineItem.getName(), lineItem.getStatus())));
-                        }
+                        // *** TMDM-8080, temp omitted start ***//
+                        // if (synchronously) {
+                        // WsString wsResult = service
+                        // .executeRoutingOrderV2Synchronously(new WSExecuteRoutingOrderV2Synchronously(
+                        // new WSRoutingOrderV2PK(lineItem.getName(), lineItem.getStatus())));
+                        // if (wsResult.getValue() != null) {
+                        //                                results += lineItem.getName() + ": " + wsResult.getValue(); //$NON-NLS-1$
+                        // }
+                        // } else {
+                        // service.executeRoutingOrderV2Asynchronously(new WSExecuteRoutingOrderV2Asynchronously(
+                        // new WSRoutingOrderV2PK(lineItem.getName(), lineItem.getStatus())));
+                        // }
+                        // *** TMDM-8080, temp omitted end ***//
                         monitor.worked(1);
                     } catch (Exception e) {
                         log.error(e.getMessage(), e);
@@ -1139,17 +1144,20 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
         }
 
         public String getColumnText(Object element, int columnIndex) {
-            WSRoutingOrderV2 ro = (WSRoutingOrderV2) element;
+            WsRoutingOrderV2 ro = (WsRoutingOrderV2) element;
             switch (columnIndex) {
             case 0:
                 return ro.getWsItemPK().getConceptName() + "[" + Util.joinStrings(ro.getWsItemPK().getIds(), ".") + "]";//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
             case 1:
                 Calendar cal = Calendar.getInstance();
-                if (WSRoutingOrderV2Status.ACTIVE.equals(ro.getStatus())) {
-                    cal.setTimeInMillis(ro.getTimeCreated());
-                } else {
-                    cal.setTimeInMillis(ro.getTimeLastRunCompleted());
-                }
+                // *** TMDM-8080, temp substituted start ***//
+                // if (WsRoutingOrderV2Status.ACTIVE.equals(ro.getStatus())) {
+                // cal.setTimeInMillis(ro.getTimeCreated());
+                // } else {
+                // cal.setTimeInMillis(ro.getTimeLastRunCompleted());
+                // }
+                cal.setTimeInMillis(ro.getTimeLastRunCompleted());
+                // *** TMDM-8080, temp substituted end ***//
                 return sdf.format(cal.getTime());
             case 2:
                 return ro.getServiceJNDI().replaceFirst("amalto/local/service/", BLANK);//$NON-NLS-1$
@@ -1195,8 +1203,8 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
 
         @Override
         public int compare(Viewer viewer, Object e1, Object e2) {
-            WSRoutingOrderV2 ro1 = (WSRoutingOrderV2) e1;
-            WSRoutingOrderV2 ro2 = (WSRoutingOrderV2) e2;
+            WsRoutingOrderV2 ro1 = (WsRoutingOrderV2) e1;
+            WsRoutingOrderV2 ro2 = (WsRoutingOrderV2) e2;
 
             int res = 0;
 
@@ -1207,11 +1215,14 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
                 res = d1.compareToIgnoreCase(d2);
                 break;
             case 1: // date
-                if (WSRoutingOrderV2Status.ACTIVE.equals(ro1.getStatus())) {
-                    res = (int) (ro1.getTimeCreated() - ro2.getTimeCreated());
-                } else {
-                    res = (int) (ro1.getTimeLastRunCompleted() - ro2.getTimeLastRunCompleted());
-                }
+                // *** TMDM-8080, temp substituted start ***//
+                // if (WsRoutingOrderV2Status.ACTIVE.equals(ro1.getStatus())) {
+                // res = (int) (ro1.getTimeCreated() - ro2.getTimeCreated());
+                // } else {
+                // res = (int) (ro1.getTimeLastRunCompleted() - ro2.getTimeLastRunCompleted());
+                // }
+                res = (int) (ro1.getTimeLastRunCompleted() - ro2.getTimeLastRunCompleted());
+                // *** TMDM-8080, temp substituted end ***//
                 break;
             case 2: // service
                 res = ro1.getServiceJNDI().compareToIgnoreCase(ro2.getServiceJNDI());
@@ -1233,13 +1244,16 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
 
     private void startSubscriptionEngine() {
         try {
-            WSRoutingEngineV2Status status = getServerRoutingStatus();
-            XtentisPort port = getPort();
-            if (status == WSRoutingEngineV2Status.STOPPED) {
-                port.routingEngineV2Action(new WSRoutingEngineV2Action(WSRoutingEngineV2ActionCode.START));
-            } else if (status == WSRoutingEngineV2Status.SUSPENDED) {
-                port.routingEngineV2Action(new WSRoutingEngineV2Action(WSRoutingEngineV2ActionCode.RESUME));
-            }
+            WsRoutingEngineV2Status status = getServerRoutingStatus();
+            TMDMService service = getMDMService();
+            // *** TMDM-8080, temp substituted start ***//
+            // if (status == WsRoutingEngineV2Status.STOPPED) {
+            // service.routingEngineV2Action(new WsRoutingEngineV2Action(WsRoutingEngineV2ActionCode.START));
+            // } else if (status == WsRoutingEngineV2Status.SUSPENDED) {
+            // service.routingEngineV2Action(new WsRoutingEngineV2Action(WsRoutingEngineV2ActionCode.RESUME));
+            // }
+            service.routingEngineV2Action(new WsRoutingEngineV2Action());
+            // *** TMDM-8080, temp substituted end ***//
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             if (!Util.handleConnectionException(this.getSite().getShell(), e, null)) {
@@ -1251,8 +1265,11 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
 
     private void stopSubscriptionEngine() {
         try {
-            XtentisPort port = getPort();
-            port.routingEngineV2Action(new WSRoutingEngineV2Action(WSRoutingEngineV2ActionCode.STOP));
+            TMDMService service = getMDMService();
+            // *** TMDM-8080, temp substituted start ***//
+            // service.routingEngineV2Action(new WsRoutingEngineV2Action(WsRoutingEngineV2ActionCode.STOP));
+            service.routingEngineV2Action(new WsRoutingEngineV2Action());
+            // *** TMDM-8080, temp substituted end ***//
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             if (!Util.handleConnectionException(this.getSite().getShell(), e, null)) {
@@ -1264,8 +1281,11 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
 
     private void suspendSubscriptionEngine() {
         try {
-            XtentisPort port = getPort();
-            port.routingEngineV2Action(new WSRoutingEngineV2Action(WSRoutingEngineV2ActionCode.SUSPEND));
+            TMDMService service = getMDMService();
+            // *** TMDM-8080, temp substituted start ***//
+            // service.routingEngineV2Action(new WsRoutingEngineV2Action(WsRoutingEngineV2ActionCode.SUSPEND));
+            service.routingEngineV2Action(new WsRoutingEngineV2Action());
+            // *** TMDM-8080, temp substituted end ***//
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             if (!Util.handleConnectionException(this.getSite().getShell(), e, null)) {

@@ -43,7 +43,6 @@ import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.models.TreeParent;
 import com.amalto.workbench.utils.Util;
-import com.amalto.workbench.webservices.WSVersioningUniverseVersions;
 
 /**
  * @author achen DOC achen class global comment. Detailled comment
@@ -82,7 +81,9 @@ public class RepositoryCheckTreeViewer {
 
     protected IDoubleClickListener tagsViewerDoubleClickListener;
 
-    private List<WSVersioningUniverseVersions.TagStructure> hisEntries;
+    // *** TMDM-8080, temp omitted start ***//
+    // private List<WSVersioningUniverseVersions.TagStructure> hisEntries;
+    // *** TMDM-8080, temp omitted end ***//
 
     public RepositoryCheckTreeViewer(IStructuredSelection selection, String defaultTagText, boolean isTagEditable) {
         this.selection = selection;
@@ -156,8 +157,13 @@ public class RepositoryCheckTreeViewer {
         layout.marginLeft = 0;
         layout.marginRight = 0;
         versionComposite.setLayout(layout);
+
+        // *** TMDM-8080, temp substituted start ***//
+        //        vwidget = new VersionTagWidget(versionComposite, "Universe", defaultTagText, isTagEditable, tagSelectionListener,//$NON-NLS-1$
+        // restoreSelectionListener, tagsViewerDoubleClickListener, this.hisEntries);
         vwidget = new VersionTagWidget(versionComposite, "Universe", defaultTagText, isTagEditable, tagSelectionListener,//$NON-NLS-1$
-                restoreSelectionListener, tagsViewerDoubleClickListener, this.hisEntries);
+                restoreSelectionListener, tagsViewerDoubleClickListener, null);
+        // *** TMDM-8080, temp substituted end ***//
 
         sash.setWeights(new int[] { 20, 2, 21 });
         // add listner
@@ -262,9 +268,9 @@ public class RepositoryCheckTreeViewer {
 
     protected void filterCheckedObjects(Object[] selected, List ret) {
 
-        for (int i = 0; i < selected.length; i++) {
-            if (selected[i] instanceof TreeObject) {
-                TreeObject node = (TreeObject) selected[i];
+        for (Object element : selected) {
+            if (element instanceof TreeObject) {
+                TreeObject node = (TreeObject) element;
                 if (node.isXObject()) {
                     ret.add(node);
                 }
@@ -438,11 +444,13 @@ public class RepositoryCheckTreeViewer {
         this.tagsViewerDoubleClickListener = tagsViewerDoubleClickListener;
     }
 
-    public void setHisEntries(List<WSVersioningUniverseVersions.TagStructure> hisEntries) {
-
-        this.hisEntries = hisEntries;
-
-    }
+    // *** TMDM-8080, temp omitted start ***//
+    // public void setHisEntries(List<WSVersioningUniverseVersions.TagStructure> hisEntries) {
+    //
+    // this.hisEntries = hisEntries;
+    //
+    // }
+    // *** TMDM-8080, temp omitted end ***//
 
     public String getComment() {
 
@@ -456,9 +464,11 @@ public class RepositoryCheckTreeViewer {
 
     }
 
-    public void refreshHistoryTable(List<WSVersioningUniverseVersions.TagStructure> hisEntries) {
-        this.vwidget.refreshData(hisEntries);
-    }
+    // *** TMDM-8080, temp omitted start ***//
+    // public void refreshHistoryTable(List<WSVersioningUniverseVersions.TagStructure> hisEntries) {
+    // this.vwidget.refreshData(hisEntries);
+    // }
+    // *** TMDM-8080, temp omitted end ***//
 
     public TableViewer getTagsViewer() {
 

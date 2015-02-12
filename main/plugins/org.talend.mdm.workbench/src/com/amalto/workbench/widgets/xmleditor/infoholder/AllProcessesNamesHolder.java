@@ -15,34 +15,34 @@ package com.amalto.workbench.widgets.xmleditor.infoholder;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.amalto.workbench.webservices.WSGetTransformerV2PKs;
-import com.amalto.workbench.webservices.WSTransformerV2PK;
-import com.amalto.workbench.webservices.XtentisPort;
+import com.amalto.workbench.webservices.TMDMService;
+import com.amalto.workbench.webservices.WsGetTransformerV2PKs;
+import com.amalto.workbench.webservices.WsTransformerV2PK;
 
 class AllProcessesNamesHolder extends ExternalInfoHolder<String[]> {
 
-    private XtentisPort port;
+    private TMDMService service;
 
-    public AllProcessesNamesHolder(XtentisPort port) {
-        this.port = port;
+    public AllProcessesNamesHolder(TMDMService service) {
+        this.service = service;
     }
 
     @Override
     public String[] getExternalInfo() {
 
-        if (port == null) {
+        if (service == null) {
             return new String[0];
         }
 
-        List<WSTransformerV2PK> transformerPKs = null;
+        List<WsTransformerV2PK> transformerPKs = null;
         try {
-            transformerPKs = port.getTransformerV2PKs(new WSGetTransformerV2PKs("")).getWsTransformerV2PK();//$NON-NLS-1$
+            transformerPKs = service.getTransformerV2PKs(new WsGetTransformerV2PKs("")).getWsTransformerV2PK();//$NON-NLS-1$
         } catch (Exception e) {
             return new String[0];
         }
         List<String> processes = new ArrayList<String>();
         if (transformerPKs != null) {
-            for (WSTransformerV2PK pk : transformerPKs) {
+            for (WsTransformerV2PK pk : transformerPKs) {
                 if (pk.getPk() != null && pk.getPk().length() > 0) {
                     processes.add(pk.getPk());
                 }

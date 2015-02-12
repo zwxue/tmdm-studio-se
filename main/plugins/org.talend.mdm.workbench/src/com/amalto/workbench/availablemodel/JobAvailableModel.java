@@ -20,9 +20,9 @@ import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.models.TreeParent;
 import com.amalto.workbench.utils.EXtentisObjects;
-import com.amalto.workbench.webservices.WSMDMJob;
-import com.amalto.workbench.webservices.WSMDMNULL;
-import com.amalto.workbench.webservices.XtentisPort;
+import com.amalto.workbench.webservices.TMDMService;
+import com.amalto.workbench.webservices.WsmdmJob;
+import com.amalto.workbench.webservices.Wsmdmnull;
 
 /**
  * DOC achen class global comment. Detailled comment
@@ -30,7 +30,7 @@ import com.amalto.workbench.webservices.XtentisPort;
 public class JobAvailableModel extends AbstractAvailableModel {
 
     @Override
-    public void addTreeObjects(XtentisPort port, IProgressMonitor monitor, TreeParent serverRoot) {
+    public void addTreeObjects(TMDMService service, IProgressMonitor monitor, TreeParent serverRoot) {
         monitor.subTask(Messages.JobAvailableModel_LoadingJobs);
         // MDM Job
 
@@ -41,9 +41,9 @@ public class JobAvailableModel extends AbstractAvailableModel {
         TreeParent deployedJob = new TreeParent(Messages.JobAvailableModel_DeployedJobs, serverRoot,
                 TreeObject.BUILT_IN_CATEGORY_FOLDER, null, null);
         try {
-            List<WSMDMJob> jobPKs = port.getMDMJob(new WSMDMNULL()).getWsMDMJob();
+            List<WsmdmJob> jobPKs = service.getMDMJob(new Wsmdmnull()).getWsMDMJob();
             if (jobPKs != null) {
-                for (WSMDMJob jobPK : jobPKs) {
+                for (WsmdmJob jobPK : jobPKs) {
                     String name = jobPK.getJobName() + "_" + jobPK.getJobVersion() + jobPK.getSuffix();//$NON-NLS-1$
                     TreeObject obj = new TreeObject(name, serverRoot, TreeObject.JOB, name, null);
                     deployedJob.addChild(obj);

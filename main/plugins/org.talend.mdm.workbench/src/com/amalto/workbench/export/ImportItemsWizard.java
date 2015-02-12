@@ -76,10 +76,10 @@ import com.amalto.workbench.utils.EXtentisObjects;
 import com.amalto.workbench.utils.LocalTreeObjectRepository;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.XmlUtil;
-import com.amalto.workbench.webservices.WSAutoIncrement;
-import com.amalto.workbench.webservices.WSItem;
-import com.amalto.workbench.webservices.WSTransformerV2;
-import com.amalto.workbench.webservices.XtentisPort;
+import com.amalto.workbench.webservices.TMDMService;
+import com.amalto.workbench.webservices.WsAutoIncrement;
+import com.amalto.workbench.webservices.WsItem;
+import com.amalto.workbench.webservices.WsTransformerV2;
 import com.amalto.workbench.widgets.FileSelectWidget;
 import com.amalto.workbench.widgets.RepositoryCheckTreeViewer;
 import com.amalto.workbench.widgets.WidgetFactory;
@@ -109,7 +109,7 @@ public class ImportItemsWizard extends Wizard {
 
     protected TreeParent serverRoot;
 
-    private XtentisPort port = null;
+    private TMDMService service = null;
 
     protected Button btnOverwrite = null;
 
@@ -160,8 +160,8 @@ public class ImportItemsWizard extends Wizard {
                 try {
                     doImport(objs, monitor);
                     // run initMDM to call backend migration task
-                    if (port != null) {
-                        port.initMDM(null);
+                    if (service != null) {
+                        service.initMDM(null);
                     }
                 } catch (Exception e) {
                     log.error(e.getMessage(), e);
@@ -336,7 +336,7 @@ public class ImportItemsWizard extends Wizard {
             // import autoincrement
             if (exports.getAutoIncrement() != null) {
                 try {
-                    port.getAutoIncrement(new WSAutoIncrement(exports.getAutoIncrement()));
+                    service.getAutoIncrement(new WsAutoIncrement(exports.getAutoIncrement()));
                 } catch (Exception e) {
                 }
             }
@@ -1050,14 +1050,14 @@ public class ImportItemsWizard extends Wizard {
         Document document = XmlUtil.parse(new FileInputStream(inputPath));
         if (document != null && document.getRootElement() != null) {
             String rootElementName = document.getRootElement().getName();
-            if (rootElementName.equals(WSTransformerV2.class.getSimpleName())) {
+            if (rootElementName.equals(WsTransformerV2.class.getSimpleName())) {
                 isV2Transformer = true;
             }
         }
         return isV2Transformer;
     }
 
-    protected void importClusterContents(TreeObject item, XtentisPort port, HashMap<String, String> picturePathMap)
+    protected void importClusterContents(TreeObject item, TMDMService port, HashMap<String, String> picturePathMap)
             throws Exception {
         if (dataClusterContent.containsKey(item.getDisplayName())) {
             Reader reader = null;
@@ -1066,7 +1066,7 @@ public class ImportItemsWizard extends Wizard {
             for (String path : paths) {
                 try {
                     reader = new InputStreamReader(new FileInputStream(importFolder + "/" + path), "UTF-8");//$NON-NLS-1$//$NON-NLS-2$
-                    WSItem wsItem = (WSItem) Unmarshaller.unmarshal(WSItem.class, reader);
+                    WsItem wsItem = (WsItem) Unmarshaller.unmarshal(WsItem.class, reader);
                     String key = wsItem.getWsDataClusterPK().getPk() + "##" + wsItem.getConceptName() + "##"//$NON-NLS-1$//$NON-NLS-2$
                             + wsItem.getDataModelName();
                     List<String> list = null;

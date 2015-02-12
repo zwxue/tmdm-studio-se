@@ -13,7 +13,6 @@
 package com.amalto.workbench.dialogs;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Set;
@@ -58,8 +57,8 @@ import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.utils.HttpClientUtil;
 import com.amalto.workbench.utils.Util;
-import com.amalto.workbench.webservices.WSMenuEntry;
-import com.amalto.workbench.webservices.WSMenuEntry.Descriptions;
+import com.amalto.workbench.webservices.WsMenuEntry;
+import com.amalto.workbench.webservices.WsMenuMenuEntriesDescriptions;
 import com.amalto.workbench.widgets.FileSelectWidget;
 
 public class MenuEntryDialog extends Dialog {
@@ -82,7 +81,7 @@ public class MenuEntryDialog extends Dialog {
 
     protected TableViewer descriptionsViewer;
 
-    private WSMenuEntry wsMenuEntry = null;
+    private WsMenuEntry wsMenuEntry = null;
 
     protected LinkedHashMap<String, String> descriptionsMap = new LinkedHashMap<String, String>();
 
@@ -101,7 +100,7 @@ public class MenuEntryDialog extends Dialog {
     /**
      * @param parentShell
      */
-    public MenuEntryDialog(WSMenuEntry wsMenuEntry, SelectionListener caller, Shell parentShell, String title, String uripre,
+    public MenuEntryDialog(WsMenuEntry wsMenuEntry, SelectionListener caller, Shell parentShell, String title, String uripre,
             boolean isLocal, TreeObject treeObject) {
         super(parentShell);
         this.wsMenuEntry = wsMenuEntry;
@@ -111,15 +110,15 @@ public class MenuEntryDialog extends Dialog {
         this.isLocal = isLocal;
         this.treeObject = treeObject;
         // feed the descritions hashmap used by the labels Table
-        List<Descriptions> descriptions = wsMenuEntry.getDescriptions();
+        List<WsMenuMenuEntriesDescriptions> descriptions = wsMenuEntry.getDescriptions();
         if (descriptions != null) {
-            for (Descriptions description : descriptions) {
+            for (WsMenuMenuEntriesDescriptions description : descriptions) {
                 descriptionsMap.put(description.getLanguage().toLowerCase(), description.getLabel());
             }
         }
     }
 
-    public MenuEntryDialog(WSMenuEntry wsMenuEntry, SelectionListener caller, Shell parentShell, String title, boolean isChanged,
+    public MenuEntryDialog(WsMenuEntry wsMenuEntry, SelectionListener caller, Shell parentShell, String title, boolean isChanged,
             String uripre, boolean isLocal, TreeObject treeObject) {
         super(parentShell);
         this.wsMenuEntry = wsMenuEntry;
@@ -130,9 +129,9 @@ public class MenuEntryDialog extends Dialog {
         this.isLocal = isLocal;
         this.treeObject = treeObject;
         // feed the descritions hashmap used by the labels Table
-        List<Descriptions> descriptions = wsMenuEntry.getDescriptions();
+        List<WsMenuMenuEntriesDescriptions> descriptions = wsMenuEntry.getDescriptions();
         if (descriptions != null) {
-            for (Descriptions description : descriptions) {
+            for (WsMenuMenuEntriesDescriptions description : descriptions) {
                 descriptionsMap.put(description.getLanguage().toLowerCase(), description.getLabel());
             }
         }
@@ -195,8 +194,8 @@ public class MenuEntryDialog extends Dialog {
         languagesCombo = new Combo(descriptionsComposite, SWT.READ_ONLY | SWT.DROP_DOWN | SWT.SINGLE);
         languagesCombo.setLayoutData(new GridData(SWT.BEGINNING, SWT.NONE, false, false, 1, 1));
         Set<String> languages = Util.lang2iso.keySet();
-        for (Iterator iter = languages.iterator(); iter.hasNext();) {
-            String language = (String) iter.next();
+        for (Object element : languages) {
+            String language = (String) element;
             languagesCombo.add(language);
         }
         languagesCombo.addModifyListener(new ModifyListener() {
@@ -280,8 +279,8 @@ public class MenuEntryDialog extends Dialog {
                 LinkedHashMap<String, String> descs = (LinkedHashMap<String, String>) inputElement;
                 Set<String> languages = descs.keySet();
                 ArrayList<DescriptionLine> lines = new ArrayList<DescriptionLine>();
-                for (Iterator iter = languages.iterator(); iter.hasNext();) {
-                    String language = (String) iter.next();
+                for (Object element : languages) {
+                    String language = (String) element;
                     DescriptionLine line = new DescriptionLine(Util.iso2lang.get(language), descs.get(language));
                     lines.add(line);
                 }

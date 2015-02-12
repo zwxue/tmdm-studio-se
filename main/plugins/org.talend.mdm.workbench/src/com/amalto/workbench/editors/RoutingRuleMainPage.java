@@ -73,13 +73,14 @@ import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.WidgetUtils;
 import com.amalto.workbench.utils.XmlUtil;
 import com.amalto.workbench.utils.XtentisException;
-import com.amalto.workbench.webservices.WSGetServicesList;
-import com.amalto.workbench.webservices.WSRoutingRule;
-import com.amalto.workbench.webservices.WSRoutingRuleExpression;
-import com.amalto.workbench.webservices.WSServiceGetDocument;
-import com.amalto.workbench.webservices.WSServicesList;
-import com.amalto.workbench.webservices.WSString;
-import com.amalto.workbench.webservices.XtentisPort;
+import com.amalto.workbench.webservices.TMDMService;
+import com.amalto.workbench.webservices.WsGetServicesList;
+import com.amalto.workbench.webservices.WsRoutingRule;
+import com.amalto.workbench.webservices.WsRoutingRuleExpression;
+import com.amalto.workbench.webservices.WsServiceGetDocument;
+import com.amalto.workbench.webservices.WsServicesList;
+import com.amalto.workbench.webservices.WsServicesListItem;
+import com.amalto.workbench.webservices.WsString;
 import com.amalto.workbench.widgets.ComplexTableViewerColumn;
 import com.amalto.workbench.widgets.ConditionWidget;
 import com.amalto.workbench.widgets.TisTableViewer;
@@ -185,11 +186,13 @@ public class RoutingRuleMainPage extends AMainPageV2 {
 
         try {
             ExternalInfoHolder<?> allProcessNamesHolder = ExternalInfoHolder.getAllProcessesNamesHolder(Util
-                    .getPort(getXObject()));
-            ExternalInfoHolder<?> allJobInfosHolder = ExternalInfoHolder.getAllJobInfosHolder(Util.getPort(getXObject()));
+                    .getMDMService(getXObject()));
+            ExternalInfoHolder<?> allJobInfosHolder = ExternalInfoHolder.getAllJobInfosHolder(Util.getMDMService(getXObject()));
             ExternalInfoHolder<?> allVarCandidatesHolder = ExternalInfoHolder.getTriggerAllCallJobVarsCandidatesHolder();
-            ExternalInfoHolder<?> mdmServerInfoHolder = ExternalInfoHolder.getAllMDMServerInfoHolder(Util.getPort(getXObject()));
-            ExternalInfoHolder<?> workflowInfoHolder = ExternalInfoHolder.getAllWorkflowInfoHolder(Util.getPort(getXObject()));
+            ExternalInfoHolder<?> mdmServerInfoHolder = ExternalInfoHolder.getAllMDMServerInfoHolder(Util
+                    .getMDMService(getXObject()));
+            ExternalInfoHolder<?> workflowInfoHolder = ExternalInfoHolder.getAllWorkflowInfoHolder(Util
+                    .getMDMService(getXObject()));
             ExternalInfoHolder<?> allDataModelHolderProxy = ExternalInfoHolder.getAllDataModelInfoHolderProxy(getXObject());
 
             initExternalInfoHolderForEachType("callprocess", new ExternalInfoHolder<?>[] { allProcessNamesHolder });//$NON-NLS-1$
@@ -416,7 +419,7 @@ public class RoutingRuleMainPage extends AMainPageV2 {
                     // WSRoutingRule wsObject = (WSRoutingRule) (getXObject().getWsObject());
                     try {
 
-                        WSServiceGetDocument document = getServiceDocument(serviceNameCombo.getText().trim());
+                        WsServiceGetDocument document = getServiceDocument(serviceNameCombo.getText().trim());
 
                         doc = document.getDocument();
                         desc = document.getDescription();
@@ -562,10 +565,10 @@ public class RoutingRuleMainPage extends AMainPageV2 {
                 dataModelName);
     }
 
-    protected WSServiceGetDocument getServiceDocument(String jndiName) {
-        XtentisPort port = getPort();
-        if (port != null) {
-            return port.getServiceDocument(new WSString(jndiName));
+    protected WsServiceGetDocument getServiceDocument(String jndiName) {
+        TMDMService service = getService();
+        if (service != null) {
+            return service.getServiceDocument(new WsString(jndiName));
         }
         return null;
     }
@@ -580,16 +583,16 @@ public class RoutingRuleMainPage extends AMainPageV2 {
      * @throws XtentisException
      */
     protected void initServiceNameCombo() throws XtentisException {
-        WSServicesList list = Util.getPort(getXObject()).getServicesList(new WSGetServicesList(""));//$NON-NLS-1$
-        List<WSServicesList.Item> items = list.getItem();
+        WsServicesList list = Util.getMDMService(getXObject()).getServicesList(new WsGetServicesList(""));//$NON-NLS-1$
+        List<WsServicesListItem> items = list.getItem();
         if (items != null) {
             String[] sortedList = new String[items.size()];
             for (int i = 0; i < items.size(); i++) {
                 sortedList[i] = items.get(i).getJndiName();
             }
             Arrays.sort(sortedList);
-            for (int i = 0; i < sortedList.length; i++) {
-                serviceNameCombo.add(sortedList[i]);
+            for (String element : sortedList) {
+                serviceNameCombo.add(element);
             }
             // serviceNameCombo.add("");
         }
@@ -657,7 +660,7 @@ public class RoutingRuleMainPage extends AMainPageV2 {
 
             this.refreshing = true;
 
-            WSRoutingRule wsRoutingRule = (WSRoutingRule) (getXObject().getWsObject());
+            WsRoutingRule wsRoutingRule = (WsRoutingRule) (getXObject().getWsObject());
             descriptionText.setText(wsRoutingRule.getDescription());
             isSynchronousButton.setSelection(wsRoutingRule.isSynchronous());
             if (wsRoutingRule.isDeactive() != null) {
@@ -683,7 +686,7 @@ public class RoutingRuleMainPage extends AMainPageV2 {
 
             java.util.List<Line> lines = new ArrayList<Line>();
 
-            for (WSRoutingRuleExpression wc : wsRoutingRule.getWsRoutingRuleExpressions()) {
+            for (WsRoutingRuleExpression wc : wsRoutingRule.getWsRoutingRuleExpressions()) {
                 Line line = new Line(conditionsColumns, Util.convertRouteCondition(wc));
                 lines.add(line);
             }
@@ -714,7 +717,7 @@ public class RoutingRuleMainPage extends AMainPageV2 {
             }
             this.comitting = true;
 
-            WSRoutingRule ws = (WSRoutingRule) (getXObject().getWsObject());
+            WsRoutingRule ws = (WsRoutingRule) (getXObject().getWsObject());
             ws.setDescription(descriptionText.getText());
             ws.setConcept(objectTypeText.getText());
 
@@ -744,11 +747,11 @@ public class RoutingRuleMainPage extends AMainPageV2 {
             }
 
             java.util.List<Line> lines = (java.util.List<Line>) conditionViewer.getViewer().getInput();
-            java.util.List<WSRoutingRuleExpression> wclist = new ArrayList<WSRoutingRuleExpression>();
+            java.util.List<WsRoutingRuleExpression> wclist = new ArrayList<WsRoutingRuleExpression>();
             for (Line item : lines) {
                 String[] values = new String[] { item.keyValues.get(0).value, item.keyValues.get(1).value,
                         item.keyValues.get(2).value, item.keyValues.get(3).value };
-                WSRoutingRuleExpression wc = Util.convertLineRoute(values);
+                WsRoutingRuleExpression wc = Util.convertLineRoute(values);
                 wclist.add(wc);
             }
             ws.getWsRoutingRuleExpressions().clear();

@@ -13,7 +13,7 @@
 package com.amalto.workbench.utils;
 
 import com.amalto.workbench.exadapter.IExAdapter;
-import com.amalto.workbench.webservices.XtentisPort;
+import com.amalto.workbench.webservices.TMDMService;
 
 /**
  * created by HHB on 2014-1-7 Detailled comment
@@ -21,5 +21,5 @@ import com.amalto.workbench.webservices.XtentisPort;
  */
 public interface ITreeObjectUtilExAdapter extends IExAdapter<TreeObjectUtil> {
 
-    void deleteSpecificationFromAttachedRole(XtentisPort port, String displayName, String objectType);
+    void deleteSpecificationFromAttachedRole(TMDMService port, String displayName, String objectType);
 }
