@@ -350,11 +350,14 @@ public class HttpClientUtil {
         }
     }
 
-    public static String invokeModelService(String protocol, String host, String port, String username, String password,
-            String modelName, String xsd, boolean isUpdate, Boolean force) throws XtentisException {
+    public static String invokeModelService(String protocol, String host, String port, String contextPath, String username,
+            String password, String modelName, String xsd, boolean isUpdate, Boolean force) throws XtentisException {
         try {
-            String url = protocol + host
-                    + ":" + port + "/talendmdm-6.0-SNAPSHOT/services/rest/datamanager/system/models/" + modelName; //$NON-NLS-1$ //$NON-NLS-2$ 
+            if (!contextPath.isEmpty()) {
+                contextPath = "/" + contextPath; //$NON-NLS-1$
+            }
+
+            String url = protocol + host + ":" + port + contextPath + "/services/rest/system/models/" + modelName; //$NON-NLS-1$ //$NON-NLS-2$ 
             if (force != null) {
                 url += "?force=" + force.toString(); //$NON-NLS-1$
             }
@@ -389,9 +392,12 @@ public class HttpClientUtil {
 
     }
 
-    public static String invokeMatchSimulation(String protocol, String host, int port, String userName, String password,
-            String modelName, String entityName, String records) throws XtentisException {
-        String url = protocol + host + ":" + port + "/datamanager/services/tasks/matching/explain/?model=" + modelName + "&type=" //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$
+    public static String invokeMatchSimulation(String protocol, String host, int port, String contextPath, String userName,
+            String password, String modelName, String entityName, String records) throws XtentisException {
+        if (!contextPath.isEmpty()) {
+            contextPath = "/" + contextPath; //$NON-NLS-1$
+        }
+        String url = protocol + host + ":" + port + contextPath + "/tasks/matching/explain/?model=" + modelName + "&type=" //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$
                 + entityName;
         String contentType = "application/xml;charset=UTF-8"; //$NON-NLS-1$
         try {

@@ -37,7 +37,6 @@ import com.amalto.workbench.webservices.WsDataCluster;
 import com.amalto.workbench.webservices.WsDataClusterPK;
 import com.amalto.workbench.webservices.WsDataModel;
 import com.amalto.workbench.webservices.WsDataModelPK;
-import com.amalto.workbench.webservices.WsGetComponentVersion;
 import com.amalto.workbench.webservices.WsGetDataCluster;
 import com.amalto.workbench.webservices.WsGetDataModel;
 import com.amalto.workbench.webservices.WsGetMenu;
@@ -61,7 +60,6 @@ import com.amalto.workbench.webservices.WsStoredProcedure;
 import com.amalto.workbench.webservices.WsStoredProcedurePK;
 import com.amalto.workbench.webservices.WsTransformerV2;
 import com.amalto.workbench.webservices.WsTransformerV2PK;
-import com.amalto.workbench.webservices.WsVersion;
 import com.amalto.workbench.webservices.WsView;
 import com.amalto.workbench.webservices.WsViewPK;
 
@@ -132,19 +130,18 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
 
             monitor.worked(1);
 
-            // fetch version info
-            try {
-                // *** TMDM-8080, temp substituted start ***//
-                // WsVersion version = service.getComponentVersion(new WsGetComponentVersion(WsComponent.DATA_MANAGER,
-                // null));
-                WsVersion version = service.getComponentVersion(new WsGetComponentVersion());
-                // *** TMDM-8080, temp substituted end ***//
-                String versionStr = version.getMajor() + "." + version.getMinor() + "." + version.getRevision() + "_" //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-                        + version.getBuild();
-                log.info("Server version = " + versionStr); //$NON-NLS-1$
-            } catch (Exception e) {
-                log.error(e.getMessage(), e);
-            }
+            // *** TMDM-8080, temp omitted start ***//
+            // // fetch version info
+            // try {
+            // WsVersion version = service.getComponentVersion(new WsGetComponentVersion(WsComponent.DATA_MANAGER,
+            // null));
+            //                String versionStr = version.getMajor() + "." + version.getMinor() + "." + version.getRevision() + "_" //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+            // + version.getBuild();
+            //                log.info("Server version = " + versionStr); //$NON-NLS-1$
+            // } catch (Exception e) {
+            // log.error(e.getMessage(), e);
+            // }
+            // *** TMDM-8080, temp omitted end ***//
 
             if (monitor.isCanceled()) {
                 throw new InterruptedException(Messages.XtentisServerObjectsRetriever_6);

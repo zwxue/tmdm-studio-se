@@ -278,9 +278,14 @@ public class ExportItemsWizard extends Wizard {
                     items = new ArrayList<String>();
                     // picture
                     try {
-                        String picUrl = obj.getEndpointIpAddress()
-                                + ResourcesUtil.getResourcesMapFromURI(obj.getEndpointIpAddress() + TreeObject.PICTURES_URI,
-                                        objs[0]).get(obj.getDisplayName());
+                        String endpointIpAddress = obj.getEndpointIpAddress();
+                        int index = endpointIpAddress.indexOf("/services/soap"); //$NON-NLS-1$
+                        if (index != -1) {
+                            endpointIpAddress = endpointIpAddress.substring(0, index);
+                        }
+                        String picUrl = endpointIpAddress
+                                + ResourcesUtil.getResourcesMapFromURI(endpointIpAddress + TreeObject.PICTURES_URI, objs[0]).get(
+                                        obj.getDisplayName());
                         // Marshal
                         sw = new StringWriter();
                         byte[] content = HttpClientUtil.getByteArrayContentByHttpget(picUrl);
@@ -568,7 +573,9 @@ public class ExportItemsWizard extends Wizard {
         String encodedID = null;
         try {
             List<String> items1 = new ArrayList<String>();
-            List<WsItemPKsByCriteriaResponseResults> results = service.getItemPKsByCriteria(new WsGetItemPKsByCriteria(null, encodedID, (long) -1, encodedID, encodedID, Integer.MAX_VALUE, 0, (long) -1, pk)).getResults();
+            List<WsItemPKsByCriteriaResponseResults> results = service.getItemPKsByCriteria(
+                    new WsGetItemPKsByCriteria(null, encodedID, (long) -1, encodedID, encodedID, Integer.MAX_VALUE, 0, (long) -1,
+                            pk)).getResults();
             if (results == null) {
                 return null;
             }

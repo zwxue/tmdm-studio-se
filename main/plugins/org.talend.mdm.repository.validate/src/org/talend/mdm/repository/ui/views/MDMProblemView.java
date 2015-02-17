@@ -138,7 +138,7 @@ public class MDMProblemView extends MarkerSupportView implements IValidationMark
                 }
             }
             MarkerContentGenerator generator = getGenerator();
-            updateSelectedResource(generator, selectedElements.toArray());
+            updateSelectedResource(generator, selectedElements.toArray(), true);
         }
     }
 
@@ -227,13 +227,14 @@ public class MDMProblemView extends MarkerSupportView implements IValidationMark
         return null;
     }
 
-    private void updateSelectedResource(MarkerContentGenerator generator, Object[] selectedElements) {
+    private void updateSelectedResource(MarkerContentGenerator generator, Object[] selectedElements, boolean forceUpdate) {
         try {
-            Method method = MarkerContentGenerator.class.getDeclaredMethod("updateSelectedResource", Object[].class); //$NON-NLS-1$
+            Method method = MarkerContentGenerator.class.getDeclaredMethod(
+                    "updateSelectedResource", Object[].class, boolean.class); //$NON-NLS-1$
             if (method != null) {
                 method.setAccessible(true);
                 Object param = selectedElements;
-                method.invoke(generator, param);
+                method.invoke(generator, param, forceUpdate);
             }
         } catch (SecurityException e) {
             log.error(e.getMessage(), e);
