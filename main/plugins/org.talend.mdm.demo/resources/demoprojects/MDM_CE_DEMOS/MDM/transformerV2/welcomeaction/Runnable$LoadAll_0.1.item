@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<mdmserverobject:WSTransformerV2E xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:mdmserverobject="http://www.talend.org/mdmserverobject" xmi:id="_t0SP43dIEeGMK_tLGnzsJg" name="Runnable#LoadAll" description="[EN:Load all][FR:Chargement complet]">  
+<mdmserverobject:WsTransformerV2E xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:mdmserverobject="http://www.talend.org/mdmserverobject" xmi:id="_t0SP43dIEeGMK_tLGnzsJg" name="Runnable#LoadAll" description="[EN:Load all][FR:Chargement complet]">  
   <processSteps xmi:id="_t0SP5HdIEeGMK_tLGnzsJg" pluginJNDI="amalto/local/transformer/plugin/callJob" description="Invoke the job" parameters="&lt;configuration>&#xA;  &lt;url>ltj://MDM_LoadAll/0.1&lt;/url>&#xA;&lt;/configuration>">
     <inputMappings xmi:id="_t0SP5XdIEeGMK_tLGnzsJg" pipelineVariable="_DEFAULT_" pluginVariable="text"/>
     <outputMappings xmi:id="_t0SP5ndIEeGMK_tLGnzsJg" pipelineVariable="output" pluginVariable="result"/>
   </processSteps>
-</mdmserverobject:WSTransformerV2E>
+</mdmserverobject:WsTransformerV2E>

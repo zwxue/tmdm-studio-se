@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<mdmserverobject:WSViewE xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:mdmserverobject="http://www.talend.org/mdmserverobject" xmi:id="_t86ncndIEeGMK_tLGnzsJg" name="Browse_items_ProductFamily" description="[FR:Famille Produit][EN:Product Family]" transformerPK="">  
+<mdmserverobject:WsViewE xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:mdmserverobject="http://www.talend.org/mdmserverobject" xmi:id="_t86ncndIEeGMK_tLGnzsJg" name="Browse_items_ProductFamily" description="[FR:Famille Produit][EN:Product Family]" transformerPK="">  
   <searchableBusinessElements>ProductFamily/Id</searchableBusinessElements>
   <searchableBusinessElements>ProductFamily/Name</searchableBusinessElements>
   <viewableBusinessElements>ProductFamily/Id</viewableBusinessElements>
   <viewableBusinessElements>ProductFamily/Name</viewableBusinessElements>
   <isTransformerActive xmi:id="_t86nc3dIEeGMK_tLGnzsJg"/>
-</mdmserverobject:WSViewE>
+</mdmserverobject:WsViewE>
