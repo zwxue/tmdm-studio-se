@@ -2,7 +2,8 @@
 //
 // Talend Community Edition
 //
-// Copyright (C) 2006-2014 Talend ï¿½C www.talend.com
+
+// Copyright (C) 2006-2015 Talend ¨C www.talend.com
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
@@ -25,6 +26,7 @@ import org.eclipse.swt.graphics.Image;
 import org.talend.core.model.properties.Item;
 import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.mdm.repository.core.impl.AbstractLabelProvider;
+
 import org.talend.mdm.repository.model.mdmproperties.WsDataClusterItem;
 import org.talend.mdm.repository.plugin.RepositoryPlugin;
 import org.talend.mdm.repository.utils.EclipseResourceManager;
@@ -52,6 +54,7 @@ public class DataClusterLabelProvider extends AbstractLabelProvider {
         if (img == null) {
             Item item = getItem(element);
             if (item != null) {
+
                 if (item instanceof WsDataClusterItem) {
                     img = IMG;
                 }

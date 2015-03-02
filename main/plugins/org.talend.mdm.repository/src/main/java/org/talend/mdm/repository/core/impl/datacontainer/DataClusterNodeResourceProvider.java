@@ -2,7 +2,8 @@
 //
 // Talend Community Edition
 //
-// Copyright (C) 2006-2014 Talend �C www.talend.com
+
+// Copyright (C) 2006-2015 Talend - C www.talend.com
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
@@ -42,6 +43,7 @@ import org.talend.mdm.repository.model.mdmproperties.WsDataClusterItem;
 public class DataClusterNodeResourceProvider extends AbstractRepositoryNodeResourceProvider {
 
     public ERepositoryObjectType getRepositoryObjectType(Item item) {
+
         if (item instanceof WsDataClusterItem || item instanceof ContainerItem) {
             return IServerObjectRepositoryType.TYPE_DATACLUSTER;
         }
@@ -53,6 +55,7 @@ public class DataClusterNodeResourceProvider extends AbstractRepositoryNodeResou
         if (repositoryType != null) {
             Resource itemResource = createCommonItemResource(project, item, repositoryType, path);
             EList<EObject> contents = itemResource.getContents();
+
             contents.add(((WsDataClusterItem) item).getWsDataCluster());
             return itemResource;
         }
@@ -61,9 +64,11 @@ public class DataClusterNodeResourceProvider extends AbstractRepositoryNodeResou
 
     @Override
     public Resource save(Item item) throws PersistenceException {
+
         if (item instanceof WsDataClusterItem) {
             Resource resource = xmiResourceManager.getItemResource(item);
             resource.getContents().clear();
+
             resource.getContents().add(((WsDataClusterItem) item).getWsDataCluster());
             Resource eResource = ((WsDataClusterItem) item).getWsDataCluster().eResource();
             return resource;

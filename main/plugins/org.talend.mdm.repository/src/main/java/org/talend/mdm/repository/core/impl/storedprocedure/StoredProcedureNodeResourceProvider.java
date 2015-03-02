@@ -2,7 +2,8 @@
 //
 // Talend Community Edition
 //
-// Copyright (C) 2006-2014 Talend ï¿½C www.talend.com
+
+// Copyright (C) 2006-2015 Talend ¨C www.talend.com
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
@@ -33,6 +34,7 @@ import org.talend.mdm.repository.core.IServerObjectRepositoryType;
 import org.talend.mdm.repository.core.impl.AbstractRepositoryNodeResourceProvider;
 import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
 import org.talend.mdm.repository.model.mdmproperties.MdmpropertiesFactory;
+
 import org.talend.mdm.repository.model.mdmproperties.WsStoredProcedureItem;
 
 /**
@@ -42,6 +44,7 @@ import org.talend.mdm.repository.model.mdmproperties.WsStoredProcedureItem;
 public class StoredProcedureNodeResourceProvider extends AbstractRepositoryNodeResourceProvider {
 
     public ERepositoryObjectType getRepositoryObjectType(Item item) {
+
         if (item instanceof WsStoredProcedureItem || item instanceof ContainerItem) {
             return IServerObjectRepositoryType.TYPE_STOREPROCEDURE;
         }
@@ -53,6 +56,7 @@ public class StoredProcedureNodeResourceProvider extends AbstractRepositoryNodeR
         if (repositoryType != null) {
             Resource itemResource = createCommonItemResource(project, item, repositoryType, path);
             EList<EObject> contents = itemResource.getContents();
+
             contents.add(((WsStoredProcedureItem) item).getWsStoredProcedure());
             return itemResource;
         }
@@ -61,9 +65,12 @@ public class StoredProcedureNodeResourceProvider extends AbstractRepositoryNodeR
 
     @Override
     public Resource save(Item item) throws PersistenceException {
+
         if (item instanceof WsStoredProcedureItem) {
             Resource resource = xmiResourceManager.getItemResource(item);
             resource.getContents().clear();
+
+
             resource.getContents().add(((WsStoredProcedureItem) item).getWsStoredProcedure());
             Resource eResource = ((WsStoredProcedureItem) item).getWsStoredProcedure().eResource();
             return resource;
@@ -72,6 +79,7 @@ public class StoredProcedureNodeResourceProvider extends AbstractRepositoryNodeR
     }
 
     public Item createNewItem(ERepositoryObjectType type) {
+
         return MdmpropertiesFactory.eINSTANCE.createWsStoredProcedureItem();
     }
 

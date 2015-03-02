@@ -2,7 +2,8 @@
 //
 // Talend Community Edition
 //
-// Copyright (C) 2006-2014 Talend ï¿½C www.talend.com
+
+// Copyright (C) 2006-2015 Talend ¨C www.talend.com
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
@@ -33,6 +34,7 @@ import org.talend.mdm.repository.core.IServerObjectRepositoryType;
 import org.talend.mdm.repository.core.impl.AbstractRepositoryNodeResourceProvider;
 import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
 import org.talend.mdm.repository.model.mdmproperties.MdmpropertiesFactory;
+
 import org.talend.mdm.repository.model.mdmproperties.WsRoutingRuleItem;
 
 /**
@@ -42,6 +44,7 @@ import org.talend.mdm.repository.model.mdmproperties.WsRoutingRuleItem;
 public class RoutingRuleNodeResourceProvider extends AbstractRepositoryNodeResourceProvider {
 
     public ERepositoryObjectType getRepositoryObjectType(Item item) {
+
         if (item instanceof WsRoutingRuleItem || item instanceof ContainerItem) {
             return IServerObjectRepositoryType.TYPE_ROUTINGRULE;
         }
@@ -53,6 +56,7 @@ public class RoutingRuleNodeResourceProvider extends AbstractRepositoryNodeResou
         if (repositoryType != null) {
             Resource itemResource = createCommonItemResource(project, item, repositoryType, path);
             EList<EObject> contents = itemResource.getContents();
+
             contents.add(((WsRoutingRuleItem) item).getWsRoutingRule());
             return itemResource;
         }
@@ -61,9 +65,12 @@ public class RoutingRuleNodeResourceProvider extends AbstractRepositoryNodeResou
 
     @Override
     public Resource save(Item item) throws PersistenceException {
+
         if (item instanceof WsRoutingRuleItem) {
             Resource resource = xmiResourceManager.getItemResource(item);
             resource.getContents().clear();
+
+
             resource.getContents().add(((WsRoutingRuleItem) item).getWsRoutingRule());
             Resource eResource = ((WsRoutingRuleItem) item).getWsRoutingRule().eResource();
             return resource;
@@ -72,6 +79,7 @@ public class RoutingRuleNodeResourceProvider extends AbstractRepositoryNodeResou
     }
 
     public Item createNewItem(ERepositoryObjectType type) {
+
         return MdmpropertiesFactory.eINSTANCE.createWsRoutingRuleItem();
     }
 
