@@ -16,7 +16,6 @@ import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 import org.talend.mdm.workbench.serverexplorer.i18n.Messages;
 import org.talend.mdm.workbench.serverexplorer.plugin.MDMServerExplorerPlugin;
 
-
 /**
  * created by liusonbo on 2013-10-17
  */
@@ -28,22 +27,22 @@ public class MDMServerLogMessageConsole extends MDMServerMessageConsole {
 
     @Override
     protected String getLogPath() {
-        return "/datamanager/logviewer/log"; //$NON-NLS-1$
+        return "/logviewer/log"; //$NON-NLS-1$
     }
 
     @Override
     protected String getConsoleTitle() {
         MDMServerDef serverDef = getServerDef();
-        if(serverDef != null && serverDef.getName() != null) {
+        if (serverDef != null && serverDef.getName() != null) {
             return Messages.bind(Messages.MDMServerMessageConsole_Name, serverDef.getName());
         }
-        
+
         return ""; //$NON-NLS-1$
     }
 
     @Override
     protected void removeFromCache(String serverName) {
-        if(serverName != null) {
+        if (serverName != null) {
             MDMServerExplorerPlugin.getDefault().getServerToConsole().remove(serverName);
         }
     }
