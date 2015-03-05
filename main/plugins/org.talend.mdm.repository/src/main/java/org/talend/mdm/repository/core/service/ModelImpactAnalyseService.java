@@ -45,6 +45,7 @@ import org.talend.mdm.repository.ui.dialogs.impact.ImpactResultDialog;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 
 import com.amalto.workbench.utils.HttpClientUtil;
+import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.XtentisException;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
@@ -239,11 +240,7 @@ public class ModelImpactAnalyseService {
             Boolean force) throws XtentisException {
         String xsd = getModelContent(modelViewObj);
         if (xsd != null) {
-            String contextPath = serverDef.getPath();
-            int index = contextPath.indexOf("/services/soap"); //$NON-NLS-1$
-            if (index != -1) {
-                contextPath = contextPath.substring(1, index);
-            }
+            String contextPath = Util.getContextPath(serverDef.getUrl());
             String result = HttpClientUtil.invokeModelService(serverDef.getProtocol(), serverDef.getHost(), serverDef.getPort(),
                     contextPath, serverDef.getUser(), serverDef.getPasswd(), modelViewObj.getLabel(), xsd, isUpdateModel, force);
             return result;

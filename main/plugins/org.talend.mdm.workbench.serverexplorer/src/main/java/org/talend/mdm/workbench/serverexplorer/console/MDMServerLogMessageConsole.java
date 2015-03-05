@@ -27,7 +27,7 @@ public class MDMServerLogMessageConsole extends MDMServerMessageConsole {
 
     @Override
     protected String getLogPath() {
-        return "/logviewer/log"; //$NON-NLS-1$
+        return "/services/logviewer/log"; //$NON-NLS-1$
     }
 
     @Override

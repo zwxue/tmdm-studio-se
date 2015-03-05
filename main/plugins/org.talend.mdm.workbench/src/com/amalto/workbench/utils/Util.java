@@ -3758,4 +3758,22 @@ public class Util {
 
         return result;
     }
+
+    public static String getContextPath(String urlStr) {
+        String contextPath = ""; //$NON-NLS-1$
+
+        try {
+            URL url = new URL(urlStr);
+            String path = url.getPath();
+            int index = path.indexOf("/services/soap"); //$NON-NLS-1$
+            if (index != -1 && index != 0) {
+                contextPath = path.substring(0, index);
+            }
+        } catch (MalformedURLException e) {
+            log.error(e.getMessage(), e);
+        }
+
+        return contextPath;
+    }
+
 }

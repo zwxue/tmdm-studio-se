@@ -64,6 +64,7 @@ import org.talend.mdm.workbench.serverexplorer.plugin.MDMServerExplorerPlugin;
 import org.talend.mdm.workbench.serverexplorer.ui.dialogs.DownloadLogDialog;
 
 import com.amalto.workbench.utils.HttpClientUtil;
+import com.amalto.workbench.utils.Util;
 
 /**
  * created by Karelun Huang on Mar 19, 2013 Detailled comment
@@ -467,22 +468,10 @@ public abstract class MDMServerMessageConsole extends MessageConsole implements 
         sb.append(serverDef.getHost());
         sb.append(":"); //$NON-NLS-1$
         sb.append(serverDef.getPort());
-        sb.append(getContextPath());
+        sb.append(Util.getContextPath(serverDef.getUrl()));
         sb.append(getLogPath());
 
         return sb.toString();
-    }
-
-    private String getContextPath() {
-        String contextPath = ""; //$NON-NLS-1$
-
-        String path = serverDef.getPath();
-        int index = path.indexOf("/services/soap"); //$NON-NLS-1$
-        if (index != -1 && index != 0) {
-            contextPath = path.substring(0, index);
-        }
-
-        return contextPath;
     }
 
     private void pauseOrResume(boolean isPaused) {

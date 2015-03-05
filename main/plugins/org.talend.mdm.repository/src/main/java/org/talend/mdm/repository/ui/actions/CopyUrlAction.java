@@ -29,6 +29,7 @@ import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
+import com.amalto.workbench.utils.Util;
 
 public class CopyUrlAction extends AbstractRepositoryAction {
 
@@ -74,7 +75,8 @@ public class CopyUrlAction extends AbstractRepositoryAction {
             }
 
             // all picture url string
-            String uripre = serverDef.getProtocol() + serverDef.getHost() + ':' + serverDef.getPort();
+            String contextPath = Util.getContextPath(serverDef.getUrl());
+            String uripre = serverDef.getProtocol() + serverDef.getHost() + ':' + serverDef.getPort() + contextPath;
 
             result.append(uripre);
             result.append("/imageserver/upload/" + catalog + '/' + fileName); //$NON-NLS-1$
@@ -88,5 +90,4 @@ public class CopyUrlAction extends AbstractRepositoryAction {
         cb.setContents(new Object[] { textData }, new Transfer[] { transfer });
         cb.dispose();
     }
-
 }
