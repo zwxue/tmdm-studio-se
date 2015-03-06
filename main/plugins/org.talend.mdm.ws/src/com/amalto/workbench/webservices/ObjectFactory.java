@@ -2381,14 +2381,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link WsRoutingEngineV2Status }
-     * 
-     */
-    public WsRoutingEngineV2Status createWsRoutingEngineV2Status() {
-        return new WsRoutingEngineV2Status();
-    }
-
-    /**
      * Create an instance of {@link WsView }
      * 
      */
@@ -2442,14 +2434,6 @@ public class ObjectFactory {
      */
     public WsStoredProcedurePK createWsStoredProcedurePK() {
         return new WsStoredProcedurePK();
-    }
-
-    /**
-     * Create an instance of {@link WsRoutingOrderV2Status }
-     * 
-     */
-    public WsRoutingOrderV2Status createWsRoutingOrderV2Status() {
-        return new WsRoutingOrderV2Status();
     }
 
     /**
@@ -2509,19 +2493,19 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link WsGetRolePKs }
-     * 
-     */
-    public WsGetRolePKs createWsGetRolePKs() {
-        return new WsGetRolePKs();
-    }
-
-    /**
      * Create an instance of {@link WsTransformerPluginV2GetConfiguration }
      * 
      */
     public WsTransformerPluginV2GetConfiguration createWsTransformerPluginV2GetConfiguration() {
         return new WsTransformerPluginV2GetConfiguration();
+    }
+
+    /**
+     * Create an instance of {@link WsGetRolePKs }
+     * 
+     */
+    public WsGetRolePKs createWsGetRolePKs() {
+        return new WsGetRolePKs();
     }
 
     /**
@@ -2997,14 +2981,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link WsServiceActionCode }
-     * 
-     */
-    public WsServiceActionCode createWsServiceActionCode() {
-        return new WsServiceActionCode();
-    }
-
-    /**
      * Create an instance of {@link WsExistsDBDataCluster }
      * 
      */
@@ -3066,14 +3042,6 @@ public class ObjectFactory {
      */
     public WsExistsItem createWsExistsItem() {
         return new WsExistsItem();
-    }
-
-    /**
-     * Create an instance of {@link WsLanguage }
-     * 
-     */
-    public WsLanguage createWsLanguage() {
-        return new WsLanguage();
     }
 
     /**
@@ -3301,14 +3269,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link WsStringPredicate }
-     * 
-     */
-    public WsStringPredicate createWsStringPredicate() {
-        return new WsStringPredicate();
-    }
-
-    /**
      * Create an instance of {@link WsTransformerV2 }
      * 
      */
@@ -3354,14 +3314,6 @@ public class ObjectFactory {
      */
     public WsTransformerPluginV2SListItem createWsTransformerPluginV2SListItem() {
         return new WsTransformerPluginV2SListItem();
-    }
-
-    /**
-     * Create an instance of {@link WsWhereOperator }
-     * 
-     */
-    public WsWhereOperator createWsWhereOperator() {
-        return new WsWhereOperator();
     }
 
     /**
@@ -3709,14 +3661,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link WsRoutingRuleOperator }
-     * 
-     */
-    public WsRoutingRuleOperator createWsRoutingRuleOperator() {
-        return new WsRoutingRuleOperator();
-    }
-
-    /**
      * Create an instance of {@link WsMenuPK }
      * 
      */
@@ -3765,19 +3709,19 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link WsExistsTransformerPluginV2 }
-     * 
-     */
-    public WsExistsTransformerPluginV2 createWsExistsTransformerPluginV2() {
-        return new WsExistsTransformerPluginV2();
-    }
-
-    /**
      * Create an instance of {@link WsQuickSearch }
      * 
      */
     public WsQuickSearch createWsQuickSearch() {
         return new WsQuickSearch();
+    }
+
+    /**
+     * Create an instance of {@link WsExistsTransformerPluginV2 }
+     * 
+     */
+    public WsExistsTransformerPluginV2 createWsExistsTransformerPluginV2() {
+        return new WsExistsTransformerPluginV2();
     }
 
     /**
@@ -3794,14 +3738,6 @@ public class ObjectFactory {
      */
     public WsBusinessConcept createWsBusinessConcept() {
         return new WsBusinessConcept();
-    }
-
-    /**
-     * Create an instance of {@link BackgroundJobStatusType }
-     * 
-     */
-    public BackgroundJobStatusType createBackgroundJobStatusType() {
-        return new BackgroundJobStatusType();
     }
 
     /**
@@ -3933,14 +3869,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link WsComponent }
-     * 
-     */
-    public WsComponent createWsComponent() {
-        return new WsComponent();
-    }
-
-    /**
      * Create an instance of {@link WsViewSearch }
      * 
      */
@@ -4050,14 +3978,6 @@ public class ObjectFactory {
      */
     public WsProcessBytesUsingTransformerAsBackgroundJob createWsProcessBytesUsingTransformerAsBackgroundJob() {
         return new WsProcessBytesUsingTransformerAsBackgroundJob();
-    }
-
-    /**
-     * Create an instance of {@link WsRoutingEngineV2ActionCode }
-     * 
-     */
-    public WsRoutingEngineV2ActionCode createWsRoutingEngineV2ActionCode() {
-        return new WsRoutingEngineV2ActionCode();
     }
 
     /**

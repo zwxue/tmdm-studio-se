@@ -1,40 +1,38 @@
 
 package com.amalto.workbench.webservices;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlEnum;
 import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsLanguage complex type.
+ * <p>Java class for wsLanguage.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ * <p>
  * <pre>
- * &lt;complexType name="wsLanguage">
- *   &lt;complexContent>
- *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       &lt;sequence>
- *       &lt;/sequence>
- *     &lt;/restriction>
- *   &lt;/complexContent>
- * &lt;/complexType>
+ * &lt;simpleType name="wsLanguage">
+ *   &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string">
+ *     &lt;enumeration value="FR"/>
+ *     &lt;enumeration value="EN"/>
+ *   &lt;/restriction>
+ * &lt;/simpleType>
  * </pre>
  * 
- * 
  */
-@XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "wsLanguage")
-public class WsLanguage {
+@XmlEnum
+public enum WsLanguage {
 
+    FR,
+    EN;
 
-    /**
-     * Default no-arg constructor
-     * 
-     */
-    public WsLanguage() {
-        super();
+    public String value() {
+        return name();
+    }
+
+    public static WsLanguage fromValue(String v) {
+        return valueOf(v);
     }
 
 }

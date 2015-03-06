@@ -1,40 +1,46 @@
 
 package com.amalto.workbench.webservices;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlEnum;
 import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsStringPredicate complex type.
+ * <p>Java class for wsStringPredicate.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ * <p>
  * <pre>
- * &lt;complexType name="wsStringPredicate">
- *   &lt;complexContent>
- *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       &lt;sequence>
- *       &lt;/sequence>
- *     &lt;/restriction>
- *   &lt;/complexContent>
- * &lt;/complexType>
+ * &lt;simpleType name="wsStringPredicate">
+ *   &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string">
+ *     &lt;enumeration value="NONE"/>
+ *     &lt;enumeration value="OR"/>
+ *     &lt;enumeration value="AND"/>
+ *     &lt;enumeration value="STRICTAND"/>
+ *     &lt;enumeration value="EXACTLY"/>
+ *     &lt;enumeration value="NOT"/>
+ *   &lt;/restriction>
+ * &lt;/simpleType>
  * </pre>
  * 
- * 
  */
-@XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "wsStringPredicate")
-public class WsStringPredicate {
+@XmlEnum
+public enum WsStringPredicate {
 
+    NONE,
+    OR,
+    AND,
+    STRICTAND,
+    EXACTLY,
+    NOT;
 
-    /**
-     * Default no-arg constructor
-     * 
-     */
-    public WsStringPredicate() {
-        super();
+    public String value() {
+        return name();
+    }
+
+    public static WsStringPredicate fromValue(String v) {
+        return valueOf(v);
     }
 
 }

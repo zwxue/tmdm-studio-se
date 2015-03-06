@@ -1,40 +1,56 @@
 
 package com.amalto.workbench.webservices;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlEnum;
 import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsRoutingRuleOperator complex type.
+ * <p>Java class for wsRoutingRuleOperator.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ * <p>
  * <pre>
- * &lt;complexType name="wsRoutingRuleOperator">
- *   &lt;complexContent>
- *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       &lt;sequence>
- *       &lt;/sequence>
- *     &lt;/restriction>
- *   &lt;/complexContent>
- * &lt;/complexType>
+ * &lt;simpleType name="wsRoutingRuleOperator">
+ *   &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string">
+ *     &lt;enumeration value="CONTAINS"/>
+ *     &lt;enumeration value="MATCHES"/>
+ *     &lt;enumeration value="STARTSWITH"/>
+ *     &lt;enumeration value="EQUALS"/>
+ *     &lt;enumeration value="NOT_EQUALS"/>
+ *     &lt;enumeration value="GREATER_THAN"/>
+ *     &lt;enumeration value="GREATER_THAN_OR_EQUAL"/>
+ *     &lt;enumeration value="LOWER_THAN"/>
+ *     &lt;enumeration value="LOWER_THAN_OR_EQUAL"/>
+ *     &lt;enumeration value="IS_NULL"/>
+ *     &lt;enumeration value="IS_NOT_NULL"/>
+ *   &lt;/restriction>
+ * &lt;/simpleType>
  * </pre>
  * 
- * 
  */
-@XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "wsRoutingRuleOperator")
-public class WsRoutingRuleOperator {
+@XmlEnum
+public enum WsRoutingRuleOperator {
 
+    CONTAINS,
+    MATCHES,
+    STARTSWITH,
+    EQUALS,
+    NOT_EQUALS,
+    GREATER_THAN,
+    GREATER_THAN_OR_EQUAL,
+    LOWER_THAN,
+    LOWER_THAN_OR_EQUAL,
+    IS_NULL,
+    IS_NOT_NULL;
 
-    /**
-     * Default no-arg constructor
-     * 
-     */
-    public WsRoutingRuleOperator() {
-        super();
+    public String value() {
+        return name();
+    }
+
+    public static WsRoutingRuleOperator fromValue(String v) {
+        return valueOf(v);
     }
 
 }

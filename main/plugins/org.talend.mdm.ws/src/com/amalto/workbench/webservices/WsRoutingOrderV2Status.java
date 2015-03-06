@@ -1,40 +1,40 @@
 
 package com.amalto.workbench.webservices;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlEnum;
 import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsRoutingOrderV2Status complex type.
+ * <p>Java class for wsRoutingOrderV2Status.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ * <p>
  * <pre>
- * &lt;complexType name="wsRoutingOrderV2Status">
- *   &lt;complexContent>
- *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       &lt;sequence>
- *       &lt;/sequence>
- *     &lt;/restriction>
- *   &lt;/complexContent>
- * &lt;/complexType>
+ * &lt;simpleType name="wsRoutingOrderV2Status">
+ *   &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string">
+ *     &lt;enumeration value="ACTIVE"/>
+ *     &lt;enumeration value="FAILED"/>
+ *     &lt;enumeration value="COMPLETED"/>
+ *   &lt;/restriction>
+ * &lt;/simpleType>
  * </pre>
  * 
- * 
  */
-@XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "wsRoutingOrderV2Status")
-public class WsRoutingOrderV2Status {
+@XmlEnum
+public enum WsRoutingOrderV2Status {
 
+    ACTIVE,
+    FAILED,
+    COMPLETED;
 
-    /**
-     * Default no-arg constructor
-     * 
-     */
-    public WsRoutingOrderV2Status() {
-        super();
+    public String value() {
+        return name();
+    }
+
+    public static WsRoutingOrderV2Status fromValue(String v) {
+        return valueOf(v);
     }
 
 }

@@ -1,40 +1,42 @@
 
 package com.amalto.workbench.webservices;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlEnum;
 import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsServiceActionCode complex type.
+ * <p>Java class for wsServiceActionCode.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ * <p>
  * <pre>
- * &lt;complexType name="wsServiceActionCode">
- *   &lt;complexContent>
- *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       &lt;sequence>
- *       &lt;/sequence>
- *     &lt;/restriction>
- *   &lt;/complexContent>
- * &lt;/complexType>
+ * &lt;simpleType name="wsServiceActionCode">
+ *   &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string">
+ *     &lt;enumeration value="START"/>
+ *     &lt;enumeration value="STOP"/>
+ *     &lt;enumeration value="STATUS"/>
+ *     &lt;enumeration value="EXECUTE"/>
+ *   &lt;/restriction>
+ * &lt;/simpleType>
  * </pre>
  * 
- * 
  */
-@XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "wsServiceActionCode")
-public class WsServiceActionCode {
+@XmlEnum
+public enum WsServiceActionCode {
 
+    START,
+    STOP,
+    STATUS,
+    EXECUTE;
 
-    /**
-     * Default no-arg constructor
-     * 
-     */
-    public WsServiceActionCode() {
-        super();
+    public String value() {
+        return name();
+    }
+
+    public static WsServiceActionCode fromValue(String v) {
+        return valueOf(v);
     }
 
 }
