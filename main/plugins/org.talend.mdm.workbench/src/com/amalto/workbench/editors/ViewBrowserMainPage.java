@@ -483,11 +483,9 @@ public class ViewBrowserMainPage extends AMainPage implements IXObjectModelListe
                     WsWhereItem item = new WsWhereItem(null, condition, null);
                     conditions.add(item);
                 }
-
-                // WsWhereCondition condition = new WsWhereCondition(searchItemCombo.getText(),
-                // WsWhereOperator.CONTAINS, search,
-                // WSStringPredicate.AND, true);
-                WsWhereCondition condition = null;
+                
+                WsWhereCondition condition = new WsWhereCondition(searchItemCombo.getText(), WsWhereOperator.CONTAINS, search,
+                         true, WsStringPredicate.AND);
                 WsWhereItem item = new WsWhereItem(null, condition, null);
                 conditions.add(item);
                 WsWhereAnd and = new WsWhereAnd(conditions);
