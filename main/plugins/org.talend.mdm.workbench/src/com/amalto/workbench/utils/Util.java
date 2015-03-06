@@ -160,6 +160,7 @@ import com.amalto.workbench.service.MissingJarService;
 import com.amalto.workbench.service.MissingJarsException;
 import com.amalto.workbench.webservices.TMDMService;
 import com.amalto.workbench.webservices.TMDMService_Service;
+import com.amalto.workbench.webservices.WsComponent;
 import com.amalto.workbench.webservices.WsDataClusterPK;
 import com.amalto.workbench.webservices.WsDataModel;
 import com.amalto.workbench.webservices.WsDataModelPK;
@@ -170,10 +171,13 @@ import com.amalto.workbench.webservices.WsPing;
 import com.amalto.workbench.webservices.WsRegexDataClusterPKs;
 import com.amalto.workbench.webservices.WsRegexDataModelPKs;
 import com.amalto.workbench.webservices.WsRoutingRuleExpression;
+import com.amalto.workbench.webservices.WsRoutingRuleOperator;
 import com.amalto.workbench.webservices.WsString;
+import com.amalto.workbench.webservices.WsStringPredicate;
 import com.amalto.workbench.webservices.WsVersion;
 import com.amalto.workbench.webservices.WsViewPK;
 import com.amalto.workbench.webservices.WsWhereCondition;
+import com.amalto.workbench.webservices.WsWhereOperator;
 import com.sun.org.apache.xpath.internal.XPathAPI;
 import com.sun.org.apache.xpath.internal.objects.XObject;
 import com.sun.xml.internal.ws.wsdl.parser.InaccessibleWSDLException;
@@ -1785,9 +1789,8 @@ public class Util {
 
     public static Version getVersion(TreeObject xobject) throws XtentisException {
         try {
-            // WsVersion version = getMDMService(xobject).getComponentVersion(
-            // new WsGetComponentVersion(WsComponent.DATA_MANAGER, null));
-            WsVersion version = getMDMService(xobject).getComponentVersion(new WsGetComponentVersion());
+            WsVersion version = getMDMService(xobject).getComponentVersion(
+                    new WsGetComponentVersion(WsComponent.DATA_MANAGER, null));
             return new Version(version.getMajor(), version.getMinor(), version.getRevision(), version.getBuild());
         } catch (XtentisException e) {
             throw (e);
@@ -2660,85 +2663,81 @@ public class Util {
     public static String[] convertWhereCondition(WsWhereCondition wc) {
         List<String> list = new ArrayList<String>();
         list.add(wc.getLeftPath());
-        // *** TMDM-8080, temp omitted start ***//
-        //        String operator = "";//$NON-NLS-1$
-        // if (wc.getOperator().equals(WsWhereOperator.CONTAINS)) {
-        //            operator = "Contains";//$NON-NLS-1$
-        // } else if (wc.getOperator().equals(WsWhereOperator.EQUALS)) {
-        //            operator = "=";//$NON-NLS-1$
-        // } else if (wc.getOperator().equals(WsWhereOperator.GREATER_THAN)) {
-        //            operator = ">";//$NON-NLS-1$
-        // } else if (wc.getOperator().equals(WsWhereOperator.GREATER_THAN_OR_EQUAL)) {
-        //            operator = ">=";//$NON-NLS-1$
-        // } else if (wc.getOperator().equals(WsWhereOperator.CONTAINS_TEXT_OF)) {
-        //            operator = "Contains Text Of";//$NON-NLS-1$
-        // } else if (wc.getOperator().equals(WsWhereOperator.JOIN)) {
-        //            operator = "Join With";//$NON-NLS-1$
-        // } else if (wc.getOperator().equals(WsWhereOperator.LOWER_THAN)) {
-        //            operator = "<";//$NON-NLS-1$
-        // } else if (wc.getOperator().equals(WsWhereOperator.LOWER_THAN_OR_EQUAL)) {
-        //            operator = "<=";//$NON-NLS-1$
-        // } else if (wc.getOperator().equals(WsWhereOperator.NOT_EQUALS)) {
-        //            operator = "!=";//$NON-NLS-1$
-        // } else if (wc.getOperator().equals(WsWhereOperator.STARTSWITH)) {
-        //            operator = "Starts With";//$NON-NLS-1$
-        // } else if (wc.getOperator().equals(WsWhereOperator.STRICTCONTAINS)) {
-        //            operator = "Strict Contains";//$NON-NLS-1$
-        // } else if (wc.getOperator().equals(WsWhereOperator.EMPTY_NULL)) {
-        //            operator = "Is Empty Or Null";//$NON-NLS-1$
-        // }
-        // list.add(operator);
-        // list.add(wc.getRightValueOrPath());
-        //
-        //        String predicate = "";//$NON-NLS-1$
-        // if (wc.getStringPredicate().equals(WsStringPredicate.AND)) {
-        //            predicate = "And";//$NON-NLS-1$
-        // } else if (wc.getStringPredicate().equals(WsStringPredicate.EXACTLY)) {
-        //            predicate = "Exactly";//$NON-NLS-1$
-        // } else if (wc.getStringPredicate().equals(WsStringPredicate.NONE)) {
-        //            predicate = "";//$NON-NLS-1$
-        // } else if (wc.getStringPredicate().equals(WsStringPredicate.NOT)) {
-        //            predicate = "Not";//$NON-NLS-1$
-        // } else if (wc.getStringPredicate().equals(WsStringPredicate.OR)) {
-        //            predicate = "Or";//$NON-NLS-1$
-        // } else if (wc.getStringPredicate().equals(WsStringPredicate.STRICTAND)) {
-        //            predicate = "Strict And";//$NON-NLS-1$
-        // }
-        // list.add(predicate);
-        // *** TMDM-8080, temp omitted end ***//
+        String operator = "";//$NON-NLS-1$
+        if (wc.getOperator().equals(WsWhereOperator.CONTAINS)) {
+            operator = "Contains";//$NON-NLS-1$
+        } else if (wc.getOperator().equals(WsWhereOperator.EQUALS)) {
+            operator = "=";//$NON-NLS-1$
+        } else if (wc.getOperator().equals(WsWhereOperator.GREATER_THAN)) {
+            operator = ">";//$NON-NLS-1$
+        } else if (wc.getOperator().equals(WsWhereOperator.GREATER_THAN_OR_EQUAL)) {
+            operator = ">=";//$NON-NLS-1$
+        } else if (wc.getOperator().equals(WsWhereOperator.CONTAINS_TEXT_OF)) {
+            operator = "Contains Text Of";//$NON-NLS-1$
+        } else if (wc.getOperator().equals(WsWhereOperator.JOIN)) {
+            operator = "Join With";//$NON-NLS-1$
+        } else if (wc.getOperator().equals(WsWhereOperator.LOWER_THAN)) {
+            operator = "<";//$NON-NLS-1$
+        } else if (wc.getOperator().equals(WsWhereOperator.LOWER_THAN_OR_EQUAL)) {
+            operator = "<=";//$NON-NLS-1$
+        } else if (wc.getOperator().equals(WsWhereOperator.NOT_EQUALS)) {
+            operator = "!=";//$NON-NLS-1$
+        } else if (wc.getOperator().equals(WsWhereOperator.STARTSWITH)) {
+            operator = "Starts With";//$NON-NLS-1$
+        } else if (wc.getOperator().equals(WsWhereOperator.STRICTCONTAINS)) {
+            operator = "Strict Contains";//$NON-NLS-1$
+        } else if (wc.getOperator().equals(WsWhereOperator.EMPTY_NULL)) {
+            operator = "Is Empty Or Null";//$NON-NLS-1$
+        }
+        list.add(operator);
+        list.add(wc.getRightValueOrPath());
+
+        String predicate = "";//$NON-NLS-1$
+        if (wc.getStringPredicate().equals(WsStringPredicate.AND)) {
+            predicate = "And";//$NON-NLS-1$
+        } else if (wc.getStringPredicate().equals(WsStringPredicate.EXACTLY)) {
+            predicate = "Exactly";//$NON-NLS-1$
+        } else if (wc.getStringPredicate().equals(WsStringPredicate.NONE)) {
+            predicate = "";//$NON-NLS-1$
+        } else if (wc.getStringPredicate().equals(WsStringPredicate.NOT)) {
+            predicate = "Not";//$NON-NLS-1$
+        } else if (wc.getStringPredicate().equals(WsStringPredicate.OR)) {
+            predicate = "Or";//$NON-NLS-1$
+        } else if (wc.getStringPredicate().equals(WsStringPredicate.STRICTAND)) {
+            predicate = "Strict And";//$NON-NLS-1$
+        }
+        list.add(predicate);
         return list.toArray(new String[list.size()]);
     }
 
     public static String[] convertRouteCondition(WsRoutingRuleExpression wc) {
         List<String> list = new ArrayList<String>();
         list.add(wc.getXpath());
-        // *** TMDM-8080, temp omitted start ***//
-        //        String operator = "";//$NON-NLS-1$
-        // if (wc.getWsOperator().equals(WsRoutingRuleOperator.CONTAINS)) {
-        //            operator = "Contains";//$NON-NLS-1$
-        // } else if (wc.getWsOperator().equals(WsRoutingRuleOperator.EQUALS)) {
-        //            operator = "=";//$NON-NLS-1$
-        // } else if (wc.getWsOperator().equals(WsRoutingRuleOperator.GREATER_THAN)) {
-        //            operator = ">";//$NON-NLS-1$
-        // } else if (wc.getWsOperator().equals(WsRoutingRuleOperator.GREATER_THAN_OR_EQUAL)) {
-        //            operator = ">=";//$NON-NLS-1$
-        // } else if (wc.getWsOperator().equals(WsRoutingRuleOperator.MATCHES)) {
-        //            operator = "Matches";//$NON-NLS-1$
-        // } else if (wc.getWsOperator().equals(WsRoutingRuleOperator.LOWER_THAN)) {
-        //            operator = "<";//$NON-NLS-1$
-        // } else if (wc.getWsOperator().equals(WsRoutingRuleOperator.LOWER_THAN_OR_EQUAL)) {
-        //            operator = "<=";//$NON-NLS-1$
-        // } else if (wc.getWsOperator().equals(WsRoutingRuleOperator.NOT_EQUALS)) {
-        //            operator = "!=";//$NON-NLS-1$
-        // } else if (wc.getWsOperator().equals(WsRoutingRuleOperator.STARTSWITH)) {
-        //            operator = "Starts With";//$NON-NLS-1$
-        // } else if (wc.getWsOperator().equals(WsRoutingRuleOperator.IS_NULL)) {
-        //            operator = "Is Null";//$NON-NLS-1$
-        // } else if (wc.getWsOperator().equals(WsRoutingRuleOperator.IS_NOT_NULL)) {
-        //            operator = "Is Not Null";//$NON-NLS-1$
-        // }
-        // list.add(operator);
-        // *** TMDM-8080, temp omitted end ***//
+        String operator = "";//$NON-NLS-1$
+        if (wc.getWsOperator().equals(WsRoutingRuleOperator.CONTAINS)) {
+            operator = "Contains";//$NON-NLS-1$
+        } else if (wc.getWsOperator().equals(WsRoutingRuleOperator.EQUALS)) {
+            operator = "=";//$NON-NLS-1$
+        } else if (wc.getWsOperator().equals(WsRoutingRuleOperator.GREATER_THAN)) {
+            operator = ">";//$NON-NLS-1$
+        } else if (wc.getWsOperator().equals(WsRoutingRuleOperator.GREATER_THAN_OR_EQUAL)) {
+            operator = ">=";//$NON-NLS-1$
+        } else if (wc.getWsOperator().equals(WsRoutingRuleOperator.MATCHES)) {
+            operator = "Matches";//$NON-NLS-1$
+        } else if (wc.getWsOperator().equals(WsRoutingRuleOperator.LOWER_THAN)) {
+            operator = "<";//$NON-NLS-1$
+        } else if (wc.getWsOperator().equals(WsRoutingRuleOperator.LOWER_THAN_OR_EQUAL)) {
+            operator = "<=";//$NON-NLS-1$
+        } else if (wc.getWsOperator().equals(WsRoutingRuleOperator.NOT_EQUALS)) {
+            operator = "!=";//$NON-NLS-1$
+        } else if (wc.getWsOperator().equals(WsRoutingRuleOperator.STARTSWITH)) {
+            operator = "Starts With";//$NON-NLS-1$
+        } else if (wc.getWsOperator().equals(WsRoutingRuleOperator.IS_NULL)) {
+            operator = "Is Null";//$NON-NLS-1$
+        } else if (wc.getWsOperator().equals(WsRoutingRuleOperator.IS_NOT_NULL)) {
+            operator = "Is Not Null";//$NON-NLS-1$
+        }
+        list.add(operator);
         list.add(wc.getValue());
         list.add(wc.getName() == null ? "" : wc.getName());//$NON-NLS-1$
         return list.toArray(new String[list.size()]);
@@ -2748,33 +2747,31 @@ public class Util {
         WsRoutingRuleExpression wc = new WsRoutingRuleExpression();
 
         wc.setXpath(values[0]);
-        // *** TMDM-8080, temp omitted start ***//
-        // WsRoutingRuleOperator operator = null;
-        //        if (values[1].equals("Contains")) { //$NON-NLS-1$
-        // operator = WsRoutingRuleOperator.CONTAINS;
-        //        } else if (values[1].equals("Matches")) { //$NON-NLS-1$
-        // operator = WsRoutingRuleOperator.MATCHES;
-        //        } else if (values[1].equals("=")) { //$NON-NLS-1$
-        // operator = WsRoutingRuleOperator.EQUALS;
-        //        } else if (values[1].equals(">")) { //$NON-NLS-1$
-        // operator = WsRoutingRuleOperator.GREATER_THAN;
-        //        } else if (values[1].equals(">=")) { //$NON-NLS-1$
-        // operator = WsRoutingRuleOperator.GREATER_THAN_OR_EQUAL;
-        //        } else if (values[1].equals("<")) { //$NON-NLS-1$
-        // operator = WsRoutingRuleOperator.LOWER_THAN;
-        //        } else if (values[1].equals("<=")) { //$NON-NLS-1$
-        // operator = WsRoutingRuleOperator.LOWER_THAN_OR_EQUAL;
-        //        } else if (values[1].equals("!=")) { //$NON-NLS-1$
-        // operator = WsRoutingRuleOperator.NOT_EQUALS;
-        //        } else if (values[1].equals("Starts With")) { //$NON-NLS-1$
-        // operator = WsRoutingRuleOperator.STARTSWITH;
-        //        } else if (values[1].equals("Is Null")) { //$NON-NLS-1$
-        // operator = WsRoutingRuleOperator.IS_NULL;
-        //        } else if (values[1].equals("Is Not Null")) { //$NON-NLS-1$
-        // operator = WsRoutingRuleOperator.IS_NOT_NULL;
-        // }
-        // wc.setWsOperator(operator);
-        // *** TMDM-8080, temp omitted end ***//
+        WsRoutingRuleOperator operator = null;
+        if (values[1].equals("Contains")) { //$NON-NLS-1$
+            operator = WsRoutingRuleOperator.CONTAINS;
+        } else if (values[1].equals("Matches")) { //$NON-NLS-1$
+            operator = WsRoutingRuleOperator.MATCHES;
+        } else if (values[1].equals("=")) { //$NON-NLS-1$
+            operator = WsRoutingRuleOperator.EQUALS;
+        } else if (values[1].equals(">")) { //$NON-NLS-1$
+            operator = WsRoutingRuleOperator.GREATER_THAN;
+        } else if (values[1].equals(">=")) { //$NON-NLS-1$
+            operator = WsRoutingRuleOperator.GREATER_THAN_OR_EQUAL;
+        } else if (values[1].equals("<")) { //$NON-NLS-1$
+            operator = WsRoutingRuleOperator.LOWER_THAN;
+        } else if (values[1].equals("<=")) { //$NON-NLS-1$
+            operator = WsRoutingRuleOperator.LOWER_THAN_OR_EQUAL;
+        } else if (values[1].equals("!=")) { //$NON-NLS-1$
+            operator = WsRoutingRuleOperator.NOT_EQUALS;
+        } else if (values[1].equals("Starts With")) { //$NON-NLS-1$
+            operator = WsRoutingRuleOperator.STARTSWITH;
+        } else if (values[1].equals("Is Null")) { //$NON-NLS-1$
+            operator = WsRoutingRuleOperator.IS_NULL;
+        } else if (values[1].equals("Is Not Null")) { //$NON-NLS-1$
+            operator = WsRoutingRuleOperator.IS_NOT_NULL;
+        }
+        wc.setWsOperator(operator);
         wc.setValue((values[2]));
         wc.setName((values[3]));
         return wc;
@@ -2783,56 +2780,54 @@ public class Util {
     public static WsWhereCondition convertLine(String[] values) {
         WsWhereCondition wc = new WsWhereCondition();
         wc.setLeftPath(values[0]);
-        // *** TMDM-8080, temp omitted start ***//
-        // WsWhereOperator operator = null;
-        //        if (values[1].equals("Contains")) { //$NON-NLS-1$
-        // operator = WsWhereOperator.CONTAINS;
-        //        } else if (values[1].equals("Contains Text Of")) { //$NON-NLS-1$
-        // operator = WsWhereOperator.CONTAINS_TEXT_OF;
-        //        } else if (values[1].equals("Join With")) {//$NON-NLS-1$
-        // operator = WsWhereOperator.JOIN;
-        //        } else if (values[1].equals("=")) { //$NON-NLS-1$
-        // operator = WsWhereOperator.EQUALS;
-        //        } else if (values[1].equals(">")) { //$NON-NLS-1$
-        // operator = WsWhereOperator.GREATER_THAN;
-        //        } else if (values[1].equals(">=")) { //$NON-NLS-1$
-        // operator = WsWhereOperator.GREATER_THAN_OR_EQUAL;
-        //        } else if (values[1].equals("<")) { //$NON-NLS-1$
-        // operator = WsWhereOperator.LOWER_THAN;
-        //        } else if (values[1].equals("<=")) { //$NON-NLS-1$
-        // operator = WsWhereOperator.LOWER_THAN_OR_EQUAL;
-        //        } else if (values[1].equals("!=")) { //$NON-NLS-1$
-        // operator = WsWhereOperator.NOT_EQUALS;
-        //        } else if (values[1].equals("Starts With")) { //$NON-NLS-1$
-        // operator = WsWhereOperator.STARTSWITH;
-        //        } else if (values[1].equals("Strict Contains")) { //$NON-NLS-1$
-        // operator = WsWhereOperator.STRICTCONTAINS;
-        //        } else if (values[1].equals("Is Empty Or Null")) { //$NON-NLS-1$
-        // operator = WsWhereOperator.EMPTY_NULL;
-        // }
-        // wc.setOperator(operator);
-        // wc.setRightValueOrPath(values[2]);
-        // WsStringPredicate predicate = null;
-        //        if (values[3].equals("")) { //$NON-NLS-1$
-        // predicate = WsStringPredicate.NONE;
-        //        } else if (values[3].equals("Or")) { //$NON-NLS-1$
-        // predicate = WsStringPredicate.OR;
-        // }
-        //        if (values[3].equals("And")) { //$NON-NLS-1$
-        // predicate = WsStringPredicate.AND;
-        // }
-        //        if (values[3].equals("Strict And")) { //$NON-NLS-1$
-        // predicate = WsStringPredicate.STRICTAND;
-        // }
-        //        if (values[3].equals("Exactly")) { //$NON-NLS-1$
-        // predicate = WsStringPredicate.EXACTLY;
-        // }
-        //        if (values[3].equals("Not")) { //$NON-NLS-1$
-        // predicate = WsStringPredicate.NOT;
-        // }
-        // wc.setStringPredicate(predicate);
+        WsWhereOperator operator = null;
+        if (values[1].equals("Contains")) { //$NON-NLS-1$
+            operator = WsWhereOperator.CONTAINS;
+        } else if (values[1].equals("Contains Text Of")) { //$NON-NLS-1$
+            operator = WsWhereOperator.CONTAINS_TEXT_OF;
+        } else if (values[1].equals("Join With")) {//$NON-NLS-1$
+            operator = WsWhereOperator.JOIN;
+        } else if (values[1].equals("=")) { //$NON-NLS-1$
+            operator = WsWhereOperator.EQUALS;
+        } else if (values[1].equals(">")) { //$NON-NLS-1$
+            operator = WsWhereOperator.GREATER_THAN;
+        } else if (values[1].equals(">=")) { //$NON-NLS-1$
+            operator = WsWhereOperator.GREATER_THAN_OR_EQUAL;
+        } else if (values[1].equals("<")) { //$NON-NLS-1$
+            operator = WsWhereOperator.LOWER_THAN;
+        } else if (values[1].equals("<=")) { //$NON-NLS-1$
+            operator = WsWhereOperator.LOWER_THAN_OR_EQUAL;
+        } else if (values[1].equals("!=")) { //$NON-NLS-1$
+            operator = WsWhereOperator.NOT_EQUALS;
+        } else if (values[1].equals("Starts With")) { //$NON-NLS-1$
+            operator = WsWhereOperator.STARTSWITH;
+        } else if (values[1].equals("Strict Contains")) { //$NON-NLS-1$
+            operator = WsWhereOperator.STRICTCONTAINS;
+        } else if (values[1].equals("Is Empty Or Null")) { //$NON-NLS-1$
+            operator = WsWhereOperator.EMPTY_NULL;
+        }
+        wc.setOperator(operator);
+        wc.setRightValueOrPath(values[2]);
+        WsStringPredicate predicate = null;
+        if (values[3].equals("")) { //$NON-NLS-1$
+            predicate = WsStringPredicate.NONE;
+        } else if (values[3].equals("Or")) { //$NON-NLS-1$
+            predicate = WsStringPredicate.OR;
+        }
+        if (values[3].equals("And")) { //$NON-NLS-1$
+            predicate = WsStringPredicate.AND;
+        }
+        if (values[3].equals("Strict And")) { //$NON-NLS-1$
+            predicate = WsStringPredicate.STRICTAND;
+        }
+        if (values[3].equals("Exactly")) { //$NON-NLS-1$
+            predicate = WsStringPredicate.EXACTLY;
+        }
+        if (values[3].equals("Not")) { //$NON-NLS-1$
+            predicate = WsStringPredicate.NOT;
+        }
+        wc.setStringPredicate(predicate);
 
-        // *** TMDM-8080, temp omitted end ***//
         return wc;
     }
 
@@ -3208,10 +3203,8 @@ public class Util {
             int major = Integer.parseInt(match.group(1));
             int minor = Integer.parseInt(match.group(2));
             int rev = match.group(4) != null && !match.group(4).equals("") ? Integer.parseInt(match.group(4)) : 0;//$NON-NLS-1$
-            TMDMService port = Util.getMDMService(new URL(url), universe, username, password);
-            // WsVersion wsVersion = port.getComponentVersion(new WsGetComponentVersion(WsComponent.DATA_MANAGER,
-            // null));
-            WsVersion wsVersion = new WsVersion("", "", "", 1, 0, 0);//
+            TMDMService service = Util.getMDMService(new URL(url), universe, username, password);
+            WsVersion wsVersion = service.getComponentVersion(new WsGetComponentVersion(WsComponent.DATA_MANAGER, null));
             versionComp += Messages.Util_47 + wsVersion.getMajor() + Messages.Util_48 + wsVersion.getMinor() + Messages.Util_49
                     + wsVersion.getRevision();
             if (major != wsVersion.getMajor() || minor != wsVersion.getMinor()) {

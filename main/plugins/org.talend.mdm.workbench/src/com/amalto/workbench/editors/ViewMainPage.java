@@ -636,15 +636,13 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener {
     }
 
     public boolean equals(WsWhereCondition wcObj, WsWhereCondition obj) {
-        // if (wcObj.getLeftPath().equals(obj.getLeftPath()) &&
-        // wcObj.getOperator().value().equals(obj.getOperator().value())
-        // && wcObj.getRightValueOrPath().equals(obj.getRightValueOrPath())
-        // && wcObj.getStringPredicate().value().equals(obj.getStringPredicate().value())) {
-        // return true;
-        // } else {
-        // return false;
-        // }
-        return true;
+        if (wcObj.getLeftPath().equals(obj.getLeftPath()) && wcObj.getOperator().value().equals(obj.getOperator().value())
+                && wcObj.getRightValueOrPath().equals(obj.getRightValueOrPath())
+                && wcObj.getStringPredicate().value().equals(obj.getStringPredicate().value())) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     @Override

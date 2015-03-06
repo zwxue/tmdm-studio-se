@@ -70,12 +70,14 @@ import com.amalto.workbench.webservices.TMDMService;
 import com.amalto.workbench.webservices.WsDataClusterPK;
 import com.amalto.workbench.webservices.WsGetView;
 import com.amalto.workbench.webservices.WsQuickSearch;
+import com.amalto.workbench.webservices.WsStringPredicate;
 import com.amalto.workbench.webservices.WsView;
 import com.amalto.workbench.webservices.WsViewPK;
 import com.amalto.workbench.webservices.WsViewSearch;
 import com.amalto.workbench.webservices.WsWhereAnd;
 import com.amalto.workbench.webservices.WsWhereCondition;
 import com.amalto.workbench.webservices.WsWhereItem;
+import com.amalto.workbench.webservices.WsWhereOperator;
 
 public class ViewBrowserMainPage extends AMainPage implements IXObjectModelListener {
 
@@ -155,55 +157,53 @@ public class ViewBrowserMainPage extends AMainPage implements IXObjectModelListe
                 public String getText(Object element) {
                     WsWhereCondition wc = (WsWhereCondition) element;
                     String text = wc.getLeftPath() + " ";//$NON-NLS-1$
-                    // *** TMDM-8080, temp omitted start ***//
-                    // if (wc.getOperator().equals(WsWhereOperator.CONTAINS)) {
-                    //                        text += "Contains";//$NON-NLS-1$
-                    // } else if (wc.getOperator().equals(WsWhereOperator.CONTAINS_TEXT_OF)) {
-                    //                        text += "Contains Text Of";//$NON-NLS-1$
-                    // } else if (wc.getOperator().equals(WsWhereOperator.EQUALS)) {
-                    //                        text += "=";//$NON-NLS-1$
-                    // } else if (wc.getOperator().equals(WsWhereOperator.GREATER_THAN)) {
-                    //                        text += ">";//$NON-NLS-1$
-                    // } else if (wc.getOperator().equals(WsWhereOperator.GREATER_THAN_OR_EQUAL)) {
-                    //                        text += ">=";//$NON-NLS-1$
-                    // } else if (wc.getOperator().equals(WsWhereOperator.JOIN)) {
-                    //                        text += "Joins With";//$NON-NLS-1$
-                    // } else if (wc.getOperator().equals(WsWhereOperator.LOWER_THAN)) {
-                    //                        text += "<";//$NON-NLS-1$
-                    // } else if (wc.getOperator().equals(WsWhereOperator.LOWER_THAN_OR_EQUAL)) {
-                    //                        text += "<=";//$NON-NLS-1$
-                    // } else if (wc.getOperator().equals(WsWhereOperator.NOT_EQUALS)) {
-                    //                        text += "!=";//$NON-NLS-1$
-                    // } else if (wc.getOperator().equals(WsWhereOperator.STARTSWITH)) {
-                    //                        text += "Starts With";//$NON-NLS-1$
-                    // } else if (wc.getOperator().equals(WsWhereOperator.STRICTCONTAINS)) {
-                    //                        text += "Strict Contains";//$NON-NLS-1$
-                    // } else if (wc.getOperator().equals(WsWhereOperator.EMPTY_NULL)) {
-                    //                        text += "Is Empty Or Null";//$NON-NLS-1$
-                    // }
-                    //                    text += " ";//$NON-NLS-1$
-                    // if (!wc.getOperator().equals(WsWhereOperator.JOIN)) {
-                    //                        text += "\"";//$NON-NLS-1$
-                    // }
-                    // text += wc.getRightValueOrPath();
-                    // if (!wc.getOperator().equals(WsWhereOperator.JOIN)) {
-                    //                        text += "\"";//$NON-NLS-1$
-                    // }
-                    //                    text += " ";//$NON-NLS-1$
-                    // if (wc.getStringPredicate().equals(WsStringPredicate.AND)) {
-                    //                        text += "[and]";//$NON-NLS-1$
-                    // } else if (wc.getStringPredicate().equals(WsStringPredicate.EXACTLY)) {
-                    //                        text += "[exactly]";//$NON-NLS-1$
-                    // } else if (wc.getStringPredicate().equals(WsStringPredicate.NONE)) {
-                    //                        text += "";//$NON-NLS-1$
-                    // } else if (wc.getStringPredicate().equals(WsStringPredicate.NOT)) {
-                    //                        text += "[not]";//$NON-NLS-1$
-                    // } else if (wc.getStringPredicate().equals(WsStringPredicate.OR)) {
-                    //                        text += "[or]";//$NON-NLS-1$
-                    // } else if (wc.getStringPredicate().equals(WsStringPredicate.STRICTAND)) {
-                    //                        text += "[strict and]";//$NON-NLS-1$
-                    // }
-                    // *** TMDM-8080, temp omitted end ***//
+                    if (wc.getOperator().equals(WsWhereOperator.CONTAINS)) {
+                        text += "Contains";//$NON-NLS-1$
+                    } else if (wc.getOperator().equals(WsWhereOperator.CONTAINS_TEXT_OF)) {
+                        text += "Contains Text Of";//$NON-NLS-1$
+                    } else if (wc.getOperator().equals(WsWhereOperator.EQUALS)) {
+                        text += "=";//$NON-NLS-1$
+                    } else if (wc.getOperator().equals(WsWhereOperator.GREATER_THAN)) {
+                        text += ">";//$NON-NLS-1$
+                    } else if (wc.getOperator().equals(WsWhereOperator.GREATER_THAN_OR_EQUAL)) {
+                        text += ">=";//$NON-NLS-1$
+                    } else if (wc.getOperator().equals(WsWhereOperator.JOIN)) {
+                        text += "Joins With";//$NON-NLS-1$
+                    } else if (wc.getOperator().equals(WsWhereOperator.LOWER_THAN)) {
+                        text += "<";//$NON-NLS-1$
+                    } else if (wc.getOperator().equals(WsWhereOperator.LOWER_THAN_OR_EQUAL)) {
+                        text += "<=";//$NON-NLS-1$
+                    } else if (wc.getOperator().equals(WsWhereOperator.NOT_EQUALS)) {
+                        text += "!=";//$NON-NLS-1$
+                    } else if (wc.getOperator().equals(WsWhereOperator.STARTSWITH)) {
+                        text += "Starts With";//$NON-NLS-1$
+                    } else if (wc.getOperator().equals(WsWhereOperator.STRICTCONTAINS)) {
+                        text += "Strict Contains";//$NON-NLS-1$
+                    } else if (wc.getOperator().equals(WsWhereOperator.EMPTY_NULL)) {
+                        text += "Is Empty Or Null";//$NON-NLS-1$
+                    }
+                    text += " ";//$NON-NLS-1$
+                    if (!wc.getOperator().equals(WsWhereOperator.JOIN)) {
+                        text += "\"";//$NON-NLS-1$
+                    }
+                    text += wc.getRightValueOrPath();
+                    if (!wc.getOperator().equals(WsWhereOperator.JOIN)) {
+                        text += "\"";//$NON-NLS-1$
+                    }
+                    text += " ";//$NON-NLS-1$
+                    if (wc.getStringPredicate().equals(WsStringPredicate.AND)) {
+                        text += "[and]";//$NON-NLS-1$
+                    } else if (wc.getStringPredicate().equals(WsStringPredicate.EXACTLY)) {
+                        text += "[exactly]";//$NON-NLS-1$
+                    } else if (wc.getStringPredicate().equals(WsStringPredicate.NONE)) {
+                        text += "";//$NON-NLS-1$
+                    } else if (wc.getStringPredicate().equals(WsStringPredicate.NOT)) {
+                        text += "[not]";//$NON-NLS-1$
+                    } else if (wc.getStringPredicate().equals(WsStringPredicate.OR)) {
+                        text += "[or]";//$NON-NLS-1$
+                    } else if (wc.getStringPredicate().equals(WsStringPredicate.STRICTAND)) {
+                        text += "[strict and]";//$NON-NLS-1$
+                    }
                     return text;
                 }
 
