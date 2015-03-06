@@ -86,6 +86,7 @@ import com.amalto.workbench.webservices.TMDMService;
 import com.amalto.workbench.webservices.WsGetRoutingOrderV2ByCriteriaWithPaging;
 import com.amalto.workbench.webservices.WsGetServicesList;
 import com.amalto.workbench.webservices.WsRoutingEngineV2Action;
+import com.amalto.workbench.webservices.WsRoutingEngineV2ActionCode;
 import com.amalto.workbench.webservices.WsRoutingEngineV2Status;
 import com.amalto.workbench.webservices.WsRoutingOrderV2;
 import com.amalto.workbench.webservices.WsRoutingOrderV2SearchCriteriaWithPaging;
@@ -526,9 +527,7 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
     protected void refreshData() {
         try {
             WsRoutingEngineV2Status status = getServerRoutingStatus();
-            // *** TMDM-8080, temp omitted start ***//
-            // statusLabel.setText(status.value());
-            // *** TMDM-8080, temp omitted end ***//
+            statusLabel.setText(status.value());
 
             idText.setFocus();
 
@@ -545,11 +544,8 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
 
     protected WsRoutingEngineV2Status getServerRoutingStatus() throws XtentisException {
         TMDMService service = getMDMService();
-        // *** TMDM-8080, temp substituted start ***//
-        // WsRoutingEngineV2Status status = service.routingEngineV2Action(new WsRoutingEngineV2Action(
-        // WsRoutingEngineV2ActionCode.STATUS));
-        WsRoutingEngineV2Status status = service.routingEngineV2Action(new WsRoutingEngineV2Action());
-        // *** TMDM-8080, temp substituted end ***//
+        WsRoutingEngineV2Status status = service.routingEngineV2Action(new WsRoutingEngineV2Action(
+                WsRoutingEngineV2ActionCode.STATUS));
         return status;
     }
 
@@ -557,12 +553,10 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
         try {
             WsRoutingEngineV2Status status = getServerRoutingStatus();
 
-            // *** TMDM-8080, temp omitted start ***//
-            // startButton.setEnabled(status != WsRoutingEngineV2Status.RUNNING);
-            // suspendButton.setEnabled(status != WsRoutingEngineV2Status.SUSPENDED);
-            // stopButton.setEnabled(status != WsRoutingEngineV2Status.STOPPED);
-            // statusLabel.setText(status.value());
-            // *** TMDM-8080, temp omitted end ***//
+            startButton.setEnabled(status != WsRoutingEngineV2Status.RUNNING);
+            suspendButton.setEnabled(status != WsRoutingEngineV2Status.SUSPENDED);
+            stopButton.setEnabled(status != WsRoutingEngineV2Status.STOPPED);
+            statusLabel.setText(status.value());
         } catch (XtentisException e) {
             startButton.setEnabled(true);
             suspendButton.setEnabled(false);
@@ -710,25 +704,23 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
             long timeLastRunCompletedMax = -1;
             WsRoutingOrderV2Status status = null;
 
-            // *** TMDM-8080, temp omitted start ***//
-            // String statusText = statusCombo.getItem(statusCombo.getSelectionIndex());
-            //            if ("ACTIVE".equals(statusText)) {//$NON-NLS-1$
-            // timeCreatedMin = from;
-            // timeCreatedMax = to;
-            // status = WsRoutingOrderV2Status.ACTIVE;
-            //            } else if ("COMPLETED".equals(statusText)) {//$NON-NLS-1$
-            // timeLastRunCompletedMin = from;
-            // timeLastRunCompletedMax = to;
-            // status = WsRoutingOrderV2Status.COMPLETED;
-            //            } else if ("FAILED".equals(statusText)) {//$NON-NLS-1$
-            // timeLastRunCompletedMin = from;
-            // timeLastRunCompletedMax = to;
-            // status = WsRoutingOrderV2Status.FAILED;
-            // } else {
-            // throw new XtentisException(Messages.RoutingEngineV2BrowserMainPage_ExceptionInfo + statusText
-            // + Messages.RoutingEngineV2BrowserMainPage_ExceptionInfoA);
-            // }
-            // *** TMDM-8080, temp omitted end ***//
+            String statusText = statusCombo.getItem(statusCombo.getSelectionIndex());
+            if ("ACTIVE".equals(statusText)) {//$NON-NLS-1$
+                timeCreatedMin = from;
+                timeCreatedMax = to;
+                status = WsRoutingOrderV2Status.ACTIVE;
+            } else if ("COMPLETED".equals(statusText)) {//$NON-NLS-1$
+                timeLastRunCompletedMin = from;
+                timeLastRunCompletedMax = to;
+                status = WsRoutingOrderV2Status.COMPLETED;
+            } else if ("FAILED".equals(statusText)) {//$NON-NLS-1$
+                timeLastRunCompletedMin = from;
+                timeLastRunCompletedMax = to;
+                status = WsRoutingOrderV2Status.FAILED;
+            } else {
+                throw new XtentisException(Messages.RoutingEngineV2BrowserMainPage_ExceptionInfo + statusText
+                        + Messages.RoutingEngineV2BrowserMainPage_ExceptionInfoA);
+            }
 
             String serviceJNDI = serviceCombo.getItem(serviceCombo.getSelectionIndex());
             if (BLANK.equals(serviceJNDI)) {
@@ -1150,14 +1142,11 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
                 return ro.getWsItemPK().getConceptName() + "[" + Util.joinStrings(ro.getWsItemPK().getIds(), ".") + "]";//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
             case 1:
                 Calendar cal = Calendar.getInstance();
-                // *** TMDM-8080, temp substituted start ***//
-                // if (WsRoutingOrderV2Status.ACTIVE.equals(ro.getStatus())) {
-                // cal.setTimeInMillis(ro.getTimeCreated());
-                // } else {
-                // cal.setTimeInMillis(ro.getTimeLastRunCompleted());
-                // }
-                cal.setTimeInMillis(ro.getTimeLastRunCompleted());
-                // *** TMDM-8080, temp substituted end ***//
+                if (WsRoutingOrderV2Status.ACTIVE.equals(ro.getStatus())) {
+                    cal.setTimeInMillis(ro.getTimeCreated());
+                } else {
+                    cal.setTimeInMillis(ro.getTimeLastRunCompleted());
+                }
                 return sdf.format(cal.getTime());
             case 2:
                 return ro.getServiceJNDI().replaceFirst("amalto/local/service/", BLANK);//$NON-NLS-1$
@@ -1215,14 +1204,11 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
                 res = d1.compareToIgnoreCase(d2);
                 break;
             case 1: // date
-                // *** TMDM-8080, temp substituted start ***//
-                // if (WsRoutingOrderV2Status.ACTIVE.equals(ro1.getStatus())) {
-                // res = (int) (ro1.getTimeCreated() - ro2.getTimeCreated());
-                // } else {
-                // res = (int) (ro1.getTimeLastRunCompleted() - ro2.getTimeLastRunCompleted());
-                // }
-                res = (int) (ro1.getTimeLastRunCompleted() - ro2.getTimeLastRunCompleted());
-                // *** TMDM-8080, temp substituted end ***//
+                if (WsRoutingOrderV2Status.ACTIVE.equals(ro1.getStatus())) {
+                    res = (int) (ro1.getTimeCreated() - ro2.getTimeCreated());
+                } else {
+                    res = (int) (ro1.getTimeLastRunCompleted() - ro2.getTimeLastRunCompleted());
+                }
                 break;
             case 2: // service
                 res = ro1.getServiceJNDI().compareToIgnoreCase(ro2.getServiceJNDI());
@@ -1246,14 +1232,11 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
         try {
             WsRoutingEngineV2Status status = getServerRoutingStatus();
             TMDMService service = getMDMService();
-            // *** TMDM-8080, temp substituted start ***//
-            // if (status == WsRoutingEngineV2Status.STOPPED) {
-            // service.routingEngineV2Action(new WsRoutingEngineV2Action(WsRoutingEngineV2ActionCode.START));
-            // } else if (status == WsRoutingEngineV2Status.SUSPENDED) {
-            // service.routingEngineV2Action(new WsRoutingEngineV2Action(WsRoutingEngineV2ActionCode.RESUME));
-            // }
-            service.routingEngineV2Action(new WsRoutingEngineV2Action());
-            // *** TMDM-8080, temp substituted end ***//
+            if (status == WsRoutingEngineV2Status.STOPPED) {
+                service.routingEngineV2Action(new WsRoutingEngineV2Action(WsRoutingEngineV2ActionCode.START));
+            } else if (status == WsRoutingEngineV2Status.SUSPENDED) {
+                service.routingEngineV2Action(new WsRoutingEngineV2Action(WsRoutingEngineV2ActionCode.RESUME));
+            }
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             if (!Util.handleConnectionException(this.getSite().getShell(), e, null)) {
@@ -1266,10 +1249,7 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
     private void stopSubscriptionEngine() {
         try {
             TMDMService service = getMDMService();
-            // *** TMDM-8080, temp substituted start ***//
-            // service.routingEngineV2Action(new WsRoutingEngineV2Action(WsRoutingEngineV2ActionCode.STOP));
-            service.routingEngineV2Action(new WsRoutingEngineV2Action());
-            // *** TMDM-8080, temp substituted end ***//
+            service.routingEngineV2Action(new WsRoutingEngineV2Action(WsRoutingEngineV2ActionCode.STOP));
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             if (!Util.handleConnectionException(this.getSite().getShell(), e, null)) {
@@ -1282,10 +1262,7 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
     private void suspendSubscriptionEngine() {
         try {
             TMDMService service = getMDMService();
-            // *** TMDM-8080, temp substituted start ***//
-            // service.routingEngineV2Action(new WsRoutingEngineV2Action(WsRoutingEngineV2ActionCode.SUSPEND));
-            service.routingEngineV2Action(new WsRoutingEngineV2Action());
-            // *** TMDM-8080, temp substituted end ***//
+            service.routingEngineV2Action(new WsRoutingEngineV2Action(WsRoutingEngineV2ActionCode.SUSPEND));
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             if (!Util.handleConnectionException(this.getSite().getShell(), e, null)) {

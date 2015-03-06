@@ -12,9 +12,11 @@
 // ============================================================================
 package com.amalto.workbench.editors;
 
+import java.lang.reflect.InvocationTargetException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -32,6 +34,8 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.IInputValidator;
 import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.dialogs.ProgressMonitorDialog;
+import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.text.TextEvent;
 import org.eclipse.jface.viewers.ILabelProviderListener;
@@ -88,6 +92,7 @@ import org.eclipse.ui.forms.widgets.Section;
 import org.eclipse.ui.preferences.ScopedPreferenceStore;
 
 import com.amalto.workbench.dialogs.PluginDetailsDialog;
+import com.amalto.workbench.dialogs.ProcessResultsDialog;
 import com.amalto.workbench.dialogs.SetupTransformerInputVariablesDialog;
 import com.amalto.workbench.dialogs.VariableDefinitionDialog;
 import com.amalto.workbench.editors.xslteditor.PageRefresher;
@@ -105,16 +110,30 @@ import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.WidgetUtils;
 import com.amalto.workbench.utils.XmlUtil;
 import com.amalto.workbench.utils.XtentisException;
+import com.amalto.workbench.webservices.BackgroundJobStatusType;
 import com.amalto.workbench.webservices.TMDMService;
+import com.amalto.workbench.webservices.WsBackgroundJob;
+import com.amalto.workbench.webservices.WsBackgroundJobPK;
+import com.amalto.workbench.webservices.WsByteArray;
+import com.amalto.workbench.webservices.WsExecuteTransformerV2AsJob;
+import com.amalto.workbench.webservices.WsExtractedContent;
+import com.amalto.workbench.webservices.WsGetBackgroundJob;
 import com.amalto.workbench.webservices.WsGetTransformerPluginV2Details;
 import com.amalto.workbench.webservices.WsGetTransformerPluginV2SList;
+import com.amalto.workbench.webservices.WsPipeline;
+import com.amalto.workbench.webservices.WsPipelineTypedContentEntry;
+import com.amalto.workbench.webservices.WsTransformerContext;
+import com.amalto.workbench.webservices.WsTransformerContextPipeline;
+import com.amalto.workbench.webservices.WsTransformerContextPipelinePipelineItem;
 import com.amalto.workbench.webservices.WsTransformerPluginV2Details;
 import com.amalto.workbench.webservices.WsTransformerPluginV2SList;
 import com.amalto.workbench.webservices.WsTransformerPluginV2SListItem;
 import com.amalto.workbench.webservices.WsTransformerPluginV2VariableDescriptor;
 import com.amalto.workbench.webservices.WsTransformerProcessStep;
 import com.amalto.workbench.webservices.WsTransformerV2;
+import com.amalto.workbench.webservices.WsTransformerV2PK;
 import com.amalto.workbench.webservices.WsTransformerVariablesMapping;
+import com.amalto.workbench.webservices.WsTypedContent;
 import com.amalto.workbench.widgets.DescAnnotationComposite;
 import com.amalto.workbench.widgets.LabelCombo;
 import com.amalto.workbench.widgets.WidgetFactory;
@@ -262,118 +281,115 @@ public class TransformerMainPage extends AMainPageV2 {
     }
 
     public void execute() {
-        // try {
-        // port = getPort();
-        // if (port == null) {
-        // return;
-        // }
-        // java.util.List<WSTransformerContext.Pipeline.PipelineItem> items = new
-        // ArrayList<WSTransformerContext.Pipeline.PipelineItem>();
-        // for (Line line : cacheList) {
-        // String variableName = line.keyValues.get(0).value;
-        // String contentType = line.keyValues.get(1).value;
-        // String value = line.keyValues.get(2).value;
-        //
-        // items.add(new WSTransformerContext.Pipeline.PipelineItem(variableName, new WSTypedContent(null, new
-        // WSByteArray(
-        //                        value.getBytes("utf-8")), contentType))); //$NON-NLS-1$
-        //
-        // }
-        // final WSBackgroundJobPK jobPK = port.executeTransformerV2AsJob(new WSExecuteTransformerV2AsJob(
-        // new WSTransformerContext(new WSTransformerV2PK(transformer.getName()), new WSTransformerContext.Pipeline(
-        // items), null)));
-        //
-        // IRunnableWithProgress progress = new IRunnableWithProgress() {
-        //
-        // WSBackgroundJob job = null;
-        //
-        // public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
-        // /******************************************
-        // * Watch the Background Job
-        // ******************************************/
-//                    try {
-//                        boolean firstTime = true;
-//                        do {
-//                            if (firstTime) {
-//                                Thread.sleep(1500L);
-//                                firstTime = false;
-//                            } else {
-//                                Thread.sleep(5000L);
-//                            }
-//
-//                            if (monitor.isCanceled()) {
-//                                throw new InterruptedException(Messages.TransformerMainPage_UserCancel);
-//                            }
-//
-//                            job = port.getBackgroundJob(new WSGetBackgroundJob(jobPK.getPk()));
-//                            monitor.subTask(job.getMessage());
-//
-//                        } while (job.getStatus().equals(BackgroundJobStatusType.RUNNING)
-//                                || job.getStatus().equals(BackgroundJobStatusType.SCHEDULED));
-//
-//                        if (job.getStatus().equals(BackgroundJobStatusType.STOPPED)) {
-//                            getSite().getShell().getDisplay().syncExec(new Runnable() {
-//
-//                                public void run() {
-//                                    MessageDialog.openError(TransformerMainPage.this.getEditor().getSite().getShell(),
-//                                            Messages.bind(Messages.TransformerMainPage_ErrorMsg, transformer.getName()),
-//                                            job.getMessage());
-//
-//                                }
-//                            });
-//                            throw new XtentisException(Messages.bind(Messages.TransformerMainPage_JobWasStoped, job.getMessage()));
-//                        }
-        //
-        // monitor.worked(1);
-        // monitor.done();
-        //
-        // /******************************************
-        // * Build the result console
-        // ******************************************/
-        //
-        // // Auto sorts the entries
-        // final TreeMap pipeline = new TreeMap<String, WSExtractedContent>();
-        // WSPipeline wsPipeline = job.getPipeline();
-        // java.util.List<TypedContentEntry> entries = wsPipeline.getTypedContentEntry();
-        // for (TypedContentEntry entry : entries) {
-        // pipeline.put(entry.getOutput(), entry.getWsExtractedContent());
-        // }
-        // getSite().getShell().getDisplay().asyncExec(new Runnable() {
-        //
-        // public void run() {
-        // try {
-        // /*
-        // * ProcessResultsPage page = new ProcessResultsPage(editor,pipeline);
-        // * parent.editor.addPage(page); parent.editor.setActivePage(page.getId());
-        // *
-        // * parent.editor.getEditorSite().getShell()
-        // */
-        // // Shell shell = new Shell(SWT.DIALOG_TRIM | SWT.RESIZE | SWT.MAX | SWT.MIN);
-        // ProcessResultsDialog dialog = new ProcessResultsDialog(getSite().getShell(), Messages.bind(
-        // Messages.TransformerMainPage_DailogTitle,
-        // sdf.format(new Date(System.currentTimeMillis()))), pipeline);
-        // dialog.setBlockOnOpen(false);
-        // dialog.open();
-        // } catch (Exception e) {
-        // log.error(e.getMessage(), e);
-        // throw new RuntimeException(e);
-        // }
-        // }
-        // });
-        //
-        // } catch (Exception e1) {
-        // log.error(e1.getMessage(), e1);
-        // }
-        // }
-        // };
-        //
-        // new ProgressMonitorDialog(TransformerMainPage.this.getSite().getWorkbenchWindow().getShell()).run(true, //
-        // fork
-        // true, progress);
-        //
-        // } catch (Exception e1) {
-        // log.error(e1.getMessage(), e1);
-        // }
+        try {
+            service= getService();
+            if (service == null) {
+                return;
+            }
+            java.util.List<WsTransformerContextPipelinePipelineItem> items = new ArrayList<WsTransformerContextPipelinePipelineItem>();
+            for (Line line : cacheList) {
+                String variableName = line.keyValues.get(0).value;
+                String contentType = line.keyValues.get(1).value;
+                String value = line.keyValues.get(2).value;
+
+                items.add(new WsTransformerContextPipelinePipelineItem(variableName, new WsTypedContent(contentType, null,
+                        new WsByteArray(value.getBytes("utf-8"))))); //$NON-NLS-1$
+
+            }
+            final WsBackgroundJobPK jobPK = service.executeTransformerV2AsJob(new WsExecuteTransformerV2AsJob(
+                    new WsTransformerContext(new WsTransformerContextPipeline(items), null, new WsTransformerV2PK(transformer
+                            .getName()))));
+
+            IRunnableWithProgress progress = new IRunnableWithProgress() {
+
+                WsBackgroundJob job = null;
+
+                public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
+                    /******************************************
+                     * Watch the Background Job
+                     ******************************************/
+                    try {
+                        boolean firstTime = true;
+                        do {
+                            if (firstTime) {
+                                Thread.sleep(1500L);
+                                firstTime = false;
+                            } else {
+                                Thread.sleep(5000L);
+                            }
+
+                            if (monitor.isCanceled()) {
+                                throw new InterruptedException(Messages.TransformerMainPage_UserCancel);
+                            }
+
+                            job = service.getBackgroundJob(new WsGetBackgroundJob(jobPK.getPk()));
+                            monitor.subTask(job.getMessage());
+
+                        } while (job.getStatus().equals(BackgroundJobStatusType.RUNNING)
+                                || job.getStatus().equals(BackgroundJobStatusType.SCHEDULED));
+
+                        if (job.getStatus().equals(BackgroundJobStatusType.STOPPED)) {
+                            getSite().getShell().getDisplay().syncExec(new Runnable() {
+
+                                public void run() {
+                                    MessageDialog.openError(TransformerMainPage.this.getEditor().getSite().getShell(),
+                                            Messages.bind(Messages.TransformerMainPage_ErrorMsg, transformer.getName()),
+                                            job.getMessage());
+
+                                }
+                            });
+                            throw new XtentisException(Messages.bind(Messages.TransformerMainPage_JobWasStoped, job.getMessage()));
+                        }
+
+                        monitor.worked(1);
+                        monitor.done();
+
+                        /******************************************
+                         * Build the result console
+                         ******************************************/
+
+                        // Auto sorts the entries
+                        final TreeMap pipeline = new TreeMap<String, WsExtractedContent>();
+                        WsPipeline wsPipeline = job.getPipeline();
+                        java.util.List<WsPipelineTypedContentEntry> entries = wsPipeline.getTypedContentEntry();
+                        for (WsPipelineTypedContentEntry entry : entries) {
+                            pipeline.put(entry.getOutput(), entry.getWsExtractedContent());
+                        }
+                        getSite().getShell().getDisplay().asyncExec(new Runnable() {
+
+                            public void run() {
+                                try {
+                                    /*
+                                     * ProcessResultsPage page = new ProcessResultsPage(editor,pipeline);
+                                     * parent.editor.addPage(page); parent.editor.setActivePage(page.getId());
+                                     *
+                                     * parent.editor.getEditorSite().getShell()
+                                     */
+                                    // Shell shell = new Shell(SWT.DIALOG_TRIM | SWT.RESIZE | SWT.MAX | SWT.MIN);
+                                    ProcessResultsDialog dialog = new ProcessResultsDialog(getSite().getShell(), Messages.bind(
+                                            Messages.TransformerMainPage_DailogTitle,
+                                            sdf.format(new Date(System.currentTimeMillis()))), pipeline);
+                                    dialog.setBlockOnOpen(false);
+                                    dialog.open();
+                                } catch (Exception e) {
+                                    log.error(e.getMessage(), e);
+                                    throw new RuntimeException(e);
+                                }
+                            }
+                        });
+
+                    } catch (Exception e1) {
+                        log.error(e1.getMessage(), e1);
+                    }
+                }
+            };
+
+            new ProgressMonitorDialog(TransformerMainPage.this.getSite().getWorkbenchWindow().getShell()).run(true, // fork
+                    true, progress);
+
+        } catch (Exception e1) {
+            log.error(e1.getMessage(), e1);
+        }
 
     }
 
