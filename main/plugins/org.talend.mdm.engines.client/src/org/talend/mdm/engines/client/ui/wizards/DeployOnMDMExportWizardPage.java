@@ -87,6 +87,7 @@ import org.talend.repository.ui.wizards.exportjob.scriptsmanager.JobScriptsManag
 import com.amalto.workbench.service.ILegendServerDefService;
 import com.amalto.workbench.utils.HttpClientUtil;
 import com.amalto.workbench.utils.MDMServerDef;
+import com.amalto.workbench.utils.Util;
 
 /**
  * Page of the Job Scripts Export Wizard. <br/>
@@ -696,7 +697,8 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
             monitor.setTaskName(Messages.bind(Messages.DeployOnMDMExportWizardPage_DeployJobOnServer, jobInfo.getJobLabelName(),
                     server.getName()));
             String filename = jobInfo.getDescValue();
-            String mdmServerUploadURL = server.getProtocol() + host + ":" + port + "/datamanager/uploadFile?deployjob="//$NON-NLS-1$ //$NON-NLS-2$
+            String contextPath = Util.getContextPath(server.getUrl());
+            String mdmServerUploadURL = server.getProtocol() + host + ":" + port + contextPath + "/uploadFile?deployjob="//$NON-NLS-1$ //$NON-NLS-2$
                     + new File(filename).getName() + "&jobpath=" + jobInfo.getJobPath() + "&contextStr=" + context;//$NON-NLS-1$//$NON-NLS-2$
             try {
                 HttpClientUtil.uploadFileToAppServer(mdmServerUploadURL, filename, user, password);

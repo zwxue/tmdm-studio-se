@@ -76,10 +76,7 @@ public class WSRoutingRuleHVCalculator extends RoutingRuleHVCalculator {
                 throw new IllegalArgumentException();
             }
             WsRoutingRuleOperator operator = (WsRoutingRuleOperator) obj;
-            // *** TMDM-8080, temp substituted start ***//
-            // return new Object[] { operator.value() };
-            return new Object[0];
-            // *** TMDM-8080, temp substituted end ***//
+            return new Object[] { operator.value() };
         }
     };
 

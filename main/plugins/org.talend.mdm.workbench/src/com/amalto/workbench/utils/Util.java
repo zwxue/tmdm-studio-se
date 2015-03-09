@@ -347,7 +347,7 @@ public class Util {
         }
     }
 
-    public static String default_endpoint_address = "http://localhost:8180/talend/TalendPort";//$NON-NLS-1$
+    public static String default_endpoint_address = "http://localhost:8080/talendmdm/services/soap";//$NON-NLS-1$
 
     private static IWebServiceHook webServceHook;
 
