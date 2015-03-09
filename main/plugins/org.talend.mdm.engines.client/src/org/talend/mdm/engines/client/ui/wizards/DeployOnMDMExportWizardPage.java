@@ -698,7 +698,8 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
                     server.getName()));
             String filename = jobInfo.getDescValue();
             String contextPath = Util.getContextPath(server.getUrl());
-            String mdmServerUploadURL = server.getProtocol() + host + ":" + port + contextPath + "/uploadFile?deployjob="//$NON-NLS-1$ //$NON-NLS-2$
+            String mdmServerUploadURL = server.getProtocol() + host
+                    + ":" + port + contextPath + "/services/uploadFile?deployjob="//$NON-NLS-1$ //$NON-NLS-2$
                     + new File(filename).getName() + "&jobpath=" + jobInfo.getJobPath() + "&contextStr=" + context;//$NON-NLS-1$//$NON-NLS-2$
             try {
                 HttpClientUtil.uploadFileToAppServer(mdmServerUploadURL, filename, user, password);
