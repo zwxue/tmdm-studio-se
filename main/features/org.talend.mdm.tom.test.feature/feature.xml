@@ -23,19 +23,5 @@
       <import plugin="org.junit"/>
    </requires>
 
-   <plugin
-         id="org.talend.mdm.repository.test"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         fragment="true"
-         unpack="false"/>
-
-   <plugin
-         id="org.talend.mdm.workbench.test"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
 
 </feature>
