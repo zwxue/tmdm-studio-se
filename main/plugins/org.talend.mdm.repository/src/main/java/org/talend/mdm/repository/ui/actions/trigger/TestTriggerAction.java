@@ -34,8 +34,6 @@ import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.service.ILegendServerDefService;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.webservices.TMDMService;
-import com.amalto.workbench.webservices.WsRoutingEngineV2Action;
-import com.amalto.workbench.webservices.WsRoutingEngineV2ActionCode;
 
 
 /**
@@ -124,7 +122,6 @@ public class TestTriggerAction extends AbstractRepositoryAction implements Selec
             // MessageDialog.openInformation(getShell(), Messages.RoutingRuleMainPage2_Success,
             // Messages.bind(Messages.RoutingRuleMainPage2_ExecuteTriggerSuccess, builder.toString()));
 
-            service.routingEngineV2Action(new WsRoutingEngineV2Action(new WsRoutingEngineV2ActionCode()));
             MessageDialog.openInformation(getShell(), Messages.RoutingRuleMainPage2_Success,
                     Messages.bind(Messages.RoutingRuleMainPage2_ExecuteTriggerSuccess, ""));
             // *** TMDM-8080, temp substituted end ***//
