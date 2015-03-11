@@ -47,8 +47,6 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.internal.wizards.datatransfer.TarException;
 import org.eclipse.ui.internal.wizards.datatransfer.TarFile;
-import org.eclipse.ui.internal.wizards.datatransfer.TarLeveledStructureProvider;
-import org.eclipse.ui.internal.wizards.datatransfer.ZipLeveledStructureProvider;
 import org.eclipse.ui.progress.UIJob;
 import org.talend.commons.exception.LoginException;
 import org.talend.commons.exception.PersistenceException;
@@ -404,10 +402,9 @@ public class MDMImportRepositoryItemsWizard extends ImportItemsWizard {
             if (sourceTarFile == null) {
                 return;
             }
-            TarLeveledStructureProvider provider = new TarLeveledStructureProvider(sourceTarFile);
-            manager = ResourcesManagerFactory.getInstance().createResourcesManager(provider);
-
-            if (!manager.collectPath2Object(provider.getRoot())) {
+            directory = MDMImportItemUtil.buildUpdatedFile(sourceTarFile);
+            manager = ResourcesManagerFactory.getInstance().createResourcesManager();
+            if (!manager.collectPath2Object(directory)) {
                 return;
             }
         } else if (importFromArchieve && IOUtil.isZipFile(importPath)) {
@@ -415,15 +412,14 @@ public class MDMImportRepositoryItemsWizard extends ImportItemsWizard {
             if (sourceFile == null) {
                 return;
             }
-            ZipLeveledStructureProvider provider = new ZipLeveledStructureProvider(sourceFile);
-            manager = ResourcesManagerFactory.getInstance().createResourcesManager(provider);
-
-            if (!manager.collectPath2Object(provider.getRoot())) {
+            directory = MDMImportItemUtil.buildUpdatedFile(sourceFile);
+            manager = ResourcesManagerFactory.getInstance().createResourcesManager();
+            if (!manager.collectPath2Object(directory)) {
                 return;
             }
         } else if (!importFromArchieve && directory.isDirectory()) {
+            directory = MDMImportItemUtil.buildUpdatedFile(directory);
             manager = ResourcesManagerFactory.getInstance().createResourcesManager();
-
             if (!manager.collectPath2Object(directory)) {
                 return;
             }
