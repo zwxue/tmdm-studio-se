@@ -399,7 +399,7 @@ public class DataClusterDialog extends Dialog {
                     ("".equals(universe) ? ""//$NON-NLS-1$//$NON-NLS-2$
                             : universe + "/") + username + ":" + (password == null ? "" : password));//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
 
-            xdcPKs = service.getDataClusterPKs(new WsRegexDataClusterPKs("")).getWsDataClusterPKs();//$NON-NLS-1$
+            xdcPKs = service.getDataClusterPKs(new WsRegexDataClusterPKs("*")).getWsDataClusterPKs();//$NON-NLS-1$
             for (WsDataClusterPK pk : xdcPKs) {
                 String name = pk.getPk();
                 if (!("CACHE".equals(name))) { //$NON-NLS-1$
