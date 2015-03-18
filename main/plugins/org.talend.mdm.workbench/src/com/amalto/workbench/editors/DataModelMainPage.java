@@ -1434,6 +1434,8 @@ public class DataModelMainPage extends EditorPart implements ModifyListener, IGo
             manager.add(getAddElementMenuForTypeClass(XSDModelGroup.class, Messages._AddElement));
             manager.add(new Separator());
             manager.add(changeSubElementGroupAction);
+            manager.add(new Separator());
+            manager.add(setAnnotationLabelAction);
 
             addPasteElementAction(manager);
         }
@@ -1497,8 +1499,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener, IGo
                 manager.add(getAddElementMenuForTypeClass(XSDComplexTypeDefinition.class, Messages._AddElement));
                 manager.add(newGroupFromTypeAction);
             }
-            String ns = ((XSDComplexTypeDefinition) obj).getTargetNamespace();
-            if (ns == null && !Util.IsAImporedElement((XSDComplexTypeDefinition) obj, xsdSchema)) {
+            if (!Util.IsAImporedElement((XSDComplexTypeDefinition) obj, xsdSchema)) {
                 // add by rhou.fix bug 0012073: Enable to create element from sub element group
                 manager.add(new Separator());
                 manager.add(getAddElementMenuForTypeClass(XSDComplexTypeDefinition.class, Messages._AddElement));
@@ -1506,6 +1507,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener, IGo
                 manager.add(editComplexTypeAction);
             }
 
+            manager.add(setAnnotationLabelAction);
             addPasteElementAction(manager);
         }
 
