@@ -1452,6 +1452,7 @@ public class TransformerMainPage extends AMainPageV2 {
                     inputViewer.setInput(new ArrayList<WsTransformerVariablesMapping>());
                     outputViewer.setInput(new ArrayList<WsTransformerVariablesMapping>());
                     String jndi = pluginsCombo.getText();
+                    pluginDescription.setText(pluginDescriptions.get(jndi) == null ? "" : pluginDescriptions.get(jndi)); //$NON-NLS-1$
 
                     refreshParameterEditor();
 

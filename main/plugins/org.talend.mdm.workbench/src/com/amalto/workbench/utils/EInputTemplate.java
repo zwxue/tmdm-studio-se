@@ -25,25 +25,8 @@ public enum EInputTemplate {
     // linereader,partialupdate,project,regexp,replace,route,tisCall,workflowtrigger,xpath,xslt
 
     // transformer parameters(Process)
-    BATCHPROJECT("batchproject",//$NON-NLS-1$
-                 "<parameters>\n\t\t<dataClusterName>?</dataClusterName>\n\t\t<dataModelName>?</dataModelName>\n\t\t<conceptName>?</conceptName>\n</parameters>"), //$NON-NLS-1$
-    CALLJOB("callJob",//$NON-NLS-1$
-            "<configuration>\n\t\t<url>?</url>\n\t\t<contextParam>\n\t\t\t<name>?</name>\n\t\t\t<value>?</value>\n\t\t</contextParam>\n\t\t<contextParam>\n\t\t\t<name>?</name>\n\t\t\t<value>?</value>\n\t\t</contextParam>\n\t\t<contextParam>\n\t\t\t<name>?</name>\n\t\t\t<value>?</value>\n\t\t</contextParam>\n\t\t<username>?</username>\n\t\t<password>?</password>\n</configuration>\n\n\n"), //$NON-NLS-1$
     CODEC("codec", "<parameters>\n\t\t<method>?</method>\n\t\t<algorithm>?</algorithm>\n</parameters>"), //$NON-NLS-1$//$NON-NLS-2$
-    CROSSREFERENCING("crossreferencing",//$NON-NLS-1$
-                     "<parameters>\n\t\t<CrossRef>\n\t\t\t<xrefName>?</xrefName>\n\t\t\t<xrefCluster>?</xrefCluster>\n\t\t\t<xrefRootElement>?</xrefRootElement>\n\t\t\t<xrefIn>\n\t\t\t\t<mapping>\n\t\t\t\t\t<xrefElement>?</xrefElement>\n\t\t\t\t\t<xrefPath>?</xrefPath>\n\t\t\t\t</mapping>\n\t\t\t</xrefIn>\n\t\t\t<xrefOut>\n\t\t\t\t<mapping>\n\t\t\t\t\t<xrefElement>?</xrefElement>\n\t\t\t\t\t<xrefPath>?</xrefPath>\n\t\t\t\t</mapping>\n\t\t\t</xrefOut>\n\t\t</CrossRef>\n</parameters>"), //$NON-NLS-1$
-    CSVPARSER("csvparser",//$NON-NLS-1$
-              "<parameters>\n\t\t<separator>?</separator>\n\t\t<headersOnFirstLine>?</headersOnFirstLine>\n\t\t<template>\n\t\t<![CDATA[\n\t\t\t<MyXml>\n\t\t\t\t\t<Field1>?</Field1>\n\t\t\t\t\t<Combo>?</Combo>\n\t\t\t\t\t<NotInterpreted>?</NotInterpreted>\n\t\t\t\t\t<HeaderReference>?</HeaderReference>\n\t\t\t\t\t[LOOP lineNumber.*]\n\t\t\t\t\t<Line>\n\t\t\t\t\t\t\t<Quantity>?</Quantity> \n\t\t\t\t\t</Line>\n\t\t\t\t\t[/LOOP] \n\t\t\t</MyXml>\n\t\t]]>\n\t\t</template>\n</parameters>"), //$NON-NLS-1$
     DUMPANDGO("dumpandgo", ""), //$NON-NLS-1$//$NON-NLS-2$
-    FIXEDLENGTHPARSER("fixedlengthparser",//$NON-NLS-1$
-                      "<parameters>\n\t\t<template>\n\t\t\t<MyXml>\n\t\t\t\t\t<Field1>?</Field1> \n\t\t\t\t\t<Combo>?</Combo>\n\t\t\t\t\t<NotInterpreted>?</NotInterpreted>\n\t\t\t</MyXml>\n\t\t</template>\n</parameters>"), //$NON-NLS-1$
-    GROUPEDLINESREADER("groupedlinesreader",//$NON-NLS-1$
-                       "<parameters>\n                 <ignoreFirstLines>?</ignoreFirstLines>\n                 <type>?</type>\n                 <position>?</position>\n                 <separator>?</separator>\n\n</parameters>"), //$NON-NLS-1$
-    LINEREADER("linereader", "<parameters>\n\t\t<ignoreFirstLines>?</ignoreFirstLines>\n</parameters>"), //$NON-NLS-1$//$NON-NLS-2$
-    PARTIALUPDATE("partialupdate",//$NON-NLS-1$
-                  "<parameters>\n\t\t<pivot>?</pivot>\n\t\t<overwrite>?</overwrite>\n\t\t<keyXPath>?</keyXPath>\n\t\t<startingPosition>?</startingPosition>\n\t\t<dataCluster>?</dataCluster>\n\t\t<dataModel>?</dataModel>\n</parameters>"), //$NON-NLS-1$
-    PROJECT("project",//$NON-NLS-1$
-            "<parameters>\n\t\t<defaultDataCluster>?</defaultDataCluster>\n\t\t<defaultDataModel>?</defaultDataModel>\n\t\t<overwrite>?</overwrite>\n</parameters>"), //$NON-NLS-1$
     REGEXP("regexp",//$NON-NLS-1$
            "<parameters>\n\t\t<regexp>?</regexp>\n\t\t<contentType>?</contentType>\n\t\t<resultPattern><![CDATA[\n\t\t\t\t<result>?</result>\n\t\t]]></resultPattern>\n</parameters>"), //$NON-NLS-1$
     REPLACE("replace",//$NON-NLS-1$

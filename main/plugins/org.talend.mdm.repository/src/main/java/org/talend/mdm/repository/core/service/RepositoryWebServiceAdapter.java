@@ -38,17 +38,9 @@ import org.talend.mdm.repository.core.service.wsimpl.servicedoc.SynchronizationS
 import org.talend.mdm.repository.core.service.wsimpl.servicedoc.WorkflowContextGetDocument;
 import org.talend.mdm.repository.core.service.wsimpl.servicedoc.WorkflowGetDocument;
 import org.talend.mdm.repository.core.service.wsimpl.transformplugin.AbstractPluginDetail;
-import org.talend.mdm.repository.core.service.wsimpl.transformplugin.BatchProjectPluginDetail;
-import org.talend.mdm.repository.core.service.wsimpl.transformplugin.CSVParserPluginDetail;
 import org.talend.mdm.repository.core.service.wsimpl.transformplugin.CodeProjectPluginDetail;
-import org.talend.mdm.repository.core.service.wsimpl.transformplugin.CrossReferencingPluginDetail;
 import org.talend.mdm.repository.core.service.wsimpl.transformplugin.DumpAndGoPluginDetail;
-import org.talend.mdm.repository.core.service.wsimpl.transformplugin.FixedLengthParserPluginDetail;
 import org.talend.mdm.repository.core.service.wsimpl.transformplugin.GroovyPluginDetail;
-import org.talend.mdm.repository.core.service.wsimpl.transformplugin.GroupedLinesReaderPluginDetail;
-import org.talend.mdm.repository.core.service.wsimpl.transformplugin.LineReaderPluginDetail;
-import org.talend.mdm.repository.core.service.wsimpl.transformplugin.PartialUpdatePluginDetail;
-import org.talend.mdm.repository.core.service.wsimpl.transformplugin.ProjectPluginDetail;
 import org.talend.mdm.repository.core.service.wsimpl.transformplugin.RegexpPluginDetail;
 import org.talend.mdm.repository.core.service.wsimpl.transformplugin.ReplacePluginDetail;
 import org.talend.mdm.repository.core.service.wsimpl.transformplugin.RoutePluginDetail;
@@ -189,17 +181,9 @@ public class RepositoryWebServiceAdapter {
         if (transformerPluginMap == null) {
             transformerPluginMap = new LinkedHashMap<String, AbstractPluginDetail>();
             String twoLettersLanguageCode = "en"; //$NON-NLS-1$
-            addDetail(transformerPluginMap, new BatchProjectPluginDetail(twoLettersLanguageCode));
             addDetail(transformerPluginMap, new CodeProjectPluginDetail(twoLettersLanguageCode));
-            addDetail(transformerPluginMap, new CrossReferencingPluginDetail(twoLettersLanguageCode));
-            addDetail(transformerPluginMap, new CSVParserPluginDetail(twoLettersLanguageCode));
             addDetail(transformerPluginMap, new DumpAndGoPluginDetail(twoLettersLanguageCode));
-            addDetail(transformerPluginMap, new FixedLengthParserPluginDetail(twoLettersLanguageCode));
             addDetail(transformerPluginMap, new GroovyPluginDetail(twoLettersLanguageCode));
-            addDetail(transformerPluginMap, new GroupedLinesReaderPluginDetail(twoLettersLanguageCode));
-            addDetail(transformerPluginMap, new LineReaderPluginDetail(twoLettersLanguageCode));
-            addDetail(transformerPluginMap, new PartialUpdatePluginDetail(twoLettersLanguageCode));
-            addDetail(transformerPluginMap, new ProjectPluginDetail(twoLettersLanguageCode));
             addDetail(transformerPluginMap, new RegexpPluginDetail(twoLettersLanguageCode));
             addDetail(transformerPluginMap, new ReplacePluginDetail(twoLettersLanguageCode));
             addDetail(transformerPluginMap, new RoutePluginDetail(twoLettersLanguageCode));
