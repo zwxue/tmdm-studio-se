@@ -24,4 +24,7 @@ public interface IWebServiceHook extends IService {
 
     void preRequestSendingHook(BindingProvider provider, String username);
 
+    String buildStudioToken(String username);
+
+    String getTokenKey();
 }

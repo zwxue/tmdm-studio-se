@@ -63,6 +63,7 @@ import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
 
 import com.amalto.workbench.i18n.Messages;
+import com.amalto.workbench.service.IWebServiceHook;
 
 /**
  * created by HHB on 2013-6-27 This tool class wrap DefaultHttpClient to provide some methods for other class,for
@@ -134,7 +135,8 @@ public class HttpClientUtil {
         return getResponseContent(client, get, message, t);
     }
 
-    private static HttpUriRequest createUploadRequest(String URL, String localFilename, String filename, String imageCatalog,
+    private static HttpUriRequest createUploadRequest(String URL, String userName, String localFilename, String filename,
+            String imageCatalog,
             HashMap<String, String> picturePathMap) {
         HttpPost request = new HttpPost(URL);
         MultipartEntity entity = new MultipartEntity();
@@ -155,12 +157,23 @@ public class HttpClientUtil {
             entity.addPart("fileName", StringBody.create(filename, STRING_CONTENT_TYPE, null)); //$NON-NLS-1$
         }
         request.setEntity(entity);
+        addStudioToken(userName, request);
+
         return request;
+    }
+
+    private static void addStudioToken(String userName, HttpPost request) {
+        IWebServiceHook webServiceHook = Util.getWebServiceHook();
+        if (webServiceHook != null) {
+            String tokenKey = webServiceHook.getTokenKey();
+            String studioToken = webServiceHook.buildStudioToken(userName);
+            request.addHeader(tokenKey, studioToken);
+        }
     }
 
     public static String uploadFileToAppServer(String URL, String localFilename, String username, String password)
             throws XtentisException {
-        HttpUriRequest request = createUploadFileToServerRequest(URL, localFilename);
+        HttpUriRequest request = createUploadFileToServerRequest(URL, username, localFilename);
         DefaultHttpClient client = wrapAuthClient(URL, username, password);
         String errMessage = Messages.Util_21 + "%s" + Messages.Util_22 + "%s"; //$NON-NLS-1$//$NON-NLS-2$
         String content = getTextContent(client, request, errMessage);
@@ -170,7 +183,7 @@ public class HttpClientUtil {
         return content;
     }
 
-    private static HttpUriRequest createUploadFileToServerRequest(String URL, final String fileName) {
+    private static HttpUriRequest createUploadFileToServerRequest(String URL, String userName, final String fileName) {
         HttpPost request = new HttpPost(URL);
         String path = fileName;
         if (URL.indexOf("deletefile") == -1) {//$NON-NLS-1$
@@ -181,6 +194,7 @@ public class HttpClientUtil {
             entity.addPart(path, new FileBody(new File(fileName)));
             request.setEntity(entity);
         }
+        addStudioToken(userName, request);
         return request;
     }
 
@@ -330,7 +344,7 @@ public class HttpClientUtil {
 
     public static String uploadImageFile(String URL, String localFilename, String filename, String imageCatalog, String username,
             String password, HashMap<String, String> picturePathMap) throws XtentisException {
-        HttpUriRequest request = createUploadRequest(URL, localFilename, filename, imageCatalog, picturePathMap);
+        HttpUriRequest request = createUploadRequest(URL, username, localFilename, filename, imageCatalog, picturePathMap);
         DefaultHttpClient client = wrapAuthClient(URL, username, password);
         String errMessage = Messages.Util_25 + "%s" + Messages.Util_26 + "%s"; //$NON-NLS-1$//$NON-NLS-2$
         String content = getTextContent(client, request, errMessage);

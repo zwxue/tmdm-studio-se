@@ -625,7 +625,7 @@ public class Util {
         return wsEx;
     }
 
-    private static IWebServiceHook getWebServiceHook() {
+    public static IWebServiceHook getWebServiceHook() {
         if (webServceHook == null && GlobalServiceRegister.getDefault().isServiceRegistered(IWebServiceHook.class)) {
             webServceHook = (IWebServiceHook) GlobalServiceRegister.getDefault().getService(IWebServiceHook.class);
         }
