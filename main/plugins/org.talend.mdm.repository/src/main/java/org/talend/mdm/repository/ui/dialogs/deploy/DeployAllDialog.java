@@ -207,7 +207,9 @@ public class DeployAllDialog extends Dialog {
         errorLabelLayoutData.exclude = isServerOk;
         errorLabel.setVisible(!isServerOk);
         if (!isServerOk) {
-            errorLabel.setText(Messages.bind(Messages.UnableConnectToServer, serverDef.getUrl()));
+            String url = serverDef.getProtocol() + serverDef.getHost() + ":" + serverDef.getPort() //$NON-NLS-1$ 
+                    + serverDef.getPath();
+            errorLabel.setText(Messages.bind(Messages.UnableConnectToServer, url));
         }
         mainContainer.layout();
     }

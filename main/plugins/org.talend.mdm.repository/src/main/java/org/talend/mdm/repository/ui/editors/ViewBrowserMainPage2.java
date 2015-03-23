@@ -56,7 +56,8 @@ public class ViewBrowserMainPage2 extends ViewBrowserMainPage {
     @Override
     protected List<WsDataClusterPK> getDataClusterPKs() throws MalformedURLException, XtentisException {
         MDMServerDef d = getServerDef();
-        return Util.getAllDataClusterPKs(new URL(d.getUrl()), d.getUniverse(), d.getUser(), d.getPasswd());
+        return Util.getAllDataClusterPKs(new URL(d.getProtocol() + d.getHost() + ":" + d.getPort() //$NON-NLS-1$ 
+                + d.getPath()), d.getUniverse(), d.getUser(), d.getPasswd());
     }
 
     private MDMServerDef getServerDef() {

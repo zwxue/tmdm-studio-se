@@ -146,7 +146,9 @@ public class RepositoryResourceUtil {
         } catch (Exception e) {
             log.debug(e.getMessage(), e);
             if (shell != null) {
-                String title = Messages.bind(Messages.Server_cannot_connected, serverDef.getUrl());
+                String url = serverDef.getProtocol() + serverDef.getHost() + ":" + serverDef.getPort() //$NON-NLS-1$ 
+                        + serverDef.getPath();
+                String title = Messages.bind(Messages.Server_cannot_connected, url);
                 MessageDialog.openError(shell, title, Messages.AbstractDataClusterAction_ConnectFailed);
             }
         }

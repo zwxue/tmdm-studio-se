@@ -468,7 +468,7 @@ public abstract class MDMServerMessageConsole extends MessageConsole implements 
         sb.append(serverDef.getHost());
         sb.append(":"); //$NON-NLS-1$
         sb.append(serverDef.getPort());
-        sb.append(Util.getContextPath(serverDef.getUrl()));
+        sb.append(Util.getContextPath(serverDef.getPath()));
         sb.append(getLogPath());
 
         return sb.toString();

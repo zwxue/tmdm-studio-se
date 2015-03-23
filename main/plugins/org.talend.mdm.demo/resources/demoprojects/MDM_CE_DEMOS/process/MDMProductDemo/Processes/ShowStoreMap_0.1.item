@@ -127,7 +127,7 @@
     <elementParameter field="COLUMN_LIST" name="XMLFIELD" value="Id"/>
     <elementParameter field="CHECK" name="USE_EXISTING_CONNECTION" value="false"/>
     <elementParameter field="COMPONENT_LIST" name="CONNECTION" value=""/>
-    <elementParameter field="TEXT" name="MDMURL" value="&quot;http://&quot; + context.host + &quot;:&quot; + context.port + &quot;/talend/TalendPort&quot;"/>
+    <elementParameter field="TEXT" name="MDMURL" value="&quot;http://&quot; + context.host + &quot;:&quot; + context.port + &quot;/talendmdm/services/soap&quot;"/>
     <elementParameter field="TEXT" name="USERNAME" value="context.user"/>
     <elementParameter field="TEXT" name="PASSWORD" value="context.password"/>
     <elementParameter field="TEXT" name="UNIVERSE" value=""/>

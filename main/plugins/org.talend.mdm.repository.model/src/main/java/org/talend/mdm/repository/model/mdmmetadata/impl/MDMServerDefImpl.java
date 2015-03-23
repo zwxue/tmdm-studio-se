@@ -5,8 +5,14 @@
  */
 package org.talend.mdm.repository.model.mdmmetadata.impl;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.net.URL;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.apache.log4j.Logger;
 import org.eclipse.emf.common.notify.Notification;
@@ -16,6 +22,11 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.talend.core.model.metadata.builder.connection.impl.AbstractMetadataObjectImpl;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 import org.talend.mdm.repository.model.mdmmetadata.MdmmetadataPackage;
+import org.w3c.dom.Document;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.InputSource;
 
 import com.amalto.workbench.utils.PasswordUtil;
 
@@ -43,11 +54,15 @@ public class MDMServerDefImpl extends AbstractMetadataObjectImpl implements MDMS
 
     private static Logger log = Logger.getLogger(MDMServerDefImpl.class);
 
-    private static final String PATTERN_URL = "[http|https]+://(.+):(\\d+)(/.*)";
+    private static final String PATTERN_URL = "[http|https]+://(.+):(\\d+)(/.*)"; //$NON-NLS-1$
+
+    private static final String FILE_PATTERN_URL = "file:///(\\w+:/)?(\\w+/)*(\\w+\\.xml|\\w+\\.wsdl)"; //$NON-NLS-1$
 
     private static final String HTTP_PREFIX = "http://"; //$NON-NLS-1$
 
     private static final String HTTPS_PREFIX = "https://"; //$NON-NLS-1$
+
+    private static final String FILE_PREFIX = "file:///"; //$NON-NLS-1$
 
     /**
      * The default value of the '{@link #getHost() <em>Host</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc
@@ -119,7 +134,7 @@ public class MDMServerDefImpl extends AbstractMetadataObjectImpl implements MDMS
      * @generated NOT
      * @ordered
      */
-    protected static final String PATH_EDEFAULT = "/talend/TalendPort"; //$NON-NLS-1$
+    protected static final String PATH_EDEFAULT = "/talendmdm/services/soap"; //$NON-NLS-1$
 
     /**
      * The cached value of the '{@link #getPath() <em>Path</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc
@@ -538,7 +553,13 @@ public class MDMServerDefImpl extends AbstractMetadataObjectImpl implements MDMS
             return false;
         }
         Matcher m = Pattern.compile(PATTERN_URL).matcher(url);
-        return m.find();
+        boolean matchHttp = m.find();
+        if (!matchHttp) {
+            String tmp = url.replace("\\", "/"); //$NON-NLS-1$ //$NON-NLS-2$
+            m = Pattern.compile(FILE_PATTERN_URL).matcher(tmp);
+            matchHttp = m.find();
+        }
+        return matchHttp;
     }
 
     /**
@@ -547,21 +568,46 @@ public class MDMServerDefImpl extends AbstractMetadataObjectImpl implements MDMS
      * @generated NOT
      */
     @Override
-    public MDMServerDef parse(String url) {
-        String protocol = getProtocol(url);
+    public MDMServerDef parse(String newUrl) {
+        String protocol = getProtocol(newUrl);
         if (protocol == null) {
             return null;
         }
-        Matcher m = Pattern.compile(PATTERN_URL).matcher(url);
+        if (protocol.equals(FILE_PREFIX)) {
+            newUrl = extractURL(newUrl);
+        }
+
+        Matcher m = Pattern.compile(PATTERN_URL).matcher(newUrl);
 
         if (!m.find()) {
             return null;
         }
-
         setHost(m.group(1));
         setPort(m.group(2));
         setPath(m.group(3));
+
         return this;
+    }
+
+    protected String extractURL(String newUrl) {
+        try {
+            File file = new File(new URL(newUrl).toURI());
+            FileInputStream input = new FileInputStream(file);
+            DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
+            Document doc = documentBuilder.parse(new InputSource(input));
+            NodeList elements = doc.getElementsByTagName("soap:address"); //$NON-NLS-1$
+            if (elements != null && elements.getLength() == 1) {
+                Node item = elements.item(0);
+                NamedNodeMap attributes = item.getAttributes();
+                Node namedItem = attributes.getNamedItem("location"); //$NON-NLS-1$
+                if (namedItem != null) {
+                    newUrl = namedItem.getNodeValue();
+                }
+            }
+        } catch (Exception e) {//
+        }
+        return newUrl;
     }
 
     /**
@@ -572,7 +618,11 @@ public class MDMServerDefImpl extends AbstractMetadataObjectImpl implements MDMS
     @Override
     public String getProtocol() {
         if (url != null) {
-            return getProtocol(url);
+            String protocol = getProtocol(url);
+            if (FILE_PREFIX.equals(protocol)) {
+                protocol = getProtocol(extractURL(url));
+            }
+            return protocol;
         }
         return HTTP_PREFIX;
     }
@@ -599,6 +649,9 @@ public class MDMServerDefImpl extends AbstractMetadataObjectImpl implements MDMS
             }
             if (tmp.startsWith(HTTPS_PREFIX)) {
                 return HTTPS_PREFIX;
+            }
+            if (tmp.startsWith(FILE_PREFIX)) {
+                return FILE_PREFIX;
             }
         }
         return null;

@@ -75,7 +75,7 @@ public class CopyUrlAction extends AbstractRepositoryAction {
             }
 
             // all picture url string
-            String contextPath = Util.getContextPath(serverDef.getUrl());
+            String contextPath = Util.getContextPath(serverDef.getPath());
             String uripre = serverDef.getProtocol() + serverDef.getHost() + ':' + serverDef.getPort() + contextPath;
 
             result.append(uripre);

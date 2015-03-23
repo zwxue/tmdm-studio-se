@@ -153,7 +153,7 @@ public class JobInteractiveHandler extends AbstractInteractiveHandler {
 
         // delete server bar file
         String filename = name + "_" + version + ".zip"; //$NON-NLS-1$ //$NON-NLS-2$
-        String contextPath = Util.getContextPath(serverDef.getUrl());
+        String contextPath = Util.getContextPath(serverDef.getPath());
         String uploadURL = serverDef.getProtocol() + serverDef.getHost() + ":"//$NON-NLS-1$
                 + serverDef.getPort() + contextPath + "/services/uploadFile?deletefile=" + filename;//$NON-NLS-1$
         HttpClientUtil.uploadFileToAppServer(uploadURL, filename, serverDef.getUser(), serverDef.getPasswd());

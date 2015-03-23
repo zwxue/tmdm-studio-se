@@ -247,11 +247,15 @@ public class TreeObject implements IAdaptable, Comparable<TreeObject> {
 
     public TreeParent getServerRoot() {
         if (this.serverRoot == null) {
-            if (this.type == TreeObject._SERVER_)
+            if (this.type == TreeObject._SERVER_) {
                 return (TreeParent) this; // we are the server root
-            else if (this.type == TreeObject._ROOT_)
+            } else if (this.type == TreeObject._ROOT_)
+             {
                 if (((TreeParent) this).getChildren().length > 0)
+                 {
                     return (TreeParent) ((TreeParent) this).getChildren()[0]; // we are the root
+                }
+            }
         }
         return serverRoot;
     }
@@ -308,7 +312,9 @@ public class TreeObject implements IAdaptable, Comparable<TreeObject> {
 
     public static String getParentPath(TreeObject obj) {
         if (obj == null || obj.getParent() == null)
+         {
             return ""; //$NON-NLS-1$
+        }
         if (obj.getParent().equals(obj.getServerRoot())) {
             return obj.getParent().getName() + "/" + obj.getName(); //$NON-NLS-1$
         } else {
@@ -319,11 +325,13 @@ public class TreeObject implements IAdaptable, Comparable<TreeObject> {
     public String getPath() {
         String path = getParentPath(this.getParent());
         int pos = path.indexOf('/');
-        if (pos != -1)
+        if (pos != -1) {
             path = path.substring(pos + 1);
+        }
         pos = path.indexOf('/');
-        if (pos != -1)
-        return path.substring(pos + 1);
+        if (pos != -1) {
+            return path.substring(pos + 1);
+        }
         return ""; //$NON-NLS-1$
     }
     public void addListener(IXObjectModelListener listener) {
@@ -331,16 +339,19 @@ public class TreeObject implements IAdaptable, Comparable<TreeObject> {
             listeners = new ArrayList<IXObjectModelListener>();
             listeners.add(listener);
         } else {
-            if (!listeners.contains(listener))
+            if (!listeners.contains(listener)) {
                 listeners.add(listener);
+            }
         }
     }
 
     public void removeListener(IXObjectModelListener listener) {
-        if (listeners == null)
+        if (listeners == null) {
             return;
-        if (listeners.contains(listener))
+        }
+        if (listeners.contains(listener)) {
             listeners.remove(listener);
+        }
     }
 
     public synchronized void fireEvent(int eventType, TreeObject objectParent, TreeObject child) {
@@ -365,21 +376,25 @@ public class TreeObject implements IAdaptable, Comparable<TreeObject> {
     }
 
     public TreeParent findServerFolder(int objectType) {
-        if (this.getServerRoot() == null)
+        if (this.getServerRoot() == null) {
             return null;
+        }
 
         TreeObject[] children = this.getServerRoot().getChildren();
         for (int i = 0; i < children.length; i++) {
-            if (children[i] instanceof TreeParent)
-                if (children[i].getType() == objectType)
+            if (children[i] instanceof TreeParent) {
+                if (children[i].getType() == objectType) {
                     return (TreeParent) children[i];
+                }
+            }
         }
         if (objectType == TRANSFORMER || objectType == ROUTING_RULE) {
             TreeParent parent = findServerFolder(EVENT_MANAGEMENT);
             children = parent.getChildren();
             for (TreeObject obj : children) {
-                if (obj.getType() == objectType)
+                if (obj.getType() == objectType) {
                     return (TreeParent) obj;
+                }
             }
         }
         return null;
@@ -406,26 +421,30 @@ public class TreeObject implements IAdaptable, Comparable<TreeObject> {
     }
 
     public String getUsername() {
-        if (getServerRoot() != null)
+        if (getServerRoot() != null) {
             return getServerRoot().getUser().getUsername();
+        }
         return username;
     }
 
     public String getPassword() {
-        if (getServerRoot() != null)
+        if (getServerRoot() != null) {
             return getServerRoot().getUser().getPassword();
+        }
         return password;
     }
 
     public String getUniverse() {
-        if (getServerRoot() != null)
+        if (getServerRoot() != null) {
             return getServerRoot().getUser().getUniverse();
+        }
         return null;
     }
 
     public String getEndpointAddress() {
-        if (getServerRoot() != null)
+        if (getServerRoot() != null) {
             return getServerRoot().getWsKey().toString();
+        }
         return url;
     }
 
@@ -434,9 +453,11 @@ public class TreeObject implements IAdaptable, Comparable<TreeObject> {
         String portAddress = getEndpointAddress();
 
         if (portAddress != null) {
-            int cutPos = portAddress.indexOf("/talend/TalendPort");//$NON-NLS-1$
-            if (cutPos != -1)
+            int endPos = portAddress.lastIndexOf(":");//$NON-NLS-1$
+            int cutPos = portAddress.indexOf("/", endPos); //$NON-NLS-1$
+            if (cutPos != -1) {
                 return portAddress.substring(0, cutPos);
+            }
         }
 
         return portAddress;
@@ -449,8 +470,9 @@ public class TreeObject implements IAdaptable, Comparable<TreeObject> {
         if (portAddress != null) {
             int startPos = portAddress.indexOf("://");//$NON-NLS-1$
             int endPos = portAddress.lastIndexOf(":");//$NON-NLS-1$
-            if (endPos != -1 && startPos != -1)
+            if (endPos != -1 && startPos != -1) {
                 return portAddress.substring(startPos + 3, endPos);
+            }
         }
 
         return portAddress;
@@ -460,7 +482,9 @@ public class TreeObject implements IAdaptable, Comparable<TreeObject> {
 
         String portAddress = getEndpointAddress();
         if (portAddress == null)
+         {
             return "8180";//$NON-NLS-1$
+        }
         Pattern p = Pattern.compile(":(\\d+?)/");//$NON-NLS-1$
         Matcher m = p.matcher(portAddress);
         if (m.find()) {
@@ -473,10 +497,11 @@ public class TreeObject implements IAdaptable, Comparable<TreeObject> {
 
     public static String getTypeName(int type) {
         EXtentisObjects obj = EXtentisObjects.getXtentisObjexts().get(String.valueOf(type));
-        if (obj != null)
+        if (obj != null) {
             return obj.getName();
-        else
+        } else {
             return UNKNOWN;
+        }
     }
 
     @Override
@@ -484,9 +509,9 @@ public class TreeObject implements IAdaptable, Comparable<TreeObject> {
 
         if (obj instanceof TreeObject) {
             TreeObject o = (TreeObject) obj;
-            if (o.getParent() == null || getParent() == null)
+            if (o.getParent() == null || getParent() == null) {
                 return o.getName().equals(getName()) && getType() == o.getType();
-            else {
+            } else {
 
                 if (o.getName().equals(getName()) && getType() == o.getType()) {
                     if (o.getParent() != null && getParent() != null) {
@@ -502,15 +527,16 @@ public class TreeObject implements IAdaptable, Comparable<TreeObject> {
     }
 
     public int compareTo(TreeObject o) {
-        if (o == this)
+        if (o == this) {
             return 0;
+        }
 
         if ((this instanceof TreeParent) && !(o instanceof TreeParent)) {
             return -1;
         } else if (!(this instanceof TreeParent) && (o instanceof TreeParent)) {
             return 1;
         } else if (!(this instanceof TreeParent) && !(o instanceof TreeParent)) {
-            return this.getDisplayName().compareTo(((TreeObject) o).getDisplayName());
+            return this.getDisplayName().compareTo(o.getDisplayName());
         } else {
             TreeParent pThis = (TreeParent) this;
             TreeParent pThat = (TreeParent) o;

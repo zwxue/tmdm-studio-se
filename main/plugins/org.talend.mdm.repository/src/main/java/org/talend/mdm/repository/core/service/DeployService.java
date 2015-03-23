@@ -224,7 +224,9 @@ public class DeployService {
             return mainStatus;
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            String title = Messages.bind(Messages.Server_cannot_connected, serverDef.getUrl());
+            String url = serverDef.getProtocol() + serverDef.getHost() + ":" + serverDef.getPort() //$NON-NLS-1$ 
+                    + serverDef.getPath();
+            String title = Messages.bind(Messages.Server_cannot_connected, url);
             MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), title,
                     Messages.AbstractDataClusterAction_ConnectFailed);
             return Status.CANCEL_STATUS;

@@ -240,7 +240,7 @@ public class ModelImpactAnalyseService {
             Boolean force) throws XtentisException {
         String xsd = getModelContent(modelViewObj);
         if (xsd != null) {
-            String contextPath = Util.getContextPath(serverDef.getUrl());
+            String contextPath = Util.getContextPath(serverDef.getPath());
             String result = HttpClientUtil.invokeModelService(serverDef.getProtocol(), serverDef.getHost(), serverDef.getPort(),
                     contextPath, serverDef.getUser(), serverDef.getPasswd(), modelViewObj.getLabel(), xsd, isUpdateModel, force);
             return result;

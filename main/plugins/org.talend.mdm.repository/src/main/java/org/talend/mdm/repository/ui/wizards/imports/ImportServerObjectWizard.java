@@ -726,8 +726,10 @@ public class ImportServerObjectWizard extends Wizard {
          */
         public void run(IProgressMonitor m) throws InvocationTargetException, InterruptedException {
 
+            String url = serverDef.getProtocol() + serverDef.getHost() + ":" + serverDef.getPort() //$NON-NLS-1$ 
+                    + serverDef.getPath();
             final XtentisServerObjectsRetriever retriever = new XtentisServerObjectsRetriever(serverDef.getName(),
-                    serverDef.getUrl(), serverDef.getUser(), serverDef.getPasswd(), serverDef.getUniverse());
+                    url, serverDef.getUser(), serverDef.getPasswd(), serverDef.getUniverse());
 
             retriever.setRetriveWSObject(true);
             retriever.run(m);

@@ -104,7 +104,7 @@
   <node componentName="tMDMConnection" componentVersion="0.102" offsetLabelX="0" offsetLabelY="0" posX="32" posY="160">
     <elementParameter field="TEXT" name="UNIQUE_NAME" value="tMDMConnection_1"/>
     <elementParameter field="DIRECTORY" name="JAVA_LIBRARY_PATH" value="/Users/pascal/dev/talend/installs/nightlybuilds/TOS_MDM-Studio-20141007_0301-V6.0.0SNAP/configuration/lib/java"/>
-    <elementParameter field="TEXT" name="MDMURL" value="&quot;http://&quot; + context.host + &quot;:&quot; + context.port + &quot;/talend/TalendPort&quot;"/>
+    <elementParameter field="TEXT" name="MDMURL" value="&quot;http://&quot; + context.host + &quot;:&quot; + context.port + &quot;/talendmdm/services/soap&quot;"/>
     <elementParameter field="TEXT" name="USER" value="context.user"/>
     <elementParameter field="PASSWORD" name="PASS" value="4D9onkGJm3elS7/MEZC34fT3q6F0Z4TqEncrypt"/>
     <elementParameter field="TEXT" name="UNIVERSE" value=""/>
@@ -141,7 +141,7 @@
     <elementParameter field="COLUMN_LIST" name="XMLFIELD" value="Id"/>
     <elementParameter field="CHECK" name="USE_EXISTING_CONNECTION" value="true"/>
     <elementParameter field="COMPONENT_LIST" name="CONNECTION" value="tMDMConnection_1"/>
-    <elementParameter field="TEXT" name="MDMURL" value="&quot;http://&quot; + context.host + &quot;:&quot; + context.port + &quot;/talend/TalendPort&quot;"/>
+    <elementParameter field="TEXT" name="MDMURL" value="&quot;http://&quot; + context.host + &quot;:&quot; + context.port + &quot;/talendmdm/services/soap&quot;"/>
     <elementParameter field="TEXT" name="USERNAME" value="context.user"/>
     <elementParameter field="PASSWORD" name="PASSWORD" value="4D9onkGJm3elS7/MEZC34fT3q6F0Z4TqEncrypt"/>
     <elementParameter field="TEXT" name="UNIVERSE" value=""/>
@@ -240,7 +240,7 @@
     <elementParameter field="PREV_COLUMN_LIST" name="DOCUMENT" value="Id"/>
     <elementParameter field="CHECK" name="USE_EXISTING_CONNECTION" value="true"/>
     <elementParameter field="COMPONENT_LIST" name="CONNECTION" value="tMDMConnection_1"/>
-    <elementParameter field="TEXT" name="MDMURL" value="&quot;http://&quot; + context.host + &quot;:&quot; + context.port + &quot;/talend/TalendPort&quot;"/>
+    <elementParameter field="TEXT" name="MDMURL" value="&quot;http://&quot; + context.host + &quot;:&quot; + context.port + &quot;/talendmdm/services/soap&quot;"/>
     <elementParameter field="TEXT" name="USERNAME" value="context.user"/>
     <elementParameter field="PASSWORD" name="PASSWORD" value="4D9onkGJm3elS7/MEZC34fT3q6F0Z4TqEncrypt"/>
     <elementParameter field="TEXT" name="UNIVERSE" value=""/>
@@ -355,7 +355,7 @@
     <elementParameter field="COLUMN_LIST" name="XMLFIELD" value="Id"/>
     <elementParameter field="CHECK" name="USE_EXISTING_CONNECTION" value="true"/>
     <elementParameter field="COMPONENT_LIST" name="CONNECTION" value="tMDMConnection_1"/>
-    <elementParameter field="TEXT" name="MDMURL" value="&quot;http://&quot; + context.host + &quot;:&quot; + context.port + &quot;/talend/TalendPort&quot;"/>
+    <elementParameter field="TEXT" name="MDMURL" value="&quot;http://&quot; + context.host + &quot;:&quot; + context.port + &quot;/talendmdm/services/soap&quot;"/>
     <elementParameter field="TEXT" name="USERNAME" value="context.user"/>
     <elementParameter field="PASSWORD" name="PASSWORD" value="4D9onkGJm3elS7/MEZC34fT3q6F0Z4TqEncrypt"/>
     <elementParameter field="TEXT" name="UNIVERSE" value=""/>
@@ -454,7 +454,7 @@
     <elementParameter field="PREV_COLUMN_LIST" name="DOCUMENT" value="Id"/>
     <elementParameter field="CHECK" name="USE_EXISTING_CONNECTION" value="true"/>
     <elementParameter field="COMPONENT_LIST" name="CONNECTION" value="tMDMConnection_1"/>
-    <elementParameter field="TEXT" name="MDMURL" value="&quot;http://&quot; + context.host + &quot;:&quot; + context.port + &quot;/talend/TalendPort&quot;"/>
+    <elementParameter field="TEXT" name="MDMURL" value="&quot;http://&quot; + context.host + &quot;:&quot; + context.port + &quot;/talendmdm/services/soap&quot;"/>
     <elementParameter field="TEXT" name="USERNAME" value="context.user"/>
     <elementParameter field="PASSWORD" name="PASSWORD" value="4D9onkGJm3elS7/MEZC34fT3q6F0Z4TqEncrypt"/>
     <elementParameter field="TEXT" name="UNIVERSE" value=""/>

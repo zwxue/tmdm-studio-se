@@ -22,7 +22,7 @@ public class MDMServerDef {
      */
     private static final String DEFAULT_PROTOCOL = "http://";
 
-    public static final String DEFAULT_PATH = "/talend/TalendPort";//$NON-NLS-1$
+    public static final String DEFAULT_PATH = "/talendmdm/services/soap";//$NON-NLS-1$
 
     private String name = "";//$NON-NLS-1$
 

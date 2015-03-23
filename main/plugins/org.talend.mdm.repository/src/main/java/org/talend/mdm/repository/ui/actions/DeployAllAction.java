@@ -162,7 +162,9 @@ public class DeployAllAction extends AbstractDeployAction {
                     }
                     updateLastServer(status, new NullProgressMonitor());
                 } catch (Exception e) {
-                    String title = Messages.bind(Messages.Server_cannot_connected, serverDef.getUrl());
+                    String url = serverDef.getProtocol() + serverDef.getHost() + ":" + serverDef.getPort() //$NON-NLS-1$ 
+                            + serverDef.getPath();
+                    String title = Messages.bind(Messages.Server_cannot_connected, url);
                     MessageDialog.openError(getShell(), title, Messages.AbstractDataClusterAction_ConnectFailed);
                 }
             }
