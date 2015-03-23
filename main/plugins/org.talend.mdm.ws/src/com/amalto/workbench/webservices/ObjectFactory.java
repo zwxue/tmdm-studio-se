@@ -37,8 +37,8 @@ public class ObjectFactory {
     private final static QName _ExtractUsingTransformerResponse_QNAME = new QName("http://www.talend.com/mdm", "extractUsingTransformerResponse");
     private final static QName _GetFullPathValuesResponse_QNAME = new QName("http://www.talend.com/mdm", "getFullPathValuesResponse");
     private final static QName _PutRole_QNAME = new QName("http://www.talend.com/mdm", "putRole");
-    private final static QName _InitMDM_QNAME = new QName("http://www.talend.com/mdm", "initMDM");
     private final static QName _PutItemWithCustomReportResponse_QNAME = new QName("http://www.talend.com/mdm", "putItemWithCustomReportResponse");
+    private final static QName _InitMDM_QNAME = new QName("http://www.talend.com/mdm", "initMDM");
     private final static QName _DeleteItemResponse_QNAME = new QName("http://www.talend.com/mdm", "deleteItemResponse");
     private final static QName _RecoverDroppedItemResponse_QNAME = new QName("http://www.talend.com/mdm", "recoverDroppedItemResponse");
     private final static QName _GetRole_QNAME = new QName("http://www.talend.com/mdm", "getRole");
@@ -61,12 +61,10 @@ public class ObjectFactory {
     private final static QName _DeleteStoredProcedure_QNAME = new QName("http://www.talend.com/mdm", "deleteStoredProcedure");
     private final static QName _GetRolePKsResponse_QNAME = new QName("http://www.talend.com/mdm", "getRolePKsResponse");
     private final static QName _QuickSearchResponse_QNAME = new QName("http://www.talend.com/mdm", "quickSearchResponse");
-    private final static QName _DeleteMDMJob_QNAME = new QName("http://www.talend.com/mdm", "deleteMDMJob");
     private final static QName _PutBusinessConceptSchemaResponse_QNAME = new QName("http://www.talend.com/mdm", "putBusinessConceptSchemaResponse");
     private final static QName _GetDataModelResponse_QNAME = new QName("http://www.talend.com/mdm", "getDataModelResponse");
     private final static QName _GetItemsResponse_QNAME = new QName("http://www.talend.com/mdm", "getItemsResponse");
     private final static QName _DeleteItem_QNAME = new QName("http://www.talend.com/mdm", "deleteItem");
-    private final static QName _PutMDMJobResponse_QNAME = new QName("http://www.talend.com/mdm", "putMDMJobResponse");
     private final static QName _PutItemArrayResponse_QNAME = new QName("http://www.talend.com/mdm", "putItemArrayResponse");
     private final static QName _SupportStagingResponse_QNAME = new QName("http://www.talend.com/mdm", "supportStagingResponse");
     private final static QName _GetDigestResponse_QNAME = new QName("http://www.talend.com/mdm", "getDigestResponse");
@@ -92,13 +90,12 @@ public class ObjectFactory {
     private final static QName _GetItemsSort_QNAME = new QName("http://www.talend.com/mdm", "getItemsSort");
     private final static QName _ExistsTransformerV2Response_QNAME = new QName("http://www.talend.com/mdm", "existsTransformerV2Response");
     private final static QName _ExistsItem_QNAME = new QName("http://www.talend.com/mdm", "existsItem");
-    private final static QName _PutMDMJob_QNAME = new QName("http://www.talend.com/mdm", "putMDMJob");
     private final static QName _PutItem_QNAME = new QName("http://www.talend.com/mdm", "putItem");
     private final static QName _GetMenuPKsResponse_QNAME = new QName("http://www.talend.com/mdm", "getMenuPKsResponse");
     private final static QName _ProcessBytesUsingTransformerAsBackgroundJob_QNAME = new QName("http://www.talend.com/mdm", "processBytesUsingTransformerAsBackgroundJob");
     private final static QName _CheckSchema_QNAME = new QName("http://www.talend.com/mdm", "checkSchema");
-    private final static QName _DropItemResponse_QNAME = new QName("http://www.talend.com/mdm", "dropItemResponse");
     private final static QName _GetDataModel_QNAME = new QName("http://www.talend.com/mdm", "getDataModel");
+    private final static QName _DropItemResponse_QNAME = new QName("http://www.talend.com/mdm", "dropItemResponse");
     private final static QName _IsItemModifiedByOther_QNAME = new QName("http://www.talend.com/mdm", "isItemModifiedByOther");
     private final static QName _ExistsTransformerV2_QNAME = new QName("http://www.talend.com/mdm", "existsTransformerV2");
     private final static QName _DeleteMenuResponse_QNAME = new QName("http://www.talend.com/mdm", "deleteMenuResponse");
@@ -111,8 +108,8 @@ public class ObjectFactory {
     private final static QName _GetRoutingOrderV2PKsByCriteria_QNAME = new QName("http://www.talend.com/mdm", "getRoutingOrderV2PKsByCriteria");
     private final static QName _SupportStaging_QNAME = new QName("http://www.talend.com/mdm", "supportStaging");
     private final static QName _PutDataClusterResponse_QNAME = new QName("http://www.talend.com/mdm", "putDataClusterResponse");
-    private final static QName _PutTransformerPluginV2ConfigurationResponse_QNAME = new QName("http://www.talend.com/mdm", "putTransformerPluginV2ConfigurationResponse");
     private final static QName _ExistsStoredProcedureResponse_QNAME = new QName("http://www.talend.com/mdm", "existsStoredProcedureResponse");
+    private final static QName _PutTransformerPluginV2ConfigurationResponse_QNAME = new QName("http://www.talend.com/mdm", "putTransformerPluginV2ConfigurationResponse");
     private final static QName _IsPagingAccurate_QNAME = new QName("http://www.talend.com/mdm", "isPagingAccurate");
     private final static QName _GetRoutingOrderV2ByCriteriaWithPagingResponse_QNAME = new QName("http://www.talend.com/mdm", "getRoutingOrderV2ByCriteriaWithPagingResponse");
     private final static QName _GetTransformerPluginV2Configuration_QNAME = new QName("http://www.talend.com/mdm", "getTransformerPluginV2Configuration");
@@ -132,8 +129,8 @@ public class ObjectFactory {
     private final static QName _ExistsDataModel_QNAME = new QName("http://www.talend.com/mdm", "existsDataModel");
     private final static QName _ExistsDataModelResponse_QNAME = new QName("http://www.talend.com/mdm", "existsDataModelResponse");
     private final static QName _GetRoutingOrderV2ByCriteriaWithPaging_QNAME = new QName("http://www.talend.com/mdm", "getRoutingOrderV2ByCriteriaWithPaging");
-    private final static QName _ExistsRoleResponse_QNAME = new QName("http://www.talend.com/mdm", "existsRoleResponse");
     private final static QName _PutBusinessConceptResponse_QNAME = new QName("http://www.talend.com/mdm", "putBusinessConceptResponse");
+    private final static QName _ExistsRoleResponse_QNAME = new QName("http://www.talend.com/mdm", "existsRoleResponse");
     private final static QName _PutStoredProcedure_QNAME = new QName("http://www.talend.com/mdm", "putStoredProcedure");
     private final static QName _GetViewPKsResponse_QNAME = new QName("http://www.talend.com/mdm", "getViewPKsResponse");
     private final static QName _CheckFKIntegrityResponse_QNAME = new QName("http://www.talend.com/mdm", "checkFKIntegrityResponse");
@@ -144,16 +141,16 @@ public class ObjectFactory {
     private final static QName _FindBackgroundJobPKsResponse_QNAME = new QName("http://www.talend.com/mdm", "findBackgroundJobPKsResponse");
     private final static QName _PutTransformer_QNAME = new QName("http://www.talend.com/mdm", "putTransformer");
     private final static QName _CountItemsByCustomFKFiltersResponse_QNAME = new QName("http://www.talend.com/mdm", "countItemsByCustomFKFiltersResponse");
-    private final static QName _ExtractUsingTransformer_QNAME = new QName("http://www.talend.com/mdm", "extractUsingTransformer");
     private final static QName _PutBusinessConcept_QNAME = new QName("http://www.talend.com/mdm", "putBusinessConcept");
+    private final static QName _ExtractUsingTransformer_QNAME = new QName("http://www.talend.com/mdm", "extractUsingTransformer");
     private final static QName _GetBusinessConceptsResponse_QNAME = new QName("http://www.talend.com/mdm", "getBusinessConceptsResponse");
     private final static QName _GetTransformerPKs_QNAME = new QName("http://www.talend.com/mdm", "getTransformerPKs");
     private final static QName _GetAutoIncrement_QNAME = new QName("http://www.talend.com/mdm", "getAutoIncrement");
     private final static QName _ProcessBytesUsingTransformer_QNAME = new QName("http://www.talend.com/mdm", "processBytesUsingTransformer");
     private final static QName _GetServiceConfigurationResponse_QNAME = new QName("http://www.talend.com/mdm", "getServiceConfigurationResponse");
     private final static QName _GetComponentVersionResponse_QNAME = new QName("http://www.talend.com/mdm", "getComponentVersionResponse");
-    private final static QName _GetItems_QNAME = new QName("http://www.talend.com/mdm", "getItems");
     private final static QName _GetDataClusterPKs_QNAME = new QName("http://www.talend.com/mdm", "getDataClusterPKs");
+    private final static QName _GetItems_QNAME = new QName("http://www.talend.com/mdm", "getItems");
     private final static QName _ExistsItemResponse_QNAME = new QName("http://www.talend.com/mdm", "existsItemResponse");
     private final static QName _DeleteItemWithReportResponse_QNAME = new QName("http://www.talend.com/mdm", "deleteItemWithReportResponse");
     private final static QName _GetBusinessConcepts_QNAME = new QName("http://www.talend.com/mdm", "getBusinessConcepts");
@@ -241,7 +238,6 @@ public class ObjectFactory {
     private final static QName _ViewSearchResponse_QNAME = new QName("http://www.talend.com/mdm", "viewSearchResponse");
     private final static QName _CheckSchemaResponse_QNAME = new QName("http://www.talend.com/mdm", "checkSchemaResponse");
     private final static QName _GetItemPKsByCriteria_QNAME = new QName("http://www.talend.com/mdm", "getItemPKsByCriteria");
-    private final static QName _DeleteMDMJobResponse_QNAME = new QName("http://www.talend.com/mdm", "deleteMDMJobResponse");
     private final static QName _GetDataModelPKsResponse_QNAME = new QName("http://www.talend.com/mdm", "getDataModelPKsResponse");
     private final static QName _RunQueryResponse_QNAME = new QName("http://www.talend.com/mdm", "runQueryResponse");
     private final static QName _DeleteDataCluster_QNAME = new QName("http://www.talend.com/mdm", "deleteDataCluster");
@@ -250,6 +246,7 @@ public class ObjectFactory {
     private final static QName _GetItemsSortResponse_QNAME = new QName("http://www.talend.com/mdm", "getItemsSortResponse");
     private final static QName _DeleteDataModelResponse_QNAME = new QName("http://www.talend.com/mdm", "deleteDataModelResponse");
     private final static QName _GetTransformerResponse_QNAME = new QName("http://www.talend.com/mdm", "getTransformerResponse");
+    private final static QName _UpdateItemMetadataResponse_QNAME = new QName("http://www.talend.com/mdm", "updateItemMetadataResponse");
     private final static QName _GetMDMJob_QNAME = new QName("http://www.talend.com/mdm", "getMDMJob");
     private final static QName _InitMDMResponse_QNAME = new QName("http://www.talend.com/mdm", "initMDMResponse");
     private final static QName _ExtractThroughTransformerV2_QNAME = new QName("http://www.talend.com/mdm", "extractThroughTransformerV2");
@@ -265,6 +262,7 @@ public class ObjectFactory {
     private final static QName _FindAllDroppedItemsPKsResponse_QNAME = new QName("http://www.talend.com/mdm", "findAllDroppedItemsPKsResponse");
     private final static QName _XPathsSearchResponse_QNAME = new QName("http://www.talend.com/mdm", "xPathsSearchResponse");
     private final static QName _PutItemWithReport_QNAME = new QName("http://www.talend.com/mdm", "putItemWithReport");
+    private final static QName _UpdateItemMetadata_QNAME = new QName("http://www.talend.com/mdm", "updateItemMetadata");
     private final static QName _ProcessFileUsingTransformerResponse_QNAME = new QName("http://www.talend.com/mdm", "processFileUsingTransformerResponse");
     private final static QName _GetFullPathValues_QNAME = new QName("http://www.talend.com/mdm", "getFullPathValues");
     private final static QName _PutServiceConfiguration_QNAME = new QName("http://www.talend.com/mdm", "putServiceConfiguration");
@@ -397,14 +395,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link PutMDMJobResponse }
-     * 
-     */
-    public PutMDMJobResponse createPutMDMJobResponse() {
-        return new PutMDMJobResponse();
-    }
-
-    /**
      * Create an instance of {@link DeleteItem }
      * 
      */
@@ -530,14 +520,6 @@ public class ObjectFactory {
      */
     public IsItemModifiedByOtherResponse createIsItemModifiedByOtherResponse() {
         return new IsItemModifiedByOtherResponse();
-    }
-
-    /**
-     * Create an instance of {@link DeleteMDMJob }
-     * 
-     */
-    public DeleteMDMJob createDeleteMDMJob() {
-        return new DeleteMDMJob();
     }
 
     /**
@@ -781,19 +763,19 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link PutBusinessConcept }
-     * 
-     */
-    public PutBusinessConcept createPutBusinessConcept() {
-        return new PutBusinessConcept();
-    }
-
-    /**
      * Create an instance of {@link ExtractUsingTransformer }
      * 
      */
     public ExtractUsingTransformer createExtractUsingTransformer() {
         return new ExtractUsingTransformer();
+    }
+
+    /**
+     * Create an instance of {@link PutBusinessConcept }
+     * 
+     */
+    public PutBusinessConcept createPutBusinessConcept() {
+        return new PutBusinessConcept();
     }
 
     /**
@@ -869,19 +851,19 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link PutBusinessConceptResponse }
-     * 
-     */
-    public PutBusinessConceptResponse createPutBusinessConceptResponse() {
-        return new PutBusinessConceptResponse();
-    }
-
-    /**
      * Create an instance of {@link ExistsRoleResponse }
      * 
      */
     public ExistsRoleResponse createExistsRoleResponse() {
         return new ExistsRoleResponse();
+    }
+
+    /**
+     * Create an instance of {@link PutBusinessConceptResponse }
+     * 
+     */
+    public PutBusinessConceptResponse createPutBusinessConceptResponse() {
+        return new PutBusinessConceptResponse();
     }
 
     /**
@@ -1165,19 +1147,19 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link DropItemResponse }
-     * 
-     */
-    public DropItemResponse createDropItemResponse() {
-        return new DropItemResponse();
-    }
-
-    /**
      * Create an instance of {@link GetDataModel }
      * 
      */
     public GetDataModel createGetDataModel() {
         return new GetDataModel();
+    }
+
+    /**
+     * Create an instance of {@link DropItemResponse }
+     * 
+     */
+    public DropItemResponse createDropItemResponse() {
+        return new DropItemResponse();
     }
 
     /**
@@ -1282,14 +1264,6 @@ public class ObjectFactory {
      */
     public PutItem createPutItem() {
         return new PutItem();
-    }
-
-    /**
-     * Create an instance of {@link PutMDMJob }
-     * 
-     */
-    public PutMDMJob createPutMDMJob() {
-        return new PutMDMJob();
     }
 
     /**
@@ -1933,6 +1907,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link UpdateItemMetadata }
+     * 
+     */
+    public UpdateItemMetadata createUpdateItemMetadata() {
+        return new UpdateItemMetadata();
+    }
+
+    /**
      * Create an instance of {@link PutItemWithReport }
      * 
      */
@@ -2085,6 +2067,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link UpdateItemMetadataResponse }
+     * 
+     */
+    public UpdateItemMetadataResponse createUpdateItemMetadataResponse() {
+        return new UpdateItemMetadataResponse();
+    }
+
+    /**
      * Create an instance of {@link GetTransformerResponse }
      * 
      */
@@ -2106,14 +2096,6 @@ public class ObjectFactory {
      */
     public GetDataModelPKsResponse createGetDataModelPKsResponse() {
         return new GetDataModelPKsResponse();
-    }
-
-    /**
-     * Create an instance of {@link DeleteMDMJobResponse }
-     * 
-     */
-    public DeleteMDMJobResponse createDeleteMDMJobResponse() {
-        return new DeleteMDMJobResponse();
     }
 
     /**
@@ -2837,14 +2819,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link WsdelmdmJob }
-     * 
-     */
-    public WsdelmdmJob createWsdelmdmJob() {
-        return new WsdelmdmJob();
-    }
-
-    /**
      * Create an instance of {@link WsExistsRole }
      * 
      */
@@ -3165,14 +3139,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link WsputmdmJob }
-     * 
-     */
-    public WsputmdmJob createWsputmdmJob() {
-        return new WsputmdmJob();
-    }
-
-    /**
      * Create an instance of {@link WsGetComponentVersion }
      * 
      */
@@ -3290,6 +3256,14 @@ public class ObjectFactory {
      */
     public WsPutItemWithReport createWsPutItemWithReport() {
         return new WsPutItemWithReport();
+    }
+
+    /**
+     * Create an instance of {@link WsUpdateMetadataItem }
+     * 
+     */
+    public WsUpdateMetadataItem createWsUpdateMetadataItem() {
+        return new WsUpdateMetadataItem();
     }
 
     /**
@@ -3709,19 +3683,19 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link WsQuickSearch }
-     * 
-     */
-    public WsQuickSearch createWsQuickSearch() {
-        return new WsQuickSearch();
-    }
-
-    /**
      * Create an instance of {@link WsExistsTransformerPluginV2 }
      * 
      */
     public WsExistsTransformerPluginV2 createWsExistsTransformerPluginV2() {
         return new WsExistsTransformerPluginV2();
+    }
+
+    /**
+     * Create an instance of {@link WsQuickSearch }
+     * 
+     */
+    public WsQuickSearch createWsQuickSearch() {
+        return new WsQuickSearch();
     }
 
     /**
@@ -4098,21 +4072,21 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link InitMDM }{@code >}}
-     * 
-     */
-    @XmlElementDecl(namespace = "http://www.talend.com/mdm", name = "initMDM")
-    public JAXBElement<InitMDM> createInitMDM(InitMDM value) {
-        return new JAXBElement<InitMDM>(_InitMDM_QNAME, InitMDM.class, null, value);
-    }
-
-    /**
      * Create an instance of {@link JAXBElement }{@code <}{@link PutItemWithCustomReportResponse }{@code >}}
      * 
      */
     @XmlElementDecl(namespace = "http://www.talend.com/mdm", name = "putItemWithCustomReportResponse")
     public JAXBElement<PutItemWithCustomReportResponse> createPutItemWithCustomReportResponse(PutItemWithCustomReportResponse value) {
         return new JAXBElement<PutItemWithCustomReportResponse>(_PutItemWithCustomReportResponse_QNAME, PutItemWithCustomReportResponse.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link InitMDM }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://www.talend.com/mdm", name = "initMDM")
+    public JAXBElement<InitMDM> createInitMDM(InitMDM value) {
+        return new JAXBElement<InitMDM>(_InitMDM_QNAME, InitMDM.class, null, value);
     }
 
     /**
@@ -4314,15 +4288,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link DeleteMDMJob }{@code >}}
-     * 
-     */
-    @XmlElementDecl(namespace = "http://www.talend.com/mdm", name = "deleteMDMJob")
-    public JAXBElement<DeleteMDMJob> createDeleteMDMJob(DeleteMDMJob value) {
-        return new JAXBElement<DeleteMDMJob>(_DeleteMDMJob_QNAME, DeleteMDMJob.class, null, value);
-    }
-
-    /**
      * Create an instance of {@link JAXBElement }{@code <}{@link PutBusinessConceptSchemaResponse }{@code >}}
      * 
      */
@@ -4356,15 +4321,6 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "http://www.talend.com/mdm", name = "deleteItem")
     public JAXBElement<DeleteItem> createDeleteItem(DeleteItem value) {
         return new JAXBElement<DeleteItem>(_DeleteItem_QNAME, DeleteItem.class, null, value);
-    }
-
-    /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link PutMDMJobResponse }{@code >}}
-     * 
-     */
-    @XmlElementDecl(namespace = "http://www.talend.com/mdm", name = "putMDMJobResponse")
-    public JAXBElement<PutMDMJobResponse> createPutMDMJobResponse(PutMDMJobResponse value) {
-        return new JAXBElement<PutMDMJobResponse>(_PutMDMJobResponse_QNAME, PutMDMJobResponse.class, null, value);
     }
 
     /**
@@ -4593,15 +4549,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link PutMDMJob }{@code >}}
-     * 
-     */
-    @XmlElementDecl(namespace = "http://www.talend.com/mdm", name = "putMDMJob")
-    public JAXBElement<PutMDMJob> createPutMDMJob(PutMDMJob value) {
-        return new JAXBElement<PutMDMJob>(_PutMDMJob_QNAME, PutMDMJob.class, null, value);
-    }
-
-    /**
      * Create an instance of {@link JAXBElement }{@code <}{@link PutItem }{@code >}}
      * 
      */
@@ -4638,21 +4585,21 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link DropItemResponse }{@code >}}
-     * 
-     */
-    @XmlElementDecl(namespace = "http://www.talend.com/mdm", name = "dropItemResponse")
-    public JAXBElement<DropItemResponse> createDropItemResponse(DropItemResponse value) {
-        return new JAXBElement<DropItemResponse>(_DropItemResponse_QNAME, DropItemResponse.class, null, value);
-    }
-
-    /**
      * Create an instance of {@link JAXBElement }{@code <}{@link GetDataModel }{@code >}}
      * 
      */
     @XmlElementDecl(namespace = "http://www.talend.com/mdm", name = "getDataModel")
     public JAXBElement<GetDataModel> createGetDataModel(GetDataModel value) {
         return new JAXBElement<GetDataModel>(_GetDataModel_QNAME, GetDataModel.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link DropItemResponse }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://www.talend.com/mdm", name = "dropItemResponse")
+    public JAXBElement<DropItemResponse> createDropItemResponse(DropItemResponse value) {
+        return new JAXBElement<DropItemResponse>(_DropItemResponse_QNAME, DropItemResponse.class, null, value);
     }
 
     /**
@@ -4764,21 +4711,21 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link PutTransformerPluginV2ConfigurationResponse }{@code >}}
-     * 
-     */
-    @XmlElementDecl(namespace = "http://www.talend.com/mdm", name = "putTransformerPluginV2ConfigurationResponse")
-    public JAXBElement<PutTransformerPluginV2ConfigurationResponse> createPutTransformerPluginV2ConfigurationResponse(PutTransformerPluginV2ConfigurationResponse value) {
-        return new JAXBElement<PutTransformerPluginV2ConfigurationResponse>(_PutTransformerPluginV2ConfigurationResponse_QNAME, PutTransformerPluginV2ConfigurationResponse.class, null, value);
-    }
-
-    /**
      * Create an instance of {@link JAXBElement }{@code <}{@link ExistsStoredProcedureResponse }{@code >}}
      * 
      */
     @XmlElementDecl(namespace = "http://www.talend.com/mdm", name = "existsStoredProcedureResponse")
     public JAXBElement<ExistsStoredProcedureResponse> createExistsStoredProcedureResponse(ExistsStoredProcedureResponse value) {
         return new JAXBElement<ExistsStoredProcedureResponse>(_ExistsStoredProcedureResponse_QNAME, ExistsStoredProcedureResponse.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link PutTransformerPluginV2ConfigurationResponse }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://www.talend.com/mdm", name = "putTransformerPluginV2ConfigurationResponse")
+    public JAXBElement<PutTransformerPluginV2ConfigurationResponse> createPutTransformerPluginV2ConfigurationResponse(PutTransformerPluginV2ConfigurationResponse value) {
+        return new JAXBElement<PutTransformerPluginV2ConfigurationResponse>(_PutTransformerPluginV2ConfigurationResponse_QNAME, PutTransformerPluginV2ConfigurationResponse.class, null, value);
     }
 
     /**
@@ -4953,21 +4900,21 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link ExistsRoleResponse }{@code >}}
-     * 
-     */
-    @XmlElementDecl(namespace = "http://www.talend.com/mdm", name = "existsRoleResponse")
-    public JAXBElement<ExistsRoleResponse> createExistsRoleResponse(ExistsRoleResponse value) {
-        return new JAXBElement<ExistsRoleResponse>(_ExistsRoleResponse_QNAME, ExistsRoleResponse.class, null, value);
-    }
-
-    /**
      * Create an instance of {@link JAXBElement }{@code <}{@link PutBusinessConceptResponse }{@code >}}
      * 
      */
     @XmlElementDecl(namespace = "http://www.talend.com/mdm", name = "putBusinessConceptResponse")
     public JAXBElement<PutBusinessConceptResponse> createPutBusinessConceptResponse(PutBusinessConceptResponse value) {
         return new JAXBElement<PutBusinessConceptResponse>(_PutBusinessConceptResponse_QNAME, PutBusinessConceptResponse.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link ExistsRoleResponse }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://www.talend.com/mdm", name = "existsRoleResponse")
+    public JAXBElement<ExistsRoleResponse> createExistsRoleResponse(ExistsRoleResponse value) {
+        return new JAXBElement<ExistsRoleResponse>(_ExistsRoleResponse_QNAME, ExistsRoleResponse.class, null, value);
     }
 
     /**
@@ -5061,21 +5008,21 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link ExtractUsingTransformer }{@code >}}
-     * 
-     */
-    @XmlElementDecl(namespace = "http://www.talend.com/mdm", name = "extractUsingTransformer")
-    public JAXBElement<ExtractUsingTransformer> createExtractUsingTransformer(ExtractUsingTransformer value) {
-        return new JAXBElement<ExtractUsingTransformer>(_ExtractUsingTransformer_QNAME, ExtractUsingTransformer.class, null, value);
-    }
-
-    /**
      * Create an instance of {@link JAXBElement }{@code <}{@link PutBusinessConcept }{@code >}}
      * 
      */
     @XmlElementDecl(namespace = "http://www.talend.com/mdm", name = "putBusinessConcept")
     public JAXBElement<PutBusinessConcept> createPutBusinessConcept(PutBusinessConcept value) {
         return new JAXBElement<PutBusinessConcept>(_PutBusinessConcept_QNAME, PutBusinessConcept.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link ExtractUsingTransformer }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://www.talend.com/mdm", name = "extractUsingTransformer")
+    public JAXBElement<ExtractUsingTransformer> createExtractUsingTransformer(ExtractUsingTransformer value) {
+        return new JAXBElement<ExtractUsingTransformer>(_ExtractUsingTransformer_QNAME, ExtractUsingTransformer.class, null, value);
     }
 
     /**
@@ -5133,21 +5080,21 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link GetItems }{@code >}}
-     * 
-     */
-    @XmlElementDecl(namespace = "http://www.talend.com/mdm", name = "getItems")
-    public JAXBElement<GetItems> createGetItems(GetItems value) {
-        return new JAXBElement<GetItems>(_GetItems_QNAME, GetItems.class, null, value);
-    }
-
-    /**
      * Create an instance of {@link JAXBElement }{@code <}{@link GetDataClusterPKs }{@code >}}
      * 
      */
     @XmlElementDecl(namespace = "http://www.talend.com/mdm", name = "getDataClusterPKs")
     public JAXBElement<GetDataClusterPKs> createGetDataClusterPKs(GetDataClusterPKs value) {
         return new JAXBElement<GetDataClusterPKs>(_GetDataClusterPKs_QNAME, GetDataClusterPKs.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link GetItems }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://www.talend.com/mdm", name = "getItems")
+    public JAXBElement<GetItems> createGetItems(GetItems value) {
+        return new JAXBElement<GetItems>(_GetItems_QNAME, GetItems.class, null, value);
     }
 
     /**
@@ -5934,15 +5881,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link DeleteMDMJobResponse }{@code >}}
-     * 
-     */
-    @XmlElementDecl(namespace = "http://www.talend.com/mdm", name = "deleteMDMJobResponse")
-    public JAXBElement<DeleteMDMJobResponse> createDeleteMDMJobResponse(DeleteMDMJobResponse value) {
-        return new JAXBElement<DeleteMDMJobResponse>(_DeleteMDMJobResponse_QNAME, DeleteMDMJobResponse.class, null, value);
-    }
-
-    /**
      * Create an instance of {@link JAXBElement }{@code <}{@link GetDataModelPKsResponse }{@code >}}
      * 
      */
@@ -6012,6 +5950,15 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "http://www.talend.com/mdm", name = "getTransformerResponse")
     public JAXBElement<GetTransformerResponse> createGetTransformerResponse(GetTransformerResponse value) {
         return new JAXBElement<GetTransformerResponse>(_GetTransformerResponse_QNAME, GetTransformerResponse.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link UpdateItemMetadataResponse }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://www.talend.com/mdm", name = "updateItemMetadataResponse")
+    public JAXBElement<UpdateItemMetadataResponse> createUpdateItemMetadataResponse(UpdateItemMetadataResponse value) {
+        return new JAXBElement<UpdateItemMetadataResponse>(_UpdateItemMetadataResponse_QNAME, UpdateItemMetadataResponse.class, null, value);
     }
 
     /**
@@ -6147,6 +6094,15 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "http://www.talend.com/mdm", name = "putItemWithReport")
     public JAXBElement<PutItemWithReport> createPutItemWithReport(PutItemWithReport value) {
         return new JAXBElement<PutItemWithReport>(_PutItemWithReport_QNAME, PutItemWithReport.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link UpdateItemMetadata }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://www.talend.com/mdm", name = "updateItemMetadata")
+    public JAXBElement<UpdateItemMetadata> createUpdateItemMetadata(UpdateItemMetadata value) {
+        return new JAXBElement<UpdateItemMetadata>(_UpdateItemMetadata_QNAME, UpdateItemMetadata.class, null, value);
     }
 
     /**
