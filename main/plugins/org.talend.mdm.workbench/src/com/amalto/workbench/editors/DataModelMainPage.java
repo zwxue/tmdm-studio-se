@@ -227,8 +227,8 @@ import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.WorkbenchClipboard;
 import com.amalto.workbench.utils.XSDAnnotationsStructure;
 import com.amalto.workbench.webservices.TMDMService;
-import com.amalto.workbench.webservices.WsDataModel;
-import com.amalto.workbench.webservices.WsPutDataModel;
+import com.amalto.workbench.webservices.WSDataModel;
+import com.amalto.workbench.webservices.WSPutDataModel;
 import com.amalto.workbench.widgets.WidgetFactory;
 
 @SuppressWarnings("restriction")
@@ -380,7 +380,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener, IGo
 
     private CompositeViewersSelectionProvider selectionProvider;
 
-    WsDataModel datamodel;
+    WSDataModel datamodel;
 
     protected TreeObject xobject;
 
@@ -390,7 +390,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener, IGo
 
     public DataModelMainPage(TreeObject obj) {
         this.xobject = obj;
-        this.datamodel = (WsDataModel) obj.getWsObject();
+        this.datamodel = (WSDataModel) obj.getWsObject();
         modelName = datamodel.getName();
         dataModelName = modelName;
         exAdapter = ExAdapterManager.getAdapter(this, IDataModelMainPageExAdapter.class);
@@ -430,7 +430,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener, IGo
             gdMainComposite.heightHint = 1;
             mainComposite.setLayoutData(gdMainComposite);
 
-            WsDataModel wsObject = (WsDataModel) (xobject.getWsObject());
+            WSDataModel wsObject = (WSDataModel) (xobject.getWsObject());
 
             // description
             Label descriptionLabel = toolkit.createLabel(mainComposite, Messages.DescriptionText, SWT.NULL);
@@ -498,8 +498,6 @@ public class DataModelMainPage extends EditorPart implements ModifyListener, IGo
         }
         return null;
     }
-
- 
 
     protected void doImportSchema(final Collection<XSDSchemaContent> addtional) {
         if (null == addtional || addtional.isEmpty()) {
@@ -979,7 +977,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener, IGo
     public void refreshData() {
         try {
 
-            WsDataModel wsObject = (WsDataModel) (xobject.getWsObject());
+            WSDataModel wsObject = (WSDataModel) (xobject.getWsObject());
             String s;
             s = wsObject.getDescription() == null ? "" : wsObject.getDescription();//$NON-NLS-1$
             if (!s.equals(descriptionText.getText())) {
@@ -1010,7 +1008,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener, IGo
 
     public int save(String xsd) {
         try {
-            WsDataModel wsObject = (WsDataModel) (xobject.getWsObject());
+            WSDataModel wsObject = (WSDataModel) (xobject.getWsObject());
             wsObject.setDescription(descriptionText.getText() == null ? "" : descriptionText.getText());//$NON-NLS-1$
             String schema = xsd;
             if (xsd == null) {
@@ -1057,11 +1055,10 @@ public class DataModelMainPage extends EditorPart implements ModifyListener, IGo
         return dirty ? 1 : 0;
     }
 
-    protected void doSave(WsDataModel wsObject) throws Exception {
+    protected void doSave(WSDataModel wsObject) throws Exception {
         TMDMService port = Util.getMDMService(new URL(xobject.getEndpointAddress()), xobject.getUniverse(),
-                xobject.getUsername(),
-                xobject.getPassword());
-        port.putDataModel(new WsPutDataModel(wsObject));
+                xobject.getUsername(), xobject.getPassword());
+        port.putDataModel(new WSPutDataModel(wsObject));
         if (exAdapter != null) {
             exAdapter.doSave(port, wsObject.getName(), Messages.DataModelText);
         }
@@ -2089,7 +2086,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener, IGo
         if (xsdSchema == null) {
             xsdSchema = getXSDSchema(Util.nodeToString(document));
         } else {
-            WsDataModel wsObject = (WsDataModel) (xobject.getWsObject());
+            WSDataModel wsObject = (WSDataModel) (xobject.getWsObject());
             xsdSchema = Util.createXsdSchema(wsObject.getXsdSchema(), xobject);
         }
         boolean exist = false;
@@ -2133,7 +2130,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener, IGo
             }
             String xsd = Util.nodeToString(xsdSchema.getDocument());
             setXsdSchema(xsdSchema);
-            WsDataModel wsObject = (WsDataModel) (xobject.getWsObject());
+            WSDataModel wsObject = (WSDataModel) (xobject.getWsObject());
             wsObject.setXsdSchema(xsd);
         }
     }
@@ -2802,7 +2799,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener, IGo
                     infer = 2;
                 } finally {
                     if (infer == 0 && !xsd.equals("")) {//$NON-NLS-1$
-                        WsDataModel wsObj = (WsDataModel) (xobject.getWsObject());
+                        WSDataModel wsObj = (WSDataModel) (xobject.getWsObject());
                         wsObj.setXsdSchema(xsd);
                         validateSchema(xsd);
                         refreshData();
@@ -2851,7 +2848,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener, IGo
             }
 
             private void inferXsdFromDataModule(String xmlFile) {
-                WsDataModel wsObject = (WsDataModel) (xobject.getWsObject());
+                WSDataModel wsObject = (WSDataModel) (xobject.getWsObject());
                 XSDDriver d = new XSDDriver();
                 if (d.outputXSD_UTF_8(wsObject.getXsdSchema(), xmlFile) != null) {
                     MessageDialog.openInformation(getSite().getShell(), Messages.ExportXSD, Messages.OperationExportingXsd);
@@ -2915,7 +2912,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener, IGo
         return selectionProvider;
     }
 
-    public WsDataModel getDataModel() {
+    public WSDataModel getDataModel() {
         return datamodel;
     }
 

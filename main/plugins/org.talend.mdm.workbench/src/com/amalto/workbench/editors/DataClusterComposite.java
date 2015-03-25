@@ -75,17 +75,17 @@ import com.amalto.workbench.utils.UserInfo;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.XtentisException;
 import com.amalto.workbench.webservices.TMDMService;
-import com.amalto.workbench.webservices.WsDataCluster;
-import com.amalto.workbench.webservices.WsDataClusterPK;
-import com.amalto.workbench.webservices.WsDataModel;
-import com.amalto.workbench.webservices.WsDataModelPK;
-import com.amalto.workbench.webservices.WsGetConceptsInDataCluster;
-import com.amalto.workbench.webservices.WsGetDataCluster;
-import com.amalto.workbench.webservices.WsGetDataModel;
-import com.amalto.workbench.webservices.WsGetItemPKsByCriteria;
-import com.amalto.workbench.webservices.WsGetItemPKsByFullCriteria;
-import com.amalto.workbench.webservices.WsItemPKsByCriteriaResponseResults;
-import com.amalto.workbench.webservices.WsStringArray;
+import com.amalto.workbench.webservices.WSDataCluster;
+import com.amalto.workbench.webservices.WSDataClusterPK;
+import com.amalto.workbench.webservices.WSDataModel;
+import com.amalto.workbench.webservices.WSDataModelPK;
+import com.amalto.workbench.webservices.WSGetConceptsInDataCluster;
+import com.amalto.workbench.webservices.WSGetDataCluster;
+import com.amalto.workbench.webservices.WSGetDataModel;
+import com.amalto.workbench.webservices.WSGetItemPKsByCriteria;
+import com.amalto.workbench.webservices.WSGetItemPKsByFullCriteria;
+import com.amalto.workbench.webservices.WSItemPKsByCriteriaResponseResults;
+import com.amalto.workbench.webservices.WSStringArray;
 import com.amalto.workbench.widgets.CalendarSelectWidget;
 import com.amalto.workbench.widgets.IPagingListener;
 import com.amalto.workbench.widgets.PageingToolBar;
@@ -419,11 +419,11 @@ public class DataClusterComposite extends Composite implements IPagingListener {
             int limit = pageToolBar.getLimit();
             // see 0015909
             String clusterName = URLEncoder.encode(getXObject().toString(), "utf-8");//$NON-NLS-1$
-            WsDataClusterPK clusterPk = new WsDataClusterPK(clusterName + getPkAddition());
+            WSDataClusterPK clusterPk = new WSDataClusterPK(clusterName + getPkAddition());
 
             // @temp yguo, get item with taskid or get taskid by specify wsitempk.
-            List<WsItemPKsByCriteriaResponseResults> results = service.getItemPKsByFullCriteria(
-                    new WsGetItemPKsByFullCriteria(useFTSearch, new WsGetItemPKsByCriteria(concept, search, from, null, keys,
+            List<WSItemPKsByCriteriaResponseResults> results = service.getItemPKsByFullCriteria(
+                    new WSGetItemPKsByFullCriteria(useFTSearch, new WSGetItemPKsByCriteria(concept, search, from, null, keys,
                             limit, start, to, clusterPk))).getResults();
 
             if (showResultInfo && (results.size() == 1)) {
@@ -437,7 +437,7 @@ public class DataClusterComposite extends Composite implements IPagingListener {
             int totalSize = 0;
             List<LineItem> ress = new ArrayList<LineItem>();
             for (int i = 0; i < results.size(); i++) {
-                WsItemPKsByCriteriaResponseResults result = results.get(i);
+                WSItemPKsByCriteriaResponseResults result = results.get(i);
                 if (i == 0) {
                     totalSize = Integer.parseInt(Util.parse(result.getWsItemPK().getConceptName()).getDocumentElement()
                             .getTextContent());
@@ -598,28 +598,28 @@ public class DataClusterComposite extends Composite implements IPagingListener {
             }
             TMDMService service = Util.getMDMService(getXObject());
 
-            WsDataCluster cluster = null;
+            WSDataCluster cluster = null;
             if (getXObject().getWsObject() == null) { // then fetch from server
-                cluster = service.getDataCluster(new WsGetDataCluster((WsDataClusterPK) getXObject().getWsKey()));
+                cluster = service.getDataCluster(new WSGetDataCluster((WSDataClusterPK) getXObject().getWsKey()));
                 getXObject().setWsObject(cluster);
             } else { // it has been opened by an editor - use the object there
                 // added for TMDM-3064
                 // the following may throw ServerException to identify the data continer not exist on the server
-                cluster = service.getDataCluster(new WsGetDataCluster(new WsDataClusterPK(getXObject().getName())));
+                cluster = service.getDataCluster(new WSGetDataCluster(new WSDataClusterPK(getXObject().getName())));
                 // if you could go to next line, that means the data container is on the server specified
-                cluster = (WsDataCluster) getXObject().getWsObject();
+                cluster = (WSDataCluster) getXObject().getWsObject();
 
             }
 
-         // *** TMDM-8080, temp omitted start ***//
-//            WSUniverse currentUniverse = service.getCurrentUniverse(new WSGetCurrentUniverse());
-//            String currentUniverseName = "";//$NON-NLS-1$
-//            if (currentUniverse != null) {
-//                currentUniverseName = currentUniverse.getName();
-//            }
-//            if (currentUniverseName != null && currentUniverseName.equals("[HEAD]")) { //$NON-NLS-1$
-//                currentUniverseName = "";//$NON-NLS-1$
-//            }
+            // *** TMDM-8080, temp omitted start ***//
+            // WSUniverse currentUniverse = service.getCurrentUniverse(new WSGetCurrentUniverse());
+            //            String currentUniverseName = "";//$NON-NLS-1$
+            // if (currentUniverse != null) {
+            // currentUniverseName = currentUniverse.getName();
+            // }
+            //            if (currentUniverseName != null && currentUniverseName.equals("[HEAD]")) { //$NON-NLS-1$
+            //                currentUniverseName = "";//$NON-NLS-1$
+            // }
             // *** TMDM-8080, temp omitted end ***//
 
             // add by myli; fix the bug:0013077: if the data is too much, just get the entities from the model instead
@@ -652,8 +652,8 @@ public class DataClusterComposite extends Composite implements IPagingListener {
             // conceptCombo.add(concept);
             // }
 
-            WsStringArray conceptsInDataCluster = service.getConceptsInDataCluster(new WsGetConceptsInDataCluster(
-                    new WsDataClusterPK(clusterName)));
+            WSStringArray conceptsInDataCluster = service.getConceptsInDataCluster(new WSGetConceptsInDataCluster(
+                    new WSDataClusterPK(clusterName)));
             if (conceptsInDataCluster != null) {
                 List<String> concepts = conceptsInDataCluster.getStrings();
                 conceptCombo.removeAll();
@@ -712,7 +712,7 @@ public class DataClusterComposite extends Composite implements IPagingListener {
 
             String[] xpaths = dialog.getXpath();
             for (String xpath : xpaths) {
-                WsDataModel dm = Util.getMDMService(this.getXObject()).getDataModel(new WsGetDataModel(new WsDataModelPK(xpath)));
+                WSDataModel dm = Util.getMDMService(this.getXObject()).getDataModel(new WSGetDataModel(new WSDataModelPK(xpath)));
                 if (dm == null) {
                     return false;
                 }

@@ -73,8 +73,8 @@ import com.amalto.workbench.providers.datamodel.TypesTreeContentProvider;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.XtentisException;
 import com.amalto.workbench.webservices.TMDMService;
-import com.amalto.workbench.webservices.WsDataModelPK;
-import com.amalto.workbench.webservices.WsRegexDataModelPKs;
+import com.amalto.workbench.webservices.WSDataModelPK;
+import com.amalto.workbench.webservices.WSRegexDataModelPKs;
 
 public class SelectImportedModulesDialog extends Dialog {
 
@@ -436,9 +436,9 @@ public class SelectImportedModulesDialog extends Dialog {
             MessageDialog.openError(getShell(), Messages._Error, Messages.ServerNotNull);
             return false;
         }
-        List<WsDataModelPK> xdmPKs = port.getDataModelPKs(new WsRegexDataModelPKs("")).getWsDataModelPKs();//$NON-NLS-1$
+        List<WSDataModelPK> xdmPKs = port.getDataModelPKs(new WSRegexDataModelPKs("")).getWsDataModelPKs();//$NON-NLS-1$
         if (xdmPKs != null) {
-            for (WsDataModelPK xdmPK : xdmPKs) {
+            for (WSDataModelPK xdmPK : xdmPKs) {
                 String name = xdmPK.getPk();
                 if (!name.startsWith("XMLSCHEMA")) {//$NON-NLS-1$
                     schemaList.add(name);

@@ -12,12 +12,12 @@
 // ============================================================================
 package org.talend.mdm.repository.core.service.wsimpl.servicedoc;
 
-import com.amalto.workbench.webservices.WsServiceGetDocument;
+import com.amalto.workbench.webservices.WSServiceGetDocument;
 
 /**
  * DOC hbhong class global comment. Detailled comment
  */
-public abstract class AbstractGetDocument extends WsServiceGetDocument {
+public abstract class AbstractGetDocument extends WSServiceGetDocument {
 
     public AbstractGetDocument(String twoLettersLanguageCode) {
         this.twoLettersLanguageCode = twoLettersLanguageCode;

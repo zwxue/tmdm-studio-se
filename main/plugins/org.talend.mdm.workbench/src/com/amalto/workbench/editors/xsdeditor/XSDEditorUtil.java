@@ -39,7 +39,7 @@ import com.amalto.workbench.providers.XObjectEditorInput;
 import com.amalto.workbench.utils.EXtentisObjects;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.views.MDMPerspective;
-import com.amalto.workbench.webservices.WsDataModel;
+import com.amalto.workbench.webservices.WSDataModel;
 
 public class XSDEditorUtil {
 
@@ -56,8 +56,8 @@ public class XSDEditorUtil {
     }
 
     public static IFile createFile(TreeObject xobject) throws Exception {
-        WsDataModel wsDataModel = (WsDataModel) xobject.getWsObject();
-        if(wsDataModel==null) {
+        WSDataModel wsDataModel = (WSDataModel) xobject.getWsObject();
+        if (wsDataModel == null) {
             return null;
         }
         String filename = xobject.getDisplayName().replace(" ", "") + ".xsd";//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
@@ -83,14 +83,13 @@ public class XSDEditorUtil {
     }
 
     private static void sycFileContents(IFile file, String content) throws Exception {
-        if (file.exists())
-         {
+        if (file.exists()) {
             file.setContents(new ByteArrayInputStream(content.getBytes("utf-8")), IFile.FORCE, new NullProgressMonitor());//$NON-NLS-1$
         }
     }
 
     private static boolean isEditorOpened(TreeObject xobject) throws Exception {
-        WsDataModel wsDataModel = (WsDataModel) xobject.getWsObject();
+        WSDataModel wsDataModel = (WSDataModel) xobject.getWsObject();
 
         String filename = xobject.getDisplayName().replace(" ", "") + ".xsd";//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
         String content = wsDataModel.getXsdSchema();
@@ -116,15 +115,15 @@ public class XSDEditorUtil {
         String projectname = xobject.getServerRoot().getDisplayName().trim().replace("://", "").replace("/", "").replace(" ", "")//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$//$NON-NLS-5$//$NON-NLS-6$
                 .replace(":", "");//$NON-NLS-1$//$NON-NLS-2$
         IProject prj = root.getProject(projectname);
-        if (prj.exists()){
-        	try {
-				prj.open(null);
-			} catch (CoreException e) {
-				log.error(e.getMessage(), e);
-			}
+        if (prj.exists()) {
+            try {
+                prj.open(null);
+            } catch (CoreException e) {
+                log.error(e.getMessage(), e);
+            }
             return prj;
         }
-        final IWorkspace workspace = ResourcesPlugin.getWorkspace();        
+        final IWorkspace workspace = ResourcesPlugin.getWorkspace();
         final IProjectDescription desc = workspace.newProjectDescription(projectname);
         desc.setNatureIds(new String[] { "org.talend.mdm.schema.nature" });//$NON-NLS-1$
         desc.setComment(Messages.XSDEditorUtil_Comment);
@@ -162,13 +161,12 @@ public class XSDEditorUtil {
         XSDSelectionListener xsdListener = new XSDSelectionListener(part, dMainPage);
         dMainPage.getTypesViewer().addSelectionChangedListener(xsdListener);
         dMainPage.getElementsViewer().addSelectionChangedListener(xsdListener);
-       
 
         part.setXSDInput(xobjectEditorinput);
         part.setXObject(xobject);
         part.setActiveEditor(dMainPage);
-        
-        //can't add DataModelMainPage the 3rd page, see 0019663
+
+        // can't add DataModelMainPage the 3rd page, see 0019663
         CTabFolder folder = (CTabFolder) dMainPage.getMainControl().getParent();
         folder.getItem(2).setText(xobject.getDisplayName() + " " + Util.getRevision(xobject));//$NON-NLS-1$
         folder.getItem(0).setText(Messages.XSDEditorUtil_SchemaDesign);

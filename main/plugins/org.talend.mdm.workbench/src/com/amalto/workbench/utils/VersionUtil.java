@@ -13,14 +13,14 @@
 package com.amalto.workbench.utils;
 
 import com.amalto.workbench.models.TreeObject;
-import com.amalto.workbench.webservices.WsDataClusterPK;
-import com.amalto.workbench.webservices.WsDataModelPK;
-import com.amalto.workbench.webservices.WsMenuPK;
-import com.amalto.workbench.webservices.WsRolePK;
-import com.amalto.workbench.webservices.WsRoutingRulePK;
-import com.amalto.workbench.webservices.WsStoredProcedurePK;
-import com.amalto.workbench.webservices.WsTransformerV2PK;
-import com.amalto.workbench.webservices.WsViewPK;
+import com.amalto.workbench.webservices.WSDataClusterPK;
+import com.amalto.workbench.webservices.WSDataModelPK;
+import com.amalto.workbench.webservices.WSMenuPK;
+import com.amalto.workbench.webservices.WSRolePK;
+import com.amalto.workbench.webservices.WSRoutingRulePK;
+import com.amalto.workbench.webservices.WSStoredProcedurePK;
+import com.amalto.workbench.webservices.WSTransformerV2PK;
+import com.amalto.workbench.webservices.WSViewPK;
 
 /**
  * 
@@ -95,35 +95,35 @@ public class VersionUtil {
          * null);
          */
         case TreeObject.VIEW:
-            instance = (xobject.isXObject() ? ((WsViewPK) xobject.getWsKey()).getPk() : null);
+            instance = (xobject.isXObject() ? ((WSViewPK) xobject.getWsKey()).getPk() : null);
             break;
         case TreeObject.DATA_MODEL:
-            instance = (xobject.isXObject() ? ((WsDataModelPK) xobject.getWsKey()).getPk() : null);
+            instance = (xobject.isXObject() ? ((WSDataModelPK) xobject.getWsKey()).getPk() : null);
             break;
         /*
          * case TreeObject.SOURCE: instance = (xobject.isXObject() ? ((WSSourcePK)xobject.getWsKey()).getPk() : null);
          * break;
          */
         case TreeObject.DATA_CLUSTER:
-            instance = (xobject.isXObject() ? ((WsDataClusterPK) xobject.getWsKey()).getPk() : null);
+            instance = (xobject.isXObject() ? ((WSDataClusterPK) xobject.getWsKey()).getPk() : null);
             break;
         case TreeObject.SUBSCRIPTION_ENGINE:
             instance = null;
             break;
         case TreeObject.ROLE:
-            instance = (xobject.isXObject() ? ((WsRolePK) xobject.getWsKey()).getPk() : null);
+            instance = (xobject.isXObject() ? ((WSRolePK) xobject.getWsKey()).getPk() : null);
             break;
         case TreeObject.STORED_PROCEDURE:
-            instance = (xobject.isXObject() ? ((WsStoredProcedurePK) xobject.getWsKey()).getPk() : null);
+            instance = (xobject.isXObject() ? ((WSStoredProcedurePK) xobject.getWsKey()).getPk() : null);
             break;
         case TreeObject.TRANSFORMER:
-            instance = (xobject.isXObject() ? ((WsTransformerV2PK) xobject.getWsKey()).getPk() : null);
+            instance = (xobject.isXObject() ? ((WSTransformerV2PK) xobject.getWsKey()).getPk() : null);
             break;
         case TreeObject.MENU:
-            instance = (xobject.isXObject() ? ((WsMenuPK) xobject.getWsKey()).getPk() : null);
+            instance = (xobject.isXObject() ? ((WSMenuPK) xobject.getWsKey()).getPk() : null);
             break;
         case TreeObject.ROUTING_RULE:
-            instance = (xobject.isXObject() ? ((WsRoutingRulePK) xobject.getWsKey()).getPk() : null);
+            instance = (xobject.isXObject() ? ((WSRoutingRulePK) xobject.getWsKey()).getPk() : null);
             break;
         case TreeObject.UNIVERSE:
             // *** TMDM-8080, temp omitted start ***//

@@ -33,27 +33,27 @@ import com.amalto.workbench.providers.XObjectEditorInput;
 import com.amalto.workbench.utils.IConstants;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.webservices.TMDMService;
-import com.amalto.workbench.webservices.WsDataCluster;
-import com.amalto.workbench.webservices.WsDataClusterPK;
-import com.amalto.workbench.webservices.WsDataModel;
-import com.amalto.workbench.webservices.WsDataModelPK;
-import com.amalto.workbench.webservices.WsGetDataCluster;
-import com.amalto.workbench.webservices.WsGetDataModel;
-import com.amalto.workbench.webservices.WsGetMenu;
-import com.amalto.workbench.webservices.WsGetRoutingRule;
-import com.amalto.workbench.webservices.WsGetStoredProcedure;
-import com.amalto.workbench.webservices.WsGetTransformerV2;
-import com.amalto.workbench.webservices.WsGetView;
-import com.amalto.workbench.webservices.WsMenu;
-import com.amalto.workbench.webservices.WsMenuPK;
-import com.amalto.workbench.webservices.WsRoutingRule;
-import com.amalto.workbench.webservices.WsRoutingRulePK;
-import com.amalto.workbench.webservices.WsStoredProcedure;
-import com.amalto.workbench.webservices.WsStoredProcedurePK;
-import com.amalto.workbench.webservices.WsTransformerV2;
-import com.amalto.workbench.webservices.WsTransformerV2PK;
-import com.amalto.workbench.webservices.WsView;
-import com.amalto.workbench.webservices.WsViewPK;
+import com.amalto.workbench.webservices.WSDataCluster;
+import com.amalto.workbench.webservices.WSDataClusterPK;
+import com.amalto.workbench.webservices.WSDataModel;
+import com.amalto.workbench.webservices.WSDataModelPK;
+import com.amalto.workbench.webservices.WSGetDataCluster;
+import com.amalto.workbench.webservices.WSGetDataModel;
+import com.amalto.workbench.webservices.WSGetMenu;
+import com.amalto.workbench.webservices.WSGetRoutingRule;
+import com.amalto.workbench.webservices.WSGetStoredProcedure;
+import com.amalto.workbench.webservices.WSGetTransformerV2;
+import com.amalto.workbench.webservices.WSGetView;
+import com.amalto.workbench.webservices.WSMenu;
+import com.amalto.workbench.webservices.WSMenuPK;
+import com.amalto.workbench.webservices.WSRoutingRule;
+import com.amalto.workbench.webservices.WSRoutingRulePK;
+import com.amalto.workbench.webservices.WSStoredProcedure;
+import com.amalto.workbench.webservices.WSStoredProcedurePK;
+import com.amalto.workbench.webservices.WSTransformerV2;
+import com.amalto.workbench.webservices.WSTransformerV2PK;
+import com.amalto.workbench.webservices.WSView;
+import com.amalto.workbench.webservices.WSViewPK;
 
 public class EditXObjectAction extends Action {
 
@@ -90,40 +90,39 @@ public class EditXObjectAction extends Action {
 
             // Access to server and get port
             TMDMService service = Util.getMDMService(new URL(xobject.getEndpointAddress()), xobject.getUniverse(),
-                    xobject.getUsername(),
-                    xobject.getPassword());
+                    xobject.getUsername(), xobject.getPassword());
 
             switch (xobject.getType()) {
             case TreeObject.DATA_MODEL:
-                WsDataModel wsDataModel = service.getDataModel(new WsGetDataModel((WsDataModelPK) xobject.getWsKey()));
+                WSDataModel wsDataModel = service.getDataModel(new WSGetDataModel((WSDataModelPK) xobject.getWsKey()));
                 xobject.setWsObject(wsDataModel);
                 XSDEditorUtil.openDataModel(xobject, false);
                 return;
             case TreeObject.VIEW:
-                WsView wsView = service.getView(new WsGetView((WsViewPK) xobject.getWsKey()));
+                WSView wsView = service.getView(new WSGetView((WSViewPK) xobject.getWsKey()));
                 xobject.setWsObject(wsView);
                 break;
             case TreeObject.DATA_CLUSTER:
-                WsDataCluster wsDataCluster = service.getDataCluster(new WsGetDataCluster((WsDataClusterPK) xobject.getWsKey()));
+                WSDataCluster wsDataCluster = service.getDataCluster(new WSGetDataCluster((WSDataClusterPK) xobject.getWsKey()));
                 xobject.setWsObject(wsDataCluster);
                 break;
             case TreeObject.STORED_PROCEDURE:
-                WsStoredProcedure wsStoredProcedure = service.getStoredProcedure(new WsGetStoredProcedure(
-                        (WsStoredProcedurePK) xobject.getWsKey()));
+                WSStoredProcedure wsStoredProcedure = service.getStoredProcedure(new WSGetStoredProcedure(
+                        (WSStoredProcedurePK) xobject.getWsKey()));
                 xobject.setWsObject(wsStoredProcedure);
                 break;
 
             case TreeObject.ROUTING_RULE:
-                WsRoutingRule wsRoutingRule = service.getRoutingRule(new WsGetRoutingRule((WsRoutingRulePK) xobject.getWsKey()));
+                WSRoutingRule wsRoutingRule = service.getRoutingRule(new WSGetRoutingRule((WSRoutingRulePK) xobject.getWsKey()));
                 xobject.setWsObject(wsRoutingRule);
                 break;
             case TreeObject.TRANSFORMER:
-                WsTransformerV2 wsTranformer = service.getTransformerV2(new WsGetTransformerV2((WsTransformerV2PK) xobject
+                WSTransformerV2 wsTranformer = service.getTransformerV2(new WSGetTransformerV2((WSTransformerV2PK) xobject
                         .getWsKey()));
                 xobject.setWsObject(wsTranformer);
                 break;
             case TreeObject.MENU:
-                WsMenu wsMenu = service.getMenu(new WsGetMenu((WsMenuPK) xobject.getWsKey()));
+                WSMenu wsMenu = service.getMenu(new WSGetMenu((WSMenuPK) xobject.getWsKey()));
                 xobject.setWsObject(wsMenu);
                 break;
             case TreeObject.SERVICE_CONFIGURATION:

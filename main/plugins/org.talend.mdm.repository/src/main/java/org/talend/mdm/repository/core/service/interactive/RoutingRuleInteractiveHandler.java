@@ -21,10 +21,10 @@ import com.amalto.workbench.utils.EXtentisObjects;
 import com.amalto.workbench.utils.TreeObjectUtil;
 import com.amalto.workbench.utils.XtentisException;
 import com.amalto.workbench.webservices.TMDMService;
-import com.amalto.workbench.webservices.WsDeleteRoutingRule;
-import com.amalto.workbench.webservices.WsPutRoutingRule;
-import com.amalto.workbench.webservices.WsRoutingRule;
-import com.amalto.workbench.webservices.WsRoutingRulePK;
+import com.amalto.workbench.webservices.WSDeleteRoutingRule;
+import com.amalto.workbench.webservices.WSPutRoutingRule;
+import com.amalto.workbench.webservices.WSRoutingRule;
+import com.amalto.workbench.webservices.WSRoutingRulePK;
 
 /**
  * DOC hbhong class global comment. Detailled comment
@@ -43,7 +43,7 @@ public class RoutingRuleInteractiveHandler extends AbstractInteractiveHandler {
     @Override
     public boolean doDeployWSObject(TMDMService service, Object wsObj) {
         if (wsObj != null) {
-            service.putRoutingRule(new WsPutRoutingRule((WsRoutingRule) wsObj));
+            service.putRoutingRule(new WSPutRoutingRule((WSRoutingRule) wsObj));
             return true;
         }
         return false;
@@ -51,10 +51,10 @@ public class RoutingRuleInteractiveHandler extends AbstractInteractiveHandler {
 
     @Override
     public boolean doRemove(TMDMService service, AbstractDeployCommand cmd) throws XtentisException {
-        WsRoutingRulePK pk = new WsRoutingRulePK();
+        WSRoutingRulePK pk = new WSRoutingRulePK();
         String name = cmd.getObjName();
         pk.setPk(name);
-        service.deleteRoutingRule(new WsDeleteRoutingRule(pk));
+        service.deleteRoutingRule(new WSDeleteRoutingRule(pk));
         TreeObjectUtil.deleteSpecificationFromAttachedRole(service, name, EXtentisObjects.RoutingRule.getName());
         return true;
     }

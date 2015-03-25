@@ -71,7 +71,7 @@ import com.amalto.workbench.providers.XObjectEditorInput;
 import com.amalto.workbench.service.MissingJarService;
 import com.amalto.workbench.utils.EXtentisObjects;
 import com.amalto.workbench.utils.UserInfo;
-import com.amalto.workbench.webservices.WsDataClusterPK;
+import com.amalto.workbench.webservices.WSDataClusterPK;
 
 /**
  * DOC hbhong class global comment. Detailled comment <br/>
@@ -353,7 +353,7 @@ public class OpenObjectAction extends AbstractRepositoryAction implements IIntro
                 TreeObject xobject = (TreeObject) input.getModel();
                 if (xobject != null && xobject.getWsKey() != null) {
                     TreeParent serverRoot = getServerRoot(serverDef);
-                    xobject.setWsKey(new WsDataClusterPK(xobject.getWsKey().toString()));
+                    xobject.setWsKey(new WSDataClusterPK(xobject.getWsKey().toString()));
                     xobject.setServerRoot(serverRoot);
                     return true;
                 }

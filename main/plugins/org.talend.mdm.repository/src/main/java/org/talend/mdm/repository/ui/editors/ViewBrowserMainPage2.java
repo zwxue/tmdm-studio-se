@@ -27,8 +27,8 @@ import com.amalto.workbench.exadapter.ExAdapterManager;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.XtentisException;
 import com.amalto.workbench.webservices.TMDMService;
-import com.amalto.workbench.webservices.WsDataClusterPK;
-import com.amalto.workbench.webservices.WsViewPK;
+import com.amalto.workbench.webservices.WSDataClusterPK;
+import com.amalto.workbench.webservices.WSViewPK;
 
 /**
  * DOC hbhong class global comment. Detailled comment
@@ -54,7 +54,7 @@ public class ViewBrowserMainPage2 extends ViewBrowserMainPage {
     }
 
     @Override
-    protected List<WsDataClusterPK> getDataClusterPKs() throws MalformedURLException, XtentisException {
+    protected List<WSDataClusterPK> getDataClusterPKs() throws MalformedURLException, XtentisException {
         MDMServerDef d = getServerDef();
         return Util.getAllDataClusterPKs(new URL(d.getProtocol() + d.getHost() + ":" + d.getPort() //$NON-NLS-1$ 
                 + d.getPath()), d.getUniverse(), d.getUser(), d.getPasswd());
@@ -66,9 +66,9 @@ public class ViewBrowserMainPage2 extends ViewBrowserMainPage {
     }
 
     @Override
-    protected WsViewPK getViewPK() {
+    protected WSViewPK getViewPK() {
 
-        return new WsViewPK((String) getXObject().getWsKey());
+        return new WSViewPK((String) getXObject().getWsKey());
     }
 
     @Override

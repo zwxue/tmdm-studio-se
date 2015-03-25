@@ -68,14 +68,14 @@ import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.providers.XObjectBrowserInput;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.webservices.TMDMService;
-import com.amalto.workbench.webservices.WsDataClusterPK;
-import com.amalto.workbench.webservices.WsDroppedItem;
-import com.amalto.workbench.webservices.WsDroppedItemPK;
-import com.amalto.workbench.webservices.WsFindAllDroppedItemsPKs;
-import com.amalto.workbench.webservices.WsItemPK;
-import com.amalto.workbench.webservices.WsLoadDroppedItem;
-import com.amalto.workbench.webservices.WsRecoverDroppedItem;
-import com.amalto.workbench.webservices.WsRemoveDroppedItem;
+import com.amalto.workbench.webservices.WSDataClusterPK;
+import com.amalto.workbench.webservices.WSDroppedItem;
+import com.amalto.workbench.webservices.WSDroppedItemPK;
+import com.amalto.workbench.webservices.WSFindAllDroppedItemsPKs;
+import com.amalto.workbench.webservices.WSItemPK;
+import com.amalto.workbench.webservices.WSLoadDroppedItem;
+import com.amalto.workbench.webservices.WSRecoverDroppedItem;
+import com.amalto.workbench.webservices.WSRemoveDroppedItem;
 import com.amalto.workbench.widgets.WidgetFactory;
 
 public class ItemsTrashBrowserMainPage extends AMainPage implements IXObjectModelListener {
@@ -426,9 +426,9 @@ public class ItemsTrashBrowserMainPage extends AMainPage implements IXObjectMode
 
             String search = searchText.getText();
 
-            List<WsDroppedItemPK> results = null;
+            List<WSDroppedItemPK> results = null;
             if (search != null && search.length() > 0) {
-                results = service.findAllDroppedItemsPKs(new WsFindAllDroppedItemsPKs(search)).getWsDroppedItemPK();
+                results = service.findAllDroppedItemsPKs(new WSFindAllDroppedItemsPKs(search)).getWsDroppedItemPK();
             }
 
             if ((results == null) || (results.isEmpty())) {
@@ -440,8 +440,8 @@ public class ItemsTrashBrowserMainPage extends AMainPage implements IXObjectMode
             } else {
                 LineItem[] res = new LineItem[results.size()];
                 for (int i = 0; i < results.size(); i++) {
-                    WsDroppedItemPK wsDroppedItemPK = results.get(i);
-                    WsItemPK refWSItemPK = wsDroppedItemPK.getWsItemPK();
+                    WSDroppedItemPK wsDroppedItemPK = results.get(i);
+                    WSItemPK refWSItemPK = wsDroppedItemPK.getWsItemPK();
 
                     // if(revison==null||revison.equals(""))revison="head";
 
@@ -501,9 +501,9 @@ public class ItemsTrashBrowserMainPage extends AMainPage implements IXObjectMode
                 IStructuredSelection selection = ((IStructuredSelection) viewer.getSelection());
                 LineItem li = (LineItem) selection.getFirstElement();
 
-                WsDroppedItem wsDroppedItem = Util.getMDMService(getXObject()).loadDroppedItem(
-                        new WsLoadDroppedItem(new WsDroppedItemPK(li.getPartPath(), new WsItemPK(li.getConcept(), Arrays
-                                .asList(li.getIds()), new WsDataClusterPK(li.getDataCluster())))
+                WSDroppedItem wsDroppedItem = Util.getMDMService(getXObject()).loadDroppedItem(
+                        new WSLoadDroppedItem(new WSDroppedItemPK(li.getPartPath(), new WSItemPK(li.getConcept(), Arrays
+                                .asList(li.getIds()), new WSDataClusterPK(li.getDataCluster())))
 
                         ));
 
@@ -586,10 +586,10 @@ public class ItemsTrashBrowserMainPage extends AMainPage implements IXObjectMode
                     return;
                 }
 
-                WsDroppedItemPK wsDroppedItemPK = new WsDroppedItemPK(li.getPartPath(), new WsItemPK(li.getConcept(),
-                        Arrays.asList(li.getIds()), new WsDataClusterPK(li.getDataCluster())));
+                WSDroppedItemPK wsDroppedItemPK = new WSDroppedItemPK(li.getPartPath(), new WSItemPK(li.getConcept(),
+                        Arrays.asList(li.getIds()), new WSDataClusterPK(li.getDataCluster())));
 
-                Util.getMDMService(getXObject()).recoverDroppedItem(new WsRecoverDroppedItem(wsDroppedItemPK));
+                Util.getMDMService(getXObject()).recoverDroppedItem(new WSRecoverDroppedItem(wsDroppedItemPK));
 
                 // TODO response status deal
 
@@ -648,10 +648,10 @@ public class ItemsTrashBrowserMainPage extends AMainPage implements IXObjectMode
                     return;
                 }
 
-                WsDroppedItemPK wsDroppedItemPK = new WsDroppedItemPK(li.getPartPath(), new WsItemPK(li.getConcept(),
-                        Arrays.asList(li.getIds()), new WsDataClusterPK(li.getDataCluster())));
+                WSDroppedItemPK wsDroppedItemPK = new WSDroppedItemPK(li.getPartPath(), new WSItemPK(li.getConcept(),
+                        Arrays.asList(li.getIds()), new WSDataClusterPK(li.getDataCluster())));
                 // run
-                Util.getMDMService(getXObject()).removeDroppedItem(new WsRemoveDroppedItem(wsDroppedItemPK));
+                Util.getMDMService(getXObject()).removeDroppedItem(new WSRemoveDroppedItem(wsDroppedItemPK));
                 // refresh the search
                 ItemsTrashBrowserMainPage.this.resultsViewer.setInput(getResults(false));
 

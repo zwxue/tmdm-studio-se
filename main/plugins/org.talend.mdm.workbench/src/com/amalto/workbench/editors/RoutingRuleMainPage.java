@@ -74,13 +74,13 @@ import com.amalto.workbench.utils.WidgetUtils;
 import com.amalto.workbench.utils.XmlUtil;
 import com.amalto.workbench.utils.XtentisException;
 import com.amalto.workbench.webservices.TMDMService;
-import com.amalto.workbench.webservices.WsGetServicesList;
-import com.amalto.workbench.webservices.WsRoutingRule;
-import com.amalto.workbench.webservices.WsRoutingRuleExpression;
-import com.amalto.workbench.webservices.WsServiceGetDocument;
-import com.amalto.workbench.webservices.WsServicesList;
-import com.amalto.workbench.webservices.WsServicesListItem;
-import com.amalto.workbench.webservices.WsString;
+import com.amalto.workbench.webservices.WSGetServicesList;
+import com.amalto.workbench.webservices.WSRoutingRule;
+import com.amalto.workbench.webservices.WSRoutingRuleExpression;
+import com.amalto.workbench.webservices.WSServiceGetDocument;
+import com.amalto.workbench.webservices.WSServicesList;
+import com.amalto.workbench.webservices.WSServicesListItem;
+import com.amalto.workbench.webservices.WSString;
 import com.amalto.workbench.widgets.ComplexTableViewerColumn;
 import com.amalto.workbench.widgets.ConditionWidget;
 import com.amalto.workbench.widgets.TisTableViewer;
@@ -416,10 +416,10 @@ public class RoutingRuleMainPage extends AMainPageV2 {
                     }
                     String doc = "";//$NON-NLS-1$
                     String desc = "";//$NON-NLS-1$
-                    // WSRoutingRule wsObject = (WSRoutingRule) (getXObject().getWsObject());
+                    // WSRoutingRule wsObject = (WSRoutingRule) (getXObject().getWSObject());
                     try {
 
-                        WsServiceGetDocument document = getServiceDocument(serviceNameCombo.getText().trim());
+                        WSServiceGetDocument document = getServiceDocument(serviceNameCombo.getText().trim());
 
                         doc = document.getDocument();
                         desc = document.getDescription();
@@ -565,10 +565,10 @@ public class RoutingRuleMainPage extends AMainPageV2 {
                 dataModelName);
     }
 
-    protected WsServiceGetDocument getServiceDocument(String jndiName) {
+    protected WSServiceGetDocument getServiceDocument(String jndiName) {
         TMDMService service = getService();
         if (service != null) {
-            return service.getServiceDocument(new WsString(jndiName));
+            return service.getServiceDocument(new WSString(jndiName));
         }
         return null;
     }
@@ -583,8 +583,8 @@ public class RoutingRuleMainPage extends AMainPageV2 {
      * @throws XtentisException
      */
     protected void initServiceNameCombo() throws XtentisException {
-        WsServicesList list = Util.getMDMService(getXObject()).getServicesList(new WsGetServicesList(""));//$NON-NLS-1$
-        List<WsServicesListItem> items = list.getItem();
+        WSServicesList list = Util.getMDMService(getXObject()).getServicesList(new WSGetServicesList(""));//$NON-NLS-1$
+        List<WSServicesListItem> items = list.getItem();
         if (items != null) {
             String[] sortedList = new String[items.size()];
             for (int i = 0; i < items.size(); i++) {
@@ -632,7 +632,7 @@ public class RoutingRuleMainPage extends AMainPageV2 {
             // WSTransformerV2PK[] transformerPKs = null;
             // try {
             // transformerPKs = Util.getPort(getXObject()).getTransformerV2PKs(new WSGetTransformerV2PKs(""))
-            // .getWsTransformerV2PK();
+            // .getWSTransformerV2PK();
             // } catch (Exception e) {
             // System.out.println("No Transformers");
             // }
@@ -660,7 +660,7 @@ public class RoutingRuleMainPage extends AMainPageV2 {
 
             this.refreshing = true;
 
-            WsRoutingRule wsRoutingRule = (WsRoutingRule) (getXObject().getWsObject());
+            WSRoutingRule wsRoutingRule = (WSRoutingRule) (getXObject().getWsObject());
             descriptionText.setText(wsRoutingRule.getDescription());
             isSynchronousButton.setSelection(wsRoutingRule.isSynchronous());
             if (wsRoutingRule.isDeactive() != null) {
@@ -686,7 +686,7 @@ public class RoutingRuleMainPage extends AMainPageV2 {
 
             java.util.List<Line> lines = new ArrayList<Line>();
 
-            for (WsRoutingRuleExpression wc : wsRoutingRule.getWsRoutingRuleExpressions()) {
+            for (WSRoutingRuleExpression wc : wsRoutingRule.getWsRoutingRuleExpressions()) {
                 Line line = new Line(conditionsColumns, Util.convertRouteCondition(wc));
                 lines.add(line);
             }
@@ -717,7 +717,7 @@ public class RoutingRuleMainPage extends AMainPageV2 {
             }
             this.comitting = true;
 
-            WsRoutingRule ws = (WsRoutingRule) (getXObject().getWsObject());
+            WSRoutingRule ws = (WSRoutingRule) (getXObject().getWsObject());
             ws.setDescription(descriptionText.getText());
             ws.setConcept(objectTypeText.getText());
 
@@ -747,17 +747,17 @@ public class RoutingRuleMainPage extends AMainPageV2 {
             }
 
             java.util.List<Line> lines = (java.util.List<Line>) conditionViewer.getViewer().getInput();
-            java.util.List<WsRoutingRuleExpression> wclist = new ArrayList<WsRoutingRuleExpression>();
+            java.util.List<WSRoutingRuleExpression> wclist = new ArrayList<WSRoutingRuleExpression>();
             for (Line item : lines) {
                 String[] values = new String[] { item.keyValues.get(0).value, item.keyValues.get(1).value,
                         item.keyValues.get(2).value, item.keyValues.get(3).value };
-                WsRoutingRuleExpression wc = Util.convertLineRoute(values);
+                WSRoutingRuleExpression wc = Util.convertLineRoute(values);
                 wclist.add(wc);
             }
             ws.getWsRoutingRuleExpressions().clear();
             ws.getWsRoutingRuleExpressions().addAll(wclist);
 
-            // WsRoutingRuleExpressions refreshed by viewer
+            // WSRoutingRuleExpressions refreshed by viewer
             ws.setCondition(conditionText.getText());
             this.comitting = false;
 

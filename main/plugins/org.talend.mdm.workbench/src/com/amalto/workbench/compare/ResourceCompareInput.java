@@ -53,9 +53,9 @@ import org.eclipse.swt.widgets.Shell;
 import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.XmlUtil;
-import com.amalto.workbench.webservices.WsDataClusterPK;
-import com.amalto.workbench.webservices.WsDataModelPK;
-import com.amalto.workbench.webservices.WsPutItem;
+import com.amalto.workbench.webservices.WSDataClusterPK;
+import com.amalto.workbench.webservices.WSDataModelPK;
+import com.amalto.workbench.webservices.WSPutItem;
 
 /**
  * A two-way or three-way compare for arbitrary IResources.
@@ -402,10 +402,9 @@ public class ResourceCompareInput extends CompareEditorInput {
             // fix for PR 1GFMLFB: ITPUI:WIN2000 - files that are out of sync with the file system appear as empty
             fLeftResource.refreshLocal(IResource.DEPTH_INFINITE, pm);
             fRightResource.refreshLocal(IResource.DEPTH_INFINITE, pm);
-            if (fThreeWay && fAncestorResource != null)
-             {
+            if (fThreeWay && fAncestorResource != null) {
                 fAncestorResource.refreshLocal(IResource.DEPTH_INFINITE, pm);
-            // end fix
+                // end fix
             }
 
             //pm.beginTask(Utilities.getString("ResourceCompare.taskName"), IProgressMonitor.UNKNOWN); //$NON-NLS-1$
@@ -537,8 +536,8 @@ public class ResourceCompareInput extends CompareEditorInput {
             toCommitContent = XmlUtil.formatCompact(toCommitContent, "UTF-8");//$NON-NLS-1$
             if (this.compareHeadInfo.isItem()) {
                 Util.getMDMService(compareHeadInfo.getXobject()).putItem(
-                        new WsPutItem(false, (WsDataClusterPK) compareHeadInfo.getXobject().getWsKey(), ""//$NON-NLS-1$
-                                .equals(compareHeadInfo.getDataModelName()) ? null : new WsDataModelPK(compareHeadInfo
+                        new WSPutItem(false, (WSDataClusterPK) compareHeadInfo.getXobject().getWsKey(), ""//$NON-NLS-1$
+                                .equals(compareHeadInfo.getDataModelName()) ? null : new WSDataModelPK(compareHeadInfo
                                         .getDataModelName()), toCommitContent));
             } else {
                 // TODO add support for Object(s)
@@ -547,9 +546,10 @@ public class ResourceCompareInput extends CompareEditorInput {
 
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-			if (!Util.handleConnectionException((Shell)null, e, null)) {
-				MessageDialog.openError(null, Messages._Error, Messages.bind(Messages.ResourceCompareInput_ErrorMsg, e.getLocalizedMessage()));
-			}
+            if (!Util.handleConnectionException((Shell) null, e, null)) {
+                MessageDialog.openError(null, Messages._Error,
+                        Messages.bind(Messages.ResourceCompareInput_ErrorMsg, e.getLocalizedMessage()));
+            }
         }
 
     }
@@ -564,8 +564,7 @@ public class ResourceCompareInput extends CompareEditorInput {
             // flush changes in any dirty viewer
             flushViewers(pm);
             IFile[] files = (IFile[]) getAdapter(IFile[].class);
-            if (files != null && files.length > 0)
-             {
+            if (files != null && files.length > 0) {
                 return files[0]; // can only return one: limitation on IDE.saveAllEditors; see #64617
             }
             return null;

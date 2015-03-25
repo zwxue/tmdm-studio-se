@@ -28,7 +28,7 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.providers.XObjectEditorInput;
-import com.amalto.workbench.webservices.WsDataCluster;
+import com.amalto.workbench.webservices.WSDataCluster;
 
 public class DataClusterMainPage extends AMainPageV2 implements ITextListener {
 
@@ -181,12 +181,12 @@ public class DataClusterMainPage extends AMainPageV2 implements ITextListener {
 
             this.refreshing = true;
 
-            WsDataCluster wsObject = (WsDataCluster) (getXObject().getWsObject());
+            WSDataCluster wsObject = (WSDataCluster) (getXObject().getWsObject());
 
             descriptionText.setText(wsObject.getDescription() == null ? "" : wsObject.getDescription());//$NON-NLS-1$
 
             /*
-             * if (wsObject.getWsDataClusterType().equals(WSDataClusterType.CACHE)) dataClusterTypeCombo.select(1); else
+             * if (wsObject.getWSDataClusterType().equals(WSDataClusterType.CACHE)) dataClusterTypeCombo.select(1); else
              * dataClusterTypeCombo.select(0);
              */
 
@@ -233,17 +233,17 @@ public class DataClusterMainPage extends AMainPageV2 implements ITextListener {
 
             this.comitting = true;
 
-            WsDataCluster wsObject = (WsDataCluster) (getXObject().getWsObject());
+            WSDataCluster wsObject = (WSDataCluster) (getXObject().getWsObject());
             wsObject.setDescription(descriptionText.getText());
             /*
              * if ("Cache".equals(dataClusterTypeCombo.getText()))
-             * wsObject.setWsDataClusterType(WSDataClusterType.CACHE); else
-             * wsObject.setWsDataClusterType(WSDataClusterType.ITEMS);
+             * wsObject.setWSDataClusterType(WSDataClusterType.CACHE); else
+             * wsObject.setWSDataClusterType(WSDataClusterType.ITEMS);
              */
             /*
-             * wsObject.setWsDataClusterType(WSDataClusterType.ITEMS);
+             * wsObject.setWSDataClusterType(WSDataClusterType.ITEMS);
              * 
-             * wsObject.setWsSpellerRefreshPeriodInSeconds(0); if (!useStemming.getSelection())
+             * wsObject.setWSSpellerRefreshPeriodInSeconds(0); if (!useStemming.getSelection())
              * wsObject.setStemmer("0100"); else { String s=languageCombo.getText(); int i=0; if
              * (singleRoot.getSelection()) i+=1; if (partOfSpeechSingleWord.getSelection()) i+=2; if
              * (rootConsistency.getSelection()) i+=4; if (accentedWords.getSelection()) i+=8; if

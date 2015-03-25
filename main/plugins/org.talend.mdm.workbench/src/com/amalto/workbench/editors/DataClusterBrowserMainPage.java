@@ -102,22 +102,22 @@ import com.amalto.workbench.utils.UserInfo;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.XtentisException;
 import com.amalto.workbench.webservices.TMDMService;
-import com.amalto.workbench.webservices.WsBoolean;
-import com.amalto.workbench.webservices.WsDataClusterPK;
-import com.amalto.workbench.webservices.WsDataModel;
-import com.amalto.workbench.webservices.WsDataModelPK;
-import com.amalto.workbench.webservices.WsDeleteItemWithReport;
-import com.amalto.workbench.webservices.WsExistsItem;
-import com.amalto.workbench.webservices.WsGetConceptsInDataCluster;
-import com.amalto.workbench.webservices.WsGetDataModel;
-import com.amalto.workbench.webservices.WsGetItem;
-import com.amalto.workbench.webservices.WsIsItemModifiedByOther;
-import com.amalto.workbench.webservices.WsItem;
-import com.amalto.workbench.webservices.WsItemPK;
-import com.amalto.workbench.webservices.WsPutItem;
-import com.amalto.workbench.webservices.WsPutItemWithReport;
-import com.amalto.workbench.webservices.WsRegexDataModelPKs;
-import com.amalto.workbench.webservices.WsStringArray;
+import com.amalto.workbench.webservices.WSBoolean;
+import com.amalto.workbench.webservices.WSDataClusterPK;
+import com.amalto.workbench.webservices.WSDataModel;
+import com.amalto.workbench.webservices.WSDataModelPK;
+import com.amalto.workbench.webservices.WSDeleteItemWithReport;
+import com.amalto.workbench.webservices.WSExistsItem;
+import com.amalto.workbench.webservices.WSGetConceptsInDataCluster;
+import com.amalto.workbench.webservices.WSGetDataModel;
+import com.amalto.workbench.webservices.WSGetItem;
+import com.amalto.workbench.webservices.WSIsItemModifiedByOther;
+import com.amalto.workbench.webservices.WSItem;
+import com.amalto.workbench.webservices.WSItemPK;
+import com.amalto.workbench.webservices.WSPutItem;
+import com.amalto.workbench.webservices.WSPutItemWithReport;
+import com.amalto.workbench.webservices.WSRegexDataModelPKs;
+import com.amalto.workbench.webservices.WSStringArray;
 
 public class DataClusterBrowserMainPage extends AMainPage implements IXObjectModelListener {
 
@@ -306,7 +306,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
         refreshData();
     }
 
-    protected DataContainerDOMViewDialog getDomViewDialog(final TMDMService service, final WsItem wsItem, String xml,
+    protected DataContainerDOMViewDialog getDomViewDialog(final TMDMService service, final WSItem wsItem, String xml,
             ArrayList<String> dataModels) throws Exception {
 
         DataContainerDOMViewDialog d = new DataContainerDOMViewDialog(getShell(), service, Util.parse(xml), dataModels,
@@ -407,12 +407,12 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
         private String getAutoIncrementRecord(final TMDMService service) {
             String record = emptyRecord();
 
-            WsBoolean existsItem = service.existsItem(new WsExistsItem(new WsItemPK("AutoIncrement", //$NON-NLS-1$ 
-                    Arrays.asList(new String[] { "AutoIncrement" }), new WsDataClusterPK("CONF")))); //$NON-NLS-1$ //$NON-NLS-2$
+            WSBoolean existsItem = service.existsItem(new WSExistsItem(new WSItemPK("AutoIncrement", //$NON-NLS-1$ 
+                    Arrays.asList(new String[] { "AutoIncrement" }), new WSDataClusterPK("CONF")))); //$NON-NLS-1$ //$NON-NLS-2$
             if (existsItem.isTrue()) {
 
-                WsItem wsItem = service.getItem(new WsGetItem(new WsItemPK("AutoIncrement", //$NON-NLS-1$ 
-                        Arrays.asList(new String[] { "AutoIncrement" }), new WsDataClusterPK("CONF")))); //$NON-NLS-1$
+                WSItem wsItem = service.getItem(new WSGetItem(new WSItemPK("AutoIncrement", //$NON-NLS-1$ 
+                        Arrays.asList(new String[] { "AutoIncrement" }), new WSDataClusterPK("CONF")))); //$NON-NLS-1$
                 if (wsItem != null) {
                     record = wsItem.getContent();
                 }
@@ -466,7 +466,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 
         private List<String> getAllEntityInDataContainer(final TMDMService service, String dataContainer) {
             List<String> entityToRevisions = new ArrayList<String>();
-            WsStringArray conceptArray = service.getConceptsInDataCluster(new WsGetConceptsInDataCluster(new WsDataClusterPK(
+            WSStringArray conceptArray = service.getConceptsInDataCluster(new WSGetConceptsInDataCluster(new WSDataClusterPK(
                     dataContainer)));
             if (conceptArray != null) {
                 List<String> concepts = conceptArray.getStrings();
@@ -496,7 +496,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
         private void saveAutoIncrement(TMDMService service, String content) {
             String pk = "CONF"; //$NON-NLS-1$
 
-            WsPutItem putItem = new WsPutItem(false, new WsDataClusterPK(pk), new WsDataModelPK(pk), content);
+            WSPutItem putItem = new WSPutItem(false, new WSDataClusterPK(pk), new WSDataModelPK(pk), content);
             service.putItem(putItem);
         }
 
@@ -528,7 +528,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                 }
 
                 if (service != null) {
-                    WsDataModel dataModel = service.getDataModel(new WsGetDataModel(new WsDataModelPK(dataContainer)));
+                    WSDataModel dataModel = service.getDataModel(new WSGetDataModel(new WSDataModelPK(dataContainer)));
                     schema = dataModel.getXsdSchema();
                 }
             }
@@ -568,17 +568,17 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                     return;
                 }
 
-                String pk = ((WsDataClusterPK) getXObject().getWsKey()).getPk();
-                final WsDataClusterPK dataClusterPk = new WsDataClusterPK(pk + getPkAddition());
-                final WsItem wsItem = service.getItem(new WsGetItem(new WsItemPK(li.getConcept().trim(), Arrays.asList(li
+                String pk = ((WSDataClusterPK) getXObject().getWsKey()).getPk();
+                final WSDataClusterPK dataClusterPk = new WSDataClusterPK(pk + getPkAddition());
+                final WSItem wsItem = service.getItem(new WSGetItem(new WSItemPK(li.getConcept().trim(), Arrays.asList(li
                         .getIds()), dataClusterPk)));
                 String xml = Util.formatXsdSource(wsItem.getContent());
 
-                List<WsDataModelPK> dmPKs = service.getDataModelPKs(new WsRegexDataModelPKs("*")).getWsDataModelPKs();//$NON-NLS-1$
+                List<WSDataModelPK> dmPKs = service.getDataModelPKs(new WSRegexDataModelPKs("*")).getWsDataModelPKs();//$NON-NLS-1$
                 ArrayList<String> dataModels = new ArrayList<String>();
                 if (dmPKs != null) {
 
-                    for (WsDataModelPK mpk : dmPKs) {
+                    for (WSDataModelPK mpk : dmPKs) {
                         if (!"XMLSCHEMA---".equals(mpk.getPk())) { //$NON-NLS-1$
                             dataModels.add(mpk.getPk());
                         }
@@ -594,10 +594,10 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                             try {
                                 // check the item is modified by others?
 
-                                boolean isModified = service.isItemModifiedByOther(new WsIsItemModifiedByOther(wsItem)).isTrue();
-                                WsPutItem putItem = new WsPutItem(false, dataClusterPk, "".equals(d //$NON-NLS-1$
-                                        .getDataModelName()) ? null : new WsDataModelPK(d.getDataModelName()), d.getXML());
-                                WsPutItemWithReport itemWithReport = new WsPutItemWithReport(d.isBeforeVerification(),
+                                boolean isModified = service.isItemModifiedByOther(new WSIsItemModifiedByOther(wsItem)).isTrue();
+                                WSPutItem putItem = new WSPutItem(false, dataClusterPk, "".equals(d //$NON-NLS-1$
+                                        .getDataModelName()) ? null : new WSDataModelPK(d.getDataModelName()), d.getXML());
+                                WSPutItemWithReport itemWithReport = new WSPutItemWithReport(d.isBeforeVerification(),
                                         "genericUI", putItem);//$NON-NLS-1$
                                 if (isModified) {
                                     if (MessageDialog.openConfirm(shell, Messages.DataClusterBrowserMainPage_31,
@@ -679,19 +679,19 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                 LineItem leftLineItem = liList.get(0);
                 LineItem rightLineItem = liList.get(1);
 
-                String pk = ((WsDataClusterPK) getXObject().getWsKey()).getPk();
-                WsDataClusterPK dataClusterPk = new WsDataClusterPK(pk + getPkAddition());
+                String pk = ((WSDataClusterPK) getXObject().getWsKey()).getPk();
+                WSDataClusterPK dataClusterPk = new WSDataClusterPK(pk + getPkAddition());
                 // left
 
-                WsItemPK leftWSItemPK = new WsItemPK(leftLineItem.getConcept().trim(), Arrays.asList(leftLineItem.getIds()),
+                WSItemPK leftWSItemPK = new WSItemPK(leftLineItem.getConcept().trim(), Arrays.asList(leftLineItem.getIds()),
                         dataClusterPk);
-                WsItem leftWSItem = Util.getMDMService(getXObject()).getItem(new WsGetItem(leftWSItemPK));
+                WSItem leftWSItem = Util.getMDMService(getXObject()).getItem(new WSGetItem(leftWSItemPK));
                 String leftItemXmlContent = leftWSItem.getContent();
                 // right
 
-                WsItemPK rightWSItemPK = new WsItemPK(rightLineItem.getConcept().trim(), Arrays.asList(rightLineItem.getIds()),
+                WSItemPK rightWSItemPK = new WSItemPK(rightLineItem.getConcept().trim(), Arrays.asList(rightLineItem.getIds()),
                         dataClusterPk);
-                WsItem rightWSItem = Util.getMDMService(getXObject()).getItem(new WsGetItem(rightWSItemPK));
+                WSItem rightWSItem = Util.getMDMService(getXObject()).getItem(new WSGetItem(rightWSItemPK));
                 String rightItemXmlContent = rightWSItem.getContent();
                 if (leftItemXmlContent != null && rightItemXmlContent != null) {
                     CompareHeadInfo compareHeadInfo = new CompareHeadInfo(getXObject());
@@ -823,7 +823,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                     int i = 0;
                     for (LineItem lineItem : lineItems) {
 
-                        String itemID = ((WsDataClusterPK) xObject.getWsKey()).getPk() + "." + lineItem.getConcept() + "."//$NON-NLS-1$//$NON-NLS-2$
+                        String itemID = ((WSDataClusterPK) xObject.getWsKey()).getPk() + "." + lineItem.getConcept() + "."//$NON-NLS-1$//$NON-NLS-2$
                                 + Util.joinStrings(lineItem.getIds(), ".");//$NON-NLS-1$
                         monitor.subTask(Messages.bind(Messages.DataClusterBrowserMainPage_72, (i++), itemID));
                         if (monitor.isCanceled()) {
@@ -832,15 +832,15 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                             return;
                         }
 
-                        WsItemPK itempk = new WsItemPK(lineItem.getConcept(), Arrays.asList(lineItem.getIds()),
-                                (WsDataClusterPK) xObject.getWsKey());
+                        WSItemPK itempk = new WSItemPK(lineItem.getConcept(), Arrays.asList(lineItem.getIds()),
+                                (WSDataClusterPK) xObject.getWsKey());
                         if (source.isEmpty()) {
                             source = "genericUI"; //$NON-NLS-1$
                         }
 
-                        service.deleteItemWithReport(new WsDeleteItemWithReport(invokeBeforeProcess,
+                        service.deleteItemWithReport(new WSDeleteItemWithReport(invokeBeforeProcess,
                                 "LOGIC_DELETE", false, fireEvent, source, partPath, getXObject().getUsername(), itempk));//$NON-NLS-1$
-                        // port.dropItem(new WSDropItem(new WSItemPK((WSDataClusterPK) xObject.getWsKey(),
+                        // port.dropItem(new WSDropItem(new WSItemPK((WSDataClusterPK) xObject.getWSKey(),
                         // lineItem.getConcept(),
                         // lineItem.getIds()), partPath));
                         monitor.worked(1);
@@ -943,12 +943,12 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
             }
 
             private List<LineItem> orderItems(TMDMService service) {
-                WsDataClusterPK pk = (WsDataClusterPK) getXObject().getWsKey();
-                WsGetConceptsInDataCluster param = new WsGetConceptsInDataCluster(pk);
+                WSDataClusterPK pk = (WSDataClusterPK) getXObject().getWsKey();
+                WSGetConceptsInDataCluster param = new WSGetConceptsInDataCluster(pk);
                 List<LineItem> orderItems = new LinkedList<LineItem>();
                 try {
 
-                    WsStringArray concepts = service.getConceptsInDataCluster(param);
+                    WSStringArray concepts = service.getConceptsInDataCluster(param);
                     if (concepts == null || concepts.getStrings() == null || concepts.getStrings().isEmpty()) {
                         orderItems.addAll(lineItems);
                     } else {
@@ -988,7 +988,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                     int i = 0;
                     for (LineItem lineItem : orderItems) {
 
-                        String itemID = ((WsDataClusterPK) getXObject().getWsKey()).getPk() + "." + lineItem.getConcept() + "."//$NON-NLS-1$//$NON-NLS-2$
+                        String itemID = ((WSDataClusterPK) getXObject().getWsKey()).getPk() + "." + lineItem.getConcept() + "."//$NON-NLS-1$//$NON-NLS-2$
                                 + Util.joinStrings(lineItem.getIds(), ".");//$NON-NLS-1$
                         monitor.subTask(Messages.bind(Messages.DataClusterBrowserMainPage_90, (i++), itemID));
                         if (monitor.isCanceled()) {
@@ -997,13 +997,13 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                             return;
                         }
 
-                        WsItemPK itempk = new WsItemPK(lineItem.getConcept(), Arrays.asList(lineItem.getIds()),
-                                (WsDataClusterPK) getXObject().getWsKey());
+                        WSItemPK itempk = new WSItemPK(lineItem.getConcept(), Arrays.asList(lineItem.getIds()),
+                                (WSDataClusterPK) getXObject().getWsKey());
                         if (source.isEmpty()) {
                             source = "genericUI"; //$NON-NLS-1$
                         }
 
-                        service.deleteItemWithReport(new WsDeleteItemWithReport(invokeBeforeProcess,
+                        service.deleteItemWithReport(new WSDeleteItemWithReport(invokeBeforeProcess,
                                 "PHYSICAL_DELETE", false, fireEvent, source, null, getXObject().getUsername(), itempk));//$NON-NLS-1$
                         monitor.worked(1);
                     }// for
@@ -1065,9 +1065,9 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
             try {
 
                 TMDMService service = Util.getMDMService(getXObject());
-                String dataClusterPk = ((WsDataClusterPK) getXObject().getWsKey()).getPk();
+                String dataClusterPk = ((WSDataClusterPK) getXObject().getWsKey()).getPk();
                 boolean created = NewItemHandler.getNewInstance().createItemRecord(service, shell,
-                        new WsDataClusterPK(dataClusterPk + getPkAddition()), isMaster());
+                        new WSDataClusterPK(dataClusterPk + getPkAddition()), isMaster());
                 if (created) {
                     doSearch();
                 }
@@ -1173,7 +1173,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                 int i = 0;
                 for (LineItem lineItem : lineItems) {
 
-                    String itemID = ((WsDataClusterPK) getXObject().getWsKey()).getPk() + "." + lineItem.getConcept() + "." //$NON-NLS-1$ //$NON-NLS-2$
+                    String itemID = ((WSDataClusterPK) getXObject().getWsKey()).getPk() + "." + lineItem.getConcept() + "." //$NON-NLS-1$ //$NON-NLS-2$
                             + Util.joinStrings(lineItem.getIds(), Messages.DataClusterBrowserMainPage_120);
                     monitor.subTask(Messages.bind(Messages.DataClusterBrowserMainPage_121, (i++), itemID));
                     if (monitor.isCanceled()) {
@@ -1184,7 +1184,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 
                     // *** TMDM-8080, temp omitted start ***//
                     // try {
-                    // port.routeItemV2(new WSRouteItemV2(new WSItemPK((WSDataClusterPK) getXObject().getWsKey(),
+                    // port.routeItemV2(new WSRouteItemV2(new WSItemPK((WSDataClusterPK) getXObject().getWSKey(),
                     // lineItem
                     // .getConcept(), Arrays.asList(lineItem.getIds()))));
                     // } catch (Exception e) {

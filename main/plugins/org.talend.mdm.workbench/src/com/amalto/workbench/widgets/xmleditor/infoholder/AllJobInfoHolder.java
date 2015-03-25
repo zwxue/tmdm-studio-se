@@ -20,8 +20,8 @@ import org.apache.commons.logging.LogFactory;
 
 import com.amalto.workbench.utils.JobInfo;
 import com.amalto.workbench.webservices.TMDMService;
-import com.amalto.workbench.webservices.WsmdmJob;
-import com.amalto.workbench.webservices.Wsmdmnull;
+import com.amalto.workbench.webservices.WSMDMJob;
+import com.amalto.workbench.webservices.WSMDMNULL;
 
 public class AllJobInfoHolder extends ExternalInfoHolder<JobInfo[]> {
 
@@ -39,12 +39,12 @@ public class AllJobInfoHolder extends ExternalInfoHolder<JobInfo[]> {
         List<JobInfo> results = new ArrayList<JobInfo>();
 
         try {
-            List<WsmdmJob> jobPKs = service.getMDMJob(new Wsmdmnull()).getWsMDMJob();
+            List<WSMDMJob> jobPKs = service.getMDMJob(new WSMDMNULL()).getWsMDMJob();
             if (jobPKs == null) {
                 return new JobInfo[0];
             }
 
-            for (WsmdmJob eacJobPK : jobPKs) {
+            for (WSMDMJob eacJobPK : jobPKs) {
                 results.add(new JobInfo(eacJobPK.getJobName(), eacJobPK.getJobVersion(), eacJobPK.getSuffix()));
             }
 

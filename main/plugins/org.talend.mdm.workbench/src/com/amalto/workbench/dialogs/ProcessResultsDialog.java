@@ -49,7 +49,7 @@ import org.eclipse.ui.internal.browser.WebBrowserPreference;
 import com.amalto.workbench.editors.TransformerMainPage;
 import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.utils.FileProvider;
-import com.amalto.workbench.webservices.WsExtractedContent;
+import com.amalto.workbench.webservices.WSExtractedContent;
 
 public class ProcessResultsDialog extends Dialog {
 
@@ -65,12 +65,12 @@ public class ProcessResultsDialog extends Dialog {
 
     protected String title;
 
-    protected TreeMap<String, WsExtractedContent> resultsMap = null;
+    protected TreeMap<String, WSExtractedContent> resultsMap = null;
 
     /**
      * @param parentShell
      */
-    public ProcessResultsDialog(Shell parentShell, String title, TreeMap<String, WsExtractedContent> map) {
+    public ProcessResultsDialog(Shell parentShell, String title, TreeMap<String, WSExtractedContent> map) {
         super(parentShell);
         this.title = title;
         this.resultsMap = map;
@@ -139,8 +139,7 @@ public class ProcessResultsDialog extends Dialog {
 
                 public void modifyText(ModifyEvent e) {
                     String output = variablesCombo.getText();
-                    if (output.startsWith(TransformerMainPage.DEFAULT_DISPLAY))
-                     {
+                    if (output.startsWith(TransformerMainPage.DEFAULT_DISPLAY)) {
                         output = DEFAULT_DISPLAY_TEXT;// TransformerMainPage.DEFAULT_VAR+output.substring(TransformerMainPage.DEFAULT_DISPLAY.length());
                     }
                     String text = variablesCombo.getText();
@@ -184,15 +183,13 @@ public class ProcessResultsDialog extends Dialog {
     private static Pattern p = Pattern.compile(".*charset\\s*=[\"|']?(.+)[\"|']([\\s|;].*)?");//$NON-NLS-1$
 
     protected String getText(String output) {
-        WsExtractedContent ct = resultsMap.get(output);
-        if (ct == null)
-         {
+        WSExtractedContent ct = resultsMap.get(output);
+        if (ct == null) {
             return "";//$NON-NLS-1$
         }
         String contentType = ct.getContentType();
         byte[] bytes = ct.getWsByteArray().getBytes();
-        if (bytes == null)
-         {
+        if (bytes == null) {
             return "";//$NON-NLS-1$
         }
         // extract charset
@@ -201,8 +198,7 @@ public class ProcessResultsDialog extends Dialog {
         if (m.matches()) {
             charset = m.group(1).trim().toUpperCase();
         }
-        if ("UTF-8".equals(charset))
-         {
+        if ("UTF-8".equals(charset)) {
             charset = "UTF8";//$NON-NLS-1$
         }
         // display
@@ -221,8 +217,7 @@ public class ProcessResultsDialog extends Dialog {
             Set<String> outputs = resultsMap.keySet();
             for (Object element : outputs) {
                 String output = (String) element;
-                if (output.startsWith(TransformerMainPage.DEFAULT_VAR))
-                 {
+                if (output.startsWith(TransformerMainPage.DEFAULT_VAR)) {
                     output = DEFAULT_DISPLAY_TEXT;// TransformerMainPage.DEFAULT_DISPLAY+output.substring(TransformerMainPage.DEFAULT_VAR.length());
                 }
                 variablesCombo.add(output);

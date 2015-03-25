@@ -38,9 +38,9 @@ import com.amalto.workbench.editors.TransformerMainPage;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.utils.XtentisException;
 import com.amalto.workbench.webservices.TMDMService;
-import com.amalto.workbench.webservices.WsTransformerPluginV2Details;
-import com.amalto.workbench.webservices.WsTransformerPluginV2VariableDescriptor;
-import com.amalto.workbench.webservices.WsTransformerV2;
+import com.amalto.workbench.webservices.WSTransformerPluginV2Details;
+import com.amalto.workbench.webservices.WSTransformerPluginV2VariableDescriptor;
+import com.amalto.workbench.webservices.WSTransformerV2;
 import com.amalto.workbench.widgets.xmleditor.infoholder.ExternalInfoHolder;
 
 /**
@@ -66,7 +66,7 @@ public class TransformerMainPage2 extends TransformerMainPage {
         ExternalInfoHolder<?> allJobInfosHolder = RepositoryExternalInfoHolder.getAllJobInfosHolder(null);
         ExternalInfoHolder<?> mdmServerInfoHolder = RepositoryExternalInfoHolder.getAllMDMServerInfoHolder2(null);
         ExternalInfoHolder<?> allVarCandidatesHolder = RepositoryExternalInfoHolder
-                .getProcessAllCallJobVarsCandidatesHolder((WsTransformerV2) getXObject().getWsObject());
+                .getProcessAllCallJobVarsCandidatesHolder((WSTransformerV2) getXObject().getWsObject());
         ExternalInfoHolder<?> workflowInfoHolder = RepositoryExternalInfoHolder.getAllWorkflowInfoHolder(null);
         ExternalInfoHolder<?> allDataModelHolderProxy = RepositoryExternalInfoHolder.getAllDataModelInfoHolderProxy(getXObject());
 
@@ -82,7 +82,7 @@ public class TransformerMainPage2 extends TransformerMainPage {
     @Override
     protected void initTransformer() throws XtentisException {
         TreeObject xObject = getXObject();
-        transformer = (WsTransformerV2) xObject.getWsObject();
+        transformer = (WSTransformerV2) xObject.getWsObject();
     }
 
     @Override
@@ -95,13 +95,13 @@ public class TransformerMainPage2 extends TransformerMainPage {
             pluginDescriptions.put(jndi, detail.getDescription());
             // add input variables and output variables
             java.util.List<String> input = new LinkedList<String>();
-            for (WsTransformerPluginV2VariableDescriptor v : detail.getInputVariableDescriptors()) {
+            for (WSTransformerPluginV2VariableDescriptor v : detail.getInputVariableDescriptors()) {
                 input.add(v.getVariableName());
             }
             inputVariablesMap.put(jndi, input);
             //
             java.util.List<String> output = new LinkedList<String>();
-            for (WsTransformerPluginV2VariableDescriptor v : detail.getOutputVariableDescriptors()) {
+            for (WSTransformerPluginV2VariableDescriptor v : detail.getOutputVariableDescriptors()) {
                 output.add(v.getVariableName());
             }
             outputVariablesMap.put(jndi, output);
@@ -168,7 +168,7 @@ public class TransformerMainPage2 extends TransformerMainPage {
     }
 
     @Override
-    protected WsTransformerPluginV2Details getWsTransformerPluginV2Details(String jndi) {
+    protected WSTransformerPluginV2Details getWsTransformerPluginV2Details(String jndi) {
         return RepositoryWebServiceAdapter.findTransformerPluginV2Detail(jndi);
     }
 

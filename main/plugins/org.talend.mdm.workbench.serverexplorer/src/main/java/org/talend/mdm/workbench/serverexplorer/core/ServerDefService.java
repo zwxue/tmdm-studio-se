@@ -41,7 +41,7 @@ import com.amalto.workbench.service.ILegendServerDefService;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.XtentisException;
 import com.amalto.workbench.webservices.TMDMService;
-import com.amalto.workbench.webservices.WsPing;
+import com.amalto.workbench.webservices.WSPing;
 
 /**
  * DOC hbhong class global comment. Detailled comment <br/>
@@ -257,7 +257,7 @@ public class ServerDefService implements ILegendServerDefService {
             throws MalformedURLException, XtentisException {
         try {
             TMDMService port = Util.getMDMService(new URL(endpointaddress), universe, username, password);
-            port.ping(new WsPing("ServerExplorer")); //$NON-NLS-1$
+            port.ping(new WSPing("ServerExplorer")); //$NON-NLS-1$
         } catch (javax.xml.ws.WebServiceException e) {
             XtentisException xtentisException = Util.convertWebServiceException(e);
             if (xtentisException != null) {
@@ -287,7 +287,7 @@ public class ServerDefService implements ILegendServerDefService {
         // String universe = serverDef.getUniverse();
         // try {
         // TMDMService port = Util.getMDMService(new URL(endpointaddress), universe, username, password);
-        // WsString ret = port.refreshCache();
+        // WSString ret = port.refreshCache();
         // return ret.getValue();
         // } catch (MalformedURLException e) {
         // log.error(e.getMessage(), e);
@@ -312,8 +312,8 @@ public class ServerDefService implements ILegendServerDefService {
                 String url = serverDef.getProtocol() + serverDef.getHost() + ":" + serverDef.getPort() //$NON-NLS-1$ 
                         + serverDef.getPath();
                 com.amalto.workbench.utils.MDMServerDef legendDef = com.amalto.workbench.utils.MDMServerDef.parse(
-                        serverDef.getProtocol(), url, serverDef.getUser(), serverDef.getPasswd(),
-                        serverDef.getUniverse(), serverDef.getName());
+                        serverDef.getProtocol(), url, serverDef.getUser(), serverDef.getPasswd(), serverDef.getUniverse(),
+                        serverDef.getName());
                 legendDefs.add(legendDef);
             }
 

@@ -19,12 +19,12 @@ import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 import org.talend.mdm.workbench.serverexplorer.core.ServerDefService;
 
 import com.amalto.workbench.webservices.TMDMService;
-import com.amalto.workbench.webservices.WsmdmConfig;
+import com.amalto.workbench.webservices.WSMDMConfig;
 
 /**
  * DOC hbhong class global comment. Detailled comment
  */
-public class RepositoryMDMServerInfoHolder extends RepositoryExternalInfoHolder<WsmdmConfig[]> {
+public class RepositoryMDMServerInfoHolder extends RepositoryExternalInfoHolder<WSMDMConfig[]> {
 
     static Logger log = Logger.getLogger(RepositoryMDMServerInfoHolder.class);
 
@@ -33,12 +33,12 @@ public class RepositoryMDMServerInfoHolder extends RepositoryExternalInfoHolder<
     }
 
     @Override
-    public WsmdmConfig[] getExternalInfo() {
+    public WSMDMConfig[] getExternalInfo() {
         List<MDMServerDef> allServerDefs = ServerDefService.getAllServerDefs(true);
-        WsmdmConfig[] configs = new WsmdmConfig[allServerDefs.size()];
+        WSMDMConfig[] configs = new WSMDMConfig[allServerDefs.size()];
         int i = 0;
         for (MDMServerDef def : allServerDefs) {
-            configs[i] = new WsmdmConfig();
+            configs[i] = new WSMDMConfig();
             configs[i].setServerName(def.getHost());
             configs[i].setServerPort(def.getPort());
             configs[i].setUserName(def.getUser());

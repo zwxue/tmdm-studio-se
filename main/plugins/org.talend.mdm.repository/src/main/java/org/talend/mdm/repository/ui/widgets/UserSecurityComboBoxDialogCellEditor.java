@@ -44,9 +44,9 @@ import org.talend.mdm.workbench.serverexplorer.ui.dialogs.SelectServerDefDialog;
 import com.amalto.workbench.exadapter.ExAdapterManager;
 import com.amalto.workbench.utils.XtentisException;
 import com.amalto.workbench.webservices.TMDMService;
-import com.amalto.workbench.webservices.WsDataModel;
-import com.amalto.workbench.webservices.WsDataModelPK;
-import com.amalto.workbench.webservices.WsGetDataModel;
+import com.amalto.workbench.webservices.WSDataModel;
+import com.amalto.workbench.webservices.WSDataModelPK;
+import com.amalto.workbench.webservices.WSGetDataModel;
 import com.amalto.workbench.widgets.celleditor.EditableComboBoxDialogCellEditor;
 
 /**
@@ -165,7 +165,7 @@ public class UserSecurityComboBoxDialogCellEditor extends EditableComboBoxDialog
         MDMServerDef serverDef = getServerDef();
         if (isAccessible(serverDef)) {
             TMDMService service = getService(serverDef);
-            WsDataModel wsDataModel = service.getDataModel(new WsGetDataModel(new WsDataModelPK(dataModelName)));
+            WSDataModel wsDataModel = service.getDataModel(new WSGetDataModel(new WSDataModelPK(dataModelName)));
             schema = wsDataModel.getXsdSchema();
         }
 

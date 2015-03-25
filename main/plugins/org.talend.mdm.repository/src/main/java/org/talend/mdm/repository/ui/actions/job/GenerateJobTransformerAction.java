@@ -44,7 +44,7 @@ import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 import org.talend.mdm.repository.utils.UIUtil;
 
 import com.amalto.workbench.service.IValidateService;
-import com.amalto.workbench.webservices.WsTransformerVariablesMapping;
+import com.amalto.workbench.webservices.WSTransformerVariablesMapping;
 
 /**
  * 
@@ -148,8 +148,8 @@ public class GenerateJobTransformerAction extends AbstractRepositoryAction {
 
         // Generate the job call
         List<WsTransformerProcessStepE> steps = new ArrayList<WsTransformerProcessStepE>();
-        WsTransformerVariablesMapping[] input;
-        WsTransformerVariablesMapping[] output;
+        WSTransformerVariablesMapping[] input;
+        WSTransformerVariablesMapping[] output;
         try {
             List<WsTransformerVariablesMappingE> inItems;
             List<WsTransformerVariablesMappingE> outItems;
@@ -225,10 +225,10 @@ public class GenerateJobTransformerAction extends AbstractRepositoryAction {
                 steps3.setPluginJNDI("amalto/local/transformer/plugin/callJob");//$NON-NLS-1$ 
                 steps3.setDescription("Invoke the job"); //$NON-NLS-1$
 
-                input = new WsTransformerVariablesMapping[1];
-                input[0] = new WsTransformerVariablesMapping(null, "_DEFAULT_", "xml");//$NON-NLS-1$ //$NON-NLS-2$ 
-                output = new WsTransformerVariablesMapping[1];
-                output[0] = new WsTransformerVariablesMapping(null, "item_xml", "text");//$NON-NLS-1$ //$NON-NLS-2$ 
+                input = new WSTransformerVariablesMapping[1];
+                input[0] = new WSTransformerVariablesMapping(null, "_DEFAULT_", "xml");//$NON-NLS-1$ //$NON-NLS-2$ 
+                output = new WSTransformerVariablesMapping[1];
+                output[0] = new WSTransformerVariablesMapping(null, "item_xml", "text");//$NON-NLS-1$ //$NON-NLS-2$ 
 
                 steps3.setParameters(parameter);
                 steps3.getInputMappings().addAll(inItems3);

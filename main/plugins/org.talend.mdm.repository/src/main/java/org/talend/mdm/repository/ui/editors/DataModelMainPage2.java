@@ -44,7 +44,7 @@ import com.amalto.workbench.dialogs.SelectImportedModulesDialog;
 import com.amalto.workbench.editors.DataModelMainPage;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.providers.datamodel.SchemaTreeContentProvider;
-import com.amalto.workbench.webservices.WsDataModel;
+import com.amalto.workbench.webservices.WSDataModel;
 
 /**
  * DOC hbhong class global comment. Detailled comment
@@ -63,7 +63,7 @@ public class DataModelMainPage2 extends DataModelMainPage {
     }
 
     @Override
-    protected void doSave(WsDataModel wsObject) throws Exception {
+    protected void doSave(WSDataModel wsObject) throws Exception {
         XObjectEditorInput2 editorInput = (XObjectEditorInput2) getEditorInput();
 
         MDMServerObjectItem serverObjectItem = (MDMServerObjectItem) editorInput.getInputItem();
@@ -90,7 +90,7 @@ public class DataModelMainPage2 extends DataModelMainPage {
     //
     public Item updateSchemaToItem(Item item) {
         WsDataModelE wsDataModelE = ((WsDataModelItem) item).getWsDataModel();
-        WsDataModel wsDataModel = (WsDataModel) xobject.getWsObject();
+        WSDataModel wsDataModel = (WSDataModel) xobject.getWsObject();
         wsDataModelE.setXsdSchema(wsDataModel.getXsdSchema());
         return item;
     }

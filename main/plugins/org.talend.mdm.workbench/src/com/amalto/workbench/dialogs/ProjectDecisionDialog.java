@@ -35,10 +35,10 @@ import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.webservices.TMDMService;
-import com.amalto.workbench.webservices.WsDataClusterPK;
-import com.amalto.workbench.webservices.WsDataModelPK;
-import com.amalto.workbench.webservices.WsRegexDataClusterPKs;
-import com.amalto.workbench.webservices.WsRegexDataModelPKs;
+import com.amalto.workbench.webservices.WSDataClusterPK;
+import com.amalto.workbench.webservices.WSDataModelPK;
+import com.amalto.workbench.webservices.WSRegexDataClusterPKs;
+import com.amalto.workbench.webservices.WSRegexDataModelPKs;
 
 public class ProjectDecisionDialog extends Dialog {
 
@@ -99,11 +99,10 @@ public class ProjectDecisionDialog extends Dialog {
             }
 
             TMDMService port = Util.getMDMService(new URL(transformerObject.getEndpointAddress()),
-                    transformerObject.getUniverse(),
-                    transformerObject.getUsername(), transformerObject.getPassword());
+                    transformerObject.getUniverse(), transformerObject.getUsername(), transformerObject.getPassword());
 
             // Grab the available Clusters
-            List<WsDataClusterPK> dcpks = port.getDataClusterPKs(new WsRegexDataClusterPKs(".*")).getWsDataClusterPKs();//$NON-NLS-1$
+            List<WSDataClusterPK> dcpks = port.getDataClusterPKs(new WSRegexDataClusterPKs(".*")).getWsDataClusterPKs();//$NON-NLS-1$
 
             Label dataClustersLabel = new Label(composite, SWT.NULL);
             dataClustersLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
@@ -114,7 +113,7 @@ public class ProjectDecisionDialog extends Dialog {
             int dataClusterSelect = -1;
             if (dcpks != null) {
                 int i = 0;
-                for (WsDataClusterPK pk : dcpks) {
+                for (WSDataClusterPK pk : dcpks) {
                     dataClustersCombo.add(pk.getPk());
                     if (pk.getPk().equals(dataClusterName)) {
                         dataClusterSelect = i;
@@ -125,7 +124,7 @@ public class ProjectDecisionDialog extends Dialog {
             dataClustersCombo.select(dataClusterSelect);
 
             // Grab the available Models
-            List<WsDataModelPK> dmpks = port.getDataModelPKs(new WsRegexDataModelPKs(".*")).getWsDataModelPKs();//$NON-NLS-1$
+            List<WSDataModelPK> dmpks = port.getDataModelPKs(new WSRegexDataModelPKs(".*")).getWsDataModelPKs();//$NON-NLS-1$
 
             Label dataModelsLabel = new Label(composite, SWT.NULL);
             dataModelsLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
@@ -136,7 +135,7 @@ public class ProjectDecisionDialog extends Dialog {
             int dataModelSelect = -1;
             if (dmpks != null) {
                 int i = 0;
-                for (WsDataModelPK pk : dmpks) {
+                for (WSDataModelPK pk : dmpks) {
                     dataModelsCombo.add(pk.getPk());
                     if (pk.getPk().equals(dataModelName)) {
                         dataModelSelect = i;

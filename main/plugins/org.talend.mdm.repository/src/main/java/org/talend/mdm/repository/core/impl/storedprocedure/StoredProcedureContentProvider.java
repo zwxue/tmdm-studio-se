@@ -30,7 +30,7 @@ import org.talend.mdm.repository.core.impl.AbstractContentProvider;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 
 import com.amalto.workbench.models.TreeObject;
-import com.amalto.workbench.webservices.WsStoredProcedure;
+import com.amalto.workbench.webservices.WSStoredProcedure;
 
 /**
  * DOC hbhong class global comment. Detailled comment <br/>
@@ -45,7 +45,7 @@ public class StoredProcedureContentProvider extends AbstractContentProvider {
     }
 
     public Class getWSObjectClass() {
-        return WsStoredProcedure.class;
+        return WSStoredProcedure.class;
     }
 
 }

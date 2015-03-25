@@ -16,9 +16,9 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import com.amalto.workbench.webservices.TMDMService;
-import com.amalto.workbench.webservices.WsmdmConfig;
+import com.amalto.workbench.webservices.WSMDMConfig;
 
-public class MDMServerInfoHolder extends ExternalInfoHolder<WsmdmConfig> {
+public class MDMServerInfoHolder extends ExternalInfoHolder<WSMDMConfig> {
 
     private static Log log = LogFactory.getLog(MDMServerInfoHolder.class);
 
@@ -29,7 +29,7 @@ public class MDMServerInfoHolder extends ExternalInfoHolder<WsmdmConfig> {
     }
 
     @Override
-    public WsmdmConfig getExternalInfo() {
+    public WSMDMConfig getExternalInfo() {
         return service.getMDMConfiguration();
     }
 

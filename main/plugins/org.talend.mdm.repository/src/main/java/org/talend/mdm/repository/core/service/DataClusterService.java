@@ -32,11 +32,11 @@ import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 import org.talend.repository.utils.ZipFileUtils;
 
 import com.amalto.workbench.webservices.TMDMService;
-import com.amalto.workbench.webservices.WsBoolean;
-import com.amalto.workbench.webservices.WsDataCluster;
-import com.amalto.workbench.webservices.WsDataClusterPK;
-import com.amalto.workbench.webservices.WsExistsDataCluster;
-import com.amalto.workbench.webservices.WsPutDataCluster;
+import com.amalto.workbench.webservices.WSBoolean;
+import com.amalto.workbench.webservices.WSDataCluster;
+import com.amalto.workbench.webservices.WSDataClusterPK;
+import com.amalto.workbench.webservices.WSExistsDataCluster;
+import com.amalto.workbench.webservices.WSPutDataCluster;
 
 /**
  * DOC hbhong class global comment. Detailled comment
@@ -60,7 +60,7 @@ public class DataClusterService {
 
     public boolean createDataCluster(TMDMService service, String dName) {
         try {
-            WsPutDataCluster wsDataCluster = new WsPutDataCluster(new WsDataCluster(dName, "", "")); //$NON-NLS-1$ //$NON-NLS-2$
+            WSPutDataCluster wsDataCluster = new WSPutDataCluster(new WSDataCluster(dName, "", "")); //$NON-NLS-1$ //$NON-NLS-2$
             service.putDataCluster(wsDataCluster);
             return true;
         } catch (WebServiceException ex) {
@@ -91,8 +91,8 @@ public class DataClusterService {
     }
 
     public boolean isExistDataCluster(TMDMService service, String dName) {
-        WsExistsDataCluster wsExistsDataCluster = new WsExistsDataCluster(new WsDataClusterPK(dName));
-        WsBoolean wsBoolean = service.existsDataCluster(wsExistsDataCluster);
+        WSExistsDataCluster wsExistsDataCluster = new WSExistsDataCluster(new WSDataClusterPK(dName));
+        WSBoolean wsBoolean = service.existsDataCluster(wsExistsDataCluster);
         return wsBoolean.isTrue();
     }
 

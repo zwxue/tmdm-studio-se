@@ -30,14 +30,13 @@ import org.talend.mdm.repository.core.impl.AbstractContentProvider;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 
 import com.amalto.workbench.models.TreeObject;
-import com.amalto.workbench.webservices.WsView;
+import com.amalto.workbench.webservices.WSView;
 
 /**
  * DOC hbhong class global comment. Detailled comment <br/>
  * 
  */
 public class ViewContentProvider extends AbstractContentProvider {
-
 
     @Override
     protected List<IRepositoryViewObject> getViewObjFromSystemFolder(Item parentItem) {
@@ -48,8 +47,7 @@ public class ViewContentProvider extends AbstractContentProvider {
         return resultList;
     }
 
-
     public Class<?> getWSObjectClass() {
-        return WsView.class;
+        return WSView.class;
     }
 }

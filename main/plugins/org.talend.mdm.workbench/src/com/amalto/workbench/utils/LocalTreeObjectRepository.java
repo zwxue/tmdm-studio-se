@@ -48,7 +48,7 @@ import com.amalto.workbench.models.IXObjectModelListener;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.models.TreeParent;
 import com.amalto.workbench.webservices.TMDMService;
-import com.amalto.workbench.webservices.WsCategoryData;
+import com.amalto.workbench.webservices.WSCategoryData;
 
 public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeViewerListener {
 
@@ -134,7 +134,7 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
 
         try {
             service = Util.getMDMService(new URL(ur), "", user, pwd);//$NON-NLS-1$
-            WsCategoryData category = service.getMDMCategory(null);
+            WSCategoryData category = service.getMDMCategory(null);
             doc = saxReader.read(new StringReader(category.getCategorySchema()));
             saveCredential(ur, user, pwd, doc, service, true);
             doUpgrade(UnifyUrl(ur));
@@ -143,7 +143,7 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
             log.error(e.getMessage(), e);
             String empty = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";//$NON-NLS-1$
             empty += "<" + ICoreConstants.DEFAULT_CATEGORY_ROOT + "/>";//$NON-NLS-1$//$NON-NLS-2$
-            WsCategoryData newData = new WsCategoryData();
+            WSCategoryData newData = new WSCategoryData();
             newData.setCategorySchema(empty);
             try {
                 newData = service.getMDMCategory(newData);
@@ -280,7 +280,7 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
             TMDMService service = credentials.get(url).service;
             Document doc = credentials.get(url).doc;
             if (doc != null) {
-                service.getMDMCategory(new WsCategoryData(doc.asXML()));
+                service.getMDMCategory(new WSCategoryData(doc.asXML()));
             }
         }
     }

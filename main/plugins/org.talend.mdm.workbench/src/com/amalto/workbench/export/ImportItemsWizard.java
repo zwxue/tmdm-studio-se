@@ -77,9 +77,9 @@ import com.amalto.workbench.utils.LocalTreeObjectRepository;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.XmlUtil;
 import com.amalto.workbench.webservices.TMDMService;
-import com.amalto.workbench.webservices.WsAutoIncrement;
-import com.amalto.workbench.webservices.WsItem;
-import com.amalto.workbench.webservices.WsTransformerV2;
+import com.amalto.workbench.webservices.WSAutoIncrement;
+import com.amalto.workbench.webservices.WSItem;
+import com.amalto.workbench.webservices.WSTransformerV2;
 import com.amalto.workbench.widgets.FileSelectWidget;
 import com.amalto.workbench.widgets.RepositoryCheckTreeViewer;
 import com.amalto.workbench.widgets.WidgetFactory;
@@ -336,7 +336,7 @@ public class ImportItemsWizard extends Wizard {
             // import autoincrement
             if (exports.getAutoIncrement() != null) {
                 try {
-                    service.getAutoIncrement(new WsAutoIncrement(exports.getAutoIncrement()));
+                    service.getAutoIncrement(new WSAutoIncrement(exports.getAutoIncrement()));
                 } catch (Exception e) {
                 }
             }
@@ -732,10 +732,10 @@ public class ImportItemsWizard extends Wizard {
         // WSRoutingRule routingRule = new WSRoutingRule();
         // routingRule = (WSRoutingRule) Unmarshaller.unmarshal(WSRoutingRule.class, reader);
         //
-        // if (routingRule.getWsRoutingRuleExpressions() != null) {
-        // for (WSRoutingRuleExpression rule : routingRule.getWsRoutingRuleExpressions()) {
-        // if (rule.getWsOperator() == null) {
-        // rule.setWsOperator(WSRoutingRuleOperator.CONTAINS);
+        // if (routingRule.getWSRoutingRuleExpressions() != null) {
+        // for (WSRoutingRuleExpression rule : routingRule.getWSRoutingRuleExpressions()) {
+        // if (rule.getWSOperator() == null) {
+        // rule.setWSOperator(WSRoutingRuleOperator.CONTAINS);
         // }
         // }
         // }
@@ -1050,7 +1050,7 @@ public class ImportItemsWizard extends Wizard {
         Document document = XmlUtil.parse(new FileInputStream(inputPath));
         if (document != null && document.getRootElement() != null) {
             String rootElementName = document.getRootElement().getName();
-            if (rootElementName.equals(WsTransformerV2.class.getSimpleName())) {
+            if (rootElementName.equals(WSTransformerV2.class.getSimpleName())) {
                 isV2Transformer = true;
             }
         }
@@ -1066,7 +1066,7 @@ public class ImportItemsWizard extends Wizard {
             for (String path : paths) {
                 try {
                     reader = new InputStreamReader(new FileInputStream(importFolder + "/" + path), "UTF-8");//$NON-NLS-1$//$NON-NLS-2$
-                    WsItem wsItem = (WsItem) Unmarshaller.unmarshal(WsItem.class, reader);
+                    WSItem wsItem = (WSItem) Unmarshaller.unmarshal(WSItem.class, reader);
                     String key = wsItem.getWsDataClusterPK().getPk() + "##" + wsItem.getConceptName() + "##"//$NON-NLS-1$//$NON-NLS-2$
                             + wsItem.getDataModelName();
                     List<String> list = null;

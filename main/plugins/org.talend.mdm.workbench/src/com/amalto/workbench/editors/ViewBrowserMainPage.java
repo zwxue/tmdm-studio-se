@@ -67,17 +67,17 @@ import com.amalto.workbench.providers.XObjectBrowserInput;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.XtentisException;
 import com.amalto.workbench.webservices.TMDMService;
-import com.amalto.workbench.webservices.WsDataClusterPK;
-import com.amalto.workbench.webservices.WsGetView;
-import com.amalto.workbench.webservices.WsQuickSearch;
-import com.amalto.workbench.webservices.WsStringPredicate;
-import com.amalto.workbench.webservices.WsView;
-import com.amalto.workbench.webservices.WsViewPK;
-import com.amalto.workbench.webservices.WsViewSearch;
-import com.amalto.workbench.webservices.WsWhereAnd;
-import com.amalto.workbench.webservices.WsWhereCondition;
-import com.amalto.workbench.webservices.WsWhereItem;
-import com.amalto.workbench.webservices.WsWhereOperator;
+import com.amalto.workbench.webservices.WSDataClusterPK;
+import com.amalto.workbench.webservices.WSGetView;
+import com.amalto.workbench.webservices.WSQuickSearch;
+import com.amalto.workbench.webservices.WSStringPredicate;
+import com.amalto.workbench.webservices.WSView;
+import com.amalto.workbench.webservices.WSViewPK;
+import com.amalto.workbench.webservices.WSViewSearch;
+import com.amalto.workbench.webservices.WSWhereAnd;
+import com.amalto.workbench.webservices.WSWhereCondition;
+import com.amalto.workbench.webservices.WSWhereItem;
+import com.amalto.workbench.webservices.WSWhereOperator;
 
 public class ViewBrowserMainPage extends AMainPage implements IXObjectModelListener {
 
@@ -145,7 +145,7 @@ public class ViewBrowserMainPage extends AMainPage implements IXObjectModelListe
                 }
 
                 public Object[] getElements(Object inputElement) {
-                    return ((WsView) inputElement).getWhereConditions().toArray();
+                    return ((WSView) inputElement).getWhereConditions().toArray();
                 }
             });
             wcListViewer.setLabelProvider(new ILabelProvider() {
@@ -155,53 +155,53 @@ public class ViewBrowserMainPage extends AMainPage implements IXObjectModelListe
                 }
 
                 public String getText(Object element) {
-                    WsWhereCondition wc = (WsWhereCondition) element;
+                    WSWhereCondition wc = (WSWhereCondition) element;
                     String text = wc.getLeftPath() + " ";//$NON-NLS-1$
-                    if (wc.getOperator().equals(WsWhereOperator.CONTAINS)) {
+                    if (wc.getOperator().equals(WSWhereOperator.CONTAINS)) {
                         text += "Contains";//$NON-NLS-1$
-                    } else if (wc.getOperator().equals(WsWhereOperator.CONTAINS_TEXT_OF)) {
+                    } else if (wc.getOperator().equals(WSWhereOperator.CONTAINS_TEXT_OF)) {
                         text += "Contains Text Of";//$NON-NLS-1$
-                    } else if (wc.getOperator().equals(WsWhereOperator.EQUALS)) {
+                    } else if (wc.getOperator().equals(WSWhereOperator.EQUALS)) {
                         text += "=";//$NON-NLS-1$
-                    } else if (wc.getOperator().equals(WsWhereOperator.GREATER_THAN)) {
+                    } else if (wc.getOperator().equals(WSWhereOperator.GREATER_THAN)) {
                         text += ">";//$NON-NLS-1$
-                    } else if (wc.getOperator().equals(WsWhereOperator.GREATER_THAN_OR_EQUAL)) {
+                    } else if (wc.getOperator().equals(WSWhereOperator.GREATER_THAN_OR_EQUAL)) {
                         text += ">=";//$NON-NLS-1$
-                    } else if (wc.getOperator().equals(WsWhereOperator.JOIN)) {
+                    } else if (wc.getOperator().equals(WSWhereOperator.JOIN)) {
                         text += "Joins With";//$NON-NLS-1$
-                    } else if (wc.getOperator().equals(WsWhereOperator.LOWER_THAN)) {
+                    } else if (wc.getOperator().equals(WSWhereOperator.LOWER_THAN)) {
                         text += "<";//$NON-NLS-1$
-                    } else if (wc.getOperator().equals(WsWhereOperator.LOWER_THAN_OR_EQUAL)) {
+                    } else if (wc.getOperator().equals(WSWhereOperator.LOWER_THAN_OR_EQUAL)) {
                         text += "<=";//$NON-NLS-1$
-                    } else if (wc.getOperator().equals(WsWhereOperator.NOT_EQUALS)) {
+                    } else if (wc.getOperator().equals(WSWhereOperator.NOT_EQUALS)) {
                         text += "!=";//$NON-NLS-1$
-                    } else if (wc.getOperator().equals(WsWhereOperator.STARTSWITH)) {
+                    } else if (wc.getOperator().equals(WSWhereOperator.STARTSWITH)) {
                         text += "Starts With";//$NON-NLS-1$
-                    } else if (wc.getOperator().equals(WsWhereOperator.STRICTCONTAINS)) {
+                    } else if (wc.getOperator().equals(WSWhereOperator.STRICTCONTAINS)) {
                         text += "Strict Contains";//$NON-NLS-1$
-                    } else if (wc.getOperator().equals(WsWhereOperator.EMPTY_NULL)) {
+                    } else if (wc.getOperator().equals(WSWhereOperator.EMPTY_NULL)) {
                         text += "Is Empty Or Null";//$NON-NLS-1$
                     }
                     text += " ";//$NON-NLS-1$
-                    if (!wc.getOperator().equals(WsWhereOperator.JOIN)) {
+                    if (!wc.getOperator().equals(WSWhereOperator.JOIN)) {
                         text += "\"";//$NON-NLS-1$
                     }
                     text += wc.getRightValueOrPath();
-                    if (!wc.getOperator().equals(WsWhereOperator.JOIN)) {
+                    if (!wc.getOperator().equals(WSWhereOperator.JOIN)) {
                         text += "\"";//$NON-NLS-1$
                     }
                     text += " ";//$NON-NLS-1$
-                    if (wc.getStringPredicate().equals(WsStringPredicate.AND)) {
+                    if (wc.getStringPredicate().equals(WSStringPredicate.AND)) {
                         text += "[and]";//$NON-NLS-1$
-                    } else if (wc.getStringPredicate().equals(WsStringPredicate.EXACTLY)) {
+                    } else if (wc.getStringPredicate().equals(WSStringPredicate.EXACTLY)) {
                         text += "[exactly]";//$NON-NLS-1$
-                    } else if (wc.getStringPredicate().equals(WsStringPredicate.NONE)) {
+                    } else if (wc.getStringPredicate().equals(WSStringPredicate.NONE)) {
                         text += "";//$NON-NLS-1$
-                    } else if (wc.getStringPredicate().equals(WsStringPredicate.NOT)) {
+                    } else if (wc.getStringPredicate().equals(WSStringPredicate.NOT)) {
                         text += "[not]";//$NON-NLS-1$
-                    } else if (wc.getStringPredicate().equals(WsStringPredicate.OR)) {
+                    } else if (wc.getStringPredicate().equals(WSStringPredicate.OR)) {
                         text += "[or]";//$NON-NLS-1$
-                    } else if (wc.getStringPredicate().equals(WsStringPredicate.STRICTAND)) {
+                    } else if (wc.getStringPredicate().equals(WSStringPredicate.STRICTAND)) {
                         text += "[strict and]";//$NON-NLS-1$
                     }
                     return text;
@@ -336,13 +336,13 @@ public class ViewBrowserMainPage extends AMainPage implements IXObjectModelListe
                 return;
             }
 
-            WsView view = null;
+            WSView view = null;
             if (getXObject().getWsObject() == null) { // then fetch from server
                 TMDMService port = getMDMService();
-                view = port.getView(new WsGetView((WsViewPK) getXObject().getWsKey()));
+                view = port.getView(new WSGetView((WSViewPK) getXObject().getWsKey()));
                 getXObject().setWsObject(view);
             } else { // it has been opened by an editor - use the object there
-                view = (WsView) getXObject().getWsObject();
+                view = (WSView) getXObject().getWsObject();
             }
 
             java.util.List<String> paths = view.getViewableBusinessElements();
@@ -368,12 +368,12 @@ public class ViewBrowserMainPage extends AMainPage implements IXObjectModelListe
             wcListViewer.refresh();
 
             dataClusterCombo.removeAll();
-            java.util.List<WsDataClusterPK> dataClusterPKs = getDataClusterPKs();
+            java.util.List<WSDataClusterPK> dataClusterPKs = getDataClusterPKs();
             if ((dataClusterPKs == null) || (dataClusterPKs.size() == 0)) {
                 MessageDialog.openError(this.getSite().getShell(), Messages._Error, Messages.ViewBrowserMainPage_ErrorMsg1);
                 return;
             }
-            for (WsDataClusterPK pk : dataClusterPKs) {
+            for (WSDataClusterPK pk : dataClusterPKs) {
                 dataClusterCombo.add(pk.getPk());
             }
             dataClusterCombo.select(0);
@@ -398,7 +398,7 @@ public class ViewBrowserMainPage extends AMainPage implements IXObjectModelListe
         return new String[0];
     }
 
-    protected java.util.List<WsDataClusterPK> getDataClusterPKs() throws MalformedURLException, XtentisException {
+    protected java.util.List<WSDataClusterPK> getDataClusterPKs() throws MalformedURLException, XtentisException {
         return Util.getAllDataClusterPKs(new URL(getXObject().getEndpointAddress()), getXObject().getUniverse(), getXObject()
                 .getUsername(), getXObject().getPassword());
     }
@@ -449,8 +449,8 @@ public class ViewBrowserMainPage extends AMainPage implements IXObjectModelListe
         return;
     }
 
-    protected WsViewPK getViewPK() {
-        return (WsViewPK) getXObject().getWsKey();
+    protected WSViewPK getViewPK() {
+        return (WSViewPK) getXObject().getWsKey();
     }
 
     public String[] getResults() {
@@ -468,31 +468,33 @@ public class ViewBrowserMainPage extends AMainPage implements IXObjectModelListe
             int maxItem = 10;
 
             String search = "".equals(searchText.getText()) ? "*" : searchText.getText(); //$NON-NLS-1$ //$NON-NLS-2$
-            WsDataClusterPK wsDataClusterPK = new WsDataClusterPK(dataClusterCombo.getText() + getPkAddition());
+            WSDataClusterPK wsDataClusterPK = new WSDataClusterPK(dataClusterCombo.getText() + getPkAddition());
             if (FULL_TEXT.equals(searchItemCombo.getText())) {
                 boolean matchAllWords = matchAllWordsBtn.getSelection();
-                
-                results = service.quickSearch(new WsQuickSearch(null, matchAllWords, maxItem, null, search, 0, Integer.MAX_VALUE,wsDataClusterPK, getViewPK())).getStrings();
+
+                results = service.quickSearch(
+                        new WSQuickSearch(null, matchAllWords, maxItem, null, search, 0, Integer.MAX_VALUE, wsDataClusterPK,
+                                getViewPK())).getStrings();
 
             } else {
-                WsView wsview = (WsView) wcListViewer.getInput();
+                WSView wsview = (WSView) wcListViewer.getInput();
 
-                java.util.List<WsWhereCondition> array = wsview.getWhereConditions();
-                java.util.List<WsWhereItem> conditions = new ArrayList<WsWhereItem>();
-                for (WsWhereCondition condition : array) {
-                    WsWhereItem item = new WsWhereItem(null, condition, null);
+                java.util.List<WSWhereCondition> array = wsview.getWhereConditions();
+                java.util.List<WSWhereItem> conditions = new ArrayList<WSWhereItem>();
+                for (WSWhereCondition condition : array) {
+                    WSWhereItem item = new WSWhereItem(null, condition, null);
                     conditions.add(item);
                 }
-                
-                WsWhereCondition condition = new WsWhereCondition(searchItemCombo.getText(), WsWhereOperator.CONTAINS, search,
-                         true, WsStringPredicate.AND);
-                WsWhereItem item = new WsWhereItem(null, condition, null);
+
+                WSWhereCondition condition = new WSWhereCondition(searchItemCombo.getText(), WSWhereOperator.CONTAINS, search,
+                        true, WSStringPredicate.AND);
+                WSWhereItem item = new WSWhereItem(null, condition, null);
                 conditions.add(item);
-                WsWhereAnd and = new WsWhereAnd(conditions);
-                WsWhereItem wi = new WsWhereItem(and, null, null);
+                WSWhereAnd and = new WSWhereAnd(conditions);
+                WSWhereItem wi = new WSWhereItem(and, null, null);
 
                 results = service.viewSearch(
-                        new WsViewSearch("ascending",maxItem, null, 0, -1, wi, wsDataClusterPK, getViewPK())).getStrings(); //$NON-NLS-1$
+                        new WSViewSearch("ascending", maxItem, null, 0, -1, wi, wsDataClusterPK, getViewPK())).getStrings(); //$NON-NLS-1$
             }
 
             resultsLabel.setText(Messages.bind(Messages.ViewBrowserMainPage_Results, results.size() - 1));

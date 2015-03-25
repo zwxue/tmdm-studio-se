@@ -53,9 +53,9 @@ import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.service.IValidateService;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.XSDAnnotationsStructure;
-import com.amalto.workbench.webservices.WsConceptKey;
-import com.amalto.workbench.webservices.WsDataModelPK;
-import com.amalto.workbench.webservices.WsGetBusinessConceptKey;
+import com.amalto.workbench.webservices.WSConceptKey;
+import com.amalto.workbench.webservices.WSDataModelPK;
+import com.amalto.workbench.webservices.WSGetBusinessConceptKey;
 
 /**
  * DOC hbhong class global comment. Detailled comment
@@ -164,8 +164,8 @@ public class AddBrowseItemsWizardR extends AddBrowseItemsWizard {
 
     private static List<String> getKeyElements(String datamodel, String concept) {
         java.util.List<String> idList = new ArrayList<String>();
-        WsGetBusinessConceptKey wsGetBusinessConceptKey = new WsGetBusinessConceptKey(concept, new WsDataModelPK(datamodel));
-        WsConceptKey wsConceptKey;
+        WSGetBusinessConceptKey wsGetBusinessConceptKey = new WSGetBusinessConceptKey(concept, new WSDataModelPK(datamodel));
+        WSConceptKey wsConceptKey;
         try {
             wsConceptKey = RepositoryResourceUtil.getBusinessConceptKey(wsGetBusinessConceptKey);
         } catch (Exception e) {

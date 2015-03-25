@@ -52,14 +52,14 @@ import com.amalto.workbench.providers.XObjectEditorInput;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.XmlUtil;
 import com.amalto.workbench.webservices.TMDMService;
-import com.amalto.workbench.webservices.WsCheckServiceConfigRequest;
-import com.amalto.workbench.webservices.WsCheckServiceConfigResponse;
-import com.amalto.workbench.webservices.WsGetServicesList;
-import com.amalto.workbench.webservices.WsServiceGetDocument;
-import com.amalto.workbench.webservices.WsServicePutConfiguration;
-import com.amalto.workbench.webservices.WsServicesList;
-import com.amalto.workbench.webservices.WsServicesListItem;
-import com.amalto.workbench.webservices.WsString;
+import com.amalto.workbench.webservices.WSCheckServiceConfigRequest;
+import com.amalto.workbench.webservices.WSCheckServiceConfigResponse;
+import com.amalto.workbench.webservices.WSGetServicesList;
+import com.amalto.workbench.webservices.WSServiceGetDocument;
+import com.amalto.workbench.webservices.WSServicePutConfiguration;
+import com.amalto.workbench.webservices.WSServicesList;
+import com.amalto.workbench.webservices.WSServicesListItem;
+import com.amalto.workbench.webservices.WSString;
 
 public class ServiceConfigrationMainPage extends AMainPageV2 {
 
@@ -75,9 +75,9 @@ public class ServiceConfigrationMainPage extends AMainPageV2 {
 
     protected TMDMService service;
 
-    protected WsServiceGetDocument document;
+    protected WSServiceGetDocument document;
 
-    protected WsServicePutConfiguration ws = new WsServicePutConfiguration();
+    protected WSServicePutConfiguration ws = new WSServicePutConfiguration();
 
     protected Text errorLabel;
 
@@ -97,7 +97,7 @@ public class ServiceConfigrationMainPage extends AMainPageV2 {
     protected void setForConfigureContent(String serviceName) {
 
         if (serviceName != null && !"".equals(serviceName)) {//$NON-NLS-1$
-            document = service.getServiceDocument(new WsString(serviceName.trim()));
+            document = service.getServiceDocument(new WSString(serviceName.trim()));
             String documentConfigure = ServiceConfigrationMainPage.formartXml(document.getConfigure());
             serviceConfigurationsText.setText(documentConfigure);
             errorLabel.setText("");//$NON-NLS-1$
@@ -108,8 +108,8 @@ public class ServiceConfigrationMainPage extends AMainPageV2 {
     protected void setForServiceNameCombo() {
         try {
             service = Util.getMDMService(getXObject());
-            WsServicesList list = service.getServicesList(new WsGetServicesList(""));//$NON-NLS-1$
-            List<WsServicesListItem> items = list.getItem();
+            WSServicesList list = service.getServicesList(new WSGetServicesList(""));//$NON-NLS-1$
+            List<WSServicesListItem> items = list.getItem();
             if (items != null) {
                 String[] sortedList = new String[items.size()];
                 for (int i = 0; i < items.size(); i++) {
@@ -117,7 +117,7 @@ public class ServiceConfigrationMainPage extends AMainPageV2 {
                 }
                 Arrays.sort(sortedList);
                 for (String element : sortedList) {
-                    WsServiceGetDocument doc = service.getServiceDocument(new WsString(element.trim()));
+                    WSServiceGetDocument doc = service.getServiceDocument(new WSString(element.trim()));
                     if (doc.getConfigureSchema() == null || doc.getConfigureSchema().length() == 0) {
                         continue;
                     }
@@ -135,7 +135,7 @@ public class ServiceConfigrationMainPage extends AMainPageV2 {
 
     protected String getDoc() {
         try {
-            WsServiceGetDocument doc = getServiceDocument(serviceNameCombo.getText());
+            WSServiceGetDocument doc = getServiceDocument(serviceNameCombo.getText());
             return doc.getDefaultConfig();
         } catch (WebServiceException e) {
             log.error(e.getMessage(), e);
@@ -145,7 +145,7 @@ public class ServiceConfigrationMainPage extends AMainPageV2 {
 
     protected String getDesc() {
         try {
-            WsServiceGetDocument doc = getServiceDocument(serviceNameCombo.getText());
+            WSServiceGetDocument doc = getServiceDocument(serviceNameCombo.getText());
             return doc.getDescription();
         } catch (WebServiceException e) {
             log.error(e.getMessage(), e);
@@ -153,10 +153,10 @@ public class ServiceConfigrationMainPage extends AMainPageV2 {
         return null;
     }
 
-    protected WsServiceGetDocument getServiceDocument(String jndiName) {
+    protected WSServiceGetDocument getServiceDocument(String jndiName) {
 
         // return port.getServiceDocument(new WSString(serviceNameCombo.getText().trim()));
-        return service.getServiceDocument(new WsString(jndiName.trim()));
+        return service.getServiceDocument(new WSString(jndiName.trim()));
     }
 
     @Override
@@ -333,9 +333,9 @@ public class ServiceConfigrationMainPage extends AMainPageV2 {
             return CHECKMSG_NOSELECTION;
         }
 
-        WsCheckServiceConfigResponse result;
+        WSCheckServiceConfigResponse result;
 
-        result = service.checkServiceConfiguration(new WsCheckServiceConfigRequest(serviceNameCombo.getText().trim(),
+        result = service.checkServiceConfiguration(new WSCheckServiceConfigRequest(serviceNameCombo.getText().trim(),
                 serviceConfigurationsText.getText()));
 
         if (result.isCheckResult()) {

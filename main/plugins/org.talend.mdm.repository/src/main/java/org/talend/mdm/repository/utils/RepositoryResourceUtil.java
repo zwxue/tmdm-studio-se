@@ -112,8 +112,8 @@ import org.talend.repository.model.RepositoryNode;
 import com.amalto.workbench.exadapter.ExAdapterManager;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.XtentisException;
-import com.amalto.workbench.webservices.WsConceptKey;
-import com.amalto.workbench.webservices.WsGetBusinessConceptKey;
+import com.amalto.workbench.webservices.WSConceptKey;
+import com.amalto.workbench.webservices.WSGetBusinessConceptKey;
 
 /**
  * DOC hbhong class global comment. Detailled comment <br/>
@@ -1417,7 +1417,7 @@ public class RepositoryResourceUtil {
         return false;
     }
 
-    public static WsConceptKey getBusinessConceptKey(WsGetBusinessConceptKey businessConcepKey) throws XtentisException {
+    public static WSConceptKey getBusinessConceptKey(WSGetBusinessConceptKey businessConcepKey) throws XtentisException {
         String pk = businessConcepKey.getWsDataModelPK().getPk();
         String concept = businessConcepKey.getConcept();
         WsDataModelE dataModel = RepositoryQueryService.findDataModelByName(pk);
@@ -1427,7 +1427,7 @@ public class RepositoryResourceUtil {
                 for (XSDIdentityConstraintDefinition idDef : xsdSchema.getIdentityConstraintDefinitions()) {
 
                     if (idDef.getName().equals(concept)) {
-                        WsConceptKey key = new WsConceptKey();
+                        WSConceptKey key = new WSConceptKey();
                         //
                         XSDXPathDefinition selector = idDef.getSelector();
                         key.setSelector(selector.getValue());

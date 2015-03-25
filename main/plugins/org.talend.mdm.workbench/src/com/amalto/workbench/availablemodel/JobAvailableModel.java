@@ -21,8 +21,8 @@ import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.models.TreeParent;
 import com.amalto.workbench.utils.EXtentisObjects;
 import com.amalto.workbench.webservices.TMDMService;
-import com.amalto.workbench.webservices.WsmdmJob;
-import com.amalto.workbench.webservices.Wsmdmnull;
+import com.amalto.workbench.webservices.WSMDMJob;
+import com.amalto.workbench.webservices.WSMDMNULL;
 
 /**
  * DOC achen class global comment. Detailled comment
@@ -41,9 +41,9 @@ public class JobAvailableModel extends AbstractAvailableModel {
         TreeParent deployedJob = new TreeParent(Messages.JobAvailableModel_DeployedJobs, serverRoot,
                 TreeObject.BUILT_IN_CATEGORY_FOLDER, null, null);
         try {
-            List<WsmdmJob> jobPKs = service.getMDMJob(new Wsmdmnull()).getWsMDMJob();
+            List<WSMDMJob> jobPKs = service.getMDMJob(new WSMDMNULL()).getWsMDMJob();
             if (jobPKs != null) {
-                for (WsmdmJob jobPK : jobPKs) {
+                for (WSMDMJob jobPK : jobPKs) {
                     String name = jobPK.getJobName() + "_" + jobPK.getJobVersion() + jobPK.getSuffix();//$NON-NLS-1$
                     TreeObject obj = new TreeObject(name, serverRoot, TreeObject.JOB, name, null);
                     deployedJob.addChild(obj);

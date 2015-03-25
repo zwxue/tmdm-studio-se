@@ -60,17 +60,17 @@ import com.amalto.workbench.providers.XObjectEditorInput;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.XtentisException;
 import com.amalto.workbench.webservices.TMDMService;
-import com.amalto.workbench.webservices.WsBoolean;
-import com.amalto.workbench.webservices.WsConceptKey;
-import com.amalto.workbench.webservices.WsDataModelPK;
-import com.amalto.workbench.webservices.WsGetBusinessConceptKey;
-import com.amalto.workbench.webservices.WsGetTransformerPKs;
-import com.amalto.workbench.webservices.WsGetView;
-import com.amalto.workbench.webservices.WsTransformerPK;
-import com.amalto.workbench.webservices.WsTransformerPKArray;
-import com.amalto.workbench.webservices.WsView;
-import com.amalto.workbench.webservices.WsViewPK;
-import com.amalto.workbench.webservices.WsWhereCondition;
+import com.amalto.workbench.webservices.WSBoolean;
+import com.amalto.workbench.webservices.WSConceptKey;
+import com.amalto.workbench.webservices.WSDataModelPK;
+import com.amalto.workbench.webservices.WSGetBusinessConceptKey;
+import com.amalto.workbench.webservices.WSGetTransformerPKs;
+import com.amalto.workbench.webservices.WSGetView;
+import com.amalto.workbench.webservices.WSTransformerPK;
+import com.amalto.workbench.webservices.WSTransformerPKArray;
+import com.amalto.workbench.webservices.WSView;
+import com.amalto.workbench.webservices.WSViewPK;
+import com.amalto.workbench.webservices.WSWhereCondition;
 import com.amalto.workbench.widgets.ComplexTableViewerColumn;
 import com.amalto.workbench.widgets.DescAnnotationComposite;
 import com.amalto.workbench.widgets.TisTableViewer;
@@ -129,9 +129,9 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener {
 
     protected void initProcessCombo() throws XtentisException {
         java.util.List<String> pList = new ArrayList<String>();
-        WsTransformerPKArray array = Util.getMDMService(getXObject()).getTransformerPKs(new WsGetTransformerPKs("")); //$NON-NLS-1$
+        WSTransformerPKArray array = Util.getMDMService(getXObject()).getTransformerPKs(new WSGetTransformerPKs("")); //$NON-NLS-1$
         if (array != null && array.getWsTransformerPK() != null) {
-            for (WsTransformerPK pk : array.getWsTransformerPK()) {
+            for (WSTransformerPK pk : array.getWsTransformerPK()) {
                 pList.add(pk.getPk());
             }
         }
@@ -273,7 +273,7 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener {
 
             this.refreshing = true;
 
-            WsView wsObject = getWsViewObject();
+            WSView wsObject = getWsViewObject();
 
             desAntionComposite.setText(wsObject.getDescription() == null ? "" : wsObject.getDescription());//$NON-NLS-1$
 
@@ -309,7 +309,7 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener {
             searchableViewer.getViewer().setInput(slines);
 
             java.util.List<Line> lines = new ArrayList<Line>();
-            for (WsWhereCondition wc : wsObject.getWhereConditions()) {
+            for (WSWhereCondition wc : wsObject.getWhereConditions()) {
                 Line line = new Line(conditionsColumns, Util.convertWhereCondition(wc));
                 lines.add(line);
             }
@@ -323,17 +323,17 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener {
         }
     }
 
-    protected WsView getWsViewObject() {
-        WsView wsObject = null;
+    protected WSView getWsViewObject() {
+        WSView wsObject = null;
         try {
             if (getXObject().getWsObject() == null) { // then fetch from server
 
                 TMDMService port = Util.getMDMService(getXObject());
 
-                wsObject = port.getView(new WsGetView((WsViewPK) getXObject().getWsKey()));
+                wsObject = port.getView(new WSGetView((WSViewPK) getXObject().getWsKey()));
                 getXObject().setWsObject(wsObject);
             } else { // it has been opened by an editor - use the object there
-                wsObject = (WsView) getXObject().getWsObject();
+                wsObject = (WSView) getXObject().getWsObject();
             }
         } catch (XtentisException e) {
             log.error(e.getMessage(), e);
@@ -350,9 +350,9 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener {
             }
 
             this.comitting = true;
-            WsView wsObject = getWsViewObject();
+            WSView wsObject = getWsViewObject();
             wsObject.setDescription(desAntionComposite.getText());
-            wsObject.setIsTransformerActive(new WsBoolean(btnRunProcess.getSelection()));
+            wsObject.setIsTransformerActive(new WSBoolean(btnRunProcess.getSelection()));
             wsObject.setTransformerPK(cboProcessList.getText());
             java.util.List<Line> vlines = (java.util.List<Line>) viewableViewer.getViewer().getInput();
             wsObject.getViewableBusinessElements().clear();
@@ -367,12 +367,12 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener {
             }
 
             java.util.List<Line> lines = (java.util.List<Line>) conditionViewer.getViewer().getInput();
-            java.util.List<WsWhereCondition> wclist = new ArrayList<WsWhereCondition>();
+            java.util.List<WSWhereCondition> wclist = new ArrayList<WSWhereCondition>();
             wsObject.getWhereConditions().clear();
             for (Line item : lines) {
                 String[] values = new String[] { item.keyValues.get(0).value, item.keyValues.get(1).value,
                         item.keyValues.get(2).value, item.keyValues.get(3).value };
-                WsWhereCondition wc = Util.convertLine(values);
+                WSWhereCondition wc = Util.convertLine(values);
                 wsObject.getWhereConditions().add(wc);
             }
 
@@ -389,7 +389,7 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener {
         return Util.getDataModel(this.getXObject(), null, concept);
     }
 
-    protected WsConceptKey getBusinessConceptKey(WsGetBusinessConceptKey businessConcepKey) throws XtentisException {
+    protected WSConceptKey getBusinessConceptKey(WSGetBusinessConceptKey businessConcepKey) throws XtentisException {
         return Util.getMDMService(getXObject()).getBusinessConceptKey(businessConcepKey);
     }
 
@@ -410,9 +410,9 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener {
                     // keys validate
                     java.util.List<String> toAddViewableList = new ArrayList<String>();
 
-                    WsGetBusinessConceptKey wsGetBusinessConceptKey = new WsGetBusinessConceptKey(concept, new WsDataModelPK(
+                    WSGetBusinessConceptKey wsGetBusinessConceptKey = new WSGetBusinessConceptKey(concept, new WSDataModelPK(
                             lastDataModelName));
-                    WsConceptKey wsConceptKey = null;
+                    WSConceptKey wsConceptKey = null;
                     try {
                         wsConceptKey = getBusinessConceptKey(wsGetBusinessConceptKey);
                     } catch (XtentisException e) {
@@ -635,7 +635,7 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener {
 
     }
 
-    public boolean equals(WsWhereCondition wcObj, WsWhereCondition obj) {
+    public boolean equals(WSWhereCondition wcObj, WSWhereCondition obj) {
         if (wcObj.getLeftPath().equals(obj.getLeftPath()) && wcObj.getOperator().value().equals(obj.getOperator().value())
                 && wcObj.getRightValueOrPath().equals(obj.getRightValueOrPath())
                 && wcObj.getStringPredicate().value().equals(obj.getStringPredicate().value())) {
@@ -674,9 +674,10 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener {
         }
         return super.getAdapter(adapter);
     }
+
     // The ending| bug:21784
 
     protected void runTest() {
-        //empty
+        // empty
     }
 }

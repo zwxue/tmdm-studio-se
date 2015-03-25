@@ -21,10 +21,10 @@ import com.amalto.workbench.utils.EXtentisObjects;
 import com.amalto.workbench.utils.TreeObjectUtil;
 import com.amalto.workbench.utils.XtentisException;
 import com.amalto.workbench.webservices.TMDMService;
-import com.amalto.workbench.webservices.WsDeleteMenu;
-import com.amalto.workbench.webservices.WsMenu;
-import com.amalto.workbench.webservices.WsMenuPK;
-import com.amalto.workbench.webservices.WsPutMenu;
+import com.amalto.workbench.webservices.WSDeleteMenu;
+import com.amalto.workbench.webservices.WSMenu;
+import com.amalto.workbench.webservices.WSMenuPK;
+import com.amalto.workbench.webservices.WSPutMenu;
 
 /**
  * DOC hbhong class global comment. Detailled comment
@@ -43,7 +43,7 @@ public class MenuInteractiveHandler extends AbstractInteractiveHandler {
     @Override
     public boolean doDeployWSObject(TMDMService service, Object wsObj) {
         if (wsObj != null) {
-            service.putMenu(new WsPutMenu((WsMenu) wsObj));
+            service.putMenu(new WSPutMenu((WSMenu) wsObj));
             return true;
         }
         return false;
@@ -51,10 +51,10 @@ public class MenuInteractiveHandler extends AbstractInteractiveHandler {
 
     @Override
     public boolean doRemove(TMDMService service, AbstractDeployCommand cmd) throws XtentisException {
-        WsMenuPK pk = new WsMenuPK();
+        WSMenuPK pk = new WSMenuPK();
         String name = cmd.getObjName();
         pk.setPk(name);
-        service.deleteMenu(new WsDeleteMenu(pk));
+        service.deleteMenu(new WSDeleteMenu(pk));
         TreeObjectUtil.deleteSpecificationFromAttachedRole(service, name, EXtentisObjects.Menu.getName());
         return true;
     }

@@ -19,9 +19,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.amalto.workbench.webservices.TMDMService;
-import com.amalto.workbench.webservices.WsDataClusterPK;
-import com.amalto.workbench.webservices.WsGetConceptsInDataCluster;
-import com.amalto.workbench.webservices.WsStringArray;
+import com.amalto.workbench.webservices.WSDataClusterPK;
+import com.amalto.workbench.webservices.WSGetConceptsInDataCluster;
+import com.amalto.workbench.webservices.WSStringArray;
 
 /**
  * created by HHB on 2012-10-8 Detailled comment
@@ -38,8 +38,8 @@ public class DataProcessRuleFactory {
      */
     public static DataProcessRule createProcessRouterFromRemote(TMDMService service, String dataClusterName) {
 
-        WsGetConceptsInDataCluster param = new WsGetConceptsInDataCluster(new WsDataClusterPK(dataClusterName));
-        WsStringArray concepts = service.getConceptsInDataCluster(param);
+        WSGetConceptsInDataCluster param = new WSGetConceptsInDataCluster(new WSDataClusterPK(dataClusterName));
+        WSStringArray concepts = service.getConceptsInDataCluster(param);
         if (concepts != null) {
             DataProcessRule rule = new DataProcessRule();
             for (String concept : concepts.getStrings()) {

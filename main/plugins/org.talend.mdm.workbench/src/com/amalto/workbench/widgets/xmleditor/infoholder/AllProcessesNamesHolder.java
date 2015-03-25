@@ -16,8 +16,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.amalto.workbench.webservices.TMDMService;
-import com.amalto.workbench.webservices.WsGetTransformerV2PKs;
-import com.amalto.workbench.webservices.WsTransformerV2PK;
+import com.amalto.workbench.webservices.WSGetTransformerV2PKs;
+import com.amalto.workbench.webservices.WSTransformerV2PK;
 
 class AllProcessesNamesHolder extends ExternalInfoHolder<String[]> {
 
@@ -34,15 +34,15 @@ class AllProcessesNamesHolder extends ExternalInfoHolder<String[]> {
             return new String[0];
         }
 
-        List<WsTransformerV2PK> transformerPKs = null;
+        List<WSTransformerV2PK> transformerPKs = null;
         try {
-            transformerPKs = service.getTransformerV2PKs(new WsGetTransformerV2PKs("")).getWsTransformerV2PK();//$NON-NLS-1$
+            transformerPKs = service.getTransformerV2PKs(new WSGetTransformerV2PKs("")).getWsTransformerV2PK();//$NON-NLS-1$
         } catch (Exception e) {
             return new String[0];
         }
         List<String> processes = new ArrayList<String>();
         if (transformerPKs != null) {
-            for (WsTransformerV2PK pk : transformerPKs) {
+            for (WSTransformerV2PK pk : transformerPKs) {
                 if (pk.getPk() != null && pk.getPk().length() > 0) {
                     processes.add(pk.getPk());
                 }

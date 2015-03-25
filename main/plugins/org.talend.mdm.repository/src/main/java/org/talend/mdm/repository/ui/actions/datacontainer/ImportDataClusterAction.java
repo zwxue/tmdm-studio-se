@@ -35,7 +35,7 @@ import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.utils.XtentisException;
 import com.amalto.workbench.webservices.TMDMService;
-import com.amalto.workbench.webservices.WsPing;
+import com.amalto.workbench.webservices.WSPing;
 
 /**
  * DOC hbhong class global comment. Detailled comment
@@ -77,7 +77,7 @@ public class ImportDataClusterAction extends AbstractDataClusterAction {
                 try {
 
                     TMDMService service = RepositoryWebServiceAdapter.getMDMService(serverDef);
-                    service.ping(new WsPing(Messages.ImportDataClusterAction_importTitle));
+                    service.ping(new WSPing(Messages.ImportDataClusterAction_importTitle));
                     if (!dataClusterService.isExistDataCluster(service, dName)) {
                         if (MessageDialog.openQuestion(getShell(), Messages.ImportDataClusterAction_createDataClusterTitle,
                                 Messages.bind(Messages.ImportDataClusterAction_createConfirm, dName))) {

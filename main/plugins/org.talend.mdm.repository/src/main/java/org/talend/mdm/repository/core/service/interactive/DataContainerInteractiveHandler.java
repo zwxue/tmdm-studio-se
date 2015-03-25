@@ -21,10 +21,10 @@ import com.amalto.workbench.utils.EXtentisObjects;
 import com.amalto.workbench.utils.TreeObjectUtil;
 import com.amalto.workbench.utils.XtentisException;
 import com.amalto.workbench.webservices.TMDMService;
-import com.amalto.workbench.webservices.WsDataCluster;
-import com.amalto.workbench.webservices.WsDataClusterPK;
-import com.amalto.workbench.webservices.WsDeleteDataCluster;
-import com.amalto.workbench.webservices.WsPutDataCluster;
+import com.amalto.workbench.webservices.WSDataCluster;
+import com.amalto.workbench.webservices.WSDataClusterPK;
+import com.amalto.workbench.webservices.WSDeleteDataCluster;
+import com.amalto.workbench.webservices.WSPutDataCluster;
 
 /**
  * DOC hbhong class global comment. Detailled comment
@@ -43,7 +43,7 @@ public class DataContainerInteractiveHandler extends AbstractInteractiveHandler 
     @Override
     public boolean doDeployWSObject(TMDMService service, Object wsObj) {
         if (wsObj != null) {
-            WsPutDataCluster wsPutDataCluster = new WsPutDataCluster((WsDataCluster) wsObj);
+            WSPutDataCluster wsPutDataCluster = new WSPutDataCluster((WSDataCluster) wsObj);
             service.putDataCluster(wsPutDataCluster);
             return true;
         }
@@ -52,10 +52,10 @@ public class DataContainerInteractiveHandler extends AbstractInteractiveHandler 
 
     @Override
     public boolean doRemove(TMDMService service, AbstractDeployCommand cmd) throws XtentisException {
-        WsDataClusterPK pk = new WsDataClusterPK();
+        WSDataClusterPK pk = new WSDataClusterPK();
         String name = cmd.getObjName();
         pk.setPk(name);
-        service.deleteDataCluster(new WsDeleteDataCluster(pk));
+        service.deleteDataCluster(new WSDeleteDataCluster(pk));
         TreeObjectUtil.deleteSpecificationFromAttachedRole(service, name, EXtentisObjects.DataCluster.getName());
         return true;
     }

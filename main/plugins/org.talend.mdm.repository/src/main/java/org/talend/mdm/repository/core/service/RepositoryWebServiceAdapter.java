@@ -61,8 +61,8 @@ import com.amalto.workbench.utils.UserInfo;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.XtentisException;
 import com.amalto.workbench.webservices.TMDMService;
-import com.amalto.workbench.webservices.WsServiceGetDocument;
-import com.amalto.workbench.webservices.WsTransformerPluginV2Details;
+import com.amalto.workbench.webservices.WSServiceGetDocument;
+import com.amalto.workbench.webservices.WSTransformerPluginV2Details;
 
 /**
  * DOC hbhong class global comment. Detailled comment
@@ -137,7 +137,7 @@ public class RepositoryWebServiceAdapter {
         return null;
     }
 
-    public static WsTransformerPluginV2Details findTransformerPluginV2Detail(String jndiName) {
+    public static WSTransformerPluginV2Details findTransformerPluginV2Detail(String jndiName) {
         if (jndiName == null) {
             return null;
         }
@@ -150,7 +150,7 @@ public class RepositoryWebServiceAdapter {
         return transformerPluginMap.values();
     }
 
-    public static WsServiceGetDocument getServiceDocument(String jndiName) {
+    public static WSServiceGetDocument getServiceDocument(String jndiName) {
         if (jndiName == null) {
             return null;
         }

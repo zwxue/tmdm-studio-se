@@ -56,7 +56,7 @@ import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 import org.talend.mdm.repository.plugin.RepositoryPlugin;
 import org.talend.mdm.repository.ui.dialogs.datacontent.DataProcessRuleDialog;
 
-import com.amalto.workbench.webservices.WsItem;
+import com.amalto.workbench.webservices.WSItem;
 
 /**
  * created by HHB on 2012-10-9 Detailled comment
@@ -231,7 +231,7 @@ public class ImportDataContentProcess extends AbstractDataContentProcess {
             monitor.beginTask(Messages.ImportDataClusterAction_importProcessTitle, files.size() + 10);
             Map<String, List<String>> conceptMap = new LinkedHashMap<String, List<String>>();
 
-            Unmarshaller unmarshaller = new Unmarshaller(WsItem.class);
+            Unmarshaller unmarshaller = new Unmarshaller(WSItem.class);
             try {
                 Mapping mapping = getWSItemMapping();
                 unmarshaller.setWhitespacePreserve(true);
@@ -250,7 +250,7 @@ public class ImportDataContentProcess extends AbstractDataContentProcess {
                 String concept = ""; //$NON-NLS-1$
                 try {
                     reader = new InputStreamReader(new FileInputStream(file), "UTF-8");//$NON-NLS-1$
-                    WsItem wsItem = (WsItem) unmarshaller.unmarshal(reader);
+                    WSItem wsItem = (WSItem) unmarshaller.unmarshal(reader);
                     //
                     String key = wsItem.getWsDataClusterPK().getPk() + "##" + wsItem.getConceptName() + "##"//$NON-NLS-1$//$NON-NLS-2$
                             + wsItem.getDataModelName();

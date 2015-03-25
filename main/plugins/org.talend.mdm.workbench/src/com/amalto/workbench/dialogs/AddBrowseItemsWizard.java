@@ -68,12 +68,12 @@ import com.amalto.workbench.providers.XObjectEditorInput;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.XSDAnnotationsStructure;
 import com.amalto.workbench.webservices.TMDMService;
-import com.amalto.workbench.webservices.WsBoolean;
-import com.amalto.workbench.webservices.WsDeleteView;
-import com.amalto.workbench.webservices.WsGetView;
-import com.amalto.workbench.webservices.WsPutView;
-import com.amalto.workbench.webservices.WsView;
-import com.amalto.workbench.webservices.WsViewPK;
+import com.amalto.workbench.webservices.WSBoolean;
+import com.amalto.workbench.webservices.WSDeleteView;
+import com.amalto.workbench.webservices.WSGetView;
+import com.amalto.workbench.webservices.WSPutView;
+import com.amalto.workbench.webservices.WSView;
+import com.amalto.workbench.webservices.WSViewPK;
 import com.amalto.workbench.widgets.ComplexTableViewer;
 import com.amalto.workbench.widgets.ComplexTableViewerColumn;
 
@@ -141,8 +141,8 @@ public class AddBrowseItemsWizard extends Wizard {
     private TMDMService getXtentisPort() {
         try {
             if (service == null) {
-                service = Util.getMDMService(new URL(page.getXObject().getEndpointAddress()), page.getXObject().getUniverse(), page
-                        .getXObject().getUsername(), page.getXObject().getPassword());
+                service = Util.getMDMService(new URL(page.getXObject().getEndpointAddress()), page.getXObject().getUniverse(),
+                        page.getXObject().getUsername(), page.getXObject().getPassword());
             }
         } catch (Exception e) {
             log.error(e.getMessage(), e);
@@ -185,8 +185,8 @@ public class AddBrowseItemsWizard extends Wizard {
     }
 
     private TreeObject createNewTreeObject(XSDElementDeclaration decl, String browseItem) {
-        WsView view = new WsView();
-        view.setIsTransformerActive(new WsBoolean(false));
+        WSView view = new WSView();
+        view.setIsTransformerActive(new WSBoolean(false));
         view.setTransformerPK("");//$NON-NLS-1$
         view.setName(browseItem);
         EList<XSDIdentityConstraintDefinition> idtylist = decl.getIdentityConstraintDefinitions();
@@ -218,15 +218,15 @@ public class AddBrowseItemsWizard extends Wizard {
         }
         view.setDescription(desc.toString());
 
-        WsPutView wrap = new WsPutView();
+        WSPutView wrap = new WSPutView();
         wrap.setWsView(view);
 
-        WsViewPK viewPk = new WsViewPK();
+        WSViewPK viewPk = new WSViewPK();
         viewPk.setPk(browseItem);
 
-        WsDeleteView delView = new WsDeleteView();
+        WSDeleteView delView = new WSDeleteView();
         delView.setWsViewPK(viewPk);
-        WsGetView getView = new WsGetView();
+        WSGetView getView = new WSGetView();
         getView.setWsViewPK(viewPk);
         service.putView(wrap);
         // add node in the root

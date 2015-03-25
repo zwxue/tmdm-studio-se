@@ -73,7 +73,7 @@ import org.talend.mdm.repository.ui.navigator.MDMRepositoryLabelProvider;
 import org.talend.mdm.repository.utils.EclipseResourceManager;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 
-import com.amalto.workbench.webservices.WsDigest;
+import com.amalto.workbench.webservices.WSDigest;
 
 /**
  * created by HHB on 2013-7-18 Detailled comment
@@ -155,7 +155,7 @@ public class ConsistencyConflictDialog extends Dialog {
                         return df.format(new Date(localTimestamp));
                     }
                 } else {
-                    WsDigest dt = viewObjMap.get(viewObj);
+                    WSDigest dt = viewObjMap.get(viewObj);
                     if (dt != null) {
                         return df.format(new Date(dt.getTimeStamp()));
                     }
@@ -230,7 +230,7 @@ public class ConsistencyConflictDialog extends Dialog {
                     || viewType == IServerObjectRepositoryType.TYPE_WORKFLOW) {
                 result = CompareResultEnum.NOT_SUPPORT;
             } else {
-                WsDigest dt = viewObjMap.get(viewObj);
+                WSDigest dt = viewObjMap.get(viewObj);
                 if (dt == null) {
                     result = CompareResultEnum.NOT_EXIST_IN_SERVER;
                 } else {
@@ -292,7 +292,7 @@ public class ConsistencyConflictDialog extends Dialog {
 
     private TreeViewer treeViewer;
 
-    private final Map<IRepositoryViewObject, WsDigest> viewObjMap;
+    private final Map<IRepositoryViewObject, WSDigest> viewObjMap;
 
     private final int conflictCount;
 
@@ -309,7 +309,7 @@ public class ConsistencyConflictDialog extends Dialog {
      * @param conflictCount
      * @param viewObCmdOpjMap
      */
-    public ConsistencyConflictDialog(Shell parentShell, int conflictCount, Map<IRepositoryViewObject, WsDigest> viewObjMap,
+    public ConsistencyConflictDialog(Shell parentShell, int conflictCount, Map<IRepositoryViewObject, WSDigest> viewObjMap,
             Map<IRepositoryViewObject, Integer> viewObCmdOpjMap) {
         super(parentShell);
         this.conflictCount = conflictCount;

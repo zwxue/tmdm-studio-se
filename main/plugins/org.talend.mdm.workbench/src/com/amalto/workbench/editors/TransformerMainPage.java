@@ -112,28 +112,28 @@ import com.amalto.workbench.utils.XmlUtil;
 import com.amalto.workbench.utils.XtentisException;
 import com.amalto.workbench.webservices.BackgroundJobStatusType;
 import com.amalto.workbench.webservices.TMDMService;
-import com.amalto.workbench.webservices.WsBackgroundJob;
-import com.amalto.workbench.webservices.WsBackgroundJobPK;
-import com.amalto.workbench.webservices.WsByteArray;
-import com.amalto.workbench.webservices.WsExecuteTransformerV2AsJob;
-import com.amalto.workbench.webservices.WsExtractedContent;
-import com.amalto.workbench.webservices.WsGetBackgroundJob;
-import com.amalto.workbench.webservices.WsGetTransformerPluginV2Details;
-import com.amalto.workbench.webservices.WsGetTransformerPluginV2SList;
-import com.amalto.workbench.webservices.WsPipeline;
-import com.amalto.workbench.webservices.WsPipelineTypedContentEntry;
-import com.amalto.workbench.webservices.WsTransformerContext;
-import com.amalto.workbench.webservices.WsTransformerContextPipeline;
-import com.amalto.workbench.webservices.WsTransformerContextPipelinePipelineItem;
-import com.amalto.workbench.webservices.WsTransformerPluginV2Details;
-import com.amalto.workbench.webservices.WsTransformerPluginV2SList;
-import com.amalto.workbench.webservices.WsTransformerPluginV2SListItem;
-import com.amalto.workbench.webservices.WsTransformerPluginV2VariableDescriptor;
-import com.amalto.workbench.webservices.WsTransformerProcessStep;
-import com.amalto.workbench.webservices.WsTransformerV2;
-import com.amalto.workbench.webservices.WsTransformerV2PK;
-import com.amalto.workbench.webservices.WsTransformerVariablesMapping;
-import com.amalto.workbench.webservices.WsTypedContent;
+import com.amalto.workbench.webservices.WSBackgroundJob;
+import com.amalto.workbench.webservices.WSBackgroundJobPK;
+import com.amalto.workbench.webservices.WSByteArray;
+import com.amalto.workbench.webservices.WSExecuteTransformerV2AsJob;
+import com.amalto.workbench.webservices.WSExtractedContent;
+import com.amalto.workbench.webservices.WSGetBackgroundJob;
+import com.amalto.workbench.webservices.WSGetTransformerPluginV2Details;
+import com.amalto.workbench.webservices.WSGetTransformerPluginV2SList;
+import com.amalto.workbench.webservices.WSPipeline;
+import com.amalto.workbench.webservices.WSPipelineTypedContentEntry;
+import com.amalto.workbench.webservices.WSTransformerContext;
+import com.amalto.workbench.webservices.WSTransformerContextPipeline;
+import com.amalto.workbench.webservices.WSTransformerContextPipelinePipelineItem;
+import com.amalto.workbench.webservices.WSTransformerPluginV2Details;
+import com.amalto.workbench.webservices.WSTransformerPluginV2SList;
+import com.amalto.workbench.webservices.WSTransformerPluginV2SListItem;
+import com.amalto.workbench.webservices.WSTransformerPluginV2VariableDescriptor;
+import com.amalto.workbench.webservices.WSTransformerProcessStep;
+import com.amalto.workbench.webservices.WSTransformerV2;
+import com.amalto.workbench.webservices.WSTransformerV2PK;
+import com.amalto.workbench.webservices.WSTransformerVariablesMapping;
+import com.amalto.workbench.webservices.WSTypedContent;
 import com.amalto.workbench.widgets.DescAnnotationComposite;
 import com.amalto.workbench.widgets.LabelCombo;
 import com.amalto.workbench.widgets.WidgetFactory;
@@ -205,7 +205,7 @@ public class TransformerMainPage extends AMainPageV2 {
 
     private Button disabledButton;
 
-    protected WsTransformerV2 transformer;
+    protected WSTransformerV2 transformer;
 
     private Composite specsComposite;
 
@@ -248,12 +248,12 @@ public class TransformerMainPage extends AMainPageV2 {
     }
 
     protected void initPlugin() {
-        WsTransformerPluginV2SList list = service.getTransformerPluginV2SList(new WsGetTransformerPluginV2SList("EN"));//$NON-NLS-1$
+        WSTransformerPluginV2SList list = service.getTransformerPluginV2SList(new WSGetTransformerPluginV2SList("EN"));//$NON-NLS-1$
 
-        java.util.List<WsTransformerPluginV2SListItem> items = list.getItem();
+        java.util.List<WSTransformerPluginV2SListItem> items = list.getItem();
 
         if (items != null) {
-            for (WsTransformerPluginV2SListItem item : items) {
+            for (WSTransformerPluginV2SListItem item : items) {
                 pluginDescriptions.put(item.getJndiName(), item.getDescription());
             }
             // get the sorted list and feed the combo
@@ -261,18 +261,18 @@ public class TransformerMainPage extends AMainPageV2 {
             for (String jndi : jndis) {
                 pluginsCombo.add(jndi);
                 // add input variables and output variables
-                WsTransformerPluginV2Details details = service.getTransformerPluginV2Details(new WsGetTransformerPluginV2Details(
+                WSTransformerPluginV2Details details = service.getTransformerPluginV2Details(new WSGetTransformerPluginV2Details(
                         jndi.contains("/") ? jndi//$NON-NLS-1$
                                 : TRANSFORMER_PLUGIN + jndi, "en"));//$NON-NLS-1$
                 java.util.List<String> input = new ArrayList<String>();
-                for (WsTransformerPluginV2VariableDescriptor v : details.getInputVariableDescriptors()) {
+                for (WSTransformerPluginV2VariableDescriptor v : details.getInputVariableDescriptors()) {
                     input.add(v.getVariableName());
 
                 }
                 inputVariablesMap.put(jndi, input);
 
                 java.util.List<String> output = new ArrayList<String>();
-                for (WsTransformerPluginV2VariableDescriptor v : details.getOutputVariableDescriptors()) {
+                for (WSTransformerPluginV2VariableDescriptor v : details.getOutputVariableDescriptors()) {
                     output.add(v.getVariableName());
                 }
                 outputVariablesMap.put(jndi, output);
@@ -282,27 +282,27 @@ public class TransformerMainPage extends AMainPageV2 {
 
     public void execute() {
         try {
-            service= getService();
+            service = getService();
             if (service == null) {
                 return;
             }
-            java.util.List<WsTransformerContextPipelinePipelineItem> items = new ArrayList<WsTransformerContextPipelinePipelineItem>();
+            java.util.List<WSTransformerContextPipelinePipelineItem> items = new ArrayList<WSTransformerContextPipelinePipelineItem>();
             for (Line line : cacheList) {
                 String variableName = line.keyValues.get(0).value;
                 String contentType = line.keyValues.get(1).value;
                 String value = line.keyValues.get(2).value;
 
-                items.add(new WsTransformerContextPipelinePipelineItem(variableName, new WsTypedContent(contentType, null,
-                        new WsByteArray(value.getBytes("utf-8"))))); //$NON-NLS-1$
+                items.add(new WSTransformerContextPipelinePipelineItem(variableName, new WSTypedContent(contentType, null,
+                        new WSByteArray(value.getBytes("utf-8"))))); //$NON-NLS-1$
 
             }
-            final WsBackgroundJobPK jobPK = service.executeTransformerV2AsJob(new WsExecuteTransformerV2AsJob(
-                    new WsTransformerContext(new WsTransformerContextPipeline(items), null, new WsTransformerV2PK(transformer
+            final WSBackgroundJobPK jobPK = service.executeTransformerV2AsJob(new WSExecuteTransformerV2AsJob(
+                    new WSTransformerContext(new WSTransformerContextPipeline(items), null, new WSTransformerV2PK(transformer
                             .getName()))));
 
             IRunnableWithProgress progress = new IRunnableWithProgress() {
 
-                WsBackgroundJob job = null;
+                WSBackgroundJob job = null;
 
                 public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
                     /******************************************
@@ -322,7 +322,7 @@ public class TransformerMainPage extends AMainPageV2 {
                                 throw new InterruptedException(Messages.TransformerMainPage_UserCancel);
                             }
 
-                            job = service.getBackgroundJob(new WsGetBackgroundJob(jobPK.getPk()));
+                            job = service.getBackgroundJob(new WSGetBackgroundJob(jobPK.getPk()));
                             monitor.subTask(job.getMessage());
 
                         } while (job.getStatus().equals(BackgroundJobStatusType.RUNNING)
@@ -349,10 +349,10 @@ public class TransformerMainPage extends AMainPageV2 {
                          ******************************************/
 
                         // Auto sorts the entries
-                        final TreeMap pipeline = new TreeMap<String, WsExtractedContent>();
-                        WsPipeline wsPipeline = job.getPipeline();
-                        java.util.List<WsPipelineTypedContentEntry> entries = wsPipeline.getTypedContentEntry();
-                        for (WsPipelineTypedContentEntry entry : entries) {
+                        final TreeMap pipeline = new TreeMap<String, WSExtractedContent>();
+                        WSPipeline wsPipeline = job.getPipeline();
+                        java.util.List<WSPipelineTypedContentEntry> entries = wsPipeline.getTypedContentEntry();
+                        for (WSPipelineTypedContentEntry entry : entries) {
                             pipeline.put(entry.getOutput(), entry.getWsExtractedContent());
                         }
                         getSite().getShell().getDisplay().asyncExec(new Runnable() {
@@ -362,7 +362,7 @@ public class TransformerMainPage extends AMainPageV2 {
                                     /*
                                      * ProcessResultsPage page = new ProcessResultsPage(editor,pipeline);
                                      * parent.editor.addPage(page); parent.editor.setActivePage(page.getId());
-                                     *
+                                     * 
                                      * parent.editor.getEditorSite().getShell()
                                      */
                                     // Shell shell = new Shell(SWT.DIALOG_TRIM | SWT.RESIZE | SWT.MAX | SWT.MIN);
@@ -395,7 +395,7 @@ public class TransformerMainPage extends AMainPageV2 {
 
     protected void initTransformer() throws XtentisException {
         service = Util.getMDMService(getXObject());
-        transformer = (WsTransformerV2) getXObject().getWsObject();
+        transformer = (WSTransformerV2) getXObject().getWsObject();
     }
 
     @Override
@@ -538,9 +538,9 @@ public class TransformerMainPage extends AMainPageV2 {
                         TransformerMainPage.this.stepsList.remove(index);
                         TransformerMainPage.this.stepsList.add(val, index - 1);
                         TransformerMainPage.this.stepsList.select(index - 1);
-                        WsTransformerV2 wsTransformer = transformer;// (WSTransformerV2)getXObject().getWsObject();
-                        java.util.List<WsTransformerProcessStep> list = wsTransformer.getProcessSteps();
-                        WsTransformerProcessStep spec = list.get(index);
+                        WSTransformerV2 wsTransformer = transformer;// (WSTransformerV2)getXObject().getWsObject();
+                        java.util.List<WSTransformerProcessStep> list = wsTransformer.getProcessSteps();
+                        WSTransformerProcessStep spec = list.get(index);
                         list.remove(index);
                         list.add(index - 1, spec);
                         performSelect(index - 1);
@@ -569,9 +569,9 @@ public class TransformerMainPage extends AMainPageV2 {
                         TransformerMainPage.this.stepsList.remove(index);
                         TransformerMainPage.this.stepsList.add(val, index + 1);
                         TransformerMainPage.this.stepsList.select(index + 1);
-                        WsTransformerV2 wsTransformer = transformer;// (WSTransformerV2)getXObject().getWsObject();
-                        java.util.List<WsTransformerProcessStep> list = wsTransformer.getProcessSteps();
-                        WsTransformerProcessStep spec = list.get(index);
+                        WSTransformerV2 wsTransformer = transformer;// (WSTransformerV2)getXObject().getWsObject();
+                        java.util.List<WSTransformerProcessStep> list = wsTransformer.getProcessSteps();
+                        WSTransformerProcessStep spec = list.get(index);
                         list.remove(index);
                         list.add(index + 1, spec);
                         TransformerMainPage.this.comitting = false;
@@ -705,7 +705,7 @@ public class TransformerMainPage extends AMainPageV2 {
     protected void executeProcess(final FormToolkit toolkit) {
         try {
             // check if we have a step to perfom
-            java.util.List<WsTransformerProcessStep> steps = // ((WSTransformerV2)getXObject().getWsObject())
+            java.util.List<WSTransformerProcessStep> steps = // ((WSTransformerV2)getXObject().getWsObject())
             transformer.getProcessSteps();
             if ((steps == null) || (steps.size() == 0)) {
                 MessageDialog.openError(TransformerMainPage.this.getSite().getShell(), Messages.TransformerMainPage_ErrorTitle1,
@@ -795,10 +795,10 @@ public class TransformerMainPage extends AMainPageV2 {
             TransformerMainPage.this.stepText.getText()
 
             );
-            WsTransformerV2 wsTransformer = transformer;//
+            WSTransformerV2 wsTransformer = transformer;//
 
             wsTransformer.getProcessSteps().add(
-                    new WsTransformerProcessStep(TransformerMainPage.this.stepText.getText(), false, new ArrayList(),
+                    new WSTransformerProcessStep(TransformerMainPage.this.stepText.getText(), false, new ArrayList(),
                             new ArrayList(), "", ""));
 
             TransformerMainPage.this.comitting = false;
@@ -819,8 +819,8 @@ public class TransformerMainPage extends AMainPageV2 {
         currentPlugin = index;
 
         if (index < 0) {
-            stepWidget.inputViewer.setInput(new ArrayList<WsTransformerVariablesMapping>());
-            stepWidget.outputViewer.setInput(new ArrayList<WsTransformerVariablesMapping>());
+            stepWidget.inputViewer.setInput(new ArrayList<WSTransformerVariablesMapping>());
+            stepWidget.outputViewer.setInput(new ArrayList<WSTransformerVariablesMapping>());
             return;
         }
         TransformerMainPage.this.refreshing = true;
@@ -905,7 +905,7 @@ public class TransformerMainPage extends AMainPageV2 {
     }
 
     protected void removeStep(int index) {
-        WsTransformerV2 wsTransformer = transformer;
+        WSTransformerV2 wsTransformer = transformer;
 
         // clean up boxes at the bottom
 
@@ -983,7 +983,7 @@ public class TransformerMainPage extends AMainPageV2 {
             if (list.size() == 0) {
                 return;
             }
-            java.util.List<WsTransformerVariablesMapping> items = (java.util.List<WsTransformerVariablesMapping>) viewer
+            java.util.List<WSTransformerVariablesMapping> items = (java.util.List<WSTransformerVariablesMapping>) viewer
                     .getInput();
             items.removeAll(list);
 
@@ -1010,15 +1010,15 @@ public class TransformerMainPage extends AMainPageV2 {
 
             this.refreshing = true;
 
-            WsTransformerV2 wsTransformer = (WsTransformerV2) (getXObject().getWsObject());
+            WSTransformerV2 wsTransformer = (WSTransformerV2) (getXObject().getWsObject());
 
             desAntionComposite.getTextWidget().setText(
                     wsTransformer.getDescription() == null ? "" : wsTransformer.getDescription()); //$NON-NLS-1$
 
             stepsList.removeAll();
-            java.util.List<WsTransformerProcessStep> specs = wsTransformer.getProcessSteps();
+            java.util.List<WSTransformerProcessStep> specs = wsTransformer.getProcessSteps();
             if (specs != null) {
-                for (WsTransformerProcessStep step : specs) {
+                for (WSTransformerProcessStep step : specs) {
                     stepsList.add(step.getDescription());
                 }
             }
@@ -1079,8 +1079,8 @@ public class TransformerMainPage extends AMainPageV2 {
         if (processName.startsWith("beforeSaving_")) {//$NON-NLS-1$
             boolean has = false;
 
-            WsTransformerProcessStep processStep = stepWidget.getProcessStep();
-            for (WsTransformerVariablesMapping map : processStep.getOutputMappings()) {
+            WSTransformerProcessStep processStep = stepWidget.getProcessStep();
+            for (WSTransformerVariablesMapping map : processStep.getOutputMappings()) {
                 if ("output_report".equals(map.getPipelineVariable())) {//$NON-NLS-1$
                     has = true;
                     break;
@@ -1142,7 +1142,7 @@ public class TransformerMainPage extends AMainPageV2 {
 
         private Button outputLinkButton;
 
-        WsTransformerProcessStep processStep;
+        WSTransformerProcessStep processStep;
 
         private TableViewer inputViewer;
 
@@ -1160,11 +1160,11 @@ public class TransformerMainPage extends AMainPageV2 {
 
         }
 
-        public WsTransformerProcessStep getProcessStep() {
+        public WSTransformerProcessStep getProcessStep() {
             return processStep;
         }
 
-        public void setProcessStep(WsTransformerProcessStep processStep, int index) {
+        public void setProcessStep(WSTransformerProcessStep processStep, int index) {
             this.processStep = processStep;
             // reset the available variables
             availableVariables.clear();
@@ -1172,10 +1172,10 @@ public class TransformerMainPage extends AMainPageV2 {
                 if (transformer.getProcessSteps().get(i).isDisabled()) {
                     continue;
                 }
-                for (WsTransformerVariablesMapping mapping : transformer.getProcessSteps().get(i).getInputMappings()) {
+                for (WSTransformerVariablesMapping mapping : transformer.getProcessSteps().get(i).getInputMappings()) {
                     availableVariables.add(mapping.getPipelineVariable() == null ? DEFAULT_VAR : mapping.getPipelineVariable());
                 }
-                for (WsTransformerVariablesMapping mapping : transformer.getProcessSteps().get(i).getOutputMappings()) {
+                for (WSTransformerVariablesMapping mapping : transformer.getProcessSteps().get(i).getOutputMappings()) {
                     availableVariables.add(mapping.getPipelineVariable() == null ? DEFAULT_VAR : mapping.getPipelineVariable());
                 }
             }
@@ -1213,7 +1213,7 @@ public class TransformerMainPage extends AMainPageV2 {
                     if (inputElement == null) {
                         return null;
                     }
-                    java.util.List<WsTransformerVariablesMapping> lines = (java.util.List<WsTransformerVariablesMapping>) inputElement;
+                    java.util.List<WSTransformerVariablesMapping> lines = (java.util.List<WSTransformerVariablesMapping>) inputElement;
                     return lines.toArray();
                 }
             });
@@ -1235,7 +1235,7 @@ public class TransformerMainPage extends AMainPageV2 {
                 }
 
                 public String getColumnText(Object element, int columnIndex) {
-                    WsTransformerVariablesMapping line = (WsTransformerVariablesMapping) element;
+                    WSTransformerVariablesMapping line = (WSTransformerVariablesMapping) element;
                     switch (columnIndex) {
 
                     case 0:
@@ -1260,14 +1260,14 @@ public class TransformerMainPage extends AMainPageV2 {
 
         void refreshViewers() {
             if (processStep != null) {
-                java.util.List<WsTransformerVariablesMapping> items = new ArrayList<WsTransformerVariablesMapping>();
-                for (WsTransformerVariablesMapping map : processStep.getInputMappings()) {
+                java.util.List<WSTransformerVariablesMapping> items = new ArrayList<WSTransformerVariablesMapping>();
+                for (WSTransformerVariablesMapping map : processStep.getInputMappings()) {
                     items.add(map);
                 }
                 inputViewer.setInput(items);
 
-                items = new ArrayList<WsTransformerVariablesMapping>();
-                for (WsTransformerVariablesMapping map : processStep.getOutputMappings()) {
+                items = new ArrayList<WSTransformerVariablesMapping>();
+                for (WSTransformerVariablesMapping map : processStep.getOutputMappings()) {
                     items.add(map);
                 }
                 outputViewer.setInput(items);
@@ -1291,8 +1291,8 @@ public class TransformerMainPage extends AMainPageV2 {
             outputVariables.setItems(availableVariables.toArray(new String[availableVariables.size()]));
         }
 
-        private boolean isExist(java.util.List<WsTransformerVariablesMapping> list, String parameterName) {
-            for (WsTransformerVariablesMapping map : list) {
+        private boolean isExist(java.util.List<WSTransformerVariablesMapping> list, String parameterName) {
+            for (WSTransformerVariablesMapping map : list) {
                 if (map.getPluginVariable().equals(parameterName)) {
                     MessageDialog.openInformation(null,
                             "", Messages.bind(Messages.TransformerMainPage_InfoContent, parameterName)); //$NON-NLS-1$
@@ -1325,13 +1325,13 @@ public class TransformerMainPage extends AMainPageV2 {
                     if (inputParams.getText().length() == 0) {
                         return;
                     }
-                    java.util.List<WsTransformerVariablesMapping> items = (java.util.List<WsTransformerVariablesMapping>) inputViewer
+                    java.util.List<WSTransformerVariablesMapping> items = (java.util.List<WSTransformerVariablesMapping>) inputViewer
                             .getInput();
                     if (isExist(items, inputParams.getText())) {
                         return;
                     }
 
-                    WsTransformerVariablesMapping line = new WsTransformerVariablesMapping();
+                    WSTransformerVariablesMapping line = new WSTransformerVariablesMapping();
                     if (inputVariables.getText().trim().length() > 0) {
                         line.setPipelineVariable(inputVariables.getText());
                     } else {
@@ -1385,13 +1385,13 @@ public class TransformerMainPage extends AMainPageV2 {
                     if (outputParams.getText().length() == 0) {
                         return;
                     }
-                    java.util.List<WsTransformerVariablesMapping> items = (java.util.List<WsTransformerVariablesMapping>) outputViewer
+                    java.util.List<WSTransformerVariablesMapping> items = (java.util.List<WSTransformerVariablesMapping>) outputViewer
                             .getInput();
                     if (isExist(items, outputParams.getText())) {
                         return;
                     }
 
-                    WsTransformerVariablesMapping line = new WsTransformerVariablesMapping();
+                    WSTransformerVariablesMapping line = new WSTransformerVariablesMapping();
                     if (outputVariables.getText().length() > 0) {
                         line.setPipelineVariable(outputVariables.getText());
                     } else {
@@ -1449,8 +1449,8 @@ public class TransformerMainPage extends AMainPageV2 {
                         transformer.getProcessSteps().get(stepsList.getSelectionIndex())
                                 .setPluginJNDI(TRANSFORMER_PLUGIN + pluginsCombo.getText());
                     }
-                    inputViewer.setInput(new ArrayList<WsTransformerVariablesMapping>());
-                    outputViewer.setInput(new ArrayList<WsTransformerVariablesMapping>());
+                    inputViewer.setInput(new ArrayList<WSTransformerVariablesMapping>());
+                    outputViewer.setInput(new ArrayList<WSTransformerVariablesMapping>());
                     String jndi = pluginsCombo.getText();
                     pluginDescription.setText(pluginDescriptions.get(jndi) == null ? "" : pluginDescriptions.get(jndi)); //$NON-NLS-1$
 
@@ -1486,7 +1486,7 @@ public class TransformerMainPage extends AMainPageV2 {
                             return;
                         }
 
-                        WsTransformerPluginV2Details details = getWsTransformerPluginV2Details(jndi);
+                        WSTransformerPluginV2Details details = getWsTransformerPluginV2Details(jndi);
                         final PluginDetailsDialog dialog = new PluginDetailsDialog(getSite().getShell(),
                                 details.getDescription(), details.getDocumentation(), details.getParametersSchema(),
                                 Messages.TransformerMainPage_Documentation);
@@ -1576,7 +1576,7 @@ public class TransformerMainPage extends AMainPageV2 {
             ExternalInfoHolder<?> mdmServerInfoHolder = ExternalInfoHolder.getAllMDMServerInfoHolder(Util
                     .getMDMService(getXObject()));
             ExternalInfoHolder<?> allVarCandidatesHolder = ExternalInfoHolder
-                    .getProcessAllCallJobVarsCandidatesHolder((WsTransformerV2) getXObject().getWsObject());
+                    .getProcessAllCallJobVarsCandidatesHolder((WSTransformerV2) getXObject().getWsObject());
             ExternalInfoHolder<?> workflowInfoHolder = ExternalInfoHolder.getAllWorkflowInfoHolder(Util
                     .getMDMService(getXObject()));
             ExternalInfoHolder<?> allDataModelHolderProxy = ExternalInfoHolder.getAllDataModelInfoHolderProxy(getXObject());
@@ -1591,8 +1591,8 @@ public class TransformerMainPage extends AMainPageV2 {
 
     }
 
-    protected WsTransformerPluginV2Details getWsTransformerPluginV2Details(String jndi) {
-        WsTransformerPluginV2Details details = service.getTransformerPluginV2Details(new WsGetTransformerPluginV2Details(jndi
+    protected WSTransformerPluginV2Details getWsTransformerPluginV2Details(String jndi) {
+        WSTransformerPluginV2Details details = service.getTransformerPluginV2Details(new WSGetTransformerPluginV2Details(jndi
                 .contains("/") ? jndi //$NON-NLS-1$
                 : TRANSFORMER_PLUGIN + jndi, "en")); //$NON-NLS-1$
         return details;

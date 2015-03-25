@@ -15,13 +15,13 @@ package org.talend.mdm.repository.core.service.wsimpl.transformplugin;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.amalto.workbench.webservices.WsTransformerPluginV2Details;
-import com.amalto.workbench.webservices.WsTransformerPluginV2VariableDescriptor;
+import com.amalto.workbench.webservices.WSTransformerPluginV2Details;
+import com.amalto.workbench.webservices.WSTransformerPluginV2VariableDescriptor;
 
 /**
  * DOC hbhong class global comment. Detailled comment
  */
-public abstract class AbstractPluginDetail extends WsTransformerPluginV2Details {
+public abstract class AbstractPluginDetail extends WSTransformerPluginV2Details {
 
     protected final String twoLettersLanguageCode;
 
@@ -35,11 +35,11 @@ public abstract class AbstractPluginDetail extends WsTransformerPluginV2Details 
 
     public abstract String getJNDIName();
 
-    private List<WsTransformerPluginV2VariableDescriptor> getNewVarDescriptor(String[] names) {
+    private List<WSTransformerPluginV2VariableDescriptor> getNewVarDescriptor(String[] names) {
         if (names != null) {
-            List<WsTransformerPluginV2VariableDescriptor> vars = new ArrayList<WsTransformerPluginV2VariableDescriptor>();
+            List<WSTransformerPluginV2VariableDescriptor> vars = new ArrayList<WSTransformerPluginV2VariableDescriptor>();
             for (String name : names) {
-                vars.add(new WsTransformerPluginV2VariableDescriptor(null, null, false, null, name));
+                vars.add(new WSTransformerPluginV2VariableDescriptor(null, null, false, null, name));
             }
             return vars;
         }

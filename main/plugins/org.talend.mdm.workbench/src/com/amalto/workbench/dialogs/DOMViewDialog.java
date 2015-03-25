@@ -66,9 +66,9 @@ import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.webservices.TMDMService;
-import com.amalto.workbench.webservices.WsDataModel;
-import com.amalto.workbench.webservices.WsDataModelPK;
-import com.amalto.workbench.webservices.WsGetDataModel;
+import com.amalto.workbench.webservices.WSDataModel;
+import com.amalto.workbench.webservices.WSDataModelPK;
+import com.amalto.workbench.webservices.WSGetDataModel;
 import com.amalto.workbench.widgets.xmlviewer.XMLConfiguration;
 import com.amalto.workbench.widgets.xmlviewer.XMLSourceViewer;
 import com.amalto.workbench.widgets.xmlviewer.XMLSourceViewerHelper;
@@ -287,9 +287,9 @@ public class DOMViewDialog extends Dialog implements IKeyWordProvider {
             return;
         }
         if (keyWordMap.get(dataModelName) == null) {
-            WsGetDataModel wsGetModel = new WsGetDataModel(new WsDataModelPK(dataModelName));
+            WSGetDataModel wsGetModel = new WSGetDataModel(new WSDataModelPK(dataModelName));
             try {
-                WsDataModel dataModel = port.getDataModel(wsGetModel);
+                WSDataModel dataModel = port.getDataModel(wsGetModel);
                 String xsdSchemaStr = dataModel.getXsdSchema();
                 if (xsdSchemaStr != null) {
                     XSDSchema schema = Util.getXSDSchema(xsdSchemaStr);

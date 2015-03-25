@@ -30,7 +30,7 @@ import org.talend.mdm.repository.core.impl.AbstractContentProvider;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 
 import com.amalto.workbench.models.TreeObject;
-import com.amalto.workbench.webservices.WsTransformerV2;
+import com.amalto.workbench.webservices.WSTransformerV2;
 
 /**
  * DOC hbhong class global comment. Detailled comment <br/>
@@ -45,7 +45,7 @@ public class TransformerV2ContentProvider extends AbstractContentProvider {
     }
 
     public Class getWSObjectClass() {
-        return WsTransformerV2.class;
+        return WSTransformerV2.class;
     }
 
     @Override

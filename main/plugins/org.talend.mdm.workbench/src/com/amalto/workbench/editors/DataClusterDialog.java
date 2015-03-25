@@ -71,13 +71,13 @@ import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.WidgetUtils;
 import com.amalto.workbench.utils.XtentisException;
 import com.amalto.workbench.webservices.TMDMService;
-import com.amalto.workbench.webservices.WsDataCluster;
-import com.amalto.workbench.webservices.WsDataClusterPK;
-import com.amalto.workbench.webservices.WsGetDataCluster;
-import com.amalto.workbench.webservices.WsGetItem;
-import com.amalto.workbench.webservices.WsItem;
-import com.amalto.workbench.webservices.WsItemPK;
-import com.amalto.workbench.webservices.WsRegexDataClusterPKs;
+import com.amalto.workbench.webservices.WSDataCluster;
+import com.amalto.workbench.webservices.WSDataClusterPK;
+import com.amalto.workbench.webservices.WSGetDataCluster;
+import com.amalto.workbench.webservices.WSGetItem;
+import com.amalto.workbench.webservices.WSItem;
+import com.amalto.workbench.webservices.WSItemPK;
+import com.amalto.workbench.webservices.WSRegexDataClusterPKs;
 
 /**
  * created by liusongbo on 2013-1-24
@@ -355,8 +355,8 @@ public class DataClusterDialog extends Dialog {
 
         try {
             final TMDMService service = Util.getMDMService(model);
-            final WsItem wsItem = service.getItem(new WsGetItem(new WsItemPK(lineItem.getConcept().trim(), Arrays.asList(lineItem
-                    .getIds()), (WsDataClusterPK) model.getWsKey())));
+            final WSItem wsItem = service.getItem(new WSGetItem(new WSItemPK(lineItem.getConcept().trim(), Arrays.asList(lineItem
+                    .getIds()), (WSDataClusterPK) model.getWsKey())));
             recordContent = Util.formatXsdSource(wsItem.getContent());
             textViewer.setText(recordContent);
         } catch (WebServiceException e) {
@@ -392,22 +392,22 @@ public class DataClusterDialog extends Dialog {
             return false;
         }
 
-        List<WsDataClusterPK> xdcPKs = null;
+        List<WSDataClusterPK> xdcPKs = null;
         try {
             TMDMService service = Util.getMDMService(new URL(endpointaddress), universe, username, password);
             TreeParent serverRoot = new TreeParent(serverName, null, TreeObject._SERVER_, endpointaddress,
                     ("".equals(universe) ? ""//$NON-NLS-1$//$NON-NLS-2$
                             : universe + "/") + username + ":" + (password == null ? "" : password));//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
 
-            xdcPKs = service.getDataClusterPKs(new WsRegexDataClusterPKs("*")).getWsDataClusterPKs();//$NON-NLS-1$
-            for (WsDataClusterPK pk : xdcPKs) {
+            xdcPKs = service.getDataClusterPKs(new WSRegexDataClusterPKs("*")).getWsDataClusterPKs();//$NON-NLS-1$
+            for (WSDataClusterPK pk : xdcPKs) {
                 String name = pk.getPk();
                 if (!("CACHE".equals(name))) { //$NON-NLS-1$
-                    WsDataCluster wsObject = null;
+                    WSDataCluster wsObject = null;
                     boolean retriveWSObject = false;
                     try {
                         if (retriveWSObject) {
-                            wsObject = service.getDataCluster(new WsGetDataCluster(pk));
+                            wsObject = service.getDataCluster(new WSGetDataCluster(pk));
                         }
                         TreeObject obj = new TreeObject(name, serverRoot, TreeObject.DATA_CLUSTER, pk, wsObject);
                         dataContainers.add(obj);
@@ -444,8 +444,7 @@ public class DataClusterDialog extends Dialog {
     @Override
     protected void createButtonsForButtonBar(Composite parent) {
         Button okBtn = createButton(parent, Dialog.OK, okLabel != null ? okLabel : IDialogConstants.OK_LABEL, false);
-        createButton(parent, Dialog.CANCEL, cancelLabel != null ? cancelLabel : IDialogConstants.CANCEL_LABEL,
-                false);
+        createButton(parent, Dialog.CANCEL, cancelLabel != null ? cancelLabel : IDialogConstants.CANCEL_LABEL, false);
         if (additionSelectionListener != null) {
             okBtn.addSelectionListener(additionSelectionListener);
         }
@@ -525,7 +524,7 @@ public class DataClusterDialog extends Dialog {
                 final TMDMService service = Util.getMDMService(new URL(oldServerDef.getUrl()), oldServerDef.getUniverse(),
                         oldServerDef.getUser(), oldServerDef.getPasswd());
                 boolean created = NewItemHandler.getNewInstance().createItemRecord(service, shell,
-                        new WsDataClusterPK(getDataContainer()), true);
+                        new WSDataClusterPK(getDataContainer()), true);
                 if (created) {
                     clusterComposite.doSearch();
                 }

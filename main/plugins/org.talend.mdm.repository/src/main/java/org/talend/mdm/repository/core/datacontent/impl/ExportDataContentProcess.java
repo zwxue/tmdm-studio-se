@@ -46,11 +46,11 @@ import org.talend.repository.utils.ZipFileUtils;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.webservices.TMDMService;
-import com.amalto.workbench.webservices.WsDataClusterPK;
-import com.amalto.workbench.webservices.WsGetItem;
-import com.amalto.workbench.webservices.WsGetItemPKsByCriteria;
-import com.amalto.workbench.webservices.WsItem;
-import com.amalto.workbench.webservices.WsItemPKsByCriteriaResponseResults;
+import com.amalto.workbench.webservices.WSDataClusterPK;
+import com.amalto.workbench.webservices.WSGetItem;
+import com.amalto.workbench.webservices.WSGetItemPKsByCriteria;
+import com.amalto.workbench.webservices.WSItem;
+import com.amalto.workbench.webservices.WSItemPKsByCriteriaResponseResults;
 
 /**
  * created by HHB on 2012-10-9 Detailled comment
@@ -184,11 +184,11 @@ public class ExportDataContentProcess extends AbstractDataContentProcess {
         protected int exportCluster(TMDMService service, String tempFolderPath, String dName, IProgressMonitor monitor) {
 
             String encodedID = null;
-            WsDataClusterPK pk = new WsDataClusterPK(dName);
+            WSDataClusterPK pk = new WSDataClusterPK(dName);
             try {
                 List<String> items = new ArrayList<String>();
-                List<WsItemPKsByCriteriaResponseResults> results = service.getItemPKsByCriteria(
-                        new WsGetItemPKsByCriteria(null, null, (long) -1, null, null, MAX_EXPORT_COUNT, 0, (long) -1, pk))
+                List<WSItemPKsByCriteriaResponseResults> results = service.getItemPKsByCriteria(
+                        new WSGetItemPKsByCriteria(null, null, (long) -1, null, null, MAX_EXPORT_COUNT, 0, (long) -1, pk))
                         .getResults();
 
                 if (results == null) {
@@ -210,8 +210,8 @@ public class ExportDataContentProcess extends AbstractDataContentProcess {
                 Mapping mapping = getWSItemMapping();
 
                 for (int i = 1; i <= maxSize; i++) {
-                    WsItemPKsByCriteriaResponseResults item = results.get(i);
-                    WsItem wsitem = service.getItem(new WsGetItem(item.getWsItemPK()));
+                    WSItemPKsByCriteriaResponseResults item = results.get(i);
+                    WSItem wsitem = service.getItem(new WSGetItem(item.getWsItemPK()));
 
                     // Marshal
                     StringWriter sw = new StringWriter();

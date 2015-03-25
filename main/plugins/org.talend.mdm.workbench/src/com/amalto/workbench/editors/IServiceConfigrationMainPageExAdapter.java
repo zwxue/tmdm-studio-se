@@ -14,7 +14,7 @@ package com.amalto.workbench.editors;
 
 import com.amalto.workbench.exadapter.IExAdapter;
 import com.amalto.workbench.webservices.TMDMService;
-import com.amalto.workbench.webservices.WsServicePutConfiguration;
+import com.amalto.workbench.webservices.WSServicePutConfiguration;
 
 /**
  * created by HHB on 2014-1-8 Detailled comment
@@ -22,5 +22,5 @@ import com.amalto.workbench.webservices.WsServicePutConfiguration;
  */
 public interface IServiceConfigrationMainPageExAdapter extends IExAdapter<ServiceConfigrationMainPage> {
 
-    void doSaveSVNChange(TMDMService service, WsServicePutConfiguration ws, String serviceName, String configurationText);
+    void doSaveSVNChange(TMDMService service, WSServicePutConfiguration ws, String serviceName, String configurationText);
 }

@@ -82,9 +82,9 @@ import org.talend.mdm.webservice.WSCustomForm;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.utils.XtentisException;
 import com.amalto.workbench.webservices.TMDMService;
-import com.amalto.workbench.webservices.WsDigest;
-import com.amalto.workbench.webservices.WsDigestKey;
-import com.amalto.workbench.webservices.WsLong;
+import com.amalto.workbench.webservices.WSDigest;
+import com.amalto.workbench.webservices.WSDigestKey;
+import com.amalto.workbench.webservices.WSLong;
 
 /**
  * created by HHB on 2013-7-18 Detailled comment
@@ -115,21 +115,21 @@ public class ConsistencyService {
 
     public static class ConsistencyData {
 
-        private WsDigest localDigestTime;
+        private WSDigest localDigestTime;
 
-        public WsDigest getLocalDigestTime() {
+        public WSDigest getLocalDigestTime() {
             return this.localDigestTime;
         }
 
-        public void setLocalDigestTime(WsDigest localDigestTime) {
+        public void setLocalDigestTime(WSDigest localDigestTime) {
             this.localDigestTime = localDigestTime;
         }
 
-        public WsDigest getServerDigestTime() {
+        public WSDigest getServerDigestTime() {
             return this.serverDigestTime;
         }
 
-        public void setServerDigestTime(WsDigest serverDigestTime) {
+        public void setServerDigestTime(WSDigest serverDigestTime) {
             this.serverDigestTime = serverDigestTime;
         }
 
@@ -141,7 +141,7 @@ public class ConsistencyService {
             this.compareResult = compareResult;
         }
 
-        private WsDigest serverDigestTime;
+        private WSDigest serverDigestTime;
 
         private CompareResultEnum compareResult;
 
@@ -448,7 +448,7 @@ public class ConsistencyService {
         Collection<IRepositoryViewObject> viewObjs = viewObCmdOpjMap.keySet();
         if (UIUtil.isWorkInUI()) {
             updateCurrentlDigestValue(viewObjs);
-            Map<IRepositoryViewObject, WsDigest> viewObjMap = queryServerDigestValue(serverDef, viewObjs);
+            Map<IRepositoryViewObject, WSDigest> viewObjMap = queryServerDigestValue(serverDef, viewObjs);
             int conflictCount = getConflictCount(viewObjMap);
             if (conflictCount > 0) {
                 ConsistencyCheckResult result = null;
@@ -526,12 +526,12 @@ public class ConsistencyService {
         return returnObjs;
     }
 
-    private ConsistencyCheckResult getCheckResultByStrategy(int strategy, Map<IRepositoryViewObject, WsDigest> viewObjMap,
+    private ConsistencyCheckResult getCheckResultByStrategy(int strategy, Map<IRepositoryViewObject, WSDigest> viewObjMap,
             Map<IRepositoryViewObject, Integer> viewObCmdOpjMap) {
         List<IRepositoryViewObject> toDeployObjs = new LinkedList<IRepositoryViewObject>();
         List<IRepositoryViewObject> toSkipObjs = new LinkedList<IRepositoryViewObject>();
         for (IRepositoryViewObject viewObj : viewObjMap.keySet()) {
-            WsDigest dt = viewObjMap.get(viewObj);
+            WSDigest dt = viewObjMap.get(viewObj);
             if (dt == null) {
                 toDeployObjs.add(viewObj);
             } else {
@@ -702,10 +702,10 @@ public class ConsistencyService {
         return Display.getDefault().getActiveShell();
     }
 
-    private int getConflictCount(Map<IRepositoryViewObject, WsDigest> map) {
+    private int getConflictCount(Map<IRepositoryViewObject, WSDigest> map) {
         int total = 0;
         for (IRepositoryViewObject viewObj : map.keySet()) {
-            WsDigest digestTime = map.get(viewObj);
+            WSDigest digestTime = map.get(viewObj);
             if (digestTime == null) {
                 continue;
             }
@@ -731,10 +731,10 @@ public class ConsistencyService {
         // key
         String type = viewObj.getRepositoryObjectType().getKey();
         String objectName = getObjectName(viewObj);
-        WsDigestKey key = new WsDigestKey(type, objectName);
+        WSDigestKey key = new WSDigestKey(type, objectName);
         // value
-        WsDigest value = new WsDigest(getLocalDigestValue(item), 0L, key);
-        WsLong timeValue = service.updateDigest(value);
+        WSDigest value = new WSDigest(getLocalDigestValue(item), 0L, key);
+        WSLong timeValue = service.updateDigest(value);
         //
         if (timeValue != null) {
             updateLocalTimestamp(item, timeValue.getValue());
@@ -771,8 +771,8 @@ public class ConsistencyService {
         return objectName;
     }
 
-    public <T> Map<T, WsDigest> queryServerDigestValue(MDMServerDef serverDef, Collection<T> objs) throws XtentisException {
-        Map<T, WsDigest> result = new LinkedHashMap<T, WsDigest>();
+    public <T> Map<T, WSDigest> queryServerDigestValue(MDMServerDef serverDef, Collection<T> objs) throws XtentisException {
+        Map<T, WSDigest> result = new LinkedHashMap<T, WSDigest>();
         TMDMService service = RepositoryWebServiceAdapter.getMDMService(serverDef);
         if (isSupportConsistency(service)) {
             for (T obj : objs) {
@@ -795,7 +795,7 @@ public class ConsistencyService {
                 }
 
                 if (type != null && objectName != null) {
-                    WsDigest digest = service.getDigest(new WsDigestKey(type, objectName));
+                    WSDigest digest = service.getDigest(new WSDigestKey(type, objectName));
                     result.put(obj, digest);
                 }
 

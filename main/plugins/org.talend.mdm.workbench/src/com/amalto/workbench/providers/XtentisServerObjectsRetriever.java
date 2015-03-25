@@ -33,38 +33,38 @@ import com.amalto.workbench.utils.LocalTreeObjectRepository;
 import com.amalto.workbench.utils.UserInfo;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.webservices.TMDMService;
-import com.amalto.workbench.webservices.WsComponent;
-import com.amalto.workbench.webservices.WsDataCluster;
-import com.amalto.workbench.webservices.WsDataClusterPK;
-import com.amalto.workbench.webservices.WsDataModel;
-import com.amalto.workbench.webservices.WsDataModelPK;
-import com.amalto.workbench.webservices.WsGetComponentVersion;
-import com.amalto.workbench.webservices.WsGetDataCluster;
-import com.amalto.workbench.webservices.WsGetDataModel;
-import com.amalto.workbench.webservices.WsGetMenu;
-import com.amalto.workbench.webservices.WsGetMenuPKs;
-import com.amalto.workbench.webservices.WsGetRoutingRule;
-import com.amalto.workbench.webservices.WsGetRoutingRulePKs;
-import com.amalto.workbench.webservices.WsGetStoredProcedure;
-import com.amalto.workbench.webservices.WsGetTransformerV2;
-import com.amalto.workbench.webservices.WsGetTransformerV2PKs;
-import com.amalto.workbench.webservices.WsGetView;
-import com.amalto.workbench.webservices.WsGetViewPKs;
-import com.amalto.workbench.webservices.WsMenu;
-import com.amalto.workbench.webservices.WsMenuPK;
-import com.amalto.workbench.webservices.WsPing;
-import com.amalto.workbench.webservices.WsRegexDataClusterPKs;
-import com.amalto.workbench.webservices.WsRegexDataModelPKs;
-import com.amalto.workbench.webservices.WsRegexStoredProcedure;
-import com.amalto.workbench.webservices.WsRoutingRule;
-import com.amalto.workbench.webservices.WsRoutingRulePK;
-import com.amalto.workbench.webservices.WsStoredProcedure;
-import com.amalto.workbench.webservices.WsStoredProcedurePK;
-import com.amalto.workbench.webservices.WsTransformerV2;
-import com.amalto.workbench.webservices.WsTransformerV2PK;
-import com.amalto.workbench.webservices.WsVersion;
-import com.amalto.workbench.webservices.WsView;
-import com.amalto.workbench.webservices.WsViewPK;
+import com.amalto.workbench.webservices.WSComponent;
+import com.amalto.workbench.webservices.WSDataCluster;
+import com.amalto.workbench.webservices.WSDataClusterPK;
+import com.amalto.workbench.webservices.WSDataModel;
+import com.amalto.workbench.webservices.WSDataModelPK;
+import com.amalto.workbench.webservices.WSGetComponentVersion;
+import com.amalto.workbench.webservices.WSGetDataCluster;
+import com.amalto.workbench.webservices.WSGetDataModel;
+import com.amalto.workbench.webservices.WSGetMenu;
+import com.amalto.workbench.webservices.WSGetMenuPKs;
+import com.amalto.workbench.webservices.WSGetRoutingRule;
+import com.amalto.workbench.webservices.WSGetRoutingRulePKs;
+import com.amalto.workbench.webservices.WSGetStoredProcedure;
+import com.amalto.workbench.webservices.WSGetTransformerV2;
+import com.amalto.workbench.webservices.WSGetTransformerV2PKs;
+import com.amalto.workbench.webservices.WSGetView;
+import com.amalto.workbench.webservices.WSGetViewPKs;
+import com.amalto.workbench.webservices.WSMenu;
+import com.amalto.workbench.webservices.WSMenuPK;
+import com.amalto.workbench.webservices.WSPing;
+import com.amalto.workbench.webservices.WSRegexDataClusterPKs;
+import com.amalto.workbench.webservices.WSRegexDataModelPKs;
+import com.amalto.workbench.webservices.WSRegexStoredProcedure;
+import com.amalto.workbench.webservices.WSRoutingRule;
+import com.amalto.workbench.webservices.WSRoutingRulePK;
+import com.amalto.workbench.webservices.WSStoredProcedure;
+import com.amalto.workbench.webservices.WSStoredProcedurePK;
+import com.amalto.workbench.webservices.WSTransformerV2;
+import com.amalto.workbench.webservices.WSTransformerV2PK;
+import com.amalto.workbench.webservices.WSVersion;
+import com.amalto.workbench.webservices.WSView;
+import com.amalto.workbench.webservices.WSViewPK;
 
 public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
 
@@ -129,13 +129,13 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
             monitor.worked(1);
             // Access to server and get port
             TMDMService service = Util.getMDMService(new URL(endpointaddress), universe, username, password);
-            service.ping(new WsPing(Messages.XtentisServerObjectsRetriever_5));// viewer user can't use studio
+            service.ping(new WSPing(Messages.XtentisServerObjectsRetriever_5));// viewer user can't use studio
 
             monitor.worked(1);
 
             // fetch version info
             try {
-                WsVersion version = service.getComponentVersion(new WsGetComponentVersion(WsComponent.DATA_MANAGER, null));
+                WSVersion version = service.getComponentVersion(new WSGetComponentVersion(WSComponent.DATA_MANAGER, null));
                 String versionStr = version.getMajor() + "." + version.getMinor() + "." + version.getRevision() + "_" //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
                         + version.getBuild();
                 log.info("Server version = " + versionStr); //$NON-NLS-1$
@@ -161,21 +161,21 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
             // Data Models
             TreeParent models = new TreeParent(EXtentisObjects.DataMODEL.getDisplayName(), serverRoot, TreeObject.DATA_MODEL,
                     null, null);
-            List<WsDataModelPK> xdmPKs = null;
+            List<WSDataModelPK> xdmPKs = null;
             try {
-                xdmPKs = service.getDataModelPKs(new WsRegexDataModelPKs("")).getWsDataModelPKs(); //$NON-NLS-1$
+                xdmPKs = service.getDataModelPKs(new WSRegexDataModelPKs("")).getWsDataModelPKs(); //$NON-NLS-1$
             } catch (Exception e) {
 
                 log.error(e.getMessage(), e);
             }
             if (xdmPKs != null) {
                 monitor.subTask(Messages.XtentisServerObjectsRetriever_8);
-                for (WsDataModelPK pk : xdmPKs) {
+                for (WSDataModelPK pk : xdmPKs) {
                     String name = pk.getPk();
                     if (!name.startsWith("XMLSCHEMA")) {//$NON-NLS-1$
-                        WsDataModel wsobj = null;
+                        WSDataModel wsobj = null;
                         if (retriveWSObject) {
-                            wsobj = service.getDataModel(new WsGetDataModel(pk));
+                            wsobj = service.getDataModel(new WSGetDataModel(pk));
                         }
                         TreeObject obj = new TreeObject(name, serverRoot, TreeObject.DATA_MODEL, pk, wsobj);
                         models.addChild(obj);
@@ -190,21 +190,21 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
             // DataClusters
             TreeParent dataClusters = new TreeParent(EXtentisObjects.DataCluster.getDisplayName(), serverRoot,
                     TreeObject.DATA_CLUSTER, null, null);
-            List<WsDataClusterPK> xdcPKs = null;
+            List<WSDataClusterPK> xdcPKs = null;
             try {
-                xdcPKs = service.getDataClusterPKs(new WsRegexDataClusterPKs("")).getWsDataClusterPKs();//$NON-NLS-1$
+                xdcPKs = service.getDataClusterPKs(new WSRegexDataClusterPKs("")).getWsDataClusterPKs();//$NON-NLS-1$
             } catch (Exception e) {
                 log.error(e.getMessage(), e);
             }
             if (xdcPKs != null) {
                 monitor.subTask(Messages.XtentisServerObjectsRetriever_10);
-                for (WsDataClusterPK pk : xdcPKs) {
+                for (WSDataClusterPK pk : xdcPKs) {
                     String name = pk.getPk();
                     if (!("CACHE".equals(name))) { // FIXME: Hardcoded CACHE//$NON-NLS-1$
-                        WsDataCluster wsObject = null;
+                        WSDataCluster wsObject = null;
                         try {
                             if (retriveWSObject) {
-                                wsObject = service.getDataCluster(new WsGetDataCluster(pk));
+                                wsObject = service.getDataCluster(new WSGetDataCluster(pk));
                             }
                             TreeObject obj = new TreeObject(name, serverRoot, TreeObject.DATA_CLUSTER, pk, wsObject);
                             dataClusters.addChild(obj);
@@ -228,9 +228,9 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
             eventManagement.addChild(engine);
 
             // transformer
-            List<WsTransformerV2PK> transformerPKs = null;
+            List<WSTransformerV2PK> transformerPKs = null;
             try {
-                transformerPKs = service.getTransformerV2PKs(new WsGetTransformerV2PKs("")).getWsTransformerV2PK();//$NON-NLS-1$
+                transformerPKs = service.getTransformerV2PKs(new WSGetTransformerV2PKs("")).getWsTransformerV2PK();//$NON-NLS-1$
             } catch (Exception e) {
                 log.error(e.getMessage(), e);
             }
@@ -240,22 +240,22 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
             eventManagement.addChild(transformers);
             if (transformerPKs != null) {
                 monitor.subTask(Messages.XtentisServerObjectsRetriever_12);
-                for (WsTransformerV2PK pk : transformerPKs) {
+                for (WSTransformerV2PK pk : transformerPKs) {
                     String id = pk.getPk();
-                    WsTransformerV2 wsobject = null;
+                    WSTransformerV2 wsobject = null;
                     if (retriveWSObject) {
-                        wsobject = service.getTransformerV2(new WsGetTransformerV2(pk));
+                        wsobject = service.getTransformerV2(new WSGetTransformerV2(pk));
                     }
-                    TreeObject obj = new TreeObject(id, serverRoot, TreeObject.TRANSFORMER, new WsTransformerV2PK(id), wsobject);
+                    TreeObject obj = new TreeObject(id, serverRoot, TreeObject.TRANSFORMER, new WSTransformerV2PK(id), wsobject);
                     transformers.addChild(obj);
                 }
             }
             monitor.worked(1);
 
             // routing rule
-            List<WsRoutingRulePK> routingRulePKs = null;
+            List<WSRoutingRulePK> routingRulePKs = null;
             try {
-                routingRulePKs = service.getRoutingRulePKs(new WsGetRoutingRulePKs("")).getWsRoutingRulePKs();//$NON-NLS-1$
+                routingRulePKs = service.getRoutingRulePKs(new WSGetRoutingRulePKs("")).getWsRoutingRulePKs();//$NON-NLS-1$
             } catch (Exception e) {
                 log.error(e.getMessage(), e);
             }
@@ -264,13 +264,13 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
             eventManagement.addChild(rules);
             if (routingRulePKs != null) {
                 monitor.subTask(Messages.XtentisServerObjectsRetriever_13);
-                for (WsRoutingRulePK pk : routingRulePKs) {
+                for (WSRoutingRulePK pk : routingRulePKs) {
                     String id = pk.getPk();
-                    WsRoutingRule wsobject = null;
+                    WSRoutingRule wsobject = null;
                     if (retriveWSObject) {
-                        wsobject = service.getRoutingRule(new WsGetRoutingRule(pk));
+                        wsobject = service.getRoutingRule(new WSGetRoutingRule(pk));
                     }
-                    TreeObject obj = new TreeObject(id, serverRoot, TreeObject.ROUTING_RULE, new WsRoutingRulePK(id), wsobject);
+                    TreeObject obj = new TreeObject(id, serverRoot, TreeObject.ROUTING_RULE, new WSRoutingRulePK(id), wsobject);
                     rules.addChild(obj);
                 }
             }
@@ -281,22 +281,22 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
 
             // Views
             TreeParent views = new TreeParent(EXtentisObjects.View.getDisplayName(), serverRoot, TreeObject.VIEW, null, null);
-            List<WsViewPK> viewPKs = null;
+            List<WSViewPK> viewPKs = null;
             try {
-                viewPKs = service.getViewPKs((new WsGetViewPKs(""))).getWsViewPK();//$NON-NLS-1$
+                viewPKs = service.getViewPKs((new WSGetViewPKs(""))).getWsViewPK();//$NON-NLS-1$
             } catch (Exception e) {
                 log.error(e.getMessage(), e);
 
             }
             if (viewPKs != null) {
                 monitor.subTask(Messages.XtentisServerObjectsRetriever_14);
-                for (WsViewPK pk : viewPKs) {
+                for (WSViewPK pk : viewPKs) {
                     String name = pk.getPk();
-                    WsView wsobject = null;
+                    WSView wsobject = null;
                     if (retriveWSObject) {
-                        wsobject = service.getView(new WsGetView(pk));
+                        wsobject = service.getView(new WSGetView(pk));
                     }
-                    TreeObject obj = new TreeObject(name, serverRoot, TreeObject.VIEW, new WsViewPK(name), wsobject);
+                    TreeObject obj = new TreeObject(name, serverRoot, TreeObject.VIEW, new WSViewPK(name), wsobject);
                     views.addChild(obj);
                 }
             }
@@ -308,22 +308,22 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
             // Stored Procedures
             TreeParent storedProcedures = new TreeParent(EXtentisObjects.StoredProcedure.getDisplayName(), serverRoot,
                     TreeObject.STORED_PROCEDURE, null, null);
-            List<WsStoredProcedurePK> spk = null;
+            List<WSStoredProcedurePK> spk = null;
             try {
-                spk = service.getStoredProcedurePKs(new WsRegexStoredProcedure("")).getWsStoredProcedurePK();//$NON-NLS-1$
+                spk = service.getStoredProcedurePKs(new WSRegexStoredProcedure("")).getWsStoredProcedurePK();//$NON-NLS-1$
             } catch (Exception e) {
 
                 log.error(e.getMessage(), e);
             }
             if (spk != null) {
                 monitor.subTask(Messages.XtentisServerObjectsRetriever_16);
-                for (WsStoredProcedurePK pk : spk) {
+                for (WSStoredProcedurePK pk : spk) {
                     String name = pk.getPk();
-                    WsStoredProcedure wsobject = null;
+                    WSStoredProcedure wsobject = null;
                     if (retriveWSObject) {
-                        wsobject = service.getStoredProcedure(new WsGetStoredProcedure(pk));
+                        wsobject = service.getStoredProcedure(new WSGetStoredProcedure(pk));
                     }
-                    TreeObject obj = new TreeObject(name, serverRoot, TreeObject.STORED_PROCEDURE, new WsStoredProcedurePK(name),
+                    TreeObject obj = new TreeObject(name, serverRoot, TreeObject.STORED_PROCEDURE, new WSStoredProcedurePK(name),
                             wsobject);
                     storedProcedures.addChild(obj);
                 }
@@ -343,10 +343,10 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
             }
 
             // Menus
-            List<WsMenuPK> menuPKs = null;
+            List<WSMenuPK> menuPKs = null;
             boolean hasMenus = true;
             try {
-                menuPKs = service.getMenuPKs(new WsGetMenuPKs("*")).getWsMenuPK();//$NON-NLS-1$
+                menuPKs = service.getMenuPKs(new WSGetMenuPKs("*")).getWsMenuPK();//$NON-NLS-1$
             } catch (Exception e) {
                 log.error(e.getMessage(), e);
                 // This server IS old
@@ -357,14 +357,14 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
                 menus = new TreeParent(EXtentisObjects.Menu.getDisplayName(), serverRoot, TreeObject.MENU, null, null);
                 if (menuPKs != null) {
                     monitor.subTask(Messages.XtentisServerObjectsRetriever_19);
-                    for (WsMenuPK pk : menuPKs) {
+                    for (WSMenuPK pk : menuPKs) {
                         String id = pk.getPk();
-                        WsMenu wsobject = null;
+                        WSMenu wsobject = null;
                         try {
                             if (retriveWSObject) {
-                                wsobject = service.getMenu(new WsGetMenu(pk));
+                                wsobject = service.getMenu(new WSGetMenu(pk));
                             }
-                            TreeObject obj = new TreeObject(id, serverRoot, TreeObject.MENU, new WsMenuPK(id), wsobject);
+                            TreeObject obj = new TreeObject(id, serverRoot, TreeObject.MENU, new WSMenuPK(id), wsobject);
                             menus.addChild(obj);
                         } catch (Exception e) {
                             log.error(e.getMessage(), e);

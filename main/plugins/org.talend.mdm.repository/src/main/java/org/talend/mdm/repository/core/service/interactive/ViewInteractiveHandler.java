@@ -21,10 +21,10 @@ import com.amalto.workbench.utils.EXtentisObjects;
 import com.amalto.workbench.utils.TreeObjectUtil;
 import com.amalto.workbench.utils.XtentisException;
 import com.amalto.workbench.webservices.TMDMService;
-import com.amalto.workbench.webservices.WsDeleteView;
-import com.amalto.workbench.webservices.WsPutView;
-import com.amalto.workbench.webservices.WsView;
-import com.amalto.workbench.webservices.WsViewPK;
+import com.amalto.workbench.webservices.WSDeleteView;
+import com.amalto.workbench.webservices.WSPutView;
+import com.amalto.workbench.webservices.WSView;
+import com.amalto.workbench.webservices.WSViewPK;
 
 /**
  * DOC hbhong class global comment. Detailled comment
@@ -43,7 +43,7 @@ public class ViewInteractiveHandler extends AbstractInteractiveHandler {
     @Override
     public boolean doDeployWSObject(TMDMService service, Object wsObj) {
         if (wsObj != null) {
-            service.putView(new WsPutView((WsView) wsObj));
+            service.putView(new WSPutView((WSView) wsObj));
             return true;
         }
         return false;
@@ -51,10 +51,10 @@ public class ViewInteractiveHandler extends AbstractInteractiveHandler {
 
     @Override
     public boolean doRemove(TMDMService service, AbstractDeployCommand cmd) throws XtentisException {
-        WsViewPK pk = new WsViewPK();
+        WSViewPK pk = new WSViewPK();
         String name = cmd.getObjName();
         pk.setPk(name);
-        service.deleteView(new WsDeleteView(pk));
+        service.deleteView(new WSDeleteView(pk));
         TreeObjectUtil.deleteSpecificationFromAttachedRole(service, name, EXtentisObjects.View.getName());
         return true;
     }

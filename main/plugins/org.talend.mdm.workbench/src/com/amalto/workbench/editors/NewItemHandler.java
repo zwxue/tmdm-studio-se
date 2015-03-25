@@ -28,12 +28,12 @@ import com.amalto.workbench.dialogs.datacontainer.DataContainerDOMViewDialog;
 import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.webservices.TMDMService;
-import com.amalto.workbench.webservices.WsDataClusterPK;
-import com.amalto.workbench.webservices.WsDataModelPK;
-import com.amalto.workbench.webservices.WsDataModelPKArray;
-import com.amalto.workbench.webservices.WsPutItem;
-import com.amalto.workbench.webservices.WsPutItemWithReport;
-import com.amalto.workbench.webservices.WsRegexDataModelPKs;
+import com.amalto.workbench.webservices.WSDataClusterPK;
+import com.amalto.workbench.webservices.WSDataModelPK;
+import com.amalto.workbench.webservices.WSDataModelPKArray;
+import com.amalto.workbench.webservices.WSPutItem;
+import com.amalto.workbench.webservices.WSPutItemWithReport;
+import com.amalto.workbench.webservices.WSRegexDataModelPKs;
 
 /**
  * created by liusongbo on 2014-2-19
@@ -48,7 +48,7 @@ public class NewItemHandler {
         return new NewItemHandler();
     }
 
-    public boolean createItemRecord(final TMDMService service, final Shell ashell, final WsDataClusterPK wsDataClusterPK,
+    public boolean createItemRecord(final TMDMService service, final Shell ashell, final WSDataClusterPK wsDataClusterPK,
             boolean isMaster) {
         if (service == null || wsDataClusterPK == null) {
             throw new IllegalArgumentException();
@@ -59,11 +59,11 @@ public class NewItemHandler {
         try {
             String xml = "<NewItem><NewElement></NewElement></NewItem>"; //$NON-NLS-1$
 
-            WsDataModelPKArray dataModelPKs = service.getDataModelPKs(new WsRegexDataModelPKs("*")); //$NON-NLS-1$
-            List<WsDataModelPK> dmPKs = dataModelPKs.getWsDataModelPKs();
+            WSDataModelPKArray dataModelPKs = service.getDataModelPKs(new WSRegexDataModelPKs("*")); //$NON-NLS-1$
+            List<WSDataModelPK> dmPKs = dataModelPKs.getWsDataModelPKs();
             List<String> dataModels = new ArrayList<String>();
             if (dmPKs != null) {
-                for (WsDataModelPK pk : dmPKs) {
+                for (WSDataModelPK pk : dmPKs) {
                     if (!"XMLSCHEMA---".equals(pk.getPk())) { //$NON-NLS-1$
                         dataModels.add(pk.getPk());
                     }
@@ -77,9 +77,9 @@ public class NewItemHandler {
                     if (event.button == DOMViewDialog.BUTTON_SAVE) {
                         // attempt to save
                         try {
-                            WsPutItem putItem = new WsPutItem(false, wsDataClusterPK, "".equals(d.getDataModelName()) ? null //$NON-NLS-1$
-                                    : new WsDataModelPK(d.getDataModelName()), d.getXML());
-                            WsPutItemWithReport item = new WsPutItemWithReport(d.isBeforeVerification(), "genericUI", putItem);//$NON-NLS-1$
+                            WSPutItem putItem = new WSPutItem(false, wsDataClusterPK, "".equals(d.getDataModelName()) ? null //$NON-NLS-1$
+                                    : new WSDataModelPK(d.getDataModelName()), d.getXML());
+                            WSPutItemWithReport item = new WSPutItemWithReport(d.isBeforeVerification(), "genericUI", putItem);//$NON-NLS-1$
                             if (d.isTriggerProcess()) {
                                 service.putItemWithReport(item);
                             } else {

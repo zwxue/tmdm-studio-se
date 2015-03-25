@@ -26,8 +26,8 @@ import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.models.infoextractor.IAllDataModelHolder;
 import com.amalto.workbench.utils.JobInfo;
 import com.amalto.workbench.webservices.TMDMService;
-import com.amalto.workbench.webservices.WsTransformerV2;
-import com.amalto.workbench.webservices.WsmdmConfig;
+import com.amalto.workbench.webservices.WSMDMConfig;
+import com.amalto.workbench.webservices.WSTransformerV2;
 import com.amalto.workbench.widgets.xmleditor.util.WorkflowInfo;
 
 public abstract class ExternalInfoHolder<T> {
@@ -90,7 +90,7 @@ public abstract class ExternalInfoHolder<T> {
         return new AllJobInfoHolder(service);
     }
 
-    public static ExternalInfoHolder<WsmdmConfig> getAllMDMServerInfoHolder(TMDMService service) {
+    public static ExternalInfoHolder<WSMDMConfig> getAllMDMServerInfoHolder(TMDMService service) {
         return new MDMServerInfoHolder(service);
     }
 
@@ -102,7 +102,7 @@ public abstract class ExternalInfoHolder<T> {
         return null;
     }
 
-    public static ExternalInfoHolder<String[]> getProcessAllCallJobVarsCandidatesHolder(WsTransformerV2 service) {
+    public static ExternalInfoHolder<String[]> getProcessAllCallJobVarsCandidatesHolder(WSTransformerV2 service) {
         return new ProcessAllCallJobVariableCandidatesHolder(service);
     }
 

@@ -21,10 +21,10 @@ import com.amalto.workbench.utils.EXtentisObjects;
 import com.amalto.workbench.utils.TreeObjectUtil;
 import com.amalto.workbench.utils.XtentisException;
 import com.amalto.workbench.webservices.TMDMService;
-import com.amalto.workbench.webservices.WsDeleteStoredProcedure;
-import com.amalto.workbench.webservices.WsPutStoredProcedure;
-import com.amalto.workbench.webservices.WsStoredProcedure;
-import com.amalto.workbench.webservices.WsStoredProcedurePK;
+import com.amalto.workbench.webservices.WSDeleteStoredProcedure;
+import com.amalto.workbench.webservices.WSPutStoredProcedure;
+import com.amalto.workbench.webservices.WSStoredProcedure;
+import com.amalto.workbench.webservices.WSStoredProcedurePK;
 
 /**
  * DOC hbhong class global comment. Detailled comment
@@ -43,7 +43,7 @@ public class StoredProcedureInteractiveHandler extends AbstractInteractiveHandle
     @Override
     public boolean doDeployWSObject(TMDMService service, Object wsObj) {
         if (wsObj != null) {
-            service.putStoredProcedure(new WsPutStoredProcedure((WsStoredProcedure) wsObj));
+            service.putStoredProcedure(new WSPutStoredProcedure((WSStoredProcedure) wsObj));
             return true;
         }
         return false;
@@ -51,10 +51,10 @@ public class StoredProcedureInteractiveHandler extends AbstractInteractiveHandle
 
     @Override
     public boolean doRemove(TMDMService service, AbstractDeployCommand cmd) throws XtentisException {
-        WsStoredProcedurePK pk = new WsStoredProcedurePK();
+        WSStoredProcedurePK pk = new WSStoredProcedurePK();
         String name = cmd.getObjName();
         pk.setPk(name);
-        service.deleteStoredProcedure(new WsDeleteStoredProcedure(pk));
+        service.deleteStoredProcedure(new WSDeleteStoredProcedure(pk));
         TreeObjectUtil.deleteSpecificationFromAttachedRole(service, name, EXtentisObjects.StoredProcedure.getName());
         return true;
     }

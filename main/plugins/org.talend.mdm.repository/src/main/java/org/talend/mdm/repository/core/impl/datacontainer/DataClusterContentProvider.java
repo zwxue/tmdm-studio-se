@@ -30,7 +30,7 @@ import org.talend.mdm.repository.core.impl.AbstractContentProvider;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 
 import com.amalto.workbench.models.TreeObject;
-import com.amalto.workbench.webservices.WsDataCluster;
+import com.amalto.workbench.webservices.WSDataCluster;
 
 /**
  * DOC hbhong class global comment. Detailled comment <br/>
@@ -43,8 +43,9 @@ public class DataClusterContentProvider extends AbstractContentProvider {
         return RepositoryResourceUtil.findViewObjectsByType(IServerObjectRepositoryType.TYPE_DATACLUSTER, parentItem,
                 TreeObject.DATA_CLUSTER);
     }
+
     public Class getWSObjectClass() {
-        return WsDataCluster.class;
+        return WSDataCluster.class;
     }
 
 }

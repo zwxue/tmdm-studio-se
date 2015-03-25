@@ -60,9 +60,9 @@ import com.amalto.workbench.providers.XSDTreeLabelProvider;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.XtentisException;
 import com.amalto.workbench.webservices.TMDMService;
-import com.amalto.workbench.webservices.WsDataModel;
-import com.amalto.workbench.webservices.WsDataModelPK;
-import com.amalto.workbench.webservices.WsGetDataModel;
+import com.amalto.workbench.webservices.WSDataModel;
+import com.amalto.workbench.webservices.WSDataModelPK;
+import com.amalto.workbench.webservices.WSGetDataModel;
 
 public class XpathSelectDialog extends Dialog {
 
@@ -326,7 +326,7 @@ public class XpathSelectDialog extends Dialog {
         } catch (Exception e3) {
             log.error(e3.getMessage(), e3);
         }
-        WsDataModel wsDataModel = null;
+        WSDataModel wsDataModel = null;
 
         String schema = null;
         XSDSchema xsd = null;
@@ -336,7 +336,7 @@ public class XpathSelectDialog extends Dialog {
         } else {
 
             try {
-                wsDataModel = service.getDataModel(new WsGetDataModel(new WsDataModelPK(dataModelName)));
+                wsDataModel = service.getDataModel(new WSGetDataModel(new WSDataModelPK(dataModelName)));
                 // XSDSchema xsdSchema = Util.getXSDSchema(wsDataModel.getXsdSchema());
                 schema = wsDataModel.getXsdSchema();// Util.nodeToString(xsdSchema.getDocument());
                 xsd = Util.createXsdSchema(schema, pObject);

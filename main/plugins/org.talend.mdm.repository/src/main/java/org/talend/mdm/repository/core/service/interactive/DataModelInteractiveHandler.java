@@ -35,10 +35,10 @@ import com.amalto.workbench.utils.EXtentisObjects;
 import com.amalto.workbench.utils.TreeObjectUtil;
 import com.amalto.workbench.utils.XtentisException;
 import com.amalto.workbench.webservices.TMDMService;
-import com.amalto.workbench.webservices.WsDataModel;
-import com.amalto.workbench.webservices.WsDataModelPK;
-import com.amalto.workbench.webservices.WsDeleteDataModel;
-import com.amalto.workbench.webservices.WsPutDataModel;
+import com.amalto.workbench.webservices.WSDataModel;
+import com.amalto.workbench.webservices.WSDataModelPK;
+import com.amalto.workbench.webservices.WSDeleteDataModel;
+import com.amalto.workbench.webservices.WSPutDataModel;
 
 /**
  * DOC hbhong class global comment. Detailled comment
@@ -75,7 +75,7 @@ public class DataModelInteractiveHandler extends AbstractInteractiveHandler {
     @Override
     public boolean doDeployWSObject(TMDMService service, Object wsObj) {
         if (wsObj != null) {
-            service.putDataModel(new WsPutDataModel((WsDataModel) wsObj));
+            service.putDataModel(new WSPutDataModel((WSDataModel) wsObj));
             return true;
         }
         return false;
@@ -83,7 +83,7 @@ public class DataModelInteractiveHandler extends AbstractInteractiveHandler {
 
     @Override
     public Object convert(Item item, MDMServerObject serverObj) {
-        WsDataModel dataModel = (WsDataModel) super.convert(item, serverObj);
+        WSDataModel dataModel = (WSDataModel) super.convert(item, serverObj);
         IFile file = RepositoryResourceUtil.findReferenceFile(getRepositoryObjectType(), item, FILE_EXTENSION);
         String schema = RepositoryResourceUtil.getTextFileContent(file, ENCODE);
         dataModel.setXsdSchema(schema);
@@ -99,10 +99,10 @@ public class DataModelInteractiveHandler extends AbstractInteractiveHandler {
 
     @Override
     public boolean doRemove(TMDMService service, AbstractDeployCommand cmd) throws XtentisException {
-        WsDataModelPK pk = new WsDataModelPK();
+        WSDataModelPK pk = new WSDataModelPK();
         String name = cmd.getObjName();
         pk.setPk(name);
-        service.deleteDataModel(new WsDeleteDataModel(pk));
+        service.deleteDataModel(new WSDeleteDataModel(pk));
         TreeObjectUtil.deleteSpecificationFromAttachedRole(service, name, EXtentisObjects.DataMODEL.getName());
         return true;
     }

@@ -13,23 +13,20 @@
 package org.talend.mdm.repository.ui.editors;
 
 import org.eclipse.core.resources.IFile;
-import org.eclipse.emf.common.ui.URIEditorInput;
-import org.eclipse.emf.common.util.URI;
+import org.eclipse.ui.part.FileEditorInput;
 import org.talend.core.model.properties.Item;
 import org.talend.core.model.repository.IRepositoryViewObject;
 
 /**
  * DOC hbhong class global comment. Detailled comment
  */
-public class WorkflowEditorInput extends URIEditorInput implements IRepositoryViewEditorInput {
+public class WorkflowEditorInput extends FileEditorInput implements IRepositoryViewEditorInput {
 
     public static String EDITOR_ID = "org.bonitasoft.studio.model.process.diagram.part.ProcessDiagramEditorID"; //$NON-NLS-1$
 
     private final IRepositoryViewObject viewObject;
 
     private String version;
-
-    private final IFile file;
 
     public String getVersion() {
         return this.version;
@@ -45,9 +42,8 @@ public class WorkflowEditorInput extends URIEditorInput implements IRepositoryVi
      * @param file
      */
     public WorkflowEditorInput(IRepositoryViewObject viewObject, IFile file) {
-        super(URI.createPlatformResourceURI(file.getFullPath().toString(), true));
+        super(file);
         this.viewObject = viewObject;
-        this.file = file;
         version = viewObject.getVersion();
     }
 
@@ -76,8 +72,8 @@ public class WorkflowEditorInput extends URIEditorInput implements IRepositoryVi
 
     public void setReadOnly(boolean readOnly) {
         this.readOnly = readOnly;
-        if (file != null) {
-            file.setReadOnly(readOnly);
+        if (getFile() != null) {
+            getFile().setReadOnly(readOnly);
         }
     }
 
@@ -87,9 +83,5 @@ public class WorkflowEditorInput extends URIEditorInput implements IRepositoryVi
             return viewObject.getLabel() + "_" + getVersion() + ".proc"; //$NON-NLS-1$ //$NON-NLS-2$
         }
         return super.getName();
-    }
-
-    public IFile getFile() {
-        return this.file;
     }
 }

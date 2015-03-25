@@ -25,7 +25,7 @@ import com.amalto.workbench.detailtabs.sections.util.CommitBarListenerRegistry;
 import com.amalto.workbench.editors.DataModelMainPage;
 import com.amalto.workbench.editors.xsdeditor.XSDEditor;
 import com.amalto.workbench.models.TreeObject;
-import com.amalto.workbench.webservices.WsDataModel;
+import com.amalto.workbench.webservices.WSDataModel;
 
 public abstract class BasePropertySection extends AbstractPropertySection {
 
@@ -36,11 +36,12 @@ public abstract class BasePropertySection extends AbstractPropertySection {
     protected Composite compSectionClient;
 
     protected Section section;
+
     @Override
     public void createControls(Composite parent, TabbedPropertySheetPage aTabbedPropertySheetPage) {
         super.createControls(parent, aTabbedPropertySheetPage);
 
-        tabbedPropertySheetPage = aTabbedPropertySheetPage;        
+        tabbedPropertySheetPage = aTabbedPropertySheetPage;
         parentTabID = tabbedPropertySheetPage.getSelectedTab().getId();
 
         Composite compTop = getWidgetFactory().createComposite(parent);
@@ -59,7 +60,7 @@ public abstract class BasePropertySection extends AbstractPropertySection {
         compSectionClient.setLayout(new FillLayout());
 
         createControlsInSection(compSectionClient);
-        this.compSectionClient=compSectionClient;
+        this.compSectionClient = compSectionClient;
         section.setClient(compSectionClient);
         // CommitSection commitsec=CommitBarListenerRegistry.getInstance().getRegistCommitSection(getParentTabID());
         // if(!(this instanceof CommitSection) && commitsec!=null){
@@ -159,7 +160,7 @@ public abstract class BasePropertySection extends AbstractPropertySection {
         return getDataModel().getName();
     }
 
-    protected WsDataModel getDataModel() {
+    protected WSDataModel getDataModel() {
         return getCurDataModelMainPage().getDataModel();
     }
 

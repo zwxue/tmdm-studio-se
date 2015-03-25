@@ -25,9 +25,9 @@ import org.talend.mdm.repository.model.mdmserverobject.WsServicePutConfiguration
 
 import com.amalto.workbench.editors.ServiceConfigrationMainPage;
 import com.amalto.workbench.webservices.TMDMService;
-import com.amalto.workbench.webservices.WsCheckServiceConfigRequest;
-import com.amalto.workbench.webservices.WsCheckServiceConfigResponse;
-import com.amalto.workbench.webservices.WsServiceGetDocument;
+import com.amalto.workbench.webservices.WSCheckServiceConfigRequest;
+import com.amalto.workbench.webservices.WSCheckServiceConfigResponse;
+import com.amalto.workbench.webservices.WSServiceGetDocument;
 
 /**
  * DOC jsxie class global comment. Detailled comment
@@ -47,7 +47,7 @@ public class MDMServiceConfigrationMainPage extends ServiceConfigrationMainPage 
     }
 
     @Override
-    protected WsServiceGetDocument getServiceDocument(String jndiName) {
+    protected WSServiceGetDocument getServiceDocument(String jndiName) {
         return RepositoryWebServiceAdapter.getServiceDocument(jndiName);
     }
 
@@ -129,12 +129,12 @@ public class MDMServiceConfigrationMainPage extends ServiceConfigrationMainPage 
             return CHECKMSG_NOSELECTION;
         }
 
-        WsCheckServiceConfigResponse result;
+        WSCheckServiceConfigResponse result;
         service = getService();
         if (service == null) {
             return null;
         }
-        result = service.checkServiceConfiguration(new WsCheckServiceConfigRequest(serviceConfigurationsText.getText(),
+        result = service.checkServiceConfiguration(new WSCheckServiceConfigRequest(serviceConfigurationsText.getText(),
                 serviceNameCombo.getText().trim()));
 
         if (result.isCheckResult()) {
@@ -148,7 +148,7 @@ public class MDMServiceConfigrationMainPage extends ServiceConfigrationMainPage 
     @Override
     protected String getDoc() {
 
-        WsServiceGetDocument document = null;
+        WSServiceGetDocument document = null;
         try {
             document = getServiceDocument(serviceNameCombo.getText().trim());
         } catch (WebServiceException e) {
@@ -163,7 +163,7 @@ public class MDMServiceConfigrationMainPage extends ServiceConfigrationMainPage 
     @Override
     protected String getDesc() {
 
-        WsServiceGetDocument document = null;
+        WSServiceGetDocument document = null;
         try {
             document = getServiceDocument(serviceNameCombo.getText().trim());
         } catch (WebServiceException e) {

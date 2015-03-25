@@ -21,10 +21,10 @@ import com.amalto.workbench.utils.EXtentisObjects;
 import com.amalto.workbench.utils.TreeObjectUtil;
 import com.amalto.workbench.utils.XtentisException;
 import com.amalto.workbench.webservices.TMDMService;
-import com.amalto.workbench.webservices.WsDeleteTransformerV2;
-import com.amalto.workbench.webservices.WsPutTransformerV2;
-import com.amalto.workbench.webservices.WsTransformerV2;
-import com.amalto.workbench.webservices.WsTransformerV2PK;
+import com.amalto.workbench.webservices.WSDeleteTransformerV2;
+import com.amalto.workbench.webservices.WSPutTransformerV2;
+import com.amalto.workbench.webservices.WSTransformerV2;
+import com.amalto.workbench.webservices.WSTransformerV2PK;
 
 /**
  * DOC hbhong class global comment. Detailled comment
@@ -43,7 +43,7 @@ public class TransformerInteractiveHandler extends AbstractInteractiveHandler {
     @Override
     public boolean doDeployWSObject(TMDMService service, Object wsObj) {
         if (wsObj != null) {
-            service.putTransformerV2(new WsPutTransformerV2((WsTransformerV2) wsObj));
+            service.putTransformerV2(new WSPutTransformerV2((WSTransformerV2) wsObj));
             return true;
         }
         return false;
@@ -51,10 +51,10 @@ public class TransformerInteractiveHandler extends AbstractInteractiveHandler {
 
     @Override
     public boolean doRemove(TMDMService service, AbstractDeployCommand cmd) throws XtentisException {
-        WsTransformerV2PK pk = new WsTransformerV2PK();
+        WSTransformerV2PK pk = new WSTransformerV2PK();
         String name = cmd.getObjName();
         pk.setPk(name);
-        service.deleteTransformerV2(new WsDeleteTransformerV2(pk));
+        service.deleteTransformerV2(new WSDeleteTransformerV2(pk));
         TreeObjectUtil.deleteSpecificationFromAttachedRole(service, name, EXtentisObjects.Transformer.getName());
         return true;
     }

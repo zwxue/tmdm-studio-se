@@ -31,11 +31,11 @@ import com.amalto.workbench.service.bridge.ITransformService;
 import com.amalto.workbench.utils.EXObjectStatus;
 import com.amalto.workbench.utils.FontUtils;
 import com.amalto.workbench.utils.Util;
-import com.amalto.workbench.webservices.WsGetRoutingRule;
-import com.amalto.workbench.webservices.WsRoutingRule;
-import com.amalto.workbench.webservices.WsRoutingRulePK;
-import com.amalto.workbench.webservices.WsTransformerV2;
-import com.amalto.workbench.webservices.WsView;
+import com.amalto.workbench.webservices.WSGetRoutingRule;
+import com.amalto.workbench.webservices.WSRoutingRule;
+import com.amalto.workbench.webservices.WSRoutingRulePK;
+import com.amalto.workbench.webservices.WSTransformerV2;
+import com.amalto.workbench.webservices.WSView;
 
 public class ServerTreeLabelProvider extends ColumnLabelProvider implements IColorProvider, IFontProvider {
 
@@ -63,9 +63,9 @@ public class ServerTreeLabelProvider extends ColumnLabelProvider implements ICol
         Object wsObject = treeObject.getWsObject();
         ITransformService transformService = (ITransformService) GlobalServiceRegister.getDefault().getService(
                 ITransformService.class);
-        if (wsObject instanceof WsTransformerV2) {
+        if (wsObject instanceof WSTransformerV2) {
             transformedName = transformService.transformToSilyProcessName(label, true);
-        } else if (wsObject instanceof WsView) {
+        } else if (wsObject instanceof WSView) {
             transformedName = transformService.transformToSilyViewName(label, true);
         }
 
@@ -97,11 +97,11 @@ public class ServerTreeLabelProvider extends ColumnLabelProvider implements ICol
         } else if (object.getType() == TreeObject.ROUTING_RULE) {
             Image img = ImageCache.getCreatedImage(EImage.ROUTING_RULE.getPath());
             if (object.isXObject()) {
-                WsRoutingRule ws = (WsRoutingRule) (object.getWsObject());
+                WSRoutingRule ws = (WSRoutingRule) (object.getWsObject());
                 try {
                     if (ws == null) {
                         ws = Util.getMDMService(object).getRoutingRule(
-                                new WsGetRoutingRule(new WsRoutingRulePK(object.getDisplayName())));
+                                new WSGetRoutingRule(new WSRoutingRulePK(object.getDisplayName())));
                     }
                 } catch (Exception e) {
                 }
