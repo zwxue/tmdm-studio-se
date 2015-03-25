@@ -32,11 +32,11 @@ import org.talend.mdm.repository.core.IServerObjectRepositoryType;
 import org.talend.mdm.repository.core.impl.transformerV2.ITransformerV2NodeConsDef;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmproperties.MdmpropertiesFactory;
-import org.talend.mdm.repository.model.mdmproperties.WsTransformerV2Item;
+import org.talend.mdm.repository.model.mdmproperties.WSTransformerV2Item;
 import org.talend.mdm.repository.model.mdmserverobject.MdmserverobjectFactory;
-import org.talend.mdm.repository.model.mdmserverobject.WsTransformerProcessStepE;
-import org.talend.mdm.repository.model.mdmserverobject.WsTransformerV2E;
-import org.talend.mdm.repository.model.mdmserverobject.WsTransformerVariablesMappingE;
+import org.talend.mdm.repository.model.mdmserverobject.WSTransformerProcessStepE;
+import org.talend.mdm.repository.model.mdmserverobject.WSTransformerV2E;
+import org.talend.mdm.repository.model.mdmserverobject.WSTransformerVariablesMappingE;
 import org.talend.mdm.repository.ui.dialogs.job.JobOptionsDialog;
 import org.talend.mdm.repository.ui.dialogs.job.JobOptionsDialog.Execution;
 import org.talend.mdm.repository.ui.dialogs.job.JobOptionsDialog.Parameter;
@@ -109,7 +109,7 @@ public class GenerateJobTransformerAction extends AbstractRepositoryAction {
                 return;
             }
         }
-        WsTransformerV2E transformer = createTransformer(jobName, jobVersion, dialog);
+        WSTransformerV2E transformer = createTransformer(jobName, jobVersion, dialog);
         // if the new objectect is opened ,than close it before regenerating
         IRepositoryViewObject toDelete = RepositoryResourceUtil.findViewObjectByName(
                 IServerObjectRepositoryType.TYPE_TRANSFORMERV2, PREFIX + jobName);
@@ -128,13 +128,13 @@ public class GenerateJobTransformerAction extends AbstractRepositoryAction {
     /**
      * @param jobVersion
      */
-    private WsTransformerV2E createTransformer(String jobName, String jobVersion, JobOptionsDialog dialog) {
+    private WSTransformerV2E createTransformer(String jobName, String jobVersion, JobOptionsDialog dialog) {
         String server = "http://localhost:8180"; //$NON-NLS-1$
         Execution execution = dialog.getExecution();
         Parameter executionParameter = dialog.getParameter();
         final String TRANSFORMER_PLUGIN = "amalto/local/transformer/plugin/xslt";//$NON-NLS-1$
 
-        WsTransformerV2E transformer = MdmserverobjectFactory.eINSTANCE.createWsTransformerV2E();
+        WSTransformerV2E transformer = MdmserverobjectFactory.eINSTANCE.createWSTransformerV2E();
 
         String url = "";//$NON-NLS-1$
         switch (execution) {
@@ -147,12 +147,12 @@ public class GenerateJobTransformerAction extends AbstractRepositoryAction {
         }
 
         // Generate the job call
-        List<WsTransformerProcessStepE> steps = new ArrayList<WsTransformerProcessStepE>();
+        List<WSTransformerProcessStepE> steps = new ArrayList<WSTransformerProcessStepE>();
         WSTransformerVariablesMapping[] input;
         WSTransformerVariablesMapping[] output;
         try {
-            List<WsTransformerVariablesMappingE> inItems;
-            List<WsTransformerVariablesMappingE> outItems;
+            List<WSTransformerVariablesMappingE> inItems;
+            List<WSTransformerVariablesMappingE> outItems;
 
             switch (executionParameter) {
             case CONTEXT_VARIABLE:
@@ -160,17 +160,17 @@ public class GenerateJobTransformerAction extends AbstractRepositoryAction {
                         + "<exchange> <report>\n <xsl:copy-of select=\"Update\"/> </report>  <item><xsl:copy-of select='mdm:getItemProjection(Update/RevisionID,Update/DataCluster,Update/Concept,Update/Key)'/></item></exchange> "//$NON-NLS-1$ 
                         + "</xsl:template> </xsl:stylesheet>\n";//$NON-NLS-1$
 
-                WsTransformerProcessStepE steps1 = MdmserverobjectFactory.eINSTANCE.createWsTransformerProcessStepE();
-                inItems = new ArrayList<WsTransformerVariablesMappingE>();
-                WsTransformerVariablesMappingE inputLine = MdmserverobjectFactory.eINSTANCE
-                        .createWsTransformerVariablesMappingE();
+                WSTransformerProcessStepE steps1 = MdmserverobjectFactory.eINSTANCE.createWSTransformerProcessStepE();
+                inItems = new ArrayList<WSTransformerVariablesMappingE>();
+                WSTransformerVariablesMappingE inputLine = MdmserverobjectFactory.eINSTANCE
+                        .createWSTransformerVariablesMappingE();
                 inputLine.setPipelineVariable("_DEFAULT_");//$NON-NLS-1$
                 inputLine.setPluginVariable("xml");//$NON-NLS-1$
                 inItems.add(inputLine);
 
-                outItems = new ArrayList<WsTransformerVariablesMappingE>();
-                WsTransformerVariablesMappingE outputLine = MdmserverobjectFactory.eINSTANCE
-                        .createWsTransformerVariablesMappingE();
+                outItems = new ArrayList<WSTransformerVariablesMappingE>();
+                WSTransformerVariablesMappingE outputLine = MdmserverobjectFactory.eINSTANCE
+                        .createWSTransformerVariablesMappingE();
                 outputLine.setPipelineVariable("item_xml");//$NON-NLS-1$
                 outputLine.setPluginVariable("text");//$NON-NLS-1$
                 outItems.add(outputLine);
@@ -183,17 +183,17 @@ public class GenerateJobTransformerAction extends AbstractRepositoryAction {
 
                 // Generate the XSLT step to retrieve the item from an update report
                 // step 2
-                WsTransformerProcessStepE steps2 = MdmserverobjectFactory.eINSTANCE.createWsTransformerProcessStepE();
-                List<WsTransformerVariablesMappingE> inItems2 = new ArrayList<WsTransformerVariablesMappingE>();
-                WsTransformerVariablesMappingE inputLine2 = MdmserverobjectFactory.eINSTANCE
-                        .createWsTransformerVariablesMappingE();
+                WSTransformerProcessStepE steps2 = MdmserverobjectFactory.eINSTANCE.createWSTransformerProcessStepE();
+                List<WSTransformerVariablesMappingE> inItems2 = new ArrayList<WSTransformerVariablesMappingE>();
+                WSTransformerVariablesMappingE inputLine2 = MdmserverobjectFactory.eINSTANCE
+                        .createWSTransformerVariablesMappingE();
                 inputLine2.setPipelineVariable("item_xml");//$NON-NLS-1$
                 inputLine2.setPluginVariable("law_text");//$NON-NLS-1$
                 inItems2.add(inputLine2);
 
-                List<WsTransformerVariablesMappingE> outItems2 = new ArrayList<WsTransformerVariablesMappingE>();
-                WsTransformerVariablesMappingE outputLine2 = MdmserverobjectFactory.eINSTANCE
-                        .createWsTransformerVariablesMappingE();
+                List<WSTransformerVariablesMappingE> outItems2 = new ArrayList<WSTransformerVariablesMappingE>();
+                WSTransformerVariablesMappingE outputLine2 = MdmserverobjectFactory.eINSTANCE
+                        .createWSTransformerVariablesMappingE();
                 outputLine2.setPipelineVariable("decode_xml");//$NON-NLS-1$
                 outputLine2.setPluginVariable("codec_text");//$NON-NLS-1$
                 outItems2.add(outputLine2);
@@ -208,17 +208,17 @@ public class GenerateJobTransformerAction extends AbstractRepositoryAction {
                 steps2.setDisabled(false);
 
                 // step 3
-                WsTransformerProcessStepE steps3 = MdmserverobjectFactory.eINSTANCE.createWsTransformerProcessStepE();
-                List<WsTransformerVariablesMappingE> inItems3 = new ArrayList<WsTransformerVariablesMappingE>();
-                WsTransformerVariablesMappingE inputLine3 = MdmserverobjectFactory.eINSTANCE
-                        .createWsTransformerVariablesMappingE();
+                WSTransformerProcessStepE steps3 = MdmserverobjectFactory.eINSTANCE.createWSTransformerProcessStepE();
+                List<WSTransformerVariablesMappingE> inItems3 = new ArrayList<WSTransformerVariablesMappingE>();
+                WSTransformerVariablesMappingE inputLine3 = MdmserverobjectFactory.eINSTANCE
+                        .createWSTransformerVariablesMappingE();
                 inputLine3.setPipelineVariable("decode_xml");//$NON-NLS-1$
                 inputLine3.setPluginVariable("text");//$NON-NLS-1$
                 inItems3.add(inputLine3);
 
-                List<WsTransformerVariablesMappingE> outItems3 = new ArrayList<WsTransformerVariablesMappingE>();
-                WsTransformerVariablesMappingE outputLine3 = MdmserverobjectFactory.eINSTANCE
-                        .createWsTransformerVariablesMappingE();
+                List<WSTransformerVariablesMappingE> outItems3 = new ArrayList<WSTransformerVariablesMappingE>();
+                WSTransformerVariablesMappingE outputLine3 = MdmserverobjectFactory.eINSTANCE
+                        .createWSTransformerVariablesMappingE();
                 outputLine3.setPipelineVariable("output");//$NON-NLS-1$
                 outputLine3.setPluginVariable("result");//$NON-NLS-1$
                 outItems3.add(outputLine3);
@@ -246,15 +246,15 @@ public class GenerateJobTransformerAction extends AbstractRepositoryAction {
 
                 break;
             case INTEGRATED:
-                WsTransformerProcessStepE step1 = MdmserverobjectFactory.eINSTANCE.createWsTransformerProcessStepE();
-                inItems = new ArrayList<WsTransformerVariablesMappingE>();
-                inputLine = MdmserverobjectFactory.eINSTANCE.createWsTransformerVariablesMappingE();
+                WSTransformerProcessStepE step1 = MdmserverobjectFactory.eINSTANCE.createWSTransformerProcessStepE();
+                inItems = new ArrayList<WSTransformerVariablesMappingE>();
+                inputLine = MdmserverobjectFactory.eINSTANCE.createWSTransformerVariablesMappingE();
                 inputLine.setPipelineVariable("_DEFAULT_");//$NON-NLS-1$
                 inputLine.setPluginVariable("text");//$NON-NLS-1$
                 inItems.add(inputLine);
 
-                outItems = new ArrayList<WsTransformerVariablesMappingE>();
-                outputLine = MdmserverobjectFactory.eINSTANCE.createWsTransformerVariablesMappingE();
+                outItems = new ArrayList<WSTransformerVariablesMappingE>();
+                outputLine = MdmserverobjectFactory.eINSTANCE.createWSTransformerVariablesMappingE();
                 outputLine.setPipelineVariable("item_xml");//$NON-NLS-1$
                 outputLine.setPluginVariable("result");//$NON-NLS-1$
                 outItems.add(outputLine);
@@ -299,9 +299,9 @@ public class GenerateJobTransformerAction extends AbstractRepositoryAction {
      * @param filename
      * @param transformer
      */
-    private void AttachToProcessView(String filename, WsTransformerV2E transformer) {
+    private void AttachToProcessView(String filename, WSTransformerV2E transformer) {
 
-        WsTransformerV2Item item = MdmpropertiesFactory.eINSTANCE.createWsTransformerV2Item();
+        WSTransformerV2Item item = MdmpropertiesFactory.eINSTANCE.createWSTransformerV2Item();
         ItemState itemState = PropertiesFactory.eINSTANCE.createItemState();
         item.setState(itemState);
         item.setWsTransformerV2(transformer);

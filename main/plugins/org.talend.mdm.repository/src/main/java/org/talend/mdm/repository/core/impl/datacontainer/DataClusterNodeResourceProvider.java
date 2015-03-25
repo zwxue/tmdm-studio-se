@@ -34,7 +34,7 @@ import org.talend.mdm.repository.core.IServerObjectRepositoryType;
 import org.talend.mdm.repository.core.impl.AbstractRepositoryNodeResourceProvider;
 import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
 import org.talend.mdm.repository.model.mdmproperties.MdmpropertiesFactory;
-import org.talend.mdm.repository.model.mdmproperties.WsDataClusterItem;
+import org.talend.mdm.repository.model.mdmproperties.WSDataClusterItem;
 
 /**
  * DOC hbhong class global comment. Detailled comment <br/>
@@ -44,7 +44,7 @@ public class DataClusterNodeResourceProvider extends AbstractRepositoryNodeResou
 
     public ERepositoryObjectType getRepositoryObjectType(Item item) {
 
-        if (item instanceof WsDataClusterItem || item instanceof ContainerItem) {
+        if (item instanceof WSDataClusterItem || item instanceof ContainerItem) {
             return IServerObjectRepositoryType.TYPE_DATACLUSTER;
         }
         return null;
@@ -56,7 +56,7 @@ public class DataClusterNodeResourceProvider extends AbstractRepositoryNodeResou
             Resource itemResource = createCommonItemResource(project, item, repositoryType, path);
             EList<EObject> contents = itemResource.getContents();
 
-            contents.add(((WsDataClusterItem) item).getWsDataCluster());
+            contents.add(((WSDataClusterItem) item).getWsDataCluster());
             return itemResource;
         }
         return null;
@@ -65,19 +65,19 @@ public class DataClusterNodeResourceProvider extends AbstractRepositoryNodeResou
     @Override
     public Resource save(Item item) throws PersistenceException {
 
-        if (item instanceof WsDataClusterItem) {
+        if (item instanceof WSDataClusterItem) {
             Resource resource = xmiResourceManager.getItemResource(item);
             resource.getContents().clear();
 
-            resource.getContents().add(((WsDataClusterItem) item).getWsDataCluster());
-            Resource eResource = ((WsDataClusterItem) item).getWsDataCluster().eResource();
+            resource.getContents().add(((WSDataClusterItem) item).getWsDataCluster());
+            Resource eResource = ((WSDataClusterItem) item).getWsDataCluster().eResource();
             return resource;
         }
         return null;
     }
 
     public Item createNewItem(ERepositoryObjectType type) {
-        return MdmpropertiesFactory.eINSTANCE.createWsDataClusterItem();
+        return MdmpropertiesFactory.eINSTANCE.createWSDataClusterItem();
     }
 
     public boolean canHandleRepObjType(ERepositoryObjectType type) {

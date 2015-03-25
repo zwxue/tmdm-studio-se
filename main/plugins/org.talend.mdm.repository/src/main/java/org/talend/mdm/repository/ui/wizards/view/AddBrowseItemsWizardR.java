@@ -34,13 +34,13 @@ import org.talend.mdm.repository.core.command.CommandManager;
 import org.talend.mdm.repository.core.command.ICommand;
 import org.talend.mdm.repository.core.service.RepositoryQueryService;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
-import org.talend.mdm.repository.model.mdmproperties.WsRoleItem;
+import org.talend.mdm.repository.model.mdmproperties.WSRoleItem;
 import org.talend.mdm.repository.model.mdmserverobject.MdmserverobjectFactory;
-import org.talend.mdm.repository.model.mdmserverobject.WsBooleanE;
-import org.talend.mdm.repository.model.mdmserverobject.WsRoleE;
-import org.talend.mdm.repository.model.mdmserverobject.WsRoleSpecificationE;
-import org.talend.mdm.repository.model.mdmserverobject.WsRoleSpecificationInstanceE;
-import org.talend.mdm.repository.model.mdmserverobject.WsViewE;
+import org.talend.mdm.repository.model.mdmserverobject.WSBooleanE;
+import org.talend.mdm.repository.model.mdmserverobject.WSRoleE;
+import org.talend.mdm.repository.model.mdmserverobject.WSRoleSpecificationE;
+import org.talend.mdm.repository.model.mdmserverobject.WSRoleSpecificationInstanceE;
+import org.talend.mdm.repository.model.mdmserverobject.WSViewE;
 import org.talend.mdm.repository.ui.actions.view.NewViewAction;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 import org.talend.repository.model.IProxyRepositoryFactory;
@@ -93,13 +93,13 @@ public class AddBrowseItemsWizardR extends AddBrowseItemsWizard {
             if (roleItem != null) {
                 IProxyRepositoryFactory factory = CoreRuntimePlugin.getInstance().getProxyRepositoryFactory();
                 if (factory.isEditableAndLockIfPossible(roleItem)) {
-                    WsRoleE role = ((WsRoleItem) roleItem).getWsRole();
-                    for (WsRoleSpecificationE spec : role.getSpecification()) {
+                    WSRoleE role = ((WSRoleItem) roleItem).getWsRole();
+                    for (WSRoleSpecificationE spec : role.getSpecification()) {
                         if (spec.getObjectType().equals("View")) {//$NON-NLS-1$
-                            EList<WsRoleSpecificationInstanceE> specInstance = spec.getInstance();
+                            EList<WSRoleSpecificationInstanceE> specInstance = spec.getInstance();
                             //
-                            WsRoleSpecificationInstanceE newInstance = MdmserverobjectFactory.eINSTANCE
-                                    .createWsRoleSpecificationInstanceE();
+                            WSRoleSpecificationInstanceE newInstance = MdmserverobjectFactory.eINSTANCE
+                                    .createWSRoleSpecificationInstanceE();
                             newInstance.setInstanceName(browseItem);
                             newInstance.setWritable(keyValues.get(1).value.equals("Read Only") ? false : true);//$NON-NLS-1$
                             //
@@ -125,11 +125,11 @@ public class AddBrowseItemsWizardR extends AddBrowseItemsWizard {
     NewViewAction newViewAction = new NewViewAction() {
 
         @Override
-        protected WsViewE newView(String viewName) {
-            WsBooleanE wsBool = MdmserverobjectFactory.eINSTANCE.createWsBooleanE();
+        protected WSViewE newView(String viewName) {
+            WSBooleanE wsBool = MdmserverobjectFactory.eINSTANCE.createWSBooleanE();
             wsBool.set_true(false);
 
-            WsViewE view = MdmserverobjectFactory.eINSTANCE.createWsViewE();
+            WSViewE view = MdmserverobjectFactory.eINSTANCE.createWSViewE();
             view.setName(viewName);
             // description
             StringBuffer desc = new StringBuffer();

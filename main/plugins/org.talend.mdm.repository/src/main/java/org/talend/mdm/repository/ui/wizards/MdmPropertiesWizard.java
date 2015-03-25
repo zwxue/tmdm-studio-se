@@ -41,7 +41,7 @@ import org.talend.mdm.repository.core.impl.transformerV2.ITransformerV2NodeConsD
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
-import org.talend.mdm.repository.model.mdmproperties.WsResourceItem;
+import org.talend.mdm.repository.model.mdmproperties.WSResourceItem;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 import org.talend.mdm.repository.utils.ValidateUtil;
@@ -167,8 +167,8 @@ public class MdmPropertiesWizard extends PropertiesWizard {
                 setPageComplete(false);
 
                 // add catalog field for resource node
-                if (object.getProperty().getItem() instanceof WsResourceItem) {
-                    final WsResourceItem item = (WsResourceItem) object.getProperty().getItem();
+                if (object.getProperty().getItem() instanceof WSResourceItem) {
+                    final WSResourceItem item = (WSResourceItem) object.getProperty().getItem();
                     final Text imageCatalog = addImageCatalogField(container, item);
                     // add listener
                     if (imageCatalog != null) {
@@ -263,7 +263,7 @@ public class MdmPropertiesWizard extends PropertiesWizard {
         return true;
     }
 
-    private Text addImageCatalogField(Composite container, WsResourceItem item) {
+    private Text addImageCatalogField(Composite container, WSResourceItem item) {
 
         Label nameLab = new Label(container, SWT.NONE);
         nameLab.setText(Messages.MdmPropertiesWizard_imageCatalog);

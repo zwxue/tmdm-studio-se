@@ -98,7 +98,7 @@ import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.model.mdmproperties.MdmpropertiesFactory;
 import org.talend.mdm.repository.model.mdmproperties.WorkspaceRootItem;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
-import org.talend.mdm.repository.model.mdmserverobject.WsDataModelE;
+import org.talend.mdm.repository.model.mdmserverobject.WSDataModelE;
 import org.talend.mdm.repository.models.FolderRepositoryObject;
 import org.talend.mdm.repository.models.WSRootRepositoryObject;
 import org.talend.mdm.repository.ui.editors.IRepositoryViewEditorInput;
@@ -1420,7 +1420,7 @@ public class RepositoryResourceUtil {
     public static WSConceptKey getBusinessConceptKey(WSGetBusinessConceptKey businessConcepKey) throws XtentisException {
         String pk = businessConcepKey.getWsDataModelPK().getPk();
         String concept = businessConcepKey.getConcept();
-        WsDataModelE dataModel = RepositoryQueryService.findDataModelByName(pk);
+        WSDataModelE dataModel = RepositoryQueryService.findDataModelByName(pk);
         if (dataModel != null) {
             try {
                 XSDSchema xsdSchema = Util.getXSDSchema(dataModel.getXsdSchema());

@@ -35,7 +35,7 @@ import org.talend.mdm.repository.core.service.RepositoryQueryService;
 import org.talend.mdm.repository.core.service.RepositoryWebServiceAdapter;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
-import org.talend.mdm.repository.model.mdmserverobject.WsDataModelE;
+import org.talend.mdm.repository.model.mdmserverobject.WSDataModelE;
 import org.talend.mdm.repository.ui.dialogs.xpath.XpathSelectDialog2;
 import org.talend.mdm.repository.ui.navigator.MDMRepositoryView;
 import org.talend.mdm.workbench.serverexplorer.core.ServerDefService;
@@ -151,7 +151,7 @@ public class UserSecurityComboBoxDialogCellEditor extends EditableComboBoxDialog
     private String getSchemaFromRepository() {
         String schema = null;
 
-        WsDataModelE wsDataModel = RepositoryQueryService.findDataModelByName(dataModelName);
+        WSDataModelE wsDataModel = RepositoryQueryService.findDataModelByName(dataModelName);
         if (wsDataModel != null) {
             schema = wsDataModel.getXsdSchema();
         }

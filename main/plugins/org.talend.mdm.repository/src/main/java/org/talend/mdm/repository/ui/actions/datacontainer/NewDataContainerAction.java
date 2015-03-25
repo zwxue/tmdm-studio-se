@@ -26,9 +26,9 @@ import org.talend.core.model.properties.ItemState;
 import org.talend.core.model.properties.PropertiesFactory;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmproperties.MdmpropertiesFactory;
-import org.talend.mdm.repository.model.mdmproperties.WsDataClusterItem;
+import org.talend.mdm.repository.model.mdmproperties.WSDataClusterItem;
 import org.talend.mdm.repository.model.mdmserverobject.MdmserverobjectFactory;
-import org.talend.mdm.repository.model.mdmserverobject.WsDataClusterE;
+import org.talend.mdm.repository.model.mdmserverobject.WSDataClusterE;
 import org.talend.mdm.repository.ui.actions.AbstractSimpleAddAction;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 
@@ -47,9 +47,9 @@ public class NewDataContainerAction extends AbstractSimpleAddAction {
         return Messages.NewDataContainerAction_newDataContainer;
     }
 
-    private WsDataClusterE newDataContainer(String key) {
+    private WSDataClusterE newDataContainer(String key) {
 
-        WsDataClusterE datacontainer = MdmserverobjectFactory.eINSTANCE.createWsDataClusterE();
+        WSDataClusterE datacontainer = MdmserverobjectFactory.eINSTANCE.createWSDataClusterE();
 
         datacontainer.setName(key);
         datacontainer.setDescription(""); //$NON-NLS-1$
@@ -61,12 +61,12 @@ public class NewDataContainerAction extends AbstractSimpleAddAction {
     @Override
     protected Item createServerObject(String key) {
 
-        WsDataClusterItem item = MdmpropertiesFactory.eINSTANCE.createWsDataClusterItem();
+        WSDataClusterItem item = MdmpropertiesFactory.eINSTANCE.createWSDataClusterItem();
 
         ItemState itemState = PropertiesFactory.eINSTANCE.createItemState();
         item.setState(itemState);
         //
-        WsDataClusterE datacontainer = newDataContainer(key);
+        WSDataClusterE datacontainer = newDataContainer(key);
         item.setWsDataCluster(datacontainer);
 
         if (parentItem != null) {

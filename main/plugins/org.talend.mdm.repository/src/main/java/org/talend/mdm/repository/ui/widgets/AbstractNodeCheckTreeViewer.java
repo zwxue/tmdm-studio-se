@@ -45,7 +45,7 @@ import org.talend.mdm.repository.core.service.RepositoryQueryService;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
-import org.talend.mdm.repository.model.mdmserverobject.WsResourceE;
+import org.talend.mdm.repository.model.mdmserverobject.WSResourceE;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 
 import com.amalto.workbench.models.TreeObject;
@@ -364,7 +364,7 @@ public abstract class AbstractNodeCheckTreeViewer {
                 }
 
                 if (type == TreeObject.PICTURES_RESOURCE) {
-                    name = name + "_" + viewObject.getVersion() + "." + ((WsResourceE) serverObj).getFileExtension(); //$NON-NLS-1$ //$NON-NLS-2$
+                    name = name + "_" + viewObject.getVersion() + "." + ((WSResourceE) serverObj).getFileExtension(); //$NON-NLS-1$ //$NON-NLS-2$
                 }
                 if (serverObj != null && treeObjName.equals(name)) {
                     return true;

@@ -24,8 +24,8 @@ import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.mdm.repository.core.impl.transformerV2.ITransformerV2NodeConsDef;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmserverobject.MdmserverobjectFactory;
-import org.talend.mdm.repository.model.mdmserverobject.WsTransformerProcessStepE;
-import org.talend.mdm.repository.model.mdmserverobject.WsTransformerV2E;
+import org.talend.mdm.repository.model.mdmserverobject.WSTransformerProcessStepE;
+import org.talend.mdm.repository.model.mdmserverobject.WSTransformerV2E;
 import org.talend.mdm.repository.utils.JobTemplateUtil;
 
 import com.amalto.workbench.service.IValidateService;
@@ -52,13 +52,13 @@ public class NewProcessWizard extends Wizard implements ITransformerV2NodeConsDe
 
     private ConfigReturnMessagePage configReturnMessagePage;
 
-    private WsTransformerV2E transformer;
+    private WSTransformerV2E transformer;
 
     List<IMDMJobTemplate> jobTemplates;
 
     private int type;// use it to decide which type of process can be create,if 0,all type is permitted
 
-    public WsTransformerV2E getNewProcess() {
+    public WSTransformerV2E getNewProcess() {
         return this.transformer;
     }
 
@@ -94,14 +94,14 @@ public class NewProcessWizard extends Wizard implements ITransformerV2NodeConsDe
         String processName = inputProcessNamePage.getProcessName();
         int processType = inputProcessNamePage.getProcessType();
         String processdesc = inputProcessNamePage.getProcessDesc();
-        transformer = MdmserverobjectFactory.eINSTANCE.createWsTransformerV2E();
+        transformer = MdmserverobjectFactory.eINSTANCE.createWSTransformerV2E();
         transformer.setName(processName);
         if (processdesc == null || processdesc.length() == 0) {
             processdesc = Messages.bind(Messages.NewProcessWizard_TemplateProcess, processName);
         }
         transformer.setDescription(processdesc);
 
-        List<WsTransformerProcessStepE> steps = new ArrayList<WsTransformerProcessStepE>();
+        List<WSTransformerProcessStepE> steps = new ArrayList<WSTransformerProcessStepE>();
         createProcessStep(steps, processType);
         transformer.getProcessSteps().addAll(steps);
 
@@ -125,7 +125,7 @@ public class NewProcessWizard extends Wizard implements ITransformerV2NodeConsDe
      * @param steps
      * @param processType
      */
-    private void createProcessStep(List<WsTransformerProcessStepE> steps, int processType) {
+    private void createProcessStep(List<WSTransformerProcessStepE> steps, int processType) {
         String processName = inputProcessNamePage.getProcessName();
         boolean createJob = false;
         if (jobTemplates != null && jobTemplates.size() > 0) {
@@ -136,14 +136,14 @@ public class NewProcessWizard extends Wizard implements ITransformerV2NodeConsDe
         case TYPE_BEFOREDEL:
         case TYPE_BEFORESAVE:
             String[] messageParams = configReturnMessagePage.getMessageParams();
-            WsTransformerProcessStepE messageStep = ProcessStepFactory.createProcessStep(ProcessStepFactory.STEP_RETURN_MESSAGE,
+            WSTransformerProcessStepE messageStep = ProcessStepFactory.createProcessStep(ProcessStepFactory.STEP_RETURN_MESSAGE,
                     messageParams, processName, createJob);
             steps.add(messageStep);
             break;
         case TYPE_ENTITYACTION:
-            WsTransformerProcessStepE updateStep = ProcessStepFactory.createProcessStep(ProcessStepFactory.STEP_UPDATE_REPORT,
+            WSTransformerProcessStepE updateStep = ProcessStepFactory.createProcessStep(ProcessStepFactory.STEP_UPDATE_REPORT,
                     null, processName, createJob);
-            WsTransformerProcessStepE escapeStep = ProcessStepFactory.createProcessStep(ProcessStepFactory.STEP_ESCAPE, null,
+            WSTransformerProcessStepE escapeStep = ProcessStepFactory.createProcessStep(ProcessStepFactory.STEP_ESCAPE, null,
                     processName, createJob);
             steps.add(updateStep);
             steps.add(escapeStep);
@@ -151,7 +151,7 @@ public class NewProcessWizard extends Wizard implements ITransformerV2NodeConsDe
             String url = configRedirectURLPage.getUrl();
             // job name can't contains #,$ etc
             processName = processName.replaceAll("#|\\$", ""); //$NON-NLS-1$ //$NON-NLS-2$
-            WsTransformerProcessStepE callJobStep = ProcessStepFactory.createProcessStep(ProcessStepFactory.STEP_REDIRECT, url,
+            WSTransformerProcessStepE callJobStep = ProcessStepFactory.createProcessStep(ProcessStepFactory.STEP_REDIRECT, url,
                     processName, createJob);
             steps.add(callJobStep);
 
@@ -189,7 +189,7 @@ public class NewProcessWizard extends Wizard implements ITransformerV2NodeConsDe
             }
             break;
         case TYPE_SMARTVIEW:
-            WsTransformerProcessStepE xsltStep = ProcessStepFactory.createSmartViewStep();
+            WSTransformerProcessStepE xsltStep = ProcessStepFactory.createSmartViewStep();
             steps.add(xsltStep);
             break;
         default:

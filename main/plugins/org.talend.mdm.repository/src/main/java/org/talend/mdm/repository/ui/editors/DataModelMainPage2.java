@@ -21,8 +21,8 @@ import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.service.ContainerCacheService;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
-import org.talend.mdm.repository.model.mdmproperties.WsDataModelItem;
-import org.talend.mdm.repository.model.mdmserverobject.WsDataModelE;
+import org.talend.mdm.repository.model.mdmproperties.WSDataModelItem;
+import org.talend.mdm.repository.model.mdmserverobject.WSDataModelE;
 import org.talend.mdm.repository.ui.actions.xsd.XSDDeleteConceptActionR;
 import org.talend.mdm.repository.ui.actions.xsd.XSDSetAnnotationFKFilterActionR;
 import org.talend.mdm.repository.ui.actions.xsd.XSDSetAnnotationForeignKeyActionR;
@@ -89,7 +89,7 @@ public class DataModelMainPage2 extends DataModelMainPage {
 
     //
     public Item updateSchemaToItem(Item item) {
-        WsDataModelE wsDataModelE = ((WsDataModelItem) item).getWsDataModel();
+        WSDataModelE wsDataModelE = ((WSDataModelItem) item).getWsDataModel();
         WSDataModel wsDataModel = (WSDataModel) xobject.getWsObject();
         wsDataModelE.setXsdSchema(wsDataModel.getXsdSchema());
         return item;

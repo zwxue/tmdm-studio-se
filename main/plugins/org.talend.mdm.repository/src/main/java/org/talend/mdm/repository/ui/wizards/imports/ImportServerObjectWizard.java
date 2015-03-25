@@ -88,8 +88,8 @@ import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
 import org.talend.mdm.repository.model.mdmserverobject.MdmserverobjectFactory;
-import org.talend.mdm.repository.model.mdmserverobject.WsResourceE;
-import org.talend.mdm.repository.model.mdmserverobject.WsWorkflowE;
+import org.talend.mdm.repository.model.mdmserverobject.WSResourceE;
+import org.talend.mdm.repository.model.mdmserverobject.WSWorkflowE;
 import org.talend.mdm.repository.ui.dialogs.lock.LockedObjectDialog;
 import org.talend.mdm.repository.ui.wizards.imports.viewer.TreeObjectCheckTreeViewer;
 import org.talend.mdm.repository.utils.Bean2EObjUtil;
@@ -248,7 +248,7 @@ public class ImportServerObjectWizard extends Wizard {
         return null;
     }
 
-    private WsWorkflowE handleWorkflowObject(TreeObject treeObj) throws IOException, ClientProtocolException,
+    private WSWorkflowE handleWorkflowObject(TreeObject treeObj) throws IOException, ClientProtocolException,
             UnsupportedEncodingException {
         // WSWorkflowProcessDefinitionUUID wsKey = (WSWorkflowProcessDefinitionUUID) treeObj.getWsKey();
         String workflowURL = treeObj.getEndpointIpAddress() + TreeObject.BARFILE_URI + treeObj.getDisplayName();
@@ -301,7 +301,7 @@ public class ImportServerObjectWizard extends Wizard {
                 try {
                     byte[] procBytes = extractBar(barFile);
                     if (procBytes != null) {
-                        WsWorkflowE workflow = MdmserverobjectFactory.eINSTANCE.createWsWorkflowE();
+                        WSWorkflowE workflow = MdmserverobjectFactory.eINSTANCE.createWSWorkflowE();
                         // workflow.setName(wsKey.getProcessName());
                         workflow.setName(treeObj.getName());
                         workflow.setFileContent(procBytes);
@@ -358,7 +358,7 @@ public class ImportServerObjectWizard extends Wizard {
      * @param treeObj
      * @throws IOException
      */
-    private WsResourceE handlePictureResourceObject(TreeObject treeObj) throws IOException {
+    private WSResourceE handlePictureResourceObject(TreeObject treeObj) throws IOException {
         if (treeObj != null) {
             if (treeObj instanceof TreeParent) {
                 return null;
@@ -373,7 +373,7 @@ public class ImportServerObjectWizard extends Wizard {
                 // encode the dirName and fileName
                 String encodedDirName = URLEncoder.encode(dirName, UTF8);
                 fileQName = URLEncoder.encode(fileQName, UTF8);
-                WsResourceE resource = MdmserverobjectFactory.eINSTANCE.createWsResourceE();
+                WSResourceE resource = MdmserverobjectFactory.eINSTANCE.createWSResourceE();
                 resource.setName(fileName);
                 resource.setFileExtension(fileExtension);
                 StringBuffer strBuf = new StringBuffer();

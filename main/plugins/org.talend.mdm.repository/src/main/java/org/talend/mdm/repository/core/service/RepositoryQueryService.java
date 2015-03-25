@@ -25,9 +25,9 @@ import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.IServerObjectRepositoryType;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
-import org.talend.mdm.repository.model.mdmserverobject.WsCustomFormE;
-import org.talend.mdm.repository.model.mdmserverobject.WsDataModelE;
-import org.talend.mdm.repository.model.mdmserverobject.WsRoleE;
+import org.talend.mdm.repository.model.mdmserverobject.WSCustomFormE;
+import org.talend.mdm.repository.model.mdmserverobject.WSDataModelE;
+import org.talend.mdm.repository.model.mdmserverobject.WSRoleE;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 
 import com.amalto.workbench.models.TreeObject;
@@ -58,12 +58,12 @@ public class RepositoryQueryService {
         return findAllServerObjectNames(IServerObjectRepositoryType.TYPE_TRANSFORMERV2);
     }
 
-    public static WsDataModelE findDataModelByName(String name) {
-        return (WsDataModelE) findServerObjectByName(IServerObjectRepositoryType.TYPE_DATAMODEL, name);
+    public static WSDataModelE findDataModelByName(String name) {
+        return (WSDataModelE) findServerObjectByName(IServerObjectRepositoryType.TYPE_DATAMODEL, name);
     }
 
-    public static WsRoleE findRoleByName(String name) {
-        return (WsRoleE) findServerObjectByName(IServerObjectRepositoryType.TYPE_ROLE, name);
+    public static WSRoleE findRoleByName(String name) {
+        return (WSRoleE) findServerObjectByName(IServerObjectRepositoryType.TYPE_ROLE, name);
     }
 
     public static List<String> findAllMenuNames() {
@@ -131,7 +131,7 @@ public class RepositoryQueryService {
         } else if (conceptName != null && !conceptName.contains("*")) {//$NON-NLS-1$
             for (String data : systemDataModelValues) {
                 try {
-                    WsDataModelE dm = findDataModelByName(data);
+                    WSDataModelE dm = findDataModelByName(data);
                     if (dm != null) {
                         String schema = dm.getXsdSchema();
                         Pattern p = Pattern.compile("<xsd:element(.*?)name=\"" + conceptName + "\"");//$NON-NLS-1$//$NON-NLS-2$
@@ -179,8 +179,8 @@ public class RepositoryQueryService {
                 Item item = viewObj.getProperty().getItem();
                 if (item instanceof MDMServerObjectItem) {
                     MDMServerObject sObject = ((MDMServerObjectItem) item).getMDMServerObject();
-                    if (sObject instanceof WsCustomFormE) {
-                        WsCustomFormE sForm = (WsCustomFormE) sObject;
+                    if (sObject instanceof WSCustomFormE) {
+                        WSCustomFormE sForm = (WSCustomFormE) sObject;
                         String name = sForm.getDatamodel() + IConstants.ITEM_PK_SPLIT + sForm.getEntity()
                                 + IConstants.ITEM_PK_SPLIT + sForm.getName();
                         if (name != null) {

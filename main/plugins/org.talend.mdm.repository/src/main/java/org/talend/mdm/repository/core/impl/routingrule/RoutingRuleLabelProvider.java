@@ -26,7 +26,7 @@ import org.eclipse.swt.graphics.Image;
 import org.talend.core.model.properties.Item;
 import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.mdm.repository.core.impl.AbstractLabelProvider;
-import org.talend.mdm.repository.model.mdmproperties.WsRoutingRuleItem;
+import org.talend.mdm.repository.model.mdmproperties.WSRoutingRuleItem;
 import org.talend.mdm.repository.plugin.RepositoryPlugin;
 import org.talend.mdm.repository.utils.EclipseResourceManager;
 
@@ -53,7 +53,7 @@ public class RoutingRuleLabelProvider extends AbstractLabelProvider {
         if (img == null) {
             Item item = getItem(element);
             if (item != null) {
-                if (item instanceof WsRoutingRuleItem) {
+                if (item instanceof WSRoutingRuleItem) {
                     img = IMG;
                 }
             }

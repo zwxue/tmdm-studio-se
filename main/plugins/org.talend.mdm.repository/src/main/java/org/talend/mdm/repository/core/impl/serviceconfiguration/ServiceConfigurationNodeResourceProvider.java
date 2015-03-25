@@ -3,7 +3,7 @@
 // Talend Community Edition
 //
 
-// Copyright (C) 2006-2015 Talend ¨C www.talend.com
+// Copyright (C) 2006-2015 Talend ï¿½C www.talend.com
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
@@ -34,8 +34,7 @@ import org.talend.mdm.repository.core.IServerObjectRepositoryType;
 import org.talend.mdm.repository.core.impl.AbstractRepositoryNodeResourceProvider;
 import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
 import org.talend.mdm.repository.model.mdmproperties.MdmpropertiesFactory;
-
-import org.talend.mdm.repository.model.mdmproperties.WsServiceConfigurationItem;
+import org.talend.mdm.repository.model.mdmproperties.WSServiceConfigurationItem;
 
 /**
  * DOC jsxie class global comment. Detailled comment <br/>
@@ -45,7 +44,7 @@ public class ServiceConfigurationNodeResourceProvider extends AbstractRepository
 
     public ERepositoryObjectType getRepositoryObjectType(Item item) {
 
-        if (item instanceof WsServiceConfigurationItem || item instanceof ContainerItem) {
+        if (item instanceof WSServiceConfigurationItem || item instanceof ContainerItem) {
             return IServerObjectRepositoryType.TYPE_SERVICECONFIGURATION;
         }
         return null;
@@ -57,7 +56,7 @@ public class ServiceConfigurationNodeResourceProvider extends AbstractRepository
             Resource itemResource = createCommonItemResource(project, item, repositoryType, path);
             EList<EObject> contents = itemResource.getContents();
 
-            contents.add(((WsServiceConfigurationItem) item).getWsServiceConfiguration());
+            contents.add(((WSServiceConfigurationItem) item).getWsServiceConfiguration());
             return itemResource;
         }
         return null;
@@ -66,13 +65,13 @@ public class ServiceConfigurationNodeResourceProvider extends AbstractRepository
     @Override
     public Resource save(Item item) throws PersistenceException {
 
-        if (item instanceof WsServiceConfigurationItem) {
+        if (item instanceof WSServiceConfigurationItem) {
             Resource resource = xmiResourceManager.getItemResource(item);
             resource.getContents().clear();
 
 
-            resource.getContents().add(((WsServiceConfigurationItem) item).getWsServiceConfiguration());
-            Resource eResource = ((WsServiceConfigurationItem) item).getWsServiceConfiguration().eResource();
+            resource.getContents().add(((WSServiceConfigurationItem) item).getWsServiceConfiguration());
+            Resource eResource = ((WSServiceConfigurationItem) item).getWsServiceConfiguration().eResource();
             return resource;
         }
         return null;
@@ -80,7 +79,7 @@ public class ServiceConfigurationNodeResourceProvider extends AbstractRepository
 
     public Item createNewItem(ERepositoryObjectType type) {
 
-        return MdmpropertiesFactory.eINSTANCE.createWsServiceConfigurationItem();
+        return MdmpropertiesFactory.eINSTANCE.createWSServiceConfigurationItem();
     }
 
     public boolean canHandleRepObjType(ERepositoryObjectType type) {

@@ -22,7 +22,7 @@ import org.eclipse.xsd.XSDSchema;
 import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.i18n.Messages;
-import org.talend.mdm.repository.model.mdmserverobject.WsDataModelE;
+import org.talend.mdm.repository.model.mdmserverobject.WSDataModelE;
 import org.talend.mdm.repository.ui.actions.job.EditProcessAction;
 import org.talend.mdm.repository.ui.navigator.MDMRepositoryView;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
@@ -53,7 +53,7 @@ public class MDMRepositoryViewServiceExt implements IMDMRepositoryViewServiceExt
 
     public XSDSchema getDataModelXsd(TreeObject pObject, String filter, String dataModelName) {
 
-        WsDataModelE wsDataModel = RepositoryQueryService.findDataModelByName(dataModelName);
+        WSDataModelE wsDataModel = RepositoryQueryService.findDataModelByName(dataModelName);
         XSDSchema xsd = null;
         if (wsDataModel != null) {
             try {

@@ -67,9 +67,9 @@ import org.talend.mdm.repository.core.command.ICommand;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.model.mdmproperties.MdmpropertiesPackage;
-import org.talend.mdm.repository.model.mdmproperties.WsCustomFormItem;
+import org.talend.mdm.repository.model.mdmproperties.WSCustomFormItem;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
-import org.talend.mdm.repository.model.mdmserverobject.WsCustomFormE;
+import org.talend.mdm.repository.model.mdmserverobject.WSCustomFormE;
 import org.talend.mdm.repository.plugin.RepositoryPlugin;
 import org.talend.mdm.repository.ui.dialogs.consistency.ConfirmConflictMessageDialog;
 import org.talend.mdm.repository.ui.dialogs.consistency.ConsistencyConflictDialog;
@@ -753,8 +753,8 @@ public class ConsistencyService {
         ERepositoryObjectType type = viewObj.getRepositoryObjectType();
         String objectName = viewObj.getLabel();
         if (type == IServerObjectRepositoryType.TYPE_CUSTOM_FORM) {
-            WsCustomFormItem item = (WsCustomFormItem) viewObj.getProperty().getItem();
-            WsCustomFormE customForm = item.getCustomForm();
+            WSCustomFormItem item = (WSCustomFormItem) viewObj.getProperty().getItem();
+            WSCustomFormE customForm = item.getCustomForm();
             objectName = customForm.getDatamodel() + OBJ_NAME_DIVIDE + customForm.getEntity() + OBJ_NAME_DIVIDE + objectName;
         }
         return objectName;

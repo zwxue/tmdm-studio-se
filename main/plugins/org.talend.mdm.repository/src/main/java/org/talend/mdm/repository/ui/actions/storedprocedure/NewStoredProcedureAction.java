@@ -26,9 +26,9 @@ import org.talend.core.model.properties.ItemState;
 import org.talend.core.model.properties.PropertiesFactory;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmproperties.MdmpropertiesFactory;
-import org.talend.mdm.repository.model.mdmproperties.WsStoredProcedureItem;
+import org.talend.mdm.repository.model.mdmproperties.WSStoredProcedureItem;
 import org.talend.mdm.repository.model.mdmserverobject.MdmserverobjectFactory;
-import org.talend.mdm.repository.model.mdmserverobject.WsStoredProcedureE;
+import org.talend.mdm.repository.model.mdmserverobject.WSStoredProcedureE;
 import org.talend.mdm.repository.ui.actions.AbstractSimpleAddAction;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 
@@ -47,9 +47,9 @@ public class NewStoredProcedureAction extends AbstractSimpleAddAction {
         return Messages.NewStoredProcedureAction_newStoredProcedure;
     }
 
-    private WsStoredProcedureE newStoredProcedure(String key) {
+    private WSStoredProcedureE newStoredProcedure(String key) {
 
-        WsStoredProcedureE storedProcedure = MdmserverobjectFactory.eINSTANCE.createWsStoredProcedureE();
+        WSStoredProcedureE storedProcedure = MdmserverobjectFactory.eINSTANCE.createWSStoredProcedureE();
 
         storedProcedure.setName(key);
         storedProcedure.setDescription(""); //$NON-NLS-1$
@@ -62,12 +62,12 @@ public class NewStoredProcedureAction extends AbstractSimpleAddAction {
     @Override
     protected Item createServerObject(String key) {
 
-        WsStoredProcedureItem item = MdmpropertiesFactory.eINSTANCE.createWsStoredProcedureItem();
+        WSStoredProcedureItem item = MdmpropertiesFactory.eINSTANCE.createWSStoredProcedureItem();
 
         ItemState itemState = PropertiesFactory.eINSTANCE.createItemState();
         item.setState(itemState);
 
-        WsStoredProcedureE storedProcedure = newStoredProcedure(key);
+        WSStoredProcedureE storedProcedure = newStoredProcedure(key);
         item.setWsStoredProcedure(storedProcedure);
 
         if (parentItem != null) {

@@ -26,7 +26,7 @@ import org.talend.mdm.repository.core.service.ModelImpactAnalyseService;
 import org.talend.mdm.repository.core.service.ModelImpactAnalyseService.ImpactOperation;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
-import org.talend.mdm.repository.model.mdmproperties.WsDataModelItem;
+import org.talend.mdm.repository.model.mdmproperties.WSDataModelItem;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 
@@ -94,7 +94,7 @@ public class DataModelInteractiveHandler extends AbstractInteractiveHandler {
     public void assertPropertyIsInited(Item item) {
         IFile file = RepositoryResourceUtil.findReferenceFile(getRepositoryObjectType(), item, FILE_EXTENSION);
         String schema = RepositoryResourceUtil.getTextFileContent(file, ENCODE);
-        ((WsDataModelItem) item).getWsDataModel().setXsdSchema(schema);
+        ((WSDataModelItem) item).getWsDataModel().setXsdSchema(schema);
     }
 
     @Override

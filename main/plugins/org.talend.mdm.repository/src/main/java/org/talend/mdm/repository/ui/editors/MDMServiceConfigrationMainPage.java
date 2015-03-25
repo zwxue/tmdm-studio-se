@@ -20,8 +20,8 @@ import org.eclipse.ui.forms.editor.FormEditor;
 import org.talend.mdm.repository.core.service.RepositoryWebServiceAdapter;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
-import org.talend.mdm.repository.model.mdmserverobject.WsServiceConfigurationE;
-import org.talend.mdm.repository.model.mdmserverobject.WsServicePutConfigurationE;
+import org.talend.mdm.repository.model.mdmserverobject.WSServiceConfigurationE;
+import org.talend.mdm.repository.model.mdmserverobject.WSServicePutConfigurationE;
 
 import com.amalto.workbench.editors.ServiceConfigrationMainPage;
 import com.amalto.workbench.webservices.TMDMService;
@@ -74,9 +74,9 @@ public class MDMServiceConfigrationMainPage extends ServiceConfigrationMainPage 
                 MDMServerObject serverObject = serverObjectItem.getMDMServerObject();
 
                 String configContent = null;
-                if (serverObject instanceof WsServiceConfigurationE) {
-                    WsServiceConfigurationE object = (WsServiceConfigurationE) serverObject;
-                    for (WsServicePutConfigurationE config : object.getServicePutConfigurations()) {
+                if (serverObject instanceof WSServiceConfigurationE) {
+                    WSServiceConfigurationE object = (WSServiceConfigurationE) serverObject;
+                    for (WSServicePutConfigurationE config : object.getServicePutConfigurations()) {
                         if (config.getJndiName().equals(serviceName.trim())) {
                             configContent = config.getConfiguration();
                         }

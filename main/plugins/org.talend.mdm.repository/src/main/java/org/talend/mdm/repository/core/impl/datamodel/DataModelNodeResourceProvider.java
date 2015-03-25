@@ -40,7 +40,7 @@ import org.talend.mdm.repository.core.IServerObjectRepositoryType;
 import org.talend.mdm.repository.core.impl.AbstractRepositoryNodeResourceProvider;
 import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
 import org.talend.mdm.repository.model.mdmproperties.MdmpropertiesFactory;
-import org.talend.mdm.repository.model.mdmproperties.WsDataModelItem;
+import org.talend.mdm.repository.model.mdmproperties.WSDataModelItem;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 
 /**
@@ -52,7 +52,7 @@ public class DataModelNodeResourceProvider extends AbstractRepositoryNodeResourc
     Logger log = Logger.getLogger(DataModelNodeResourceProvider.class);
 
     public ERepositoryObjectType getRepositoryObjectType(Item item) {
-        if (item instanceof WsDataModelItem || item instanceof ContainerItem) {
+        if (item instanceof WSDataModelItem || item instanceof ContainerItem) {
             return IServerObjectRepositoryType.TYPE_DATAMODEL;
         }
         return null;
@@ -63,7 +63,7 @@ public class DataModelNodeResourceProvider extends AbstractRepositoryNodeResourc
         if (repositoryType != null) {
             Resource itemResource = createCommonItemResource(project, item, repositoryType, path);
             EList<EObject> contents = itemResource.getContents();
-            contents.add(((WsDataModelItem) item).getWsDataModel());
+            contents.add(((WSDataModelItem) item).getWsDataModel());
             return itemResource;
         }
         return null;
@@ -71,17 +71,17 @@ public class DataModelNodeResourceProvider extends AbstractRepositoryNodeResourc
 
     @Override
     public Resource save(Item item) throws PersistenceException {
-        if (item instanceof WsDataModelItem) {
+        if (item instanceof WSDataModelItem) {
             Resource resource = xmiResourceManager.getItemResource(item);
             resource.getContents().clear();
-            resource.getContents().add(((WsDataModelItem) item).getWsDataModel());
+            resource.getContents().add(((WSDataModelItem) item).getWsDataModel());
             return resource;
         }
         return null;
     }
 
     public Item createNewItem(ERepositoryObjectType type) {
-        return MdmpropertiesFactory.eINSTANCE.createWsDataModelItem();
+        return MdmpropertiesFactory.eINSTANCE.createWSDataModelItem();
     }
 
     public boolean canHandleRepObjType(ERepositoryObjectType type) {
@@ -115,7 +115,7 @@ public class DataModelNodeResourceProvider extends AbstractRepositoryNodeResourc
 
     protected IFile createOrUpdateFile(Item item, IFile file) throws UnsupportedEncodingException, CoreException {
 
-        String resource = ((WsDataModelItem) item).getWsDataModel().getXsdSchema();
+        String resource = ((WSDataModelItem) item).getWsDataModel().getXsdSchema();
         if (resource != null) {
             byte[] content = resource.getBytes("utf-8"); //$NON-NLS-1$
             if (!file.exists()) {

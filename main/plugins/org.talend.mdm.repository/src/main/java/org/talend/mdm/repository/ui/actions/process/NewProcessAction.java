@@ -43,11 +43,11 @@ import org.talend.mdm.repository.core.impl.transformerV2.ITransformerV2NodeConsD
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
 import org.talend.mdm.repository.model.mdmproperties.MdmpropertiesFactory;
-import org.talend.mdm.repository.model.mdmproperties.WsTransformerV2Item;
+import org.talend.mdm.repository.model.mdmproperties.WSTransformerV2Item;
 import org.talend.mdm.repository.model.mdmserverobject.MdmserverobjectFactory;
-import org.talend.mdm.repository.model.mdmserverobject.WsTransformerProcessStepE;
-import org.talend.mdm.repository.model.mdmserverobject.WsTransformerV2E;
-import org.talend.mdm.repository.model.mdmserverobject.WsTransformerVariablesMappingE;
+import org.talend.mdm.repository.model.mdmserverobject.WSTransformerProcessStepE;
+import org.talend.mdm.repository.model.mdmserverobject.WSTransformerV2E;
+import org.talend.mdm.repository.model.mdmserverobject.WSTransformerVariablesMappingE;
 import org.talend.mdm.repository.ui.actions.AbstractSimpleAddAction;
 import org.talend.mdm.repository.ui.wizards.process.NewProcessWizard;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
@@ -92,7 +92,7 @@ public class NewProcessAction extends AbstractSimpleAddAction implements ITransf
         WizardDialog wizardDialog = new WizardDialog(getShell(), newProcessWizard);
         wizardDialog.setPageSize(500, 260);
         if (wizardDialog.open() == IDialogConstants.OK_ID) {
-            WsTransformerV2E newProcess = newProcessWizard.getNewProcess();
+            WSTransformerV2E newProcess = newProcessWizard.getNewProcess();
             Item item = createServerObject(newProcess);
             commonViewer.refresh(selectObj);
             commonViewer.expandToLevel(selectObj, 1);
@@ -159,9 +159,9 @@ public class NewProcessAction extends AbstractSimpleAddAction implements ITransf
         return type;
     }
 
-    private WsTransformerV2E newProcess(String key) {
+    private WSTransformerV2E newProcess(String key) {
 
-        WsTransformerV2E transformer = MdmserverobjectFactory.eINSTANCE.createWsTransformerV2E();
+        WSTransformerV2E transformer = MdmserverobjectFactory.eINSTANCE.createWSTransformerV2E();
         transformer.setName(key);
         transformer.setDescription(""); //$NON-NLS-1$
 
@@ -176,20 +176,20 @@ public class NewProcessAction extends AbstractSimpleAddAction implements ITransf
 
             final String TRANSFORMER_PLUGIN = "amalto/local/transformer/plugin/xslt";//$NON-NLS-1$
 
-            List<WsTransformerVariablesMappingE> inItems = new ArrayList<WsTransformerVariablesMappingE>();
-            WsTransformerVariablesMappingE inputLine = MdmserverobjectFactory.eINSTANCE.createWsTransformerVariablesMappingE();
+            List<WSTransformerVariablesMappingE> inItems = new ArrayList<WSTransformerVariablesMappingE>();
+            WSTransformerVariablesMappingE inputLine = MdmserverobjectFactory.eINSTANCE.createWSTransformerVariablesMappingE();
             inputLine.setPipelineVariable("_DEFAULT_");//$NON-NLS-1$
             inputLine.setPluginVariable("xml");//$NON-NLS-1$
             inItems.add(inputLine);
 
-            List<WsTransformerVariablesMappingE> outItems = new ArrayList<WsTransformerVariablesMappingE>();
-            WsTransformerVariablesMappingE outputLine = MdmserverobjectFactory.eINSTANCE.createWsTransformerVariablesMappingE();
+            List<WSTransformerVariablesMappingE> outItems = new ArrayList<WSTransformerVariablesMappingE>();
+            WSTransformerVariablesMappingE outputLine = MdmserverobjectFactory.eINSTANCE.createWSTransformerVariablesMappingE();
             outputLine.setPipelineVariable("html");//$NON-NLS-1$
             outputLine.setPluginVariable("text");//$NON-NLS-1$
             outItems.add(outputLine);
 
-            ArrayList<WsTransformerProcessStepE> list = new ArrayList<WsTransformerProcessStepE>();
-            WsTransformerProcessStepE step = MdmserverobjectFactory.eINSTANCE.createWsTransformerProcessStepE();
+            ArrayList<WSTransformerProcessStepE> list = new ArrayList<WSTransformerProcessStepE>();
+            WSTransformerProcessStepE step = MdmserverobjectFactory.eINSTANCE.createWSTransformerProcessStepE();
             step.setPluginJNDI(TRANSFORMER_PLUGIN);
             step.setDescription("Stylesheet"); //$NON-NLS-1$
             step.setParameters(parameters);
@@ -208,11 +208,11 @@ public class NewProcessAction extends AbstractSimpleAddAction implements ITransf
     @Override
     protected Item createServerObject(String key) {
 
-        WsTransformerV2Item item = MdmpropertiesFactory.eINSTANCE.createWsTransformerV2Item();
+        WSTransformerV2Item item = MdmpropertiesFactory.eINSTANCE.createWSTransformerV2Item();
         ItemState itemState = PropertiesFactory.eINSTANCE.createItemState();
         item.setState(itemState);
         //
-        WsTransformerV2E process = newProcess(key);
+        WSTransformerV2E process = newProcess(key);
         item.setWsTransformerV2(process);
 
         if (parentItem != null) {
@@ -222,9 +222,9 @@ public class NewProcessAction extends AbstractSimpleAddAction implements ITransf
         return item;
     }
 
-    protected Item createServerObject(WsTransformerV2E process) {
+    protected Item createServerObject(WSTransformerV2E process) {
 
-        WsTransformerV2Item item = MdmpropertiesFactory.eINSTANCE.createWsTransformerV2Item();
+        WSTransformerV2Item item = MdmpropertiesFactory.eINSTANCE.createWSTransformerV2Item();
         ItemState itemState = PropertiesFactory.eINSTANCE.createItemState();
         item.setState(itemState);
         //

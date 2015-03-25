@@ -15,7 +15,7 @@ package org.talend.mdm.repository.ui.widgets.xmleditor.infoholder;
 import org.apache.log4j.Logger;
 import org.eclipse.xsd.XSDSchema;
 import org.talend.mdm.repository.core.service.RepositoryQueryService;
-import org.talend.mdm.repository.model.mdmserverobject.WsDataModelE;
+import org.talend.mdm.repository.model.mdmserverobject.WSDataModelE;
 
 import com.amalto.workbench.models.infoextractor.IAllDataModelHolder;
 import com.amalto.workbench.utils.Util;
@@ -48,7 +48,7 @@ public class RepositoryDataModelInfoHolder extends RepositoryExternalInfoHolder<
         }
 
         public XSDSchema getDataModel(String dataModelName) {
-            WsDataModelE dataModel = RepositoryQueryService.findDataModelByName(dataModelName);
+            WSDataModelE dataModel = RepositoryQueryService.findDataModelByName(dataModelName);
             try {
                 if (dataModel != null) {
                     XSDSchema xsdSchema = Util.getXSDSchema(dataModel.getXsdSchema());
