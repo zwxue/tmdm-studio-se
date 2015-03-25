@@ -16,7 +16,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="arg0" type="{http://www.talend.com/mdm}wsFindBackgroundJobPKs" minOccurs="0"/>
+ *         &lt;element name="arg0" type="{http://www.talend.com/mdm}WSFindBackgroundJobPKs" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -31,7 +31,7 @@ import javax.xml.bind.annotation.XmlType;
 })
 public class FindBackgroundJobPKs {
 
-    protected WsFindBackgroundJobPKs arg0;
+    protected WSFindBackgroundJobPKs arg0;
 
     /**
      * Default no-arg constructor
@@ -45,7 +45,7 @@ public class FindBackgroundJobPKs {
      * Fully-initialising value constructor
      * 
      */
-    public FindBackgroundJobPKs(final WsFindBackgroundJobPKs arg0) {
+    public FindBackgroundJobPKs(final WSFindBackgroundJobPKs arg0) {
         this.arg0 = arg0;
     }
 
@@ -54,10 +54,10 @@ public class FindBackgroundJobPKs {
      * 
      * @return
      *     possible object is
-     *     {@link WsFindBackgroundJobPKs }
+     *     {@link WSFindBackgroundJobPKs }
      *     
      */
-    public WsFindBackgroundJobPKs getArg0() {
+    public WSFindBackgroundJobPKs getArg0() {
         return arg0;
     }
 
@@ -66,10 +66,10 @@ public class FindBackgroundJobPKs {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsFindBackgroundJobPKs }
+     *     {@link WSFindBackgroundJobPKs }
      *     
      */
-    public void setArg0(WsFindBackgroundJobPKs value) {
+    public void setArg0(WSFindBackgroundJobPKs value) {
         this.arg0 = value;
     }
 

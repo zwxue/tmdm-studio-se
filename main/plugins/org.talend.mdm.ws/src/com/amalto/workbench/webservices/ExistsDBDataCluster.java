@@ -16,7 +16,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="arg0" type="{http://www.talend.com/mdm}wsExistsDBDataCluster" minOccurs="0"/>
+ *         &lt;element name="arg0" type="{http://www.talend.com/mdm}WSExistsDBDataCluster" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -31,7 +31,7 @@ import javax.xml.bind.annotation.XmlType;
 })
 public class ExistsDBDataCluster {
 
-    protected WsExistsDBDataCluster arg0;
+    protected WSExistsDBDataCluster arg0;
 
     /**
      * Default no-arg constructor
@@ -45,7 +45,7 @@ public class ExistsDBDataCluster {
      * Fully-initialising value constructor
      * 
      */
-    public ExistsDBDataCluster(final WsExistsDBDataCluster arg0) {
+    public ExistsDBDataCluster(final WSExistsDBDataCluster arg0) {
         this.arg0 = arg0;
     }
 
@@ -54,10 +54,10 @@ public class ExistsDBDataCluster {
      * 
      * @return
      *     possible object is
-     *     {@link WsExistsDBDataCluster }
+     *     {@link WSExistsDBDataCluster }
      *     
      */
-    public WsExistsDBDataCluster getArg0() {
+    public WSExistsDBDataCluster getArg0() {
         return arg0;
     }
 
@@ -66,10 +66,10 @@ public class ExistsDBDataCluster {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsExistsDBDataCluster }
+     *     {@link WSExistsDBDataCluster }
      *     
      */
-    public void setArg0(WsExistsDBDataCluster value) {
+    public void setArg0(WSExistsDBDataCluster value) {
         this.arg0 = value;
     }
 

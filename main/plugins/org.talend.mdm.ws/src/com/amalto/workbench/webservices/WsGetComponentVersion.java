@@ -7,16 +7,16 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsGetComponentVersion complex type.
+ * <p>Java class for WSGetComponentVersion complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsGetComponentVersion">
+ * &lt;complexType name="WSGetComponentVersion">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="component" type="{http://www.talend.com/mdm}wsComponent" minOccurs="0"/>
+ *         &lt;element name="component" type="{http://www.talend.com/mdm}WSComponent" minOccurs="0"/>
  *         &lt;element name="id" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
@@ -27,20 +27,20 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsGetComponentVersion", propOrder = {
+@XmlType(name = "WSGetComponentVersion", propOrder = {
     "component",
     "id"
 })
-public class WsGetComponentVersion {
+public class WSGetComponentVersion {
 
-    protected WsComponent component;
+    protected WSComponent component;
     protected String id;
 
     /**
      * Default no-arg constructor
      * 
      */
-    public WsGetComponentVersion() {
+    public WSGetComponentVersion() {
         super();
     }
 
@@ -48,7 +48,7 @@ public class WsGetComponentVersion {
      * Fully-initialising value constructor
      * 
      */
-    public WsGetComponentVersion(final WsComponent component, final String id) {
+    public WSGetComponentVersion(final WSComponent component, final String id) {
         this.component = component;
         this.id = id;
     }
@@ -58,10 +58,10 @@ public class WsGetComponentVersion {
      * 
      * @return
      *     possible object is
-     *     {@link WsComponent }
+     *     {@link WSComponent }
      *     
      */
-    public WsComponent getComponent() {
+    public WSComponent getComponent() {
         return component;
     }
 
@@ -70,10 +70,10 @@ public class WsGetComponentVersion {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsComponent }
+     *     {@link WSComponent }
      *     
      */
-    public void setComponent(WsComponent value) {
+    public void setComponent(WSComponent value) {
         this.component = value;
     }
 

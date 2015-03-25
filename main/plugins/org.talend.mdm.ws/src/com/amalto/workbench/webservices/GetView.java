@@ -16,7 +16,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="arg0" type="{http://www.talend.com/mdm}wsGetView" minOccurs="0"/>
+ *         &lt;element name="arg0" type="{http://www.talend.com/mdm}WSGetView" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -31,7 +31,7 @@ import javax.xml.bind.annotation.XmlType;
 })
 public class GetView {
 
-    protected WsGetView arg0;
+    protected WSGetView arg0;
 
     /**
      * Default no-arg constructor
@@ -45,7 +45,7 @@ public class GetView {
      * Fully-initialising value constructor
      * 
      */
-    public GetView(final WsGetView arg0) {
+    public GetView(final WSGetView arg0) {
         this.arg0 = arg0;
     }
 
@@ -54,10 +54,10 @@ public class GetView {
      * 
      * @return
      *     possible object is
-     *     {@link WsGetView }
+     *     {@link WSGetView }
      *     
      */
-    public WsGetView getArg0() {
+    public WSGetView getArg0() {
         return arg0;
     }
 
@@ -66,10 +66,10 @@ public class GetView {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsGetView }
+     *     {@link WSGetView }
      *     
      */
-    public void setArg0(WsGetView value) {
+    public void setArg0(WSGetView value) {
         this.arg0 = value;
     }
 

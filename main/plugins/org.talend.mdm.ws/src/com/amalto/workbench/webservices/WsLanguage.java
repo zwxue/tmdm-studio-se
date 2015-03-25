@@ -6,12 +6,12 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsLanguage.
+ * <p>Java class for WSLanguage.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * <p>
  * <pre>
- * &lt;simpleType name="wsLanguage">
+ * &lt;simpleType name="WSLanguage">
  *   &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string">
  *     &lt;enumeration value="FR"/>
  *     &lt;enumeration value="EN"/>
@@ -20,9 +20,9 @@ import javax.xml.bind.annotation.XmlType;
  * </pre>
  * 
  */
-@XmlType(name = "wsLanguage")
+@XmlType(name = "WSLanguage")
 @XmlEnum
-public enum WsLanguage {
+public enum WSLanguage {
 
     FR,
     EN;
@@ -31,7 +31,7 @@ public enum WsLanguage {
         return name();
     }
 
-    public static WsLanguage fromValue(String v) {
+    public static WSLanguage fromValue(String v) {
         return valueOf(v);
     }
 

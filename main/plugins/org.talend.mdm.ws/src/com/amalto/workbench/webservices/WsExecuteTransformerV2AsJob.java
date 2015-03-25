@@ -7,16 +7,16 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsExecuteTransformerV2AsJob complex type.
+ * <p>Java class for WSExecuteTransformerV2AsJob complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsExecuteTransformerV2AsJob">
+ * &lt;complexType name="WSExecuteTransformerV2AsJob">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="wsTransformerContext" type="{http://www.talend.com/mdm}wsTransformerContext" minOccurs="0"/>
+ *         &lt;element name="wsTransformerContext" type="{http://www.talend.com/mdm}WSTransformerContext" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -26,18 +26,18 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsExecuteTransformerV2AsJob", propOrder = {
+@XmlType(name = "WSExecuteTransformerV2AsJob", propOrder = {
     "wsTransformerContext"
 })
-public class WsExecuteTransformerV2AsJob {
+public class WSExecuteTransformerV2AsJob {
 
-    protected WsTransformerContext wsTransformerContext;
+    protected WSTransformerContext wsTransformerContext;
 
     /**
      * Default no-arg constructor
      * 
      */
-    public WsExecuteTransformerV2AsJob() {
+    public WSExecuteTransformerV2AsJob() {
         super();
     }
 
@@ -45,7 +45,7 @@ public class WsExecuteTransformerV2AsJob {
      * Fully-initialising value constructor
      * 
      */
-    public WsExecuteTransformerV2AsJob(final WsTransformerContext wsTransformerContext) {
+    public WSExecuteTransformerV2AsJob(final WSTransformerContext wsTransformerContext) {
         this.wsTransformerContext = wsTransformerContext;
     }
 
@@ -54,10 +54,10 @@ public class WsExecuteTransformerV2AsJob {
      * 
      * @return
      *     possible object is
-     *     {@link WsTransformerContext }
+     *     {@link WSTransformerContext }
      *     
      */
-    public WsTransformerContext getWsTransformerContext() {
+    public WSTransformerContext getWsTransformerContext() {
         return wsTransformerContext;
     }
 
@@ -66,10 +66,10 @@ public class WsExecuteTransformerV2AsJob {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsTransformerContext }
+     *     {@link WSTransformerContext }
      *     
      */
-    public void setWsTransformerContext(WsTransformerContext value) {
+    public void setWsTransformerContext(WSTransformerContext value) {
         this.wsTransformerContext = value;
     }
 

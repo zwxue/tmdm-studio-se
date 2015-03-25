@@ -17,7 +17,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="return" type="{http://www.talend.com/mdm}wsStoredProcedurePKArray" minOccurs="0"/>
+ *         &lt;element name="return" type="{http://www.talend.com/mdm}WSStoredProcedurePKArray" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -33,7 +33,7 @@ import javax.xml.bind.annotation.XmlType;
 public class GetStoredProcedurePKsResponse {
 
     @XmlElement(name = "return")
-    protected WsStoredProcedurePKArray _return;
+    protected WSStoredProcedurePKArray _return;
 
     /**
      * Default no-arg constructor
@@ -47,7 +47,7 @@ public class GetStoredProcedurePKsResponse {
      * Fully-initialising value constructor
      * 
      */
-    public GetStoredProcedurePKsResponse(final WsStoredProcedurePKArray _return) {
+    public GetStoredProcedurePKsResponse(final WSStoredProcedurePKArray _return) {
         this._return = _return;
     }
 
@@ -56,10 +56,10 @@ public class GetStoredProcedurePKsResponse {
      * 
      * @return
      *     possible object is
-     *     {@link WsStoredProcedurePKArray }
+     *     {@link WSStoredProcedurePKArray }
      *     
      */
-    public WsStoredProcedurePKArray getReturn() {
+    public WSStoredProcedurePKArray getReturn() {
         return _return;
     }
 
@@ -68,10 +68,10 @@ public class GetStoredProcedurePKsResponse {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsStoredProcedurePKArray }
+     *     {@link WSStoredProcedurePKArray }
      *     
      */
-    public void setReturn(WsStoredProcedurePKArray value) {
+    public void setReturn(WSStoredProcedurePKArray value) {
         this._return = value;
     }
 

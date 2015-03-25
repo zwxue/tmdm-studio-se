@@ -7,17 +7,17 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsi18NString complex type.
+ * <p>Java class for WSI18NString complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsi18NString">
+ * &lt;complexType name="WSI18NString">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
  *         &lt;element name="label" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="language" type="{http://www.talend.com/mdm}wsLanguage" minOccurs="0"/>
+ *         &lt;element name="language" type="{http://www.talend.com/mdm}WSLanguage" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -27,20 +27,20 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsi18NString", propOrder = {
+@XmlType(name = "WSI18NString", propOrder = {
     "label",
     "language"
 })
-public class Wsi18NString {
+public class WSI18NString {
 
     protected String label;
-    protected WsLanguage language;
+    protected WSLanguage language;
 
     /**
      * Default no-arg constructor
      * 
      */
-    public Wsi18NString() {
+    public WSI18NString() {
         super();
     }
 
@@ -48,7 +48,7 @@ public class Wsi18NString {
      * Fully-initialising value constructor
      * 
      */
-    public Wsi18NString(final String label, final WsLanguage language) {
+    public WSI18NString(final String label, final WSLanguage language) {
         this.label = label;
         this.language = language;
     }
@@ -82,10 +82,10 @@ public class Wsi18NString {
      * 
      * @return
      *     possible object is
-     *     {@link WsLanguage }
+     *     {@link WSLanguage }
      *     
      */
-    public WsLanguage getLanguage() {
+    public WSLanguage getLanguage() {
         return language;
     }
 
@@ -94,10 +94,10 @@ public class Wsi18NString {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsLanguage }
+     *     {@link WSLanguage }
      *     
      */
-    public void setLanguage(WsLanguage value) {
+    public void setLanguage(WSLanguage value) {
         this.language = value;
     }
 

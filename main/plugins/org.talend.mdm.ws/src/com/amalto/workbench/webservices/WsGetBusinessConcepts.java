@@ -7,16 +7,16 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsGetBusinessConcepts complex type.
+ * <p>Java class for WSGetBusinessConcepts complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsGetBusinessConcepts">
+ * &lt;complexType name="WSGetBusinessConcepts">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="wsDataModelPK" type="{http://www.talend.com/mdm}wsDataModelPK" minOccurs="0"/>
+ *         &lt;element name="wsDataModelPK" type="{http://www.talend.com/mdm}WSDataModelPK" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -26,18 +26,18 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsGetBusinessConcepts", propOrder = {
+@XmlType(name = "WSGetBusinessConcepts", propOrder = {
     "wsDataModelPK"
 })
-public class WsGetBusinessConcepts {
+public class WSGetBusinessConcepts {
 
-    protected WsDataModelPK wsDataModelPK;
+    protected WSDataModelPK wsDataModelPK;
 
     /**
      * Default no-arg constructor
      * 
      */
-    public WsGetBusinessConcepts() {
+    public WSGetBusinessConcepts() {
         super();
     }
 
@@ -45,7 +45,7 @@ public class WsGetBusinessConcepts {
      * Fully-initialising value constructor
      * 
      */
-    public WsGetBusinessConcepts(final WsDataModelPK wsDataModelPK) {
+    public WSGetBusinessConcepts(final WSDataModelPK wsDataModelPK) {
         this.wsDataModelPK = wsDataModelPK;
     }
 
@@ -54,10 +54,10 @@ public class WsGetBusinessConcepts {
      * 
      * @return
      *     possible object is
-     *     {@link WsDataModelPK }
+     *     {@link WSDataModelPK }
      *     
      */
-    public WsDataModelPK getWsDataModelPK() {
+    public WSDataModelPK getWsDataModelPK() {
         return wsDataModelPK;
     }
 
@@ -66,10 +66,10 @@ public class WsGetBusinessConcepts {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsDataModelPK }
+     *     {@link WSDataModelPK }
      *     
      */
-    public void setWsDataModelPK(WsDataModelPK value) {
+    public void setWsDataModelPK(WSDataModelPK value) {
         this.wsDataModelPK = value;
     }
 

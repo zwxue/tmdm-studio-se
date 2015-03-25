@@ -16,7 +16,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="arg0" type="{http://www.talend.com/mdm}wsExecuteTransformerV2AsJob" minOccurs="0"/>
+ *         &lt;element name="arg0" type="{http://www.talend.com/mdm}WSExecuteTransformerV2AsJob" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -31,7 +31,7 @@ import javax.xml.bind.annotation.XmlType;
 })
 public class ExecuteTransformerV2AsJob {
 
-    protected WsExecuteTransformerV2AsJob arg0;
+    protected WSExecuteTransformerV2AsJob arg0;
 
     /**
      * Default no-arg constructor
@@ -45,7 +45,7 @@ public class ExecuteTransformerV2AsJob {
      * Fully-initialising value constructor
      * 
      */
-    public ExecuteTransformerV2AsJob(final WsExecuteTransformerV2AsJob arg0) {
+    public ExecuteTransformerV2AsJob(final WSExecuteTransformerV2AsJob arg0) {
         this.arg0 = arg0;
     }
 
@@ -54,10 +54,10 @@ public class ExecuteTransformerV2AsJob {
      * 
      * @return
      *     possible object is
-     *     {@link WsExecuteTransformerV2AsJob }
+     *     {@link WSExecuteTransformerV2AsJob }
      *     
      */
-    public WsExecuteTransformerV2AsJob getArg0() {
+    public WSExecuteTransformerV2AsJob getArg0() {
         return arg0;
     }
 
@@ -66,10 +66,10 @@ public class ExecuteTransformerV2AsJob {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsExecuteTransformerV2AsJob }
+     *     {@link WSExecuteTransformerV2AsJob }
      *     
      */
-    public void setArg0(WsExecuteTransformerV2AsJob value) {
+    public void setArg0(WSExecuteTransformerV2AsJob value) {
         this.arg0 = value;
     }
 

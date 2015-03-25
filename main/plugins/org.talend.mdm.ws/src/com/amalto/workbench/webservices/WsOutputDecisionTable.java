@@ -10,16 +10,16 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsOutputDecisionTable complex type.
+ * <p>Java class for WSOutputDecisionTable complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsOutputDecisionTable">
+ * &lt;complexType name="WSOutputDecisionTable">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="decisions" type="{http://www.talend.com/mdm}wsProcessBytesUsingTransformerWsOutputDecisionTableDecisions" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element name="decisions" type="{http://www.talend.com/mdm}WSProcessBytesUsingTransformerWsOutputDecisionTableDecisions" maxOccurs="unbounded" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -29,19 +29,19 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsOutputDecisionTable", propOrder = {
+@XmlType(name = "WSOutputDecisionTable", propOrder = {
     "decisions"
 })
-public class WsOutputDecisionTable {
+public class WSOutputDecisionTable {
 
     @XmlElement(nillable = true)
-    protected List<WsProcessBytesUsingTransformerWsOutputDecisionTableDecisions> decisions;
+    protected List<WSProcessBytesUsingTransformerWsOutputDecisionTableDecisions> decisions;
 
     /**
      * Default no-arg constructor
      * 
      */
-    public WsOutputDecisionTable() {
+    public WSOutputDecisionTable() {
         super();
     }
 
@@ -49,7 +49,7 @@ public class WsOutputDecisionTable {
      * Fully-initialising value constructor
      * 
      */
-    public WsOutputDecisionTable(final List<WsProcessBytesUsingTransformerWsOutputDecisionTableDecisions> decisions) {
+    public WSOutputDecisionTable(final List<WSProcessBytesUsingTransformerWsOutputDecisionTableDecisions> decisions) {
         this.decisions = decisions;
     }
 
@@ -71,13 +71,13 @@ public class WsOutputDecisionTable {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link WsProcessBytesUsingTransformerWsOutputDecisionTableDecisions }
+     * {@link WSProcessBytesUsingTransformerWsOutputDecisionTableDecisions }
      * 
      * 
      */
-    public List<WsProcessBytesUsingTransformerWsOutputDecisionTableDecisions> getDecisions() {
+    public List<WSProcessBytesUsingTransformerWsOutputDecisionTableDecisions> getDecisions() {
         if (decisions == null) {
-            decisions = new ArrayList<WsProcessBytesUsingTransformerWsOutputDecisionTableDecisions>();
+            decisions = new ArrayList<WSProcessBytesUsingTransformerWsOutputDecisionTableDecisions>();
         }
         return this.decisions;
     }

@@ -16,7 +16,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="arg0" type="{http://www.talend.com/mdm}wsGetFullPathValues" minOccurs="0"/>
+ *         &lt;element name="arg0" type="{http://www.talend.com/mdm}WSGetFullPathValues" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -31,7 +31,7 @@ import javax.xml.bind.annotation.XmlType;
 })
 public class GetFullPathValues {
 
-    protected WsGetFullPathValues arg0;
+    protected WSGetFullPathValues arg0;
 
     /**
      * Default no-arg constructor
@@ -45,7 +45,7 @@ public class GetFullPathValues {
      * Fully-initialising value constructor
      * 
      */
-    public GetFullPathValues(final WsGetFullPathValues arg0) {
+    public GetFullPathValues(final WSGetFullPathValues arg0) {
         this.arg0 = arg0;
     }
 
@@ -54,10 +54,10 @@ public class GetFullPathValues {
      * 
      * @return
      *     possible object is
-     *     {@link WsGetFullPathValues }
+     *     {@link WSGetFullPathValues }
      *     
      */
-    public WsGetFullPathValues getArg0() {
+    public WSGetFullPathValues getArg0() {
         return arg0;
     }
 
@@ -66,10 +66,10 @@ public class GetFullPathValues {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsGetFullPathValues }
+     *     {@link WSGetFullPathValues }
      *     
      */
-    public void setArg0(WsGetFullPathValues value) {
+    public void setArg0(WSGetFullPathValues value) {
         this.arg0 = value;
     }
 

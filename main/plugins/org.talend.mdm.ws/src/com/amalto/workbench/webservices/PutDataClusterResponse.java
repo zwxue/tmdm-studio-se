@@ -17,7 +17,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="return" type="{http://www.talend.com/mdm}wsDataClusterPK" minOccurs="0"/>
+ *         &lt;element name="return" type="{http://www.talend.com/mdm}WSDataClusterPK" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -33,7 +33,7 @@ import javax.xml.bind.annotation.XmlType;
 public class PutDataClusterResponse {
 
     @XmlElement(name = "return")
-    protected WsDataClusterPK _return;
+    protected WSDataClusterPK _return;
 
     /**
      * Default no-arg constructor
@@ -47,7 +47,7 @@ public class PutDataClusterResponse {
      * Fully-initialising value constructor
      * 
      */
-    public PutDataClusterResponse(final WsDataClusterPK _return) {
+    public PutDataClusterResponse(final WSDataClusterPK _return) {
         this._return = _return;
     }
 
@@ -56,10 +56,10 @@ public class PutDataClusterResponse {
      * 
      * @return
      *     possible object is
-     *     {@link WsDataClusterPK }
+     *     {@link WSDataClusterPK }
      *     
      */
-    public WsDataClusterPK getReturn() {
+    public WSDataClusterPK getReturn() {
         return _return;
     }
 
@@ -68,10 +68,10 @@ public class PutDataClusterResponse {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsDataClusterPK }
+     *     {@link WSDataClusterPK }
      *     
      */
-    public void setReturn(WsDataClusterPK value) {
+    public void setReturn(WSDataClusterPK value) {
         this._return = value;
     }
 

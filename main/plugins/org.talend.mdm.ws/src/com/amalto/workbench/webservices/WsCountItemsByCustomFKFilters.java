@@ -7,18 +7,18 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsCountItemsByCustomFKFilters complex type.
+ * <p>Java class for WSCountItemsByCustomFKFilters complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsCountItemsByCustomFKFilters">
+ * &lt;complexType name="WSCountItemsByCustomFKFilters">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
  *         &lt;element name="conceptName" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="injectedXpath" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="wsDataClusterPK" type="{http://www.talend.com/mdm}wsDataClusterPK" minOccurs="0"/>
+ *         &lt;element name="wsDataClusterPK" type="{http://www.talend.com/mdm}WSDataClusterPK" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -28,22 +28,22 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsCountItemsByCustomFKFilters", propOrder = {
+@XmlType(name = "WSCountItemsByCustomFKFilters", propOrder = {
     "conceptName",
     "injectedXpath",
     "wsDataClusterPK"
 })
-public class WsCountItemsByCustomFKFilters {
+public class WSCountItemsByCustomFKFilters {
 
     protected String conceptName;
     protected String injectedXpath;
-    protected WsDataClusterPK wsDataClusterPK;
+    protected WSDataClusterPK wsDataClusterPK;
 
     /**
      * Default no-arg constructor
      * 
      */
-    public WsCountItemsByCustomFKFilters() {
+    public WSCountItemsByCustomFKFilters() {
         super();
     }
 
@@ -51,7 +51,7 @@ public class WsCountItemsByCustomFKFilters {
      * Fully-initialising value constructor
      * 
      */
-    public WsCountItemsByCustomFKFilters(final String conceptName, final String injectedXpath, final WsDataClusterPK wsDataClusterPK) {
+    public WSCountItemsByCustomFKFilters(final String conceptName, final String injectedXpath, final WSDataClusterPK wsDataClusterPK) {
         this.conceptName = conceptName;
         this.injectedXpath = injectedXpath;
         this.wsDataClusterPK = wsDataClusterPK;
@@ -110,10 +110,10 @@ public class WsCountItemsByCustomFKFilters {
      * 
      * @return
      *     possible object is
-     *     {@link WsDataClusterPK }
+     *     {@link WSDataClusterPK }
      *     
      */
-    public WsDataClusterPK getWsDataClusterPK() {
+    public WSDataClusterPK getWsDataClusterPK() {
         return wsDataClusterPK;
     }
 
@@ -122,10 +122,10 @@ public class WsCountItemsByCustomFKFilters {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsDataClusterPK }
+     *     {@link WSDataClusterPK }
      *     
      */
-    public void setWsDataClusterPK(WsDataClusterPK value) {
+    public void setWsDataClusterPK(WSDataClusterPK value) {
         this.wsDataClusterPK = value;
     }
 

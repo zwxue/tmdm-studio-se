@@ -7,16 +7,16 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsGetStoredProcedure complex type.
+ * <p>Java class for WSGetStoredProcedure complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsGetStoredProcedure">
+ * &lt;complexType name="WSGetStoredProcedure">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="wsStoredProcedurePK" type="{http://www.talend.com/mdm}wsStoredProcedurePK" minOccurs="0"/>
+ *         &lt;element name="wsStoredProcedurePK" type="{http://www.talend.com/mdm}WSStoredProcedurePK" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -26,18 +26,18 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsGetStoredProcedure", propOrder = {
+@XmlType(name = "WSGetStoredProcedure", propOrder = {
     "wsStoredProcedurePK"
 })
-public class WsGetStoredProcedure {
+public class WSGetStoredProcedure {
 
-    protected WsStoredProcedurePK wsStoredProcedurePK;
+    protected WSStoredProcedurePK wsStoredProcedurePK;
 
     /**
      * Default no-arg constructor
      * 
      */
-    public WsGetStoredProcedure() {
+    public WSGetStoredProcedure() {
         super();
     }
 
@@ -45,7 +45,7 @@ public class WsGetStoredProcedure {
      * Fully-initialising value constructor
      * 
      */
-    public WsGetStoredProcedure(final WsStoredProcedurePK wsStoredProcedurePK) {
+    public WSGetStoredProcedure(final WSStoredProcedurePK wsStoredProcedurePK) {
         this.wsStoredProcedurePK = wsStoredProcedurePK;
     }
 
@@ -54,10 +54,10 @@ public class WsGetStoredProcedure {
      * 
      * @return
      *     possible object is
-     *     {@link WsStoredProcedurePK }
+     *     {@link WSStoredProcedurePK }
      *     
      */
-    public WsStoredProcedurePK getWsStoredProcedurePK() {
+    public WSStoredProcedurePK getWsStoredProcedurePK() {
         return wsStoredProcedurePK;
     }
 
@@ -66,10 +66,10 @@ public class WsGetStoredProcedure {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsStoredProcedurePK }
+     *     {@link WSStoredProcedurePK }
      *     
      */
-    public void setWsStoredProcedurePK(WsStoredProcedurePK value) {
+    public void setWsStoredProcedurePK(WSStoredProcedurePK value) {
         this.wsStoredProcedurePK = value;
     }
 

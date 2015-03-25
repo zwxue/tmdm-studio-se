@@ -7,12 +7,12 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsGetTransformerPKs complex type.
+ * <p>Java class for WSGetTransformerPKs complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsGetTransformerPKs">
+ * &lt;complexType name="WSGetTransformerPKs">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
@@ -26,10 +26,10 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsGetTransformerPKs", propOrder = {
+@XmlType(name = "WSGetTransformerPKs", propOrder = {
     "regex"
 })
-public class WsGetTransformerPKs {
+public class WSGetTransformerPKs {
 
     protected String regex;
 
@@ -37,7 +37,7 @@ public class WsGetTransformerPKs {
      * Default no-arg constructor
      * 
      */
-    public WsGetTransformerPKs() {
+    public WSGetTransformerPKs() {
         super();
     }
 
@@ -45,7 +45,7 @@ public class WsGetTransformerPKs {
      * Fully-initialising value constructor
      * 
      */
-    public WsGetTransformerPKs(final String regex) {
+    public WSGetTransformerPKs(final String regex) {
         this.regex = regex;
     }
 

@@ -7,12 +7,12 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsStoredProcedure complex type.
+ * <p>Java class for WSStoredProcedure complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsStoredProcedure">
+ * &lt;complexType name="WSStoredProcedure">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
@@ -29,13 +29,13 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsStoredProcedure", propOrder = {
+@XmlType(name = "WSStoredProcedure", propOrder = {
     "description",
     "name",
     "procedure",
     "refreshCache"
 })
-public class WsStoredProcedure {
+public class WSStoredProcedure {
 
     protected String description;
     protected String name;
@@ -46,7 +46,7 @@ public class WsStoredProcedure {
      * Default no-arg constructor
      * 
      */
-    public WsStoredProcedure() {
+    public WSStoredProcedure() {
         super();
     }
 
@@ -54,7 +54,7 @@ public class WsStoredProcedure {
      * Fully-initialising value constructor
      * 
      */
-    public WsStoredProcedure(final String description, final String name, final String procedure, final Boolean refreshCache) {
+    public WSStoredProcedure(final String description, final String name, final String procedure, final Boolean refreshCache) {
         this.description = description;
         this.name = name;
         this.procedure = procedure;

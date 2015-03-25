@@ -7,12 +7,12 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsFindAllDroppedItemsPKs complex type.
+ * <p>Java class for WSFindAllDroppedItemsPKs complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsFindAllDroppedItemsPKs">
+ * &lt;complexType name="WSFindAllDroppedItemsPKs">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
@@ -26,10 +26,10 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsFindAllDroppedItemsPKs", propOrder = {
+@XmlType(name = "WSFindAllDroppedItemsPKs", propOrder = {
     "regex"
 })
-public class WsFindAllDroppedItemsPKs {
+public class WSFindAllDroppedItemsPKs {
 
     protected String regex;
 
@@ -37,7 +37,7 @@ public class WsFindAllDroppedItemsPKs {
      * Default no-arg constructor
      * 
      */
-    public WsFindAllDroppedItemsPKs() {
+    public WSFindAllDroppedItemsPKs() {
         super();
     }
 
@@ -45,7 +45,7 @@ public class WsFindAllDroppedItemsPKs {
      * Fully-initialising value constructor
      * 
      */
-    public WsFindAllDroppedItemsPKs(final String regex) {
+    public WSFindAllDroppedItemsPKs(final String regex) {
         this.regex = regex;
     }
 

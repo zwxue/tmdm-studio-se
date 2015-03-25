@@ -7,12 +7,12 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsTransformerPluginSpec complex type.
+ * <p>Java class for WSTransformerPluginSpec complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsTransformerPluginSpec">
+ * &lt;complexType name="WSTransformerPluginSpec">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
@@ -30,14 +30,14 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsTransformerPluginSpec", propOrder = {
+@XmlType(name = "WSTransformerPluginSpec", propOrder = {
     "description",
     "input",
     "output",
     "parameters",
     "pluginJNDI"
 })
-public class WsTransformerPluginSpec {
+public class WSTransformerPluginSpec {
 
     protected String description;
     protected String input;
@@ -49,7 +49,7 @@ public class WsTransformerPluginSpec {
      * Default no-arg constructor
      * 
      */
-    public WsTransformerPluginSpec() {
+    public WSTransformerPluginSpec() {
         super();
     }
 
@@ -57,7 +57,7 @@ public class WsTransformerPluginSpec {
      * Fully-initialising value constructor
      * 
      */
-    public WsTransformerPluginSpec(final String description, final String input, final String output, final String parameters, final String pluginJNDI) {
+    public WSTransformerPluginSpec(final String description, final String input, final String output, final String parameters, final String pluginJNDI) {
         this.description = description;
         this.input = input;
         this.output = output;

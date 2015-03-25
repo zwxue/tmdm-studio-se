@@ -10,16 +10,16 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsWhereOr complex type.
+ * <p>Java class for WSWhereOr complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsWhereOr">
+ * &lt;complexType name="WSWhereOr">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="whereItems" type="{http://www.talend.com/mdm}wsWhereItem" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element name="whereItems" type="{http://www.talend.com/mdm}WSWhereItem" maxOccurs="unbounded" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -29,19 +29,19 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsWhereOr", propOrder = {
+@XmlType(name = "WSWhereOr", propOrder = {
     "whereItems"
 })
-public class WsWhereOr {
+public class WSWhereOr {
 
     @XmlElement(nillable = true)
-    protected List<WsWhereItem> whereItems;
+    protected List<WSWhereItem> whereItems;
 
     /**
      * Default no-arg constructor
      * 
      */
-    public WsWhereOr() {
+    public WSWhereOr() {
         super();
     }
 
@@ -49,7 +49,7 @@ public class WsWhereOr {
      * Fully-initialising value constructor
      * 
      */
-    public WsWhereOr(final List<WsWhereItem> whereItems) {
+    public WSWhereOr(final List<WSWhereItem> whereItems) {
         this.whereItems = whereItems;
     }
 
@@ -71,13 +71,13 @@ public class WsWhereOr {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link WsWhereItem }
+     * {@link WSWhereItem }
      * 
      * 
      */
-    public List<WsWhereItem> getWhereItems() {
+    public List<WSWhereItem> getWhereItems() {
         if (whereItems == null) {
-            whereItems = new ArrayList<WsWhereItem>();
+            whereItems = new ArrayList<WSWhereItem>();
         }
         return this.whereItems;
     }

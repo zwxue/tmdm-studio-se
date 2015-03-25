@@ -17,7 +17,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="return" type="{http://www.talend.com/mdm}wsTransformerV2PK" minOccurs="0"/>
+ *         &lt;element name="return" type="{http://www.talend.com/mdm}WSTransformerV2PK" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -33,7 +33,7 @@ import javax.xml.bind.annotation.XmlType;
 public class PutTransformerV2Response {
 
     @XmlElement(name = "return")
-    protected WsTransformerV2PK _return;
+    protected WSTransformerV2PK _return;
 
     /**
      * Default no-arg constructor
@@ -47,7 +47,7 @@ public class PutTransformerV2Response {
      * Fully-initialising value constructor
      * 
      */
-    public PutTransformerV2Response(final WsTransformerV2PK _return) {
+    public PutTransformerV2Response(final WSTransformerV2PK _return) {
         this._return = _return;
     }
 
@@ -56,10 +56,10 @@ public class PutTransformerV2Response {
      * 
      * @return
      *     possible object is
-     *     {@link WsTransformerV2PK }
+     *     {@link WSTransformerV2PK }
      *     
      */
-    public WsTransformerV2PK getReturn() {
+    public WSTransformerV2PK getReturn() {
         return _return;
     }
 
@@ -68,10 +68,10 @@ public class PutTransformerV2Response {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsTransformerV2PK }
+     *     {@link WSTransformerV2PK }
      *     
      */
-    public void setReturn(WsTransformerV2PK value) {
+    public void setReturn(WSTransformerV2PK value) {
         this._return = value;
     }
 

@@ -16,7 +16,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="arg0" type="{http://www.talend.com/mdm}wsPutItemWithCustomReport" minOccurs="0"/>
+ *         &lt;element name="arg0" type="{http://www.talend.com/mdm}WSPutItemWithCustomReport" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -31,7 +31,7 @@ import javax.xml.bind.annotation.XmlType;
 })
 public class PutItemWithCustomReport {
 
-    protected WsPutItemWithCustomReport arg0;
+    protected WSPutItemWithCustomReport arg0;
 
     /**
      * Default no-arg constructor
@@ -45,7 +45,7 @@ public class PutItemWithCustomReport {
      * Fully-initialising value constructor
      * 
      */
-    public PutItemWithCustomReport(final WsPutItemWithCustomReport arg0) {
+    public PutItemWithCustomReport(final WSPutItemWithCustomReport arg0) {
         this.arg0 = arg0;
     }
 
@@ -54,10 +54,10 @@ public class PutItemWithCustomReport {
      * 
      * @return
      *     possible object is
-     *     {@link WsPutItemWithCustomReport }
+     *     {@link WSPutItemWithCustomReport }
      *     
      */
-    public WsPutItemWithCustomReport getArg0() {
+    public WSPutItemWithCustomReport getArg0() {
         return arg0;
     }
 
@@ -66,10 +66,10 @@ public class PutItemWithCustomReport {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsPutItemWithCustomReport }
+     *     {@link WSPutItemWithCustomReport }
      *     
      */
-    public void setArg0(WsPutItemWithCustomReport value) {
+    public void setArg0(WSPutItemWithCustomReport value) {
         this.arg0 = value;
     }
 

@@ -7,12 +7,12 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsCheckServiceConfigResponse complex type.
+ * <p>Java class for WSCheckServiceConfigResponse complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsCheckServiceConfigResponse">
+ * &lt;complexType name="WSCheckServiceConfigResponse">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
@@ -26,10 +26,10 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsCheckServiceConfigResponse", propOrder = {
+@XmlType(name = "WSCheckServiceConfigResponse", propOrder = {
     "checkResult"
 })
-public class WsCheckServiceConfigResponse {
+public class WSCheckServiceConfigResponse {
 
     protected Boolean checkResult;
 
@@ -37,7 +37,7 @@ public class WsCheckServiceConfigResponse {
      * Default no-arg constructor
      * 
      */
-    public WsCheckServiceConfigResponse() {
+    public WSCheckServiceConfigResponse() {
         super();
     }
 
@@ -45,7 +45,7 @@ public class WsCheckServiceConfigResponse {
      * Fully-initialising value constructor
      * 
      */
-    public WsCheckServiceConfigResponse(final Boolean checkResult) {
+    public WSCheckServiceConfigResponse(final Boolean checkResult) {
         this.checkResult = checkResult;
     }
 

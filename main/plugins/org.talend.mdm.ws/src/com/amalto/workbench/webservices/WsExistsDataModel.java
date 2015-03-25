@@ -7,16 +7,16 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsExistsDataModel complex type.
+ * <p>Java class for WSExistsDataModel complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsExistsDataModel">
+ * &lt;complexType name="WSExistsDataModel">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="wsDataModelPK" type="{http://www.talend.com/mdm}wsDataModelPK" minOccurs="0"/>
+ *         &lt;element name="wsDataModelPK" type="{http://www.talend.com/mdm}WSDataModelPK" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -26,18 +26,18 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsExistsDataModel", propOrder = {
+@XmlType(name = "WSExistsDataModel", propOrder = {
     "wsDataModelPK"
 })
-public class WsExistsDataModel {
+public class WSExistsDataModel {
 
-    protected WsDataModelPK wsDataModelPK;
+    protected WSDataModelPK wsDataModelPK;
 
     /**
      * Default no-arg constructor
      * 
      */
-    public WsExistsDataModel() {
+    public WSExistsDataModel() {
         super();
     }
 
@@ -45,7 +45,7 @@ public class WsExistsDataModel {
      * Fully-initialising value constructor
      * 
      */
-    public WsExistsDataModel(final WsDataModelPK wsDataModelPK) {
+    public WSExistsDataModel(final WSDataModelPK wsDataModelPK) {
         this.wsDataModelPK = wsDataModelPK;
     }
 
@@ -54,10 +54,10 @@ public class WsExistsDataModel {
      * 
      * @return
      *     possible object is
-     *     {@link WsDataModelPK }
+     *     {@link WSDataModelPK }
      *     
      */
-    public WsDataModelPK getWsDataModelPK() {
+    public WSDataModelPK getWsDataModelPK() {
         return wsDataModelPK;
     }
 
@@ -66,10 +66,10 @@ public class WsExistsDataModel {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsDataModelPK }
+     *     {@link WSDataModelPK }
      *     
      */
-    public void setWsDataModelPK(WsDataModelPK value) {
+    public void setWsDataModelPK(WSDataModelPK value) {
         this.wsDataModelPK = value;
     }
 

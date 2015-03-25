@@ -16,7 +16,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="arg0" type="{http://www.talend.com/mdm}wsGetMenuPKs" minOccurs="0"/>
+ *         &lt;element name="arg0" type="{http://www.talend.com/mdm}WSGetMenuPKs" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -31,7 +31,7 @@ import javax.xml.bind.annotation.XmlType;
 })
 public class GetMenuPKs {
 
-    protected WsGetMenuPKs arg0;
+    protected WSGetMenuPKs arg0;
 
     /**
      * Default no-arg constructor
@@ -45,7 +45,7 @@ public class GetMenuPKs {
      * Fully-initialising value constructor
      * 
      */
-    public GetMenuPKs(final WsGetMenuPKs arg0) {
+    public GetMenuPKs(final WSGetMenuPKs arg0) {
         this.arg0 = arg0;
     }
 
@@ -54,10 +54,10 @@ public class GetMenuPKs {
      * 
      * @return
      *     possible object is
-     *     {@link WsGetMenuPKs }
+     *     {@link WSGetMenuPKs }
      *     
      */
-    public WsGetMenuPKs getArg0() {
+    public WSGetMenuPKs getArg0() {
         return arg0;
     }
 
@@ -66,10 +66,10 @@ public class GetMenuPKs {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsGetMenuPKs }
+     *     {@link WSGetMenuPKs }
      *     
      */
-    public void setArg0(WsGetMenuPKs value) {
+    public void setArg0(WSGetMenuPKs value) {
         this.arg0 = value;
     }
 

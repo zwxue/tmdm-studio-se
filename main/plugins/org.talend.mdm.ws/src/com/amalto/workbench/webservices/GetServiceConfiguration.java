@@ -16,7 +16,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="arg0" type="{http://www.talend.com/mdm}wsServiceGetConfiguration" minOccurs="0"/>
+ *         &lt;element name="arg0" type="{http://www.talend.com/mdm}WSServiceGetConfiguration" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -31,7 +31,7 @@ import javax.xml.bind.annotation.XmlType;
 })
 public class GetServiceConfiguration {
 
-    protected WsServiceGetConfiguration arg0;
+    protected WSServiceGetConfiguration arg0;
 
     /**
      * Default no-arg constructor
@@ -45,7 +45,7 @@ public class GetServiceConfiguration {
      * Fully-initialising value constructor
      * 
      */
-    public GetServiceConfiguration(final WsServiceGetConfiguration arg0) {
+    public GetServiceConfiguration(final WSServiceGetConfiguration arg0) {
         this.arg0 = arg0;
     }
 
@@ -54,10 +54,10 @@ public class GetServiceConfiguration {
      * 
      * @return
      *     possible object is
-     *     {@link WsServiceGetConfiguration }
+     *     {@link WSServiceGetConfiguration }
      *     
      */
-    public WsServiceGetConfiguration getArg0() {
+    public WSServiceGetConfiguration getArg0() {
         return arg0;
     }
 
@@ -66,10 +66,10 @@ public class GetServiceConfiguration {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsServiceGetConfiguration }
+     *     {@link WSServiceGetConfiguration }
      *     
      */
-    public void setArg0(WsServiceGetConfiguration value) {
+    public void setArg0(WSServiceGetConfiguration value) {
         this.arg0 = value;
     }
 

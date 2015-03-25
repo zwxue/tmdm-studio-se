@@ -7,12 +7,12 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsGetFullPathValues complex type.
+ * <p>Java class for WSGetFullPathValues complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsGetFullPathValues">
+ * &lt;complexType name="WSGetFullPathValues">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
@@ -20,8 +20,8 @@ import javax.xml.bind.annotation.XmlType;
  *         &lt;element name="fullPath" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="orderBy" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="spellThreshold" type="{http://www.w3.org/2001/XMLSchema}int"/>
- *         &lt;element name="whereItem" type="{http://www.talend.com/mdm}wsWhereItem" minOccurs="0"/>
- *         &lt;element name="wsDataClusterPK" type="{http://www.talend.com/mdm}wsDataClusterPK" minOccurs="0"/>
+ *         &lt;element name="whereItem" type="{http://www.talend.com/mdm}WSWhereItem" minOccurs="0"/>
+ *         &lt;element name="wsDataClusterPK" type="{http://www.talend.com/mdm}WSDataClusterPK" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -31,7 +31,7 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsGetFullPathValues", propOrder = {
+@XmlType(name = "WSGetFullPathValues", propOrder = {
     "direction",
     "fullPath",
     "orderBy",
@@ -39,20 +39,20 @@ import javax.xml.bind.annotation.XmlType;
     "whereItem",
     "wsDataClusterPK"
 })
-public class WsGetFullPathValues {
+public class WSGetFullPathValues {
 
     protected String direction;
     protected String fullPath;
     protected String orderBy;
     protected int spellThreshold;
-    protected WsWhereItem whereItem;
-    protected WsDataClusterPK wsDataClusterPK;
+    protected WSWhereItem whereItem;
+    protected WSDataClusterPK wsDataClusterPK;
 
     /**
      * Default no-arg constructor
      * 
      */
-    public WsGetFullPathValues() {
+    public WSGetFullPathValues() {
         super();
     }
 
@@ -60,7 +60,7 @@ public class WsGetFullPathValues {
      * Fully-initialising value constructor
      * 
      */
-    public WsGetFullPathValues(final String direction, final String fullPath, final String orderBy, final int spellThreshold, final WsWhereItem whereItem, final WsDataClusterPK wsDataClusterPK) {
+    public WSGetFullPathValues(final String direction, final String fullPath, final String orderBy, final int spellThreshold, final WSWhereItem whereItem, final WSDataClusterPK wsDataClusterPK) {
         this.direction = direction;
         this.fullPath = fullPath;
         this.orderBy = orderBy;
@@ -162,10 +162,10 @@ public class WsGetFullPathValues {
      * 
      * @return
      *     possible object is
-     *     {@link WsWhereItem }
+     *     {@link WSWhereItem }
      *     
      */
-    public WsWhereItem getWhereItem() {
+    public WSWhereItem getWhereItem() {
         return whereItem;
     }
 
@@ -174,10 +174,10 @@ public class WsGetFullPathValues {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsWhereItem }
+     *     {@link WSWhereItem }
      *     
      */
-    public void setWhereItem(WsWhereItem value) {
+    public void setWhereItem(WSWhereItem value) {
         this.whereItem = value;
     }
 
@@ -186,10 +186,10 @@ public class WsGetFullPathValues {
      * 
      * @return
      *     possible object is
-     *     {@link WsDataClusterPK }
+     *     {@link WSDataClusterPK }
      *     
      */
-    public WsDataClusterPK getWsDataClusterPK() {
+    public WSDataClusterPK getWsDataClusterPK() {
         return wsDataClusterPK;
     }
 
@@ -198,10 +198,10 @@ public class WsGetFullPathValues {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsDataClusterPK }
+     *     {@link WSDataClusterPK }
      *     
      */
-    public void setWsDataClusterPK(WsDataClusterPK value) {
+    public void setWsDataClusterPK(WSDataClusterPK value) {
         this.wsDataClusterPK = value;
     }
 

@@ -7,12 +7,12 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsRoutingOrderV2 complex type.
+ * <p>Java class for WSRoutingOrderV2 complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsRoutingOrderV2">
+ * &lt;complexType name="WSRoutingOrderV2">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
@@ -22,12 +22,12 @@ import javax.xml.bind.annotation.XmlType;
  *         &lt;element name="name" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="serviceJNDI" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="serviceParameters" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="status" type="{http://www.talend.com/mdm}wsRoutingOrderV2Status" minOccurs="0"/>
+ *         &lt;element name="status" type="{http://www.talend.com/mdm}WSRoutingOrderV2Status" minOccurs="0"/>
  *         &lt;element name="timeCreated" type="{http://www.w3.org/2001/XMLSchema}long"/>
  *         &lt;element name="timeLastRunCompleted" type="{http://www.w3.org/2001/XMLSchema}long"/>
  *         &lt;element name="timeLastRunStarted" type="{http://www.w3.org/2001/XMLSchema}long"/>
  *         &lt;element name="timeScheduled" type="{http://www.w3.org/2001/XMLSchema}long"/>
- *         &lt;element name="wsItemPK" type="{http://www.talend.com/mdm}wsItemPK" minOccurs="0"/>
+ *         &lt;element name="wsItemPK" type="{http://www.talend.com/mdm}WSItemPK" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -37,7 +37,7 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsRoutingOrderV2", propOrder = {
+@XmlType(name = "WSRoutingOrderV2", propOrder = {
     "bindingUniverseName",
     "bindingUserToken",
     "message",
@@ -51,7 +51,7 @@ import javax.xml.bind.annotation.XmlType;
     "timeScheduled",
     "wsItemPK"
 })
-public class WsRoutingOrderV2 {
+public class WSRoutingOrderV2 {
 
     protected String bindingUniverseName;
     protected String bindingUserToken;
@@ -59,18 +59,18 @@ public class WsRoutingOrderV2 {
     protected String name;
     protected String serviceJNDI;
     protected String serviceParameters;
-    protected WsRoutingOrderV2Status status;
+    protected WSRoutingOrderV2Status status;
     protected long timeCreated;
     protected long timeLastRunCompleted;
     protected long timeLastRunStarted;
     protected long timeScheduled;
-    protected WsItemPK wsItemPK;
+    protected WSItemPK wsItemPK;
 
     /**
      * Default no-arg constructor
      * 
      */
-    public WsRoutingOrderV2() {
+    public WSRoutingOrderV2() {
         super();
     }
 
@@ -78,7 +78,7 @@ public class WsRoutingOrderV2 {
      * Fully-initialising value constructor
      * 
      */
-    public WsRoutingOrderV2(final String bindingUniverseName, final String bindingUserToken, final String message, final String name, final String serviceJNDI, final String serviceParameters, final WsRoutingOrderV2Status status, final long timeCreated, final long timeLastRunCompleted, final long timeLastRunStarted, final long timeScheduled, final WsItemPK wsItemPK) {
+    public WSRoutingOrderV2(final String bindingUniverseName, final String bindingUserToken, final String message, final String name, final String serviceJNDI, final String serviceParameters, final WSRoutingOrderV2Status status, final long timeCreated, final long timeLastRunCompleted, final long timeLastRunStarted, final long timeScheduled, final WSItemPK wsItemPK) {
         this.bindingUniverseName = bindingUniverseName;
         this.bindingUserToken = bindingUserToken;
         this.message = message;
@@ -242,10 +242,10 @@ public class WsRoutingOrderV2 {
      * 
      * @return
      *     possible object is
-     *     {@link WsRoutingOrderV2Status }
+     *     {@link WSRoutingOrderV2Status }
      *     
      */
-    public WsRoutingOrderV2Status getStatus() {
+    public WSRoutingOrderV2Status getStatus() {
         return status;
     }
 
@@ -254,10 +254,10 @@ public class WsRoutingOrderV2 {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsRoutingOrderV2Status }
+     *     {@link WSRoutingOrderV2Status }
      *     
      */
-    public void setStatus(WsRoutingOrderV2Status value) {
+    public void setStatus(WSRoutingOrderV2Status value) {
         this.status = value;
     }
 
@@ -330,10 +330,10 @@ public class WsRoutingOrderV2 {
      * 
      * @return
      *     possible object is
-     *     {@link WsItemPK }
+     *     {@link WSItemPK }
      *     
      */
-    public WsItemPK getWsItemPK() {
+    public WSItemPK getWsItemPK() {
         return wsItemPK;
     }
 
@@ -342,10 +342,10 @@ public class WsRoutingOrderV2 {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsItemPK }
+     *     {@link WSItemPK }
      *     
      */
-    public void setWsItemPK(WsItemPK value) {
+    public void setWsItemPK(WSItemPK value) {
         this.wsItemPK = value;
     }
 

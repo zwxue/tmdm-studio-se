@@ -10,12 +10,12 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsTransformerPluginV2VariableDescriptor complex type.
+ * <p>Java class for WSTransformerPluginV2VariableDescriptor complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsTransformerPluginV2VariableDescriptor">
+ * &lt;complexType name="WSTransformerPluginV2VariableDescriptor">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
@@ -33,14 +33,14 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsTransformerPluginV2VariableDescriptor", propOrder = {
+@XmlType(name = "WSTransformerPluginV2VariableDescriptor", propOrder = {
     "contentTypesRegex",
     "description",
     "mandatory",
     "possibleValuesRegex",
     "variableName"
 })
-public class WsTransformerPluginV2VariableDescriptor {
+public class WSTransformerPluginV2VariableDescriptor {
 
     @XmlElement(nillable = true)
     protected List<String> contentTypesRegex;
@@ -54,7 +54,7 @@ public class WsTransformerPluginV2VariableDescriptor {
      * Default no-arg constructor
      * 
      */
-    public WsTransformerPluginV2VariableDescriptor() {
+    public WSTransformerPluginV2VariableDescriptor() {
         super();
     }
 
@@ -62,7 +62,7 @@ public class WsTransformerPluginV2VariableDescriptor {
      * Fully-initialising value constructor
      * 
      */
-    public WsTransformerPluginV2VariableDescriptor(final List<String> contentTypesRegex, final String description, final boolean mandatory, final List<String> possibleValuesRegex, final String variableName) {
+    public WSTransformerPluginV2VariableDescriptor(final List<String> contentTypesRegex, final String description, final boolean mandatory, final List<String> possibleValuesRegex, final String variableName) {
         this.contentTypesRegex = contentTypesRegex;
         this.description = description;
         this.mandatory = mandatory;

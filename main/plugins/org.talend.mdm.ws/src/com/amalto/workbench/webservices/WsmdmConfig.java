@@ -7,12 +7,12 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsmdmConfig complex type.
+ * <p>Java class for WSMDMConfig complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsmdmConfig">
+ * &lt;complexType name="WSMDMConfig">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
@@ -33,7 +33,7 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsmdmConfig", propOrder = {
+@XmlType(name = "WSMDMConfig", propOrder = {
     "isupurl",
     "password",
     "serverName",
@@ -43,7 +43,7 @@ import javax.xml.bind.annotation.XmlType;
     "xdbID",
     "xdbUrl"
 })
-public class WsmdmConfig {
+public class WSMDMConfig {
 
     protected String isupurl;
     protected String password;
@@ -58,7 +58,7 @@ public class WsmdmConfig {
      * Default no-arg constructor
      * 
      */
-    public WsmdmConfig() {
+    public WSMDMConfig() {
         super();
     }
 
@@ -66,7 +66,7 @@ public class WsmdmConfig {
      * Fully-initialising value constructor
      * 
      */
-    public WsmdmConfig(final String isupurl, final String password, final String serverName, final String serverPort, final String userName, final String xdbDriver, final String xdbID, final String xdbUrl) {
+    public WSMDMConfig(final String isupurl, final String password, final String serverName, final String serverPort, final String userName, final String xdbDriver, final String xdbID, final String xdbUrl) {
         this.isupurl = isupurl;
         this.password = password;
         this.serverName = serverName;

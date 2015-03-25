@@ -7,12 +7,12 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsExistsTransformerPluginV2 complex type.
+ * <p>Java class for WSExistsTransformerPluginV2 complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsExistsTransformerPluginV2">
+ * &lt;complexType name="WSExistsTransformerPluginV2">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
@@ -26,10 +26,10 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsExistsTransformerPluginV2", propOrder = {
+@XmlType(name = "WSExistsTransformerPluginV2", propOrder = {
     "jndiName"
 })
-public class WsExistsTransformerPluginV2 {
+public class WSExistsTransformerPluginV2 {
 
     protected String jndiName;
 
@@ -37,7 +37,7 @@ public class WsExistsTransformerPluginV2 {
      * Default no-arg constructor
      * 
      */
-    public WsExistsTransformerPluginV2() {
+    public WSExistsTransformerPluginV2() {
         super();
     }
 
@@ -45,7 +45,7 @@ public class WsExistsTransformerPluginV2 {
      * Fully-initialising value constructor
      * 
      */
-    public WsExistsTransformerPluginV2(final String jndiName) {
+    public WSExistsTransformerPluginV2(final String jndiName) {
         this.jndiName = jndiName;
     }
 

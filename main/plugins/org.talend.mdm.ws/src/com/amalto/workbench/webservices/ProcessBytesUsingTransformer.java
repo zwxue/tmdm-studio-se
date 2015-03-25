@@ -16,7 +16,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="arg0" type="{http://www.talend.com/mdm}wsProcessBytesUsingTransformer" minOccurs="0"/>
+ *         &lt;element name="arg0" type="{http://www.talend.com/mdm}WSProcessBytesUsingTransformer" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -31,7 +31,7 @@ import javax.xml.bind.annotation.XmlType;
 })
 public class ProcessBytesUsingTransformer {
 
-    protected WsProcessBytesUsingTransformer arg0;
+    protected WSProcessBytesUsingTransformer arg0;
 
     /**
      * Default no-arg constructor
@@ -45,7 +45,7 @@ public class ProcessBytesUsingTransformer {
      * Fully-initialising value constructor
      * 
      */
-    public ProcessBytesUsingTransformer(final WsProcessBytesUsingTransformer arg0) {
+    public ProcessBytesUsingTransformer(final WSProcessBytesUsingTransformer arg0) {
         this.arg0 = arg0;
     }
 
@@ -54,10 +54,10 @@ public class ProcessBytesUsingTransformer {
      * 
      * @return
      *     possible object is
-     *     {@link WsProcessBytesUsingTransformer }
+     *     {@link WSProcessBytesUsingTransformer }
      *     
      */
-    public WsProcessBytesUsingTransformer getArg0() {
+    public WSProcessBytesUsingTransformer getArg0() {
         return arg0;
     }
 
@@ -66,10 +66,10 @@ public class ProcessBytesUsingTransformer {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsProcessBytesUsingTransformer }
+     *     {@link WSProcessBytesUsingTransformer }
      *     
      */
-    public void setArg0(WsProcessBytesUsingTransformer value) {
+    public void setArg0(WSProcessBytesUsingTransformer value) {
         this.arg0 = value;
     }
 

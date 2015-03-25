@@ -7,12 +7,12 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsServicesListItem complex type.
+ * <p>Java class for WSServicesListItem complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsServicesListItem">
+ * &lt;complexType name="WSServicesListItem">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
@@ -26,10 +26,10 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsServicesListItem", propOrder = {
+@XmlType(name = "WSServicesListItem", propOrder = {
     "jndiName"
 })
-public class WsServicesListItem {
+public class WSServicesListItem {
 
     protected String jndiName;
 
@@ -37,7 +37,7 @@ public class WsServicesListItem {
      * Default no-arg constructor
      * 
      */
-    public WsServicesListItem() {
+    public WSServicesListItem() {
         super();
     }
 
@@ -45,7 +45,7 @@ public class WsServicesListItem {
      * Fully-initialising value constructor
      * 
      */
-    public WsServicesListItem(final String jndiName) {
+    public WSServicesListItem(final String jndiName) {
         this.jndiName = jndiName;
     }
 

@@ -17,7 +17,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="return" type="{http://www.talend.com/mdm}wsDataModelPKArray" minOccurs="0"/>
+ *         &lt;element name="return" type="{http://www.talend.com/mdm}WSDataModelPKArray" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -33,7 +33,7 @@ import javax.xml.bind.annotation.XmlType;
 public class GetDataModelPKsResponse {
 
     @XmlElement(name = "return")
-    protected WsDataModelPKArray _return;
+    protected WSDataModelPKArray _return;
 
     /**
      * Default no-arg constructor
@@ -47,7 +47,7 @@ public class GetDataModelPKsResponse {
      * Fully-initialising value constructor
      * 
      */
-    public GetDataModelPKsResponse(final WsDataModelPKArray _return) {
+    public GetDataModelPKsResponse(final WSDataModelPKArray _return) {
         this._return = _return;
     }
 
@@ -56,10 +56,10 @@ public class GetDataModelPKsResponse {
      * 
      * @return
      *     possible object is
-     *     {@link WsDataModelPKArray }
+     *     {@link WSDataModelPKArray }
      *     
      */
-    public WsDataModelPKArray getReturn() {
+    public WSDataModelPKArray getReturn() {
         return _return;
     }
 
@@ -68,10 +68,10 @@ public class GetDataModelPKsResponse {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsDataModelPKArray }
+     *     {@link WSDataModelPKArray }
      *     
      */
-    public void setReturn(WsDataModelPKArray value) {
+    public void setReturn(WSDataModelPKArray value) {
         this._return = value;
     }
 

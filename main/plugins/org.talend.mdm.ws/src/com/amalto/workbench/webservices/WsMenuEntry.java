@@ -10,21 +10,21 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsMenuEntry complex type.
+ * <p>Java class for WSMenuEntry complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsMenuEntry">
+ * &lt;complexType name="WSMenuEntry">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
  *         &lt;element name="application" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="context" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="descriptions" type="{http://www.talend.com/mdm}wsMenuMenuEntriesDescriptions" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element name="descriptions" type="{http://www.talend.com/mdm}WSMenuMenuEntriesDescriptions" maxOccurs="unbounded" minOccurs="0"/>
  *         &lt;element name="icon" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="id" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="subMenus" type="{http://www.talend.com/mdm}wsMenuEntry" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element name="subMenus" type="{http://www.talend.com/mdm}WSMenuEntry" maxOccurs="unbounded" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -34,7 +34,7 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsMenuEntry", propOrder = {
+@XmlType(name = "WSMenuEntry", propOrder = {
     "application",
     "context",
     "descriptions",
@@ -42,22 +42,22 @@ import javax.xml.bind.annotation.XmlType;
     "id",
     "subMenus"
 })
-public class WsMenuEntry {
+public class WSMenuEntry {
 
     protected String application;
     protected String context;
     @XmlElement(nillable = true)
-    protected List<WsMenuMenuEntriesDescriptions> descriptions;
+    protected List<WSMenuMenuEntriesDescriptions> descriptions;
     protected String icon;
     protected String id;
     @XmlElement(nillable = true)
-    protected List<WsMenuEntry> subMenus;
+    protected List<WSMenuEntry> subMenus;
 
     /**
      * Default no-arg constructor
      * 
      */
-    public WsMenuEntry() {
+    public WSMenuEntry() {
         super();
     }
 
@@ -65,7 +65,7 @@ public class WsMenuEntry {
      * Fully-initialising value constructor
      * 
      */
-    public WsMenuEntry(final String application, final String context, final List<WsMenuMenuEntriesDescriptions> descriptions, final String icon, final String id, final List<WsMenuEntry> subMenus) {
+    public WSMenuEntry(final String application, final String context, final List<WSMenuMenuEntriesDescriptions> descriptions, final String icon, final String id, final List<WSMenuEntry> subMenus) {
         this.application = application;
         this.context = context;
         this.descriptions = descriptions;
@@ -140,13 +140,13 @@ public class WsMenuEntry {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link WsMenuMenuEntriesDescriptions }
+     * {@link WSMenuMenuEntriesDescriptions }
      * 
      * 
      */
-    public List<WsMenuMenuEntriesDescriptions> getDescriptions() {
+    public List<WSMenuMenuEntriesDescriptions> getDescriptions() {
         if (descriptions == null) {
-            descriptions = new ArrayList<WsMenuMenuEntriesDescriptions>();
+            descriptions = new ArrayList<WSMenuMenuEntriesDescriptions>();
         }
         return this.descriptions;
     }
@@ -217,13 +217,13 @@ public class WsMenuEntry {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link WsMenuEntry }
+     * {@link WSMenuEntry }
      * 
      * 
      */
-    public List<WsMenuEntry> getSubMenus() {
+    public List<WSMenuEntry> getSubMenus() {
         if (subMenus == null) {
-            subMenus = new ArrayList<WsMenuEntry>();
+            subMenus = new ArrayList<WSMenuEntry>();
         }
         return this.subMenus;
     }

@@ -7,16 +7,16 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsGetRoutingOrderV2SByCriteria complex type.
+ * <p>Java class for WSGetRoutingOrderV2SByCriteria complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsGetRoutingOrderV2SByCriteria">
+ * &lt;complexType name="WSGetRoutingOrderV2SByCriteria">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="wsSearchCriteria" type="{http://www.talend.com/mdm}wsRoutingOrderV2SearchCriteria" minOccurs="0"/>
+ *         &lt;element name="wsSearchCriteria" type="{http://www.talend.com/mdm}WSRoutingOrderV2SearchCriteria" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -26,18 +26,18 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsGetRoutingOrderV2SByCriteria", propOrder = {
+@XmlType(name = "WSGetRoutingOrderV2SByCriteria", propOrder = {
     "wsSearchCriteria"
 })
-public class WsGetRoutingOrderV2SByCriteria {
+public class WSGetRoutingOrderV2SByCriteria {
 
-    protected WsRoutingOrderV2SearchCriteria wsSearchCriteria;
+    protected WSRoutingOrderV2SearchCriteria wsSearchCriteria;
 
     /**
      * Default no-arg constructor
      * 
      */
-    public WsGetRoutingOrderV2SByCriteria() {
+    public WSGetRoutingOrderV2SByCriteria() {
         super();
     }
 
@@ -45,7 +45,7 @@ public class WsGetRoutingOrderV2SByCriteria {
      * Fully-initialising value constructor
      * 
      */
-    public WsGetRoutingOrderV2SByCriteria(final WsRoutingOrderV2SearchCriteria wsSearchCriteria) {
+    public WSGetRoutingOrderV2SByCriteria(final WSRoutingOrderV2SearchCriteria wsSearchCriteria) {
         this.wsSearchCriteria = wsSearchCriteria;
     }
 
@@ -54,10 +54,10 @@ public class WsGetRoutingOrderV2SByCriteria {
      * 
      * @return
      *     possible object is
-     *     {@link WsRoutingOrderV2SearchCriteria }
+     *     {@link WSRoutingOrderV2SearchCriteria }
      *     
      */
-    public WsRoutingOrderV2SearchCriteria getWsSearchCriteria() {
+    public WSRoutingOrderV2SearchCriteria getWsSearchCriteria() {
         return wsSearchCriteria;
     }
 
@@ -66,10 +66,10 @@ public class WsGetRoutingOrderV2SByCriteria {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsRoutingOrderV2SearchCriteria }
+     *     {@link WSRoutingOrderV2SearchCriteria }
      *     
      */
-    public void setWsSearchCriteria(WsRoutingOrderV2SearchCriteria value) {
+    public void setWsSearchCriteria(WSRoutingOrderV2SearchCriteria value) {
         this.wsSearchCriteria = value;
     }
 

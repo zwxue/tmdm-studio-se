@@ -17,7 +17,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="return" type="{http://www.talend.com/mdm}wsRoutingRule" minOccurs="0"/>
+ *         &lt;element name="return" type="{http://www.talend.com/mdm}WSRoutingRule" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -33,7 +33,7 @@ import javax.xml.bind.annotation.XmlType;
 public class GetRoutingRuleResponse {
 
     @XmlElement(name = "return")
-    protected WsRoutingRule _return;
+    protected WSRoutingRule _return;
 
     /**
      * Default no-arg constructor
@@ -47,7 +47,7 @@ public class GetRoutingRuleResponse {
      * Fully-initialising value constructor
      * 
      */
-    public GetRoutingRuleResponse(final WsRoutingRule _return) {
+    public GetRoutingRuleResponse(final WSRoutingRule _return) {
         this._return = _return;
     }
 
@@ -56,10 +56,10 @@ public class GetRoutingRuleResponse {
      * 
      * @return
      *     possible object is
-     *     {@link WsRoutingRule }
+     *     {@link WSRoutingRule }
      *     
      */
-    public WsRoutingRule getReturn() {
+    public WSRoutingRule getReturn() {
         return _return;
     }
 
@@ -68,10 +68,10 @@ public class GetRoutingRuleResponse {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsRoutingRule }
+     *     {@link WSRoutingRule }
      *     
      */
-    public void setReturn(WsRoutingRule value) {
+    public void setReturn(WSRoutingRule value) {
         this._return = value;
     }
 

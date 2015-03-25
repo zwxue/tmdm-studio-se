@@ -7,12 +7,12 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsTransformerPK complex type.
+ * <p>Java class for WSTransformerPK complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsTransformerPK">
+ * &lt;complexType name="WSTransformerPK">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
@@ -26,10 +26,10 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsTransformerPK", propOrder = {
+@XmlType(name = "WSTransformerPK", propOrder = {
     "pk"
 })
-public class WsTransformerPK {
+public class WSTransformerPK {
 
     protected String pk;
 
@@ -37,7 +37,7 @@ public class WsTransformerPK {
      * Default no-arg constructor
      * 
      */
-    public WsTransformerPK() {
+    public WSTransformerPK() {
         super();
     }
 
@@ -45,7 +45,7 @@ public class WsTransformerPK {
      * Fully-initialising value constructor
      * 
      */
-    public WsTransformerPK(final String pk) {
+    public WSTransformerPK(final String pk) {
         this.pk = pk;
     }
 

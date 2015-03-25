@@ -17,7 +17,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="return" type="{http://www.talend.com/mdm}wsRolePKArray" minOccurs="0"/>
+ *         &lt;element name="return" type="{http://www.talend.com/mdm}WSRolePKArray" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -33,7 +33,7 @@ import javax.xml.bind.annotation.XmlType;
 public class GetRolePKsResponse {
 
     @XmlElement(name = "return")
-    protected WsRolePKArray _return;
+    protected WSRolePKArray _return;
 
     /**
      * Default no-arg constructor
@@ -47,7 +47,7 @@ public class GetRolePKsResponse {
      * Fully-initialising value constructor
      * 
      */
-    public GetRolePKsResponse(final WsRolePKArray _return) {
+    public GetRolePKsResponse(final WSRolePKArray _return) {
         this._return = _return;
     }
 
@@ -56,10 +56,10 @@ public class GetRolePKsResponse {
      * 
      * @return
      *     possible object is
-     *     {@link WsRolePKArray }
+     *     {@link WSRolePKArray }
      *     
      */
-    public WsRolePKArray getReturn() {
+    public WSRolePKArray getReturn() {
         return _return;
     }
 
@@ -68,10 +68,10 @@ public class GetRolePKsResponse {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsRolePKArray }
+     *     {@link WSRolePKArray }
      *     
      */
-    public void setReturn(WsRolePKArray value) {
+    public void setReturn(WSRolePKArray value) {
         this._return = value;
     }
 

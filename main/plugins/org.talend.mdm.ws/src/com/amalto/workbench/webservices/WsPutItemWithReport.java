@@ -7,18 +7,18 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsPutItemWithReport complex type.
+ * <p>Java class for WSPutItemWithReport complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsPutItemWithReport">
+ * &lt;complexType name="WSPutItemWithReport">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
  *         &lt;element name="invokeBeforeSaving" type="{http://www.w3.org/2001/XMLSchema}boolean" minOccurs="0"/>
  *         &lt;element name="source" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="wsPutItem" type="{http://www.talend.com/mdm}wsPutItem" minOccurs="0"/>
+ *         &lt;element name="wsPutItem" type="{http://www.talend.com/mdm}WSPutItem" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -28,22 +28,22 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsPutItemWithReport", propOrder = {
+@XmlType(name = "WSPutItemWithReport", propOrder = {
     "invokeBeforeSaving",
     "source",
     "wsPutItem"
 })
-public class WsPutItemWithReport {
+public class WSPutItemWithReport {
 
     protected Boolean invokeBeforeSaving;
     protected String source;
-    protected WsPutItem wsPutItem;
+    protected WSPutItem wsPutItem;
 
     /**
      * Default no-arg constructor
      * 
      */
-    public WsPutItemWithReport() {
+    public WSPutItemWithReport() {
         super();
     }
 
@@ -51,7 +51,7 @@ public class WsPutItemWithReport {
      * Fully-initialising value constructor
      * 
      */
-    public WsPutItemWithReport(final Boolean invokeBeforeSaving, final String source, final WsPutItem wsPutItem) {
+    public WSPutItemWithReport(final Boolean invokeBeforeSaving, final String source, final WSPutItem wsPutItem) {
         this.invokeBeforeSaving = invokeBeforeSaving;
         this.source = source;
         this.wsPutItem = wsPutItem;
@@ -110,10 +110,10 @@ public class WsPutItemWithReport {
      * 
      * @return
      *     possible object is
-     *     {@link WsPutItem }
+     *     {@link WSPutItem }
      *     
      */
-    public WsPutItem getWsPutItem() {
+    public WSPutItem getWsPutItem() {
         return wsPutItem;
     }
 
@@ -122,10 +122,10 @@ public class WsPutItemWithReport {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsPutItem }
+     *     {@link WSPutItem }
      *     
      */
-    public void setWsPutItem(WsPutItem value) {
+    public void setWsPutItem(WSPutItem value) {
         this.wsPutItem = value;
     }
 

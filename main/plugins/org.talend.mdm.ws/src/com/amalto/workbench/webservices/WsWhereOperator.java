@@ -6,12 +6,12 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsWhereOperator.
+ * <p>Java class for WSWhereOperator.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * <p>
  * <pre>
- * &lt;simpleType name="wsWhereOperator">
+ * &lt;simpleType name="WSWhereOperator">
  *   &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string">
  *     &lt;enumeration value="JOIN"/>
  *     &lt;enumeration value="CONTAINS_TEXT_OF"/>
@@ -32,9 +32,9 @@ import javax.xml.bind.annotation.XmlType;
  * </pre>
  * 
  */
-@XmlType(name = "wsWhereOperator")
+@XmlType(name = "WSWhereOperator")
 @XmlEnum
-public enum WsWhereOperator {
+public enum WSWhereOperator {
 
     JOIN,
     CONTAINS_TEXT_OF,
@@ -55,7 +55,7 @@ public enum WsWhereOperator {
         return name();
     }
 
-    public static WsWhereOperator fromValue(String v) {
+    public static WSWhereOperator fromValue(String v) {
         return valueOf(v);
     }
 

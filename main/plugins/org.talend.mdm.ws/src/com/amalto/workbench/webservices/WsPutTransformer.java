@@ -7,16 +7,16 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsPutTransformer complex type.
+ * <p>Java class for WSPutTransformer complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsPutTransformer">
+ * &lt;complexType name="WSPutTransformer">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="wsTransformer" type="{http://www.talend.com/mdm}wsTransformer" minOccurs="0"/>
+ *         &lt;element name="wsTransformer" type="{http://www.talend.com/mdm}WSTransformer" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -26,18 +26,18 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsPutTransformer", propOrder = {
+@XmlType(name = "WSPutTransformer", propOrder = {
     "wsTransformer"
 })
-public class WsPutTransformer {
+public class WSPutTransformer {
 
-    protected WsTransformer wsTransformer;
+    protected WSTransformer wsTransformer;
 
     /**
      * Default no-arg constructor
      * 
      */
-    public WsPutTransformer() {
+    public WSPutTransformer() {
         super();
     }
 
@@ -45,7 +45,7 @@ public class WsPutTransformer {
      * Fully-initialising value constructor
      * 
      */
-    public WsPutTransformer(final WsTransformer wsTransformer) {
+    public WSPutTransformer(final WSTransformer wsTransformer) {
         this.wsTransformer = wsTransformer;
     }
 
@@ -54,10 +54,10 @@ public class WsPutTransformer {
      * 
      * @return
      *     possible object is
-     *     {@link WsTransformer }
+     *     {@link WSTransformer }
      *     
      */
-    public WsTransformer getWsTransformer() {
+    public WSTransformer getWsTransformer() {
         return wsTransformer;
     }
 
@@ -66,10 +66,10 @@ public class WsPutTransformer {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsTransformer }
+     *     {@link WSTransformer }
      *     
      */
-    public void setWsTransformer(WsTransformer value) {
+    public void setWsTransformer(WSTransformer value) {
         this.wsTransformer = value;
     }
 

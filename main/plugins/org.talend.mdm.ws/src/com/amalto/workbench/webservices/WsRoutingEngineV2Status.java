@@ -6,12 +6,12 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsRoutingEngineV2Status.
+ * <p>Java class for WSRoutingEngineV2Status.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * <p>
  * <pre>
- * &lt;simpleType name="wsRoutingEngineV2Status">
+ * &lt;simpleType name="WSRoutingEngineV2Status">
  *   &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string">
  *     &lt;enumeration value="DEAD"/>
  *     &lt;enumeration value="STOPPED"/>
@@ -22,9 +22,9 @@ import javax.xml.bind.annotation.XmlType;
  * </pre>
  * 
  */
-@XmlType(name = "wsRoutingEngineV2Status")
+@XmlType(name = "WSRoutingEngineV2Status")
 @XmlEnum
-public enum WsRoutingEngineV2Status {
+public enum WSRoutingEngineV2Status {
 
     DEAD,
     STOPPED,
@@ -35,7 +35,7 @@ public enum WsRoutingEngineV2Status {
         return name();
     }
 
-    public static WsRoutingEngineV2Status fromValue(String v) {
+    public static WSRoutingEngineV2Status fromValue(String v) {
         return valueOf(v);
     }
 

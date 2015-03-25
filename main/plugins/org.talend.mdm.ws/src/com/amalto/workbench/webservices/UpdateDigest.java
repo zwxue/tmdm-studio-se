@@ -16,7 +16,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="arg0" type="{http://www.talend.com/mdm}wsDigest" minOccurs="0"/>
+ *         &lt;element name="arg0" type="{http://www.talend.com/mdm}WSDigest" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -31,7 +31,7 @@ import javax.xml.bind.annotation.XmlType;
 })
 public class UpdateDigest {
 
-    protected WsDigest arg0;
+    protected WSDigest arg0;
 
     /**
      * Default no-arg constructor
@@ -45,7 +45,7 @@ public class UpdateDigest {
      * Fully-initialising value constructor
      * 
      */
-    public UpdateDigest(final WsDigest arg0) {
+    public UpdateDigest(final WSDigest arg0) {
         this.arg0 = arg0;
     }
 
@@ -54,10 +54,10 @@ public class UpdateDigest {
      * 
      * @return
      *     possible object is
-     *     {@link WsDigest }
+     *     {@link WSDigest }
      *     
      */
-    public WsDigest getArg0() {
+    public WSDigest getArg0() {
         return arg0;
     }
 
@@ -66,10 +66,10 @@ public class UpdateDigest {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsDigest }
+     *     {@link WSDigest }
      *     
      */
-    public void setArg0(WsDigest value) {
+    public void setArg0(WSDigest value) {
         this.arg0 = value;
     }
 

@@ -7,16 +7,16 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsRoutingEngineV2Action complex type.
+ * <p>Java class for WSRoutingEngineV2Action complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsRoutingEngineV2Action">
+ * &lt;complexType name="WSRoutingEngineV2Action">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="wsAction" type="{http://www.talend.com/mdm}wsRoutingEngineV2ActionCode" minOccurs="0"/>
+ *         &lt;element name="wsAction" type="{http://www.talend.com/mdm}WSRoutingEngineV2ActionCode" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -26,18 +26,18 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsRoutingEngineV2Action", propOrder = {
+@XmlType(name = "WSRoutingEngineV2Action", propOrder = {
     "wsAction"
 })
-public class WsRoutingEngineV2Action {
+public class WSRoutingEngineV2Action {
 
-    protected WsRoutingEngineV2ActionCode wsAction;
+    protected WSRoutingEngineV2ActionCode wsAction;
 
     /**
      * Default no-arg constructor
      * 
      */
-    public WsRoutingEngineV2Action() {
+    public WSRoutingEngineV2Action() {
         super();
     }
 
@@ -45,7 +45,7 @@ public class WsRoutingEngineV2Action {
      * Fully-initialising value constructor
      * 
      */
-    public WsRoutingEngineV2Action(final WsRoutingEngineV2ActionCode wsAction) {
+    public WSRoutingEngineV2Action(final WSRoutingEngineV2ActionCode wsAction) {
         this.wsAction = wsAction;
     }
 
@@ -54,10 +54,10 @@ public class WsRoutingEngineV2Action {
      * 
      * @return
      *     possible object is
-     *     {@link WsRoutingEngineV2ActionCode }
+     *     {@link WSRoutingEngineV2ActionCode }
      *     
      */
-    public WsRoutingEngineV2ActionCode getWsAction() {
+    public WSRoutingEngineV2ActionCode getWsAction() {
         return wsAction;
     }
 
@@ -66,10 +66,10 @@ public class WsRoutingEngineV2Action {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsRoutingEngineV2ActionCode }
+     *     {@link WSRoutingEngineV2ActionCode }
      *     
      */
-    public void setWsAction(WsRoutingEngineV2ActionCode value) {
+    public void setWsAction(WSRoutingEngineV2ActionCode value) {
         this.wsAction = value;
     }
 

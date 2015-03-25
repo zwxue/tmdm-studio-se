@@ -6,12 +6,12 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsRoutingOrderV2Status.
+ * <p>Java class for WSRoutingOrderV2Status.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * <p>
  * <pre>
- * &lt;simpleType name="wsRoutingOrderV2Status">
+ * &lt;simpleType name="WSRoutingOrderV2Status">
  *   &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string">
  *     &lt;enumeration value="ACTIVE"/>
  *     &lt;enumeration value="FAILED"/>
@@ -21,9 +21,9 @@ import javax.xml.bind.annotation.XmlType;
  * </pre>
  * 
  */
-@XmlType(name = "wsRoutingOrderV2Status")
+@XmlType(name = "WSRoutingOrderV2Status")
 @XmlEnum
-public enum WsRoutingOrderV2Status {
+public enum WSRoutingOrderV2Status {
 
     ACTIVE,
     FAILED,
@@ -33,7 +33,7 @@ public enum WsRoutingOrderV2Status {
         return name();
     }
 
-    public static WsRoutingOrderV2Status fromValue(String v) {
+    public static WSRoutingOrderV2Status fromValue(String v) {
         return valueOf(v);
     }
 

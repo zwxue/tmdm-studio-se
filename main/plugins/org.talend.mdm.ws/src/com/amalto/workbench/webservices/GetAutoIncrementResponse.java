@@ -17,7 +17,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="return" type="{http://www.talend.com/mdm}wsAutoIncrement" minOccurs="0"/>
+ *         &lt;element name="return" type="{http://www.talend.com/mdm}WSAutoIncrement" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -33,7 +33,7 @@ import javax.xml.bind.annotation.XmlType;
 public class GetAutoIncrementResponse {
 
     @XmlElement(name = "return")
-    protected WsAutoIncrement _return;
+    protected WSAutoIncrement _return;
 
     /**
      * Default no-arg constructor
@@ -47,7 +47,7 @@ public class GetAutoIncrementResponse {
      * Fully-initialising value constructor
      * 
      */
-    public GetAutoIncrementResponse(final WsAutoIncrement _return) {
+    public GetAutoIncrementResponse(final WSAutoIncrement _return) {
         this._return = _return;
     }
 
@@ -56,10 +56,10 @@ public class GetAutoIncrementResponse {
      * 
      * @return
      *     possible object is
-     *     {@link WsAutoIncrement }
+     *     {@link WSAutoIncrement }
      *     
      */
-    public WsAutoIncrement getReturn() {
+    public WSAutoIncrement getReturn() {
         return _return;
     }
 
@@ -68,10 +68,10 @@ public class GetAutoIncrementResponse {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsAutoIncrement }
+     *     {@link WSAutoIncrement }
      *     
      */
-    public void setReturn(WsAutoIncrement value) {
+    public void setReturn(WSAutoIncrement value) {
         this._return = value;
     }
 

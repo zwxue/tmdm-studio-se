@@ -7,12 +7,12 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsGetItemsSort complex type.
+ * <p>Java class for WSGetItemsSort complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsGetItemsSort">
+ * &lt;complexType name="WSGetItemsSort">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
@@ -23,8 +23,8 @@ import javax.xml.bind.annotation.XmlType;
  *         &lt;element name="sort" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="spellTreshold" type="{http://www.w3.org/2001/XMLSchema}int"/>
  *         &lt;element name="totalCountOnFirstResult" type="{http://www.w3.org/2001/XMLSchema}boolean" minOccurs="0"/>
- *         &lt;element name="whereItem" type="{http://www.talend.com/mdm}wsWhereItem" minOccurs="0"/>
- *         &lt;element name="wsDataClusterPK" type="{http://www.talend.com/mdm}wsDataClusterPK" minOccurs="0"/>
+ *         &lt;element name="whereItem" type="{http://www.talend.com/mdm}WSWhereItem" minOccurs="0"/>
+ *         &lt;element name="wsDataClusterPK" type="{http://www.talend.com/mdm}WSDataClusterPK" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -34,7 +34,7 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsGetItemsSort", propOrder = {
+@XmlType(name = "WSGetItemsSort", propOrder = {
     "conceptName",
     "dir",
     "maxItems",
@@ -45,7 +45,7 @@ import javax.xml.bind.annotation.XmlType;
     "whereItem",
     "wsDataClusterPK"
 })
-public class WsGetItemsSort {
+public class WSGetItemsSort {
 
     protected String conceptName;
     protected String dir;
@@ -54,14 +54,14 @@ public class WsGetItemsSort {
     protected String sort;
     protected int spellTreshold;
     protected Boolean totalCountOnFirstResult;
-    protected WsWhereItem whereItem;
-    protected WsDataClusterPK wsDataClusterPK;
+    protected WSWhereItem whereItem;
+    protected WSDataClusterPK wsDataClusterPK;
 
     /**
      * Default no-arg constructor
      * 
      */
-    public WsGetItemsSort() {
+    public WSGetItemsSort() {
         super();
     }
 
@@ -69,7 +69,7 @@ public class WsGetItemsSort {
      * Fully-initialising value constructor
      * 
      */
-    public WsGetItemsSort(final String conceptName, final String dir, final int maxItems, final int skip, final String sort, final int spellTreshold, final Boolean totalCountOnFirstResult, final WsWhereItem whereItem, final WsDataClusterPK wsDataClusterPK) {
+    public WSGetItemsSort(final String conceptName, final String dir, final int maxItems, final int skip, final String sort, final int spellTreshold, final Boolean totalCountOnFirstResult, final WSWhereItem whereItem, final WSDataClusterPK wsDataClusterPK) {
         this.conceptName = conceptName;
         this.dir = dir;
         this.maxItems = maxItems;
@@ -230,10 +230,10 @@ public class WsGetItemsSort {
      * 
      * @return
      *     possible object is
-     *     {@link WsWhereItem }
+     *     {@link WSWhereItem }
      *     
      */
-    public WsWhereItem getWhereItem() {
+    public WSWhereItem getWhereItem() {
         return whereItem;
     }
 
@@ -242,10 +242,10 @@ public class WsGetItemsSort {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsWhereItem }
+     *     {@link WSWhereItem }
      *     
      */
-    public void setWhereItem(WsWhereItem value) {
+    public void setWhereItem(WSWhereItem value) {
         this.whereItem = value;
     }
 
@@ -254,10 +254,10 @@ public class WsGetItemsSort {
      * 
      * @return
      *     possible object is
-     *     {@link WsDataClusterPK }
+     *     {@link WSDataClusterPK }
      *     
      */
-    public WsDataClusterPK getWsDataClusterPK() {
+    public WSDataClusterPK getWsDataClusterPK() {
         return wsDataClusterPK;
     }
 
@@ -266,10 +266,10 @@ public class WsGetItemsSort {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsDataClusterPK }
+     *     {@link WSDataClusterPK }
      *     
      */
-    public void setWsDataClusterPK(WsDataClusterPK value) {
+    public void setWsDataClusterPK(WSDataClusterPK value) {
         this.wsDataClusterPK = value;
     }
 

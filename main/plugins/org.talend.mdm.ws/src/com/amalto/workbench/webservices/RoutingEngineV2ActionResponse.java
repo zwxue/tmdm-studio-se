@@ -17,7 +17,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="return" type="{http://www.talend.com/mdm}wsRoutingEngineV2Status" minOccurs="0"/>
+ *         &lt;element name="return" type="{http://www.talend.com/mdm}WSRoutingEngineV2Status" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -33,7 +33,7 @@ import javax.xml.bind.annotation.XmlType;
 public class RoutingEngineV2ActionResponse {
 
     @XmlElement(name = "return")
-    protected WsRoutingEngineV2Status _return;
+    protected WSRoutingEngineV2Status _return;
 
     /**
      * Default no-arg constructor
@@ -47,7 +47,7 @@ public class RoutingEngineV2ActionResponse {
      * Fully-initialising value constructor
      * 
      */
-    public RoutingEngineV2ActionResponse(final WsRoutingEngineV2Status _return) {
+    public RoutingEngineV2ActionResponse(final WSRoutingEngineV2Status _return) {
         this._return = _return;
     }
 
@@ -56,10 +56,10 @@ public class RoutingEngineV2ActionResponse {
      * 
      * @return
      *     possible object is
-     *     {@link WsRoutingEngineV2Status }
+     *     {@link WSRoutingEngineV2Status }
      *     
      */
-    public WsRoutingEngineV2Status getReturn() {
+    public WSRoutingEngineV2Status getReturn() {
         return _return;
     }
 
@@ -68,10 +68,10 @@ public class RoutingEngineV2ActionResponse {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsRoutingEngineV2Status }
+     *     {@link WSRoutingEngineV2Status }
      *     
      */
-    public void setReturn(WsRoutingEngineV2Status value) {
+    public void setReturn(WSRoutingEngineV2Status value) {
         this._return = value;
     }
 

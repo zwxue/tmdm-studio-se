@@ -17,7 +17,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="return" type="{http://www.talend.com/mdm}wsRoutingRulePKArray" minOccurs="0"/>
+ *         &lt;element name="return" type="{http://www.talend.com/mdm}WSRoutingRulePKArray" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -33,7 +33,7 @@ import javax.xml.bind.annotation.XmlType;
 public class GetRoutingRulePKsResponse {
 
     @XmlElement(name = "return")
-    protected WsRoutingRulePKArray _return;
+    protected WSRoutingRulePKArray _return;
 
     /**
      * Default no-arg constructor
@@ -47,7 +47,7 @@ public class GetRoutingRulePKsResponse {
      * Fully-initialising value constructor
      * 
      */
-    public GetRoutingRulePKsResponse(final WsRoutingRulePKArray _return) {
+    public GetRoutingRulePKsResponse(final WSRoutingRulePKArray _return) {
         this._return = _return;
     }
 
@@ -56,10 +56,10 @@ public class GetRoutingRulePKsResponse {
      * 
      * @return
      *     possible object is
-     *     {@link WsRoutingRulePKArray }
+     *     {@link WSRoutingRulePKArray }
      *     
      */
-    public WsRoutingRulePKArray getReturn() {
+    public WSRoutingRulePKArray getReturn() {
         return _return;
     }
 
@@ -68,10 +68,10 @@ public class GetRoutingRulePKsResponse {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsRoutingRulePKArray }
+     *     {@link WSRoutingRulePKArray }
      *     
      */
-    public void setReturn(WsRoutingRulePKArray value) {
+    public void setReturn(WSRoutingRulePKArray value) {
         this._return = value;
     }
 

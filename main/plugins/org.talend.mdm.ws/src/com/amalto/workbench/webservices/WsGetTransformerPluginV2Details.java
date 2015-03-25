@@ -7,12 +7,12 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsGetTransformerPluginV2Details complex type.
+ * <p>Java class for WSGetTransformerPluginV2Details complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsGetTransformerPluginV2Details">
+ * &lt;complexType name="WSGetTransformerPluginV2Details">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
@@ -27,11 +27,11 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsGetTransformerPluginV2Details", propOrder = {
+@XmlType(name = "WSGetTransformerPluginV2Details", propOrder = {
     "jndiName",
     "language"
 })
-public class WsGetTransformerPluginV2Details {
+public class WSGetTransformerPluginV2Details {
 
     protected String jndiName;
     protected String language;
@@ -40,7 +40,7 @@ public class WsGetTransformerPluginV2Details {
      * Default no-arg constructor
      * 
      */
-    public WsGetTransformerPluginV2Details() {
+    public WSGetTransformerPluginV2Details() {
         super();
     }
 
@@ -48,7 +48,7 @@ public class WsGetTransformerPluginV2Details {
      * Fully-initialising value constructor
      * 
      */
-    public WsGetTransformerPluginV2Details(final String jndiName, final String language) {
+    public WSGetTransformerPluginV2Details(final String jndiName, final String language) {
         this.jndiName = jndiName;
         this.language = language;
     }

@@ -10,19 +10,19 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsTransformerProcessStep complex type.
+ * <p>Java class for WSTransformerProcessStep complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsTransformerProcessStep">
+ * &lt;complexType name="WSTransformerProcessStep">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
  *         &lt;element name="description" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="disabled" type="{http://www.w3.org/2001/XMLSchema}boolean" minOccurs="0"/>
- *         &lt;element name="inputMappings" type="{http://www.talend.com/mdm}wsTransformerVariablesMapping" maxOccurs="unbounded" minOccurs="0"/>
- *         &lt;element name="outputMappings" type="{http://www.talend.com/mdm}wsTransformerVariablesMapping" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element name="inputMappings" type="{http://www.talend.com/mdm}WSTransformerVariablesMapping" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element name="outputMappings" type="{http://www.talend.com/mdm}WSTransformerVariablesMapping" maxOccurs="unbounded" minOccurs="0"/>
  *         &lt;element name="parameters" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="pluginJNDI" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *       &lt;/sequence>
@@ -34,7 +34,7 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsTransformerProcessStep", propOrder = {
+@XmlType(name = "WSTransformerProcessStep", propOrder = {
     "description",
     "disabled",
     "inputMappings",
@@ -42,14 +42,14 @@ import javax.xml.bind.annotation.XmlType;
     "parameters",
     "pluginJNDI"
 })
-public class WsTransformerProcessStep {
+public class WSTransformerProcessStep {
 
     protected String description;
     protected Boolean disabled;
     @XmlElement(nillable = true)
-    protected List<WsTransformerVariablesMapping> inputMappings;
+    protected List<WSTransformerVariablesMapping> inputMappings;
     @XmlElement(nillable = true)
-    protected List<WsTransformerVariablesMapping> outputMappings;
+    protected List<WSTransformerVariablesMapping> outputMappings;
     protected String parameters;
     protected String pluginJNDI;
 
@@ -57,7 +57,7 @@ public class WsTransformerProcessStep {
      * Default no-arg constructor
      * 
      */
-    public WsTransformerProcessStep() {
+    public WSTransformerProcessStep() {
         super();
     }
 
@@ -65,7 +65,7 @@ public class WsTransformerProcessStep {
      * Fully-initialising value constructor
      * 
      */
-    public WsTransformerProcessStep(final String description, final Boolean disabled, final List<WsTransformerVariablesMapping> inputMappings, final List<WsTransformerVariablesMapping> outputMappings, final String parameters, final String pluginJNDI) {
+    public WSTransformerProcessStep(final String description, final Boolean disabled, final List<WSTransformerVariablesMapping> inputMappings, final List<WSTransformerVariablesMapping> outputMappings, final String parameters, final String pluginJNDI) {
         this.description = description;
         this.disabled = disabled;
         this.inputMappings = inputMappings;
@@ -140,13 +140,13 @@ public class WsTransformerProcessStep {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link WsTransformerVariablesMapping }
+     * {@link WSTransformerVariablesMapping }
      * 
      * 
      */
-    public List<WsTransformerVariablesMapping> getInputMappings() {
+    public List<WSTransformerVariablesMapping> getInputMappings() {
         if (inputMappings == null) {
-            inputMappings = new ArrayList<WsTransformerVariablesMapping>();
+            inputMappings = new ArrayList<WSTransformerVariablesMapping>();
         }
         return this.inputMappings;
     }
@@ -169,13 +169,13 @@ public class WsTransformerProcessStep {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link WsTransformerVariablesMapping }
+     * {@link WSTransformerVariablesMapping }
      * 
      * 
      */
-    public List<WsTransformerVariablesMapping> getOutputMappings() {
+    public List<WSTransformerVariablesMapping> getOutputMappings() {
         if (outputMappings == null) {
-            outputMappings = new ArrayList<WsTransformerVariablesMapping>();
+            outputMappings = new ArrayList<WSTransformerVariablesMapping>();
         }
         return this.outputMappings;
     }

@@ -10,16 +10,16 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsDroppedItemPKArray complex type.
+ * <p>Java class for WSDroppedItemPKArray complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsDroppedItemPKArray">
+ * &lt;complexType name="WSDroppedItemPKArray">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="wsDroppedItemPK" type="{http://www.talend.com/mdm}wsDroppedItemPK" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element name="wsDroppedItemPK" type="{http://www.talend.com/mdm}WSDroppedItemPK" maxOccurs="unbounded" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -29,19 +29,19 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsDroppedItemPKArray", propOrder = {
+@XmlType(name = "WSDroppedItemPKArray", propOrder = {
     "wsDroppedItemPK"
 })
-public class WsDroppedItemPKArray {
+public class WSDroppedItemPKArray {
 
     @XmlElement(nillable = true)
-    protected List<WsDroppedItemPK> wsDroppedItemPK;
+    protected List<WSDroppedItemPK> wsDroppedItemPK;
 
     /**
      * Default no-arg constructor
      * 
      */
-    public WsDroppedItemPKArray() {
+    public WSDroppedItemPKArray() {
         super();
     }
 
@@ -49,7 +49,7 @@ public class WsDroppedItemPKArray {
      * Fully-initialising value constructor
      * 
      */
-    public WsDroppedItemPKArray(final List<WsDroppedItemPK> wsDroppedItemPK) {
+    public WSDroppedItemPKArray(final List<WSDroppedItemPK> wsDroppedItemPK) {
         this.wsDroppedItemPK = wsDroppedItemPK;
     }
 
@@ -71,13 +71,13 @@ public class WsDroppedItemPKArray {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link WsDroppedItemPK }
+     * {@link WSDroppedItemPK }
      * 
      * 
      */
-    public List<WsDroppedItemPK> getWsDroppedItemPK() {
+    public List<WSDroppedItemPK> getWsDroppedItemPK() {
         if (wsDroppedItemPK == null) {
-            wsDroppedItemPK = new ArrayList<WsDroppedItemPK>();
+            wsDroppedItemPK = new ArrayList<WSDroppedItemPK>();
         }
         return this.wsDroppedItemPK;
     }

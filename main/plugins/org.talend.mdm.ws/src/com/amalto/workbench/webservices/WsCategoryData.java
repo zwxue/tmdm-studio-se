@@ -7,12 +7,12 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsCategoryData complex type.
+ * <p>Java class for WSCategoryData complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsCategoryData">
+ * &lt;complexType name="WSCategoryData">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
@@ -26,10 +26,10 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsCategoryData", propOrder = {
+@XmlType(name = "WSCategoryData", propOrder = {
     "categorySchema"
 })
-public class WsCategoryData {
+public class WSCategoryData {
 
     protected String categorySchema;
 
@@ -37,7 +37,7 @@ public class WsCategoryData {
      * Default no-arg constructor
      * 
      */
-    public WsCategoryData() {
+    public WSCategoryData() {
         super();
     }
 
@@ -45,7 +45,7 @@ public class WsCategoryData {
      * Fully-initialising value constructor
      * 
      */
-    public WsCategoryData(final String categorySchema) {
+    public WSCategoryData(final String categorySchema) {
         this.categorySchema = categorySchema;
     }
 

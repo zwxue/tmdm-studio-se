@@ -16,7 +16,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="arg0" type="{http://www.talend.com/mdm}wsPutTransformerV2" minOccurs="0"/>
+ *         &lt;element name="arg0" type="{http://www.talend.com/mdm}WSPutTransformerV2" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -31,7 +31,7 @@ import javax.xml.bind.annotation.XmlType;
 })
 public class PutTransformerV2 {
 
-    protected WsPutTransformerV2 arg0;
+    protected WSPutTransformerV2 arg0;
 
     /**
      * Default no-arg constructor
@@ -45,7 +45,7 @@ public class PutTransformerV2 {
      * Fully-initialising value constructor
      * 
      */
-    public PutTransformerV2(final WsPutTransformerV2 arg0) {
+    public PutTransformerV2(final WSPutTransformerV2 arg0) {
         this.arg0 = arg0;
     }
 
@@ -54,10 +54,10 @@ public class PutTransformerV2 {
      * 
      * @return
      *     possible object is
-     *     {@link WsPutTransformerV2 }
+     *     {@link WSPutTransformerV2 }
      *     
      */
-    public WsPutTransformerV2 getArg0() {
+    public WSPutTransformerV2 getArg0() {
         return arg0;
     }
 
@@ -66,10 +66,10 @@ public class PutTransformerV2 {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsPutTransformerV2 }
+     *     {@link WSPutTransformerV2 }
      *     
      */
-    public void setArg0(WsPutTransformerV2 value) {
+    public void setArg0(WSPutTransformerV2 value) {
         this.arg0 = value;
     }
 

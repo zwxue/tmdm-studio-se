@@ -7,12 +7,12 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsDeleteItemWithReport complex type.
+ * <p>Java class for WSDeleteItemWithReport complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsDeleteItemWithReport">
+ * &lt;complexType name="WSDeleteItemWithReport">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
@@ -23,7 +23,7 @@ import javax.xml.bind.annotation.XmlType;
  *         &lt;element name="source" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="updatePath" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="user" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="wsItemPK" type="{http://www.talend.com/mdm}wsItemPK" minOccurs="0"/>
+ *         &lt;element name="wsItemPK" type="{http://www.talend.com/mdm}WSItemPK" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -33,7 +33,7 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsDeleteItemWithReport", propOrder = {
+@XmlType(name = "WSDeleteItemWithReport", propOrder = {
     "invokeBeforeSaving",
     "operateType",
     "override",
@@ -43,7 +43,7 @@ import javax.xml.bind.annotation.XmlType;
     "user",
     "wsItemPK"
 })
-public class WsDeleteItemWithReport {
+public class WSDeleteItemWithReport {
 
     protected Boolean invokeBeforeSaving;
     protected String operateType;
@@ -52,13 +52,13 @@ public class WsDeleteItemWithReport {
     protected String source;
     protected String updatePath;
     protected String user;
-    protected WsItemPK wsItemPK;
+    protected WSItemPK wsItemPK;
 
     /**
      * Default no-arg constructor
      * 
      */
-    public WsDeleteItemWithReport() {
+    public WSDeleteItemWithReport() {
         super();
     }
 
@@ -66,7 +66,7 @@ public class WsDeleteItemWithReport {
      * Fully-initialising value constructor
      * 
      */
-    public WsDeleteItemWithReport(final Boolean invokeBeforeSaving, final String operateType, final Boolean override, final Boolean pushToUpdateReport, final String source, final String updatePath, final String user, final WsItemPK wsItemPK) {
+    public WSDeleteItemWithReport(final Boolean invokeBeforeSaving, final String operateType, final Boolean override, final Boolean pushToUpdateReport, final String source, final String updatePath, final String user, final WSItemPK wsItemPK) {
         this.invokeBeforeSaving = invokeBeforeSaving;
         this.operateType = operateType;
         this.override = override;
@@ -250,10 +250,10 @@ public class WsDeleteItemWithReport {
      * 
      * @return
      *     possible object is
-     *     {@link WsItemPK }
+     *     {@link WSItemPK }
      *     
      */
-    public WsItemPK getWsItemPK() {
+    public WSItemPK getWsItemPK() {
         return wsItemPK;
     }
 
@@ -262,10 +262,10 @@ public class WsDeleteItemWithReport {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsItemPK }
+     *     {@link WSItemPK }
      *     
      */
-    public void setWsItemPK(WsItemPK value) {
+    public void setWsItemPK(WSItemPK value) {
         this.wsItemPK = value;
     }
 

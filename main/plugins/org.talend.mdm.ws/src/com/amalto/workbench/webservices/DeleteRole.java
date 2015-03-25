@@ -16,7 +16,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="arg0" type="{http://www.talend.com/mdm}wsDeleteRole" minOccurs="0"/>
+ *         &lt;element name="arg0" type="{http://www.talend.com/mdm}WSDeleteRole" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -31,7 +31,7 @@ import javax.xml.bind.annotation.XmlType;
 })
 public class DeleteRole {
 
-    protected WsDeleteRole arg0;
+    protected WSDeleteRole arg0;
 
     /**
      * Default no-arg constructor
@@ -45,7 +45,7 @@ public class DeleteRole {
      * Fully-initialising value constructor
      * 
      */
-    public DeleteRole(final WsDeleteRole arg0) {
+    public DeleteRole(final WSDeleteRole arg0) {
         this.arg0 = arg0;
     }
 
@@ -54,10 +54,10 @@ public class DeleteRole {
      * 
      * @return
      *     possible object is
-     *     {@link WsDeleteRole }
+     *     {@link WSDeleteRole }
      *     
      */
-    public WsDeleteRole getArg0() {
+    public WSDeleteRole getArg0() {
         return arg0;
     }
 
@@ -66,10 +66,10 @@ public class DeleteRole {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsDeleteRole }
+     *     {@link WSDeleteRole }
      *     
      */
-    public void setArg0(WsDeleteRole value) {
+    public void setArg0(WSDeleteRole value) {
         this.arg0 = value;
     }
 

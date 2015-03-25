@@ -16,7 +16,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="arg0" type="{http://www.talend.com/mdm}wsPutDataModel" minOccurs="0"/>
+ *         &lt;element name="arg0" type="{http://www.talend.com/mdm}WSPutDataModel" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -31,7 +31,7 @@ import javax.xml.bind.annotation.XmlType;
 })
 public class PutDataModel {
 
-    protected WsPutDataModel arg0;
+    protected WSPutDataModel arg0;
 
     /**
      * Default no-arg constructor
@@ -45,7 +45,7 @@ public class PutDataModel {
      * Fully-initialising value constructor
      * 
      */
-    public PutDataModel(final WsPutDataModel arg0) {
+    public PutDataModel(final WSPutDataModel arg0) {
         this.arg0 = arg0;
     }
 
@@ -54,10 +54,10 @@ public class PutDataModel {
      * 
      * @return
      *     possible object is
-     *     {@link WsPutDataModel }
+     *     {@link WSPutDataModel }
      *     
      */
-    public WsPutDataModel getArg0() {
+    public WSPutDataModel getArg0() {
         return arg0;
     }
 
@@ -66,10 +66,10 @@ public class PutDataModel {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsPutDataModel }
+     *     {@link WSPutDataModel }
      *     
      */
-    public void setArg0(WsPutDataModel value) {
+    public void setArg0(WSPutDataModel value) {
         this.arg0 = value;
     }
 

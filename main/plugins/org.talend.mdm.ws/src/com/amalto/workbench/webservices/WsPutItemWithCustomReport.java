@@ -7,17 +7,17 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsPutItemWithCustomReport complex type.
+ * <p>Java class for WSPutItemWithCustomReport complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsPutItemWithCustomReport">
+ * &lt;complexType name="WSPutItemWithCustomReport">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
  *         &lt;element name="user" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="wsPutItemWithReport" type="{http://www.talend.com/mdm}wsPutItemWithReport" minOccurs="0"/>
+ *         &lt;element name="wsPutItemWithReport" type="{http://www.talend.com/mdm}WSPutItemWithReport" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -27,20 +27,20 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsPutItemWithCustomReport", propOrder = {
+@XmlType(name = "WSPutItemWithCustomReport", propOrder = {
     "user",
     "wsPutItemWithReport"
 })
-public class WsPutItemWithCustomReport {
+public class WSPutItemWithCustomReport {
 
     protected String user;
-    protected WsPutItemWithReport wsPutItemWithReport;
+    protected WSPutItemWithReport wsPutItemWithReport;
 
     /**
      * Default no-arg constructor
      * 
      */
-    public WsPutItemWithCustomReport() {
+    public WSPutItemWithCustomReport() {
         super();
     }
 
@@ -48,7 +48,7 @@ public class WsPutItemWithCustomReport {
      * Fully-initialising value constructor
      * 
      */
-    public WsPutItemWithCustomReport(final String user, final WsPutItemWithReport wsPutItemWithReport) {
+    public WSPutItemWithCustomReport(final String user, final WSPutItemWithReport wsPutItemWithReport) {
         this.user = user;
         this.wsPutItemWithReport = wsPutItemWithReport;
     }
@@ -82,10 +82,10 @@ public class WsPutItemWithCustomReport {
      * 
      * @return
      *     possible object is
-     *     {@link WsPutItemWithReport }
+     *     {@link WSPutItemWithReport }
      *     
      */
-    public WsPutItemWithReport getWsPutItemWithReport() {
+    public WSPutItemWithReport getWsPutItemWithReport() {
         return wsPutItemWithReport;
     }
 
@@ -94,10 +94,10 @@ public class WsPutItemWithCustomReport {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsPutItemWithReport }
+     *     {@link WSPutItemWithReport }
      *     
      */
-    public void setWsPutItemWithReport(WsPutItemWithReport value) {
+    public void setWsPutItemWithReport(WSPutItemWithReport value) {
         this.wsPutItemWithReport = value;
     }
 

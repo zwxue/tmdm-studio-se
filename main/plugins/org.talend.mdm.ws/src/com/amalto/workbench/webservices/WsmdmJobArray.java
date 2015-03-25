@@ -10,16 +10,16 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsmdmJobArray complex type.
+ * <p>Java class for WSMDMJobArray complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsmdmJobArray">
+ * &lt;complexType name="WSMDMJobArray">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="wsMDMJob" type="{http://www.talend.com/mdm}wsmdmJob" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element name="wsMDMJob" type="{http://www.talend.com/mdm}WSMDMJob" maxOccurs="unbounded" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -29,19 +29,19 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsmdmJobArray", propOrder = {
+@XmlType(name = "WSMDMJobArray", propOrder = {
     "wsMDMJob"
 })
-public class WsmdmJobArray {
+public class WSMDMJobArray {
 
     @XmlElement(nillable = true)
-    protected List<WsmdmJob> wsMDMJob;
+    protected List<WSMDMJob> wsMDMJob;
 
     /**
      * Default no-arg constructor
      * 
      */
-    public WsmdmJobArray() {
+    public WSMDMJobArray() {
         super();
     }
 
@@ -49,7 +49,7 @@ public class WsmdmJobArray {
      * Fully-initialising value constructor
      * 
      */
-    public WsmdmJobArray(final List<WsmdmJob> wsMDMJob) {
+    public WSMDMJobArray(final List<WSMDMJob> wsMDMJob) {
         this.wsMDMJob = wsMDMJob;
     }
 
@@ -71,13 +71,13 @@ public class WsmdmJobArray {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link WsmdmJob }
+     * {@link WSMDMJob }
      * 
      * 
      */
-    public List<WsmdmJob> getWsMDMJob() {
+    public List<WSMDMJob> getWsMDMJob() {
         if (wsMDMJob == null) {
-            wsMDMJob = new ArrayList<WsmdmJob>();
+            wsMDMJob = new ArrayList<WSMDMJob>();
         }
         return this.wsMDMJob;
     }

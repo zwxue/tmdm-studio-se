@@ -7,12 +7,12 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsBackgroundJob complex type.
+ * <p>Java class for WSBackgroundJob complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsBackgroundJob">
+ * &lt;complexType name="WSBackgroundJob">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
@@ -20,9 +20,9 @@ import javax.xml.bind.annotation.XmlType;
  *         &lt;element name="id" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="message" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="percentage" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
- *         &lt;element name="pipeline" type="{http://www.talend.com/mdm}wsPipeline" minOccurs="0"/>
+ *         &lt;element name="pipeline" type="{http://www.talend.com/mdm}WSPipeline" minOccurs="0"/>
  *         &lt;element name="serializedObject" type="{http://www.w3.org/2001/XMLSchema}base64Binary" minOccurs="0"/>
- *         &lt;element name="status" type="{http://www.talend.com/mdm}backgroundJobStatusType" minOccurs="0"/>
+ *         &lt;element name="status" type="{http://www.talend.com/mdm}BackgroundJobStatusType" minOccurs="0"/>
  *         &lt;element name="timestamp" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
@@ -33,7 +33,7 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsBackgroundJob", propOrder = {
+@XmlType(name = "WSBackgroundJob", propOrder = {
     "description",
     "id",
     "message",
@@ -43,13 +43,13 @@ import javax.xml.bind.annotation.XmlType;
     "status",
     "timestamp"
 })
-public class WsBackgroundJob {
+public class WSBackgroundJob {
 
     protected String description;
     protected String id;
     protected String message;
     protected Integer percentage;
-    protected WsPipeline pipeline;
+    protected WSPipeline pipeline;
     protected byte[] serializedObject;
     protected BackgroundJobStatusType status;
     protected String timestamp;
@@ -58,7 +58,7 @@ public class WsBackgroundJob {
      * Default no-arg constructor
      * 
      */
-    public WsBackgroundJob() {
+    public WSBackgroundJob() {
         super();
     }
 
@@ -66,7 +66,7 @@ public class WsBackgroundJob {
      * Fully-initialising value constructor
      * 
      */
-    public WsBackgroundJob(final String description, final String id, final String message, final Integer percentage, final WsPipeline pipeline, final byte[] serializedObject, final BackgroundJobStatusType status, final String timestamp) {
+    public WSBackgroundJob(final String description, final String id, final String message, final Integer percentage, final WSPipeline pipeline, final byte[] serializedObject, final BackgroundJobStatusType status, final String timestamp) {
         this.description = description;
         this.id = id;
         this.message = message;
@@ -178,10 +178,10 @@ public class WsBackgroundJob {
      * 
      * @return
      *     possible object is
-     *     {@link WsPipeline }
+     *     {@link WSPipeline }
      *     
      */
-    public WsPipeline getPipeline() {
+    public WSPipeline getPipeline() {
         return pipeline;
     }
 
@@ -190,10 +190,10 @@ public class WsBackgroundJob {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsPipeline }
+     *     {@link WSPipeline }
      *     
      */
-    public void setPipeline(WsPipeline value) {
+    public void setPipeline(WSPipeline value) {
         this.pipeline = value;
     }
 

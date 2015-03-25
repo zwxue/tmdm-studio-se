@@ -10,19 +10,19 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsServiceAction complex type.
+ * <p>Java class for WSServiceAction complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsServiceAction">
+ * &lt;complexType name="WSServiceAction">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
  *         &lt;element name="jndiName" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="methodName" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="methodParameters" type="{http://www.w3.org/2001/XMLSchema}string" maxOccurs="unbounded" minOccurs="0"/>
- *         &lt;element name="wsAction" type="{http://www.talend.com/mdm}wsServiceActionCode" minOccurs="0"/>
+ *         &lt;element name="wsAction" type="{http://www.talend.com/mdm}WSServiceActionCode" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -32,25 +32,25 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsServiceAction", propOrder = {
+@XmlType(name = "WSServiceAction", propOrder = {
     "jndiName",
     "methodName",
     "methodParameters",
     "wsAction"
 })
-public class WsServiceAction {
+public class WSServiceAction {
 
     protected String jndiName;
     protected String methodName;
     @XmlElement(nillable = true)
     protected List<String> methodParameters;
-    protected WsServiceActionCode wsAction;
+    protected WSServiceActionCode wsAction;
 
     /**
      * Default no-arg constructor
      * 
      */
-    public WsServiceAction() {
+    public WSServiceAction() {
         super();
     }
 
@@ -58,7 +58,7 @@ public class WsServiceAction {
      * Fully-initialising value constructor
      * 
      */
-    public WsServiceAction(final String jndiName, final String methodName, final List<String> methodParameters, final WsServiceActionCode wsAction) {
+    public WSServiceAction(final String jndiName, final String methodName, final List<String> methodParameters, final WSServiceActionCode wsAction) {
         this.jndiName = jndiName;
         this.methodName = methodName;
         this.methodParameters = methodParameters;
@@ -147,10 +147,10 @@ public class WsServiceAction {
      * 
      * @return
      *     possible object is
-     *     {@link WsServiceActionCode }
+     *     {@link WSServiceActionCode }
      *     
      */
-    public WsServiceActionCode getWsAction() {
+    public WSServiceActionCode getWsAction() {
         return wsAction;
     }
 
@@ -159,10 +159,10 @@ public class WsServiceAction {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsServiceActionCode }
+     *     {@link WSServiceActionCode }
      *     
      */
-    public void setWsAction(WsServiceActionCode value) {
+    public void setWsAction(WSServiceActionCode value) {
         this.wsAction = value;
     }
 

@@ -17,7 +17,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="return" type="{http://www.talend.com/mdm}wsMenuPK" minOccurs="0"/>
+ *         &lt;element name="return" type="{http://www.talend.com/mdm}WSMenuPK" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -33,7 +33,7 @@ import javax.xml.bind.annotation.XmlType;
 public class PutMenuResponse {
 
     @XmlElement(name = "return")
-    protected WsMenuPK _return;
+    protected WSMenuPK _return;
 
     /**
      * Default no-arg constructor
@@ -47,7 +47,7 @@ public class PutMenuResponse {
      * Fully-initialising value constructor
      * 
      */
-    public PutMenuResponse(final WsMenuPK _return) {
+    public PutMenuResponse(final WSMenuPK _return) {
         this._return = _return;
     }
 
@@ -56,10 +56,10 @@ public class PutMenuResponse {
      * 
      * @return
      *     possible object is
-     *     {@link WsMenuPK }
+     *     {@link WSMenuPK }
      *     
      */
-    public WsMenuPK getReturn() {
+    public WSMenuPK getReturn() {
         return _return;
     }
 
@@ -68,10 +68,10 @@ public class PutMenuResponse {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsMenuPK }
+     *     {@link WSMenuPK }
      *     
      */
-    public void setReturn(WsMenuPK value) {
+    public void setReturn(WSMenuPK value) {
         this._return = value;
     }
 

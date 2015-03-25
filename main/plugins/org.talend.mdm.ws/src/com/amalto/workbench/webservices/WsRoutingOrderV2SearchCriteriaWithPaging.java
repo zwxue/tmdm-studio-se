@@ -7,12 +7,12 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsRoutingOrderV2SearchCriteriaWithPaging complex type.
+ * <p>Java class for WSRoutingOrderV2SearchCriteriaWithPaging complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsRoutingOrderV2SearchCriteriaWithPaging">
+ * &lt;complexType name="WSRoutingOrderV2SearchCriteriaWithPaging">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
@@ -25,7 +25,7 @@ import javax.xml.bind.annotation.XmlType;
  *         &lt;element name="serviceJNDIContains" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="serviceParametersContain" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="skip" type="{http://www.w3.org/2001/XMLSchema}int"/>
- *         &lt;element name="status" type="{http://www.talend.com/mdm}wsRoutingOrderV2Status" minOccurs="0"/>
+ *         &lt;element name="status" type="{http://www.talend.com/mdm}WSRoutingOrderV2Status" minOccurs="0"/>
  *         &lt;element name="timeCreatedMax" type="{http://www.w3.org/2001/XMLSchema}long"/>
  *         &lt;element name="timeCreatedMin" type="{http://www.w3.org/2001/XMLSchema}long"/>
  *         &lt;element name="timeLastRunCompletedMax" type="{http://www.w3.org/2001/XMLSchema}long"/>
@@ -44,7 +44,7 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsRoutingOrderV2SearchCriteriaWithPaging", propOrder = {
+@XmlType(name = "WSRoutingOrderV2SearchCriteriaWithPaging", propOrder = {
     "anyFieldContains",
     "itemPKConceptContains",
     "itemPKIDFieldsContain",
@@ -65,7 +65,7 @@ import javax.xml.bind.annotation.XmlType;
     "timeScheduledMin",
     "totalCountOnFirstResult"
 })
-public class WsRoutingOrderV2SearchCriteriaWithPaging {
+public class WSRoutingOrderV2SearchCriteriaWithPaging {
 
     protected String anyFieldContains;
     protected String itemPKConceptContains;
@@ -76,7 +76,7 @@ public class WsRoutingOrderV2SearchCriteriaWithPaging {
     protected String serviceJNDIContains;
     protected String serviceParametersContain;
     protected int skip;
-    protected WsRoutingOrderV2Status status;
+    protected WSRoutingOrderV2Status status;
     protected long timeCreatedMax;
     protected long timeCreatedMin;
     protected long timeLastRunCompletedMax;
@@ -91,7 +91,7 @@ public class WsRoutingOrderV2SearchCriteriaWithPaging {
      * Default no-arg constructor
      * 
      */
-    public WsRoutingOrderV2SearchCriteriaWithPaging() {
+    public WSRoutingOrderV2SearchCriteriaWithPaging() {
         super();
     }
 
@@ -99,7 +99,7 @@ public class WsRoutingOrderV2SearchCriteriaWithPaging {
      * Fully-initialising value constructor
      * 
      */
-    public WsRoutingOrderV2SearchCriteriaWithPaging(final String anyFieldContains, final String itemPKConceptContains, final String itemPKIDFieldsContain, final int maxItems, final String messageContain, final String nameContains, final String serviceJNDIContains, final String serviceParametersContain, final int skip, final WsRoutingOrderV2Status status, final long timeCreatedMax, final long timeCreatedMin, final long timeLastRunCompletedMax, final long timeLastRunCompletedMin, final long timeLastRunStartedMax, final long timeLastRunStartedMin, final long timeScheduledMax, final long timeScheduledMin, final Boolean totalCountOnFirstResult) {
+    public WSRoutingOrderV2SearchCriteriaWithPaging(final String anyFieldContains, final String itemPKConceptContains, final String itemPKIDFieldsContain, final int maxItems, final String messageContain, final String nameContains, final String serviceJNDIContains, final String serviceParametersContain, final int skip, final WSRoutingOrderV2Status status, final long timeCreatedMax, final long timeCreatedMin, final long timeLastRunCompletedMax, final long timeLastRunCompletedMin, final long timeLastRunStartedMax, final long timeLastRunStartedMin, final long timeScheduledMax, final long timeScheduledMin, final Boolean totalCountOnFirstResult) {
         this.anyFieldContains = anyFieldContains;
         this.itemPKConceptContains = itemPKConceptContains;
         this.itemPKIDFieldsContain = itemPKIDFieldsContain;
@@ -326,10 +326,10 @@ public class WsRoutingOrderV2SearchCriteriaWithPaging {
      * 
      * @return
      *     possible object is
-     *     {@link WsRoutingOrderV2Status }
+     *     {@link WSRoutingOrderV2Status }
      *     
      */
-    public WsRoutingOrderV2Status getStatus() {
+    public WSRoutingOrderV2Status getStatus() {
         return status;
     }
 
@@ -338,10 +338,10 @@ public class WsRoutingOrderV2SearchCriteriaWithPaging {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsRoutingOrderV2Status }
+     *     {@link WSRoutingOrderV2Status }
      *     
      */
-    public void setStatus(WsRoutingOrderV2Status value) {
+    public void setStatus(WSRoutingOrderV2Status value) {
         this.status = value;
     }
 

@@ -17,7 +17,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="return" type="{http://www.talend.com/mdm}wsInt" minOccurs="0"/>
+ *         &lt;element name="return" type="{http://www.talend.com/mdm}WSInt" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -33,7 +33,7 @@ import javax.xml.bind.annotation.XmlType;
 public class DeleteItemsResponse {
 
     @XmlElement(name = "return")
-    protected WsInt _return;
+    protected WSInt _return;
 
     /**
      * Default no-arg constructor
@@ -47,7 +47,7 @@ public class DeleteItemsResponse {
      * Fully-initialising value constructor
      * 
      */
-    public DeleteItemsResponse(final WsInt _return) {
+    public DeleteItemsResponse(final WSInt _return) {
         this._return = _return;
     }
 
@@ -56,10 +56,10 @@ public class DeleteItemsResponse {
      * 
      * @return
      *     possible object is
-     *     {@link WsInt }
+     *     {@link WSInt }
      *     
      */
-    public WsInt getReturn() {
+    public WSInt getReturn() {
         return _return;
     }
 
@@ -68,10 +68,10 @@ public class DeleteItemsResponse {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsInt }
+     *     {@link WSInt }
      *     
      */
-    public void setReturn(WsInt value) {
+    public void setReturn(WSInt value) {
         this._return = value;
     }
 

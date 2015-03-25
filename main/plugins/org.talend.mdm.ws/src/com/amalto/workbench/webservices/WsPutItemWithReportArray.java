@@ -10,16 +10,16 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsPutItemWithReportArray complex type.
+ * <p>Java class for WSPutItemWithReportArray complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsPutItemWithReportArray">
+ * &lt;complexType name="WSPutItemWithReportArray">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="wsPutItem" type="{http://www.talend.com/mdm}wsPutItemWithReport" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element name="wsPutItem" type="{http://www.talend.com/mdm}WSPutItemWithReport" maxOccurs="unbounded" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -29,19 +29,19 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsPutItemWithReportArray", propOrder = {
+@XmlType(name = "WSPutItemWithReportArray", propOrder = {
     "wsPutItem"
 })
-public class WsPutItemWithReportArray {
+public class WSPutItemWithReportArray {
 
     @XmlElement(nillable = true)
-    protected List<WsPutItemWithReport> wsPutItem;
+    protected List<WSPutItemWithReport> wsPutItem;
 
     /**
      * Default no-arg constructor
      * 
      */
-    public WsPutItemWithReportArray() {
+    public WSPutItemWithReportArray() {
         super();
     }
 
@@ -49,7 +49,7 @@ public class WsPutItemWithReportArray {
      * Fully-initialising value constructor
      * 
      */
-    public WsPutItemWithReportArray(final List<WsPutItemWithReport> wsPutItem) {
+    public WSPutItemWithReportArray(final List<WSPutItemWithReport> wsPutItem) {
         this.wsPutItem = wsPutItem;
     }
 
@@ -71,13 +71,13 @@ public class WsPutItemWithReportArray {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link WsPutItemWithReport }
+     * {@link WSPutItemWithReport }
      * 
      * 
      */
-    public List<WsPutItemWithReport> getWsPutItem() {
+    public List<WSPutItemWithReport> getWsPutItem() {
         if (wsPutItem == null) {
-            wsPutItem = new ArrayList<WsPutItemWithReport>();
+            wsPutItem = new ArrayList<WSPutItemWithReport>();
         }
         return this.wsPutItem;
     }

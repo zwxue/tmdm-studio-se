@@ -17,7 +17,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="return" type="{http://www.talend.com/mdm}wsPipeline" minOccurs="0"/>
+ *         &lt;element name="return" type="{http://www.talend.com/mdm}WSPipeline" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -33,7 +33,7 @@ import javax.xml.bind.annotation.XmlType;
 public class ProcessBytesUsingTransformerResponse {
 
     @XmlElement(name = "return")
-    protected WsPipeline _return;
+    protected WSPipeline _return;
 
     /**
      * Default no-arg constructor
@@ -47,7 +47,7 @@ public class ProcessBytesUsingTransformerResponse {
      * Fully-initialising value constructor
      * 
      */
-    public ProcessBytesUsingTransformerResponse(final WsPipeline _return) {
+    public ProcessBytesUsingTransformerResponse(final WSPipeline _return) {
         this._return = _return;
     }
 
@@ -56,10 +56,10 @@ public class ProcessBytesUsingTransformerResponse {
      * 
      * @return
      *     possible object is
-     *     {@link WsPipeline }
+     *     {@link WSPipeline }
      *     
      */
-    public WsPipeline getReturn() {
+    public WSPipeline getReturn() {
         return _return;
     }
 
@@ -68,10 +68,10 @@ public class ProcessBytesUsingTransformerResponse {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsPipeline }
+     *     {@link WSPipeline }
      *     
      */
-    public void setReturn(WsPipeline value) {
+    public void setReturn(WSPipeline value) {
         this._return = value;
     }
 

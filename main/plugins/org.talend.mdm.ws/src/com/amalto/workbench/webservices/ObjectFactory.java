@@ -2283,1675 +2283,1675 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link WsGetItemsSort }
+     * Create an instance of {@link WSRegexStoredProcedure }
      * 
      */
-    public WsGetItemsSort createWsGetItemsSort() {
-        return new WsGetItemsSort();
+    public WSRegexStoredProcedure createWSRegexStoredProcedure() {
+        return new WSRegexStoredProcedure();
     }
 
     /**
-     * Create an instance of {@link WsPutItemWithReportArray }
+     * Create an instance of {@link WSDeleteRoutingRule }
      * 
      */
-    public WsPutItemWithReportArray createWsPutItemWithReportArray() {
-        return new WsPutItemWithReportArray();
+    public WSDeleteRoutingRule createWSDeleteRoutingRule() {
+        return new WSDeleteRoutingRule();
     }
 
     /**
-     * Create an instance of {@link WsRemoveDroppedItem }
+     * Create an instance of {@link WSDataCluster }
      * 
      */
-    public WsRemoveDroppedItem createWsRemoveDroppedItem() {
-        return new WsRemoveDroppedItem();
+    public WSDataCluster createWSDataCluster() {
+        return new WSDataCluster();
     }
 
     /**
-     * Create an instance of {@link WsGetRole }
+     * Create an instance of {@link WSTransformerPK }
      * 
      */
-    public WsGetRole createWsGetRole() {
-        return new WsGetRole();
+    public WSTransformerPK createWSTransformerPK() {
+        return new WSTransformerPK();
     }
 
     /**
-     * Create an instance of {@link WsPutDataModel }
+     * Create an instance of {@link WSGetTransformer }
      * 
      */
-    public WsPutDataModel createWsPutDataModel() {
-        return new WsPutDataModel();
+    public WSGetTransformer createWSGetTransformer() {
+        return new WSGetTransformer();
     }
 
     /**
-     * Create an instance of {@link WsRoutingOrderV2 }
+     * Create an instance of {@link WSMenu }
      * 
      */
-    public WsRoutingOrderV2 createWsRoutingOrderV2() {
-        return new WsRoutingOrderV2();
+    public WSMenu createWSMenu() {
+        return new WSMenu();
     }
 
     /**
-     * Create an instance of {@link WsMenuMenuEntriesDescriptions }
+     * Create an instance of {@link WSPutItemWithReport }
      * 
      */
-    public WsMenuMenuEntriesDescriptions createWsMenuMenuEntriesDescriptions() {
-        return new WsMenuMenuEntriesDescriptions();
+    public WSPutItemWithReport createWSPutItemWithReport() {
+        return new WSPutItemWithReport();
     }
 
     /**
-     * Create an instance of {@link WsInitData }
+     * Create an instance of {@link WSDeleteDataCluster }
      * 
      */
-    public WsInitData createWsInitData() {
-        return new WsInitData();
+    public WSDeleteDataCluster createWSDeleteDataCluster() {
+        return new WSDeleteDataCluster();
     }
 
     /**
-     * Create an instance of {@link WsGetItem }
+     * Create an instance of {@link WSTypedContent }
      * 
      */
-    public WsGetItem createWsGetItem() {
-        return new WsGetItem();
+    public WSTypedContent createWSTypedContent() {
+        return new WSTypedContent();
     }
 
     /**
-     * Create an instance of {@link WsAutoIncrement }
+     * Create an instance of {@link WSTransformerPluginV2VariableDescriptor }
      * 
      */
-    public WsAutoIncrement createWsAutoIncrement() {
-        return new WsAutoIncrement();
+    public WSTransformerPluginV2VariableDescriptor createWSTransformerPluginV2VariableDescriptor() {
+        return new WSTransformerPluginV2VariableDescriptor();
     }
 
     /**
-     * Create an instance of {@link WsView }
+     * Create an instance of {@link WSExecuteTransformerV2 }
      * 
      */
-    public WsView createWsView() {
-        return new WsView();
+    public WSExecuteTransformerV2 createWSExecuteTransformerV2() {
+        return new WSExecuteTransformerV2();
     }
 
     /**
-     * Create an instance of {@link WsTransformerContextPipelinePipelineItem }
+     * Create an instance of {@link WSGetComponentVersion }
      * 
      */
-    public WsTransformerContextPipelinePipelineItem createWsTransformerContextPipelinePipelineItem() {
-        return new WsTransformerContextPipelinePipelineItem();
+    public WSGetComponentVersion createWSGetComponentVersion() {
+        return new WSGetComponentVersion();
     }
 
     /**
-     * Create an instance of {@link WsPutBackgroundJob }
+     * Create an instance of {@link WSTransformerContextPipelinePipelineItem }
      * 
      */
-    public WsPutBackgroundJob createWsPutBackgroundJob() {
-        return new WsPutBackgroundJob();
+    public WSTransformerContextPipelinePipelineItem createWSTransformerContextPipelinePipelineItem() {
+        return new WSTransformerContextPipelinePipelineItem();
     }
 
     /**
-     * Create an instance of {@link WsGetTransformerPKs }
+     * Create an instance of {@link WSRoutingOrderV2SearchCriteria }
      * 
      */
-    public WsGetTransformerPKs createWsGetTransformerPKs() {
-        return new WsGetTransformerPKs();
+    public WSRoutingOrderV2SearchCriteria createWSRoutingOrderV2SearchCriteria() {
+        return new WSRoutingOrderV2SearchCriteria();
     }
 
     /**
-     * Create an instance of {@link WsPutTransformer }
+     * Create an instance of {@link WSTransformerPluginV2GetConfiguration }
      * 
      */
-    public WsPutTransformer createWsPutTransformer() {
-        return new WsPutTransformer();
+    public WSTransformerPluginV2GetConfiguration createWSTransformerPluginV2GetConfiguration() {
+        return new WSTransformerPluginV2GetConfiguration();
     }
 
     /**
-     * Create an instance of {@link WsExecuteTransformerV2 }
+     * Create an instance of {@link WSExecuteTransformerV2AsJob }
      * 
      */
-    public WsExecuteTransformerV2 createWsExecuteTransformerV2() {
-        return new WsExecuteTransformerV2();
+    public WSExecuteTransformerV2AsJob createWSExecuteTransformerV2AsJob() {
+        return new WSExecuteTransformerV2AsJob();
     }
 
     /**
-     * Create an instance of {@link WsStoredProcedurePK }
+     * Create an instance of {@link WSGetBusinessConceptValue }
      * 
      */
-    public WsStoredProcedurePK createWsStoredProcedurePK() {
-        return new WsStoredProcedurePK();
+    public WSGetBusinessConceptValue createWSGetBusinessConceptValue() {
+        return new WSGetBusinessConceptValue();
     }
 
     /**
-     * Create an instance of {@link WsPipelineTypedContentEntry }
+     * Create an instance of {@link WSExistsDataModel }
      * 
      */
-    public WsPipelineTypedContentEntry createWsPipelineTypedContentEntry() {
-        return new WsPipelineTypedContentEntry();
+    public WSExistsDataModel createWSExistsDataModel() {
+        return new WSExistsDataModel();
     }
 
     /**
-     * Create an instance of {@link WsCategoryData }
+     * Create an instance of {@link WSDataClusterPKArray }
      * 
      */
-    public WsCategoryData createWsCategoryData() {
-        return new WsCategoryData();
+    public WSDataClusterPKArray createWSDataClusterPKArray() {
+        return new WSDataClusterPKArray();
     }
 
     /**
-     * Create an instance of {@link WsRoleSpecificationInstance }
+     * Create an instance of {@link WSProcessBytesUsingTransformer }
      * 
      */
-    public WsRoleSpecificationInstance createWsRoleSpecificationInstance() {
-        return new WsRoleSpecificationInstance();
+    public WSProcessBytesUsingTransformer createWSProcessBytesUsingTransformer() {
+        return new WSProcessBytesUsingTransformer();
     }
 
     /**
-     * Create an instance of {@link WsTransformerProcessStep }
+     * Create an instance of {@link WSRegexDataModelPKs }
      * 
      */
-    public WsTransformerProcessStep createWsTransformerProcessStep() {
-        return new WsTransformerProcessStep();
+    public WSRegexDataModelPKs createWSRegexDataModelPKs() {
+        return new WSRegexDataModelPKs();
     }
 
     /**
-     * Create an instance of {@link WsDeleteView }
+     * Create an instance of {@link WSFindAllDroppedItemsPKs }
      * 
      */
-    public WsDeleteView createWsDeleteView() {
-        return new WsDeleteView();
+    public WSFindAllDroppedItemsPKs createWSFindAllDroppedItemsPKs() {
+        return new WSFindAllDroppedItemsPKs();
     }
 
     /**
-     * Create an instance of {@link WsRoleSpecification }
+     * Create an instance of {@link WSDropItem }
      * 
      */
-    public WsRoleSpecification createWsRoleSpecification() {
-        return new WsRoleSpecification();
+    public WSDropItem createWSDropItem() {
+        return new WSDropItem();
     }
 
     /**
-     * Create an instance of {@link WsServicesList }
+     * Create an instance of {@link WSMenuPK }
      * 
      */
-    public WsServicesList createWsServicesList() {
-        return new WsServicesList();
+    public WSMenuPK createWSMenuPK() {
+        return new WSMenuPK();
     }
 
     /**
-     * Create an instance of {@link WsTransformerPluginV2GetConfiguration }
+     * Create an instance of {@link WSDeleteMenu }
      * 
      */
-    public WsTransformerPluginV2GetConfiguration createWsTransformerPluginV2GetConfiguration() {
-        return new WsTransformerPluginV2GetConfiguration();
+    public WSDeleteMenu createWSDeleteMenu() {
+        return new WSDeleteMenu();
     }
 
     /**
-     * Create an instance of {@link WsGetRolePKs }
+     * Create an instance of {@link WSPutItemWithCustomReport }
      * 
      */
-    public WsGetRolePKs createWsGetRolePKs() {
-        return new WsGetRolePKs();
+    public WSPutItemWithCustomReport createWSPutItemWithCustomReport() {
+        return new WSPutItemWithCustomReport();
     }
 
     /**
-     * Create an instance of {@link WsTransformer }
+     * Create an instance of {@link WSGetTransformerPKs }
      * 
      */
-    public WsTransformer createWsTransformer() {
-        return new WsTransformer();
+    public WSGetTransformerPKs createWSGetTransformerPKs() {
+        return new WSGetTransformerPKs();
     }
 
     /**
-     * Create an instance of {@link WsPutItemWithCustomReport }
+     * Create an instance of {@link WSExistsTransformerV2 }
      * 
      */
-    public WsPutItemWithCustomReport createWsPutItemWithCustomReport() {
-        return new WsPutItemWithCustomReport();
+    public WSExistsTransformerV2 createWSExistsTransformerV2() {
+        return new WSExistsTransformerV2();
     }
 
     /**
-     * Create an instance of {@link WsVersion }
+     * Create an instance of {@link WSGetMenuPKs }
      * 
      */
-    public WsVersion createWsVersion() {
-        return new WsVersion();
+    public WSGetMenuPKs createWSGetMenuPKs() {
+        return new WSGetMenuPKs();
     }
 
     /**
-     * Create an instance of {@link WsItemPKsByCriteriaResponseResults }
+     * Create an instance of {@link WSInt }
      * 
      */
-    public WsItemPKsByCriteriaResponseResults createWsItemPKsByCriteriaResponseResults() {
-        return new WsItemPKsByCriteriaResponseResults();
+    public WSInt createWSInt() {
+        return new WSInt();
     }
 
     /**
-     * Create an instance of {@link WsDroppedItemPKArray }
+     * Create an instance of {@link WSServicesList }
      * 
      */
-    public WsDroppedItemPKArray createWsDroppedItemPKArray() {
-        return new WsDroppedItemPKArray();
+    public WSServicesList createWSServicesList() {
+        return new WSServicesList();
     }
 
     /**
-     * Create an instance of {@link WsTransformerVariablesMapping }
+     * Create an instance of {@link WSRoutingOrderV2Array }
      * 
      */
-    public WsTransformerVariablesMapping createWsTransformerVariablesMapping() {
-        return new WsTransformerVariablesMapping();
+    public WSRoutingOrderV2Array createWSRoutingOrderV2Array() {
+        return new WSRoutingOrderV2Array();
     }
 
     /**
-     * Create an instance of {@link WsStoredProcedurePKArray }
+     * Create an instance of {@link WSPutRoutingRule }
      * 
      */
-    public WsStoredProcedurePKArray createWsStoredProcedurePKArray() {
-        return new WsStoredProcedurePKArray();
+    public WSPutRoutingRule createWSPutRoutingRule() {
+        return new WSPutRoutingRule();
     }
 
     /**
-     * Create an instance of {@link WsGetTransformerPluginV2SList }
+     * Create an instance of {@link WSFindBackgroundJobPKs }
      * 
      */
-    public WsGetTransformerPluginV2SList createWsGetTransformerPluginV2SList() {
-        return new WsGetTransformerPluginV2SList();
+    public WSFindBackgroundJobPKs createWSFindBackgroundJobPKs() {
+        return new WSFindBackgroundJobPKs();
     }
 
     /**
-     * Create an instance of {@link WsGetRoutingRule }
+     * Create an instance of {@link WSItemPKsByCriteriaResponse }
      * 
      */
-    public WsGetRoutingRule createWsGetRoutingRule() {
-        return new WsGetRoutingRule();
+    public WSItemPKsByCriteriaResponse createWSItemPKsByCriteriaResponse() {
+        return new WSItemPKsByCriteriaResponse();
     }
 
     /**
-     * Create an instance of {@link WsInt }
+     * Create an instance of {@link WSWhereAnd }
      * 
      */
-    public WsInt createWsInt() {
-        return new WsInt();
+    public WSWhereAnd createWSWhereAnd() {
+        return new WSWhereAnd();
     }
 
     /**
-     * Create an instance of {@link WsRegexDataModelPKs }
+     * Create an instance of {@link WSServicesListItem }
      * 
      */
-    public WsRegexDataModelPKs createWsRegexDataModelPKs() {
-        return new WsRegexDataModelPKs();
+    public WSServicesListItem createWSServicesListItem() {
+        return new WSServicesListItem();
     }
 
     /**
-     * Create an instance of {@link WsPartialPutItem }
+     * Create an instance of {@link WSConceptKey }
      * 
      */
-    public WsPartialPutItem createWsPartialPutItem() {
-        return new WsPartialPutItem();
+    public WSConceptKey createWSConceptKey() {
+        return new WSConceptKey();
     }
 
     /**
-     * Create an instance of {@link WsPutItem }
+     * Create an instance of {@link WSGetRoutingOrderV2ByCriteriaWithPaging }
      * 
      */
-    public WsPutItem createWsPutItem() {
-        return new WsPutItem();
+    public WSGetRoutingOrderV2ByCriteriaWithPaging createWSGetRoutingOrderV2ByCriteriaWithPaging() {
+        return new WSGetRoutingOrderV2ByCriteriaWithPaging();
     }
 
     /**
-     * Create an instance of {@link WsLong }
+     * Create an instance of {@link WSTransformerContextProjectedItemPKs }
      * 
      */
-    public WsLong createWsLong() {
-        return new WsLong();
+    public WSTransformerContextProjectedItemPKs createWSTransformerContextProjectedItemPKs() {
+        return new WSTransformerContextProjectedItemPKs();
     }
 
     /**
-     * Create an instance of {@link WsBackgroundJob }
+     * Create an instance of {@link WSRoutingRuleExpression }
      * 
      */
-    public WsBackgroundJob createWsBackgroundJob() {
-        return new WsBackgroundJob();
+    public WSRoutingRuleExpression createWSRoutingRuleExpression() {
+        return new WSRoutingRuleExpression();
     }
 
     /**
-     * Create an instance of {@link WsGetDataCluster }
+     * Create an instance of {@link WSRoutingRule }
      * 
      */
-    public WsGetDataCluster createWsGetDataCluster() {
-        return new WsGetDataCluster();
+    public WSRoutingRule createWSRoutingRule() {
+        return new WSRoutingRule();
     }
 
     /**
-     * Create an instance of {@link WsDeleteMenu }
+     * Create an instance of {@link WSTransformerV2 }
      * 
      */
-    public WsDeleteMenu createWsDeleteMenu() {
-        return new WsDeleteMenu();
+    public WSTransformerV2 createWSTransformerV2() {
+        return new WSTransformerV2();
     }
 
     /**
-     * Create an instance of {@link WsExecuteTransformerV2AsJob }
+     * Create an instance of {@link WSItemPK }
      * 
      */
-    public WsExecuteTransformerV2AsJob createWsExecuteTransformerV2AsJob() {
-        return new WsExecuteTransformerV2AsJob();
+    public WSItemPK createWSItemPK() {
+        return new WSItemPK();
     }
 
     /**
-     * Create an instance of {@link WsServiceGetDocument }
+     * Create an instance of {@link WSGetView }
      * 
      */
-    public WsServiceGetDocument createWsServiceGetDocument() {
-        return new WsServiceGetDocument();
+    public WSGetView createWSGetView() {
+        return new WSGetView();
     }
 
     /**
-     * Create an instance of {@link WsRole }
+     * Create an instance of {@link WSPutRole }
      * 
      */
-    public WsRole createWsRole() {
-        return new WsRole();
+    public WSPutRole createWSPutRole() {
+        return new WSPutRole();
     }
 
     /**
-     * Create an instance of {@link WsGetMenuPKs }
+     * Create an instance of {@link WSGetFullPathValues }
      * 
      */
-    public WsGetMenuPKs createWsGetMenuPKs() {
-        return new WsGetMenuPKs();
+    public WSGetFullPathValues createWSGetFullPathValues() {
+        return new WSGetFullPathValues();
     }
 
     /**
-     * Create an instance of {@link WsGetBusinessConceptValue }
+     * Create an instance of {@link WSWhereItem }
      * 
      */
-    public WsGetBusinessConceptValue createWsGetBusinessConceptValue() {
-        return new WsGetBusinessConceptValue();
+    public WSWhereItem createWSWhereItem() {
+        return new WSWhereItem();
     }
 
     /**
-     * Create an instance of {@link WsRolePKArray }
+     * Create an instance of {@link WSGetItemPKsByFullCriteria }
      * 
      */
-    public WsRolePKArray createWsRolePKArray() {
-        return new WsRolePKArray();
+    public WSGetItemPKsByFullCriteria createWSGetItemPKsByFullCriteria() {
+        return new WSGetItemPKsByFullCriteria();
     }
 
     /**
-     * Create an instance of {@link WsByteArray }
+     * Create an instance of {@link WSCheckServiceConfigRequest }
      * 
      */
-    public WsByteArray createWsByteArray() {
-        return new WsByteArray();
+    public WSCheckServiceConfigRequest createWSCheckServiceConfigRequest() {
+        return new WSCheckServiceConfigRequest();
     }
 
     /**
-     * Create an instance of {@link WsCheckSchema }
+     * Create an instance of {@link WSServiceGetDocument }
      * 
      */
-    public WsCheckSchema createWsCheckSchema() {
-        return new WsCheckSchema();
+    public WSServiceGetDocument createWSServiceGetDocument() {
+        return new WSServiceGetDocument();
     }
 
     /**
-     * Create an instance of {@link WsRoutingEngineV2Action }
+     * Create an instance of {@link WSByteArray }
      * 
      */
-    public WsRoutingEngineV2Action createWsRoutingEngineV2Action() {
-        return new WsRoutingEngineV2Action();
+    public WSByteArray createWSByteArray() {
+        return new WSByteArray();
     }
 
     /**
-     * Create an instance of {@link WsDeleteTransformerV2 }
+     * Create an instance of {@link WSGetConceptsInDataCluster }
      * 
      */
-    public WsDeleteTransformerV2 createWsDeleteTransformerV2() {
-        return new WsDeleteTransformerV2();
+    public WSGetConceptsInDataCluster createWSGetConceptsInDataCluster() {
+        return new WSGetConceptsInDataCluster();
     }
 
     /**
-     * Create an instance of {@link WsString }
+     * Create an instance of {@link WSStoredProcedurePKArray }
      * 
      */
-    public WsString createWsString() {
-        return new WsString();
+    public WSStoredProcedurePKArray createWSStoredProcedurePKArray() {
+        return new WSStoredProcedurePKArray();
     }
 
     /**
-     * Create an instance of {@link WsOutputDecisionTable }
+     * Create an instance of {@link WSStoredProcedure }
      * 
      */
-    public WsOutputDecisionTable createWsOutputDecisionTable() {
-        return new WsOutputDecisionTable();
+    public WSStoredProcedure createWSStoredProcedure() {
+        return new WSStoredProcedure();
     }
 
     /**
-     * Create an instance of {@link WsDroppedItem }
+     * Create an instance of {@link WSRoutingEngineV2Action }
      * 
      */
-    public WsDroppedItem createWsDroppedItem() {
-        return new WsDroppedItem();
+    public WSRoutingEngineV2Action createWSRoutingEngineV2Action() {
+        return new WSRoutingEngineV2Action();
     }
 
     /**
-     * Create an instance of {@link WsRegexDataClusterPKs }
+     * Create an instance of {@link WSViewPK }
      * 
      */
-    public WsRegexDataClusterPKs createWsRegexDataClusterPKs() {
-        return new WsRegexDataClusterPKs();
+    public WSViewPK createWSViewPK() {
+        return new WSViewPK();
     }
 
     /**
-     * Create an instance of {@link WsFindAllDroppedItemsPKs }
+     * Create an instance of {@link WSDataModelPKArray }
      * 
      */
-    public WsFindAllDroppedItemsPKs createWsFindAllDroppedItemsPKs() {
-        return new WsFindAllDroppedItemsPKs();
+    public WSDataModelPKArray createWSDataModelPKArray() {
+        return new WSDataModelPKArray();
     }
 
     /**
-     * Create an instance of {@link WsExtractUsingTransformerThruView }
+     * Create an instance of {@link WSGetRoutingOrderV2SByCriteria }
      * 
      */
-    public WsExtractUsingTransformerThruView createWsExtractUsingTransformerThruView() {
-        return new WsExtractUsingTransformerThruView();
+    public WSGetRoutingOrderV2SByCriteria createWSGetRoutingOrderV2SByCriteria() {
+        return new WSGetRoutingOrderV2SByCriteria();
     }
 
     /**
-     * Create an instance of {@link WsWhereOr }
+     * Create an instance of {@link WSPutView }
      * 
      */
-    public WsWhereOr createWsWhereOr() {
-        return new WsWhereOr();
+    public WSPutView createWSPutView() {
+        return new WSPutView();
     }
 
     /**
-     * Create an instance of {@link WsDigest }
+     * Create an instance of {@link WSRolePKArray }
      * 
      */
-    public WsDigest createWsDigest() {
-        return new WsDigest();
+    public WSRolePKArray createWSRolePKArray() {
+        return new WSRolePKArray();
     }
 
     /**
-     * Create an instance of {@link WsBoolean }
+     * Create an instance of {@link WSPutTransformerV2 }
      * 
      */
-    public WsBoolean createWsBoolean() {
-        return new WsBoolean();
+    public WSPutTransformerV2 createWSPutTransformerV2() {
+        return new WSPutTransformerV2();
     }
 
     /**
-     * Create an instance of {@link WsFindBackgroundJobPKs }
+     * Create an instance of {@link WSGetMenu }
      * 
      */
-    public WsFindBackgroundJobPKs createWsFindBackgroundJobPKs() {
-        return new WsFindBackgroundJobPKs();
+    public WSGetMenu createWSGetMenu() {
+        return new WSGetMenu();
     }
 
     /**
-     * Create an instance of {@link WsCount }
+     * Create an instance of {@link WSRoutingRulePK }
      * 
      */
-    public WsCount createWsCount() {
-        return new WsCount();
+    public WSRoutingRulePK createWSRoutingRulePK() {
+        return new WSRoutingRulePK();
     }
 
     /**
-     * Create an instance of {@link WsPipeline }
+     * Create an instance of {@link WSRoutingOrderV2 }
      * 
      */
-    public WsPipeline createWsPipeline() {
-        return new WsPipeline();
+    public WSRoutingOrderV2 createWSRoutingOrderV2() {
+        return new WSRoutingOrderV2();
     }
 
     /**
-     * Create an instance of {@link WsRegexStoredProcedure }
+     * Create an instance of {@link WSExistsView }
      * 
      */
-    public WsRegexStoredProcedure createWsRegexStoredProcedure() {
-        return new WsRegexStoredProcedure();
+    public WSExistsView createWSExistsView() {
+        return new WSExistsView();
     }
 
     /**
-     * Create an instance of {@link WsDataClusterPKArray }
+     * Create an instance of {@link WSPutItem }
      * 
      */
-    public WsDataClusterPKArray createWsDataClusterPKArray() {
-        return new WsDataClusterPKArray();
+    public WSPutItem createWSPutItem() {
+        return new WSPutItem();
     }
 
     /**
-     * Create an instance of {@link WsExistsRole }
+     * Create an instance of {@link WSViewPKArray }
      * 
      */
-    public WsExistsRole createWsExistsRole() {
-        return new WsExistsRole();
+    public WSViewPKArray createWSViewPKArray() {
+        return new WSViewPKArray();
     }
 
     /**
-     * Create an instance of {@link WsProcessBytesUsingTransformerWsOutputDecisionTableDecisions }
+     * Create an instance of {@link WSItemPKArray }
      * 
      */
-    public WsProcessBytesUsingTransformerWsOutputDecisionTableDecisions createWsProcessBytesUsingTransformerWsOutputDecisionTableDecisions() {
-        return new WsProcessBytesUsingTransformerWsOutputDecisionTableDecisions();
+    public WSItemPKArray createWSItemPKArray() {
+        return new WSItemPKArray();
     }
 
     /**
-     * Create an instance of {@link WsDeleteBusinessConcept }
+     * Create an instance of {@link WSTransformerContextPipeline }
      * 
      */
-    public WsDeleteBusinessConcept createWsDeleteBusinessConcept() {
-        return new WsDeleteBusinessConcept();
+    public WSTransformerContextPipeline createWSTransformerContextPipeline() {
+        return new WSTransformerContextPipeline();
     }
 
     /**
-     * Create an instance of {@link WsDropItem }
+     * Create an instance of {@link WSPutBackgroundJob }
      * 
      */
-    public WsDropItem createWsDropItem() {
-        return new WsDropItem();
+    public WSPutBackgroundJob createWSPutBackgroundJob() {
+        return new WSPutBackgroundJob();
     }
 
     /**
-     * Create an instance of {@link WsExistsStoredProcedure }
+     * Create an instance of {@link WSPutBusinessConcept }
      * 
      */
-    public WsExistsStoredProcedure createWsExistsStoredProcedure() {
-        return new WsExistsStoredProcedure();
+    public WSPutBusinessConcept createWSPutBusinessConcept() {
+        return new WSPutBusinessConcept();
     }
 
     /**
-     * Create an instance of {@link WsGetTransformerV2 }
+     * Create an instance of {@link WSInitData }
      * 
      */
-    public WsGetTransformerV2 createWsGetTransformerV2() {
-        return new WsGetTransformerV2();
+    public WSInitData createWSInitData() {
+        return new WSInitData();
     }
 
     /**
-     * Create an instance of {@link WsItem }
+     * Create an instance of {@link WSPutMenu }
      * 
      */
-    public WsItem createWsItem() {
-        return new WsItem();
+    public WSPutMenu createWSPutMenu() {
+        return new WSPutMenu();
     }
 
     /**
-     * Create an instance of {@link WsRoutingOrderV2PKArray }
+     * Create an instance of {@link WSRoutingOrderV2PK }
      * 
      */
-    public WsRoutingOrderV2PKArray createWsRoutingOrderV2PKArray() {
-        return new WsRoutingOrderV2PKArray();
+    public WSRoutingOrderV2PK createWSRoutingOrderV2PK() {
+        return new WSRoutingOrderV2PK();
     }
 
     /**
-     * Create an instance of {@link WsGetItemsByCustomFKFilters }
+     * Create an instance of {@link WSTransformerPKArray }
      * 
      */
-    public WsGetItemsByCustomFKFilters createWsGetItemsByCustomFKFilters() {
-        return new WsGetItemsByCustomFKFilters();
+    public WSTransformerPKArray createWSTransformerPKArray() {
+        return new WSTransformerPKArray();
     }
 
     /**
-     * Create an instance of {@link WsDataModelPK }
+     * Create an instance of {@link WSServicePutConfiguration }
      * 
      */
-    public WsDataModelPK createWsDataModelPK() {
-        return new WsDataModelPK();
+    public WSServicePutConfiguration createWSServicePutConfiguration() {
+        return new WSServicePutConfiguration();
     }
 
     /**
-     * Create an instance of {@link WsDataModel }
+     * Create an instance of {@link WSTransformerPluginV2SList }
      * 
      */
-    public WsDataModel createWsDataModel() {
-        return new WsDataModel();
+    public WSTransformerPluginV2SList createWSTransformerPluginV2SList() {
+        return new WSTransformerPluginV2SList();
     }
 
     /**
-     * Create an instance of {@link WsStoredProcedure }
+     * Create an instance of {@link WSExistsItem }
      * 
      */
-    public WsStoredProcedure createWsStoredProcedure() {
-        return new WsStoredProcedure();
+    public WSExistsItem createWSExistsItem() {
+        return new WSExistsItem();
     }
 
     /**
-     * Create an instance of {@link WsRolePK }
+     * Create an instance of {@link WSMenuPKArray }
      * 
      */
-    public WsRolePK createWsRolePK() {
-        return new WsRolePK();
+    public WSMenuPKArray createWSMenuPKArray() {
+        return new WSMenuPKArray();
     }
 
     /**
-     * Create an instance of {@link WsTransformerPluginV2Details }
+     * Create an instance of {@link WSPutStoredProcedure }
      * 
      */
-    public WsTransformerPluginV2Details createWsTransformerPluginV2Details() {
-        return new WsTransformerPluginV2Details();
+    public WSPutStoredProcedure createWSPutStoredProcedure() {
+        return new WSPutStoredProcedure();
     }
 
     /**
-     * Create an instance of {@link WsServiceAction }
+     * Create an instance of {@link WSGetTransformerPluginV2Details }
      * 
      */
-    public WsServiceAction createWsServiceAction() {
-        return new WsServiceAction();
+    public WSGetTransformerPluginV2Details createWSGetTransformerPluginV2Details() {
+        return new WSGetTransformerPluginV2Details();
     }
 
     /**
-     * Create an instance of {@link WsRoutingRuleExpression }
+     * Create an instance of {@link WSExistsRoutingRule }
      * 
      */
-    public WsRoutingRuleExpression createWsRoutingRuleExpression() {
-        return new WsRoutingRuleExpression();
+    public WSExistsRoutingRule createWSExistsRoutingRule() {
+        return new WSExistsRoutingRule();
     }
 
     /**
-     * Create an instance of {@link WsLoadDroppedItem }
+     * Create an instance of {@link WSPutBusinessConceptSchema }
      * 
      */
-    public WsLoadDroppedItem createWsLoadDroppedItem() {
-        return new WsLoadDroppedItem();
+    public WSPutBusinessConceptSchema createWSPutBusinessConceptSchema() {
+        return new WSPutBusinessConceptSchema();
     }
 
     /**
-     * Create an instance of {@link WsExistsDBDataCluster }
+     * Create an instance of {@link WSGetBackgroundJob }
      * 
      */
-    public WsExistsDBDataCluster createWsExistsDBDataCluster() {
-        return new WsExistsDBDataCluster();
+    public WSGetBackgroundJob createWSGetBackgroundJob() {
+        return new WSGetBackgroundJob();
     }
 
     /**
-     * Create an instance of {@link WsGetBusinessConceptKey }
+     * Create an instance of {@link WSExtractUsingTransformer }
      * 
      */
-    public WsGetBusinessConceptKey createWsGetBusinessConceptKey() {
-        return new WsGetBusinessConceptKey();
+    public WSExtractUsingTransformer createWSExtractUsingTransformer() {
+        return new WSExtractUsingTransformer();
     }
 
     /**
-     * Create an instance of {@link WsGetTransformer }
+     * Create an instance of {@link WSLoadDroppedItem }
      * 
      */
-    public WsGetTransformer createWsGetTransformer() {
-        return new WsGetTransformer();
+    public WSLoadDroppedItem createWSLoadDroppedItem() {
+        return new WSLoadDroppedItem();
     }
 
     /**
-     * Create an instance of {@link WsDeleteDataCluster }
+     * Create an instance of {@link WSMDMConfig }
      * 
      */
-    public WsDeleteDataCluster createWsDeleteDataCluster() {
-        return new WsDeleteDataCluster();
+    public WSMDMConfig createWSMDMConfig() {
+        return new WSMDMConfig();
     }
 
     /**
-     * Create an instance of {@link WsRoutingRule }
+     * Create an instance of {@link WSGetRolePKs }
      * 
      */
-    public WsRoutingRule createWsRoutingRule() {
-        return new WsRoutingRule();
+    public WSGetRolePKs createWSGetRolePKs() {
+        return new WSGetRolePKs();
     }
 
     /**
-     * Create an instance of {@link WsExistsView }
+     * Create an instance of {@link WSProcessFileUsingTransformer }
      * 
      */
-    public WsExistsView createWsExistsView() {
-        return new WsExistsView();
+    public WSProcessFileUsingTransformer createWSProcessFileUsingTransformer() {
+        return new WSProcessFileUsingTransformer();
     }
 
     /**
-     * Create an instance of {@link WsPing }
+     * Create an instance of {@link WSQuickSearch }
      * 
      */
-    public WsPing createWsPing() {
-        return new WsPing();
+    public WSQuickSearch createWSQuickSearch() {
+        return new WSQuickSearch();
     }
 
     /**
-     * Create an instance of {@link WsExistsItem }
+     * Create an instance of {@link WSTransformer }
      * 
      */
-    public WsExistsItem createWsExistsItem() {
-        return new WsExistsItem();
+    public WSTransformer createWSTransformer() {
+        return new WSTransformer();
     }
 
     /**
-     * Create an instance of {@link WsPutMenu }
+     * Create an instance of {@link WSTransformerPluginV2Details }
      * 
      */
-    public WsPutMenu createWsPutMenu() {
-        return new WsPutMenu();
+    public WSTransformerPluginV2Details createWSTransformerPluginV2Details() {
+        return new WSTransformerPluginV2Details();
     }
 
     /**
-     * Create an instance of {@link WsTransformerContext }
+     * Create an instance of {@link WSBusinessConcept }
      * 
      */
-    public WsTransformerContext createWsTransformerContext() {
-        return new WsTransformerContext();
+    public WSBusinessConcept createWSBusinessConcept() {
+        return new WSBusinessConcept();
     }
 
     /**
-     * Create an instance of {@link WsDeleteItem }
+     * Create an instance of {@link WSExistsDBDataCluster }
      * 
      */
-    public WsDeleteItem createWsDeleteItem() {
-        return new WsDeleteItem();
+    public WSExistsDBDataCluster createWSExistsDBDataCluster() {
+        return new WSExistsDBDataCluster();
     }
 
     /**
-     * Create an instance of {@link WsCheckServiceConfigResponse }
+     * Create an instance of {@link WSDeleteView }
      * 
      */
-    public WsCheckServiceConfigResponse createWsCheckServiceConfigResponse() {
-        return new WsCheckServiceConfigResponse();
+    public WSDeleteView createWSDeleteView() {
+        return new WSDeleteView();
     }
 
     /**
-     * Create an instance of {@link WsExistsDataModel }
+     * Create an instance of {@link WSRoleSpecificationInstance }
      * 
      */
-    public WsExistsDataModel createWsExistsDataModel() {
-        return new WsExistsDataModel();
+    public WSRoleSpecificationInstance createWSRoleSpecificationInstance() {
+        return new WSRoleSpecificationInstance();
     }
 
     /**
-     * Create an instance of {@link WsmdmJob }
+     * Create an instance of {@link WSTransformerPluginV2PutConfiguration }
      * 
      */
-    public WsmdmJob createWsmdmJob() {
-        return new WsmdmJob();
+    public WSTransformerPluginV2PutConfiguration createWSTransformerPluginV2PutConfiguration() {
+        return new WSTransformerPluginV2PutConfiguration();
     }
 
     /**
-     * Create an instance of {@link WsGetBackgroundJob }
+     * Create an instance of {@link WSTransformerPluginSpec }
      * 
      */
-    public WsGetBackgroundJob createWsGetBackgroundJob() {
-        return new WsGetBackgroundJob();
+    public WSTransformerPluginSpec createWSTransformerPluginSpec() {
+        return new WSTransformerPluginSpec();
     }
 
     /**
-     * Create an instance of {@link WsWhereAnd }
+     * Create an instance of {@link WSPipelineTypedContentEntry }
      * 
      */
-    public WsWhereAnd createWsWhereAnd() {
-        return new WsWhereAnd();
+    public WSPipelineTypedContentEntry createWSPipelineTypedContentEntry() {
+        return new WSPipelineTypedContentEntry();
     }
 
     /**
-     * Create an instance of {@link WsItemPK }
+     * Create an instance of {@link WSGetRoutingOrderV2PKsByCriteria }
      * 
      */
-    public WsItemPK createWsItemPK() {
-        return new WsItemPK();
+    public WSGetRoutingOrderV2PKsByCriteria createWSGetRoutingOrderV2PKsByCriteria() {
+        return new WSGetRoutingOrderV2PKsByCriteria();
     }
 
     /**
-     * Create an instance of {@link WsItemPKsByCriteriaResponse }
+     * Create an instance of {@link WSI18NString }
      * 
      */
-    public WsItemPKsByCriteriaResponse createWsItemPKsByCriteriaResponse() {
-        return new WsItemPKsByCriteriaResponse();
+    public WSI18NString createWSI18NString() {
+        return new WSI18NString();
     }
 
     /**
-     * Create an instance of {@link WsRoutingOrderV2Array }
+     * Create an instance of {@link WSXPathsSearch }
      * 
      */
-    public WsRoutingOrderV2Array createWsRoutingOrderV2Array() {
-        return new WsRoutingOrderV2Array();
+    public WSXPathsSearch createWSXPathsSearch() {
+        return new WSXPathsSearch();
     }
 
     /**
-     * Create an instance of {@link WsLogout }
+     * Create an instance of {@link WSStringArray }
      * 
      */
-    public WsLogout createWsLogout() {
-        return new WsLogout();
+    public WSStringArray createWSStringArray() {
+        return new WSStringArray();
     }
 
     /**
-     * Create an instance of {@link WsViewPKArray }
+     * Create an instance of {@link WSString }
      * 
      */
-    public WsViewPKArray createWsViewPKArray() {
-        return new WsViewPKArray();
+    public WSString createWSString() {
+        return new WSString();
     }
 
     /**
-     * Create an instance of {@link WsExistsTransformerV2 }
+     * Create an instance of {@link WSLogout }
      * 
      */
-    public WsExistsTransformerV2 createWsExistsTransformerV2() {
-        return new WsExistsTransformerV2();
+    public WSLogout createWSLogout() {
+        return new WSLogout();
     }
 
     /**
-     * Create an instance of {@link WsTypedContent }
+     * Create an instance of {@link WSExecuteStoredProcedure }
      * 
      */
-    public WsTypedContent createWsTypedContent() {
-        return new WsTypedContent();
+    public WSExecuteStoredProcedure createWSExecuteStoredProcedure() {
+        return new WSExecuteStoredProcedure();
     }
 
     /**
-     * Create an instance of {@link WsGetComponentVersion }
+     * Create an instance of {@link WSExistsDataCluster }
      * 
      */
-    public WsGetComponentVersion createWsGetComponentVersion() {
-        return new WsGetComponentVersion();
+    public WSExistsDataCluster createWSExistsDataCluster() {
+        return new WSExistsDataCluster();
     }
 
     /**
-     * Create an instance of {@link WsPutItemArray }
+     * Create an instance of {@link WSTransformerV2PK }
      * 
      */
-    public WsPutItemArray createWsPutItemArray() {
-        return new WsPutItemArray();
+    public WSTransformerV2PK createWSTransformerV2PK() {
+        return new WSTransformerV2PK();
     }
 
     /**
-     * Create an instance of {@link WsPutTransformerV2 }
+     * Create an instance of {@link WSGetStoredProcedure }
      * 
      */
-    public WsPutTransformerV2 createWsPutTransformerV2() {
-        return new WsPutTransformerV2();
+    public WSGetStoredProcedure createWSGetStoredProcedure() {
+        return new WSGetStoredProcedure();
     }
 
     /**
-     * Create an instance of {@link WsGetRoutingOrderV2SByCriteria }
+     * Create an instance of {@link WSExistsMenu }
      * 
      */
-    public WsGetRoutingOrderV2SByCriteria createWsGetRoutingOrderV2SByCriteria() {
-        return new WsGetRoutingOrderV2SByCriteria();
+    public WSExistsMenu createWSExistsMenu() {
+        return new WSExistsMenu();
     }
 
     /**
-     * Create an instance of {@link WsGetViewPKs }
+     * Create an instance of {@link WSAutoIncrement }
      * 
      */
-    public WsGetViewPKs createWsGetViewPKs() {
-        return new WsGetViewPKs();
+    public WSAutoIncrement createWSAutoIncrement() {
+        return new WSAutoIncrement();
     }
 
     /**
-     * Create an instance of {@link WsGetTransformerPluginV2Details }
+     * Create an instance of {@link WSPutDBDataCluster }
      * 
      */
-    public WsGetTransformerPluginV2Details createWsGetTransformerPluginV2Details() {
-        return new WsGetTransformerPluginV2Details();
+    public WSPutDBDataCluster createWSPutDBDataCluster() {
+        return new WSPutDBDataCluster();
     }
 
     /**
-     * Create an instance of {@link WsExistsDataCluster }
+     * Create an instance of {@link WSCheckServiceConfigResponse }
      * 
      */
-    public WsExistsDataCluster createWsExistsDataCluster() {
-        return new WsExistsDataCluster();
+    public WSCheckServiceConfigResponse createWSCheckServiceConfigResponse() {
+        return new WSCheckServiceConfigResponse();
     }
 
     /**
-     * Create an instance of {@link WsPutStoredProcedure }
+     * Create an instance of {@link WSTransformerPluginV2SListItem }
      * 
      */
-    public WsPutStoredProcedure createWsPutStoredProcedure() {
-        return new WsPutStoredProcedure();
+    public WSTransformerPluginV2SListItem createWSTransformerPluginV2SListItem() {
+        return new WSTransformerPluginV2SListItem();
     }
 
     /**
-     * Create an instance of {@link WsDeleteDataModel }
+     * Create an instance of {@link WSGetRoutingRulePKs }
      * 
      */
-    public WsDeleteDataModel createWsDeleteDataModel() {
-        return new WsDeleteDataModel();
+    public WSGetRoutingRulePKs createWSGetRoutingRulePKs() {
+        return new WSGetRoutingRulePKs();
     }
 
     /**
-     * Create an instance of {@link WsPutRole }
+     * Create an instance of {@link WSExistsRole }
      * 
      */
-    public WsPutRole createWsPutRole() {
-        return new WsPutRole();
+    public WSExistsRole createWSExistsRole() {
+        return new WSExistsRole();
     }
 
     /**
-     * Create an instance of {@link WsExtractUsingTransformer }
+     * Create an instance of {@link WSMDMJob }
      * 
      */
-    public WsExtractUsingTransformer createWsExtractUsingTransformer() {
-        return new WsExtractUsingTransformer();
+    public WSMDMJob createWSMDMJob() {
+        return new WSMDMJob();
     }
 
     /**
-     * Create an instance of {@link WsItemPKArray }
+     * Create an instance of {@link WSOutputDecisionTable }
      * 
      */
-    public WsItemPKArray createWsItemPKArray() {
-        return new WsItemPKArray();
+    public WSOutputDecisionTable createWSOutputDecisionTable() {
+        return new WSOutputDecisionTable();
     }
 
     /**
-     * Create an instance of {@link WsTransformerV2 }
+     * Create an instance of {@link WSProcessBytesUsingTransformerWsOutputDecisionTableDecisions }
      * 
      */
-    public WsTransformerV2 createWsTransformerV2() {
-        return new WsTransformerV2();
+    public WSProcessBytesUsingTransformerWsOutputDecisionTableDecisions createWSProcessBytesUsingTransformerWsOutputDecisionTableDecisions() {
+        return new WSProcessBytesUsingTransformerWsOutputDecisionTableDecisions();
     }
 
     /**
-     * Create an instance of {@link WsDeleteItemWithReport }
+     * Create an instance of {@link WSGetItems }
      * 
      */
-    public WsDeleteItemWithReport createWsDeleteItemWithReport() {
-        return new WsDeleteItemWithReport();
+    public WSGetItems createWSGetItems() {
+        return new WSGetItems();
     }
 
     /**
-     * Create an instance of {@link WsPutItemWithReport }
+     * Create an instance of {@link WSGetRoutingRule }
      * 
      */
-    public WsPutItemWithReport createWsPutItemWithReport() {
-        return new WsPutItemWithReport();
+    public WSGetRoutingRule createWSGetRoutingRule() {
+        return new WSGetRoutingRule();
     }
 
     /**
-     * Create an instance of {@link WsUpdateMetadataItem }
+     * Create an instance of {@link WSExtractThroughTransformerV2 }
      * 
      */
-    public WsUpdateMetadataItem createWsUpdateMetadataItem() {
-        return new WsUpdateMetadataItem();
+    public WSExtractThroughTransformerV2 createWSExtractThroughTransformerV2() {
+        return new WSExtractThroughTransformerV2();
     }
 
     /**
-     * Create an instance of {@link WsExistsMenu }
+     * Create an instance of {@link WSBoolean }
      * 
      */
-    public WsExistsMenu createWsExistsMenu() {
-        return new WsExistsMenu();
+    public WSBoolean createWSBoolean() {
+        return new WSBoolean();
     }
 
     /**
-     * Create an instance of {@link WsTransformerPluginSpec }
+     * Create an instance of {@link WSTransformerContext }
      * 
      */
-    public WsTransformerPluginSpec createWsTransformerPluginSpec() {
-        return new WsTransformerPluginSpec();
+    public WSTransformerContext createWSTransformerContext() {
+        return new WSTransformerContext();
     }
 
     /**
-     * Create an instance of {@link WsTransformerPluginV2SListItem }
+     * Create an instance of {@link WSGetItemsByCustomFKFilters }
      * 
      */
-    public WsTransformerPluginV2SListItem createWsTransformerPluginV2SListItem() {
-        return new WsTransformerPluginV2SListItem();
+    public WSGetItemsByCustomFKFilters createWSGetItemsByCustomFKFilters() {
+        return new WSGetItemsByCustomFKFilters();
     }
 
     /**
-     * Create an instance of {@link WsTransformerPluginV2VariableDescriptor }
+     * Create an instance of {@link WSViewSearch }
      * 
      */
-    public WsTransformerPluginV2VariableDescriptor createWsTransformerPluginV2VariableDescriptor() {
-        return new WsTransformerPluginV2VariableDescriptor();
+    public WSViewSearch createWSViewSearch() {
+        return new WSViewSearch();
     }
 
     /**
-     * Create an instance of {@link WsMenuPKArray }
+     * Create an instance of {@link WSGetTransformerV2 }
      * 
      */
-    public WsMenuPKArray createWsMenuPKArray() {
-        return new WsMenuPKArray();
+    public WSGetTransformerV2 createWSGetTransformerV2() {
+        return new WSGetTransformerV2();
     }
 
     /**
-     * Create an instance of {@link WsmdmConfig }
+     * Create an instance of {@link WSMenuEntry }
      * 
      */
-    public WsmdmConfig createWsmdmConfig() {
-        return new WsmdmConfig();
+    public WSMenuEntry createWSMenuEntry() {
+        return new WSMenuEntry();
     }
 
     /**
-     * Create an instance of {@link WsGetView }
+     * Create an instance of {@link WSKey }
      * 
      */
-    public WsGetView createWsGetView() {
-        return new WsGetView();
+    public WSKey createWSKey() {
+        return new WSKey();
     }
 
     /**
-     * Create an instance of {@link WsDataClusterPK }
+     * Create an instance of {@link WSBackgroundJobPK }
      * 
      */
-    public WsDataClusterPK createWsDataClusterPK() {
-        return new WsDataClusterPK();
+    public WSBackgroundJobPK createWSBackgroundJobPK() {
+        return new WSBackgroundJobPK();
     }
 
     /**
-     * Create an instance of {@link WsDeleteRoutingRule }
+     * Create an instance of {@link WSPutDataCluster }
      * 
      */
-    public WsDeleteRoutingRule createWsDeleteRoutingRule() {
-        return new WsDeleteRoutingRule();
+    public WSPutDataCluster createWSPutDataCluster() {
+        return new WSPutDataCluster();
     }
 
     /**
-     * Create an instance of {@link WsGetStoredProcedure }
+     * Create an instance of {@link WSPutItemArray }
      * 
      */
-    public WsGetStoredProcedure createWsGetStoredProcedure() {
-        return new WsGetStoredProcedure();
+    public WSPutItemArray createWSPutItemArray() {
+        return new WSPutItemArray();
     }
 
     /**
-     * Create an instance of {@link WsGetRoutingOrderV2PKsByCriteria }
+     * Create an instance of {@link WSExistsTransformerPluginV2 }
      * 
      */
-    public WsGetRoutingOrderV2PKsByCriteria createWsGetRoutingOrderV2PKsByCriteria() {
-        return new WsGetRoutingOrderV2PKsByCriteria();
+    public WSExistsTransformerPluginV2 createWSExistsTransformerPluginV2() {
+        return new WSExistsTransformerPluginV2();
     }
 
     /**
-     * Create an instance of {@link WsDataCluster }
+     * Create an instance of {@link WSDeleteItem }
      * 
      */
-    public WsDataCluster createWsDataCluster() {
-        return new WsDataCluster();
+    public WSDeleteItem createWSDeleteItem() {
+        return new WSDeleteItem();
     }
 
     /**
-     * Create an instance of {@link WsMenuEntry }
+     * Create an instance of {@link WSTransformerProcessStep }
      * 
      */
-    public WsMenuEntry createWsMenuEntry() {
-        return new WsMenuEntry();
+    public WSTransformerProcessStep createWSTransformerProcessStep() {
+        return new WSTransformerProcessStep();
     }
 
     /**
-     * Create an instance of {@link WsBackgroundJobPK }
+     * Create an instance of {@link WSBackgroundJob }
      * 
      */
-    public WsBackgroundJobPK createWsBackgroundJobPK() {
-        return new WsBackgroundJobPK();
+    public WSBackgroundJob createWSBackgroundJob() {
+        return new WSBackgroundJob();
     }
 
     /**
-     * Create an instance of {@link WsKey }
+     * Create an instance of {@link WSDroppedItemPKArray }
      * 
      */
-    public WsKey createWsKey() {
-        return new WsKey();
+    public WSDroppedItemPKArray createWSDroppedItemPKArray() {
+        return new WSDroppedItemPKArray();
     }
 
     /**
-     * Create an instance of {@link WsCheckServiceConfigRequest }
+     * Create an instance of {@link WSCategoryData }
      * 
      */
-    public WsCheckServiceConfigRequest createWsCheckServiceConfigRequest() {
-        return new WsCheckServiceConfigRequest();
+    public WSCategoryData createWSCategoryData() {
+        return new WSCategoryData();
     }
 
     /**
-     * Create an instance of {@link WsRecoverDroppedItem }
+     * Create an instance of {@link WSServiceGetConfiguration }
      * 
      */
-    public WsRecoverDroppedItem createWsRecoverDroppedItem() {
-        return new WsRecoverDroppedItem();
+    public WSServiceGetConfiguration createWSServiceGetConfiguration() {
+        return new WSServiceGetConfiguration();
     }
 
     /**
-     * Create an instance of {@link WsPutBusinessConceptSchema }
+     * Create an instance of {@link WSGetServicesList }
      * 
      */
-    public WsPutBusinessConceptSchema createWsPutBusinessConceptSchema() {
-        return new WsPutBusinessConceptSchema();
+    public WSGetServicesList createWSGetServicesList() {
+        return new WSGetServicesList();
     }
 
     /**
-     * Create an instance of {@link WsmdmJobArray }
+     * Create an instance of {@link WSGetRole }
      * 
      */
-    public WsmdmJobArray createWsmdmJobArray() {
-        return new WsmdmJobArray();
+    public WSGetRole createWSGetRole() {
+        return new WSGetRole();
     }
 
     /**
-     * Create an instance of {@link WsGetTransformerV2PKs }
+     * Create an instance of {@link WSTransformerVariablesMapping }
      * 
      */
-    public WsGetTransformerV2PKs createWsGetTransformerV2PKs() {
-        return new WsGetTransformerV2PKs();
+    public WSTransformerVariablesMapping createWSTransformerVariablesMapping() {
+        return new WSTransformerVariablesMapping();
     }
 
     /**
-     * Create an instance of {@link WsExecuteStoredProcedure }
+     * Create an instance of {@link WSPing }
      * 
      */
-    public WsExecuteStoredProcedure createWsExecuteStoredProcedure() {
-        return new WsExecuteStoredProcedure();
+    public WSPing createWSPing() {
+        return new WSPing();
     }
 
     /**
-     * Create an instance of {@link WsRoutingOrderV2SearchCriteriaWithPaging }
+     * Create an instance of {@link WSProcessFileUsingTransformerAsBackgroundJob }
      * 
      */
-    public WsRoutingOrderV2SearchCriteriaWithPaging createWsRoutingOrderV2SearchCriteriaWithPaging() {
-        return new WsRoutingOrderV2SearchCriteriaWithPaging();
+    public WSProcessFileUsingTransformerAsBackgroundJob createWSProcessFileUsingTransformerAsBackgroundJob() {
+        return new WSProcessFileUsingTransformerAsBackgroundJob();
     }
 
     /**
-     * Create an instance of {@link WsTransformerContextPipeline }
+     * Create an instance of {@link WSDigest }
      * 
      */
-    public WsTransformerContextPipeline createWsTransformerContextPipeline() {
-        return new WsTransformerContextPipeline();
+    public WSDigest createWSDigest() {
+        return new WSDigest();
     }
 
     /**
-     * Create an instance of {@link WsRunQuery }
+     * Create an instance of {@link WSDataClusterPK }
      * 
      */
-    public WsRunQuery createWsRunQuery() {
-        return new WsRunQuery();
+    public WSDataClusterPK createWSDataClusterPK() {
+        return new WSDataClusterPK();
     }
 
     /**
-     * Create an instance of {@link WsExtractedContent }
+     * Create an instance of {@link WSDeleteItems }
      * 
      */
-    public WsExtractedContent createWsExtractedContent() {
-        return new WsExtractedContent();
+    public WSDeleteItems createWSDeleteItems() {
+        return new WSDeleteItems();
     }
 
     /**
-     * Create an instance of {@link WsTransformerPKArray }
+     * Create an instance of {@link WSDigestKey }
      * 
      */
-    public WsTransformerPKArray createWsTransformerPKArray() {
-        return new WsTransformerPKArray();
+    public WSDigestKey createWSDigestKey() {
+        return new WSDigestKey();
     }
 
     /**
-     * Create an instance of {@link WsExistsRoutingRule }
+     * Create an instance of {@link WSGetItemsSort }
      * 
      */
-    public WsExistsRoutingRule createWsExistsRoutingRule() {
-        return new WsExistsRoutingRule();
+    public WSGetItemsSort createWSGetItemsSort() {
+        return new WSGetItemsSort();
     }
 
     /**
-     * Create an instance of {@link WsTransformerPluginV2PutConfiguration }
+     * Create an instance of {@link WSBusinessConceptPK }
      * 
      */
-    public WsTransformerPluginV2PutConfiguration createWsTransformerPluginV2PutConfiguration() {
-        return new WsTransformerPluginV2PutConfiguration();
+    public WSBusinessConceptPK createWSBusinessConceptPK() {
+        return new WSBusinessConceptPK();
     }
 
     /**
-     * Create an instance of {@link WsConceptKey }
+     * Create an instance of {@link WSExistsTransformer }
      * 
      */
-    public WsConceptKey createWsConceptKey() {
-        return new WsConceptKey();
+    public WSExistsTransformer createWSExistsTransformer() {
+        return new WSExistsTransformer();
     }
 
     /**
-     * Create an instance of {@link WsTransformerV2PK }
+     * Create an instance of {@link WSDroppedItemPK }
      * 
      */
-    public WsTransformerV2PK createWsTransformerV2PK() {
-        return new WsTransformerV2PK();
+    public WSDroppedItemPK createWSDroppedItemPK() {
+        return new WSDroppedItemPK();
     }
 
     /**
-     * Create an instance of {@link WsTransformerPK }
+     * Create an instance of {@link WSView }
      * 
      */
-    public WsTransformerPK createWsTransformerPK() {
-        return new WsTransformerPK();
+    public WSView createWSView() {
+        return new WSView();
     }
 
     /**
-     * Create an instance of {@link WsDataModelPKArray }
+     * Create an instance of {@link WSStoredProcedurePK }
      * 
      */
-    public WsDataModelPKArray createWsDataModelPKArray() {
-        return new WsDataModelPKArray();
+    public WSStoredProcedurePK createWSStoredProcedurePK() {
+        return new WSStoredProcedurePK();
     }
 
     /**
-     * Create an instance of {@link WsPutDBDataCluster }
+     * Create an instance of {@link WSItem }
      * 
      */
-    public WsPutDBDataCluster createWsPutDBDataCluster() {
-        return new WsPutDBDataCluster();
+    public WSItem createWSItem() {
+        return new WSItem();
     }
 
     /**
-     * Create an instance of {@link WsDeleteStoredProcedure }
+     * Create an instance of {@link WSExistsStoredProcedure }
      * 
      */
-    public WsDeleteStoredProcedure createWsDeleteStoredProcedure() {
-        return new WsDeleteStoredProcedure();
+    public WSExistsStoredProcedure createWSExistsStoredProcedure() {
+        return new WSExistsStoredProcedure();
     }
 
     /**
-     * Create an instance of {@link WsServicesListItem }
+     * Create an instance of {@link WSDeleteStoredProcedure }
      * 
      */
-    public WsServicesListItem createWsServicesListItem() {
-        return new WsServicesListItem();
+    public WSDeleteStoredProcedure createWSDeleteStoredProcedure() {
+        return new WSDeleteStoredProcedure();
     }
 
     /**
-     * Create an instance of {@link WsWhereCondition }
+     * Create an instance of {@link WSServiceAction }
      * 
      */
-    public WsWhereCondition createWsWhereCondition() {
-        return new WsWhereCondition();
+    public WSServiceAction createWSServiceAction() {
+        return new WSServiceAction();
     }
 
     /**
-     * Create an instance of {@link WsGetRoutingRulePKs }
+     * Create an instance of {@link WSWhereOr }
      * 
      */
-    public WsGetRoutingRulePKs createWsGetRoutingRulePKs() {
-        return new WsGetRoutingRulePKs();
+    public WSWhereOr createWSWhereOr() {
+        return new WSWhereOr();
     }
 
     /**
-     * Create an instance of {@link Wsmdmnull }
+     * Create an instance of {@link WSRoleSpecification }
      * 
      */
-    public Wsmdmnull createWsmdmnull() {
-        return new Wsmdmnull();
+    public WSRoleSpecification createWSRoleSpecification() {
+        return new WSRoleSpecification();
     }
 
     /**
-     * Create an instance of {@link WsTransformerPluginV2SList }
+     * Create an instance of {@link WSExtractUsingTransformerThruView }
      * 
      */
-    public WsTransformerPluginV2SList createWsTransformerPluginV2SList() {
-        return new WsTransformerPluginV2SList();
+    public WSExtractUsingTransformerThruView createWSExtractUsingTransformerThruView() {
+        return new WSExtractUsingTransformerThruView();
     }
 
     /**
-     * Create an instance of {@link WsGetMenu }
+     * Create an instance of {@link WSMDMNULL }
      * 
      */
-    public WsGetMenu createWsGetMenu() {
-        return new WsGetMenu();
+    public WSMDMNULL createWSMDMNULL() {
+        return new WSMDMNULL();
     }
 
     /**
-     * Create an instance of {@link WsDroppedItemPK }
+     * Create an instance of {@link WSPutItemWithReportArray }
      * 
      */
-    public WsDroppedItemPK createWsDroppedItemPK() {
-        return new WsDroppedItemPK();
+    public WSPutItemWithReportArray createWSPutItemWithReportArray() {
+        return new WSPutItemWithReportArray();
     }
 
     /**
-     * Create an instance of {@link WsGetFullPathValues }
+     * Create an instance of {@link WSDeleteItemWithReport }
      * 
      */
-    public WsGetFullPathValues createWsGetFullPathValues() {
-        return new WsGetFullPathValues();
+    public WSDeleteItemWithReport createWSDeleteItemWithReport() {
+        return new WSDeleteItemWithReport();
     }
 
     /**
-     * Create an instance of {@link WsGetRoutingOrderV2ByCriteriaWithPaging }
+     * Create an instance of {@link WSLong }
      * 
      */
-    public WsGetRoutingOrderV2ByCriteriaWithPaging createWsGetRoutingOrderV2ByCriteriaWithPaging() {
-        return new WsGetRoutingOrderV2ByCriteriaWithPaging();
+    public WSLong createWSLong() {
+        return new WSLong();
     }
 
     /**
-     * Create an instance of {@link WsRoutingOrderV2PK }
+     * Create an instance of {@link WSMenuMenuEntriesDescriptions }
      * 
      */
-    public WsRoutingOrderV2PK createWsRoutingOrderV2PK() {
-        return new WsRoutingOrderV2PK();
+    public WSMenuMenuEntriesDescriptions createWSMenuMenuEntriesDescriptions() {
+        return new WSMenuMenuEntriesDescriptions();
     }
 
     /**
-     * Create an instance of {@link WsGetItems }
+     * Create an instance of {@link WSGetViewPKs }
      * 
      */
-    public WsGetItems createWsGetItems() {
-        return new WsGetItems();
+    public WSGetViewPKs createWSGetViewPKs() {
+        return new WSGetViewPKs();
     }
 
     /**
-     * Create an instance of {@link WsPutRoutingRule }
+     * Create an instance of {@link WSRecoverDroppedItem }
      * 
      */
-    public WsPutRoutingRule createWsPutRoutingRule() {
-        return new WsPutRoutingRule();
+    public WSRecoverDroppedItem createWSRecoverDroppedItem() {
+        return new WSRecoverDroppedItem();
     }
 
     /**
-     * Create an instance of {@link WsMenuPK }
+     * Create an instance of {@link WSVersion }
      * 
      */
-    public WsMenuPK createWsMenuPK() {
-        return new WsMenuPK();
+    public WSVersion createWSVersion() {
+        return new WSVersion();
     }
 
     /**
-     * Create an instance of {@link WsProcessFileUsingTransformer }
+     * Create an instance of {@link WSWhereCondition }
      * 
      */
-    public WsProcessFileUsingTransformer createWsProcessFileUsingTransformer() {
-        return new WsProcessFileUsingTransformer();
+    public WSWhereCondition createWSWhereCondition() {
+        return new WSWhereCondition();
     }
 
     /**
-     * Create an instance of {@link WsPutView }
+     * Create an instance of {@link WSGetDataModel }
      * 
      */
-    public WsPutView createWsPutView() {
-        return new WsPutView();
+    public WSGetDataModel createWSGetDataModel() {
+        return new WSGetDataModel();
     }
 
     /**
-     * Create an instance of {@link WsTransformerContextProjectedItemPKs }
+     * Create an instance of {@link WSDeleteTransformerV2 }
      * 
      */
-    public WsTransformerContextProjectedItemPKs createWsTransformerContextProjectedItemPKs() {
-        return new WsTransformerContextProjectedItemPKs();
+    public WSDeleteTransformerV2 createWSDeleteTransformerV2() {
+        return new WSDeleteTransformerV2();
     }
 
     /**
-     * Create an instance of {@link WsTransformerV2PKArray }
+     * Create an instance of {@link WSGetTransformerPluginV2SList }
      * 
      */
-    public WsTransformerV2PKArray createWsTransformerV2PKArray() {
-        return new WsTransformerV2PKArray();
+    public WSGetTransformerPluginV2SList createWSGetTransformerPluginV2SList() {
+        return new WSGetTransformerPluginV2SList();
     }
 
     /**
-     * Create an instance of {@link WsGetDataModel }
+     * Create an instance of {@link WSRunQuery }
      * 
      */
-    public WsGetDataModel createWsGetDataModel() {
-        return new WsGetDataModel();
+    public WSRunQuery createWSRunQuery() {
+        return new WSRunQuery();
     }
 
     /**
-     * Create an instance of {@link WsExistsTransformerPluginV2 }
+     * Create an instance of {@link WSGetItemPKsByCriteria }
      * 
      */
-    public WsExistsTransformerPluginV2 createWsExistsTransformerPluginV2() {
-        return new WsExistsTransformerPluginV2();
+    public WSGetItemPKsByCriteria createWSGetItemPKsByCriteria() {
+        return new WSGetItemPKsByCriteria();
     }
 
     /**
-     * Create an instance of {@link WsQuickSearch }
+     * Create an instance of {@link WSDeleteBusinessConcept }
      * 
      */
-    public WsQuickSearch createWsQuickSearch() {
-        return new WsQuickSearch();
+    public WSDeleteBusinessConcept createWSDeleteBusinessConcept() {
+        return new WSDeleteBusinessConcept();
     }
 
     /**
-     * Create an instance of {@link WsRoutingOrderV2SearchCriteria }
+     * Create an instance of {@link WSRolePK }
      * 
      */
-    public WsRoutingOrderV2SearchCriteria createWsRoutingOrderV2SearchCriteria() {
-        return new WsRoutingOrderV2SearchCriteria();
+    public WSRolePK createWSRolePK() {
+        return new WSRolePK();
     }
 
     /**
-     * Create an instance of {@link WsBusinessConcept }
+     * Create an instance of {@link WSRoutingRulePKArray }
      * 
      */
-    public WsBusinessConcept createWsBusinessConcept() {
-        return new WsBusinessConcept();
+    public WSRoutingRulePKArray createWSRoutingRulePKArray() {
+        return new WSRoutingRulePKArray();
     }
 
     /**
-     * Create an instance of {@link WsServicePutConfiguration }
+     * Create an instance of {@link WSRemoveDroppedItem }
      * 
      */
-    public WsServicePutConfiguration createWsServicePutConfiguration() {
-        return new WsServicePutConfiguration();
+    public WSRemoveDroppedItem createWSRemoveDroppedItem() {
+        return new WSRemoveDroppedItem();
     }
 
     /**
-     * Create an instance of {@link WsRoutingRulePK }
+     * Create an instance of {@link WSGetTransformerV2PKs }
      * 
      */
-    public WsRoutingRulePK createWsRoutingRulePK() {
-        return new WsRoutingRulePK();
+    public WSGetTransformerV2PKs createWSGetTransformerV2PKs() {
+        return new WSGetTransformerV2PKs();
     }
 
     /**
-     * Create an instance of {@link WsDeleteItems }
+     * Create an instance of {@link WSRoutingOrderV2SearchCriteriaWithPaging }
      * 
      */
-    public WsDeleteItems createWsDeleteItems() {
-        return new WsDeleteItems();
+    public WSRoutingOrderV2SearchCriteriaWithPaging createWSRoutingOrderV2SearchCriteriaWithPaging() {
+        return new WSRoutingOrderV2SearchCriteriaWithPaging();
     }
 
     /**
-     * Create an instance of {@link WsExistsTransformer }
+     * Create an instance of {@link WSDataModel }
      * 
      */
-    public WsExistsTransformer createWsExistsTransformer() {
-        return new WsExistsTransformer();
+    public WSDataModel createWSDataModel() {
+        return new WSDataModel();
     }
 
     /**
-     * Create an instance of {@link WsBusinessConceptPK }
+     * Create an instance of {@link WSBackgroundJobPKArray }
      * 
      */
-    public WsBusinessConceptPK createWsBusinessConceptPK() {
-        return new WsBusinessConceptPK();
+    public WSBackgroundJobPKArray createWSBackgroundJobPKArray() {
+        return new WSBackgroundJobPKArray();
     }
 
     /**
-     * Create an instance of {@link WsProcessBytesUsingTransformer }
+     * Create an instance of {@link WSRoutingOrderV2PKArray }
      * 
      */
-    public WsProcessBytesUsingTransformer createWsProcessBytesUsingTransformer() {
-        return new WsProcessBytesUsingTransformer();
+    public WSRoutingOrderV2PKArray createWSRoutingOrderV2PKArray() {
+        return new WSRoutingOrderV2PKArray();
     }
 
     /**
-     * Create an instance of {@link WsGetItemPKsByFullCriteria }
+     * Create an instance of {@link WSPipeline }
      * 
      */
-    public WsGetItemPKsByFullCriteria createWsGetItemPKsByFullCriteria() {
-        return new WsGetItemPKsByFullCriteria();
+    public WSPipeline createWSPipeline() {
+        return new WSPipeline();
     }
 
     /**
-     * Create an instance of {@link WsGetConceptsInDataCluster }
+     * Create an instance of {@link WSProcessBytesUsingTransformerAsBackgroundJob }
      * 
      */
-    public WsGetConceptsInDataCluster createWsGetConceptsInDataCluster() {
-        return new WsGetConceptsInDataCluster();
+    public WSProcessBytesUsingTransformerAsBackgroundJob createWSProcessBytesUsingTransformerAsBackgroundJob() {
+        return new WSProcessBytesUsingTransformerAsBackgroundJob();
     }
 
     /**
-     * Create an instance of {@link WsDigestKey }
+     * Create an instance of {@link WSExtractedContent }
      * 
      */
-    public WsDigestKey createWsDigestKey() {
-        return new WsDigestKey();
+    public WSExtractedContent createWSExtractedContent() {
+        return new WSExtractedContent();
     }
 
     /**
-     * Create an instance of {@link WsGetServicesList }
+     * Create an instance of {@link WSGetBusinessConcepts }
      * 
      */
-    public WsGetServicesList createWsGetServicesList() {
-        return new WsGetServicesList();
+    public WSGetBusinessConcepts createWSGetBusinessConcepts() {
+        return new WSGetBusinessConcepts();
     }
 
     /**
-     * Create an instance of {@link WsMenu }
+     * Create an instance of {@link WSIsItemModifiedByOther }
      * 
      */
-    public WsMenu createWsMenu() {
-        return new WsMenu();
+    public WSIsItemModifiedByOther createWSIsItemModifiedByOther() {
+        return new WSIsItemModifiedByOther();
     }
 
     /**
-     * Create an instance of {@link WsStringArray }
+     * Create an instance of {@link WSUpdateMetadataItem }
      * 
      */
-    public WsStringArray createWsStringArray() {
-        return new WsStringArray();
+    public WSUpdateMetadataItem createWSUpdateMetadataItem() {
+        return new WSUpdateMetadataItem();
     }
 
     /**
-     * Create an instance of {@link WsRoutingRulePKArray }
+     * Create an instance of {@link WSCountItemsByCustomFKFilters }
      * 
      */
-    public WsRoutingRulePKArray createWsRoutingRulePKArray() {
-        return new WsRoutingRulePKArray();
+    public WSCountItemsByCustomFKFilters createWSCountItemsByCustomFKFilters() {
+        return new WSCountItemsByCustomFKFilters();
     }
 
     /**
-     * Create an instance of {@link WsViewPK }
+     * Create an instance of {@link WSCount }
      * 
      */
-    public WsViewPK createWsViewPK() {
-        return new WsViewPK();
+    public WSCount createWSCount() {
+        return new WSCount();
     }
 
     /**
-     * Create an instance of {@link WsProcessFileUsingTransformerAsBackgroundJob }
+     * Create an instance of {@link WSTransformerV2PKArray }
      * 
      */
-    public WsProcessFileUsingTransformerAsBackgroundJob createWsProcessFileUsingTransformerAsBackgroundJob() {
-        return new WsProcessFileUsingTransformerAsBackgroundJob();
+    public WSTransformerV2PKArray createWSTransformerV2PKArray() {
+        return new WSTransformerV2PKArray();
     }
 
     /**
-     * Create an instance of {@link WsIsItemModifiedByOther }
+     * Create an instance of {@link WSGetItem }
      * 
      */
-    public WsIsItemModifiedByOther createWsIsItemModifiedByOther() {
-        return new WsIsItemModifiedByOther();
+    public WSGetItem createWSGetItem() {
+        return new WSGetItem();
     }
 
     /**
-     * Create an instance of {@link WsViewSearch }
+     * Create an instance of {@link WSDataModelPK }
      * 
      */
-    public WsViewSearch createWsViewSearch() {
-        return new WsViewSearch();
+    public WSDataModelPK createWSDataModelPK() {
+        return new WSDataModelPK();
     }
 
     /**
-     * Create an instance of {@link WsCountItemsByCustomFKFilters }
+     * Create an instance of {@link WSDeleteDataModel }
      * 
      */
-    public WsCountItemsByCustomFKFilters createWsCountItemsByCustomFKFilters() {
-        return new WsCountItemsByCustomFKFilters();
+    public WSDeleteDataModel createWSDeleteDataModel() {
+        return new WSDeleteDataModel();
     }
 
     /**
-     * Create an instance of {@link WsGetBusinessConcepts }
+     * Create an instance of {@link WSPartialPutItem }
      * 
      */
-    public WsGetBusinessConcepts createWsGetBusinessConcepts() {
-        return new WsGetBusinessConcepts();
+    public WSPartialPutItem createWSPartialPutItem() {
+        return new WSPartialPutItem();
     }
 
     /**
-     * Create an instance of {@link WsServiceGetConfiguration }
+     * Create an instance of {@link WSPutDataModel }
      * 
      */
-    public WsServiceGetConfiguration createWsServiceGetConfiguration() {
-        return new WsServiceGetConfiguration();
+    public WSPutDataModel createWSPutDataModel() {
+        return new WSPutDataModel();
     }
 
     /**
-     * Create an instance of {@link WsPutBusinessConcept }
+     * Create an instance of {@link WSGetBusinessConceptKey }
      * 
      */
-    public WsPutBusinessConcept createWsPutBusinessConcept() {
-        return new WsPutBusinessConcept();
+    public WSGetBusinessConceptKey createWSGetBusinessConceptKey() {
+        return new WSGetBusinessConceptKey();
     }
 
     /**
-     * Create an instance of {@link WsDeleteRole }
+     * Create an instance of {@link WSItemPKsByCriteriaResponseResults }
      * 
      */
-    public WsDeleteRole createWsDeleteRole() {
-        return new WsDeleteRole();
+    public WSItemPKsByCriteriaResponseResults createWSItemPKsByCriteriaResponseResults() {
+        return new WSItemPKsByCriteriaResponseResults();
     }
 
     /**
-     * Create an instance of {@link Wsi18NString }
+     * Create an instance of {@link WSDroppedItem }
      * 
      */
-    public Wsi18NString createWsi18NString() {
-        return new Wsi18NString();
+    public WSDroppedItem createWSDroppedItem() {
+        return new WSDroppedItem();
     }
 
     /**
-     * Create an instance of {@link WsWhereItem }
+     * Create an instance of {@link WSCheckSchema }
      * 
      */
-    public WsWhereItem createWsWhereItem() {
-        return new WsWhereItem();
+    public WSCheckSchema createWSCheckSchema() {
+        return new WSCheckSchema();
     }
 
     /**
-     * Create an instance of {@link WsPutDataCluster }
+     * Create an instance of {@link WSRegexDataClusterPKs }
      * 
      */
-    public WsPutDataCluster createWsPutDataCluster() {
-        return new WsPutDataCluster();
+    public WSRegexDataClusterPKs createWSRegexDataClusterPKs() {
+        return new WSRegexDataClusterPKs();
     }
 
     /**
-     * Create an instance of {@link WsExtractThroughTransformerV2 }
+     * Create an instance of {@link WSGetDataCluster }
      * 
      */
-    public WsExtractThroughTransformerV2 createWsExtractThroughTransformerV2() {
-        return new WsExtractThroughTransformerV2();
+    public WSGetDataCluster createWSGetDataCluster() {
+        return new WSGetDataCluster();
     }
 
     /**
-     * Create an instance of {@link WsGetItemPKsByCriteria }
+     * Create an instance of {@link WSRole }
      * 
      */
-    public WsGetItemPKsByCriteria createWsGetItemPKsByCriteria() {
-        return new WsGetItemPKsByCriteria();
+    public WSRole createWSRole() {
+        return new WSRole();
     }
 
     /**
-     * Create an instance of {@link WsxPathsSearch }
+     * Create an instance of {@link WSPutTransformer }
      * 
      */
-    public WsxPathsSearch createWsxPathsSearch() {
-        return new WsxPathsSearch();
+    public WSPutTransformer createWSPutTransformer() {
+        return new WSPutTransformer();
     }
 
     /**
-     * Create an instance of {@link WsBackgroundJobPKArray }
+     * Create an instance of {@link WSMDMJobArray }
      * 
      */
-    public WsBackgroundJobPKArray createWsBackgroundJobPKArray() {
-        return new WsBackgroundJobPKArray();
+    public WSMDMJobArray createWSMDMJobArray() {
+        return new WSMDMJobArray();
     }
 
     /**
-     * Create an instance of {@link WsProcessBytesUsingTransformerAsBackgroundJob }
+     * Create an instance of {@link WSDeleteRole }
      * 
      */
-    public WsProcessBytesUsingTransformerAsBackgroundJob createWsProcessBytesUsingTransformerAsBackgroundJob() {
-        return new WsProcessBytesUsingTransformerAsBackgroundJob();
+    public WSDeleteRole createWSDeleteRole() {
+        return new WSDeleteRole();
     }
 
     /**

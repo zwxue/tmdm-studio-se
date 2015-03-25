@@ -7,16 +7,16 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsExistsRole complex type.
+ * <p>Java class for WSExistsRole complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsExistsRole">
+ * &lt;complexType name="WSExistsRole">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="wsRolePK" type="{http://www.talend.com/mdm}wsRolePK" minOccurs="0"/>
+ *         &lt;element name="wsRolePK" type="{http://www.talend.com/mdm}WSRolePK" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -26,18 +26,18 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsExistsRole", propOrder = {
+@XmlType(name = "WSExistsRole", propOrder = {
     "wsRolePK"
 })
-public class WsExistsRole {
+public class WSExistsRole {
 
-    protected WsRolePK wsRolePK;
+    protected WSRolePK wsRolePK;
 
     /**
      * Default no-arg constructor
      * 
      */
-    public WsExistsRole() {
+    public WSExistsRole() {
         super();
     }
 
@@ -45,7 +45,7 @@ public class WsExistsRole {
      * Fully-initialising value constructor
      * 
      */
-    public WsExistsRole(final WsRolePK wsRolePK) {
+    public WSExistsRole(final WSRolePK wsRolePK) {
         this.wsRolePK = wsRolePK;
     }
 
@@ -54,10 +54,10 @@ public class WsExistsRole {
      * 
      * @return
      *     possible object is
-     *     {@link WsRolePK }
+     *     {@link WSRolePK }
      *     
      */
-    public WsRolePK getWsRolePK() {
+    public WSRolePK getWsRolePK() {
         return wsRolePK;
     }
 
@@ -66,10 +66,10 @@ public class WsExistsRole {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsRolePK }
+     *     {@link WSRolePK }
      *     
      */
-    public void setWsRolePK(WsRolePK value) {
+    public void setWsRolePK(WSRolePK value) {
         this.wsRolePK = value;
     }
 

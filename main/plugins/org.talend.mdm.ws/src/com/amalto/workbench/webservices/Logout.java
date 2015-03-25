@@ -16,7 +16,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="arg0" type="{http://www.talend.com/mdm}wsLogout" minOccurs="0"/>
+ *         &lt;element name="arg0" type="{http://www.talend.com/mdm}WSLogout" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -31,7 +31,7 @@ import javax.xml.bind.annotation.XmlType;
 })
 public class Logout {
 
-    protected WsLogout arg0;
+    protected WSLogout arg0;
 
     /**
      * Default no-arg constructor
@@ -45,7 +45,7 @@ public class Logout {
      * Fully-initialising value constructor
      * 
      */
-    public Logout(final WsLogout arg0) {
+    public Logout(final WSLogout arg0) {
         this.arg0 = arg0;
     }
 
@@ -54,10 +54,10 @@ public class Logout {
      * 
      * @return
      *     possible object is
-     *     {@link WsLogout }
+     *     {@link WSLogout }
      *     
      */
-    public WsLogout getArg0() {
+    public WSLogout getArg0() {
         return arg0;
     }
 
@@ -66,10 +66,10 @@ public class Logout {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsLogout }
+     *     {@link WSLogout }
      *     
      */
-    public void setArg0(WsLogout value) {
+    public void setArg0(WSLogout value) {
         this.arg0 = value;
     }
 

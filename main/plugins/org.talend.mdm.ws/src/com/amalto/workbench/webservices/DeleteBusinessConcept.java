@@ -16,7 +16,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="arg0" type="{http://www.talend.com/mdm}wsDeleteBusinessConcept" minOccurs="0"/>
+ *         &lt;element name="arg0" type="{http://www.talend.com/mdm}WSDeleteBusinessConcept" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -31,7 +31,7 @@ import javax.xml.bind.annotation.XmlType;
 })
 public class DeleteBusinessConcept {
 
-    protected WsDeleteBusinessConcept arg0;
+    protected WSDeleteBusinessConcept arg0;
 
     /**
      * Default no-arg constructor
@@ -45,7 +45,7 @@ public class DeleteBusinessConcept {
      * Fully-initialising value constructor
      * 
      */
-    public DeleteBusinessConcept(final WsDeleteBusinessConcept arg0) {
+    public DeleteBusinessConcept(final WSDeleteBusinessConcept arg0) {
         this.arg0 = arg0;
     }
 
@@ -54,10 +54,10 @@ public class DeleteBusinessConcept {
      * 
      * @return
      *     possible object is
-     *     {@link WsDeleteBusinessConcept }
+     *     {@link WSDeleteBusinessConcept }
      *     
      */
-    public WsDeleteBusinessConcept getArg0() {
+    public WSDeleteBusinessConcept getArg0() {
         return arg0;
     }
 
@@ -66,10 +66,10 @@ public class DeleteBusinessConcept {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsDeleteBusinessConcept }
+     *     {@link WSDeleteBusinessConcept }
      *     
      */
-    public void setArg0(WsDeleteBusinessConcept value) {
+    public void setArg0(WSDeleteBusinessConcept value) {
         this.arg0 = value;
     }
 

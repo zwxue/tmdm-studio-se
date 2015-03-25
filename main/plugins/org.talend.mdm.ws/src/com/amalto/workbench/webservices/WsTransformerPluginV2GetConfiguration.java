@@ -7,12 +7,12 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsTransformerPluginV2GetConfiguration complex type.
+ * <p>Java class for WSTransformerPluginV2GetConfiguration complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsTransformerPluginV2GetConfiguration">
+ * &lt;complexType name="WSTransformerPluginV2GetConfiguration">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
@@ -27,11 +27,11 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsTransformerPluginV2GetConfiguration", propOrder = {
+@XmlType(name = "WSTransformerPluginV2GetConfiguration", propOrder = {
     "jndiName",
     "optionalParameter"
 })
-public class WsTransformerPluginV2GetConfiguration {
+public class WSTransformerPluginV2GetConfiguration {
 
     protected String jndiName;
     protected String optionalParameter;
@@ -40,7 +40,7 @@ public class WsTransformerPluginV2GetConfiguration {
      * Default no-arg constructor
      * 
      */
-    public WsTransformerPluginV2GetConfiguration() {
+    public WSTransformerPluginV2GetConfiguration() {
         super();
     }
 
@@ -48,7 +48,7 @@ public class WsTransformerPluginV2GetConfiguration {
      * Fully-initialising value constructor
      * 
      */
-    public WsTransformerPluginV2GetConfiguration(final String jndiName, final String optionalParameter) {
+    public WSTransformerPluginV2GetConfiguration(final String jndiName, final String optionalParameter) {
         this.jndiName = jndiName;
         this.optionalParameter = optionalParameter;
     }

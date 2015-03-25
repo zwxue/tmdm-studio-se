@@ -7,12 +7,12 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsComponent.
+ * <p>Java class for WSComponent.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * <p>
  * <pre>
- * &lt;simpleType name="wsComponent">
+ * &lt;simpleType name="WSComponent">
  *   &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string">
  *     &lt;enumeration value="DataManager"/>
  *     &lt;enumeration value="Service"/>
@@ -22,9 +22,9 @@ import javax.xml.bind.annotation.XmlType;
  * </pre>
  * 
  */
-@XmlType(name = "wsComponent")
+@XmlType(name = "WSComponent")
 @XmlEnum
-public enum WsComponent {
+public enum WSComponent {
 
     @XmlEnumValue("DataManager")
     DATA_MANAGER("DataManager"),
@@ -34,7 +34,7 @@ public enum WsComponent {
     CONNECTOR("Connector");
     private final String value;
 
-    WsComponent(String v) {
+    WSComponent(String v) {
         value = v;
     }
 
@@ -42,8 +42,8 @@ public enum WsComponent {
         return value;
     }
 
-    public static WsComponent fromValue(String v) {
-        for (WsComponent c: WsComponent.values()) {
+    public static WSComponent fromValue(String v) {
+        for (WSComponent c: WSComponent.values()) {
             if (c.value.equals(v)) {
                 return c;
             }

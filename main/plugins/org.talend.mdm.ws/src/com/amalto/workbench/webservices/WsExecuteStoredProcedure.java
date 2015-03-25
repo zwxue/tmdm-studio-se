@@ -10,18 +10,18 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsExecuteStoredProcedure complex type.
+ * <p>Java class for WSExecuteStoredProcedure complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsExecuteStoredProcedure">
+ * &lt;complexType name="WSExecuteStoredProcedure">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
  *         &lt;element name="parameters" type="{http://www.w3.org/2001/XMLSchema}string" maxOccurs="unbounded" minOccurs="0"/>
- *         &lt;element name="wsDataClusterPK" type="{http://www.talend.com/mdm}wsDataClusterPK" minOccurs="0"/>
- *         &lt;element name="wsStoredProcedurePK" type="{http://www.talend.com/mdm}wsStoredProcedurePK" minOccurs="0"/>
+ *         &lt;element name="wsDataClusterPK" type="{http://www.talend.com/mdm}WSDataClusterPK" minOccurs="0"/>
+ *         &lt;element name="wsStoredProcedurePK" type="{http://www.talend.com/mdm}WSStoredProcedurePK" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -31,23 +31,23 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsExecuteStoredProcedure", propOrder = {
+@XmlType(name = "WSExecuteStoredProcedure", propOrder = {
     "parameters",
     "wsDataClusterPK",
     "wsStoredProcedurePK"
 })
-public class WsExecuteStoredProcedure {
+public class WSExecuteStoredProcedure {
 
     @XmlElement(nillable = true)
     protected List<String> parameters;
-    protected WsDataClusterPK wsDataClusterPK;
-    protected WsStoredProcedurePK wsStoredProcedurePK;
+    protected WSDataClusterPK wsDataClusterPK;
+    protected WSStoredProcedurePK wsStoredProcedurePK;
 
     /**
      * Default no-arg constructor
      * 
      */
-    public WsExecuteStoredProcedure() {
+    public WSExecuteStoredProcedure() {
         super();
     }
 
@@ -55,7 +55,7 @@ public class WsExecuteStoredProcedure {
      * Fully-initialising value constructor
      * 
      */
-    public WsExecuteStoredProcedure(final List<String> parameters, final WsDataClusterPK wsDataClusterPK, final WsStoredProcedurePK wsStoredProcedurePK) {
+    public WSExecuteStoredProcedure(final List<String> parameters, final WSDataClusterPK wsDataClusterPK, final WSStoredProcedurePK wsStoredProcedurePK) {
         this.parameters = parameters;
         this.wsDataClusterPK = wsDataClusterPK;
         this.wsStoredProcedurePK = wsStoredProcedurePK;
@@ -95,10 +95,10 @@ public class WsExecuteStoredProcedure {
      * 
      * @return
      *     possible object is
-     *     {@link WsDataClusterPK }
+     *     {@link WSDataClusterPK }
      *     
      */
-    public WsDataClusterPK getWsDataClusterPK() {
+    public WSDataClusterPK getWsDataClusterPK() {
         return wsDataClusterPK;
     }
 
@@ -107,10 +107,10 @@ public class WsExecuteStoredProcedure {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsDataClusterPK }
+     *     {@link WSDataClusterPK }
      *     
      */
-    public void setWsDataClusterPK(WsDataClusterPK value) {
+    public void setWsDataClusterPK(WSDataClusterPK value) {
         this.wsDataClusterPK = value;
     }
 
@@ -119,10 +119,10 @@ public class WsExecuteStoredProcedure {
      * 
      * @return
      *     possible object is
-     *     {@link WsStoredProcedurePK }
+     *     {@link WSStoredProcedurePK }
      *     
      */
-    public WsStoredProcedurePK getWsStoredProcedurePK() {
+    public WSStoredProcedurePK getWsStoredProcedurePK() {
         return wsStoredProcedurePK;
     }
 
@@ -131,10 +131,10 @@ public class WsExecuteStoredProcedure {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsStoredProcedurePK }
+     *     {@link WSStoredProcedurePK }
      *     
      */
-    public void setWsStoredProcedurePK(WsStoredProcedurePK value) {
+    public void setWsStoredProcedurePK(WSStoredProcedurePK value) {
         this.wsStoredProcedurePK = value;
     }
 

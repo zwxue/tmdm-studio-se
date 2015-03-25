@@ -16,7 +16,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="arg0" type="{http://www.talend.com/mdm}wsDeleteStoredProcedure" minOccurs="0"/>
+ *         &lt;element name="arg0" type="{http://www.talend.com/mdm}WSDeleteStoredProcedure" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -31,7 +31,7 @@ import javax.xml.bind.annotation.XmlType;
 })
 public class DeleteStoredProcedure {
 
-    protected WsDeleteStoredProcedure arg0;
+    protected WSDeleteStoredProcedure arg0;
 
     /**
      * Default no-arg constructor
@@ -45,7 +45,7 @@ public class DeleteStoredProcedure {
      * Fully-initialising value constructor
      * 
      */
-    public DeleteStoredProcedure(final WsDeleteStoredProcedure arg0) {
+    public DeleteStoredProcedure(final WSDeleteStoredProcedure arg0) {
         this.arg0 = arg0;
     }
 
@@ -54,10 +54,10 @@ public class DeleteStoredProcedure {
      * 
      * @return
      *     possible object is
-     *     {@link WsDeleteStoredProcedure }
+     *     {@link WSDeleteStoredProcedure }
      *     
      */
-    public WsDeleteStoredProcedure getArg0() {
+    public WSDeleteStoredProcedure getArg0() {
         return arg0;
     }
 
@@ -66,10 +66,10 @@ public class DeleteStoredProcedure {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsDeleteStoredProcedure }
+     *     {@link WSDeleteStoredProcedure }
      *     
      */
-    public void setArg0(WsDeleteStoredProcedure value) {
+    public void setArg0(WSDeleteStoredProcedure value) {
         this.arg0 = value;
     }
 

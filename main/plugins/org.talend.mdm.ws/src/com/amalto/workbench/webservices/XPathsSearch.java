@@ -16,7 +16,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="arg0" type="{http://www.talend.com/mdm}wsxPathsSearch" minOccurs="0"/>
+ *         &lt;element name="arg0" type="{http://www.talend.com/mdm}WSXPathsSearch" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -31,7 +31,7 @@ import javax.xml.bind.annotation.XmlType;
 })
 public class XPathsSearch {
 
-    protected WsxPathsSearch arg0;
+    protected WSXPathsSearch arg0;
 
     /**
      * Default no-arg constructor
@@ -45,7 +45,7 @@ public class XPathsSearch {
      * Fully-initialising value constructor
      * 
      */
-    public XPathsSearch(final WsxPathsSearch arg0) {
+    public XPathsSearch(final WSXPathsSearch arg0) {
         this.arg0 = arg0;
     }
 
@@ -54,10 +54,10 @@ public class XPathsSearch {
      * 
      * @return
      *     possible object is
-     *     {@link WsxPathsSearch }
+     *     {@link WSXPathsSearch }
      *     
      */
-    public WsxPathsSearch getArg0() {
+    public WSXPathsSearch getArg0() {
         return arg0;
     }
 
@@ -66,10 +66,10 @@ public class XPathsSearch {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsxPathsSearch }
+     *     {@link WSXPathsSearch }
      *     
      */
-    public void setArg0(WsxPathsSearch value) {
+    public void setArg0(WSXPathsSearch value) {
         this.arg0 = value;
     }
 

@@ -7,17 +7,17 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsExtractedContent complex type.
+ * <p>Java class for WSExtractedContent complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsExtractedContent">
+ * &lt;complexType name="WSExtractedContent">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
  *         &lt;element name="contentType" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="wsByteArray" type="{http://www.talend.com/mdm}wsByteArray" minOccurs="0"/>
+ *         &lt;element name="wsByteArray" type="{http://www.talend.com/mdm}WSByteArray" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -27,20 +27,20 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsExtractedContent", propOrder = {
+@XmlType(name = "WSExtractedContent", propOrder = {
     "contentType",
     "wsByteArray"
 })
-public class WsExtractedContent {
+public class WSExtractedContent {
 
     protected String contentType;
-    protected WsByteArray wsByteArray;
+    protected WSByteArray wsByteArray;
 
     /**
      * Default no-arg constructor
      * 
      */
-    public WsExtractedContent() {
+    public WSExtractedContent() {
         super();
     }
 
@@ -48,7 +48,7 @@ public class WsExtractedContent {
      * Fully-initialising value constructor
      * 
      */
-    public WsExtractedContent(final String contentType, final WsByteArray wsByteArray) {
+    public WSExtractedContent(final String contentType, final WSByteArray wsByteArray) {
         this.contentType = contentType;
         this.wsByteArray = wsByteArray;
     }
@@ -82,10 +82,10 @@ public class WsExtractedContent {
      * 
      * @return
      *     possible object is
-     *     {@link WsByteArray }
+     *     {@link WSByteArray }
      *     
      */
-    public WsByteArray getWsByteArray() {
+    public WSByteArray getWsByteArray() {
         return wsByteArray;
     }
 
@@ -94,10 +94,10 @@ public class WsExtractedContent {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsByteArray }
+     *     {@link WSByteArray }
      *     
      */
-    public void setWsByteArray(WsByteArray value) {
+    public void setWsByteArray(WSByteArray value) {
         this.wsByteArray = value;
     }
 

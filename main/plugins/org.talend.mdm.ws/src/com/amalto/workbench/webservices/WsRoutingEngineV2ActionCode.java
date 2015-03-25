@@ -6,12 +6,12 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsRoutingEngineV2ActionCode.
+ * <p>Java class for WSRoutingEngineV2ActionCode.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * <p>
  * <pre>
- * &lt;simpleType name="wsRoutingEngineV2ActionCode">
+ * &lt;simpleType name="WSRoutingEngineV2ActionCode">
  *   &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string">
  *     &lt;enumeration value="START"/>
  *     &lt;enumeration value="STOP"/>
@@ -23,9 +23,9 @@ import javax.xml.bind.annotation.XmlType;
  * </pre>
  * 
  */
-@XmlType(name = "wsRoutingEngineV2ActionCode")
+@XmlType(name = "WSRoutingEngineV2ActionCode")
 @XmlEnum
-public enum WsRoutingEngineV2ActionCode {
+public enum WSRoutingEngineV2ActionCode {
 
     START,
     STOP,
@@ -37,7 +37,7 @@ public enum WsRoutingEngineV2ActionCode {
         return name();
     }
 
-    public static WsRoutingEngineV2ActionCode fromValue(String v) {
+    public static WSRoutingEngineV2ActionCode fromValue(String v) {
         return valueOf(v);
     }
 

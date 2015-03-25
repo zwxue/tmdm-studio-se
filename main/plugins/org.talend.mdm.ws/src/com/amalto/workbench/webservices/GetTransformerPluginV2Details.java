@@ -16,7 +16,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="arg0" type="{http://www.talend.com/mdm}wsGetTransformerPluginV2Details" minOccurs="0"/>
+ *         &lt;element name="arg0" type="{http://www.talend.com/mdm}WSGetTransformerPluginV2Details" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -31,7 +31,7 @@ import javax.xml.bind.annotation.XmlType;
 })
 public class GetTransformerPluginV2Details {
 
-    protected WsGetTransformerPluginV2Details arg0;
+    protected WSGetTransformerPluginV2Details arg0;
 
     /**
      * Default no-arg constructor
@@ -45,7 +45,7 @@ public class GetTransformerPluginV2Details {
      * Fully-initialising value constructor
      * 
      */
-    public GetTransformerPluginV2Details(final WsGetTransformerPluginV2Details arg0) {
+    public GetTransformerPluginV2Details(final WSGetTransformerPluginV2Details arg0) {
         this.arg0 = arg0;
     }
 
@@ -54,10 +54,10 @@ public class GetTransformerPluginV2Details {
      * 
      * @return
      *     possible object is
-     *     {@link WsGetTransformerPluginV2Details }
+     *     {@link WSGetTransformerPluginV2Details }
      *     
      */
-    public WsGetTransformerPluginV2Details getArg0() {
+    public WSGetTransformerPluginV2Details getArg0() {
         return arg0;
     }
 
@@ -66,10 +66,10 @@ public class GetTransformerPluginV2Details {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsGetTransformerPluginV2Details }
+     *     {@link WSGetTransformerPluginV2Details }
      *     
      */
-    public void setArg0(WsGetTransformerPluginV2Details value) {
+    public void setArg0(WSGetTransformerPluginV2Details value) {
         this.arg0 = value;
     }
 

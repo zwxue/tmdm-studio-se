@@ -10,16 +10,16 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsRoutingRulePKArray complex type.
+ * <p>Java class for WSRoutingRulePKArray complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsRoutingRulePKArray">
+ * &lt;complexType name="WSRoutingRulePKArray">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="wsRoutingRulePKs" type="{http://www.talend.com/mdm}wsRoutingRulePK" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element name="wsRoutingRulePKs" type="{http://www.talend.com/mdm}WSRoutingRulePK" maxOccurs="unbounded" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -29,19 +29,19 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsRoutingRulePKArray", propOrder = {
+@XmlType(name = "WSRoutingRulePKArray", propOrder = {
     "wsRoutingRulePKs"
 })
-public class WsRoutingRulePKArray {
+public class WSRoutingRulePKArray {
 
     @XmlElement(nillable = true)
-    protected List<WsRoutingRulePK> wsRoutingRulePKs;
+    protected List<WSRoutingRulePK> wsRoutingRulePKs;
 
     /**
      * Default no-arg constructor
      * 
      */
-    public WsRoutingRulePKArray() {
+    public WSRoutingRulePKArray() {
         super();
     }
 
@@ -49,7 +49,7 @@ public class WsRoutingRulePKArray {
      * Fully-initialising value constructor
      * 
      */
-    public WsRoutingRulePKArray(final List<WsRoutingRulePK> wsRoutingRulePKs) {
+    public WSRoutingRulePKArray(final List<WSRoutingRulePK> wsRoutingRulePKs) {
         this.wsRoutingRulePKs = wsRoutingRulePKs;
     }
 
@@ -71,13 +71,13 @@ public class WsRoutingRulePKArray {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link WsRoutingRulePK }
+     * {@link WSRoutingRulePK }
      * 
      * 
      */
-    public List<WsRoutingRulePK> getWsRoutingRulePKs() {
+    public List<WSRoutingRulePK> getWsRoutingRulePKs() {
         if (wsRoutingRulePKs == null) {
-            wsRoutingRulePKs = new ArrayList<WsRoutingRulePK>();
+            wsRoutingRulePKs = new ArrayList<WSRoutingRulePK>();
         }
         return this.wsRoutingRulePKs;
     }

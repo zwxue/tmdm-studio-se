@@ -16,7 +16,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="arg0" type="{http://www.talend.com/mdm}wsPartialPutItem" minOccurs="0"/>
+ *         &lt;element name="arg0" type="{http://www.talend.com/mdm}WSPartialPutItem" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -31,7 +31,7 @@ import javax.xml.bind.annotation.XmlType;
 })
 public class PartialPutItem {
 
-    protected WsPartialPutItem arg0;
+    protected WSPartialPutItem arg0;
 
     /**
      * Default no-arg constructor
@@ -45,7 +45,7 @@ public class PartialPutItem {
      * Fully-initialising value constructor
      * 
      */
-    public PartialPutItem(final WsPartialPutItem arg0) {
+    public PartialPutItem(final WSPartialPutItem arg0) {
         this.arg0 = arg0;
     }
 
@@ -54,10 +54,10 @@ public class PartialPutItem {
      * 
      * @return
      *     possible object is
-     *     {@link WsPartialPutItem }
+     *     {@link WSPartialPutItem }
      *     
      */
-    public WsPartialPutItem getArg0() {
+    public WSPartialPutItem getArg0() {
         return arg0;
     }
 
@@ -66,10 +66,10 @@ public class PartialPutItem {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsPartialPutItem }
+     *     {@link WSPartialPutItem }
      *     
      */
-    public void setArg0(WsPartialPutItem value) {
+    public void setArg0(WSPartialPutItem value) {
         this.arg0 = value;
     }
 

@@ -17,7 +17,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="return" type="{http://www.talend.com/mdm}wsDroppedItemPKArray" minOccurs="0"/>
+ *         &lt;element name="return" type="{http://www.talend.com/mdm}WSDroppedItemPKArray" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -33,7 +33,7 @@ import javax.xml.bind.annotation.XmlType;
 public class FindAllDroppedItemsPKsResponse {
 
     @XmlElement(name = "return")
-    protected WsDroppedItemPKArray _return;
+    protected WSDroppedItemPKArray _return;
 
     /**
      * Default no-arg constructor
@@ -47,7 +47,7 @@ public class FindAllDroppedItemsPKsResponse {
      * Fully-initialising value constructor
      * 
      */
-    public FindAllDroppedItemsPKsResponse(final WsDroppedItemPKArray _return) {
+    public FindAllDroppedItemsPKsResponse(final WSDroppedItemPKArray _return) {
         this._return = _return;
     }
 
@@ -56,10 +56,10 @@ public class FindAllDroppedItemsPKsResponse {
      * 
      * @return
      *     possible object is
-     *     {@link WsDroppedItemPKArray }
+     *     {@link WSDroppedItemPKArray }
      *     
      */
-    public WsDroppedItemPKArray getReturn() {
+    public WSDroppedItemPKArray getReturn() {
         return _return;
     }
 
@@ -68,10 +68,10 @@ public class FindAllDroppedItemsPKsResponse {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsDroppedItemPKArray }
+     *     {@link WSDroppedItemPKArray }
      *     
      */
-    public void setReturn(WsDroppedItemPKArray value) {
+    public void setReturn(WSDroppedItemPKArray value) {
         this._return = value;
     }
 

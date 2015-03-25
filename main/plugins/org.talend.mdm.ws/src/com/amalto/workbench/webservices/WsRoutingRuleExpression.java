@@ -7,18 +7,18 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsRoutingRuleExpression complex type.
+ * <p>Java class for WSRoutingRuleExpression complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsRoutingRuleExpression">
+ * &lt;complexType name="WSRoutingRuleExpression">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
  *         &lt;element name="name" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="value" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="wsOperator" type="{http://www.talend.com/mdm}wsRoutingRuleOperator" minOccurs="0"/>
+ *         &lt;element name="wsOperator" type="{http://www.talend.com/mdm}WSRoutingRuleOperator" minOccurs="0"/>
  *         &lt;element name="xpath" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
@@ -29,24 +29,24 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsRoutingRuleExpression", propOrder = {
+@XmlType(name = "WSRoutingRuleExpression", propOrder = {
     "name",
     "value",
     "wsOperator",
     "xpath"
 })
-public class WsRoutingRuleExpression {
+public class WSRoutingRuleExpression {
 
     protected String name;
     protected String value;
-    protected WsRoutingRuleOperator wsOperator;
+    protected WSRoutingRuleOperator wsOperator;
     protected String xpath;
 
     /**
      * Default no-arg constructor
      * 
      */
-    public WsRoutingRuleExpression() {
+    public WSRoutingRuleExpression() {
         super();
     }
 
@@ -54,7 +54,7 @@ public class WsRoutingRuleExpression {
      * Fully-initialising value constructor
      * 
      */
-    public WsRoutingRuleExpression(final String name, final String value, final WsRoutingRuleOperator wsOperator, final String xpath) {
+    public WSRoutingRuleExpression(final String name, final String value, final WSRoutingRuleOperator wsOperator, final String xpath) {
         this.name = name;
         this.value = value;
         this.wsOperator = wsOperator;
@@ -114,10 +114,10 @@ public class WsRoutingRuleExpression {
      * 
      * @return
      *     possible object is
-     *     {@link WsRoutingRuleOperator }
+     *     {@link WSRoutingRuleOperator }
      *     
      */
-    public WsRoutingRuleOperator getWsOperator() {
+    public WSRoutingRuleOperator getWsOperator() {
         return wsOperator;
     }
 
@@ -126,10 +126,10 @@ public class WsRoutingRuleExpression {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsRoutingRuleOperator }
+     *     {@link WSRoutingRuleOperator }
      *     
      */
-    public void setWsOperator(WsRoutingRuleOperator value) {
+    public void setWsOperator(WSRoutingRuleOperator value) {
         this.wsOperator = value;
     }
 

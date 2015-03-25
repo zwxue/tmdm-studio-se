@@ -16,7 +16,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="arg0" type="{http://www.talend.com/mdm}wsGetServicesList" minOccurs="0"/>
+ *         &lt;element name="arg0" type="{http://www.talend.com/mdm}WSGetServicesList" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -31,7 +31,7 @@ import javax.xml.bind.annotation.XmlType;
 })
 public class GetServicesList {
 
-    protected WsGetServicesList arg0;
+    protected WSGetServicesList arg0;
 
     /**
      * Default no-arg constructor
@@ -45,7 +45,7 @@ public class GetServicesList {
      * Fully-initialising value constructor
      * 
      */
-    public GetServicesList(final WsGetServicesList arg0) {
+    public GetServicesList(final WSGetServicesList arg0) {
         this.arg0 = arg0;
     }
 
@@ -54,10 +54,10 @@ public class GetServicesList {
      * 
      * @return
      *     possible object is
-     *     {@link WsGetServicesList }
+     *     {@link WSGetServicesList }
      *     
      */
-    public WsGetServicesList getArg0() {
+    public WSGetServicesList getArg0() {
         return arg0;
     }
 
@@ -66,10 +66,10 @@ public class GetServicesList {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsGetServicesList }
+     *     {@link WSGetServicesList }
      *     
      */
-    public void setArg0(WsGetServicesList value) {
+    public void setArg0(WSGetServicesList value) {
         this.arg0 = value;
     }
 

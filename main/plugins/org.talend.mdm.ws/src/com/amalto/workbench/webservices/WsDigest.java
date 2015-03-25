@@ -7,18 +7,18 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsDigest complex type.
+ * <p>Java class for WSDigest complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsDigest">
+ * &lt;complexType name="WSDigest">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
  *         &lt;element name="digestValue" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="timeStamp" type="{http://www.w3.org/2001/XMLSchema}long"/>
- *         &lt;element name="wsDigestKey" type="{http://www.talend.com/mdm}wsDigestKey" minOccurs="0"/>
+ *         &lt;element name="wsDigestKey" type="{http://www.talend.com/mdm}WSDigestKey" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -28,22 +28,22 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsDigest", propOrder = {
+@XmlType(name = "WSDigest", propOrder = {
     "digestValue",
     "timeStamp",
     "wsDigestKey"
 })
-public class WsDigest {
+public class WSDigest {
 
     protected String digestValue;
     protected long timeStamp;
-    protected WsDigestKey wsDigestKey;
+    protected WSDigestKey wsDigestKey;
 
     /**
      * Default no-arg constructor
      * 
      */
-    public WsDigest() {
+    public WSDigest() {
         super();
     }
 
@@ -51,7 +51,7 @@ public class WsDigest {
      * Fully-initialising value constructor
      * 
      */
-    public WsDigest(final String digestValue, final long timeStamp, final WsDigestKey wsDigestKey) {
+    public WSDigest(final String digestValue, final long timeStamp, final WSDigestKey wsDigestKey) {
         this.digestValue = digestValue;
         this.timeStamp = timeStamp;
         this.wsDigestKey = wsDigestKey;
@@ -102,10 +102,10 @@ public class WsDigest {
      * 
      * @return
      *     possible object is
-     *     {@link WsDigestKey }
+     *     {@link WSDigestKey }
      *     
      */
-    public WsDigestKey getWsDigestKey() {
+    public WSDigestKey getWsDigestKey() {
         return wsDigestKey;
     }
 
@@ -114,10 +114,10 @@ public class WsDigest {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsDigestKey }
+     *     {@link WSDigestKey }
      *     
      */
-    public void setWsDigestKey(WsDigestKey value) {
+    public void setWsDigestKey(WSDigestKey value) {
         this.wsDigestKey = value;
     }
 

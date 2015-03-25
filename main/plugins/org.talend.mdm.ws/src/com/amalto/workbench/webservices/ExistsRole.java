@@ -16,7 +16,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="arg0" type="{http://www.talend.com/mdm}wsExistsRole" minOccurs="0"/>
+ *         &lt;element name="arg0" type="{http://www.talend.com/mdm}WSExistsRole" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -31,7 +31,7 @@ import javax.xml.bind.annotation.XmlType;
 })
 public class ExistsRole {
 
-    protected WsExistsRole arg0;
+    protected WSExistsRole arg0;
 
     /**
      * Default no-arg constructor
@@ -45,7 +45,7 @@ public class ExistsRole {
      * Fully-initialising value constructor
      * 
      */
-    public ExistsRole(final WsExistsRole arg0) {
+    public ExistsRole(final WSExistsRole arg0) {
         this.arg0 = arg0;
     }
 
@@ -54,10 +54,10 @@ public class ExistsRole {
      * 
      * @return
      *     possible object is
-     *     {@link WsExistsRole }
+     *     {@link WSExistsRole }
      *     
      */
-    public WsExistsRole getArg0() {
+    public WSExistsRole getArg0() {
         return arg0;
     }
 
@@ -66,10 +66,10 @@ public class ExistsRole {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsExistsRole }
+     *     {@link WSExistsRole }
      *     
      */
-    public void setArg0(WsExistsRole value) {
+    public void setArg0(WSExistsRole value) {
         this.arg0 = value;
     }
 

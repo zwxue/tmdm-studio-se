@@ -17,7 +17,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="return" type="{http://www.talend.com/mdm}wsDataClusterPKArray" minOccurs="0"/>
+ *         &lt;element name="return" type="{http://www.talend.com/mdm}WSDataClusterPKArray" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -33,7 +33,7 @@ import javax.xml.bind.annotation.XmlType;
 public class GetDataClusterPKsResponse {
 
     @XmlElement(name = "return")
-    protected WsDataClusterPKArray _return;
+    protected WSDataClusterPKArray _return;
 
     /**
      * Default no-arg constructor
@@ -47,7 +47,7 @@ public class GetDataClusterPKsResponse {
      * Fully-initialising value constructor
      * 
      */
-    public GetDataClusterPKsResponse(final WsDataClusterPKArray _return) {
+    public GetDataClusterPKsResponse(final WSDataClusterPKArray _return) {
         this._return = _return;
     }
 
@@ -56,10 +56,10 @@ public class GetDataClusterPKsResponse {
      * 
      * @return
      *     possible object is
-     *     {@link WsDataClusterPKArray }
+     *     {@link WSDataClusterPKArray }
      *     
      */
-    public WsDataClusterPKArray getReturn() {
+    public WSDataClusterPKArray getReturn() {
         return _return;
     }
 
@@ -68,10 +68,10 @@ public class GetDataClusterPKsResponse {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsDataClusterPKArray }
+     *     {@link WSDataClusterPKArray }
      *     
      */
-    public void setReturn(WsDataClusterPKArray value) {
+    public void setReturn(WSDataClusterPKArray value) {
         this._return = value;
     }
 

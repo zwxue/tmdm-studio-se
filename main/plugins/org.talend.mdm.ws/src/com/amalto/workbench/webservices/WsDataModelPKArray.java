@@ -10,16 +10,16 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsDataModelPKArray complex type.
+ * <p>Java class for WSDataModelPKArray complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsDataModelPKArray">
+ * &lt;complexType name="WSDataModelPKArray">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="wsDataModelPKs" type="{http://www.talend.com/mdm}wsDataModelPK" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element name="wsDataModelPKs" type="{http://www.talend.com/mdm}WSDataModelPK" maxOccurs="unbounded" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -29,19 +29,19 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsDataModelPKArray", propOrder = {
+@XmlType(name = "WSDataModelPKArray", propOrder = {
     "wsDataModelPKs"
 })
-public class WsDataModelPKArray {
+public class WSDataModelPKArray {
 
     @XmlElement(nillable = true)
-    protected List<WsDataModelPK> wsDataModelPKs;
+    protected List<WSDataModelPK> wsDataModelPKs;
 
     /**
      * Default no-arg constructor
      * 
      */
-    public WsDataModelPKArray() {
+    public WSDataModelPKArray() {
         super();
     }
 
@@ -49,7 +49,7 @@ public class WsDataModelPKArray {
      * Fully-initialising value constructor
      * 
      */
-    public WsDataModelPKArray(final List<WsDataModelPK> wsDataModelPKs) {
+    public WSDataModelPKArray(final List<WSDataModelPK> wsDataModelPKs) {
         this.wsDataModelPKs = wsDataModelPKs;
     }
 
@@ -71,13 +71,13 @@ public class WsDataModelPKArray {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link WsDataModelPK }
+     * {@link WSDataModelPK }
      * 
      * 
      */
-    public List<WsDataModelPK> getWsDataModelPKs() {
+    public List<WSDataModelPK> getWsDataModelPKs() {
         if (wsDataModelPKs == null) {
-            wsDataModelPKs = new ArrayList<WsDataModelPK>();
+            wsDataModelPKs = new ArrayList<WSDataModelPK>();
         }
         return this.wsDataModelPKs;
     }

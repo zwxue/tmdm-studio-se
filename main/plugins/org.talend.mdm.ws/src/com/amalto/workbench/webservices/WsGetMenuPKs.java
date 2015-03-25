@@ -7,12 +7,12 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsGetMenuPKs complex type.
+ * <p>Java class for WSGetMenuPKs complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsGetMenuPKs">
+ * &lt;complexType name="WSGetMenuPKs">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
@@ -26,10 +26,10 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsGetMenuPKs", propOrder = {
+@XmlType(name = "WSGetMenuPKs", propOrder = {
     "regex"
 })
-public class WsGetMenuPKs {
+public class WSGetMenuPKs {
 
     protected String regex;
 
@@ -37,7 +37,7 @@ public class WsGetMenuPKs {
      * Default no-arg constructor
      * 
      */
-    public WsGetMenuPKs() {
+    public WSGetMenuPKs() {
         super();
     }
 
@@ -45,7 +45,7 @@ public class WsGetMenuPKs {
      * Fully-initialising value constructor
      * 
      */
-    public WsGetMenuPKs(final String regex) {
+    public WSGetMenuPKs(final String regex) {
         this.regex = regex;
     }
 

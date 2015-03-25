@@ -17,7 +17,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="return" type="{http://www.talend.com/mdm}wsRoutingOrderV2Array" minOccurs="0"/>
+ *         &lt;element name="return" type="{http://www.talend.com/mdm}WSRoutingOrderV2Array" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -33,7 +33,7 @@ import javax.xml.bind.annotation.XmlType;
 public class GetRoutingOrderV2SByCriteriaResponse {
 
     @XmlElement(name = "return")
-    protected WsRoutingOrderV2Array _return;
+    protected WSRoutingOrderV2Array _return;
 
     /**
      * Default no-arg constructor
@@ -47,7 +47,7 @@ public class GetRoutingOrderV2SByCriteriaResponse {
      * Fully-initialising value constructor
      * 
      */
-    public GetRoutingOrderV2SByCriteriaResponse(final WsRoutingOrderV2Array _return) {
+    public GetRoutingOrderV2SByCriteriaResponse(final WSRoutingOrderV2Array _return) {
         this._return = _return;
     }
 
@@ -56,10 +56,10 @@ public class GetRoutingOrderV2SByCriteriaResponse {
      * 
      * @return
      *     possible object is
-     *     {@link WsRoutingOrderV2Array }
+     *     {@link WSRoutingOrderV2Array }
      *     
      */
-    public WsRoutingOrderV2Array getReturn() {
+    public WSRoutingOrderV2Array getReturn() {
         return _return;
     }
 
@@ -68,10 +68,10 @@ public class GetRoutingOrderV2SByCriteriaResponse {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsRoutingOrderV2Array }
+     *     {@link WSRoutingOrderV2Array }
      *     
      */
-    public void setReturn(WsRoutingOrderV2Array value) {
+    public void setReturn(WSRoutingOrderV2Array value) {
         this._return = value;
     }
 

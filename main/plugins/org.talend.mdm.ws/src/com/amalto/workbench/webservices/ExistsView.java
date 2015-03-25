@@ -16,7 +16,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="arg0" type="{http://www.talend.com/mdm}wsExistsView" minOccurs="0"/>
+ *         &lt;element name="arg0" type="{http://www.talend.com/mdm}WSExistsView" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -31,7 +31,7 @@ import javax.xml.bind.annotation.XmlType;
 })
 public class ExistsView {
 
-    protected WsExistsView arg0;
+    protected WSExistsView arg0;
 
     /**
      * Default no-arg constructor
@@ -45,7 +45,7 @@ public class ExistsView {
      * Fully-initialising value constructor
      * 
      */
-    public ExistsView(final WsExistsView arg0) {
+    public ExistsView(final WSExistsView arg0) {
         this.arg0 = arg0;
     }
 
@@ -54,10 +54,10 @@ public class ExistsView {
      * 
      * @return
      *     possible object is
-     *     {@link WsExistsView }
+     *     {@link WSExistsView }
      *     
      */
-    public WsExistsView getArg0() {
+    public WSExistsView getArg0() {
         return arg0;
     }
 
@@ -66,10 +66,10 @@ public class ExistsView {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsExistsView }
+     *     {@link WSExistsView }
      *     
      */
-    public void setArg0(WsExistsView value) {
+    public void setArg0(WSExistsView value) {
         this.arg0 = value;
     }
 

@@ -10,12 +10,12 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsConceptKey complex type.
+ * <p>Java class for WSConceptKey complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsConceptKey">
+ * &lt;complexType name="WSConceptKey">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
@@ -30,11 +30,11 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsConceptKey", propOrder = {
+@XmlType(name = "WSConceptKey", propOrder = {
     "fields",
     "selector"
 })
-public class WsConceptKey {
+public class WSConceptKey {
 
     @XmlElement(nillable = true)
     protected List<String> fields;
@@ -44,7 +44,7 @@ public class WsConceptKey {
      * Default no-arg constructor
      * 
      */
-    public WsConceptKey() {
+    public WSConceptKey() {
         super();
     }
 
@@ -52,7 +52,7 @@ public class WsConceptKey {
      * Fully-initialising value constructor
      * 
      */
-    public WsConceptKey(final List<String> fields, final String selector) {
+    public WSConceptKey(final List<String> fields, final String selector) {
         this.fields = fields;
         this.selector = selector;
     }

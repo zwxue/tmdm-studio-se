@@ -10,16 +10,16 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsStoredProcedurePKArray complex type.
+ * <p>Java class for WSStoredProcedurePKArray complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsStoredProcedurePKArray">
+ * &lt;complexType name="WSStoredProcedurePKArray">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="wsStoredProcedurePK" type="{http://www.talend.com/mdm}wsStoredProcedurePK" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element name="wsStoredProcedurePK" type="{http://www.talend.com/mdm}WSStoredProcedurePK" maxOccurs="unbounded" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -29,19 +29,19 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsStoredProcedurePKArray", propOrder = {
+@XmlType(name = "WSStoredProcedurePKArray", propOrder = {
     "wsStoredProcedurePK"
 })
-public class WsStoredProcedurePKArray {
+public class WSStoredProcedurePKArray {
 
     @XmlElement(nillable = true)
-    protected List<WsStoredProcedurePK> wsStoredProcedurePK;
+    protected List<WSStoredProcedurePK> wsStoredProcedurePK;
 
     /**
      * Default no-arg constructor
      * 
      */
-    public WsStoredProcedurePKArray() {
+    public WSStoredProcedurePKArray() {
         super();
     }
 
@@ -49,7 +49,7 @@ public class WsStoredProcedurePKArray {
      * Fully-initialising value constructor
      * 
      */
-    public WsStoredProcedurePKArray(final List<WsStoredProcedurePK> wsStoredProcedurePK) {
+    public WSStoredProcedurePKArray(final List<WSStoredProcedurePK> wsStoredProcedurePK) {
         this.wsStoredProcedurePK = wsStoredProcedurePK;
     }
 
@@ -71,13 +71,13 @@ public class WsStoredProcedurePKArray {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link WsStoredProcedurePK }
+     * {@link WSStoredProcedurePK }
      * 
      * 
      */
-    public List<WsStoredProcedurePK> getWsStoredProcedurePK() {
+    public List<WSStoredProcedurePK> getWsStoredProcedurePK() {
         if (wsStoredProcedurePK == null) {
-            wsStoredProcedurePK = new ArrayList<WsStoredProcedurePK>();
+            wsStoredProcedurePK = new ArrayList<WSStoredProcedurePK>();
         }
         return this.wsStoredProcedurePK;
     }

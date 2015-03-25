@@ -17,7 +17,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="return" type="{http://www.talend.com/mdm}wsDataModel" minOccurs="0"/>
+ *         &lt;element name="return" type="{http://www.talend.com/mdm}WSDataModel" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -33,7 +33,7 @@ import javax.xml.bind.annotation.XmlType;
 public class GetDataModelResponse {
 
     @XmlElement(name = "return")
-    protected WsDataModel _return;
+    protected WSDataModel _return;
 
     /**
      * Default no-arg constructor
@@ -47,7 +47,7 @@ public class GetDataModelResponse {
      * Fully-initialising value constructor
      * 
      */
-    public GetDataModelResponse(final WsDataModel _return) {
+    public GetDataModelResponse(final WSDataModel _return) {
         this._return = _return;
     }
 
@@ -56,10 +56,10 @@ public class GetDataModelResponse {
      * 
      * @return
      *     possible object is
-     *     {@link WsDataModel }
+     *     {@link WSDataModel }
      *     
      */
-    public WsDataModel getReturn() {
+    public WSDataModel getReturn() {
         return _return;
     }
 
@@ -68,10 +68,10 @@ public class GetDataModelResponse {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsDataModel }
+     *     {@link WSDataModel }
      *     
      */
-    public void setReturn(WsDataModel value) {
+    public void setReturn(WSDataModel value) {
         this._return = value;
     }
 

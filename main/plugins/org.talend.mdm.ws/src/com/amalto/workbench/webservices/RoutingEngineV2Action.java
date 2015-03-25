@@ -16,7 +16,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="arg0" type="{http://www.talend.com/mdm}wsRoutingEngineV2Action" minOccurs="0"/>
+ *         &lt;element name="arg0" type="{http://www.talend.com/mdm}WSRoutingEngineV2Action" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -31,7 +31,7 @@ import javax.xml.bind.annotation.XmlType;
 })
 public class RoutingEngineV2Action {
 
-    protected WsRoutingEngineV2Action arg0;
+    protected WSRoutingEngineV2Action arg0;
 
     /**
      * Default no-arg constructor
@@ -45,7 +45,7 @@ public class RoutingEngineV2Action {
      * Fully-initialising value constructor
      * 
      */
-    public RoutingEngineV2Action(final WsRoutingEngineV2Action arg0) {
+    public RoutingEngineV2Action(final WSRoutingEngineV2Action arg0) {
         this.arg0 = arg0;
     }
 
@@ -54,10 +54,10 @@ public class RoutingEngineV2Action {
      * 
      * @return
      *     possible object is
-     *     {@link WsRoutingEngineV2Action }
+     *     {@link WSRoutingEngineV2Action }
      *     
      */
-    public WsRoutingEngineV2Action getArg0() {
+    public WSRoutingEngineV2Action getArg0() {
         return arg0;
     }
 
@@ -66,10 +66,10 @@ public class RoutingEngineV2Action {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsRoutingEngineV2Action }
+     *     {@link WSRoutingEngineV2Action }
      *     
      */
-    public void setArg0(WsRoutingEngineV2Action value) {
+    public void setArg0(WSRoutingEngineV2Action value) {
         this.arg0 = value;
     }
 

@@ -16,7 +16,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="arg0" type="{http://www.talend.com/mdm}wsAutoIncrement" minOccurs="0"/>
+ *         &lt;element name="arg0" type="{http://www.talend.com/mdm}WSAutoIncrement" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -31,7 +31,7 @@ import javax.xml.bind.annotation.XmlType;
 })
 public class GetAutoIncrement {
 
-    protected WsAutoIncrement arg0;
+    protected WSAutoIncrement arg0;
 
     /**
      * Default no-arg constructor
@@ -45,7 +45,7 @@ public class GetAutoIncrement {
      * Fully-initialising value constructor
      * 
      */
-    public GetAutoIncrement(final WsAutoIncrement arg0) {
+    public GetAutoIncrement(final WSAutoIncrement arg0) {
         this.arg0 = arg0;
     }
 
@@ -54,10 +54,10 @@ public class GetAutoIncrement {
      * 
      * @return
      *     possible object is
-     *     {@link WsAutoIncrement }
+     *     {@link WSAutoIncrement }
      *     
      */
-    public WsAutoIncrement getArg0() {
+    public WSAutoIncrement getArg0() {
         return arg0;
     }
 
@@ -66,10 +66,10 @@ public class GetAutoIncrement {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsAutoIncrement }
+     *     {@link WSAutoIncrement }
      *     
      */
-    public void setArg0(WsAutoIncrement value) {
+    public void setArg0(WSAutoIncrement value) {
         this.arg0 = value;
     }
 

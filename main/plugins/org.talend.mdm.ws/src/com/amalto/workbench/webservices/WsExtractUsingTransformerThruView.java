@@ -7,12 +7,12 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsExtractUsingTransformerThruView complex type.
+ * <p>Java class for WSExtractUsingTransformerThruView complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsExtractUsingTransformerThruView">
+ * &lt;complexType name="WSExtractUsingTransformerThruView">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
@@ -21,10 +21,10 @@ import javax.xml.bind.annotation.XmlType;
  *         &lt;element name="orderBy" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="skip" type="{http://www.w3.org/2001/XMLSchema}int"/>
  *         &lt;element name="spellTreshold" type="{http://www.w3.org/2001/XMLSchema}int"/>
- *         &lt;element name="whereItem" type="{http://www.talend.com/mdm}wsWhereItem" minOccurs="0"/>
- *         &lt;element name="wsDataClusterPK" type="{http://www.talend.com/mdm}wsDataClusterPK" minOccurs="0"/>
- *         &lt;element name="wsTransformerPK" type="{http://www.talend.com/mdm}wsTransformerPK" minOccurs="0"/>
- *         &lt;element name="wsViewPK" type="{http://www.talend.com/mdm}wsViewPK" minOccurs="0"/>
+ *         &lt;element name="whereItem" type="{http://www.talend.com/mdm}WSWhereItem" minOccurs="0"/>
+ *         &lt;element name="wsDataClusterPK" type="{http://www.talend.com/mdm}WSDataClusterPK" minOccurs="0"/>
+ *         &lt;element name="wsTransformerPK" type="{http://www.talend.com/mdm}WSTransformerPK" minOccurs="0"/>
+ *         &lt;element name="wsViewPK" type="{http://www.talend.com/mdm}WSViewPK" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -34,7 +34,7 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsExtractUsingTransformerThruView", propOrder = {
+@XmlType(name = "WSExtractUsingTransformerThruView", propOrder = {
     "direction",
     "maxItems",
     "orderBy",
@@ -45,23 +45,23 @@ import javax.xml.bind.annotation.XmlType;
     "wsTransformerPK",
     "wsViewPK"
 })
-public class WsExtractUsingTransformerThruView {
+public class WSExtractUsingTransformerThruView {
 
     protected String direction;
     protected int maxItems;
     protected String orderBy;
     protected int skip;
     protected int spellTreshold;
-    protected WsWhereItem whereItem;
-    protected WsDataClusterPK wsDataClusterPK;
-    protected WsTransformerPK wsTransformerPK;
-    protected WsViewPK wsViewPK;
+    protected WSWhereItem whereItem;
+    protected WSDataClusterPK wsDataClusterPK;
+    protected WSTransformerPK wsTransformerPK;
+    protected WSViewPK wsViewPK;
 
     /**
      * Default no-arg constructor
      * 
      */
-    public WsExtractUsingTransformerThruView() {
+    public WSExtractUsingTransformerThruView() {
         super();
     }
 
@@ -69,7 +69,7 @@ public class WsExtractUsingTransformerThruView {
      * Fully-initialising value constructor
      * 
      */
-    public WsExtractUsingTransformerThruView(final String direction, final int maxItems, final String orderBy, final int skip, final int spellTreshold, final WsWhereItem whereItem, final WsDataClusterPK wsDataClusterPK, final WsTransformerPK wsTransformerPK, final WsViewPK wsViewPK) {
+    public WSExtractUsingTransformerThruView(final String direction, final int maxItems, final String orderBy, final int skip, final int spellTreshold, final WSWhereItem whereItem, final WSDataClusterPK wsDataClusterPK, final WSTransformerPK wsTransformerPK, final WSViewPK wsViewPK) {
         this.direction = direction;
         this.maxItems = maxItems;
         this.orderBy = orderBy;
@@ -182,10 +182,10 @@ public class WsExtractUsingTransformerThruView {
      * 
      * @return
      *     possible object is
-     *     {@link WsWhereItem }
+     *     {@link WSWhereItem }
      *     
      */
-    public WsWhereItem getWhereItem() {
+    public WSWhereItem getWhereItem() {
         return whereItem;
     }
 
@@ -194,10 +194,10 @@ public class WsExtractUsingTransformerThruView {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsWhereItem }
+     *     {@link WSWhereItem }
      *     
      */
-    public void setWhereItem(WsWhereItem value) {
+    public void setWhereItem(WSWhereItem value) {
         this.whereItem = value;
     }
 
@@ -206,10 +206,10 @@ public class WsExtractUsingTransformerThruView {
      * 
      * @return
      *     possible object is
-     *     {@link WsDataClusterPK }
+     *     {@link WSDataClusterPK }
      *     
      */
-    public WsDataClusterPK getWsDataClusterPK() {
+    public WSDataClusterPK getWsDataClusterPK() {
         return wsDataClusterPK;
     }
 
@@ -218,10 +218,10 @@ public class WsExtractUsingTransformerThruView {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsDataClusterPK }
+     *     {@link WSDataClusterPK }
      *     
      */
-    public void setWsDataClusterPK(WsDataClusterPK value) {
+    public void setWsDataClusterPK(WSDataClusterPK value) {
         this.wsDataClusterPK = value;
     }
 
@@ -230,10 +230,10 @@ public class WsExtractUsingTransformerThruView {
      * 
      * @return
      *     possible object is
-     *     {@link WsTransformerPK }
+     *     {@link WSTransformerPK }
      *     
      */
-    public WsTransformerPK getWsTransformerPK() {
+    public WSTransformerPK getWsTransformerPK() {
         return wsTransformerPK;
     }
 
@@ -242,10 +242,10 @@ public class WsExtractUsingTransformerThruView {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsTransformerPK }
+     *     {@link WSTransformerPK }
      *     
      */
-    public void setWsTransformerPK(WsTransformerPK value) {
+    public void setWsTransformerPK(WSTransformerPK value) {
         this.wsTransformerPK = value;
     }
 
@@ -254,10 +254,10 @@ public class WsExtractUsingTransformerThruView {
      * 
      * @return
      *     possible object is
-     *     {@link WsViewPK }
+     *     {@link WSViewPK }
      *     
      */
-    public WsViewPK getWsViewPK() {
+    public WSViewPK getWsViewPK() {
         return wsViewPK;
     }
 
@@ -266,10 +266,10 @@ public class WsExtractUsingTransformerThruView {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsViewPK }
+     *     {@link WSViewPK }
      *     
      */
-    public void setWsViewPK(WsViewPK value) {
+    public void setWsViewPK(WSViewPK value) {
         this.wsViewPK = value;
     }
 

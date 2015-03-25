@@ -7,20 +7,20 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsDeleteItems complex type.
+ * <p>Java class for WSDeleteItems complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsDeleteItems">
+ * &lt;complexType name="WSDeleteItems">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
  *         &lt;element name="conceptName" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="override" type="{http://www.w3.org/2001/XMLSchema}boolean" minOccurs="0"/>
  *         &lt;element name="spellTreshold" type="{http://www.w3.org/2001/XMLSchema}int"/>
- *         &lt;element name="wsDataClusterPK" type="{http://www.talend.com/mdm}wsDataClusterPK" minOccurs="0"/>
- *         &lt;element name="wsWhereItem" type="{http://www.talend.com/mdm}wsWhereItem" minOccurs="0"/>
+ *         &lt;element name="wsDataClusterPK" type="{http://www.talend.com/mdm}WSDataClusterPK" minOccurs="0"/>
+ *         &lt;element name="wsWhereItem" type="{http://www.talend.com/mdm}WSWhereItem" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -30,26 +30,26 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsDeleteItems", propOrder = {
+@XmlType(name = "WSDeleteItems", propOrder = {
     "conceptName",
     "override",
     "spellTreshold",
     "wsDataClusterPK",
     "wsWhereItem"
 })
-public class WsDeleteItems {
+public class WSDeleteItems {
 
     protected String conceptName;
     protected Boolean override;
     protected int spellTreshold;
-    protected WsDataClusterPK wsDataClusterPK;
-    protected WsWhereItem wsWhereItem;
+    protected WSDataClusterPK wsDataClusterPK;
+    protected WSWhereItem wsWhereItem;
 
     /**
      * Default no-arg constructor
      * 
      */
-    public WsDeleteItems() {
+    public WSDeleteItems() {
         super();
     }
 
@@ -57,7 +57,7 @@ public class WsDeleteItems {
      * Fully-initialising value constructor
      * 
      */
-    public WsDeleteItems(final String conceptName, final Boolean override, final int spellTreshold, final WsDataClusterPK wsDataClusterPK, final WsWhereItem wsWhereItem) {
+    public WSDeleteItems(final String conceptName, final Boolean override, final int spellTreshold, final WSDataClusterPK wsDataClusterPK, final WSWhereItem wsWhereItem) {
         this.conceptName = conceptName;
         this.override = override;
         this.spellTreshold = spellTreshold;
@@ -134,10 +134,10 @@ public class WsDeleteItems {
      * 
      * @return
      *     possible object is
-     *     {@link WsDataClusterPK }
+     *     {@link WSDataClusterPK }
      *     
      */
-    public WsDataClusterPK getWsDataClusterPK() {
+    public WSDataClusterPK getWsDataClusterPK() {
         return wsDataClusterPK;
     }
 
@@ -146,10 +146,10 @@ public class WsDeleteItems {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsDataClusterPK }
+     *     {@link WSDataClusterPK }
      *     
      */
-    public void setWsDataClusterPK(WsDataClusterPK value) {
+    public void setWsDataClusterPK(WSDataClusterPK value) {
         this.wsDataClusterPK = value;
     }
 
@@ -158,10 +158,10 @@ public class WsDeleteItems {
      * 
      * @return
      *     possible object is
-     *     {@link WsWhereItem }
+     *     {@link WSWhereItem }
      *     
      */
-    public WsWhereItem getWsWhereItem() {
+    public WSWhereItem getWsWhereItem() {
         return wsWhereItem;
     }
 
@@ -170,10 +170,10 @@ public class WsDeleteItems {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsWhereItem }
+     *     {@link WSWhereItem }
      *     
      */
-    public void setWsWhereItem(WsWhereItem value) {
+    public void setWsWhereItem(WSWhereItem value) {
         this.wsWhereItem = value;
     }
 

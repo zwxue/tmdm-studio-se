@@ -16,7 +16,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="arg0" type="{http://www.talend.com/mdm}wsPutRole" minOccurs="0"/>
+ *         &lt;element name="arg0" type="{http://www.talend.com/mdm}WSPutRole" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -31,7 +31,7 @@ import javax.xml.bind.annotation.XmlType;
 })
 public class PutRole {
 
-    protected WsPutRole arg0;
+    protected WSPutRole arg0;
 
     /**
      * Default no-arg constructor
@@ -45,7 +45,7 @@ public class PutRole {
      * Fully-initialising value constructor
      * 
      */
-    public PutRole(final WsPutRole arg0) {
+    public PutRole(final WSPutRole arg0) {
         this.arg0 = arg0;
     }
 
@@ -54,10 +54,10 @@ public class PutRole {
      * 
      * @return
      *     possible object is
-     *     {@link WsPutRole }
+     *     {@link WSPutRole }
      *     
      */
-    public WsPutRole getArg0() {
+    public WSPutRole getArg0() {
         return arg0;
     }
 
@@ -66,10 +66,10 @@ public class PutRole {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsPutRole }
+     *     {@link WSPutRole }
      *     
      */
-    public void setArg0(WsPutRole value) {
+    public void setArg0(WSPutRole value) {
         this.arg0 = value;
     }
 

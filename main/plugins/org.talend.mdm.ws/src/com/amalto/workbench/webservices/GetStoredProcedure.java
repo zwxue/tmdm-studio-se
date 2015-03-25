@@ -16,7 +16,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="arg0" type="{http://www.talend.com/mdm}wsGetStoredProcedure" minOccurs="0"/>
+ *         &lt;element name="arg0" type="{http://www.talend.com/mdm}WSGetStoredProcedure" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -31,7 +31,7 @@ import javax.xml.bind.annotation.XmlType;
 })
 public class GetStoredProcedure {
 
-    protected WsGetStoredProcedure arg0;
+    protected WSGetStoredProcedure arg0;
 
     /**
      * Default no-arg constructor
@@ -45,7 +45,7 @@ public class GetStoredProcedure {
      * Fully-initialising value constructor
      * 
      */
-    public GetStoredProcedure(final WsGetStoredProcedure arg0) {
+    public GetStoredProcedure(final WSGetStoredProcedure arg0) {
         this.arg0 = arg0;
     }
 
@@ -54,10 +54,10 @@ public class GetStoredProcedure {
      * 
      * @return
      *     possible object is
-     *     {@link WsGetStoredProcedure }
+     *     {@link WSGetStoredProcedure }
      *     
      */
-    public WsGetStoredProcedure getArg0() {
+    public WSGetStoredProcedure getArg0() {
         return arg0;
     }
 
@@ -66,10 +66,10 @@ public class GetStoredProcedure {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsGetStoredProcedure }
+     *     {@link WSGetStoredProcedure }
      *     
      */
-    public void setArg0(WsGetStoredProcedure value) {
+    public void setArg0(WSGetStoredProcedure value) {
         this.arg0 = value;
     }
 

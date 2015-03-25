@@ -7,17 +7,17 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsGetBusinessConceptValue complex type.
+ * <p>Java class for WSGetBusinessConceptValue complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsGetBusinessConceptValue">
+ * &lt;complexType name="WSGetBusinessConceptValue">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="wsBusinessConceptPK" type="{http://www.talend.com/mdm}wsBusinessConceptPK" minOccurs="0"/>
- *         &lt;element name="wsDataClusterPK" type="{http://www.talend.com/mdm}wsDataClusterPK" minOccurs="0"/>
+ *         &lt;element name="wsBusinessConceptPK" type="{http://www.talend.com/mdm}WSBusinessConceptPK" minOccurs="0"/>
+ *         &lt;element name="wsDataClusterPK" type="{http://www.talend.com/mdm}WSDataClusterPK" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -27,20 +27,20 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsGetBusinessConceptValue", propOrder = {
+@XmlType(name = "WSGetBusinessConceptValue", propOrder = {
     "wsBusinessConceptPK",
     "wsDataClusterPK"
 })
-public class WsGetBusinessConceptValue {
+public class WSGetBusinessConceptValue {
 
-    protected WsBusinessConceptPK wsBusinessConceptPK;
-    protected WsDataClusterPK wsDataClusterPK;
+    protected WSBusinessConceptPK wsBusinessConceptPK;
+    protected WSDataClusterPK wsDataClusterPK;
 
     /**
      * Default no-arg constructor
      * 
      */
-    public WsGetBusinessConceptValue() {
+    public WSGetBusinessConceptValue() {
         super();
     }
 
@@ -48,7 +48,7 @@ public class WsGetBusinessConceptValue {
      * Fully-initialising value constructor
      * 
      */
-    public WsGetBusinessConceptValue(final WsBusinessConceptPK wsBusinessConceptPK, final WsDataClusterPK wsDataClusterPK) {
+    public WSGetBusinessConceptValue(final WSBusinessConceptPK wsBusinessConceptPK, final WSDataClusterPK wsDataClusterPK) {
         this.wsBusinessConceptPK = wsBusinessConceptPK;
         this.wsDataClusterPK = wsDataClusterPK;
     }
@@ -58,10 +58,10 @@ public class WsGetBusinessConceptValue {
      * 
      * @return
      *     possible object is
-     *     {@link WsBusinessConceptPK }
+     *     {@link WSBusinessConceptPK }
      *     
      */
-    public WsBusinessConceptPK getWsBusinessConceptPK() {
+    public WSBusinessConceptPK getWsBusinessConceptPK() {
         return wsBusinessConceptPK;
     }
 
@@ -70,10 +70,10 @@ public class WsGetBusinessConceptValue {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsBusinessConceptPK }
+     *     {@link WSBusinessConceptPK }
      *     
      */
-    public void setWsBusinessConceptPK(WsBusinessConceptPK value) {
+    public void setWsBusinessConceptPK(WSBusinessConceptPK value) {
         this.wsBusinessConceptPK = value;
     }
 
@@ -82,10 +82,10 @@ public class WsGetBusinessConceptValue {
      * 
      * @return
      *     possible object is
-     *     {@link WsDataClusterPK }
+     *     {@link WSDataClusterPK }
      *     
      */
-    public WsDataClusterPK getWsDataClusterPK() {
+    public WSDataClusterPK getWsDataClusterPK() {
         return wsDataClusterPK;
     }
 
@@ -94,10 +94,10 @@ public class WsGetBusinessConceptValue {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsDataClusterPK }
+     *     {@link WSDataClusterPK }
      *     
      */
-    public void setWsDataClusterPK(WsDataClusterPK value) {
+    public void setWsDataClusterPK(WSDataClusterPK value) {
         this.wsDataClusterPK = value;
     }
 

@@ -7,16 +7,16 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsPutStoredProcedure complex type.
+ * <p>Java class for WSPutStoredProcedure complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsPutStoredProcedure">
+ * &lt;complexType name="WSPutStoredProcedure">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="wsStoredProcedure" type="{http://www.talend.com/mdm}wsStoredProcedure" minOccurs="0"/>
+ *         &lt;element name="wsStoredProcedure" type="{http://www.talend.com/mdm}WSStoredProcedure" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -26,18 +26,18 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsPutStoredProcedure", propOrder = {
+@XmlType(name = "WSPutStoredProcedure", propOrder = {
     "wsStoredProcedure"
 })
-public class WsPutStoredProcedure {
+public class WSPutStoredProcedure {
 
-    protected WsStoredProcedure wsStoredProcedure;
+    protected WSStoredProcedure wsStoredProcedure;
 
     /**
      * Default no-arg constructor
      * 
      */
-    public WsPutStoredProcedure() {
+    public WSPutStoredProcedure() {
         super();
     }
 
@@ -45,7 +45,7 @@ public class WsPutStoredProcedure {
      * Fully-initialising value constructor
      * 
      */
-    public WsPutStoredProcedure(final WsStoredProcedure wsStoredProcedure) {
+    public WSPutStoredProcedure(final WSStoredProcedure wsStoredProcedure) {
         this.wsStoredProcedure = wsStoredProcedure;
     }
 
@@ -54,10 +54,10 @@ public class WsPutStoredProcedure {
      * 
      * @return
      *     possible object is
-     *     {@link WsStoredProcedure }
+     *     {@link WSStoredProcedure }
      *     
      */
-    public WsStoredProcedure getWsStoredProcedure() {
+    public WSStoredProcedure getWsStoredProcedure() {
         return wsStoredProcedure;
     }
 
@@ -66,10 +66,10 @@ public class WsPutStoredProcedure {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsStoredProcedure }
+     *     {@link WSStoredProcedure }
      *     
      */
-    public void setWsStoredProcedure(WsStoredProcedure value) {
+    public void setWsStoredProcedure(WSStoredProcedure value) {
         this.wsStoredProcedure = value;
     }
 

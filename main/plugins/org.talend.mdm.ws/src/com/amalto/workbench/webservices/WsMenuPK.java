@@ -7,12 +7,12 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsMenuPK complex type.
+ * <p>Java class for WSMenuPK complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsMenuPK">
+ * &lt;complexType name="WSMenuPK">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
@@ -26,10 +26,10 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsMenuPK", propOrder = {
+@XmlType(name = "WSMenuPK", propOrder = {
     "pk"
 })
-public class WsMenuPK {
+public class WSMenuPK {
 
     protected String pk;
 
@@ -37,7 +37,7 @@ public class WsMenuPK {
      * Default no-arg constructor
      * 
      */
-    public WsMenuPK() {
+    public WSMenuPK() {
         super();
     }
 
@@ -45,7 +45,7 @@ public class WsMenuPK {
      * Fully-initialising value constructor
      * 
      */
-    public WsMenuPK(final String pk) {
+    public WSMenuPK(final String pk) {
         this.pk = pk;
     }
 

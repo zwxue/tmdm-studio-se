@@ -7,12 +7,12 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsRoutingRulePK complex type.
+ * <p>Java class for WSRoutingRulePK complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsRoutingRulePK">
+ * &lt;complexType name="WSRoutingRulePK">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
@@ -26,10 +26,10 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsRoutingRulePK", propOrder = {
+@XmlType(name = "WSRoutingRulePK", propOrder = {
     "pk"
 })
-public class WsRoutingRulePK {
+public class WSRoutingRulePK {
 
     protected String pk;
 
@@ -37,7 +37,7 @@ public class WsRoutingRulePK {
      * Default no-arg constructor
      * 
      */
-    public WsRoutingRulePK() {
+    public WSRoutingRulePK() {
         super();
     }
 
@@ -45,7 +45,7 @@ public class WsRoutingRulePK {
      * Fully-initialising value constructor
      * 
      */
-    public WsRoutingRulePK(final String pk) {
+    public WSRoutingRulePK(final String pk) {
         this.pk = pk;
     }
 

@@ -17,7 +17,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="return" type="{http://www.talend.com/mdm}wsBoolean" minOccurs="0"/>
+ *         &lt;element name="return" type="{http://www.talend.com/mdm}WSBoolean" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -33,7 +33,7 @@ import javax.xml.bind.annotation.XmlType;
 public class ExistsTransformerResponse {
 
     @XmlElement(name = "return")
-    protected WsBoolean _return;
+    protected WSBoolean _return;
 
     /**
      * Default no-arg constructor
@@ -47,7 +47,7 @@ public class ExistsTransformerResponse {
      * Fully-initialising value constructor
      * 
      */
-    public ExistsTransformerResponse(final WsBoolean _return) {
+    public ExistsTransformerResponse(final WSBoolean _return) {
         this._return = _return;
     }
 
@@ -56,10 +56,10 @@ public class ExistsTransformerResponse {
      * 
      * @return
      *     possible object is
-     *     {@link WsBoolean }
+     *     {@link WSBoolean }
      *     
      */
-    public WsBoolean getReturn() {
+    public WSBoolean getReturn() {
         return _return;
     }
 
@@ -68,10 +68,10 @@ public class ExistsTransformerResponse {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsBoolean }
+     *     {@link WSBoolean }
      *     
      */
-    public void setReturn(WsBoolean value) {
+    public void setReturn(WSBoolean value) {
         this._return = value;
     }
 

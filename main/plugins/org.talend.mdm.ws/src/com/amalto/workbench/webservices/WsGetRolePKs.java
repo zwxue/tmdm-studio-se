@@ -7,12 +7,12 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsGetRolePKs complex type.
+ * <p>Java class for WSGetRolePKs complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsGetRolePKs">
+ * &lt;complexType name="WSGetRolePKs">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
@@ -26,10 +26,10 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsGetRolePKs", propOrder = {
+@XmlType(name = "WSGetRolePKs", propOrder = {
     "regex"
 })
-public class WsGetRolePKs {
+public class WSGetRolePKs {
 
     protected String regex;
 
@@ -37,7 +37,7 @@ public class WsGetRolePKs {
      * Default no-arg constructor
      * 
      */
-    public WsGetRolePKs() {
+    public WSGetRolePKs() {
         super();
     }
 
@@ -45,7 +45,7 @@ public class WsGetRolePKs {
      * Fully-initialising value constructor
      * 
      */
-    public WsGetRolePKs(final String regex) {
+    public WSGetRolePKs(final String regex) {
         this.regex = regex;
     }
 

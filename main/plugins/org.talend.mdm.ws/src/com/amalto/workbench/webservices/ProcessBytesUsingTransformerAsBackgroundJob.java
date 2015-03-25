@@ -16,7 +16,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="arg0" type="{http://www.talend.com/mdm}wsProcessBytesUsingTransformerAsBackgroundJob" minOccurs="0"/>
+ *         &lt;element name="arg0" type="{http://www.talend.com/mdm}WSProcessBytesUsingTransformerAsBackgroundJob" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -31,7 +31,7 @@ import javax.xml.bind.annotation.XmlType;
 })
 public class ProcessBytesUsingTransformerAsBackgroundJob {
 
-    protected WsProcessBytesUsingTransformerAsBackgroundJob arg0;
+    protected WSProcessBytesUsingTransformerAsBackgroundJob arg0;
 
     /**
      * Default no-arg constructor
@@ -45,7 +45,7 @@ public class ProcessBytesUsingTransformerAsBackgroundJob {
      * Fully-initialising value constructor
      * 
      */
-    public ProcessBytesUsingTransformerAsBackgroundJob(final WsProcessBytesUsingTransformerAsBackgroundJob arg0) {
+    public ProcessBytesUsingTransformerAsBackgroundJob(final WSProcessBytesUsingTransformerAsBackgroundJob arg0) {
         this.arg0 = arg0;
     }
 
@@ -54,10 +54,10 @@ public class ProcessBytesUsingTransformerAsBackgroundJob {
      * 
      * @return
      *     possible object is
-     *     {@link WsProcessBytesUsingTransformerAsBackgroundJob }
+     *     {@link WSProcessBytesUsingTransformerAsBackgroundJob }
      *     
      */
-    public WsProcessBytesUsingTransformerAsBackgroundJob getArg0() {
+    public WSProcessBytesUsingTransformerAsBackgroundJob getArg0() {
         return arg0;
     }
 
@@ -66,10 +66,10 @@ public class ProcessBytesUsingTransformerAsBackgroundJob {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsProcessBytesUsingTransformerAsBackgroundJob }
+     *     {@link WSProcessBytesUsingTransformerAsBackgroundJob }
      *     
      */
-    public void setArg0(WsProcessBytesUsingTransformerAsBackgroundJob value) {
+    public void setArg0(WSProcessBytesUsingTransformerAsBackgroundJob value) {
         this.arg0 = value;
     }
 

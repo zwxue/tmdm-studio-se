@@ -7,12 +7,12 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsVersion complex type.
+ * <p>Java class for WSVersion complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsVersion">
+ * &lt;complexType name="WSVersion">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
@@ -31,7 +31,7 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsVersion", propOrder = {
+@XmlType(name = "WSVersion", propOrder = {
     "build",
     "date",
     "description",
@@ -39,7 +39,7 @@ import javax.xml.bind.annotation.XmlType;
     "minor",
     "revision"
 })
-public class WsVersion {
+public class WSVersion {
 
     protected String build;
     protected String date;
@@ -52,7 +52,7 @@ public class WsVersion {
      * Default no-arg constructor
      * 
      */
-    public WsVersion() {
+    public WSVersion() {
         super();
     }
 
@@ -60,7 +60,7 @@ public class WsVersion {
      * Fully-initialising value constructor
      * 
      */
-    public WsVersion(final String build, final String date, final String description, final int major, final int minor, final int revision) {
+    public WSVersion(final String build, final String date, final String description, final int major, final int minor, final int revision) {
         this.build = build;
         this.date = date;
         this.description = description;

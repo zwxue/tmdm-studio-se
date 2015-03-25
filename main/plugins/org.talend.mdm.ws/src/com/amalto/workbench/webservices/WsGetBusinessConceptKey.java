@@ -7,17 +7,17 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsGetBusinessConceptKey complex type.
+ * <p>Java class for WSGetBusinessConceptKey complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsGetBusinessConceptKey">
+ * &lt;complexType name="WSGetBusinessConceptKey">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
  *         &lt;element name="concept" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="wsDataModelPK" type="{http://www.talend.com/mdm}wsDataModelPK" minOccurs="0"/>
+ *         &lt;element name="wsDataModelPK" type="{http://www.talend.com/mdm}WSDataModelPK" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -27,20 +27,20 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsGetBusinessConceptKey", propOrder = {
+@XmlType(name = "WSGetBusinessConceptKey", propOrder = {
     "concept",
     "wsDataModelPK"
 })
-public class WsGetBusinessConceptKey {
+public class WSGetBusinessConceptKey {
 
     protected String concept;
-    protected WsDataModelPK wsDataModelPK;
+    protected WSDataModelPK wsDataModelPK;
 
     /**
      * Default no-arg constructor
      * 
      */
-    public WsGetBusinessConceptKey() {
+    public WSGetBusinessConceptKey() {
         super();
     }
 
@@ -48,7 +48,7 @@ public class WsGetBusinessConceptKey {
      * Fully-initialising value constructor
      * 
      */
-    public WsGetBusinessConceptKey(final String concept, final WsDataModelPK wsDataModelPK) {
+    public WSGetBusinessConceptKey(final String concept, final WSDataModelPK wsDataModelPK) {
         this.concept = concept;
         this.wsDataModelPK = wsDataModelPK;
     }
@@ -82,10 +82,10 @@ public class WsGetBusinessConceptKey {
      * 
      * @return
      *     possible object is
-     *     {@link WsDataModelPK }
+     *     {@link WSDataModelPK }
      *     
      */
-    public WsDataModelPK getWsDataModelPK() {
+    public WSDataModelPK getWsDataModelPK() {
         return wsDataModelPK;
     }
 
@@ -94,10 +94,10 @@ public class WsGetBusinessConceptKey {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsDataModelPK }
+     *     {@link WSDataModelPK }
      *     
      */
-    public void setWsDataModelPK(WsDataModelPK value) {
+    public void setWsDataModelPK(WSDataModelPK value) {
         this.wsDataModelPK = value;
     }
 

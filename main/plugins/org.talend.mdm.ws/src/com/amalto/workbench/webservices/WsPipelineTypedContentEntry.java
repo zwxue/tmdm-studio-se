@@ -7,17 +7,17 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsPipelineTypedContentEntry complex type.
+ * <p>Java class for WSPipelineTypedContentEntry complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsPipelineTypedContentEntry">
+ * &lt;complexType name="WSPipelineTypedContentEntry">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
  *         &lt;element name="output" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="wsExtractedContent" type="{http://www.talend.com/mdm}wsExtractedContent" minOccurs="0"/>
+ *         &lt;element name="wsExtractedContent" type="{http://www.talend.com/mdm}WSExtractedContent" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -27,20 +27,20 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsPipelineTypedContentEntry", propOrder = {
+@XmlType(name = "WSPipelineTypedContentEntry", propOrder = {
     "output",
     "wsExtractedContent"
 })
-public class WsPipelineTypedContentEntry {
+public class WSPipelineTypedContentEntry {
 
     protected String output;
-    protected WsExtractedContent wsExtractedContent;
+    protected WSExtractedContent wsExtractedContent;
 
     /**
      * Default no-arg constructor
      * 
      */
-    public WsPipelineTypedContentEntry() {
+    public WSPipelineTypedContentEntry() {
         super();
     }
 
@@ -48,7 +48,7 @@ public class WsPipelineTypedContentEntry {
      * Fully-initialising value constructor
      * 
      */
-    public WsPipelineTypedContentEntry(final String output, final WsExtractedContent wsExtractedContent) {
+    public WSPipelineTypedContentEntry(final String output, final WSExtractedContent wsExtractedContent) {
         this.output = output;
         this.wsExtractedContent = wsExtractedContent;
     }
@@ -82,10 +82,10 @@ public class WsPipelineTypedContentEntry {
      * 
      * @return
      *     possible object is
-     *     {@link WsExtractedContent }
+     *     {@link WSExtractedContent }
      *     
      */
-    public WsExtractedContent getWsExtractedContent() {
+    public WSExtractedContent getWsExtractedContent() {
         return wsExtractedContent;
     }
 
@@ -94,10 +94,10 @@ public class WsPipelineTypedContentEntry {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsExtractedContent }
+     *     {@link WSExtractedContent }
      *     
      */
-    public void setWsExtractedContent(WsExtractedContent value) {
+    public void setWsExtractedContent(WSExtractedContent value) {
         this.wsExtractedContent = value;
     }
 

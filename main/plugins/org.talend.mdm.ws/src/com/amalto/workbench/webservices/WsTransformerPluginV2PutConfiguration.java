@@ -7,12 +7,12 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsTransformerPluginV2PutConfiguration complex type.
+ * <p>Java class for WSTransformerPluginV2PutConfiguration complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsTransformerPluginV2PutConfiguration">
+ * &lt;complexType name="WSTransformerPluginV2PutConfiguration">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
@@ -27,11 +27,11 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsTransformerPluginV2PutConfiguration", propOrder = {
+@XmlType(name = "WSTransformerPluginV2PutConfiguration", propOrder = {
     "configuration",
     "jndiName"
 })
-public class WsTransformerPluginV2PutConfiguration {
+public class WSTransformerPluginV2PutConfiguration {
 
     protected String configuration;
     protected String jndiName;
@@ -40,7 +40,7 @@ public class WsTransformerPluginV2PutConfiguration {
      * Default no-arg constructor
      * 
      */
-    public WsTransformerPluginV2PutConfiguration() {
+    public WSTransformerPluginV2PutConfiguration() {
         super();
     }
 
@@ -48,7 +48,7 @@ public class WsTransformerPluginV2PutConfiguration {
      * Fully-initialising value constructor
      * 
      */
-    public WsTransformerPluginV2PutConfiguration(final String configuration, final String jndiName) {
+    public WSTransformerPluginV2PutConfiguration(final String configuration, final String jndiName) {
         this.configuration = configuration;
         this.jndiName = jndiName;
     }

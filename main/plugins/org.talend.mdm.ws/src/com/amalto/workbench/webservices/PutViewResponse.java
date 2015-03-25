@@ -17,7 +17,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="return" type="{http://www.talend.com/mdm}wsViewPK" minOccurs="0"/>
+ *         &lt;element name="return" type="{http://www.talend.com/mdm}WSViewPK" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -33,7 +33,7 @@ import javax.xml.bind.annotation.XmlType;
 public class PutViewResponse {
 
     @XmlElement(name = "return")
-    protected WsViewPK _return;
+    protected WSViewPK _return;
 
     /**
      * Default no-arg constructor
@@ -47,7 +47,7 @@ public class PutViewResponse {
      * Fully-initialising value constructor
      * 
      */
-    public PutViewResponse(final WsViewPK _return) {
+    public PutViewResponse(final WSViewPK _return) {
         this._return = _return;
     }
 
@@ -56,10 +56,10 @@ public class PutViewResponse {
      * 
      * @return
      *     possible object is
-     *     {@link WsViewPK }
+     *     {@link WSViewPK }
      *     
      */
-    public WsViewPK getReturn() {
+    public WSViewPK getReturn() {
         return _return;
     }
 
@@ -68,10 +68,10 @@ public class PutViewResponse {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsViewPK }
+     *     {@link WSViewPK }
      *     
      */
-    public void setReturn(WsViewPK value) {
+    public void setReturn(WSViewPK value) {
         this._return = value;
     }
 

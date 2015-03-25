@@ -16,7 +16,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="arg0" type="{http://www.talend.com/mdm}wsPutItemWithReportArray" minOccurs="0"/>
+ *         &lt;element name="arg0" type="{http://www.talend.com/mdm}WSPutItemWithReportArray" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -31,7 +31,7 @@ import javax.xml.bind.annotation.XmlType;
 })
 public class PutItemWithReportArray {
 
-    protected WsPutItemWithReportArray arg0;
+    protected WSPutItemWithReportArray arg0;
 
     /**
      * Default no-arg constructor
@@ -45,7 +45,7 @@ public class PutItemWithReportArray {
      * Fully-initialising value constructor
      * 
      */
-    public PutItemWithReportArray(final WsPutItemWithReportArray arg0) {
+    public PutItemWithReportArray(final WSPutItemWithReportArray arg0) {
         this.arg0 = arg0;
     }
 
@@ -54,10 +54,10 @@ public class PutItemWithReportArray {
      * 
      * @return
      *     possible object is
-     *     {@link WsPutItemWithReportArray }
+     *     {@link WSPutItemWithReportArray }
      *     
      */
-    public WsPutItemWithReportArray getArg0() {
+    public WSPutItemWithReportArray getArg0() {
         return arg0;
     }
 
@@ -66,10 +66,10 @@ public class PutItemWithReportArray {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsPutItemWithReportArray }
+     *     {@link WSPutItemWithReportArray }
      *     
      */
-    public void setArg0(WsPutItemWithReportArray value) {
+    public void setArg0(WSPutItemWithReportArray value) {
         this.arg0 = value;
     }
 

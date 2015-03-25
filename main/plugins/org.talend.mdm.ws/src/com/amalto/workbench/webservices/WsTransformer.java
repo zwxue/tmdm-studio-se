@@ -10,18 +10,18 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsTransformer complex type.
+ * <p>Java class for WSTransformer complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsTransformer">
+ * &lt;complexType name="WSTransformer">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
  *         &lt;element name="description" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="name" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="pluginSpecs" type="{http://www.talend.com/mdm}wsTransformerPluginSpec" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element name="pluginSpecs" type="{http://www.talend.com/mdm}WSTransformerPluginSpec" maxOccurs="unbounded" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -31,23 +31,23 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsTransformer", propOrder = {
+@XmlType(name = "WSTransformer", propOrder = {
     "description",
     "name",
     "pluginSpecs"
 })
-public class WsTransformer {
+public class WSTransformer {
 
     protected String description;
     protected String name;
     @XmlElement(nillable = true)
-    protected List<WsTransformerPluginSpec> pluginSpecs;
+    protected List<WSTransformerPluginSpec> pluginSpecs;
 
     /**
      * Default no-arg constructor
      * 
      */
-    public WsTransformer() {
+    public WSTransformer() {
         super();
     }
 
@@ -55,7 +55,7 @@ public class WsTransformer {
      * Fully-initialising value constructor
      * 
      */
-    public WsTransformer(final String description, final String name, final List<WsTransformerPluginSpec> pluginSpecs) {
+    public WSTransformer(final String description, final String name, final List<WSTransformerPluginSpec> pluginSpecs) {
         this.description = description;
         this.name = name;
         this.pluginSpecs = pluginSpecs;
@@ -127,13 +127,13 @@ public class WsTransformer {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link WsTransformerPluginSpec }
+     * {@link WSTransformerPluginSpec }
      * 
      * 
      */
-    public List<WsTransformerPluginSpec> getPluginSpecs() {
+    public List<WSTransformerPluginSpec> getPluginSpecs() {
         if (pluginSpecs == null) {
-            pluginSpecs = new ArrayList<WsTransformerPluginSpec>();
+            pluginSpecs = new ArrayList<WSTransformerPluginSpec>();
         }
         return this.pluginSpecs;
     }

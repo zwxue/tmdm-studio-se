@@ -16,7 +16,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="arg0" type="{http://www.talend.com/mdm}wsPutRoutingRule" minOccurs="0"/>
+ *         &lt;element name="arg0" type="{http://www.talend.com/mdm}WSPutRoutingRule" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -31,7 +31,7 @@ import javax.xml.bind.annotation.XmlType;
 })
 public class PutRoutingRule {
 
-    protected WsPutRoutingRule arg0;
+    protected WSPutRoutingRule arg0;
 
     /**
      * Default no-arg constructor
@@ -45,7 +45,7 @@ public class PutRoutingRule {
      * Fully-initialising value constructor
      * 
      */
-    public PutRoutingRule(final WsPutRoutingRule arg0) {
+    public PutRoutingRule(final WSPutRoutingRule arg0) {
         this.arg0 = arg0;
     }
 
@@ -54,10 +54,10 @@ public class PutRoutingRule {
      * 
      * @return
      *     possible object is
-     *     {@link WsPutRoutingRule }
+     *     {@link WSPutRoutingRule }
      *     
      */
-    public WsPutRoutingRule getArg0() {
+    public WSPutRoutingRule getArg0() {
         return arg0;
     }
 
@@ -66,10 +66,10 @@ public class PutRoutingRule {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsPutRoutingRule }
+     *     {@link WSPutRoutingRule }
      *     
      */
-    public void setArg0(WsPutRoutingRule value) {
+    public void setArg0(WSPutRoutingRule value) {
         this.arg0 = value;
     }
 

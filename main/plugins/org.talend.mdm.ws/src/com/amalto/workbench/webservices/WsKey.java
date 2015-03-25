@@ -10,12 +10,12 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsKey complex type.
+ * <p>Java class for WSKey complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsKey">
+ * &lt;complexType name="WSKey">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
@@ -30,11 +30,11 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsKey", propOrder = {
+@XmlType(name = "WSKey", propOrder = {
     "fieldpath",
     "selectorpath"
 })
-public class WsKey {
+public class WSKey {
 
     @XmlElement(nillable = true)
     protected List<String> fieldpath;
@@ -44,7 +44,7 @@ public class WsKey {
      * Default no-arg constructor
      * 
      */
-    public WsKey() {
+    public WSKey() {
         super();
     }
 
@@ -52,7 +52,7 @@ public class WsKey {
      * Fully-initialising value constructor
      * 
      */
-    public WsKey(final List<String> fieldpath, final String selectorpath) {
+    public WSKey(final List<String> fieldpath, final String selectorpath) {
         this.fieldpath = fieldpath;
         this.selectorpath = selectorpath;
     }

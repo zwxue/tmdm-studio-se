@@ -7,16 +7,16 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsGetMenu complex type.
+ * <p>Java class for WSGetMenu complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsGetMenu">
+ * &lt;complexType name="WSGetMenu">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="wsMenuPK" type="{http://www.talend.com/mdm}wsMenuPK" minOccurs="0"/>
+ *         &lt;element name="wsMenuPK" type="{http://www.talend.com/mdm}WSMenuPK" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -26,18 +26,18 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsGetMenu", propOrder = {
+@XmlType(name = "WSGetMenu", propOrder = {
     "wsMenuPK"
 })
-public class WsGetMenu {
+public class WSGetMenu {
 
-    protected WsMenuPK wsMenuPK;
+    protected WSMenuPK wsMenuPK;
 
     /**
      * Default no-arg constructor
      * 
      */
-    public WsGetMenu() {
+    public WSGetMenu() {
         super();
     }
 
@@ -45,7 +45,7 @@ public class WsGetMenu {
      * Fully-initialising value constructor
      * 
      */
-    public WsGetMenu(final WsMenuPK wsMenuPK) {
+    public WSGetMenu(final WSMenuPK wsMenuPK) {
         this.wsMenuPK = wsMenuPK;
     }
 
@@ -54,10 +54,10 @@ public class WsGetMenu {
      * 
      * @return
      *     possible object is
-     *     {@link WsMenuPK }
+     *     {@link WSMenuPK }
      *     
      */
-    public WsMenuPK getWsMenuPK() {
+    public WSMenuPK getWsMenuPK() {
         return wsMenuPK;
     }
 
@@ -66,10 +66,10 @@ public class WsGetMenu {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsMenuPK }
+     *     {@link WSMenuPK }
      *     
      */
-    public void setWsMenuPK(WsMenuPK value) {
+    public void setWsMenuPK(WSMenuPK value) {
         this.wsMenuPK = value;
     }
 

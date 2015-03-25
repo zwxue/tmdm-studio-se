@@ -16,7 +16,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="arg0" type="{http://www.talend.com/mdm}wsUpdateMetadataItem" minOccurs="0"/>
+ *         &lt;element name="arg0" type="{http://www.talend.com/mdm}WSUpdateMetadataItem" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -31,7 +31,7 @@ import javax.xml.bind.annotation.XmlType;
 })
 public class UpdateItemMetadata {
 
-    protected WsUpdateMetadataItem arg0;
+    protected WSUpdateMetadataItem arg0;
 
     /**
      * Default no-arg constructor
@@ -45,7 +45,7 @@ public class UpdateItemMetadata {
      * Fully-initialising value constructor
      * 
      */
-    public UpdateItemMetadata(final WsUpdateMetadataItem arg0) {
+    public UpdateItemMetadata(final WSUpdateMetadataItem arg0) {
         this.arg0 = arg0;
     }
 
@@ -54,10 +54,10 @@ public class UpdateItemMetadata {
      * 
      * @return
      *     possible object is
-     *     {@link WsUpdateMetadataItem }
+     *     {@link WSUpdateMetadataItem }
      *     
      */
-    public WsUpdateMetadataItem getArg0() {
+    public WSUpdateMetadataItem getArg0() {
         return arg0;
     }
 
@@ -66,10 +66,10 @@ public class UpdateItemMetadata {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsUpdateMetadataItem }
+     *     {@link WSUpdateMetadataItem }
      *     
      */
-    public void setArg0(WsUpdateMetadataItem value) {
+    public void setArg0(WSUpdateMetadataItem value) {
         this.arg0 = value;
     }
 

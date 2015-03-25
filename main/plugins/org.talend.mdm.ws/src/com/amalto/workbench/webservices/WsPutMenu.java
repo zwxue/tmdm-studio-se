@@ -7,16 +7,16 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsPutMenu complex type.
+ * <p>Java class for WSPutMenu complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsPutMenu">
+ * &lt;complexType name="WSPutMenu">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="wsMenu" type="{http://www.talend.com/mdm}wsMenu" minOccurs="0"/>
+ *         &lt;element name="wsMenu" type="{http://www.talend.com/mdm}WSMenu" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -26,18 +26,18 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsPutMenu", propOrder = {
+@XmlType(name = "WSPutMenu", propOrder = {
     "wsMenu"
 })
-public class WsPutMenu {
+public class WSPutMenu {
 
-    protected WsMenu wsMenu;
+    protected WSMenu wsMenu;
 
     /**
      * Default no-arg constructor
      * 
      */
-    public WsPutMenu() {
+    public WSPutMenu() {
         super();
     }
 
@@ -45,7 +45,7 @@ public class WsPutMenu {
      * Fully-initialising value constructor
      * 
      */
-    public WsPutMenu(final WsMenu wsMenu) {
+    public WSPutMenu(final WSMenu wsMenu) {
         this.wsMenu = wsMenu;
     }
 
@@ -54,10 +54,10 @@ public class WsPutMenu {
      * 
      * @return
      *     possible object is
-     *     {@link WsMenu }
+     *     {@link WSMenu }
      *     
      */
-    public WsMenu getWsMenu() {
+    public WSMenu getWsMenu() {
         return wsMenu;
     }
 
@@ -66,10 +66,10 @@ public class WsPutMenu {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsMenu }
+     *     {@link WSMenu }
      *     
      */
-    public void setWsMenu(WsMenu value) {
+    public void setWsMenu(WSMenu value) {
         this.wsMenu = value;
     }
 

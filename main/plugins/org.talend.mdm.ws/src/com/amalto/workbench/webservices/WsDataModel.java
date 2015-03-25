@@ -7,12 +7,12 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsDataModel complex type.
+ * <p>Java class for WSDataModel complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsDataModel">
+ * &lt;complexType name="WSDataModel">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
@@ -28,12 +28,12 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsDataModel", propOrder = {
+@XmlType(name = "WSDataModel", propOrder = {
     "description",
     "name",
     "xsdSchema"
 })
-public class WsDataModel {
+public class WSDataModel {
 
     protected String description;
     protected String name;
@@ -43,7 +43,7 @@ public class WsDataModel {
      * Default no-arg constructor
      * 
      */
-    public WsDataModel() {
+    public WSDataModel() {
         super();
     }
 
@@ -51,7 +51,7 @@ public class WsDataModel {
      * Fully-initialising value constructor
      * 
      */
-    public WsDataModel(final String description, final String name, final String xsdSchema) {
+    public WSDataModel(final String description, final String name, final String xsdSchema) {
         this.description = description;
         this.name = name;
         this.xsdSchema = xsdSchema;

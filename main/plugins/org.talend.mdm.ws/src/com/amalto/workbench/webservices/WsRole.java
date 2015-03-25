@@ -10,18 +10,18 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsRole complex type.
+ * <p>Java class for WSRole complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsRole">
+ * &lt;complexType name="WSRole">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
  *         &lt;element name="description" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="name" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="specification" type="{http://www.talend.com/mdm}wsRoleSpecification" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element name="specification" type="{http://www.talend.com/mdm}WSRoleSpecification" maxOccurs="unbounded" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -31,23 +31,23 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsRole", propOrder = {
+@XmlType(name = "WSRole", propOrder = {
     "description",
     "name",
     "specification"
 })
-public class WsRole {
+public class WSRole {
 
     protected String description;
     protected String name;
     @XmlElement(nillable = true)
-    protected List<WsRoleSpecification> specification;
+    protected List<WSRoleSpecification> specification;
 
     /**
      * Default no-arg constructor
      * 
      */
-    public WsRole() {
+    public WSRole() {
         super();
     }
 
@@ -55,7 +55,7 @@ public class WsRole {
      * Fully-initialising value constructor
      * 
      */
-    public WsRole(final String description, final String name, final List<WsRoleSpecification> specification) {
+    public WSRole(final String description, final String name, final List<WSRoleSpecification> specification) {
         this.description = description;
         this.name = name;
         this.specification = specification;
@@ -127,13 +127,13 @@ public class WsRole {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link WsRoleSpecification }
+     * {@link WSRoleSpecification }
      * 
      * 
      */
-    public List<WsRoleSpecification> getSpecification() {
+    public List<WSRoleSpecification> getSpecification() {
         if (specification == null) {
-            specification = new ArrayList<WsRoleSpecification>();
+            specification = new ArrayList<WSRoleSpecification>();
         }
         return this.specification;
     }

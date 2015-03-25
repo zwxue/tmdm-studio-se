@@ -16,7 +16,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="arg0" type="{http://www.talend.com/mdm}wsGetItemsSort" minOccurs="0"/>
+ *         &lt;element name="arg0" type="{http://www.talend.com/mdm}WSGetItemsSort" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -31,7 +31,7 @@ import javax.xml.bind.annotation.XmlType;
 })
 public class GetItemsSort {
 
-    protected WsGetItemsSort arg0;
+    protected WSGetItemsSort arg0;
 
     /**
      * Default no-arg constructor
@@ -45,7 +45,7 @@ public class GetItemsSort {
      * Fully-initialising value constructor
      * 
      */
-    public GetItemsSort(final WsGetItemsSort arg0) {
+    public GetItemsSort(final WSGetItemsSort arg0) {
         this.arg0 = arg0;
     }
 
@@ -54,10 +54,10 @@ public class GetItemsSort {
      * 
      * @return
      *     possible object is
-     *     {@link WsGetItemsSort }
+     *     {@link WSGetItemsSort }
      *     
      */
-    public WsGetItemsSort getArg0() {
+    public WSGetItemsSort getArg0() {
         return arg0;
     }
 
@@ -66,10 +66,10 @@ public class GetItemsSort {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsGetItemsSort }
+     *     {@link WSGetItemsSort }
      *     
      */
-    public void setArg0(WsGetItemsSort value) {
+    public void setArg0(WSGetItemsSort value) {
         this.arg0 = value;
     }
 

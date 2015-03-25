@@ -16,7 +16,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="arg0" type="{http://www.talend.com/mdm}wsServicePutConfiguration" minOccurs="0"/>
+ *         &lt;element name="arg0" type="{http://www.talend.com/mdm}WSServicePutConfiguration" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -31,7 +31,7 @@ import javax.xml.bind.annotation.XmlType;
 })
 public class PutServiceConfiguration {
 
-    protected WsServicePutConfiguration arg0;
+    protected WSServicePutConfiguration arg0;
 
     /**
      * Default no-arg constructor
@@ -45,7 +45,7 @@ public class PutServiceConfiguration {
      * Fully-initialising value constructor
      * 
      */
-    public PutServiceConfiguration(final WsServicePutConfiguration arg0) {
+    public PutServiceConfiguration(final WSServicePutConfiguration arg0) {
         this.arg0 = arg0;
     }
 
@@ -54,10 +54,10 @@ public class PutServiceConfiguration {
      * 
      * @return
      *     possible object is
-     *     {@link WsServicePutConfiguration }
+     *     {@link WSServicePutConfiguration }
      *     
      */
-    public WsServicePutConfiguration getArg0() {
+    public WSServicePutConfiguration getArg0() {
         return arg0;
     }
 
@@ -66,10 +66,10 @@ public class PutServiceConfiguration {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsServicePutConfiguration }
+     *     {@link WSServicePutConfiguration }
      *     
      */
-    public void setArg0(WsServicePutConfiguration value) {
+    public void setArg0(WSServicePutConfiguration value) {
         this.arg0 = value;
     }
 

@@ -16,7 +16,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="arg0" type="{http://www.talend.com/mdm}wsGetConceptsInDataCluster" minOccurs="0"/>
+ *         &lt;element name="arg0" type="{http://www.talend.com/mdm}WSGetConceptsInDataCluster" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -31,7 +31,7 @@ import javax.xml.bind.annotation.XmlType;
 })
 public class GetConceptsInDataCluster {
 
-    protected WsGetConceptsInDataCluster arg0;
+    protected WSGetConceptsInDataCluster arg0;
 
     /**
      * Default no-arg constructor
@@ -45,7 +45,7 @@ public class GetConceptsInDataCluster {
      * Fully-initialising value constructor
      * 
      */
-    public GetConceptsInDataCluster(final WsGetConceptsInDataCluster arg0) {
+    public GetConceptsInDataCluster(final WSGetConceptsInDataCluster arg0) {
         this.arg0 = arg0;
     }
 
@@ -54,10 +54,10 @@ public class GetConceptsInDataCluster {
      * 
      * @return
      *     possible object is
-     *     {@link WsGetConceptsInDataCluster }
+     *     {@link WSGetConceptsInDataCluster }
      *     
      */
-    public WsGetConceptsInDataCluster getArg0() {
+    public WSGetConceptsInDataCluster getArg0() {
         return arg0;
     }
 
@@ -66,10 +66,10 @@ public class GetConceptsInDataCluster {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsGetConceptsInDataCluster }
+     *     {@link WSGetConceptsInDataCluster }
      *     
      */
-    public void setArg0(WsGetConceptsInDataCluster value) {
+    public void setArg0(WSGetConceptsInDataCluster value) {
         this.arg0 = value;
     }
 

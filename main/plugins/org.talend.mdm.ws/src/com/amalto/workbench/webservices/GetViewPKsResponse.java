@@ -17,7 +17,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="return" type="{http://www.talend.com/mdm}wsViewPKArray" minOccurs="0"/>
+ *         &lt;element name="return" type="{http://www.talend.com/mdm}WSViewPKArray" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -33,7 +33,7 @@ import javax.xml.bind.annotation.XmlType;
 public class GetViewPKsResponse {
 
     @XmlElement(name = "return")
-    protected WsViewPKArray _return;
+    protected WSViewPKArray _return;
 
     /**
      * Default no-arg constructor
@@ -47,7 +47,7 @@ public class GetViewPKsResponse {
      * Fully-initialising value constructor
      * 
      */
-    public GetViewPKsResponse(final WsViewPKArray _return) {
+    public GetViewPKsResponse(final WSViewPKArray _return) {
         this._return = _return;
     }
 
@@ -56,10 +56,10 @@ public class GetViewPKsResponse {
      * 
      * @return
      *     possible object is
-     *     {@link WsViewPKArray }
+     *     {@link WSViewPKArray }
      *     
      */
-    public WsViewPKArray getReturn() {
+    public WSViewPKArray getReturn() {
         return _return;
     }
 
@@ -68,10 +68,10 @@ public class GetViewPKsResponse {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsViewPKArray }
+     *     {@link WSViewPKArray }
      *     
      */
-    public void setReturn(WsViewPKArray value) {
+    public void setReturn(WSViewPKArray value) {
         this._return = value;
     }
 

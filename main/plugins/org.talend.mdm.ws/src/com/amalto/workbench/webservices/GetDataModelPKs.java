@@ -16,7 +16,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="arg0" type="{http://www.talend.com/mdm}wsRegexDataModelPKs" minOccurs="0"/>
+ *         &lt;element name="arg0" type="{http://www.talend.com/mdm}WSRegexDataModelPKs" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -31,7 +31,7 @@ import javax.xml.bind.annotation.XmlType;
 })
 public class GetDataModelPKs {
 
-    protected WsRegexDataModelPKs arg0;
+    protected WSRegexDataModelPKs arg0;
 
     /**
      * Default no-arg constructor
@@ -45,7 +45,7 @@ public class GetDataModelPKs {
      * Fully-initialising value constructor
      * 
      */
-    public GetDataModelPKs(final WsRegexDataModelPKs arg0) {
+    public GetDataModelPKs(final WSRegexDataModelPKs arg0) {
         this.arg0 = arg0;
     }
 
@@ -54,10 +54,10 @@ public class GetDataModelPKs {
      * 
      * @return
      *     possible object is
-     *     {@link WsRegexDataModelPKs }
+     *     {@link WSRegexDataModelPKs }
      *     
      */
-    public WsRegexDataModelPKs getArg0() {
+    public WSRegexDataModelPKs getArg0() {
         return arg0;
     }
 
@@ -66,10 +66,10 @@ public class GetDataModelPKs {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsRegexDataModelPKs }
+     *     {@link WSRegexDataModelPKs }
      *     
      */
-    public void setArg0(WsRegexDataModelPKs value) {
+    public void setArg0(WSRegexDataModelPKs value) {
         this.arg0 = value;
     }
 

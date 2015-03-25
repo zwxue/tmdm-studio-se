@@ -7,16 +7,16 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsGetTransformerV2 complex type.
+ * <p>Java class for WSGetTransformerV2 complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsGetTransformerV2">
+ * &lt;complexType name="WSGetTransformerV2">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="wsTransformerV2PK" type="{http://www.talend.com/mdm}wsTransformerV2PK" minOccurs="0"/>
+ *         &lt;element name="wsTransformerV2PK" type="{http://www.talend.com/mdm}WSTransformerV2PK" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -26,18 +26,18 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsGetTransformerV2", propOrder = {
+@XmlType(name = "WSGetTransformerV2", propOrder = {
     "wsTransformerV2PK"
 })
-public class WsGetTransformerV2 {
+public class WSGetTransformerV2 {
 
-    protected WsTransformerV2PK wsTransformerV2PK;
+    protected WSTransformerV2PK wsTransformerV2PK;
 
     /**
      * Default no-arg constructor
      * 
      */
-    public WsGetTransformerV2() {
+    public WSGetTransformerV2() {
         super();
     }
 
@@ -45,7 +45,7 @@ public class WsGetTransformerV2 {
      * Fully-initialising value constructor
      * 
      */
-    public WsGetTransformerV2(final WsTransformerV2PK wsTransformerV2PK) {
+    public WSGetTransformerV2(final WSTransformerV2PK wsTransformerV2PK) {
         this.wsTransformerV2PK = wsTransformerV2PK;
     }
 
@@ -54,10 +54,10 @@ public class WsGetTransformerV2 {
      * 
      * @return
      *     possible object is
-     *     {@link WsTransformerV2PK }
+     *     {@link WSTransformerV2PK }
      *     
      */
-    public WsTransformerV2PK getWsTransformerV2PK() {
+    public WSTransformerV2PK getWsTransformerV2PK() {
         return wsTransformerV2PK;
     }
 
@@ -66,10 +66,10 @@ public class WsGetTransformerV2 {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsTransformerV2PK }
+     *     {@link WSTransformerV2PK }
      *     
      */
-    public void setWsTransformerV2PK(WsTransformerV2PK value) {
+    public void setWsTransformerV2PK(WSTransformerV2PK value) {
         this.wsTransformerV2PK = value;
     }
 

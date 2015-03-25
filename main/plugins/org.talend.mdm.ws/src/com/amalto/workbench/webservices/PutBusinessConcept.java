@@ -16,7 +16,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="arg0" type="{http://www.talend.com/mdm}wsPutBusinessConcept" minOccurs="0"/>
+ *         &lt;element name="arg0" type="{http://www.talend.com/mdm}WSPutBusinessConcept" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -31,7 +31,7 @@ import javax.xml.bind.annotation.XmlType;
 })
 public class PutBusinessConcept {
 
-    protected WsPutBusinessConcept arg0;
+    protected WSPutBusinessConcept arg0;
 
     /**
      * Default no-arg constructor
@@ -45,7 +45,7 @@ public class PutBusinessConcept {
      * Fully-initialising value constructor
      * 
      */
-    public PutBusinessConcept(final WsPutBusinessConcept arg0) {
+    public PutBusinessConcept(final WSPutBusinessConcept arg0) {
         this.arg0 = arg0;
     }
 
@@ -54,10 +54,10 @@ public class PutBusinessConcept {
      * 
      * @return
      *     possible object is
-     *     {@link WsPutBusinessConcept }
+     *     {@link WSPutBusinessConcept }
      *     
      */
-    public WsPutBusinessConcept getArg0() {
+    public WSPutBusinessConcept getArg0() {
         return arg0;
     }
 
@@ -66,10 +66,10 @@ public class PutBusinessConcept {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsPutBusinessConcept }
+     *     {@link WSPutBusinessConcept }
      *     
      */
-    public void setArg0(WsPutBusinessConcept value) {
+    public void setArg0(WSPutBusinessConcept value) {
         this.arg0 = value;
     }
 

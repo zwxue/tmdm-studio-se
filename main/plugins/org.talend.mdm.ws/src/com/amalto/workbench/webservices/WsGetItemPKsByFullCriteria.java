@@ -7,17 +7,17 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsGetItemPKsByFullCriteria complex type.
+ * <p>Java class for WSGetItemPKsByFullCriteria complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsGetItemPKsByFullCriteria">
+ * &lt;complexType name="WSGetItemPKsByFullCriteria">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
  *         &lt;element name="useFTSearch" type="{http://www.w3.org/2001/XMLSchema}boolean"/>
- *         &lt;element name="wsGetItemPKsByCriteria" type="{http://www.talend.com/mdm}wsGetItemPKsByCriteria" minOccurs="0"/>
+ *         &lt;element name="wsGetItemPKsByCriteria" type="{http://www.talend.com/mdm}WSGetItemPKsByCriteria" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -27,20 +27,20 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsGetItemPKsByFullCriteria", propOrder = {
+@XmlType(name = "WSGetItemPKsByFullCriteria", propOrder = {
     "useFTSearch",
     "wsGetItemPKsByCriteria"
 })
-public class WsGetItemPKsByFullCriteria {
+public class WSGetItemPKsByFullCriteria {
 
     protected boolean useFTSearch;
-    protected WsGetItemPKsByCriteria wsGetItemPKsByCriteria;
+    protected WSGetItemPKsByCriteria wsGetItemPKsByCriteria;
 
     /**
      * Default no-arg constructor
      * 
      */
-    public WsGetItemPKsByFullCriteria() {
+    public WSGetItemPKsByFullCriteria() {
         super();
     }
 
@@ -48,7 +48,7 @@ public class WsGetItemPKsByFullCriteria {
      * Fully-initialising value constructor
      * 
      */
-    public WsGetItemPKsByFullCriteria(final boolean useFTSearch, final WsGetItemPKsByCriteria wsGetItemPKsByCriteria) {
+    public WSGetItemPKsByFullCriteria(final boolean useFTSearch, final WSGetItemPKsByCriteria wsGetItemPKsByCriteria) {
         this.useFTSearch = useFTSearch;
         this.wsGetItemPKsByCriteria = wsGetItemPKsByCriteria;
     }
@@ -74,10 +74,10 @@ public class WsGetItemPKsByFullCriteria {
      * 
      * @return
      *     possible object is
-     *     {@link WsGetItemPKsByCriteria }
+     *     {@link WSGetItemPKsByCriteria }
      *     
      */
-    public WsGetItemPKsByCriteria getWsGetItemPKsByCriteria() {
+    public WSGetItemPKsByCriteria getWsGetItemPKsByCriteria() {
         return wsGetItemPKsByCriteria;
     }
 
@@ -86,10 +86,10 @@ public class WsGetItemPKsByFullCriteria {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsGetItemPKsByCriteria }
+     *     {@link WSGetItemPKsByCriteria }
      *     
      */
-    public void setWsGetItemPKsByCriteria(WsGetItemPKsByCriteria value) {
+    public void setWsGetItemPKsByCriteria(WSGetItemPKsByCriteria value) {
         this.wsGetItemPKsByCriteria = value;
     }
 

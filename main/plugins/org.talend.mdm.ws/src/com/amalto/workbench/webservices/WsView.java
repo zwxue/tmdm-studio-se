@@ -10,22 +10,22 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsView complex type.
+ * <p>Java class for WSView complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsView">
+ * &lt;complexType name="WSView">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
  *         &lt;element name="description" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="isTransformerActive" type="{http://www.talend.com/mdm}wsBoolean" minOccurs="0"/>
+ *         &lt;element name="isTransformerActive" type="{http://www.talend.com/mdm}WSBoolean" minOccurs="0"/>
  *         &lt;element name="name" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="searchableBusinessElements" type="{http://www.w3.org/2001/XMLSchema}string" maxOccurs="unbounded" minOccurs="0"/>
  *         &lt;element name="transformerPK" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="viewableBusinessElements" type="{http://www.w3.org/2001/XMLSchema}string" maxOccurs="unbounded" minOccurs="0"/>
- *         &lt;element name="whereConditions" type="{http://www.talend.com/mdm}wsWhereCondition" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element name="whereConditions" type="{http://www.talend.com/mdm}WSWhereCondition" maxOccurs="unbounded" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -35,7 +35,7 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsView", propOrder = {
+@XmlType(name = "WSView", propOrder = {
     "description",
     "isTransformerActive",
     "name",
@@ -44,10 +44,10 @@ import javax.xml.bind.annotation.XmlType;
     "viewableBusinessElements",
     "whereConditions"
 })
-public class WsView {
+public class WSView {
 
     protected String description;
-    protected WsBoolean isTransformerActive;
+    protected WSBoolean isTransformerActive;
     protected String name;
     @XmlElement(nillable = true)
     protected List<String> searchableBusinessElements;
@@ -55,13 +55,13 @@ public class WsView {
     @XmlElement(nillable = true)
     protected List<String> viewableBusinessElements;
     @XmlElement(nillable = true)
-    protected List<WsWhereCondition> whereConditions;
+    protected List<WSWhereCondition> whereConditions;
 
     /**
      * Default no-arg constructor
      * 
      */
-    public WsView() {
+    public WSView() {
         super();
     }
 
@@ -69,7 +69,7 @@ public class WsView {
      * Fully-initialising value constructor
      * 
      */
-    public WsView(final String description, final WsBoolean isTransformerActive, final String name, final List<String> searchableBusinessElements, final String transformerPK, final List<String> viewableBusinessElements, final List<WsWhereCondition> whereConditions) {
+    public WSView(final String description, final WSBoolean isTransformerActive, final String name, final List<String> searchableBusinessElements, final String transformerPK, final List<String> viewableBusinessElements, final List<WSWhereCondition> whereConditions) {
         this.description = description;
         this.isTransformerActive = isTransformerActive;
         this.name = name;
@@ -108,10 +108,10 @@ public class WsView {
      * 
      * @return
      *     possible object is
-     *     {@link WsBoolean }
+     *     {@link WSBoolean }
      *     
      */
-    public WsBoolean getIsTransformerActive() {
+    public WSBoolean getIsTransformerActive() {
         return isTransformerActive;
     }
 
@@ -120,10 +120,10 @@ public class WsView {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsBoolean }
+     *     {@link WSBoolean }
      *     
      */
-    public void setIsTransformerActive(WsBoolean value) {
+    public void setIsTransformerActive(WSBoolean value) {
         this.isTransformerActive = value;
     }
 
@@ -251,13 +251,13 @@ public class WsView {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link WsWhereCondition }
+     * {@link WSWhereCondition }
      * 
      * 
      */
-    public List<WsWhereCondition> getWhereConditions() {
+    public List<WSWhereCondition> getWhereConditions() {
         if (whereConditions == null) {
-            whereConditions = new ArrayList<WsWhereCondition>();
+            whereConditions = new ArrayList<WSWhereCondition>();
         }
         return this.whereConditions;
     }

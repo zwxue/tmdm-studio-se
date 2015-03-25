@@ -7,18 +7,18 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsItemPKsByCriteriaResponseResults complex type.
+ * <p>Java class for WSItemPKsByCriteriaResponseResults complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsItemPKsByCriteriaResponseResults">
+ * &lt;complexType name="WSItemPKsByCriteriaResponseResults">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
  *         &lt;element name="date" type="{http://www.w3.org/2001/XMLSchema}long"/>
  *         &lt;element name="taskId" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="wsItemPK" type="{http://www.talend.com/mdm}wsItemPK" minOccurs="0"/>
+ *         &lt;element name="wsItemPK" type="{http://www.talend.com/mdm}WSItemPK" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -28,22 +28,22 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsItemPKsByCriteriaResponseResults", propOrder = {
+@XmlType(name = "WSItemPKsByCriteriaResponseResults", propOrder = {
     "date",
     "taskId",
     "wsItemPK"
 })
-public class WsItemPKsByCriteriaResponseResults {
+public class WSItemPKsByCriteriaResponseResults {
 
     protected long date;
     protected String taskId;
-    protected WsItemPK wsItemPK;
+    protected WSItemPK wsItemPK;
 
     /**
      * Default no-arg constructor
      * 
      */
-    public WsItemPKsByCriteriaResponseResults() {
+    public WSItemPKsByCriteriaResponseResults() {
         super();
     }
 
@@ -51,7 +51,7 @@ public class WsItemPKsByCriteriaResponseResults {
      * Fully-initialising value constructor
      * 
      */
-    public WsItemPKsByCriteriaResponseResults(final long date, final String taskId, final WsItemPK wsItemPK) {
+    public WSItemPKsByCriteriaResponseResults(final long date, final String taskId, final WSItemPK wsItemPK) {
         this.date = date;
         this.taskId = taskId;
         this.wsItemPK = wsItemPK;
@@ -102,10 +102,10 @@ public class WsItemPKsByCriteriaResponseResults {
      * 
      * @return
      *     possible object is
-     *     {@link WsItemPK }
+     *     {@link WSItemPK }
      *     
      */
-    public WsItemPK getWsItemPK() {
+    public WSItemPK getWsItemPK() {
         return wsItemPK;
     }
 
@@ -114,10 +114,10 @@ public class WsItemPKsByCriteriaResponseResults {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsItemPK }
+     *     {@link WSItemPK }
      *     
      */
-    public void setWsItemPK(WsItemPK value) {
+    public void setWsItemPK(WSItemPK value) {
         this.wsItemPK = value;
     }
 

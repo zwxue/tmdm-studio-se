@@ -7,12 +7,12 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsLong complex type.
+ * <p>Java class for WSLong complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsLong">
+ * &lt;complexType name="WSLong">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
@@ -26,10 +26,10 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsLong", propOrder = {
+@XmlType(name = "WSLong", propOrder = {
     "value"
 })
-public class WsLong {
+public class WSLong {
 
     protected long value;
 
@@ -37,7 +37,7 @@ public class WsLong {
      * Default no-arg constructor
      * 
      */
-    public WsLong() {
+    public WSLong() {
         super();
     }
 
@@ -45,7 +45,7 @@ public class WsLong {
      * Fully-initialising value constructor
      * 
      */
-    public WsLong(final long value) {
+    public WSLong(final long value) {
         this.value = value;
     }
 

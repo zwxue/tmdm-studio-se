@@ -16,7 +16,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="arg0" type="{http://www.talend.com/mdm}wsDropItem" minOccurs="0"/>
+ *         &lt;element name="arg0" type="{http://www.talend.com/mdm}WSDropItem" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -31,7 +31,7 @@ import javax.xml.bind.annotation.XmlType;
 })
 public class DropItem {
 
-    protected WsDropItem arg0;
+    protected WSDropItem arg0;
 
     /**
      * Default no-arg constructor
@@ -45,7 +45,7 @@ public class DropItem {
      * Fully-initialising value constructor
      * 
      */
-    public DropItem(final WsDropItem arg0) {
+    public DropItem(final WSDropItem arg0) {
         this.arg0 = arg0;
     }
 
@@ -54,10 +54,10 @@ public class DropItem {
      * 
      * @return
      *     possible object is
-     *     {@link WsDropItem }
+     *     {@link WSDropItem }
      *     
      */
-    public WsDropItem getArg0() {
+    public WSDropItem getArg0() {
         return arg0;
     }
 
@@ -66,10 +66,10 @@ public class DropItem {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsDropItem }
+     *     {@link WSDropItem }
      *     
      */
-    public void setArg0(WsDropItem value) {
+    public void setArg0(WSDropItem value) {
         this.arg0 = value;
     }
 

@@ -10,12 +10,12 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsDroppedItem complex type.
+ * <p>Java class for WSDroppedItem complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsDroppedItem">
+ * &lt;complexType name="WSDroppedItem">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
@@ -26,7 +26,7 @@ import javax.xml.bind.annotation.XmlType;
  *         &lt;element name="partPath" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="projection" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="uniqueId" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="wsDataClusterPK" type="{http://www.talend.com/mdm}wsDataClusterPK" minOccurs="0"/>
+ *         &lt;element name="wsDataClusterPK" type="{http://www.talend.com/mdm}WSDataClusterPK" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -36,7 +36,7 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsDroppedItem", propOrder = {
+@XmlType(name = "WSDroppedItem", propOrder = {
     "conceptName",
     "ids",
     "insertionTime",
@@ -46,7 +46,7 @@ import javax.xml.bind.annotation.XmlType;
     "uniqueId",
     "wsDataClusterPK"
 })
-public class WsDroppedItem {
+public class WSDroppedItem {
 
     protected String conceptName;
     @XmlElement(nillable = true)
@@ -56,13 +56,13 @@ public class WsDroppedItem {
     protected String partPath;
     protected String projection;
     protected String uniqueId;
-    protected WsDataClusterPK wsDataClusterPK;
+    protected WSDataClusterPK wsDataClusterPK;
 
     /**
      * Default no-arg constructor
      * 
      */
-    public WsDroppedItem() {
+    public WSDroppedItem() {
         super();
     }
 
@@ -70,7 +70,7 @@ public class WsDroppedItem {
      * Fully-initialising value constructor
      * 
      */
-    public WsDroppedItem(final String conceptName, final List<String> ids, final Long insertionTime, final String insertionUserName, final String partPath, final String projection, final String uniqueId, final WsDataClusterPK wsDataClusterPK) {
+    public WSDroppedItem(final String conceptName, final List<String> ids, final Long insertionTime, final String insertionUserName, final String partPath, final String projection, final String uniqueId, final WSDataClusterPK wsDataClusterPK) {
         this.conceptName = conceptName;
         this.ids = ids;
         this.insertionTime = insertionTime;
@@ -259,10 +259,10 @@ public class WsDroppedItem {
      * 
      * @return
      *     possible object is
-     *     {@link WsDataClusterPK }
+     *     {@link WSDataClusterPK }
      *     
      */
-    public WsDataClusterPK getWsDataClusterPK() {
+    public WSDataClusterPK getWsDataClusterPK() {
         return wsDataClusterPK;
     }
 
@@ -271,10 +271,10 @@ public class WsDroppedItem {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsDataClusterPK }
+     *     {@link WSDataClusterPK }
      *     
      */
-    public void setWsDataClusterPK(WsDataClusterPK value) {
+    public void setWsDataClusterPK(WSDataClusterPK value) {
         this.wsDataClusterPK = value;
     }
 

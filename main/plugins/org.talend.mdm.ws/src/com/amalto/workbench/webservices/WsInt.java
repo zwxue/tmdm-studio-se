@@ -7,12 +7,12 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsInt complex type.
+ * <p>Java class for WSInt complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsInt">
+ * &lt;complexType name="WSInt">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
@@ -26,10 +26,10 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsInt", propOrder = {
+@XmlType(name = "WSInt", propOrder = {
     "value"
 })
-public class WsInt {
+public class WSInt {
 
     protected int value;
 
@@ -37,7 +37,7 @@ public class WsInt {
      * Default no-arg constructor
      * 
      */
-    public WsInt() {
+    public WSInt() {
         super();
     }
 
@@ -45,7 +45,7 @@ public class WsInt {
      * Fully-initialising value constructor
      * 
      */
-    public WsInt(final int value) {
+    public WSInt(final int value) {
         this.value = value;
     }
 

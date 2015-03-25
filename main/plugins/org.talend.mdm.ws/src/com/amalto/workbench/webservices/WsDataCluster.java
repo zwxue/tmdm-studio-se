@@ -7,12 +7,12 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsDataCluster complex type.
+ * <p>Java class for WSDataCluster complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsDataCluster">
+ * &lt;complexType name="WSDataCluster">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
@@ -28,12 +28,12 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsDataCluster", propOrder = {
+@XmlType(name = "WSDataCluster", propOrder = {
     "description",
     "name",
     "vocabulary"
 })
-public class WsDataCluster {
+public class WSDataCluster {
 
     protected String description;
     protected String name;
@@ -43,7 +43,7 @@ public class WsDataCluster {
      * Default no-arg constructor
      * 
      */
-    public WsDataCluster() {
+    public WSDataCluster() {
         super();
     }
 
@@ -51,7 +51,7 @@ public class WsDataCluster {
      * Fully-initialising value constructor
      * 
      */
-    public WsDataCluster(final String description, final String name, final String vocabulary) {
+    public WSDataCluster(final String description, final String name, final String vocabulary) {
         this.description = description;
         this.name = name;
         this.vocabulary = vocabulary;

@@ -17,7 +17,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="return" type="{http://www.talend.com/mdm}wsString" minOccurs="0"/>
+ *         &lt;element name="return" type="{http://www.talend.com/mdm}WSString" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -33,7 +33,7 @@ import javax.xml.bind.annotation.XmlType;
 public class GetBusinessConceptValueResponse {
 
     @XmlElement(name = "return")
-    protected WsString _return;
+    protected WSString _return;
 
     /**
      * Default no-arg constructor
@@ -47,7 +47,7 @@ public class GetBusinessConceptValueResponse {
      * Fully-initialising value constructor
      * 
      */
-    public GetBusinessConceptValueResponse(final WsString _return) {
+    public GetBusinessConceptValueResponse(final WSString _return) {
         this._return = _return;
     }
 
@@ -56,10 +56,10 @@ public class GetBusinessConceptValueResponse {
      * 
      * @return
      *     possible object is
-     *     {@link WsString }
+     *     {@link WSString }
      *     
      */
-    public WsString getReturn() {
+    public WSString getReturn() {
         return _return;
     }
 
@@ -68,10 +68,10 @@ public class GetBusinessConceptValueResponse {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsString }
+     *     {@link WSString }
      *     
      */
-    public void setReturn(WsString value) {
+    public void setReturn(WSString value) {
         this._return = value;
     }
 

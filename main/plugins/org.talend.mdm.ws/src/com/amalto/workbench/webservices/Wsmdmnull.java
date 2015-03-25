@@ -7,12 +7,12 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsmdmnull complex type.
+ * <p>Java class for WSMDMNULL complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsmdmnull">
+ * &lt;complexType name="WSMDMNULL">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
@@ -25,15 +25,15 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsmdmnull")
-public class Wsmdmnull {
+@XmlType(name = "WSMDMNULL")
+public class WSMDMNULL {
 
 
     /**
      * Default no-arg constructor
      * 
      */
-    public Wsmdmnull() {
+    public WSMDMNULL() {
         super();
     }
 

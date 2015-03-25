@@ -16,7 +16,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="arg0" type="{http://www.talend.com/mdm}wsRecoverDroppedItem" minOccurs="0"/>
+ *         &lt;element name="arg0" type="{http://www.talend.com/mdm}WSRecoverDroppedItem" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -31,7 +31,7 @@ import javax.xml.bind.annotation.XmlType;
 })
 public class RecoverDroppedItem {
 
-    protected WsRecoverDroppedItem arg0;
+    protected WSRecoverDroppedItem arg0;
 
     /**
      * Default no-arg constructor
@@ -45,7 +45,7 @@ public class RecoverDroppedItem {
      * Fully-initialising value constructor
      * 
      */
-    public RecoverDroppedItem(final WsRecoverDroppedItem arg0) {
+    public RecoverDroppedItem(final WSRecoverDroppedItem arg0) {
         this.arg0 = arg0;
     }
 
@@ -54,10 +54,10 @@ public class RecoverDroppedItem {
      * 
      * @return
      *     possible object is
-     *     {@link WsRecoverDroppedItem }
+     *     {@link WSRecoverDroppedItem }
      *     
      */
-    public WsRecoverDroppedItem getArg0() {
+    public WSRecoverDroppedItem getArg0() {
         return arg0;
     }
 
@@ -66,10 +66,10 @@ public class RecoverDroppedItem {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsRecoverDroppedItem }
+     *     {@link WSRecoverDroppedItem }
      *     
      */
-    public void setArg0(WsRecoverDroppedItem value) {
+    public void setArg0(WSRecoverDroppedItem value) {
         this.arg0 = value;
     }
 

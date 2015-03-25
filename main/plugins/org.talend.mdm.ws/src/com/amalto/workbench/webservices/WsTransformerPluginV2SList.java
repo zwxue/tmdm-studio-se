@@ -10,16 +10,16 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsTransformerPluginV2SList complex type.
+ * <p>Java class for WSTransformerPluginV2SList complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsTransformerPluginV2SList">
+ * &lt;complexType name="WSTransformerPluginV2SList">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="item" type="{http://www.talend.com/mdm}wsTransformerPluginV2SListItem" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element name="item" type="{http://www.talend.com/mdm}WSTransformerPluginV2SListItem" maxOccurs="unbounded" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -29,19 +29,19 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsTransformerPluginV2SList", propOrder = {
+@XmlType(name = "WSTransformerPluginV2SList", propOrder = {
     "item"
 })
-public class WsTransformerPluginV2SList {
+public class WSTransformerPluginV2SList {
 
     @XmlElement(nillable = true)
-    protected List<WsTransformerPluginV2SListItem> item;
+    protected List<WSTransformerPluginV2SListItem> item;
 
     /**
      * Default no-arg constructor
      * 
      */
-    public WsTransformerPluginV2SList() {
+    public WSTransformerPluginV2SList() {
         super();
     }
 
@@ -49,7 +49,7 @@ public class WsTransformerPluginV2SList {
      * Fully-initialising value constructor
      * 
      */
-    public WsTransformerPluginV2SList(final List<WsTransformerPluginV2SListItem> item) {
+    public WSTransformerPluginV2SList(final List<WSTransformerPluginV2SListItem> item) {
         this.item = item;
     }
 
@@ -71,13 +71,13 @@ public class WsTransformerPluginV2SList {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link WsTransformerPluginV2SListItem }
+     * {@link WSTransformerPluginV2SListItem }
      * 
      * 
      */
-    public List<WsTransformerPluginV2SListItem> getItem() {
+    public List<WSTransformerPluginV2SListItem> getItem() {
         if (item == null) {
-            item = new ArrayList<WsTransformerPluginV2SListItem>();
+            item = new ArrayList<WSTransformerPluginV2SListItem>();
         }
         return this.item;
     }

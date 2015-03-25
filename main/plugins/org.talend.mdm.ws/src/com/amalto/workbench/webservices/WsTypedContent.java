@@ -7,18 +7,18 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsTypedContent complex type.
+ * <p>Java class for WSTypedContent complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsTypedContent">
+ * &lt;complexType name="WSTypedContent">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
  *         &lt;element name="contentType" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="url" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="wsBytes" type="{http://www.talend.com/mdm}wsByteArray" minOccurs="0"/>
+ *         &lt;element name="wsBytes" type="{http://www.talend.com/mdm}WSByteArray" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -28,22 +28,22 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsTypedContent", propOrder = {
+@XmlType(name = "WSTypedContent", propOrder = {
     "contentType",
     "url",
     "wsBytes"
 })
-public class WsTypedContent {
+public class WSTypedContent {
 
     protected String contentType;
     protected String url;
-    protected WsByteArray wsBytes;
+    protected WSByteArray wsBytes;
 
     /**
      * Default no-arg constructor
      * 
      */
-    public WsTypedContent() {
+    public WSTypedContent() {
         super();
     }
 
@@ -51,7 +51,7 @@ public class WsTypedContent {
      * Fully-initialising value constructor
      * 
      */
-    public WsTypedContent(final String contentType, final String url, final WsByteArray wsBytes) {
+    public WSTypedContent(final String contentType, final String url, final WSByteArray wsBytes) {
         this.contentType = contentType;
         this.url = url;
         this.wsBytes = wsBytes;
@@ -110,10 +110,10 @@ public class WsTypedContent {
      * 
      * @return
      *     possible object is
-     *     {@link WsByteArray }
+     *     {@link WSByteArray }
      *     
      */
-    public WsByteArray getWsBytes() {
+    public WSByteArray getWsBytes() {
         return wsBytes;
     }
 
@@ -122,10 +122,10 @@ public class WsTypedContent {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsByteArray }
+     *     {@link WSByteArray }
      *     
      */
-    public void setWsBytes(WsByteArray value) {
+    public void setWsBytes(WSByteArray value) {
         this.wsBytes = value;
     }
 

@@ -7,12 +7,12 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsProcessBytesUsingTransformerWsOutputDecisionTableDecisions complex type.
+ * <p>Java class for WSProcessBytesUsingTransformerWsOutputDecisionTableDecisions complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsProcessBytesUsingTransformerWsOutputDecisionTableDecisions">
+ * &lt;complexType name="WSProcessBytesUsingTransformerWsOutputDecisionTableDecisions">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
@@ -27,11 +27,11 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsProcessBytesUsingTransformerWsOutputDecisionTableDecisions", propOrder = {
+@XmlType(name = "WSProcessBytesUsingTransformerWsOutputDecisionTableDecisions", propOrder = {
     "decision",
     "outputVariableName"
 })
-public class WsProcessBytesUsingTransformerWsOutputDecisionTableDecisions {
+public class WSProcessBytesUsingTransformerWsOutputDecisionTableDecisions {
 
     protected String decision;
     protected String outputVariableName;
@@ -40,7 +40,7 @@ public class WsProcessBytesUsingTransformerWsOutputDecisionTableDecisions {
      * Default no-arg constructor
      * 
      */
-    public WsProcessBytesUsingTransformerWsOutputDecisionTableDecisions() {
+    public WSProcessBytesUsingTransformerWsOutputDecisionTableDecisions() {
         super();
     }
 
@@ -48,7 +48,7 @@ public class WsProcessBytesUsingTransformerWsOutputDecisionTableDecisions {
      * Fully-initialising value constructor
      * 
      */
-    public WsProcessBytesUsingTransformerWsOutputDecisionTableDecisions(final String decision, final String outputVariableName) {
+    public WSProcessBytesUsingTransformerWsOutputDecisionTableDecisions(final String decision, final String outputVariableName) {
         this.decision = decision;
         this.outputVariableName = outputVariableName;
     }

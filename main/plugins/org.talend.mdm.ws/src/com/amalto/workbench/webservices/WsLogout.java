@@ -7,12 +7,12 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsLogout complex type.
+ * <p>Java class for WSLogout complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsLogout">
+ * &lt;complexType name="WSLogout">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
@@ -26,10 +26,10 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsLogout", propOrder = {
+@XmlType(name = "WSLogout", propOrder = {
     "dummy"
 })
-public class WsLogout {
+public class WSLogout {
 
     protected String dummy;
 
@@ -37,7 +37,7 @@ public class WsLogout {
      * Default no-arg constructor
      * 
      */
-    public WsLogout() {
+    public WSLogout() {
         super();
     }
 
@@ -45,7 +45,7 @@ public class WsLogout {
      * Fully-initialising value constructor
      * 
      */
-    public WsLogout(final String dummy) {
+    public WSLogout(final String dummy) {
         this.dummy = dummy;
     }
 

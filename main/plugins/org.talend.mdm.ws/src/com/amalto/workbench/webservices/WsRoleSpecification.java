@@ -10,17 +10,17 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsRoleSpecification complex type.
+ * <p>Java class for WSRoleSpecification complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsRoleSpecification">
+ * &lt;complexType name="WSRoleSpecification">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
  *         &lt;element name="admin" type="{http://www.w3.org/2001/XMLSchema}boolean"/>
- *         &lt;element name="instance" type="{http://www.talend.com/mdm}wsRoleSpecificationInstance" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element name="instance" type="{http://www.talend.com/mdm}WSRoleSpecificationInstance" maxOccurs="unbounded" minOccurs="0"/>
  *         &lt;element name="objectType" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
@@ -31,23 +31,23 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsRoleSpecification", propOrder = {
+@XmlType(name = "WSRoleSpecification", propOrder = {
     "admin",
     "instance",
     "objectType"
 })
-public class WsRoleSpecification {
+public class WSRoleSpecification {
 
     protected boolean admin;
     @XmlElement(nillable = true)
-    protected List<WsRoleSpecificationInstance> instance;
+    protected List<WSRoleSpecificationInstance> instance;
     protected String objectType;
 
     /**
      * Default no-arg constructor
      * 
      */
-    public WsRoleSpecification() {
+    public WSRoleSpecification() {
         super();
     }
 
@@ -55,7 +55,7 @@ public class WsRoleSpecification {
      * Fully-initialising value constructor
      * 
      */
-    public WsRoleSpecification(final boolean admin, final List<WsRoleSpecificationInstance> instance, final String objectType) {
+    public WSRoleSpecification(final boolean admin, final List<WSRoleSpecificationInstance> instance, final String objectType) {
         this.admin = admin;
         this.instance = instance;
         this.objectType = objectType;
@@ -95,13 +95,13 @@ public class WsRoleSpecification {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link WsRoleSpecificationInstance }
+     * {@link WSRoleSpecificationInstance }
      * 
      * 
      */
-    public List<WsRoleSpecificationInstance> getInstance() {
+    public List<WSRoleSpecificationInstance> getInstance() {
         if (instance == null) {
-            instance = new ArrayList<WsRoleSpecificationInstance>();
+            instance = new ArrayList<WSRoleSpecificationInstance>();
         }
         return this.instance;
     }

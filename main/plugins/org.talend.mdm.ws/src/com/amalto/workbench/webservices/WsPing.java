@@ -7,12 +7,12 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsPing complex type.
+ * <p>Java class for WSPing complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsPing">
+ * &lt;complexType name="WSPing">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
@@ -26,10 +26,10 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsPing", propOrder = {
+@XmlType(name = "WSPing", propOrder = {
     "echo"
 })
-public class WsPing {
+public class WSPing {
 
     protected String echo;
 
@@ -37,7 +37,7 @@ public class WsPing {
      * Default no-arg constructor
      * 
      */
-    public WsPing() {
+    public WSPing() {
         super();
     }
 
@@ -45,7 +45,7 @@ public class WsPing {
      * Fully-initialising value constructor
      * 
      */
-    public WsPing(final String echo) {
+    public WSPing(final String echo) {
         this.echo = echo;
     }
 

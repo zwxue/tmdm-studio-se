@@ -7,16 +7,16 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsGetDataCluster complex type.
+ * <p>Java class for WSGetDataCluster complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsGetDataCluster">
+ * &lt;complexType name="WSGetDataCluster">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="wsDataClusterPK" type="{http://www.talend.com/mdm}wsDataClusterPK" minOccurs="0"/>
+ *         &lt;element name="wsDataClusterPK" type="{http://www.talend.com/mdm}WSDataClusterPK" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -26,18 +26,18 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsGetDataCluster", propOrder = {
+@XmlType(name = "WSGetDataCluster", propOrder = {
     "wsDataClusterPK"
 })
-public class WsGetDataCluster {
+public class WSGetDataCluster {
 
-    protected WsDataClusterPK wsDataClusterPK;
+    protected WSDataClusterPK wsDataClusterPK;
 
     /**
      * Default no-arg constructor
      * 
      */
-    public WsGetDataCluster() {
+    public WSGetDataCluster() {
         super();
     }
 
@@ -45,7 +45,7 @@ public class WsGetDataCluster {
      * Fully-initialising value constructor
      * 
      */
-    public WsGetDataCluster(final WsDataClusterPK wsDataClusterPK) {
+    public WSGetDataCluster(final WSDataClusterPK wsDataClusterPK) {
         this.wsDataClusterPK = wsDataClusterPK;
     }
 
@@ -54,10 +54,10 @@ public class WsGetDataCluster {
      * 
      * @return
      *     possible object is
-     *     {@link WsDataClusterPK }
+     *     {@link WSDataClusterPK }
      *     
      */
-    public WsDataClusterPK getWsDataClusterPK() {
+    public WSDataClusterPK getWsDataClusterPK() {
         return wsDataClusterPK;
     }
 
@@ -66,10 +66,10 @@ public class WsGetDataCluster {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsDataClusterPK }
+     *     {@link WSDataClusterPK }
      *     
      */
-    public void setWsDataClusterPK(WsDataClusterPK value) {
+    public void setWsDataClusterPK(WSDataClusterPK value) {
         this.wsDataClusterPK = value;
     }
 

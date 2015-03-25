@@ -7,12 +7,12 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsDeleteItem complex type.
+ * <p>Java class for WSDeleteItem complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsDeleteItem">
+ * &lt;complexType name="WSDeleteItem">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
@@ -20,7 +20,7 @@ import javax.xml.bind.annotation.XmlType;
  *         &lt;element name="override" type="{http://www.w3.org/2001/XMLSchema}boolean" minOccurs="0"/>
  *         &lt;element name="source" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="withReport" type="{http://www.w3.org/2001/XMLSchema}boolean" minOccurs="0"/>
- *         &lt;element name="wsItemPK" type="{http://www.talend.com/mdm}wsItemPK" minOccurs="0"/>
+ *         &lt;element name="wsItemPK" type="{http://www.talend.com/mdm}WSItemPK" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -30,26 +30,26 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsDeleteItem", propOrder = {
+@XmlType(name = "WSDeleteItem", propOrder = {
     "invokeBeforeDeleting",
     "override",
     "source",
     "withReport",
     "wsItemPK"
 })
-public class WsDeleteItem {
+public class WSDeleteItem {
 
     protected Boolean invokeBeforeDeleting;
     protected Boolean override;
     protected String source;
     protected Boolean withReport;
-    protected WsItemPK wsItemPK;
+    protected WSItemPK wsItemPK;
 
     /**
      * Default no-arg constructor
      * 
      */
-    public WsDeleteItem() {
+    public WSDeleteItem() {
         super();
     }
 
@@ -57,7 +57,7 @@ public class WsDeleteItem {
      * Fully-initialising value constructor
      * 
      */
-    public WsDeleteItem(final Boolean invokeBeforeDeleting, final Boolean override, final String source, final Boolean withReport, final WsItemPK wsItemPK) {
+    public WSDeleteItem(final Boolean invokeBeforeDeleting, final Boolean override, final String source, final Boolean withReport, final WSItemPK wsItemPK) {
         this.invokeBeforeDeleting = invokeBeforeDeleting;
         this.override = override;
         this.source = source;
@@ -166,10 +166,10 @@ public class WsDeleteItem {
      * 
      * @return
      *     possible object is
-     *     {@link WsItemPK }
+     *     {@link WSItemPK }
      *     
      */
-    public WsItemPK getWsItemPK() {
+    public WSItemPK getWsItemPK() {
         return wsItemPK;
     }
 
@@ -178,10 +178,10 @@ public class WsDeleteItem {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsItemPK }
+     *     {@link WSItemPK }
      *     
      */
-    public void setWsItemPK(WsItemPK value) {
+    public void setWsItemPK(WSItemPK value) {
         this.wsItemPK = value;
     }
 

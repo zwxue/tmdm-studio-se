@@ -17,7 +17,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="return" type="{http://www.talend.com/mdm}wsItemPKArray" minOccurs="0"/>
+ *         &lt;element name="return" type="{http://www.talend.com/mdm}WSItemPKArray" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -33,7 +33,7 @@ import javax.xml.bind.annotation.XmlType;
 public class PutItemWithReportArrayResponse {
 
     @XmlElement(name = "return")
-    protected WsItemPKArray _return;
+    protected WSItemPKArray _return;
 
     /**
      * Default no-arg constructor
@@ -47,7 +47,7 @@ public class PutItemWithReportArrayResponse {
      * Fully-initialising value constructor
      * 
      */
-    public PutItemWithReportArrayResponse(final WsItemPKArray _return) {
+    public PutItemWithReportArrayResponse(final WSItemPKArray _return) {
         this._return = _return;
     }
 
@@ -56,10 +56,10 @@ public class PutItemWithReportArrayResponse {
      * 
      * @return
      *     possible object is
-     *     {@link WsItemPKArray }
+     *     {@link WSItemPKArray }
      *     
      */
-    public WsItemPKArray getReturn() {
+    public WSItemPKArray getReturn() {
         return _return;
     }
 
@@ -68,10 +68,10 @@ public class PutItemWithReportArrayResponse {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsItemPKArray }
+     *     {@link WSItemPKArray }
      *     
      */
-    public void setReturn(WsItemPKArray value) {
+    public void setReturn(WSItemPKArray value) {
         this._return = value;
     }
 

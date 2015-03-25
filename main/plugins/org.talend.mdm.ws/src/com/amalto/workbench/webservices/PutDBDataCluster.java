@@ -16,7 +16,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="arg0" type="{http://www.talend.com/mdm}wsPutDBDataCluster" minOccurs="0"/>
+ *         &lt;element name="arg0" type="{http://www.talend.com/mdm}WSPutDBDataCluster" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -31,7 +31,7 @@ import javax.xml.bind.annotation.XmlType;
 })
 public class PutDBDataCluster {
 
-    protected WsPutDBDataCluster arg0;
+    protected WSPutDBDataCluster arg0;
 
     /**
      * Default no-arg constructor
@@ -45,7 +45,7 @@ public class PutDBDataCluster {
      * Fully-initialising value constructor
      * 
      */
-    public PutDBDataCluster(final WsPutDBDataCluster arg0) {
+    public PutDBDataCluster(final WSPutDBDataCluster arg0) {
         this.arg0 = arg0;
     }
 
@@ -54,10 +54,10 @@ public class PutDBDataCluster {
      * 
      * @return
      *     possible object is
-     *     {@link WsPutDBDataCluster }
+     *     {@link WSPutDBDataCluster }
      *     
      */
-    public WsPutDBDataCluster getArg0() {
+    public WSPutDBDataCluster getArg0() {
         return arg0;
     }
 
@@ -66,10 +66,10 @@ public class PutDBDataCluster {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsPutDBDataCluster }
+     *     {@link WSPutDBDataCluster }
      *     
      */
-    public void setArg0(WsPutDBDataCluster value) {
+    public void setArg0(WSPutDBDataCluster value) {
         this.arg0 = value;
     }
 

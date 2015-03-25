@@ -7,12 +7,12 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsStoredProcedurePK complex type.
+ * <p>Java class for WSStoredProcedurePK complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsStoredProcedurePK">
+ * &lt;complexType name="WSStoredProcedurePK">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
@@ -26,10 +26,10 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsStoredProcedurePK", propOrder = {
+@XmlType(name = "WSStoredProcedurePK", propOrder = {
     "pk"
 })
-public class WsStoredProcedurePK {
+public class WSStoredProcedurePK {
 
     protected String pk;
 
@@ -37,7 +37,7 @@ public class WsStoredProcedurePK {
      * Default no-arg constructor
      * 
      */
-    public WsStoredProcedurePK() {
+    public WSStoredProcedurePK() {
         super();
     }
 
@@ -45,7 +45,7 @@ public class WsStoredProcedurePK {
      * Fully-initialising value constructor
      * 
      */
-    public WsStoredProcedurePK(final String pk) {
+    public WSStoredProcedurePK(final String pk) {
         this.pk = pk;
     }
 

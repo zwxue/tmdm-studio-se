@@ -10,12 +10,12 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsRoleSpecificationInstance complex type.
+ * <p>Java class for WSRoleSpecificationInstance complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsRoleSpecificationInstance">
+ * &lt;complexType name="WSRoleSpecificationInstance">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
@@ -31,12 +31,12 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsRoleSpecificationInstance", propOrder = {
+@XmlType(name = "WSRoleSpecificationInstance", propOrder = {
     "instanceName",
     "parameter",
     "writable"
 })
-public class WsRoleSpecificationInstance {
+public class WSRoleSpecificationInstance {
 
     protected String instanceName;
     @XmlElement(nillable = true)
@@ -47,7 +47,7 @@ public class WsRoleSpecificationInstance {
      * Default no-arg constructor
      * 
      */
-    public WsRoleSpecificationInstance() {
+    public WSRoleSpecificationInstance() {
         super();
     }
 
@@ -55,7 +55,7 @@ public class WsRoleSpecificationInstance {
      * Fully-initialising value constructor
      * 
      */
-    public WsRoleSpecificationInstance(final String instanceName, final List<String> parameter, final boolean writable) {
+    public WSRoleSpecificationInstance(final String instanceName, final List<String> parameter, final boolean writable) {
         this.instanceName = instanceName;
         this.parameter = parameter;
         this.writable = writable;

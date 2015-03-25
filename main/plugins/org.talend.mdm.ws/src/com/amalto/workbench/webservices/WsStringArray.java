@@ -10,12 +10,12 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsStringArray complex type.
+ * <p>Java class for WSStringArray complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsStringArray">
+ * &lt;complexType name="WSStringArray">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
@@ -29,10 +29,10 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsStringArray", propOrder = {
+@XmlType(name = "WSStringArray", propOrder = {
     "strings"
 })
-public class WsStringArray {
+public class WSStringArray {
 
     @XmlElement(nillable = true)
     protected List<String> strings;
@@ -41,7 +41,7 @@ public class WsStringArray {
      * Default no-arg constructor
      * 
      */
-    public WsStringArray() {
+    public WSStringArray() {
         super();
     }
 
@@ -49,7 +49,7 @@ public class WsStringArray {
      * Fully-initialising value constructor
      * 
      */
-    public WsStringArray(final List<String> strings) {
+    public WSStringArray(final List<String> strings) {
         this.strings = strings;
     }
 

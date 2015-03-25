@@ -7,17 +7,17 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsDeleteBusinessConcept complex type.
+ * <p>Java class for WSDeleteBusinessConcept complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsDeleteBusinessConcept">
+ * &lt;complexType name="WSDeleteBusinessConcept">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
  *         &lt;element name="businessConceptName" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="wsDataModelPK" type="{http://www.talend.com/mdm}wsDataModelPK" minOccurs="0"/>
+ *         &lt;element name="wsDataModelPK" type="{http://www.talend.com/mdm}WSDataModelPK" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -27,20 +27,20 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsDeleteBusinessConcept", propOrder = {
+@XmlType(name = "WSDeleteBusinessConcept", propOrder = {
     "businessConceptName",
     "wsDataModelPK"
 })
-public class WsDeleteBusinessConcept {
+public class WSDeleteBusinessConcept {
 
     protected String businessConceptName;
-    protected WsDataModelPK wsDataModelPK;
+    protected WSDataModelPK wsDataModelPK;
 
     /**
      * Default no-arg constructor
      * 
      */
-    public WsDeleteBusinessConcept() {
+    public WSDeleteBusinessConcept() {
         super();
     }
 
@@ -48,7 +48,7 @@ public class WsDeleteBusinessConcept {
      * Fully-initialising value constructor
      * 
      */
-    public WsDeleteBusinessConcept(final String businessConceptName, final WsDataModelPK wsDataModelPK) {
+    public WSDeleteBusinessConcept(final String businessConceptName, final WSDataModelPK wsDataModelPK) {
         this.businessConceptName = businessConceptName;
         this.wsDataModelPK = wsDataModelPK;
     }
@@ -82,10 +82,10 @@ public class WsDeleteBusinessConcept {
      * 
      * @return
      *     possible object is
-     *     {@link WsDataModelPK }
+     *     {@link WSDataModelPK }
      *     
      */
-    public WsDataModelPK getWsDataModelPK() {
+    public WSDataModelPK getWsDataModelPK() {
         return wsDataModelPK;
     }
 
@@ -94,10 +94,10 @@ public class WsDeleteBusinessConcept {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsDataModelPK }
+     *     {@link WSDataModelPK }
      *     
      */
-    public void setWsDataModelPK(WsDataModelPK value) {
+    public void setWsDataModelPK(WSDataModelPK value) {
         this.wsDataModelPK = value;
     }
 

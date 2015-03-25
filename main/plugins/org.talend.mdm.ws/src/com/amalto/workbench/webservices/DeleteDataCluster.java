@@ -16,7 +16,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="arg0" type="{http://www.talend.com/mdm}wsDeleteDataCluster" minOccurs="0"/>
+ *         &lt;element name="arg0" type="{http://www.talend.com/mdm}WSDeleteDataCluster" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -31,7 +31,7 @@ import javax.xml.bind.annotation.XmlType;
 })
 public class DeleteDataCluster {
 
-    protected WsDeleteDataCluster arg0;
+    protected WSDeleteDataCluster arg0;
 
     /**
      * Default no-arg constructor
@@ -45,7 +45,7 @@ public class DeleteDataCluster {
      * Fully-initialising value constructor
      * 
      */
-    public DeleteDataCluster(final WsDeleteDataCluster arg0) {
+    public DeleteDataCluster(final WSDeleteDataCluster arg0) {
         this.arg0 = arg0;
     }
 
@@ -54,10 +54,10 @@ public class DeleteDataCluster {
      * 
      * @return
      *     possible object is
-     *     {@link WsDeleteDataCluster }
+     *     {@link WSDeleteDataCluster }
      *     
      */
-    public WsDeleteDataCluster getArg0() {
+    public WSDeleteDataCluster getArg0() {
         return arg0;
     }
 
@@ -66,10 +66,10 @@ public class DeleteDataCluster {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsDeleteDataCluster }
+     *     {@link WSDeleteDataCluster }
      *     
      */
-    public void setArg0(WsDeleteDataCluster value) {
+    public void setArg0(WSDeleteDataCluster value) {
         this.arg0 = value;
     }
 

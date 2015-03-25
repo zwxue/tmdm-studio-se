@@ -17,7 +17,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="return" type="{http://www.talend.com/mdm}wsDataCluster" minOccurs="0"/>
+ *         &lt;element name="return" type="{http://www.talend.com/mdm}WSDataCluster" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -33,7 +33,7 @@ import javax.xml.bind.annotation.XmlType;
 public class GetDataClusterResponse {
 
     @XmlElement(name = "return")
-    protected WsDataCluster _return;
+    protected WSDataCluster _return;
 
     /**
      * Default no-arg constructor
@@ -47,7 +47,7 @@ public class GetDataClusterResponse {
      * Fully-initialising value constructor
      * 
      */
-    public GetDataClusterResponse(final WsDataCluster _return) {
+    public GetDataClusterResponse(final WSDataCluster _return) {
         this._return = _return;
     }
 
@@ -56,10 +56,10 @@ public class GetDataClusterResponse {
      * 
      * @return
      *     possible object is
-     *     {@link WsDataCluster }
+     *     {@link WSDataCluster }
      *     
      */
-    public WsDataCluster getReturn() {
+    public WSDataCluster getReturn() {
         return _return;
     }
 
@@ -68,10 +68,10 @@ public class GetDataClusterResponse {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsDataCluster }
+     *     {@link WSDataCluster }
      *     
      */
-    public void setReturn(WsDataCluster value) {
+    public void setReturn(WSDataCluster value) {
         this._return = value;
     }
 

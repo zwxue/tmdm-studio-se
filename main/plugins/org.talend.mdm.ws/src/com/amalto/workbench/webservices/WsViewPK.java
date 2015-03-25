@@ -7,12 +7,12 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsViewPK complex type.
+ * <p>Java class for WSViewPK complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsViewPK">
+ * &lt;complexType name="WSViewPK">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
@@ -26,10 +26,10 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsViewPK", propOrder = {
+@XmlType(name = "WSViewPK", propOrder = {
     "pk"
 })
-public class WsViewPK {
+public class WSViewPK {
 
     protected String pk;
 
@@ -37,7 +37,7 @@ public class WsViewPK {
      * Default no-arg constructor
      * 
      */
-    public WsViewPK() {
+    public WSViewPK() {
         super();
     }
 
@@ -45,7 +45,7 @@ public class WsViewPK {
      * Fully-initialising value constructor
      * 
      */
-    public WsViewPK(final String pk) {
+    public WSViewPK(final String pk) {
         this.pk = pk;
     }
 

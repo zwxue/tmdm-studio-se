@@ -10,12 +10,12 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsRoutingRule complex type.
+ * <p>Java class for WSRoutingRule complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsRoutingRule">
+ * &lt;complexType name="WSRoutingRule">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
@@ -28,7 +28,7 @@ import javax.xml.bind.annotation.XmlType;
  *         &lt;element name="parameters" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="serviceJNDI" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="synchronous" type="{http://www.w3.org/2001/XMLSchema}boolean"/>
- *         &lt;element name="wsRoutingRuleExpressions" type="{http://www.talend.com/mdm}wsRoutingRuleExpression" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element name="wsRoutingRuleExpressions" type="{http://www.talend.com/mdm}WSRoutingRuleExpression" maxOccurs="unbounded" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -38,7 +38,7 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsRoutingRule", propOrder = {
+@XmlType(name = "WSRoutingRule", propOrder = {
     "concept",
     "condition",
     "deactive",
@@ -50,7 +50,7 @@ import javax.xml.bind.annotation.XmlType;
     "synchronous",
     "wsRoutingRuleExpressions"
 })
-public class WsRoutingRule {
+public class WSRoutingRule {
 
     protected String concept;
     protected String condition;
@@ -62,13 +62,13 @@ public class WsRoutingRule {
     protected String serviceJNDI;
     protected boolean synchronous;
     @XmlElement(nillable = true)
-    protected List<WsRoutingRuleExpression> wsRoutingRuleExpressions;
+    protected List<WSRoutingRuleExpression> wsRoutingRuleExpressions;
 
     /**
      * Default no-arg constructor
      * 
      */
-    public WsRoutingRule() {
+    public WSRoutingRule() {
         super();
     }
 
@@ -76,7 +76,7 @@ public class WsRoutingRule {
      * Fully-initialising value constructor
      * 
      */
-    public WsRoutingRule(final String concept, final String condition, final Boolean deactive, final String description, final int executeOrder, final String name, final String parameters, final String serviceJNDI, final boolean synchronous, final List<WsRoutingRuleExpression> wsRoutingRuleExpressions) {
+    public WSRoutingRule(final String concept, final String condition, final Boolean deactive, final String description, final int executeOrder, final String name, final String parameters, final String serviceJNDI, final boolean synchronous, final List<WSRoutingRuleExpression> wsRoutingRuleExpressions) {
         this.concept = concept;
         this.condition = condition;
         this.deactive = deactive;
@@ -307,13 +307,13 @@ public class WsRoutingRule {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link WsRoutingRuleExpression }
+     * {@link WSRoutingRuleExpression }
      * 
      * 
      */
-    public List<WsRoutingRuleExpression> getWsRoutingRuleExpressions() {
+    public List<WSRoutingRuleExpression> getWsRoutingRuleExpressions() {
         if (wsRoutingRuleExpressions == null) {
-            wsRoutingRuleExpressions = new ArrayList<WsRoutingRuleExpression>();
+            wsRoutingRuleExpressions = new ArrayList<WSRoutingRuleExpression>();
         }
         return this.wsRoutingRuleExpressions;
     }

@@ -17,7 +17,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="return" type="{http://www.talend.com/mdm}wsBackgroundJobPKArray" minOccurs="0"/>
+ *         &lt;element name="return" type="{http://www.talend.com/mdm}WSBackgroundJobPKArray" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -33,7 +33,7 @@ import javax.xml.bind.annotation.XmlType;
 public class FindBackgroundJobPKsResponse {
 
     @XmlElement(name = "return")
-    protected WsBackgroundJobPKArray _return;
+    protected WSBackgroundJobPKArray _return;
 
     /**
      * Default no-arg constructor
@@ -47,7 +47,7 @@ public class FindBackgroundJobPKsResponse {
      * Fully-initialising value constructor
      * 
      */
-    public FindBackgroundJobPKsResponse(final WsBackgroundJobPKArray _return) {
+    public FindBackgroundJobPKsResponse(final WSBackgroundJobPKArray _return) {
         this._return = _return;
     }
 
@@ -56,10 +56,10 @@ public class FindBackgroundJobPKsResponse {
      * 
      * @return
      *     possible object is
-     *     {@link WsBackgroundJobPKArray }
+     *     {@link WSBackgroundJobPKArray }
      *     
      */
-    public WsBackgroundJobPKArray getReturn() {
+    public WSBackgroundJobPKArray getReturn() {
         return _return;
     }
 
@@ -68,10 +68,10 @@ public class FindBackgroundJobPKsResponse {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsBackgroundJobPKArray }
+     *     {@link WSBackgroundJobPKArray }
      *     
      */
-    public void setReturn(WsBackgroundJobPKArray value) {
+    public void setReturn(WSBackgroundJobPKArray value) {
         this._return = value;
     }
 

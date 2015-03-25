@@ -7,12 +7,12 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsCheckServiceConfigRequest complex type.
+ * <p>Java class for WSCheckServiceConfigRequest complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsCheckServiceConfigRequest">
+ * &lt;complexType name="WSCheckServiceConfigRequest">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
@@ -27,11 +27,11 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsCheckServiceConfigRequest", propOrder = {
+@XmlType(name = "WSCheckServiceConfigRequest", propOrder = {
     "conf",
     "jndiName"
 })
-public class WsCheckServiceConfigRequest {
+public class WSCheckServiceConfigRequest {
 
     protected String conf;
     protected String jndiName;
@@ -40,7 +40,7 @@ public class WsCheckServiceConfigRequest {
      * Default no-arg constructor
      * 
      */
-    public WsCheckServiceConfigRequest() {
+    public WSCheckServiceConfigRequest() {
         super();
     }
 
@@ -48,7 +48,7 @@ public class WsCheckServiceConfigRequest {
      * Fully-initialising value constructor
      * 
      */
-    public WsCheckServiceConfigRequest(final String conf, final String jndiName) {
+    public WSCheckServiceConfigRequest(final String conf, final String jndiName) {
         this.conf = conf;
         this.jndiName = jndiName;
     }

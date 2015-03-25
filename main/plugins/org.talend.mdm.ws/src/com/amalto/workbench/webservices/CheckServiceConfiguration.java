@@ -16,7 +16,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="arg0" type="{http://www.talend.com/mdm}wsCheckServiceConfigRequest" minOccurs="0"/>
+ *         &lt;element name="arg0" type="{http://www.talend.com/mdm}WSCheckServiceConfigRequest" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -31,7 +31,7 @@ import javax.xml.bind.annotation.XmlType;
 })
 public class CheckServiceConfiguration {
 
-    protected WsCheckServiceConfigRequest arg0;
+    protected WSCheckServiceConfigRequest arg0;
 
     /**
      * Default no-arg constructor
@@ -45,7 +45,7 @@ public class CheckServiceConfiguration {
      * Fully-initialising value constructor
      * 
      */
-    public CheckServiceConfiguration(final WsCheckServiceConfigRequest arg0) {
+    public CheckServiceConfiguration(final WSCheckServiceConfigRequest arg0) {
         this.arg0 = arg0;
     }
 
@@ -54,10 +54,10 @@ public class CheckServiceConfiguration {
      * 
      * @return
      *     possible object is
-     *     {@link WsCheckServiceConfigRequest }
+     *     {@link WSCheckServiceConfigRequest }
      *     
      */
-    public WsCheckServiceConfigRequest getArg0() {
+    public WSCheckServiceConfigRequest getArg0() {
         return arg0;
     }
 
@@ -66,10 +66,10 @@ public class CheckServiceConfiguration {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsCheckServiceConfigRequest }
+     *     {@link WSCheckServiceConfigRequest }
      *     
      */
-    public void setArg0(WsCheckServiceConfigRequest value) {
+    public void setArg0(WSCheckServiceConfigRequest value) {
         this.arg0 = value;
     }
 

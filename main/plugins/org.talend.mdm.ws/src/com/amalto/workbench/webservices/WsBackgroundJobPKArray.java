@@ -10,16 +10,16 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsBackgroundJobPKArray complex type.
+ * <p>Java class for WSBackgroundJobPKArray complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsBackgroundJobPKArray">
+ * &lt;complexType name="WSBackgroundJobPKArray">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="wsBackgroundJobPK" type="{http://www.talend.com/mdm}wsBackgroundJobPK" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element name="wsBackgroundJobPK" type="{http://www.talend.com/mdm}WSBackgroundJobPK" maxOccurs="unbounded" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -29,19 +29,19 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsBackgroundJobPKArray", propOrder = {
+@XmlType(name = "WSBackgroundJobPKArray", propOrder = {
     "wsBackgroundJobPK"
 })
-public class WsBackgroundJobPKArray {
+public class WSBackgroundJobPKArray {
 
     @XmlElement(nillable = true)
-    protected List<WsBackgroundJobPK> wsBackgroundJobPK;
+    protected List<WSBackgroundJobPK> wsBackgroundJobPK;
 
     /**
      * Default no-arg constructor
      * 
      */
-    public WsBackgroundJobPKArray() {
+    public WSBackgroundJobPKArray() {
         super();
     }
 
@@ -49,7 +49,7 @@ public class WsBackgroundJobPKArray {
      * Fully-initialising value constructor
      * 
      */
-    public WsBackgroundJobPKArray(final List<WsBackgroundJobPK> wsBackgroundJobPK) {
+    public WSBackgroundJobPKArray(final List<WSBackgroundJobPK> wsBackgroundJobPK) {
         this.wsBackgroundJobPK = wsBackgroundJobPK;
     }
 
@@ -71,13 +71,13 @@ public class WsBackgroundJobPKArray {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link WsBackgroundJobPK }
+     * {@link WSBackgroundJobPK }
      * 
      * 
      */
-    public List<WsBackgroundJobPK> getWsBackgroundJobPK() {
+    public List<WSBackgroundJobPK> getWsBackgroundJobPK() {
         if (wsBackgroundJobPK == null) {
-            wsBackgroundJobPK = new ArrayList<WsBackgroundJobPK>();
+            wsBackgroundJobPK = new ArrayList<WSBackgroundJobPK>();
         }
         return this.wsBackgroundJobPK;
     }

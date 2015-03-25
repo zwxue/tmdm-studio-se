@@ -7,16 +7,16 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsPutBackgroundJob complex type.
+ * <p>Java class for WSPutBackgroundJob complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsPutBackgroundJob">
+ * &lt;complexType name="WSPutBackgroundJob">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="wsBackgroundJob" type="{http://www.talend.com/mdm}wsBackgroundJob" minOccurs="0"/>
+ *         &lt;element name="wsBackgroundJob" type="{http://www.talend.com/mdm}WSBackgroundJob" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -26,18 +26,18 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsPutBackgroundJob", propOrder = {
+@XmlType(name = "WSPutBackgroundJob", propOrder = {
     "wsBackgroundJob"
 })
-public class WsPutBackgroundJob {
+public class WSPutBackgroundJob {
 
-    protected WsBackgroundJob wsBackgroundJob;
+    protected WSBackgroundJob wsBackgroundJob;
 
     /**
      * Default no-arg constructor
      * 
      */
-    public WsPutBackgroundJob() {
+    public WSPutBackgroundJob() {
         super();
     }
 
@@ -45,7 +45,7 @@ public class WsPutBackgroundJob {
      * Fully-initialising value constructor
      * 
      */
-    public WsPutBackgroundJob(final WsBackgroundJob wsBackgroundJob) {
+    public WSPutBackgroundJob(final WSBackgroundJob wsBackgroundJob) {
         this.wsBackgroundJob = wsBackgroundJob;
     }
 
@@ -54,10 +54,10 @@ public class WsPutBackgroundJob {
      * 
      * @return
      *     possible object is
-     *     {@link WsBackgroundJob }
+     *     {@link WSBackgroundJob }
      *     
      */
-    public WsBackgroundJob getWsBackgroundJob() {
+    public WSBackgroundJob getWsBackgroundJob() {
         return wsBackgroundJob;
     }
 
@@ -66,10 +66,10 @@ public class WsPutBackgroundJob {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsBackgroundJob }
+     *     {@link WSBackgroundJob }
      *     
      */
-    public void setWsBackgroundJob(WsBackgroundJob value) {
+    public void setWsBackgroundJob(WSBackgroundJob value) {
         this.wsBackgroundJob = value;
     }
 

@@ -10,16 +10,16 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsServicesList complex type.
+ * <p>Java class for WSServicesList complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsServicesList">
+ * &lt;complexType name="WSServicesList">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="item" type="{http://www.talend.com/mdm}wsServicesListItem" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element name="item" type="{http://www.talend.com/mdm}WSServicesListItem" maxOccurs="unbounded" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -29,19 +29,19 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsServicesList", propOrder = {
+@XmlType(name = "WSServicesList", propOrder = {
     "item"
 })
-public class WsServicesList {
+public class WSServicesList {
 
     @XmlElement(nillable = true)
-    protected List<WsServicesListItem> item;
+    protected List<WSServicesListItem> item;
 
     /**
      * Default no-arg constructor
      * 
      */
-    public WsServicesList() {
+    public WSServicesList() {
         super();
     }
 
@@ -49,7 +49,7 @@ public class WsServicesList {
      * Fully-initialising value constructor
      * 
      */
-    public WsServicesList(final List<WsServicesListItem> item) {
+    public WSServicesList(final List<WSServicesListItem> item) {
         this.item = item;
     }
 
@@ -71,13 +71,13 @@ public class WsServicesList {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link WsServicesListItem }
+     * {@link WSServicesListItem }
      * 
      * 
      */
-    public List<WsServicesListItem> getItem() {
+    public List<WSServicesListItem> getItem() {
         if (item == null) {
-            item = new ArrayList<WsServicesListItem>();
+            item = new ArrayList<WSServicesListItem>();
         }
         return this.item;
     }

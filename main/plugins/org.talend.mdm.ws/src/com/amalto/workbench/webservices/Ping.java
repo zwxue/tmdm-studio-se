@@ -16,7 +16,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="arg0" type="{http://www.talend.com/mdm}wsPing" minOccurs="0"/>
+ *         &lt;element name="arg0" type="{http://www.talend.com/mdm}WSPing" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -31,7 +31,7 @@ import javax.xml.bind.annotation.XmlType;
 })
 public class Ping {
 
-    protected WsPing arg0;
+    protected WSPing arg0;
 
     /**
      * Default no-arg constructor
@@ -45,7 +45,7 @@ public class Ping {
      * Fully-initialising value constructor
      * 
      */
-    public Ping(final WsPing arg0) {
+    public Ping(final WSPing arg0) {
         this.arg0 = arg0;
     }
 
@@ -54,10 +54,10 @@ public class Ping {
      * 
      * @return
      *     possible object is
-     *     {@link WsPing }
+     *     {@link WSPing }
      *     
      */
-    public WsPing getArg0() {
+    public WSPing getArg0() {
         return arg0;
     }
 
@@ -66,10 +66,10 @@ public class Ping {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsPing }
+     *     {@link WSPing }
      *     
      */
-    public void setArg0(WsPing value) {
+    public void setArg0(WSPing value) {
         this.arg0 = value;
     }
 

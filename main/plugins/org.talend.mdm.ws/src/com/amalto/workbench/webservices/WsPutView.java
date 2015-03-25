@@ -7,16 +7,16 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsPutView complex type.
+ * <p>Java class for WSPutView complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsPutView">
+ * &lt;complexType name="WSPutView">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="wsView" type="{http://www.talend.com/mdm}wsView" minOccurs="0"/>
+ *         &lt;element name="wsView" type="{http://www.talend.com/mdm}WSView" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -26,18 +26,18 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsPutView", propOrder = {
+@XmlType(name = "WSPutView", propOrder = {
     "wsView"
 })
-public class WsPutView {
+public class WSPutView {
 
-    protected WsView wsView;
+    protected WSView wsView;
 
     /**
      * Default no-arg constructor
      * 
      */
-    public WsPutView() {
+    public WSPutView() {
         super();
     }
 
@@ -45,7 +45,7 @@ public class WsPutView {
      * Fully-initialising value constructor
      * 
      */
-    public WsPutView(final WsView wsView) {
+    public WSPutView(final WSView wsView) {
         this.wsView = wsView;
     }
 
@@ -54,10 +54,10 @@ public class WsPutView {
      * 
      * @return
      *     possible object is
-     *     {@link WsView }
+     *     {@link WSView }
      *     
      */
-    public WsView getWsView() {
+    public WSView getWsView() {
         return wsView;
     }
 
@@ -66,10 +66,10 @@ public class WsPutView {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsView }
+     *     {@link WSView }
      *     
      */
-    public void setWsView(WsView value) {
+    public void setWsView(WSView value) {
         this.wsView = value;
     }
 

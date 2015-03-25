@@ -10,20 +10,20 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsBusinessConcept complex type.
+ * <p>Java class for WSBusinessConcept complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsBusinessConcept">
+ * &lt;complexType name="WSBusinessConcept">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
  *         &lt;element name="businessTemplate" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="name" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="wsDescription" type="{http://www.talend.com/mdm}wsi18NString" maxOccurs="unbounded" minOccurs="0"/>
- *         &lt;element name="wsLabel" type="{http://www.talend.com/mdm}wsi18NString" maxOccurs="unbounded" minOccurs="0"/>
- *         &lt;element name="wsUniqueKey" type="{http://www.talend.com/mdm}wsKey" minOccurs="0"/>
+ *         &lt;element name="wsDescription" type="{http://www.talend.com/mdm}WSI18NString" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element name="wsLabel" type="{http://www.talend.com/mdm}WSI18NString" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element name="wsUniqueKey" type="{http://www.talend.com/mdm}WSKey" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -33,28 +33,28 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsBusinessConcept", propOrder = {
+@XmlType(name = "WSBusinessConcept", propOrder = {
     "businessTemplate",
     "name",
     "wsDescription",
     "wsLabel",
     "wsUniqueKey"
 })
-public class WsBusinessConcept {
+public class WSBusinessConcept {
 
     protected String businessTemplate;
     protected String name;
     @XmlElement(nillable = true)
-    protected List<Wsi18NString> wsDescription;
+    protected List<WSI18NString> wsDescription;
     @XmlElement(nillable = true)
-    protected List<Wsi18NString> wsLabel;
-    protected WsKey wsUniqueKey;
+    protected List<WSI18NString> wsLabel;
+    protected WSKey wsUniqueKey;
 
     /**
      * Default no-arg constructor
      * 
      */
-    public WsBusinessConcept() {
+    public WSBusinessConcept() {
         super();
     }
 
@@ -62,7 +62,7 @@ public class WsBusinessConcept {
      * Fully-initialising value constructor
      * 
      */
-    public WsBusinessConcept(final String businessTemplate, final String name, final List<Wsi18NString> wsDescription, final List<Wsi18NString> wsLabel, final WsKey wsUniqueKey) {
+    public WSBusinessConcept(final String businessTemplate, final String name, final List<WSI18NString> wsDescription, final List<WSI18NString> wsLabel, final WSKey wsUniqueKey) {
         this.businessTemplate = businessTemplate;
         this.name = name;
         this.wsDescription = wsDescription;
@@ -136,13 +136,13 @@ public class WsBusinessConcept {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link Wsi18NString }
+     * {@link WSI18NString }
      * 
      * 
      */
-    public List<Wsi18NString> getWsDescription() {
+    public List<WSI18NString> getWsDescription() {
         if (wsDescription == null) {
-            wsDescription = new ArrayList<Wsi18NString>();
+            wsDescription = new ArrayList<WSI18NString>();
         }
         return this.wsDescription;
     }
@@ -165,13 +165,13 @@ public class WsBusinessConcept {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link Wsi18NString }
+     * {@link WSI18NString }
      * 
      * 
      */
-    public List<Wsi18NString> getWsLabel() {
+    public List<WSI18NString> getWsLabel() {
         if (wsLabel == null) {
-            wsLabel = new ArrayList<Wsi18NString>();
+            wsLabel = new ArrayList<WSI18NString>();
         }
         return this.wsLabel;
     }
@@ -181,10 +181,10 @@ public class WsBusinessConcept {
      * 
      * @return
      *     possible object is
-     *     {@link WsKey }
+     *     {@link WSKey }
      *     
      */
-    public WsKey getWsUniqueKey() {
+    public WSKey getWsUniqueKey() {
         return wsUniqueKey;
     }
 
@@ -193,10 +193,10 @@ public class WsBusinessConcept {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsKey }
+     *     {@link WSKey }
      *     
      */
-    public void setWsUniqueKey(WsKey value) {
+    public void setWsUniqueKey(WSKey value) {
         this.wsUniqueKey = value;
     }
 

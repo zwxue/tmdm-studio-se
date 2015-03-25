@@ -7,16 +7,16 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsPutDataModel complex type.
+ * <p>Java class for WSPutDataModel complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsPutDataModel">
+ * &lt;complexType name="WSPutDataModel">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="wsDataModel" type="{http://www.talend.com/mdm}wsDataModel" minOccurs="0"/>
+ *         &lt;element name="wsDataModel" type="{http://www.talend.com/mdm}WSDataModel" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -26,18 +26,18 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsPutDataModel", propOrder = {
+@XmlType(name = "WSPutDataModel", propOrder = {
     "wsDataModel"
 })
-public class WsPutDataModel {
+public class WSPutDataModel {
 
-    protected WsDataModel wsDataModel;
+    protected WSDataModel wsDataModel;
 
     /**
      * Default no-arg constructor
      * 
      */
-    public WsPutDataModel() {
+    public WSPutDataModel() {
         super();
     }
 
@@ -45,7 +45,7 @@ public class WsPutDataModel {
      * Fully-initialising value constructor
      * 
      */
-    public WsPutDataModel(final WsDataModel wsDataModel) {
+    public WSPutDataModel(final WSDataModel wsDataModel) {
         this.wsDataModel = wsDataModel;
     }
 
@@ -54,10 +54,10 @@ public class WsPutDataModel {
      * 
      * @return
      *     possible object is
-     *     {@link WsDataModel }
+     *     {@link WSDataModel }
      *     
      */
-    public WsDataModel getWsDataModel() {
+    public WSDataModel getWsDataModel() {
         return wsDataModel;
     }
 
@@ -66,10 +66,10 @@ public class WsPutDataModel {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsDataModel }
+     *     {@link WSDataModel }
      *     
      */
-    public void setWsDataModel(WsDataModel value) {
+    public void setWsDataModel(WSDataModel value) {
         this.wsDataModel = value;
     }
 

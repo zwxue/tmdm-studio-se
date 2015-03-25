@@ -7,12 +7,12 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsString complex type.
+ * <p>Java class for WSString complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsString">
+ * &lt;complexType name="WSString">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
@@ -26,10 +26,10 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsString", propOrder = {
+@XmlType(name = "WSString", propOrder = {
     "value"
 })
-public class WsString {
+public class WSString {
 
     protected String value;
 
@@ -37,7 +37,7 @@ public class WsString {
      * Default no-arg constructor
      * 
      */
-    public WsString() {
+    public WSString() {
         super();
     }
 
@@ -45,7 +45,7 @@ public class WsString {
      * Fully-initialising value constructor
      * 
      */
-    public WsString(final String value) {
+    public WSString(final String value) {
         this.value = value;
     }
 

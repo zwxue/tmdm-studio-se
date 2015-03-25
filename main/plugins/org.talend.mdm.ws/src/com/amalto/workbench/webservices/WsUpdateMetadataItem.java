@@ -7,17 +7,17 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsUpdateMetadataItem complex type.
+ * <p>Java class for WSUpdateMetadataItem complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsUpdateMetadataItem">
+ * &lt;complexType name="WSUpdateMetadataItem">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
  *         &lt;element name="taskId" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="wsItemPK" type="{http://www.talend.com/mdm}wsItemPK" minOccurs="0"/>
+ *         &lt;element name="wsItemPK" type="{http://www.talend.com/mdm}WSItemPK" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -27,20 +27,20 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsUpdateMetadataItem", propOrder = {
+@XmlType(name = "WSUpdateMetadataItem", propOrder = {
     "taskId",
     "wsItemPK"
 })
-public class WsUpdateMetadataItem {
+public class WSUpdateMetadataItem {
 
     protected String taskId;
-    protected WsItemPK wsItemPK;
+    protected WSItemPK wsItemPK;
 
     /**
      * Default no-arg constructor
      * 
      */
-    public WsUpdateMetadataItem() {
+    public WSUpdateMetadataItem() {
         super();
     }
 
@@ -48,7 +48,7 @@ public class WsUpdateMetadataItem {
      * Fully-initialising value constructor
      * 
      */
-    public WsUpdateMetadataItem(final String taskId, final WsItemPK wsItemPK) {
+    public WSUpdateMetadataItem(final String taskId, final WSItemPK wsItemPK) {
         this.taskId = taskId;
         this.wsItemPK = wsItemPK;
     }
@@ -82,10 +82,10 @@ public class WsUpdateMetadataItem {
      * 
      * @return
      *     possible object is
-     *     {@link WsItemPK }
+     *     {@link WSItemPK }
      *     
      */
-    public WsItemPK getWsItemPK() {
+    public WSItemPK getWsItemPK() {
         return wsItemPK;
     }
 
@@ -94,10 +94,10 @@ public class WsUpdateMetadataItem {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsItemPK }
+     *     {@link WSItemPK }
      *     
      */
-    public void setWsItemPK(WsItemPK value) {
+    public void setWsItemPK(WSItemPK value) {
         this.wsItemPK = value;
     }
 

@@ -10,16 +10,16 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsMenuPKArray complex type.
+ * <p>Java class for WSMenuPKArray complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsMenuPKArray">
+ * &lt;complexType name="WSMenuPKArray">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="wsMenuPK" type="{http://www.talend.com/mdm}wsMenuPK" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element name="wsMenuPK" type="{http://www.talend.com/mdm}WSMenuPK" maxOccurs="unbounded" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -29,19 +29,19 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsMenuPKArray", propOrder = {
+@XmlType(name = "WSMenuPKArray", propOrder = {
     "wsMenuPK"
 })
-public class WsMenuPKArray {
+public class WSMenuPKArray {
 
     @XmlElement(nillable = true)
-    protected List<WsMenuPK> wsMenuPK;
+    protected List<WSMenuPK> wsMenuPK;
 
     /**
      * Default no-arg constructor
      * 
      */
-    public WsMenuPKArray() {
+    public WSMenuPKArray() {
         super();
     }
 
@@ -49,7 +49,7 @@ public class WsMenuPKArray {
      * Fully-initialising value constructor
      * 
      */
-    public WsMenuPKArray(final List<WsMenuPK> wsMenuPK) {
+    public WSMenuPKArray(final List<WSMenuPK> wsMenuPK) {
         this.wsMenuPK = wsMenuPK;
     }
 
@@ -71,13 +71,13 @@ public class WsMenuPKArray {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link WsMenuPK }
+     * {@link WSMenuPK }
      * 
      * 
      */
-    public List<WsMenuPK> getWsMenuPK() {
+    public List<WSMenuPK> getWsMenuPK() {
         if (wsMenuPK == null) {
-            wsMenuPK = new ArrayList<WsMenuPK>();
+            wsMenuPK = new ArrayList<WSMenuPK>();
         }
         return this.wsMenuPK;
     }

@@ -16,7 +16,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="arg0" type="{http://www.talend.com/mdm}wsGetTransformerPKs" minOccurs="0"/>
+ *         &lt;element name="arg0" type="{http://www.talend.com/mdm}WSGetTransformerPKs" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -31,7 +31,7 @@ import javax.xml.bind.annotation.XmlType;
 })
 public class GetTransformerPKs {
 
-    protected WsGetTransformerPKs arg0;
+    protected WSGetTransformerPKs arg0;
 
     /**
      * Default no-arg constructor
@@ -45,7 +45,7 @@ public class GetTransformerPKs {
      * Fully-initialising value constructor
      * 
      */
-    public GetTransformerPKs(final WsGetTransformerPKs arg0) {
+    public GetTransformerPKs(final WSGetTransformerPKs arg0) {
         this.arg0 = arg0;
     }
 
@@ -54,10 +54,10 @@ public class GetTransformerPKs {
      * 
      * @return
      *     possible object is
-     *     {@link WsGetTransformerPKs }
+     *     {@link WSGetTransformerPKs }
      *     
      */
-    public WsGetTransformerPKs getArg0() {
+    public WSGetTransformerPKs getArg0() {
         return arg0;
     }
 
@@ -66,10 +66,10 @@ public class GetTransformerPKs {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsGetTransformerPKs }
+     *     {@link WSGetTransformerPKs }
      *     
      */
-    public void setArg0(WsGetTransformerPKs value) {
+    public void setArg0(WSGetTransformerPKs value) {
         this.arg0 = value;
     }
 

@@ -17,7 +17,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="return" type="{http://www.talend.com/mdm}wsBackgroundJob" minOccurs="0"/>
+ *         &lt;element name="return" type="{http://www.talend.com/mdm}WSBackgroundJob" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -33,7 +33,7 @@ import javax.xml.bind.annotation.XmlType;
 public class GetBackgroundJobResponse {
 
     @XmlElement(name = "return")
-    protected WsBackgroundJob _return;
+    protected WSBackgroundJob _return;
 
     /**
      * Default no-arg constructor
@@ -47,7 +47,7 @@ public class GetBackgroundJobResponse {
      * Fully-initialising value constructor
      * 
      */
-    public GetBackgroundJobResponse(final WsBackgroundJob _return) {
+    public GetBackgroundJobResponse(final WSBackgroundJob _return) {
         this._return = _return;
     }
 
@@ -56,10 +56,10 @@ public class GetBackgroundJobResponse {
      * 
      * @return
      *     possible object is
-     *     {@link WsBackgroundJob }
+     *     {@link WSBackgroundJob }
      *     
      */
-    public WsBackgroundJob getReturn() {
+    public WSBackgroundJob getReturn() {
         return _return;
     }
 
@@ -68,10 +68,10 @@ public class GetBackgroundJobResponse {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsBackgroundJob }
+     *     {@link WSBackgroundJob }
      *     
      */
-    public void setReturn(WsBackgroundJob value) {
+    public void setReturn(WSBackgroundJob value) {
         this._return = value;
     }
 

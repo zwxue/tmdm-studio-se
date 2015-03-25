@@ -7,12 +7,12 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsRegexDataModelPKs complex type.
+ * <p>Java class for WSRegexDataModelPKs complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsRegexDataModelPKs">
+ * &lt;complexType name="WSRegexDataModelPKs">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
@@ -26,10 +26,10 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsRegexDataModelPKs", propOrder = {
+@XmlType(name = "WSRegexDataModelPKs", propOrder = {
     "regex"
 })
-public class WsRegexDataModelPKs {
+public class WSRegexDataModelPKs {
 
     protected String regex;
 
@@ -37,7 +37,7 @@ public class WsRegexDataModelPKs {
      * Default no-arg constructor
      * 
      */
-    public WsRegexDataModelPKs() {
+    public WSRegexDataModelPKs() {
         super();
     }
 
@@ -45,7 +45,7 @@ public class WsRegexDataModelPKs {
      * Fully-initialising value constructor
      * 
      */
-    public WsRegexDataModelPKs(final String regex) {
+    public WSRegexDataModelPKs(final String regex) {
         this.regex = regex;
     }
 

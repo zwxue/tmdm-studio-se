@@ -16,7 +16,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="arg0" type="{http://www.talend.com/mdm}wsGetRoutingRulePKs" minOccurs="0"/>
+ *         &lt;element name="arg0" type="{http://www.talend.com/mdm}WSGetRoutingRulePKs" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -31,7 +31,7 @@ import javax.xml.bind.annotation.XmlType;
 })
 public class GetRoutingRulePKs {
 
-    protected WsGetRoutingRulePKs arg0;
+    protected WSGetRoutingRulePKs arg0;
 
     /**
      * Default no-arg constructor
@@ -45,7 +45,7 @@ public class GetRoutingRulePKs {
      * Fully-initialising value constructor
      * 
      */
-    public GetRoutingRulePKs(final WsGetRoutingRulePKs arg0) {
+    public GetRoutingRulePKs(final WSGetRoutingRulePKs arg0) {
         this.arg0 = arg0;
     }
 
@@ -54,10 +54,10 @@ public class GetRoutingRulePKs {
      * 
      * @return
      *     possible object is
-     *     {@link WsGetRoutingRulePKs }
+     *     {@link WSGetRoutingRulePKs }
      *     
      */
-    public WsGetRoutingRulePKs getArg0() {
+    public WSGetRoutingRulePKs getArg0() {
         return arg0;
     }
 
@@ -66,10 +66,10 @@ public class GetRoutingRulePKs {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsGetRoutingRulePKs }
+     *     {@link WSGetRoutingRulePKs }
      *     
      */
-    public void setArg0(WsGetRoutingRulePKs value) {
+    public void setArg0(WSGetRoutingRulePKs value) {
         this.arg0 = value;
     }
 

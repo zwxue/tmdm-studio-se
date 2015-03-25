@@ -10,19 +10,19 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsTransformerPluginV2Details complex type.
+ * <p>Java class for WSTransformerPluginV2Details complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsTransformerPluginV2Details">
+ * &lt;complexType name="WSTransformerPluginV2Details">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
  *         &lt;element name="description" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="documentation" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="inputVariableDescriptors" type="{http://www.talend.com/mdm}wsTransformerPluginV2VariableDescriptor" maxOccurs="unbounded" minOccurs="0"/>
- *         &lt;element name="outputVariableDescriptors" type="{http://www.talend.com/mdm}wsTransformerPluginV2VariableDescriptor" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element name="inputVariableDescriptors" type="{http://www.talend.com/mdm}WSTransformerPluginV2VariableDescriptor" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element name="outputVariableDescriptors" type="{http://www.talend.com/mdm}WSTransformerPluginV2VariableDescriptor" maxOccurs="unbounded" minOccurs="0"/>
  *         &lt;element name="parametersSchema" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
@@ -33,28 +33,28 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsTransformerPluginV2Details", propOrder = {
+@XmlType(name = "WSTransformerPluginV2Details", propOrder = {
     "description",
     "documentation",
     "inputVariableDescriptors",
     "outputVariableDescriptors",
     "parametersSchema"
 })
-public class WsTransformerPluginV2Details {
+public class WSTransformerPluginV2Details {
 
     protected String description;
     protected String documentation;
     @XmlElement(nillable = true)
-    protected List<WsTransformerPluginV2VariableDescriptor> inputVariableDescriptors;
+    protected List<WSTransformerPluginV2VariableDescriptor> inputVariableDescriptors;
     @XmlElement(nillable = true)
-    protected List<WsTransformerPluginV2VariableDescriptor> outputVariableDescriptors;
+    protected List<WSTransformerPluginV2VariableDescriptor> outputVariableDescriptors;
     protected String parametersSchema;
 
     /**
      * Default no-arg constructor
      * 
      */
-    public WsTransformerPluginV2Details() {
+    public WSTransformerPluginV2Details() {
         super();
     }
 
@@ -62,7 +62,7 @@ public class WsTransformerPluginV2Details {
      * Fully-initialising value constructor
      * 
      */
-    public WsTransformerPluginV2Details(final String description, final String documentation, final List<WsTransformerPluginV2VariableDescriptor> inputVariableDescriptors, final List<WsTransformerPluginV2VariableDescriptor> outputVariableDescriptors, final String parametersSchema) {
+    public WSTransformerPluginV2Details(final String description, final String documentation, final List<WSTransformerPluginV2VariableDescriptor> inputVariableDescriptors, final List<WSTransformerPluginV2VariableDescriptor> outputVariableDescriptors, final String parametersSchema) {
         this.description = description;
         this.documentation = documentation;
         this.inputVariableDescriptors = inputVariableDescriptors;
@@ -136,13 +136,13 @@ public class WsTransformerPluginV2Details {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link WsTransformerPluginV2VariableDescriptor }
+     * {@link WSTransformerPluginV2VariableDescriptor }
      * 
      * 
      */
-    public List<WsTransformerPluginV2VariableDescriptor> getInputVariableDescriptors() {
+    public List<WSTransformerPluginV2VariableDescriptor> getInputVariableDescriptors() {
         if (inputVariableDescriptors == null) {
-            inputVariableDescriptors = new ArrayList<WsTransformerPluginV2VariableDescriptor>();
+            inputVariableDescriptors = new ArrayList<WSTransformerPluginV2VariableDescriptor>();
         }
         return this.inputVariableDescriptors;
     }
@@ -165,13 +165,13 @@ public class WsTransformerPluginV2Details {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link WsTransformerPluginV2VariableDescriptor }
+     * {@link WSTransformerPluginV2VariableDescriptor }
      * 
      * 
      */
-    public List<WsTransformerPluginV2VariableDescriptor> getOutputVariableDescriptors() {
+    public List<WSTransformerPluginV2VariableDescriptor> getOutputVariableDescriptors() {
         if (outputVariableDescriptors == null) {
-            outputVariableDescriptors = new ArrayList<WsTransformerPluginV2VariableDescriptor>();
+            outputVariableDescriptors = new ArrayList<WSTransformerPluginV2VariableDescriptor>();
         }
         return this.outputVariableDescriptors;
     }

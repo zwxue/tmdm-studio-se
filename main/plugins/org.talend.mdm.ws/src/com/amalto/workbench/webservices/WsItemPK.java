@@ -10,18 +10,18 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsItemPK complex type.
+ * <p>Java class for WSItemPK complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsItemPK">
+ * &lt;complexType name="WSItemPK">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
  *         &lt;element name="conceptName" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="ids" type="{http://www.w3.org/2001/XMLSchema}string" maxOccurs="unbounded" minOccurs="0"/>
- *         &lt;element name="wsDataClusterPK" type="{http://www.talend.com/mdm}wsDataClusterPK" minOccurs="0"/>
+ *         &lt;element name="wsDataClusterPK" type="{http://www.talend.com/mdm}WSDataClusterPK" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -31,23 +31,23 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsItemPK", propOrder = {
+@XmlType(name = "WSItemPK", propOrder = {
     "conceptName",
     "ids",
     "wsDataClusterPK"
 })
-public class WsItemPK {
+public class WSItemPK {
 
     protected String conceptName;
     @XmlElement(nillable = true)
     protected List<String> ids;
-    protected WsDataClusterPK wsDataClusterPK;
+    protected WSDataClusterPK wsDataClusterPK;
 
     /**
      * Default no-arg constructor
      * 
      */
-    public WsItemPK() {
+    public WSItemPK() {
         super();
     }
 
@@ -55,7 +55,7 @@ public class WsItemPK {
      * Fully-initialising value constructor
      * 
      */
-    public WsItemPK(final String conceptName, final List<String> ids, final WsDataClusterPK wsDataClusterPK) {
+    public WSItemPK(final String conceptName, final List<String> ids, final WSDataClusterPK wsDataClusterPK) {
         this.conceptName = conceptName;
         this.ids = ids;
         this.wsDataClusterPK = wsDataClusterPK;
@@ -119,10 +119,10 @@ public class WsItemPK {
      * 
      * @return
      *     possible object is
-     *     {@link WsDataClusterPK }
+     *     {@link WSDataClusterPK }
      *     
      */
-    public WsDataClusterPK getWsDataClusterPK() {
+    public WSDataClusterPK getWsDataClusterPK() {
         return wsDataClusterPK;
     }
 
@@ -131,10 +131,10 @@ public class WsItemPK {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsDataClusterPK }
+     *     {@link WSDataClusterPK }
      *     
      */
-    public void setWsDataClusterPK(WsDataClusterPK value) {
+    public void setWsDataClusterPK(WSDataClusterPK value) {
         this.wsDataClusterPK = value;
     }
 

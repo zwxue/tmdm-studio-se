@@ -7,12 +7,12 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsServiceGetConfiguration complex type.
+ * <p>Java class for WSServiceGetConfiguration complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsServiceGetConfiguration">
+ * &lt;complexType name="WSServiceGetConfiguration">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
@@ -27,11 +27,11 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsServiceGetConfiguration", propOrder = {
+@XmlType(name = "WSServiceGetConfiguration", propOrder = {
     "jndiName",
     "optionalParameter"
 })
-public class WsServiceGetConfiguration {
+public class WSServiceGetConfiguration {
 
     protected String jndiName;
     protected String optionalParameter;
@@ -40,7 +40,7 @@ public class WsServiceGetConfiguration {
      * Default no-arg constructor
      * 
      */
-    public WsServiceGetConfiguration() {
+    public WSServiceGetConfiguration() {
         super();
     }
 
@@ -48,7 +48,7 @@ public class WsServiceGetConfiguration {
      * Fully-initialising value constructor
      * 
      */
-    public WsServiceGetConfiguration(final String jndiName, final String optionalParameter) {
+    public WSServiceGetConfiguration(final String jndiName, final String optionalParameter) {
         this.jndiName = jndiName;
         this.optionalParameter = optionalParameter;
     }

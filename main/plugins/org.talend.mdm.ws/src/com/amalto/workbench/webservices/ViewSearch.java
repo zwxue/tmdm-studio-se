@@ -16,7 +16,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="arg0" type="{http://www.talend.com/mdm}wsViewSearch" minOccurs="0"/>
+ *         &lt;element name="arg0" type="{http://www.talend.com/mdm}WSViewSearch" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -31,7 +31,7 @@ import javax.xml.bind.annotation.XmlType;
 })
 public class ViewSearch {
 
-    protected WsViewSearch arg0;
+    protected WSViewSearch arg0;
 
     /**
      * Default no-arg constructor
@@ -45,7 +45,7 @@ public class ViewSearch {
      * Fully-initialising value constructor
      * 
      */
-    public ViewSearch(final WsViewSearch arg0) {
+    public ViewSearch(final WSViewSearch arg0) {
         this.arg0 = arg0;
     }
 
@@ -54,10 +54,10 @@ public class ViewSearch {
      * 
      * @return
      *     possible object is
-     *     {@link WsViewSearch }
+     *     {@link WSViewSearch }
      *     
      */
-    public WsViewSearch getArg0() {
+    public WSViewSearch getArg0() {
         return arg0;
     }
 
@@ -66,10 +66,10 @@ public class ViewSearch {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsViewSearch }
+     *     {@link WSViewSearch }
      *     
      */
-    public void setArg0(WsViewSearch value) {
+    public void setArg0(WSViewSearch value) {
         this.arg0 = value;
     }
 

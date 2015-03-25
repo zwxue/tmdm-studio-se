@@ -7,12 +7,12 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsServicePutConfiguration complex type.
+ * <p>Java class for WSServicePutConfiguration complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsServicePutConfiguration">
+ * &lt;complexType name="WSServicePutConfiguration">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
@@ -27,11 +27,11 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsServicePutConfiguration", propOrder = {
+@XmlType(name = "WSServicePutConfiguration", propOrder = {
     "configuration",
     "jndiName"
 })
-public class WsServicePutConfiguration {
+public class WSServicePutConfiguration {
 
     protected String configuration;
     protected String jndiName;
@@ -40,7 +40,7 @@ public class WsServicePutConfiguration {
      * Default no-arg constructor
      * 
      */
-    public WsServicePutConfiguration() {
+    public WSServicePutConfiguration() {
         super();
     }
 
@@ -48,7 +48,7 @@ public class WsServicePutConfiguration {
      * Fully-initialising value constructor
      * 
      */
-    public WsServicePutConfiguration(final String configuration, final String jndiName) {
+    public WSServicePutConfiguration(final String configuration, final String jndiName) {
         this.configuration = configuration;
         this.jndiName = jndiName;
     }

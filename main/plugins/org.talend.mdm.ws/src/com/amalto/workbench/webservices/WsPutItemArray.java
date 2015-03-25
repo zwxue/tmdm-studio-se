@@ -10,16 +10,16 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsPutItemArray complex type.
+ * <p>Java class for WSPutItemArray complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsPutItemArray">
+ * &lt;complexType name="WSPutItemArray">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="wsPutItem" type="{http://www.talend.com/mdm}wsPutItem" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element name="wsPutItem" type="{http://www.talend.com/mdm}WSPutItem" maxOccurs="unbounded" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -29,19 +29,19 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsPutItemArray", propOrder = {
+@XmlType(name = "WSPutItemArray", propOrder = {
     "wsPutItem"
 })
-public class WsPutItemArray {
+public class WSPutItemArray {
 
     @XmlElement(nillable = true)
-    protected List<WsPutItem> wsPutItem;
+    protected List<WSPutItem> wsPutItem;
 
     /**
      * Default no-arg constructor
      * 
      */
-    public WsPutItemArray() {
+    public WSPutItemArray() {
         super();
     }
 
@@ -49,7 +49,7 @@ public class WsPutItemArray {
      * Fully-initialising value constructor
      * 
      */
-    public WsPutItemArray(final List<WsPutItem> wsPutItem) {
+    public WSPutItemArray(final List<WSPutItem> wsPutItem) {
         this.wsPutItem = wsPutItem;
     }
 
@@ -71,13 +71,13 @@ public class WsPutItemArray {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link WsPutItem }
+     * {@link WSPutItem }
      * 
      * 
      */
-    public List<WsPutItem> getWsPutItem() {
+    public List<WSPutItem> getWsPutItem() {
         if (wsPutItem == null) {
-            wsPutItem = new ArrayList<WsPutItem>();
+            wsPutItem = new ArrayList<WSPutItem>();
         }
         return this.wsPutItem;
     }

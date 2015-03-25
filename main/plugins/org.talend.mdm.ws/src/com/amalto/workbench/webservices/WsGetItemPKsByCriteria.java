@@ -7,12 +7,12 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsGetItemPKsByCriteria complex type.
+ * <p>Java class for WSGetItemPKsByCriteria complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsGetItemPKsByCriteria">
+ * &lt;complexType name="WSGetItemPKsByCriteria">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
@@ -24,7 +24,7 @@ import javax.xml.bind.annotation.XmlType;
  *         &lt;element name="maxItems" type="{http://www.w3.org/2001/XMLSchema}int"/>
  *         &lt;element name="skip" type="{http://www.w3.org/2001/XMLSchema}int"/>
  *         &lt;element name="toDate" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
- *         &lt;element name="wsDataClusterPK" type="{http://www.talend.com/mdm}wsDataClusterPK" minOccurs="0"/>
+ *         &lt;element name="wsDataClusterPK" type="{http://www.talend.com/mdm}WSDataClusterPK" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -34,7 +34,7 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsGetItemPKsByCriteria", propOrder = {
+@XmlType(name = "WSGetItemPKsByCriteria", propOrder = {
     "conceptName",
     "contentKeywords",
     "fromDate",
@@ -45,7 +45,7 @@ import javax.xml.bind.annotation.XmlType;
     "toDate",
     "wsDataClusterPK"
 })
-public class WsGetItemPKsByCriteria {
+public class WSGetItemPKsByCriteria {
 
     protected String conceptName;
     protected String contentKeywords;
@@ -55,13 +55,13 @@ public class WsGetItemPKsByCriteria {
     protected int maxItems;
     protected int skip;
     protected Long toDate;
-    protected WsDataClusterPK wsDataClusterPK;
+    protected WSDataClusterPK wsDataClusterPK;
 
     /**
      * Default no-arg constructor
      * 
      */
-    public WsGetItemPKsByCriteria() {
+    public WSGetItemPKsByCriteria() {
         super();
     }
 
@@ -69,7 +69,7 @@ public class WsGetItemPKsByCriteria {
      * Fully-initialising value constructor
      * 
      */
-    public WsGetItemPKsByCriteria(final String conceptName, final String contentKeywords, final Long fromDate, final String keys, final String keysKeywords, final int maxItems, final int skip, final Long toDate, final WsDataClusterPK wsDataClusterPK) {
+    public WSGetItemPKsByCriteria(final String conceptName, final String contentKeywords, final Long fromDate, final String keys, final String keysKeywords, final int maxItems, final int skip, final Long toDate, final WSDataClusterPK wsDataClusterPK) {
         this.conceptName = conceptName;
         this.contentKeywords = contentKeywords;
         this.fromDate = fromDate;
@@ -262,10 +262,10 @@ public class WsGetItemPKsByCriteria {
      * 
      * @return
      *     possible object is
-     *     {@link WsDataClusterPK }
+     *     {@link WSDataClusterPK }
      *     
      */
-    public WsDataClusterPK getWsDataClusterPK() {
+    public WSDataClusterPK getWsDataClusterPK() {
         return wsDataClusterPK;
     }
 
@@ -274,10 +274,10 @@ public class WsGetItemPKsByCriteria {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsDataClusterPK }
+     *     {@link WSDataClusterPK }
      *     
      */
-    public void setWsDataClusterPK(WsDataClusterPK value) {
+    public void setWsDataClusterPK(WSDataClusterPK value) {
         this.wsDataClusterPK = value;
     }
 

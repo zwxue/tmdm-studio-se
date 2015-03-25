@@ -16,7 +16,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="arg0" type="{http://www.talend.com/mdm}wsDeleteView" minOccurs="0"/>
+ *         &lt;element name="arg0" type="{http://www.talend.com/mdm}WSDeleteView" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -31,7 +31,7 @@ import javax.xml.bind.annotation.XmlType;
 })
 public class DeleteView {
 
-    protected WsDeleteView arg0;
+    protected WSDeleteView arg0;
 
     /**
      * Default no-arg constructor
@@ -45,7 +45,7 @@ public class DeleteView {
      * Fully-initialising value constructor
      * 
      */
-    public DeleteView(final WsDeleteView arg0) {
+    public DeleteView(final WSDeleteView arg0) {
         this.arg0 = arg0;
     }
 
@@ -54,10 +54,10 @@ public class DeleteView {
      * 
      * @return
      *     possible object is
-     *     {@link WsDeleteView }
+     *     {@link WSDeleteView }
      *     
      */
-    public WsDeleteView getArg0() {
+    public WSDeleteView getArg0() {
         return arg0;
     }
 
@@ -66,10 +66,10 @@ public class DeleteView {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsDeleteView }
+     *     {@link WSDeleteView }
      *     
      */
-    public void setArg0(WsDeleteView value) {
+    public void setArg0(WSDeleteView value) {
         this.arg0 = value;
     }
 

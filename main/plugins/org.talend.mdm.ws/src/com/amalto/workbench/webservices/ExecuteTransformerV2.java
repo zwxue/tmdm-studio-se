@@ -16,7 +16,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="arg0" type="{http://www.talend.com/mdm}wsExecuteTransformerV2" minOccurs="0"/>
+ *         &lt;element name="arg0" type="{http://www.talend.com/mdm}WSExecuteTransformerV2" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -31,7 +31,7 @@ import javax.xml.bind.annotation.XmlType;
 })
 public class ExecuteTransformerV2 {
 
-    protected WsExecuteTransformerV2 arg0;
+    protected WSExecuteTransformerV2 arg0;
 
     /**
      * Default no-arg constructor
@@ -45,7 +45,7 @@ public class ExecuteTransformerV2 {
      * Fully-initialising value constructor
      * 
      */
-    public ExecuteTransformerV2(final WsExecuteTransformerV2 arg0) {
+    public ExecuteTransformerV2(final WSExecuteTransformerV2 arg0) {
         this.arg0 = arg0;
     }
 
@@ -54,10 +54,10 @@ public class ExecuteTransformerV2 {
      * 
      * @return
      *     possible object is
-     *     {@link WsExecuteTransformerV2 }
+     *     {@link WSExecuteTransformerV2 }
      *     
      */
-    public WsExecuteTransformerV2 getArg0() {
+    public WSExecuteTransformerV2 getArg0() {
         return arg0;
     }
 
@@ -66,10 +66,10 @@ public class ExecuteTransformerV2 {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsExecuteTransformerV2 }
+     *     {@link WSExecuteTransformerV2 }
      *     
      */
-    public void setArg0(WsExecuteTransformerV2 value) {
+    public void setArg0(WSExecuteTransformerV2 value) {
         this.arg0 = value;
     }
 

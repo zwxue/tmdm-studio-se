@@ -7,12 +7,12 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsCheckSchema complex type.
+ * <p>Java class for WSCheckSchema complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsCheckSchema">
+ * &lt;complexType name="WSCheckSchema">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
@@ -26,10 +26,10 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsCheckSchema", propOrder = {
+@XmlType(name = "WSCheckSchema", propOrder = {
     "schema"
 })
-public class WsCheckSchema {
+public class WSCheckSchema {
 
     protected String schema;
 
@@ -37,7 +37,7 @@ public class WsCheckSchema {
      * Default no-arg constructor
      * 
      */
-    public WsCheckSchema() {
+    public WSCheckSchema() {
         super();
     }
 
@@ -45,7 +45,7 @@ public class WsCheckSchema {
      * Fully-initialising value constructor
      * 
      */
-    public WsCheckSchema(final String schema) {
+    public WSCheckSchema(final String schema) {
         this.schema = schema;
     }
 

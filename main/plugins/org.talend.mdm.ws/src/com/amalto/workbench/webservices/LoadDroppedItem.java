@@ -16,7 +16,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="arg0" type="{http://www.talend.com/mdm}wsLoadDroppedItem" minOccurs="0"/>
+ *         &lt;element name="arg0" type="{http://www.talend.com/mdm}WSLoadDroppedItem" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -31,7 +31,7 @@ import javax.xml.bind.annotation.XmlType;
 })
 public class LoadDroppedItem {
 
-    protected WsLoadDroppedItem arg0;
+    protected WSLoadDroppedItem arg0;
 
     /**
      * Default no-arg constructor
@@ -45,7 +45,7 @@ public class LoadDroppedItem {
      * Fully-initialising value constructor
      * 
      */
-    public LoadDroppedItem(final WsLoadDroppedItem arg0) {
+    public LoadDroppedItem(final WSLoadDroppedItem arg0) {
         this.arg0 = arg0;
     }
 
@@ -54,10 +54,10 @@ public class LoadDroppedItem {
      * 
      * @return
      *     possible object is
-     *     {@link WsLoadDroppedItem }
+     *     {@link WSLoadDroppedItem }
      *     
      */
-    public WsLoadDroppedItem getArg0() {
+    public WSLoadDroppedItem getArg0() {
         return arg0;
     }
 
@@ -66,10 +66,10 @@ public class LoadDroppedItem {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsLoadDroppedItem }
+     *     {@link WSLoadDroppedItem }
      *     
      */
-    public void setArg0(WsLoadDroppedItem value) {
+    public void setArg0(WSLoadDroppedItem value) {
         this.arg0 = value;
     }
 

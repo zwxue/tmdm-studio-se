@@ -7,17 +7,17 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsTransformerContextPipelinePipelineItem complex type.
+ * <p>Java class for WSTransformerContextPipelinePipelineItem complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsTransformerContextPipelinePipelineItem">
+ * &lt;complexType name="WSTransformerContextPipelinePipelineItem">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
  *         &lt;element name="variable" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="wsTypedContent" type="{http://www.talend.com/mdm}wsTypedContent" minOccurs="0"/>
+ *         &lt;element name="wsTypedContent" type="{http://www.talend.com/mdm}WSTypedContent" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -27,20 +27,20 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsTransformerContextPipelinePipelineItem", propOrder = {
+@XmlType(name = "WSTransformerContextPipelinePipelineItem", propOrder = {
     "variable",
     "wsTypedContent"
 })
-public class WsTransformerContextPipelinePipelineItem {
+public class WSTransformerContextPipelinePipelineItem {
 
     protected String variable;
-    protected WsTypedContent wsTypedContent;
+    protected WSTypedContent wsTypedContent;
 
     /**
      * Default no-arg constructor
      * 
      */
-    public WsTransformerContextPipelinePipelineItem() {
+    public WSTransformerContextPipelinePipelineItem() {
         super();
     }
 
@@ -48,7 +48,7 @@ public class WsTransformerContextPipelinePipelineItem {
      * Fully-initialising value constructor
      * 
      */
-    public WsTransformerContextPipelinePipelineItem(final String variable, final WsTypedContent wsTypedContent) {
+    public WSTransformerContextPipelinePipelineItem(final String variable, final WSTypedContent wsTypedContent) {
         this.variable = variable;
         this.wsTypedContent = wsTypedContent;
     }
@@ -82,10 +82,10 @@ public class WsTransformerContextPipelinePipelineItem {
      * 
      * @return
      *     possible object is
-     *     {@link WsTypedContent }
+     *     {@link WSTypedContent }
      *     
      */
-    public WsTypedContent getWsTypedContent() {
+    public WSTypedContent getWsTypedContent() {
         return wsTypedContent;
     }
 
@@ -94,10 +94,10 @@ public class WsTransformerContextPipelinePipelineItem {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsTypedContent }
+     *     {@link WSTypedContent }
      *     
      */
-    public void setWsTypedContent(WsTypedContent value) {
+    public void setWsTypedContent(WSTypedContent value) {
         this.wsTypedContent = value;
     }
 

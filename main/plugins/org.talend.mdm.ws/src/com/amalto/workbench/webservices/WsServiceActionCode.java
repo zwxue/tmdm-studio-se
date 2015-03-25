@@ -6,12 +6,12 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsServiceActionCode.
+ * <p>Java class for WSServiceActionCode.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * <p>
  * <pre>
- * &lt;simpleType name="wsServiceActionCode">
+ * &lt;simpleType name="WSServiceActionCode">
  *   &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string">
  *     &lt;enumeration value="START"/>
  *     &lt;enumeration value="STOP"/>
@@ -22,9 +22,9 @@ import javax.xml.bind.annotation.XmlType;
  * </pre>
  * 
  */
-@XmlType(name = "wsServiceActionCode")
+@XmlType(name = "WSServiceActionCode")
 @XmlEnum
-public enum WsServiceActionCode {
+public enum WSServiceActionCode {
 
     START,
     STOP,
@@ -35,7 +35,7 @@ public enum WsServiceActionCode {
         return name();
     }
 
-    public static WsServiceActionCode fromValue(String v) {
+    public static WSServiceActionCode fromValue(String v) {
         return valueOf(v);
     }
 

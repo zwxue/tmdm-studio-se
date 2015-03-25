@@ -7,16 +7,16 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsDeleteView complex type.
+ * <p>Java class for WSDeleteView complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsDeleteView">
+ * &lt;complexType name="WSDeleteView">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="wsViewPK" type="{http://www.talend.com/mdm}wsViewPK" minOccurs="0"/>
+ *         &lt;element name="wsViewPK" type="{http://www.talend.com/mdm}WSViewPK" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -26,18 +26,18 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsDeleteView", propOrder = {
+@XmlType(name = "WSDeleteView", propOrder = {
     "wsViewPK"
 })
-public class WsDeleteView {
+public class WSDeleteView {
 
-    protected WsViewPK wsViewPK;
+    protected WSViewPK wsViewPK;
 
     /**
      * Default no-arg constructor
      * 
      */
-    public WsDeleteView() {
+    public WSDeleteView() {
         super();
     }
 
@@ -45,7 +45,7 @@ public class WsDeleteView {
      * Fully-initialising value constructor
      * 
      */
-    public WsDeleteView(final WsViewPK wsViewPK) {
+    public WSDeleteView(final WSViewPK wsViewPK) {
         this.wsViewPK = wsViewPK;
     }
 
@@ -54,10 +54,10 @@ public class WsDeleteView {
      * 
      * @return
      *     possible object is
-     *     {@link WsViewPK }
+     *     {@link WSViewPK }
      *     
      */
-    public WsViewPK getWsViewPK() {
+    public WSViewPK getWsViewPK() {
         return wsViewPK;
     }
 
@@ -66,10 +66,10 @@ public class WsDeleteView {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsViewPK }
+     *     {@link WSViewPK }
      *     
      */
-    public void setWsViewPK(WsViewPK value) {
+    public void setWsViewPK(WSViewPK value) {
         this.wsViewPK = value;
     }
 

@@ -10,16 +10,16 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsItemPKArray complex type.
+ * <p>Java class for WSItemPKArray complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsItemPKArray">
+ * &lt;complexType name="WSItemPKArray">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="wsItemPK" type="{http://www.talend.com/mdm}wsItemPK" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element name="wsItemPK" type="{http://www.talend.com/mdm}WSItemPK" maxOccurs="unbounded" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -29,19 +29,19 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsItemPKArray", propOrder = {
+@XmlType(name = "WSItemPKArray", propOrder = {
     "wsItemPK"
 })
-public class WsItemPKArray {
+public class WSItemPKArray {
 
     @XmlElement(nillable = true)
-    protected List<WsItemPK> wsItemPK;
+    protected List<WSItemPK> wsItemPK;
 
     /**
      * Default no-arg constructor
      * 
      */
-    public WsItemPKArray() {
+    public WSItemPKArray() {
         super();
     }
 
@@ -49,7 +49,7 @@ public class WsItemPKArray {
      * Fully-initialising value constructor
      * 
      */
-    public WsItemPKArray(final List<WsItemPK> wsItemPK) {
+    public WSItemPKArray(final List<WSItemPK> wsItemPK) {
         this.wsItemPK = wsItemPK;
     }
 
@@ -71,13 +71,13 @@ public class WsItemPKArray {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link WsItemPK }
+     * {@link WSItemPK }
      * 
      * 
      */
-    public List<WsItemPK> getWsItemPK() {
+    public List<WSItemPK> getWsItemPK() {
         if (wsItemPK == null) {
-            wsItemPK = new ArrayList<WsItemPK>();
+            wsItemPK = new ArrayList<WSItemPK>();
         }
         return this.wsItemPK;
     }

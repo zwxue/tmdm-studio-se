@@ -7,12 +7,12 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsGetItemsByCustomFKFilters complex type.
+ * <p>Java class for WSGetItemsByCustomFKFilters complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsGetItemsByCustomFKFilters">
+ * &lt;complexType name="WSGetItemsByCustomFKFilters">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
@@ -23,9 +23,9 @@ import javax.xml.bind.annotation.XmlType;
  *         &lt;element name="orderBy" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="returnCount" type="{http://www.w3.org/2001/XMLSchema}boolean"/>
  *         &lt;element name="skip" type="{http://www.w3.org/2001/XMLSchema}int"/>
- *         &lt;element name="viewablePaths" type="{http://www.talend.com/mdm}wsStringArray" minOccurs="0"/>
- *         &lt;element name="whereItem" type="{http://www.talend.com/mdm}wsWhereItem" minOccurs="0"/>
- *         &lt;element name="wsDataClusterPK" type="{http://www.talend.com/mdm}wsDataClusterPK" minOccurs="0"/>
+ *         &lt;element name="viewablePaths" type="{http://www.talend.com/mdm}WSStringArray" minOccurs="0"/>
+ *         &lt;element name="whereItem" type="{http://www.talend.com/mdm}WSWhereItem" minOccurs="0"/>
+ *         &lt;element name="wsDataClusterPK" type="{http://www.talend.com/mdm}WSDataClusterPK" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -35,7 +35,7 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsGetItemsByCustomFKFilters", propOrder = {
+@XmlType(name = "WSGetItemsByCustomFKFilters", propOrder = {
     "conceptName",
     "direction",
     "injectedXpath",
@@ -47,7 +47,7 @@ import javax.xml.bind.annotation.XmlType;
     "whereItem",
     "wsDataClusterPK"
 })
-public class WsGetItemsByCustomFKFilters {
+public class WSGetItemsByCustomFKFilters {
 
     protected String conceptName;
     protected String direction;
@@ -56,15 +56,15 @@ public class WsGetItemsByCustomFKFilters {
     protected String orderBy;
     protected boolean returnCount;
     protected int skip;
-    protected WsStringArray viewablePaths;
-    protected WsWhereItem whereItem;
-    protected WsDataClusterPK wsDataClusterPK;
+    protected WSStringArray viewablePaths;
+    protected WSWhereItem whereItem;
+    protected WSDataClusterPK wsDataClusterPK;
 
     /**
      * Default no-arg constructor
      * 
      */
-    public WsGetItemsByCustomFKFilters() {
+    public WSGetItemsByCustomFKFilters() {
         super();
     }
 
@@ -72,7 +72,7 @@ public class WsGetItemsByCustomFKFilters {
      * Fully-initialising value constructor
      * 
      */
-    public WsGetItemsByCustomFKFilters(final String conceptName, final String direction, final String injectedXpath, final int maxItems, final String orderBy, final boolean returnCount, final int skip, final WsStringArray viewablePaths, final WsWhereItem whereItem, final WsDataClusterPK wsDataClusterPK) {
+    public WSGetItemsByCustomFKFilters(final String conceptName, final String direction, final String injectedXpath, final int maxItems, final String orderBy, final boolean returnCount, final int skip, final WSStringArray viewablePaths, final WSWhereItem whereItem, final WSDataClusterPK wsDataClusterPK) {
         this.conceptName = conceptName;
         this.direction = direction;
         this.injectedXpath = injectedXpath;
@@ -234,10 +234,10 @@ public class WsGetItemsByCustomFKFilters {
      * 
      * @return
      *     possible object is
-     *     {@link WsStringArray }
+     *     {@link WSStringArray }
      *     
      */
-    public WsStringArray getViewablePaths() {
+    public WSStringArray getViewablePaths() {
         return viewablePaths;
     }
 
@@ -246,10 +246,10 @@ public class WsGetItemsByCustomFKFilters {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsStringArray }
+     *     {@link WSStringArray }
      *     
      */
-    public void setViewablePaths(WsStringArray value) {
+    public void setViewablePaths(WSStringArray value) {
         this.viewablePaths = value;
     }
 
@@ -258,10 +258,10 @@ public class WsGetItemsByCustomFKFilters {
      * 
      * @return
      *     possible object is
-     *     {@link WsWhereItem }
+     *     {@link WSWhereItem }
      *     
      */
-    public WsWhereItem getWhereItem() {
+    public WSWhereItem getWhereItem() {
         return whereItem;
     }
 
@@ -270,10 +270,10 @@ public class WsGetItemsByCustomFKFilters {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsWhereItem }
+     *     {@link WSWhereItem }
      *     
      */
-    public void setWhereItem(WsWhereItem value) {
+    public void setWhereItem(WSWhereItem value) {
         this.whereItem = value;
     }
 
@@ -282,10 +282,10 @@ public class WsGetItemsByCustomFKFilters {
      * 
      * @return
      *     possible object is
-     *     {@link WsDataClusterPK }
+     *     {@link WSDataClusterPK }
      *     
      */
-    public WsDataClusterPK getWsDataClusterPK() {
+    public WSDataClusterPK getWsDataClusterPK() {
         return wsDataClusterPK;
     }
 
@@ -294,10 +294,10 @@ public class WsGetItemsByCustomFKFilters {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsDataClusterPK }
+     *     {@link WSDataClusterPK }
      *     
      */
-    public void setWsDataClusterPK(WsDataClusterPK value) {
+    public void setWsDataClusterPK(WSDataClusterPK value) {
         this.wsDataClusterPK = value;
     }
 

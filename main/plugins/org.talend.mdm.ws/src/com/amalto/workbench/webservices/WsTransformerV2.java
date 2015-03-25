@@ -10,18 +10,18 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsTransformerV2 complex type.
+ * <p>Java class for WSTransformerV2 complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsTransformerV2">
+ * &lt;complexType name="WSTransformerV2">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
  *         &lt;element name="description" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="name" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="processSteps" type="{http://www.talend.com/mdm}wsTransformerProcessStep" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element name="processSteps" type="{http://www.talend.com/mdm}WSTransformerProcessStep" maxOccurs="unbounded" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -31,23 +31,23 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsTransformerV2", propOrder = {
+@XmlType(name = "WSTransformerV2", propOrder = {
     "description",
     "name",
     "processSteps"
 })
-public class WsTransformerV2 {
+public class WSTransformerV2 {
 
     protected String description;
     protected String name;
     @XmlElement(nillable = true)
-    protected List<WsTransformerProcessStep> processSteps;
+    protected List<WSTransformerProcessStep> processSteps;
 
     /**
      * Default no-arg constructor
      * 
      */
-    public WsTransformerV2() {
+    public WSTransformerV2() {
         super();
     }
 
@@ -55,7 +55,7 @@ public class WsTransformerV2 {
      * Fully-initialising value constructor
      * 
      */
-    public WsTransformerV2(final String description, final String name, final List<WsTransformerProcessStep> processSteps) {
+    public WSTransformerV2(final String description, final String name, final List<WSTransformerProcessStep> processSteps) {
         this.description = description;
         this.name = name;
         this.processSteps = processSteps;
@@ -127,13 +127,13 @@ public class WsTransformerV2 {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link WsTransformerProcessStep }
+     * {@link WSTransformerProcessStep }
      * 
      * 
      */
-    public List<WsTransformerProcessStep> getProcessSteps() {
+    public List<WSTransformerProcessStep> getProcessSteps() {
         if (processSteps == null) {
-            processSteps = new ArrayList<WsTransformerProcessStep>();
+            processSteps = new ArrayList<WSTransformerProcessStep>();
         }
         return this.processSteps;
     }

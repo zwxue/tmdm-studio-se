@@ -16,7 +16,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="arg0" type="{http://www.talend.com/mdm}wsRegexDataClusterPKs" minOccurs="0"/>
+ *         &lt;element name="arg0" type="{http://www.talend.com/mdm}WSRegexDataClusterPKs" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -31,7 +31,7 @@ import javax.xml.bind.annotation.XmlType;
 })
 public class GetDataClusterPKs {
 
-    protected WsRegexDataClusterPKs arg0;
+    protected WSRegexDataClusterPKs arg0;
 
     /**
      * Default no-arg constructor
@@ -45,7 +45,7 @@ public class GetDataClusterPKs {
      * Fully-initialising value constructor
      * 
      */
-    public GetDataClusterPKs(final WsRegexDataClusterPKs arg0) {
+    public GetDataClusterPKs(final WSRegexDataClusterPKs arg0) {
         this.arg0 = arg0;
     }
 
@@ -54,10 +54,10 @@ public class GetDataClusterPKs {
      * 
      * @return
      *     possible object is
-     *     {@link WsRegexDataClusterPKs }
+     *     {@link WSRegexDataClusterPKs }
      *     
      */
-    public WsRegexDataClusterPKs getArg0() {
+    public WSRegexDataClusterPKs getArg0() {
         return arg0;
     }
 
@@ -66,10 +66,10 @@ public class GetDataClusterPKs {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsRegexDataClusterPKs }
+     *     {@link WSRegexDataClusterPKs }
      *     
      */
-    public void setArg0(WsRegexDataClusterPKs value) {
+    public void setArg0(WSRegexDataClusterPKs value) {
         this.arg0 = value;
     }
 

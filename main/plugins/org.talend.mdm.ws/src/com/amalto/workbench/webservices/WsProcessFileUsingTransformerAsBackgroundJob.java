@@ -7,19 +7,19 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsProcessFileUsingTransformerAsBackgroundJob complex type.
+ * <p>Java class for WSProcessFileUsingTransformerAsBackgroundJob complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsProcessFileUsingTransformerAsBackgroundJob">
+ * &lt;complexType name="WSProcessFileUsingTransformerAsBackgroundJob">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
  *         &lt;element name="contentType" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="fileName" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="wsOutputDecisionTable" type="{http://www.talend.com/mdm}wsOutputDecisionTable" minOccurs="0"/>
- *         &lt;element name="wsTransformerPK" type="{http://www.talend.com/mdm}wsTransformerPK" minOccurs="0"/>
+ *         &lt;element name="wsOutputDecisionTable" type="{http://www.talend.com/mdm}WSOutputDecisionTable" minOccurs="0"/>
+ *         &lt;element name="wsTransformerPK" type="{http://www.talend.com/mdm}WSTransformerPK" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -29,24 +29,24 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsProcessFileUsingTransformerAsBackgroundJob", propOrder = {
+@XmlType(name = "WSProcessFileUsingTransformerAsBackgroundJob", propOrder = {
     "contentType",
     "fileName",
     "wsOutputDecisionTable",
     "wsTransformerPK"
 })
-public class WsProcessFileUsingTransformerAsBackgroundJob {
+public class WSProcessFileUsingTransformerAsBackgroundJob {
 
     protected String contentType;
     protected String fileName;
-    protected WsOutputDecisionTable wsOutputDecisionTable;
-    protected WsTransformerPK wsTransformerPK;
+    protected WSOutputDecisionTable wsOutputDecisionTable;
+    protected WSTransformerPK wsTransformerPK;
 
     /**
      * Default no-arg constructor
      * 
      */
-    public WsProcessFileUsingTransformerAsBackgroundJob() {
+    public WSProcessFileUsingTransformerAsBackgroundJob() {
         super();
     }
 
@@ -54,7 +54,7 @@ public class WsProcessFileUsingTransformerAsBackgroundJob {
      * Fully-initialising value constructor
      * 
      */
-    public WsProcessFileUsingTransformerAsBackgroundJob(final String contentType, final String fileName, final WsOutputDecisionTable wsOutputDecisionTable, final WsTransformerPK wsTransformerPK) {
+    public WSProcessFileUsingTransformerAsBackgroundJob(final String contentType, final String fileName, final WSOutputDecisionTable wsOutputDecisionTable, final WSTransformerPK wsTransformerPK) {
         this.contentType = contentType;
         this.fileName = fileName;
         this.wsOutputDecisionTable = wsOutputDecisionTable;
@@ -114,10 +114,10 @@ public class WsProcessFileUsingTransformerAsBackgroundJob {
      * 
      * @return
      *     possible object is
-     *     {@link WsOutputDecisionTable }
+     *     {@link WSOutputDecisionTable }
      *     
      */
-    public WsOutputDecisionTable getWsOutputDecisionTable() {
+    public WSOutputDecisionTable getWsOutputDecisionTable() {
         return wsOutputDecisionTable;
     }
 
@@ -126,10 +126,10 @@ public class WsProcessFileUsingTransformerAsBackgroundJob {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsOutputDecisionTable }
+     *     {@link WSOutputDecisionTable }
      *     
      */
-    public void setWsOutputDecisionTable(WsOutputDecisionTable value) {
+    public void setWsOutputDecisionTable(WSOutputDecisionTable value) {
         this.wsOutputDecisionTable = value;
     }
 
@@ -138,10 +138,10 @@ public class WsProcessFileUsingTransformerAsBackgroundJob {
      * 
      * @return
      *     possible object is
-     *     {@link WsTransformerPK }
+     *     {@link WSTransformerPK }
      *     
      */
-    public WsTransformerPK getWsTransformerPK() {
+    public WSTransformerPK getWsTransformerPK() {
         return wsTransformerPK;
     }
 
@@ -150,10 +150,10 @@ public class WsProcessFileUsingTransformerAsBackgroundJob {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsTransformerPK }
+     *     {@link WSTransformerPK }
      *     
      */
-    public void setWsTransformerPK(WsTransformerPK value) {
+    public void setWsTransformerPK(WSTransformerPK value) {
         this.wsTransformerPK = value;
     }
 

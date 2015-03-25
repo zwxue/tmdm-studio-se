@@ -16,7 +16,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="arg0" type="{http://www.talend.com/mdm}wsPutView" minOccurs="0"/>
+ *         &lt;element name="arg0" type="{http://www.talend.com/mdm}WSPutView" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -31,7 +31,7 @@ import javax.xml.bind.annotation.XmlType;
 })
 public class PutView {
 
-    protected WsPutView arg0;
+    protected WSPutView arg0;
 
     /**
      * Default no-arg constructor
@@ -45,7 +45,7 @@ public class PutView {
      * Fully-initialising value constructor
      * 
      */
-    public PutView(final WsPutView arg0) {
+    public PutView(final WSPutView arg0) {
         this.arg0 = arg0;
     }
 
@@ -54,10 +54,10 @@ public class PutView {
      * 
      * @return
      *     possible object is
-     *     {@link WsPutView }
+     *     {@link WSPutView }
      *     
      */
-    public WsPutView getArg0() {
+    public WSPutView getArg0() {
         return arg0;
     }
 
@@ -66,10 +66,10 @@ public class PutView {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsPutView }
+     *     {@link WSPutView }
      *     
      */
-    public void setArg0(WsPutView value) {
+    public void setArg0(WSPutView value) {
         this.arg0 = value;
     }
 

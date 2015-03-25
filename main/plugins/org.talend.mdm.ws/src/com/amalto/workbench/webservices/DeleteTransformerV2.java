@@ -16,7 +16,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="arg0" type="{http://www.talend.com/mdm}wsDeleteTransformerV2" minOccurs="0"/>
+ *         &lt;element name="arg0" type="{http://www.talend.com/mdm}WSDeleteTransformerV2" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -31,7 +31,7 @@ import javax.xml.bind.annotation.XmlType;
 })
 public class DeleteTransformerV2 {
 
-    protected WsDeleteTransformerV2 arg0;
+    protected WSDeleteTransformerV2 arg0;
 
     /**
      * Default no-arg constructor
@@ -45,7 +45,7 @@ public class DeleteTransformerV2 {
      * Fully-initialising value constructor
      * 
      */
-    public DeleteTransformerV2(final WsDeleteTransformerV2 arg0) {
+    public DeleteTransformerV2(final WSDeleteTransformerV2 arg0) {
         this.arg0 = arg0;
     }
 
@@ -54,10 +54,10 @@ public class DeleteTransformerV2 {
      * 
      * @return
      *     possible object is
-     *     {@link WsDeleteTransformerV2 }
+     *     {@link WSDeleteTransformerV2 }
      *     
      */
-    public WsDeleteTransformerV2 getArg0() {
+    public WSDeleteTransformerV2 getArg0() {
         return arg0;
     }
 
@@ -66,10 +66,10 @@ public class DeleteTransformerV2 {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsDeleteTransformerV2 }
+     *     {@link WSDeleteTransformerV2 }
      *     
      */
-    public void setArg0(WsDeleteTransformerV2 value) {
+    public void setArg0(WSDeleteTransformerV2 value) {
         this.arg0 = value;
     }
 

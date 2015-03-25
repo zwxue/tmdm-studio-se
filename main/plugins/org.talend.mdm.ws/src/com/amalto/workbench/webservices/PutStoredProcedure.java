@@ -16,7 +16,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="arg0" type="{http://www.talend.com/mdm}wsPutStoredProcedure" minOccurs="0"/>
+ *         &lt;element name="arg0" type="{http://www.talend.com/mdm}WSPutStoredProcedure" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -31,7 +31,7 @@ import javax.xml.bind.annotation.XmlType;
 })
 public class PutStoredProcedure {
 
-    protected WsPutStoredProcedure arg0;
+    protected WSPutStoredProcedure arg0;
 
     /**
      * Default no-arg constructor
@@ -45,7 +45,7 @@ public class PutStoredProcedure {
      * Fully-initialising value constructor
      * 
      */
-    public PutStoredProcedure(final WsPutStoredProcedure arg0) {
+    public PutStoredProcedure(final WSPutStoredProcedure arg0) {
         this.arg0 = arg0;
     }
 
@@ -54,10 +54,10 @@ public class PutStoredProcedure {
      * 
      * @return
      *     possible object is
-     *     {@link WsPutStoredProcedure }
+     *     {@link WSPutStoredProcedure }
      *     
      */
-    public WsPutStoredProcedure getArg0() {
+    public WSPutStoredProcedure getArg0() {
         return arg0;
     }
 
@@ -66,10 +66,10 @@ public class PutStoredProcedure {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsPutStoredProcedure }
+     *     {@link WSPutStoredProcedure }
      *     
      */
-    public void setArg0(WsPutStoredProcedure value) {
+    public void setArg0(WSPutStoredProcedure value) {
         this.arg0 = value;
     }
 

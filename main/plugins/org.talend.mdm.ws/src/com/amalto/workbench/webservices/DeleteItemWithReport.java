@@ -16,7 +16,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="arg0" type="{http://www.talend.com/mdm}wsDeleteItemWithReport" minOccurs="0"/>
+ *         &lt;element name="arg0" type="{http://www.talend.com/mdm}WSDeleteItemWithReport" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -31,7 +31,7 @@ import javax.xml.bind.annotation.XmlType;
 })
 public class DeleteItemWithReport {
 
-    protected WsDeleteItemWithReport arg0;
+    protected WSDeleteItemWithReport arg0;
 
     /**
      * Default no-arg constructor
@@ -45,7 +45,7 @@ public class DeleteItemWithReport {
      * Fully-initialising value constructor
      * 
      */
-    public DeleteItemWithReport(final WsDeleteItemWithReport arg0) {
+    public DeleteItemWithReport(final WSDeleteItemWithReport arg0) {
         this.arg0 = arg0;
     }
 
@@ -54,10 +54,10 @@ public class DeleteItemWithReport {
      * 
      * @return
      *     possible object is
-     *     {@link WsDeleteItemWithReport }
+     *     {@link WSDeleteItemWithReport }
      *     
      */
-    public WsDeleteItemWithReport getArg0() {
+    public WSDeleteItemWithReport getArg0() {
         return arg0;
     }
 
@@ -66,10 +66,10 @@ public class DeleteItemWithReport {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsDeleteItemWithReport }
+     *     {@link WSDeleteItemWithReport }
      *     
      */
-    public void setArg0(WsDeleteItemWithReport value) {
+    public void setArg0(WSDeleteItemWithReport value) {
         this.arg0 = value;
     }
 

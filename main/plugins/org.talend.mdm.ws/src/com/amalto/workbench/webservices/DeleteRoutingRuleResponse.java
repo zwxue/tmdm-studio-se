@@ -17,7 +17,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="return" type="{http://www.talend.com/mdm}wsRoutingRulePK" minOccurs="0"/>
+ *         &lt;element name="return" type="{http://www.talend.com/mdm}WSRoutingRulePK" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -33,7 +33,7 @@ import javax.xml.bind.annotation.XmlType;
 public class DeleteRoutingRuleResponse {
 
     @XmlElement(name = "return")
-    protected WsRoutingRulePK _return;
+    protected WSRoutingRulePK _return;
 
     /**
      * Default no-arg constructor
@@ -47,7 +47,7 @@ public class DeleteRoutingRuleResponse {
      * Fully-initialising value constructor
      * 
      */
-    public DeleteRoutingRuleResponse(final WsRoutingRulePK _return) {
+    public DeleteRoutingRuleResponse(final WSRoutingRulePK _return) {
         this._return = _return;
     }
 
@@ -56,10 +56,10 @@ public class DeleteRoutingRuleResponse {
      * 
      * @return
      *     possible object is
-     *     {@link WsRoutingRulePK }
+     *     {@link WSRoutingRulePK }
      *     
      */
-    public WsRoutingRulePK getReturn() {
+    public WSRoutingRulePK getReturn() {
         return _return;
     }
 
@@ -68,10 +68,10 @@ public class DeleteRoutingRuleResponse {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsRoutingRulePK }
+     *     {@link WSRoutingRulePK }
      *     
      */
-    public void setReturn(WsRoutingRulePK value) {
+    public void setReturn(WSRoutingRulePK value) {
         this._return = value;
     }
 

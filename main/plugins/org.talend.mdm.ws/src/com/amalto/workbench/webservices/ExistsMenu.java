@@ -16,7 +16,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="arg0" type="{http://www.talend.com/mdm}wsExistsMenu" minOccurs="0"/>
+ *         &lt;element name="arg0" type="{http://www.talend.com/mdm}WSExistsMenu" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -31,7 +31,7 @@ import javax.xml.bind.annotation.XmlType;
 })
 public class ExistsMenu {
 
-    protected WsExistsMenu arg0;
+    protected WSExistsMenu arg0;
 
     /**
      * Default no-arg constructor
@@ -45,7 +45,7 @@ public class ExistsMenu {
      * Fully-initialising value constructor
      * 
      */
-    public ExistsMenu(final WsExistsMenu arg0) {
+    public ExistsMenu(final WSExistsMenu arg0) {
         this.arg0 = arg0;
     }
 
@@ -54,10 +54,10 @@ public class ExistsMenu {
      * 
      * @return
      *     possible object is
-     *     {@link WsExistsMenu }
+     *     {@link WSExistsMenu }
      *     
      */
-    public WsExistsMenu getArg0() {
+    public WSExistsMenu getArg0() {
         return arg0;
     }
 
@@ -66,10 +66,10 @@ public class ExistsMenu {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsExistsMenu }
+     *     {@link WSExistsMenu }
      *     
      */
-    public void setArg0(WsExistsMenu value) {
+    public void setArg0(WSExistsMenu value) {
         this.arg0 = value;
     }
 

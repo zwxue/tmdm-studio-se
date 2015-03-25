@@ -16,7 +16,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="arg0" type="{http://www.talend.com/mdm}wsExtractThroughTransformerV2" minOccurs="0"/>
+ *         &lt;element name="arg0" type="{http://www.talend.com/mdm}WSExtractThroughTransformerV2" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -31,7 +31,7 @@ import javax.xml.bind.annotation.XmlType;
 })
 public class ExtractThroughTransformerV2 {
 
-    protected WsExtractThroughTransformerV2 arg0;
+    protected WSExtractThroughTransformerV2 arg0;
 
     /**
      * Default no-arg constructor
@@ -45,7 +45,7 @@ public class ExtractThroughTransformerV2 {
      * Fully-initialising value constructor
      * 
      */
-    public ExtractThroughTransformerV2(final WsExtractThroughTransformerV2 arg0) {
+    public ExtractThroughTransformerV2(final WSExtractThroughTransformerV2 arg0) {
         this.arg0 = arg0;
     }
 
@@ -54,10 +54,10 @@ public class ExtractThroughTransformerV2 {
      * 
      * @return
      *     possible object is
-     *     {@link WsExtractThroughTransformerV2 }
+     *     {@link WSExtractThroughTransformerV2 }
      *     
      */
-    public WsExtractThroughTransformerV2 getArg0() {
+    public WSExtractThroughTransformerV2 getArg0() {
         return arg0;
     }
 
@@ -66,10 +66,10 @@ public class ExtractThroughTransformerV2 {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsExtractThroughTransformerV2 }
+     *     {@link WSExtractThroughTransformerV2 }
      *     
      */
-    public void setArg0(WsExtractThroughTransformerV2 value) {
+    public void setArg0(WSExtractThroughTransformerV2 value) {
         this.arg0 = value;
     }
 

@@ -7,12 +7,12 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsByteArray complex type.
+ * <p>Java class for WSByteArray complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsByteArray">
+ * &lt;complexType name="WSByteArray">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
@@ -26,10 +26,10 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsByteArray", propOrder = {
+@XmlType(name = "WSByteArray", propOrder = {
     "bytes"
 })
-public class WsByteArray {
+public class WSByteArray {
 
     protected byte[] bytes;
 
@@ -37,7 +37,7 @@ public class WsByteArray {
      * Default no-arg constructor
      * 
      */
-    public WsByteArray() {
+    public WSByteArray() {
         super();
     }
 
@@ -45,7 +45,7 @@ public class WsByteArray {
      * Fully-initialising value constructor
      * 
      */
-    public WsByteArray(final byte[] bytes) {
+    public WSByteArray(final byte[] bytes) {
         this.bytes = bytes;
     }
 

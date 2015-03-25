@@ -16,7 +16,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="arg0" type="{http://www.talend.com/mdm}wsRunQuery" minOccurs="0"/>
+ *         &lt;element name="arg0" type="{http://www.talend.com/mdm}WSRunQuery" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -31,7 +31,7 @@ import javax.xml.bind.annotation.XmlType;
 })
 public class RunQuery {
 
-    protected WsRunQuery arg0;
+    protected WSRunQuery arg0;
 
     /**
      * Default no-arg constructor
@@ -45,7 +45,7 @@ public class RunQuery {
      * Fully-initialising value constructor
      * 
      */
-    public RunQuery(final WsRunQuery arg0) {
+    public RunQuery(final WSRunQuery arg0) {
         this.arg0 = arg0;
     }
 
@@ -54,10 +54,10 @@ public class RunQuery {
      * 
      * @return
      *     possible object is
-     *     {@link WsRunQuery }
+     *     {@link WSRunQuery }
      *     
      */
-    public WsRunQuery getArg0() {
+    public WSRunQuery getArg0() {
         return arg0;
     }
 
@@ -66,10 +66,10 @@ public class RunQuery {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsRunQuery }
+     *     {@link WSRunQuery }
      *     
      */
-    public void setArg0(WsRunQuery value) {
+    public void setArg0(WSRunQuery value) {
         this.arg0 = value;
     }
 

@@ -17,7 +17,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="return" type="{http://www.talend.com/mdm}wsBackgroundJobPK" minOccurs="0"/>
+ *         &lt;element name="return" type="{http://www.talend.com/mdm}WSBackgroundJobPK" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -33,7 +33,7 @@ import javax.xml.bind.annotation.XmlType;
 public class ExecuteTransformerV2AsJobResponse {
 
     @XmlElement(name = "return")
-    protected WsBackgroundJobPK _return;
+    protected WSBackgroundJobPK _return;
 
     /**
      * Default no-arg constructor
@@ -47,7 +47,7 @@ public class ExecuteTransformerV2AsJobResponse {
      * Fully-initialising value constructor
      * 
      */
-    public ExecuteTransformerV2AsJobResponse(final WsBackgroundJobPK _return) {
+    public ExecuteTransformerV2AsJobResponse(final WSBackgroundJobPK _return) {
         this._return = _return;
     }
 
@@ -56,10 +56,10 @@ public class ExecuteTransformerV2AsJobResponse {
      * 
      * @return
      *     possible object is
-     *     {@link WsBackgroundJobPK }
+     *     {@link WSBackgroundJobPK }
      *     
      */
-    public WsBackgroundJobPK getReturn() {
+    public WSBackgroundJobPK getReturn() {
         return _return;
     }
 
@@ -68,10 +68,10 @@ public class ExecuteTransformerV2AsJobResponse {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsBackgroundJobPK }
+     *     {@link WSBackgroundJobPK }
      *     
      */
-    public void setReturn(WsBackgroundJobPK value) {
+    public void setReturn(WSBackgroundJobPK value) {
         this._return = value;
     }
 

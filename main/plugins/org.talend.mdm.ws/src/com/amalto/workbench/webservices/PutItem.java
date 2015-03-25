@@ -16,7 +16,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="arg0" type="{http://www.talend.com/mdm}wsPutItem" minOccurs="0"/>
+ *         &lt;element name="arg0" type="{http://www.talend.com/mdm}WSPutItem" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -31,7 +31,7 @@ import javax.xml.bind.annotation.XmlType;
 })
 public class PutItem {
 
-    protected WsPutItem arg0;
+    protected WSPutItem arg0;
 
     /**
      * Default no-arg constructor
@@ -45,7 +45,7 @@ public class PutItem {
      * Fully-initialising value constructor
      * 
      */
-    public PutItem(final WsPutItem arg0) {
+    public PutItem(final WSPutItem arg0) {
         this.arg0 = arg0;
     }
 
@@ -54,10 +54,10 @@ public class PutItem {
      * 
      * @return
      *     possible object is
-     *     {@link WsPutItem }
+     *     {@link WSPutItem }
      *     
      */
-    public WsPutItem getArg0() {
+    public WSPutItem getArg0() {
         return arg0;
     }
 
@@ -66,10 +66,10 @@ public class PutItem {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsPutItem }
+     *     {@link WSPutItem }
      *     
      */
-    public void setArg0(WsPutItem value) {
+    public void setArg0(WSPutItem value) {
         this.arg0 = value;
     }
 

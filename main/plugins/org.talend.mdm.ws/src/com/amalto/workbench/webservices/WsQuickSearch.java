@@ -7,12 +7,12 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsQuickSearch complex type.
+ * <p>Java class for WSQuickSearch complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsQuickSearch">
+ * &lt;complexType name="WSQuickSearch">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
@@ -23,8 +23,8 @@ import javax.xml.bind.annotation.XmlType;
  *         &lt;element name="searchedValue" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="skip" type="{http://www.w3.org/2001/XMLSchema}int"/>
  *         &lt;element name="spellTreshold" type="{http://www.w3.org/2001/XMLSchema}int"/>
- *         &lt;element name="wsDataClusterPK" type="{http://www.talend.com/mdm}wsDataClusterPK" minOccurs="0"/>
- *         &lt;element name="wsViewPK" type="{http://www.talend.com/mdm}wsViewPK" minOccurs="0"/>
+ *         &lt;element name="wsDataClusterPK" type="{http://www.talend.com/mdm}WSDataClusterPK" minOccurs="0"/>
+ *         &lt;element name="wsViewPK" type="{http://www.talend.com/mdm}WSViewPK" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -34,7 +34,7 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsQuickSearch", propOrder = {
+@XmlType(name = "WSQuickSearch", propOrder = {
     "direction",
     "matchAllWords",
     "maxItems",
@@ -45,7 +45,7 @@ import javax.xml.bind.annotation.XmlType;
     "wsDataClusterPK",
     "wsViewPK"
 })
-public class WsQuickSearch {
+public class WSQuickSearch {
 
     protected String direction;
     protected boolean matchAllWords;
@@ -54,14 +54,14 @@ public class WsQuickSearch {
     protected String searchedValue;
     protected int skip;
     protected int spellTreshold;
-    protected WsDataClusterPK wsDataClusterPK;
-    protected WsViewPK wsViewPK;
+    protected WSDataClusterPK wsDataClusterPK;
+    protected WSViewPK wsViewPK;
 
     /**
      * Default no-arg constructor
      * 
      */
-    public WsQuickSearch() {
+    public WSQuickSearch() {
         super();
     }
 
@@ -69,7 +69,7 @@ public class WsQuickSearch {
      * Fully-initialising value constructor
      * 
      */
-    public WsQuickSearch(final String direction, final boolean matchAllWords, final int maxItems, final String orderBy, final String searchedValue, final int skip, final int spellTreshold, final WsDataClusterPK wsDataClusterPK, final WsViewPK wsViewPK) {
+    public WSQuickSearch(final String direction, final boolean matchAllWords, final int maxItems, final String orderBy, final String searchedValue, final int skip, final int spellTreshold, final WSDataClusterPK wsDataClusterPK, final WSViewPK wsViewPK) {
         this.direction = direction;
         this.matchAllWords = matchAllWords;
         this.maxItems = maxItems;
@@ -222,10 +222,10 @@ public class WsQuickSearch {
      * 
      * @return
      *     possible object is
-     *     {@link WsDataClusterPK }
+     *     {@link WSDataClusterPK }
      *     
      */
-    public WsDataClusterPK getWsDataClusterPK() {
+    public WSDataClusterPK getWsDataClusterPK() {
         return wsDataClusterPK;
     }
 
@@ -234,10 +234,10 @@ public class WsQuickSearch {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsDataClusterPK }
+     *     {@link WSDataClusterPK }
      *     
      */
-    public void setWsDataClusterPK(WsDataClusterPK value) {
+    public void setWsDataClusterPK(WSDataClusterPK value) {
         this.wsDataClusterPK = value;
     }
 
@@ -246,10 +246,10 @@ public class WsQuickSearch {
      * 
      * @return
      *     possible object is
-     *     {@link WsViewPK }
+     *     {@link WSViewPK }
      *     
      */
-    public WsViewPK getWsViewPK() {
+    public WSViewPK getWsViewPK() {
         return wsViewPK;
     }
 
@@ -258,10 +258,10 @@ public class WsQuickSearch {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsViewPK }
+     *     {@link WSViewPK }
      *     
      */
-    public void setWsViewPK(WsViewPK value) {
+    public void setWsViewPK(WSViewPK value) {
         this.wsViewPK = value;
     }
 

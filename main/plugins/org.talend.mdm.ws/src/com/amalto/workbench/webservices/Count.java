@@ -16,7 +16,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="arg0" type="{http://www.talend.com/mdm}wsCount" minOccurs="0"/>
+ *         &lt;element name="arg0" type="{http://www.talend.com/mdm}WSCount" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -31,7 +31,7 @@ import javax.xml.bind.annotation.XmlType;
 })
 public class Count {
 
-    protected WsCount arg0;
+    protected WSCount arg0;
 
     /**
      * Default no-arg constructor
@@ -45,7 +45,7 @@ public class Count {
      * Fully-initialising value constructor
      * 
      */
-    public Count(final WsCount arg0) {
+    public Count(final WSCount arg0) {
         this.arg0 = arg0;
     }
 
@@ -54,10 +54,10 @@ public class Count {
      * 
      * @return
      *     possible object is
-     *     {@link WsCount }
+     *     {@link WSCount }
      *     
      */
-    public WsCount getArg0() {
+    public WSCount getArg0() {
         return arg0;
     }
 
@@ -66,10 +66,10 @@ public class Count {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsCount }
+     *     {@link WSCount }
      *     
      */
-    public void setArg0(WsCount value) {
+    public void setArg0(WSCount value) {
         this.arg0 = value;
     }
 

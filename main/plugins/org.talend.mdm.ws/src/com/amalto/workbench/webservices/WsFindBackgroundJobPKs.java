@@ -7,16 +7,16 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsFindBackgroundJobPKs complex type.
+ * <p>Java class for WSFindBackgroundJobPKs complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsFindBackgroundJobPKs">
+ * &lt;complexType name="WSFindBackgroundJobPKs">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="status" type="{http://www.talend.com/mdm}backgroundJobStatusType" minOccurs="0"/>
+ *         &lt;element name="status" type="{http://www.talend.com/mdm}BackgroundJobStatusType" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -26,10 +26,10 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsFindBackgroundJobPKs", propOrder = {
+@XmlType(name = "WSFindBackgroundJobPKs", propOrder = {
     "status"
 })
-public class WsFindBackgroundJobPKs {
+public class WSFindBackgroundJobPKs {
 
     protected BackgroundJobStatusType status;
 
@@ -37,7 +37,7 @@ public class WsFindBackgroundJobPKs {
      * Default no-arg constructor
      * 
      */
-    public WsFindBackgroundJobPKs() {
+    public WSFindBackgroundJobPKs() {
         super();
     }
 
@@ -45,7 +45,7 @@ public class WsFindBackgroundJobPKs {
      * Fully-initialising value constructor
      * 
      */
-    public WsFindBackgroundJobPKs(final BackgroundJobStatusType status) {
+    public WSFindBackgroundJobPKs(final BackgroundJobStatusType status) {
         this.status = status;
     }
 

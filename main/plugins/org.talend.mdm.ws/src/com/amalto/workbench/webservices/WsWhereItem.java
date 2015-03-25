@@ -7,18 +7,18 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsWhereItem complex type.
+ * <p>Java class for WSWhereItem complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsWhereItem">
+ * &lt;complexType name="WSWhereItem">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="whereAnd" type="{http://www.talend.com/mdm}wsWhereAnd" minOccurs="0"/>
- *         &lt;element name="whereCondition" type="{http://www.talend.com/mdm}wsWhereCondition" minOccurs="0"/>
- *         &lt;element name="whereOr" type="{http://www.talend.com/mdm}wsWhereOr" minOccurs="0"/>
+ *         &lt;element name="whereAnd" type="{http://www.talend.com/mdm}WSWhereAnd" minOccurs="0"/>
+ *         &lt;element name="whereCondition" type="{http://www.talend.com/mdm}WSWhereCondition" minOccurs="0"/>
+ *         &lt;element name="whereOr" type="{http://www.talend.com/mdm}WSWhereOr" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -28,22 +28,22 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsWhereItem", propOrder = {
+@XmlType(name = "WSWhereItem", propOrder = {
     "whereAnd",
     "whereCondition",
     "whereOr"
 })
-public class WsWhereItem {
+public class WSWhereItem {
 
-    protected WsWhereAnd whereAnd;
-    protected WsWhereCondition whereCondition;
-    protected WsWhereOr whereOr;
+    protected WSWhereAnd whereAnd;
+    protected WSWhereCondition whereCondition;
+    protected WSWhereOr whereOr;
 
     /**
      * Default no-arg constructor
      * 
      */
-    public WsWhereItem() {
+    public WSWhereItem() {
         super();
     }
 
@@ -51,7 +51,7 @@ public class WsWhereItem {
      * Fully-initialising value constructor
      * 
      */
-    public WsWhereItem(final WsWhereAnd whereAnd, final WsWhereCondition whereCondition, final WsWhereOr whereOr) {
+    public WSWhereItem(final WSWhereAnd whereAnd, final WSWhereCondition whereCondition, final WSWhereOr whereOr) {
         this.whereAnd = whereAnd;
         this.whereCondition = whereCondition;
         this.whereOr = whereOr;
@@ -62,10 +62,10 @@ public class WsWhereItem {
      * 
      * @return
      *     possible object is
-     *     {@link WsWhereAnd }
+     *     {@link WSWhereAnd }
      *     
      */
-    public WsWhereAnd getWhereAnd() {
+    public WSWhereAnd getWhereAnd() {
         return whereAnd;
     }
 
@@ -74,10 +74,10 @@ public class WsWhereItem {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsWhereAnd }
+     *     {@link WSWhereAnd }
      *     
      */
-    public void setWhereAnd(WsWhereAnd value) {
+    public void setWhereAnd(WSWhereAnd value) {
         this.whereAnd = value;
     }
 
@@ -86,10 +86,10 @@ public class WsWhereItem {
      * 
      * @return
      *     possible object is
-     *     {@link WsWhereCondition }
+     *     {@link WSWhereCondition }
      *     
      */
-    public WsWhereCondition getWhereCondition() {
+    public WSWhereCondition getWhereCondition() {
         return whereCondition;
     }
 
@@ -98,10 +98,10 @@ public class WsWhereItem {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsWhereCondition }
+     *     {@link WSWhereCondition }
      *     
      */
-    public void setWhereCondition(WsWhereCondition value) {
+    public void setWhereCondition(WSWhereCondition value) {
         this.whereCondition = value;
     }
 
@@ -110,10 +110,10 @@ public class WsWhereItem {
      * 
      * @return
      *     possible object is
-     *     {@link WsWhereOr }
+     *     {@link WSWhereOr }
      *     
      */
-    public WsWhereOr getWhereOr() {
+    public WSWhereOr getWhereOr() {
         return whereOr;
     }
 
@@ -122,10 +122,10 @@ public class WsWhereItem {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsWhereOr }
+     *     {@link WSWhereOr }
      *     
      */
-    public void setWhereOr(WsWhereOr value) {
+    public void setWhereOr(WSWhereOr value) {
         this.whereOr = value;
     }
 

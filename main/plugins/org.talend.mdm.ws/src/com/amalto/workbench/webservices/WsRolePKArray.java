@@ -10,16 +10,16 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsRolePKArray complex type.
+ * <p>Java class for WSRolePKArray complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsRolePKArray">
+ * &lt;complexType name="WSRolePKArray">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="wsRolePK" type="{http://www.talend.com/mdm}wsRolePK" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element name="wsRolePK" type="{http://www.talend.com/mdm}WSRolePK" maxOccurs="unbounded" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -29,19 +29,19 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsRolePKArray", propOrder = {
+@XmlType(name = "WSRolePKArray", propOrder = {
     "wsRolePK"
 })
-public class WsRolePKArray {
+public class WSRolePKArray {
 
     @XmlElement(nillable = true)
-    protected List<WsRolePK> wsRolePK;
+    protected List<WSRolePK> wsRolePK;
 
     /**
      * Default no-arg constructor
      * 
      */
-    public WsRolePKArray() {
+    public WSRolePKArray() {
         super();
     }
 
@@ -49,7 +49,7 @@ public class WsRolePKArray {
      * Fully-initialising value constructor
      * 
      */
-    public WsRolePKArray(final List<WsRolePK> wsRolePK) {
+    public WSRolePKArray(final List<WSRolePK> wsRolePK) {
         this.wsRolePK = wsRolePK;
     }
 
@@ -71,13 +71,13 @@ public class WsRolePKArray {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link WsRolePK }
+     * {@link WSRolePK }
      * 
      * 
      */
-    public List<WsRolePK> getWsRolePK() {
+    public List<WSRolePK> getWsRolePK() {
         if (wsRolePK == null) {
-            wsRolePK = new ArrayList<WsRolePK>();
+            wsRolePK = new ArrayList<WSRolePK>();
         }
         return this.wsRolePK;
     }

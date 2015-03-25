@@ -7,12 +7,12 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsBoolean complex type.
+ * <p>Java class for WSBoolean complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsBoolean">
+ * &lt;complexType name="WSBoolean">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
@@ -26,10 +26,10 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsBoolean", propOrder = {
+@XmlType(name = "WSBoolean", propOrder = {
     "_true"
 })
-public class WsBoolean {
+public class WSBoolean {
 
     protected boolean _true;
 
@@ -37,7 +37,7 @@ public class WsBoolean {
      * Default no-arg constructor
      * 
      */
-    public WsBoolean() {
+    public WSBoolean() {
         super();
     }
 
@@ -45,7 +45,7 @@ public class WsBoolean {
      * Fully-initialising value constructor
      * 
      */
-    public WsBoolean(final boolean _true) {
+    public WSBoolean(final boolean _true) {
         this._true = _true;
     }
 

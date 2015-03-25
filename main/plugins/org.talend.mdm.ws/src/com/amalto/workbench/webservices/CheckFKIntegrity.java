@@ -16,7 +16,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="arg0" type="{http://www.talend.com/mdm}wsDeleteItem" minOccurs="0"/>
+ *         &lt;element name="arg0" type="{http://www.talend.com/mdm}WSDeleteItem" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -31,7 +31,7 @@ import javax.xml.bind.annotation.XmlType;
 })
 public class CheckFKIntegrity {
 
-    protected WsDeleteItem arg0;
+    protected WSDeleteItem arg0;
 
     /**
      * Default no-arg constructor
@@ -45,7 +45,7 @@ public class CheckFKIntegrity {
      * Fully-initialising value constructor
      * 
      */
-    public CheckFKIntegrity(final WsDeleteItem arg0) {
+    public CheckFKIntegrity(final WSDeleteItem arg0) {
         this.arg0 = arg0;
     }
 
@@ -54,10 +54,10 @@ public class CheckFKIntegrity {
      * 
      * @return
      *     possible object is
-     *     {@link WsDeleteItem }
+     *     {@link WSDeleteItem }
      *     
      */
-    public WsDeleteItem getArg0() {
+    public WSDeleteItem getArg0() {
         return arg0;
     }
 
@@ -66,10 +66,10 @@ public class CheckFKIntegrity {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsDeleteItem }
+     *     {@link WSDeleteItem }
      *     
      */
-    public void setArg0(WsDeleteItem value) {
+    public void setArg0(WSDeleteItem value) {
         this.arg0 = value;
     }
 

@@ -16,7 +16,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="arg0" type="{http://www.talend.com/mdm}wsFindAllDroppedItemsPKs" minOccurs="0"/>
+ *         &lt;element name="arg0" type="{http://www.talend.com/mdm}WSFindAllDroppedItemsPKs" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -31,7 +31,7 @@ import javax.xml.bind.annotation.XmlType;
 })
 public class FindAllDroppedItemsPKs {
 
-    protected WsFindAllDroppedItemsPKs arg0;
+    protected WSFindAllDroppedItemsPKs arg0;
 
     /**
      * Default no-arg constructor
@@ -45,7 +45,7 @@ public class FindAllDroppedItemsPKs {
      * Fully-initialising value constructor
      * 
      */
-    public FindAllDroppedItemsPKs(final WsFindAllDroppedItemsPKs arg0) {
+    public FindAllDroppedItemsPKs(final WSFindAllDroppedItemsPKs arg0) {
         this.arg0 = arg0;
     }
 
@@ -54,10 +54,10 @@ public class FindAllDroppedItemsPKs {
      * 
      * @return
      *     possible object is
-     *     {@link WsFindAllDroppedItemsPKs }
+     *     {@link WSFindAllDroppedItemsPKs }
      *     
      */
-    public WsFindAllDroppedItemsPKs getArg0() {
+    public WSFindAllDroppedItemsPKs getArg0() {
         return arg0;
     }
 
@@ -66,10 +66,10 @@ public class FindAllDroppedItemsPKs {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsFindAllDroppedItemsPKs }
+     *     {@link WSFindAllDroppedItemsPKs }
      *     
      */
-    public void setArg0(WsFindAllDroppedItemsPKs value) {
+    public void setArg0(WSFindAllDroppedItemsPKs value) {
         this.arg0 = value;
     }
 

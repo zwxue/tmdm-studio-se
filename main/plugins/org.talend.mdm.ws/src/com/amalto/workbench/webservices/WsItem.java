@@ -10,12 +10,12 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsItem complex type.
+ * <p>Java class for WSItem complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsItem">
+ * &lt;complexType name="WSItem">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
@@ -25,7 +25,7 @@ import javax.xml.bind.annotation.XmlType;
  *         &lt;element name="ids" type="{http://www.w3.org/2001/XMLSchema}string" maxOccurs="unbounded" minOccurs="0"/>
  *         &lt;element name="insertionTime" type="{http://www.w3.org/2001/XMLSchema}long"/>
  *         &lt;element name="taskId" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="wsDataClusterPK" type="{http://www.talend.com/mdm}wsDataClusterPK" minOccurs="0"/>
+ *         &lt;element name="wsDataClusterPK" type="{http://www.talend.com/mdm}WSDataClusterPK" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -35,7 +35,7 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsItem", propOrder = {
+@XmlType(name = "WSItem", propOrder = {
     "conceptName",
     "content",
     "dataModelName",
@@ -44,7 +44,7 @@ import javax.xml.bind.annotation.XmlType;
     "taskId",
     "wsDataClusterPK"
 })
-public class WsItem {
+public class WSItem {
 
     protected String conceptName;
     protected String content;
@@ -53,13 +53,13 @@ public class WsItem {
     protected List<String> ids;
     protected long insertionTime;
     protected String taskId;
-    protected WsDataClusterPK wsDataClusterPK;
+    protected WSDataClusterPK wsDataClusterPK;
 
     /**
      * Default no-arg constructor
      * 
      */
-    public WsItem() {
+    public WSItem() {
         super();
     }
 
@@ -67,7 +67,7 @@ public class WsItem {
      * Fully-initialising value constructor
      * 
      */
-    public WsItem(final String conceptName, final String content, final String dataModelName, final List<String> ids, final long insertionTime, final String taskId, final WsDataClusterPK wsDataClusterPK) {
+    public WSItem(final String conceptName, final String content, final String dataModelName, final List<String> ids, final long insertionTime, final String taskId, final WSDataClusterPK wsDataClusterPK) {
         this.conceptName = conceptName;
         this.content = content;
         this.dataModelName = dataModelName;
@@ -223,10 +223,10 @@ public class WsItem {
      * 
      * @return
      *     possible object is
-     *     {@link WsDataClusterPK }
+     *     {@link WSDataClusterPK }
      *     
      */
-    public WsDataClusterPK getWsDataClusterPK() {
+    public WSDataClusterPK getWsDataClusterPK() {
         return wsDataClusterPK;
     }
 
@@ -235,10 +235,10 @@ public class WsItem {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsDataClusterPK }
+     *     {@link WSDataClusterPK }
      *     
      */
-    public void setWsDataClusterPK(WsDataClusterPK value) {
+    public void setWsDataClusterPK(WSDataClusterPK value) {
         this.wsDataClusterPK = value;
     }
 

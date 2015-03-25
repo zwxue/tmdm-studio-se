@@ -7,12 +7,12 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsPutDBDataCluster complex type.
+ * <p>Java class for WSPutDBDataCluster complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsPutDBDataCluster">
+ * &lt;complexType name="WSPutDBDataCluster">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
@@ -26,10 +26,10 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsPutDBDataCluster", propOrder = {
+@XmlType(name = "WSPutDBDataCluster", propOrder = {
     "name"
 })
-public class WsPutDBDataCluster {
+public class WSPutDBDataCluster {
 
     protected String name;
 
@@ -37,7 +37,7 @@ public class WsPutDBDataCluster {
      * Default no-arg constructor
      * 
      */
-    public WsPutDBDataCluster() {
+    public WSPutDBDataCluster() {
         super();
     }
 
@@ -45,7 +45,7 @@ public class WsPutDBDataCluster {
      * Fully-initialising value constructor
      * 
      */
-    public WsPutDBDataCluster(final String name) {
+    public WSPutDBDataCluster(final String name) {
         this.name = name;
     }
 

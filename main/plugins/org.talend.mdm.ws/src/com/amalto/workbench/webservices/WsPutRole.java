@@ -7,16 +7,16 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsPutRole complex type.
+ * <p>Java class for WSPutRole complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsPutRole">
+ * &lt;complexType name="WSPutRole">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="wsRole" type="{http://www.talend.com/mdm}wsRole" minOccurs="0"/>
+ *         &lt;element name="wsRole" type="{http://www.talend.com/mdm}WSRole" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -26,18 +26,18 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsPutRole", propOrder = {
+@XmlType(name = "WSPutRole", propOrder = {
     "wsRole"
 })
-public class WsPutRole {
+public class WSPutRole {
 
-    protected WsRole wsRole;
+    protected WSRole wsRole;
 
     /**
      * Default no-arg constructor
      * 
      */
-    public WsPutRole() {
+    public WSPutRole() {
         super();
     }
 
@@ -45,7 +45,7 @@ public class WsPutRole {
      * Fully-initialising value constructor
      * 
      */
-    public WsPutRole(final WsRole wsRole) {
+    public WSPutRole(final WSRole wsRole) {
         this.wsRole = wsRole;
     }
 
@@ -54,10 +54,10 @@ public class WsPutRole {
      * 
      * @return
      *     possible object is
-     *     {@link WsRole }
+     *     {@link WSRole }
      *     
      */
-    public WsRole getWsRole() {
+    public WSRole getWsRole() {
         return wsRole;
     }
 
@@ -66,10 +66,10 @@ public class WsPutRole {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsRole }
+     *     {@link WSRole }
      *     
      */
-    public void setWsRole(WsRole value) {
+    public void setWsRole(WSRole value) {
         this.wsRole = value;
     }
 

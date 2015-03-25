@@ -7,18 +7,18 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsTransformerContext complex type.
+ * <p>Java class for WSTransformerContext complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsTransformerContext">
+ * &lt;complexType name="WSTransformerContext">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="pipeline" type="{http://www.talend.com/mdm}wsTransformerContextPipeline" minOccurs="0"/>
- *         &lt;element name="projectedItemPKs" type="{http://www.talend.com/mdm}wsTransformerContextProjectedItemPKs" minOccurs="0"/>
- *         &lt;element name="wsTransformerPK" type="{http://www.talend.com/mdm}wsTransformerV2PK" minOccurs="0"/>
+ *         &lt;element name="pipeline" type="{http://www.talend.com/mdm}WSTransformerContextPipeline" minOccurs="0"/>
+ *         &lt;element name="projectedItemPKs" type="{http://www.talend.com/mdm}WSTransformerContextProjectedItemPKs" minOccurs="0"/>
+ *         &lt;element name="wsTransformerPK" type="{http://www.talend.com/mdm}WSTransformerV2PK" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -28,22 +28,22 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsTransformerContext", propOrder = {
+@XmlType(name = "WSTransformerContext", propOrder = {
     "pipeline",
     "projectedItemPKs",
     "wsTransformerPK"
 })
-public class WsTransformerContext {
+public class WSTransformerContext {
 
-    protected WsTransformerContextPipeline pipeline;
-    protected WsTransformerContextProjectedItemPKs projectedItemPKs;
-    protected WsTransformerV2PK wsTransformerPK;
+    protected WSTransformerContextPipeline pipeline;
+    protected WSTransformerContextProjectedItemPKs projectedItemPKs;
+    protected WSTransformerV2PK wsTransformerPK;
 
     /**
      * Default no-arg constructor
      * 
      */
-    public WsTransformerContext() {
+    public WSTransformerContext() {
         super();
     }
 
@@ -51,7 +51,7 @@ public class WsTransformerContext {
      * Fully-initialising value constructor
      * 
      */
-    public WsTransformerContext(final WsTransformerContextPipeline pipeline, final WsTransformerContextProjectedItemPKs projectedItemPKs, final WsTransformerV2PK wsTransformerPK) {
+    public WSTransformerContext(final WSTransformerContextPipeline pipeline, final WSTransformerContextProjectedItemPKs projectedItemPKs, final WSTransformerV2PK wsTransformerPK) {
         this.pipeline = pipeline;
         this.projectedItemPKs = projectedItemPKs;
         this.wsTransformerPK = wsTransformerPK;
@@ -62,10 +62,10 @@ public class WsTransformerContext {
      * 
      * @return
      *     possible object is
-     *     {@link WsTransformerContextPipeline }
+     *     {@link WSTransformerContextPipeline }
      *     
      */
-    public WsTransformerContextPipeline getPipeline() {
+    public WSTransformerContextPipeline getPipeline() {
         return pipeline;
     }
 
@@ -74,10 +74,10 @@ public class WsTransformerContext {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsTransformerContextPipeline }
+     *     {@link WSTransformerContextPipeline }
      *     
      */
-    public void setPipeline(WsTransformerContextPipeline value) {
+    public void setPipeline(WSTransformerContextPipeline value) {
         this.pipeline = value;
     }
 
@@ -86,10 +86,10 @@ public class WsTransformerContext {
      * 
      * @return
      *     possible object is
-     *     {@link WsTransformerContextProjectedItemPKs }
+     *     {@link WSTransformerContextProjectedItemPKs }
      *     
      */
-    public WsTransformerContextProjectedItemPKs getProjectedItemPKs() {
+    public WSTransformerContextProjectedItemPKs getProjectedItemPKs() {
         return projectedItemPKs;
     }
 
@@ -98,10 +98,10 @@ public class WsTransformerContext {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsTransformerContextProjectedItemPKs }
+     *     {@link WSTransformerContextProjectedItemPKs }
      *     
      */
-    public void setProjectedItemPKs(WsTransformerContextProjectedItemPKs value) {
+    public void setProjectedItemPKs(WSTransformerContextProjectedItemPKs value) {
         this.projectedItemPKs = value;
     }
 
@@ -110,10 +110,10 @@ public class WsTransformerContext {
      * 
      * @return
      *     possible object is
-     *     {@link WsTransformerV2PK }
+     *     {@link WSTransformerV2PK }
      *     
      */
-    public WsTransformerV2PK getWsTransformerPK() {
+    public WSTransformerV2PK getWsTransformerPK() {
         return wsTransformerPK;
     }
 
@@ -122,10 +122,10 @@ public class WsTransformerContext {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsTransformerV2PK }
+     *     {@link WSTransformerV2PK }
      *     
      */
-    public void setWsTransformerPK(WsTransformerV2PK value) {
+    public void setWsTransformerPK(WSTransformerV2PK value) {
         this.wsTransformerPK = value;
     }
 

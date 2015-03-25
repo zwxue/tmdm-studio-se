@@ -7,12 +7,12 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsGetTransformerPluginV2SList complex type.
+ * <p>Java class for WSGetTransformerPluginV2SList complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsGetTransformerPluginV2SList">
+ * &lt;complexType name="WSGetTransformerPluginV2SList">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
@@ -26,10 +26,10 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsGetTransformerPluginV2SList", propOrder = {
+@XmlType(name = "WSGetTransformerPluginV2SList", propOrder = {
     "language"
 })
-public class WsGetTransformerPluginV2SList {
+public class WSGetTransformerPluginV2SList {
 
     protected String language;
 
@@ -37,7 +37,7 @@ public class WsGetTransformerPluginV2SList {
      * Default no-arg constructor
      * 
      */
-    public WsGetTransformerPluginV2SList() {
+    public WSGetTransformerPluginV2SList() {
         super();
     }
 
@@ -45,7 +45,7 @@ public class WsGetTransformerPluginV2SList {
      * Fully-initialising value constructor
      * 
      */
-    public WsGetTransformerPluginV2SList(final String language) {
+    public WSGetTransformerPluginV2SList(final String language) {
         this.language = language;
     }
 

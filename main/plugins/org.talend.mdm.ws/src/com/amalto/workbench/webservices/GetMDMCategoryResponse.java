@@ -17,7 +17,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="return" type="{http://www.talend.com/mdm}wsCategoryData" minOccurs="0"/>
+ *         &lt;element name="return" type="{http://www.talend.com/mdm}WSCategoryData" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -33,7 +33,7 @@ import javax.xml.bind.annotation.XmlType;
 public class GetMDMCategoryResponse {
 
     @XmlElement(name = "return")
-    protected WsCategoryData _return;
+    protected WSCategoryData _return;
 
     /**
      * Default no-arg constructor
@@ -47,7 +47,7 @@ public class GetMDMCategoryResponse {
      * Fully-initialising value constructor
      * 
      */
-    public GetMDMCategoryResponse(final WsCategoryData _return) {
+    public GetMDMCategoryResponse(final WSCategoryData _return) {
         this._return = _return;
     }
 
@@ -56,10 +56,10 @@ public class GetMDMCategoryResponse {
      * 
      * @return
      *     possible object is
-     *     {@link WsCategoryData }
+     *     {@link WSCategoryData }
      *     
      */
-    public WsCategoryData getReturn() {
+    public WSCategoryData getReturn() {
         return _return;
     }
 
@@ -68,10 +68,10 @@ public class GetMDMCategoryResponse {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsCategoryData }
+     *     {@link WSCategoryData }
      *     
      */
-    public void setReturn(WsCategoryData value) {
+    public void setReturn(WSCategoryData value) {
         this._return = value;
     }
 

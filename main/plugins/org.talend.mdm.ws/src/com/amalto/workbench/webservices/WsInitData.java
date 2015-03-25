@@ -7,12 +7,12 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsInitData complex type.
+ * <p>Java class for WSInitData complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsInitData">
+ * &lt;complexType name="WSInitData">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
@@ -27,11 +27,11 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsInitData", propOrder = {
+@XmlType(name = "WSInitData", propOrder = {
     "xmlSchema",
     "zap"
 })
-public class WsInitData {
+public class WSInitData {
 
     protected String xmlSchema;
     protected boolean zap;
@@ -40,7 +40,7 @@ public class WsInitData {
      * Default no-arg constructor
      * 
      */
-    public WsInitData() {
+    public WSInitData() {
         super();
     }
 
@@ -48,7 +48,7 @@ public class WsInitData {
      * Fully-initialising value constructor
      * 
      */
-    public WsInitData(final String xmlSchema, final boolean zap) {
+    public WSInitData(final String xmlSchema, final boolean zap) {
         this.xmlSchema = xmlSchema;
         this.zap = zap;
     }

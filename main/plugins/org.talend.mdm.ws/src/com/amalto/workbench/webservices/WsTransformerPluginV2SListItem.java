@@ -7,12 +7,12 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsTransformerPluginV2SListItem complex type.
+ * <p>Java class for WSTransformerPluginV2SListItem complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsTransformerPluginV2SListItem">
+ * &lt;complexType name="WSTransformerPluginV2SListItem">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
@@ -27,11 +27,11 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsTransformerPluginV2SListItem", propOrder = {
+@XmlType(name = "WSTransformerPluginV2SListItem", propOrder = {
     "description",
     "jndiName"
 })
-public class WsTransformerPluginV2SListItem {
+public class WSTransformerPluginV2SListItem {
 
     protected String description;
     protected String jndiName;
@@ -40,7 +40,7 @@ public class WsTransformerPluginV2SListItem {
      * Default no-arg constructor
      * 
      */
-    public WsTransformerPluginV2SListItem() {
+    public WSTransformerPluginV2SListItem() {
         super();
     }
 
@@ -48,7 +48,7 @@ public class WsTransformerPluginV2SListItem {
      * Fully-initialising value constructor
      * 
      */
-    public WsTransformerPluginV2SListItem(final String description, final String jndiName) {
+    public WSTransformerPluginV2SListItem(final String description, final String jndiName) {
         this.description = description;
         this.jndiName = jndiName;
     }

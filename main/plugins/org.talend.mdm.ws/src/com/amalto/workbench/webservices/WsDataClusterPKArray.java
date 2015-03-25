@@ -10,16 +10,16 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsDataClusterPKArray complex type.
+ * <p>Java class for WSDataClusterPKArray complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsDataClusterPKArray">
+ * &lt;complexType name="WSDataClusterPKArray">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="wsDataClusterPKs" type="{http://www.talend.com/mdm}wsDataClusterPK" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element name="wsDataClusterPKs" type="{http://www.talend.com/mdm}WSDataClusterPK" maxOccurs="unbounded" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -29,19 +29,19 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsDataClusterPKArray", propOrder = {
+@XmlType(name = "WSDataClusterPKArray", propOrder = {
     "wsDataClusterPKs"
 })
-public class WsDataClusterPKArray {
+public class WSDataClusterPKArray {
 
     @XmlElement(nillable = true)
-    protected List<WsDataClusterPK> wsDataClusterPKs;
+    protected List<WSDataClusterPK> wsDataClusterPKs;
 
     /**
      * Default no-arg constructor
      * 
      */
-    public WsDataClusterPKArray() {
+    public WSDataClusterPKArray() {
         super();
     }
 
@@ -49,7 +49,7 @@ public class WsDataClusterPKArray {
      * Fully-initialising value constructor
      * 
      */
-    public WsDataClusterPKArray(final List<WsDataClusterPK> wsDataClusterPKs) {
+    public WSDataClusterPKArray(final List<WSDataClusterPK> wsDataClusterPKs) {
         this.wsDataClusterPKs = wsDataClusterPKs;
     }
 
@@ -71,13 +71,13 @@ public class WsDataClusterPKArray {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link WsDataClusterPK }
+     * {@link WSDataClusterPK }
      * 
      * 
      */
-    public List<WsDataClusterPK> getWsDataClusterPKs() {
+    public List<WSDataClusterPK> getWsDataClusterPKs() {
         if (wsDataClusterPKs == null) {
-            wsDataClusterPKs = new ArrayList<WsDataClusterPK>();
+            wsDataClusterPKs = new ArrayList<WSDataClusterPK>();
         }
         return this.wsDataClusterPKs;
     }

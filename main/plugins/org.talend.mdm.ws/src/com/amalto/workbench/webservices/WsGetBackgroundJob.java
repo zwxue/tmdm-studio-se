@@ -7,12 +7,12 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsGetBackgroundJob complex type.
+ * <p>Java class for WSGetBackgroundJob complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsGetBackgroundJob">
+ * &lt;complexType name="WSGetBackgroundJob">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
@@ -26,10 +26,10 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsGetBackgroundJob", propOrder = {
+@XmlType(name = "WSGetBackgroundJob", propOrder = {
     "pk"
 })
-public class WsGetBackgroundJob {
+public class WSGetBackgroundJob {
 
     protected String pk;
 
@@ -37,7 +37,7 @@ public class WsGetBackgroundJob {
      * Default no-arg constructor
      * 
      */
-    public WsGetBackgroundJob() {
+    public WSGetBackgroundJob() {
         super();
     }
 
@@ -45,7 +45,7 @@ public class WsGetBackgroundJob {
      * Fully-initialising value constructor
      * 
      */
-    public WsGetBackgroundJob(final String pk) {
+    public WSGetBackgroundJob(final String pk) {
         this.pk = pk;
     }
 

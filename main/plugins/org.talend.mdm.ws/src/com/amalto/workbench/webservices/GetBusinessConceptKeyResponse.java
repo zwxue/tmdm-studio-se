@@ -17,7 +17,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="return" type="{http://www.talend.com/mdm}wsConceptKey" minOccurs="0"/>
+ *         &lt;element name="return" type="{http://www.talend.com/mdm}WSConceptKey" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -33,7 +33,7 @@ import javax.xml.bind.annotation.XmlType;
 public class GetBusinessConceptKeyResponse {
 
     @XmlElement(name = "return")
-    protected WsConceptKey _return;
+    protected WSConceptKey _return;
 
     /**
      * Default no-arg constructor
@@ -47,7 +47,7 @@ public class GetBusinessConceptKeyResponse {
      * Fully-initialising value constructor
      * 
      */
-    public GetBusinessConceptKeyResponse(final WsConceptKey _return) {
+    public GetBusinessConceptKeyResponse(final WSConceptKey _return) {
         this._return = _return;
     }
 
@@ -56,10 +56,10 @@ public class GetBusinessConceptKeyResponse {
      * 
      * @return
      *     possible object is
-     *     {@link WsConceptKey }
+     *     {@link WSConceptKey }
      *     
      */
-    public WsConceptKey getReturn() {
+    public WSConceptKey getReturn() {
         return _return;
     }
 
@@ -68,10 +68,10 @@ public class GetBusinessConceptKeyResponse {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsConceptKey }
+     *     {@link WSConceptKey }
      *     
      */
-    public void setReturn(WsConceptKey value) {
+    public void setReturn(WSConceptKey value) {
         this._return = value;
     }
 

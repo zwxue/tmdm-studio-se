@@ -10,16 +10,16 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsPipeline complex type.
+ * <p>Java class for WSPipeline complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsPipeline">
+ * &lt;complexType name="WSPipeline">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="typedContentEntry" type="{http://www.talend.com/mdm}wsPipelineTypedContentEntry" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element name="typedContentEntry" type="{http://www.talend.com/mdm}WSPipelineTypedContentEntry" maxOccurs="unbounded" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -29,19 +29,19 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsPipeline", propOrder = {
+@XmlType(name = "WSPipeline", propOrder = {
     "typedContentEntry"
 })
-public class WsPipeline {
+public class WSPipeline {
 
     @XmlElement(nillable = true)
-    protected List<WsPipelineTypedContentEntry> typedContentEntry;
+    protected List<WSPipelineTypedContentEntry> typedContentEntry;
 
     /**
      * Default no-arg constructor
      * 
      */
-    public WsPipeline() {
+    public WSPipeline() {
         super();
     }
 
@@ -49,7 +49,7 @@ public class WsPipeline {
      * Fully-initialising value constructor
      * 
      */
-    public WsPipeline(final List<WsPipelineTypedContentEntry> typedContentEntry) {
+    public WSPipeline(final List<WSPipelineTypedContentEntry> typedContentEntry) {
         this.typedContentEntry = typedContentEntry;
     }
 
@@ -71,13 +71,13 @@ public class WsPipeline {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link WsPipelineTypedContentEntry }
+     * {@link WSPipelineTypedContentEntry }
      * 
      * 
      */
-    public List<WsPipelineTypedContentEntry> getTypedContentEntry() {
+    public List<WSPipelineTypedContentEntry> getTypedContentEntry() {
         if (typedContentEntry == null) {
-            typedContentEntry = new ArrayList<WsPipelineTypedContentEntry>();
+            typedContentEntry = new ArrayList<WSPipelineTypedContentEntry>();
         }
         return this.typedContentEntry;
     }

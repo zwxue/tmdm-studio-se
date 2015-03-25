@@ -7,17 +7,17 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsDroppedItemPK complex type.
+ * <p>Java class for WSDroppedItemPK complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsDroppedItemPK">
+ * &lt;complexType name="WSDroppedItemPK">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
  *         &lt;element name="partPath" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="wsItemPK" type="{http://www.talend.com/mdm}wsItemPK" minOccurs="0"/>
+ *         &lt;element name="wsItemPK" type="{http://www.talend.com/mdm}WSItemPK" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -27,20 +27,20 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsDroppedItemPK", propOrder = {
+@XmlType(name = "WSDroppedItemPK", propOrder = {
     "partPath",
     "wsItemPK"
 })
-public class WsDroppedItemPK {
+public class WSDroppedItemPK {
 
     protected String partPath;
-    protected WsItemPK wsItemPK;
+    protected WSItemPK wsItemPK;
 
     /**
      * Default no-arg constructor
      * 
      */
-    public WsDroppedItemPK() {
+    public WSDroppedItemPK() {
         super();
     }
 
@@ -48,7 +48,7 @@ public class WsDroppedItemPK {
      * Fully-initialising value constructor
      * 
      */
-    public WsDroppedItemPK(final String partPath, final WsItemPK wsItemPK) {
+    public WSDroppedItemPK(final String partPath, final WSItemPK wsItemPK) {
         this.partPath = partPath;
         this.wsItemPK = wsItemPK;
     }
@@ -82,10 +82,10 @@ public class WsDroppedItemPK {
      * 
      * @return
      *     possible object is
-     *     {@link WsItemPK }
+     *     {@link WSItemPK }
      *     
      */
-    public WsItemPK getWsItemPK() {
+    public WSItemPK getWsItemPK() {
         return wsItemPK;
     }
 
@@ -94,10 +94,10 @@ public class WsDroppedItemPK {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsItemPK }
+     *     {@link WSItemPK }
      *     
      */
-    public void setWsItemPK(WsItemPK value) {
+    public void setWsItemPK(WSItemPK value) {
         this.wsItemPK = value;
     }
 

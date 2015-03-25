@@ -10,18 +10,18 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsRunQuery complex type.
+ * <p>Java class for WSRunQuery complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsRunQuery">
+ * &lt;complexType name="WSRunQuery">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
  *         &lt;element name="parameters" type="{http://www.w3.org/2001/XMLSchema}string" maxOccurs="unbounded" minOccurs="0"/>
  *         &lt;element name="query" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="wsDataClusterPK" type="{http://www.talend.com/mdm}wsDataClusterPK" minOccurs="0"/>
+ *         &lt;element name="wsDataClusterPK" type="{http://www.talend.com/mdm}WSDataClusterPK" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -31,23 +31,23 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsRunQuery", propOrder = {
+@XmlType(name = "WSRunQuery", propOrder = {
     "parameters",
     "query",
     "wsDataClusterPK"
 })
-public class WsRunQuery {
+public class WSRunQuery {
 
     @XmlElement(nillable = true)
     protected List<String> parameters;
     protected String query;
-    protected WsDataClusterPK wsDataClusterPK;
+    protected WSDataClusterPK wsDataClusterPK;
 
     /**
      * Default no-arg constructor
      * 
      */
-    public WsRunQuery() {
+    public WSRunQuery() {
         super();
     }
 
@@ -55,7 +55,7 @@ public class WsRunQuery {
      * Fully-initialising value constructor
      * 
      */
-    public WsRunQuery(final List<String> parameters, final String query, final WsDataClusterPK wsDataClusterPK) {
+    public WSRunQuery(final List<String> parameters, final String query, final WSDataClusterPK wsDataClusterPK) {
         this.parameters = parameters;
         this.query = query;
         this.wsDataClusterPK = wsDataClusterPK;
@@ -119,10 +119,10 @@ public class WsRunQuery {
      * 
      * @return
      *     possible object is
-     *     {@link WsDataClusterPK }
+     *     {@link WSDataClusterPK }
      *     
      */
-    public WsDataClusterPK getWsDataClusterPK() {
+    public WSDataClusterPK getWsDataClusterPK() {
         return wsDataClusterPK;
     }
 
@@ -131,10 +131,10 @@ public class WsRunQuery {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsDataClusterPK }
+     *     {@link WSDataClusterPK }
      *     
      */
-    public void setWsDataClusterPK(WsDataClusterPK value) {
+    public void setWsDataClusterPK(WSDataClusterPK value) {
         this.wsDataClusterPK = value;
     }
 

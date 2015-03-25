@@ -10,17 +10,17 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsMenu complex type.
+ * <p>Java class for WSMenu complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsMenu">
+ * &lt;complexType name="WSMenu">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
  *         &lt;element name="description" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="menuEntries" type="{http://www.talend.com/mdm}wsMenuEntry" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element name="menuEntries" type="{http://www.talend.com/mdm}WSMenuEntry" maxOccurs="unbounded" minOccurs="0"/>
  *         &lt;element name="name" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
@@ -31,23 +31,23 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsMenu", propOrder = {
+@XmlType(name = "WSMenu", propOrder = {
     "description",
     "menuEntries",
     "name"
 })
-public class WsMenu {
+public class WSMenu {
 
     protected String description;
     @XmlElement(nillable = true)
-    protected List<WsMenuEntry> menuEntries;
+    protected List<WSMenuEntry> menuEntries;
     protected String name;
 
     /**
      * Default no-arg constructor
      * 
      */
-    public WsMenu() {
+    public WSMenu() {
         super();
     }
 
@@ -55,7 +55,7 @@ public class WsMenu {
      * Fully-initialising value constructor
      * 
      */
-    public WsMenu(final String description, final List<WsMenuEntry> menuEntries, final String name) {
+    public WSMenu(final String description, final List<WSMenuEntry> menuEntries, final String name) {
         this.description = description;
         this.menuEntries = menuEntries;
         this.name = name;
@@ -103,13 +103,13 @@ public class WsMenu {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link WsMenuEntry }
+     * {@link WSMenuEntry }
      * 
      * 
      */
-    public List<WsMenuEntry> getMenuEntries() {
+    public List<WSMenuEntry> getMenuEntries() {
         if (menuEntries == null) {
-            menuEntries = new ArrayList<WsMenuEntry>();
+            menuEntries = new ArrayList<WSMenuEntry>();
         }
         return this.menuEntries;
     }

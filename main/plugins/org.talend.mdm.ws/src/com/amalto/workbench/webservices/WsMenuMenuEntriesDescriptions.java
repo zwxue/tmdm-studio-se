@@ -7,12 +7,12 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsMenuMenuEntriesDescriptions complex type.
+ * <p>Java class for WSMenuMenuEntriesDescriptions complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsMenuMenuEntriesDescriptions">
+ * &lt;complexType name="WSMenuMenuEntriesDescriptions">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
@@ -27,11 +27,11 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsMenuMenuEntriesDescriptions", propOrder = {
+@XmlType(name = "WSMenuMenuEntriesDescriptions", propOrder = {
     "label",
     "language"
 })
-public class WsMenuMenuEntriesDescriptions {
+public class WSMenuMenuEntriesDescriptions {
 
     protected String label;
     protected String language;
@@ -40,7 +40,7 @@ public class WsMenuMenuEntriesDescriptions {
      * Default no-arg constructor
      * 
      */
-    public WsMenuMenuEntriesDescriptions() {
+    public WSMenuMenuEntriesDescriptions() {
         super();
     }
 
@@ -48,7 +48,7 @@ public class WsMenuMenuEntriesDescriptions {
      * Fully-initialising value constructor
      * 
      */
-    public WsMenuMenuEntriesDescriptions(final String label, final String language) {
+    public WSMenuMenuEntriesDescriptions(final String label, final String language) {
         this.label = label;
         this.language = language;
     }

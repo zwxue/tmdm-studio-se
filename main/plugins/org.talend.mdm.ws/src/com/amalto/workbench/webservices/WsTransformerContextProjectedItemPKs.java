@@ -10,16 +10,16 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsTransformerContextProjectedItemPKs complex type.
+ * <p>Java class for WSTransformerContextProjectedItemPKs complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsTransformerContextProjectedItemPKs">
+ * &lt;complexType name="WSTransformerContextProjectedItemPKs">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="wsItemPOJOPK" type="{http://www.talend.com/mdm}wsItemPK" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element name="wsItemPOJOPK" type="{http://www.talend.com/mdm}WSItemPK" maxOccurs="unbounded" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -29,19 +29,19 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsTransformerContextProjectedItemPKs", propOrder = {
+@XmlType(name = "WSTransformerContextProjectedItemPKs", propOrder = {
     "wsItemPOJOPK"
 })
-public class WsTransformerContextProjectedItemPKs {
+public class WSTransformerContextProjectedItemPKs {
 
     @XmlElement(nillable = true)
-    protected List<WsItemPK> wsItemPOJOPK;
+    protected List<WSItemPK> wsItemPOJOPK;
 
     /**
      * Default no-arg constructor
      * 
      */
-    public WsTransformerContextProjectedItemPKs() {
+    public WSTransformerContextProjectedItemPKs() {
         super();
     }
 
@@ -49,7 +49,7 @@ public class WsTransformerContextProjectedItemPKs {
      * Fully-initialising value constructor
      * 
      */
-    public WsTransformerContextProjectedItemPKs(final List<WsItemPK> wsItemPOJOPK) {
+    public WSTransformerContextProjectedItemPKs(final List<WSItemPK> wsItemPOJOPK) {
         this.wsItemPOJOPK = wsItemPOJOPK;
     }
 
@@ -71,13 +71,13 @@ public class WsTransformerContextProjectedItemPKs {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link WsItemPK }
+     * {@link WSItemPK }
      * 
      * 
      */
-    public List<WsItemPK> getWsItemPOJOPK() {
+    public List<WSItemPK> getWsItemPOJOPK() {
         if (wsItemPOJOPK == null) {
-            wsItemPOJOPK = new ArrayList<WsItemPK>();
+            wsItemPOJOPK = new ArrayList<WSItemPK>();
         }
         return this.wsItemPOJOPK;
     }

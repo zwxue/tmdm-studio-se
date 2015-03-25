@@ -7,12 +7,12 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsExistsDBDataCluster complex type.
+ * <p>Java class for WSExistsDBDataCluster complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsExistsDBDataCluster">
+ * &lt;complexType name="WSExistsDBDataCluster">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
@@ -26,10 +26,10 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsExistsDBDataCluster", propOrder = {
+@XmlType(name = "WSExistsDBDataCluster", propOrder = {
     "name"
 })
-public class WsExistsDBDataCluster {
+public class WSExistsDBDataCluster {
 
     protected String name;
 
@@ -37,7 +37,7 @@ public class WsExistsDBDataCluster {
      * Default no-arg constructor
      * 
      */
-    public WsExistsDBDataCluster() {
+    public WSExistsDBDataCluster() {
         super();
     }
 
@@ -45,7 +45,7 @@ public class WsExistsDBDataCluster {
      * Fully-initialising value constructor
      * 
      */
-    public WsExistsDBDataCluster(final String name) {
+    public WSExistsDBDataCluster(final String name) {
         this.name = name;
     }
 

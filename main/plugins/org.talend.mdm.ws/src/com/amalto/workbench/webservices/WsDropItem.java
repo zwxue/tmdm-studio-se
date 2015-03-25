@@ -7,12 +7,12 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsDropItem complex type.
+ * <p>Java class for WSDropItem complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsDropItem">
+ * &lt;complexType name="WSDropItem">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
@@ -21,7 +21,7 @@ import javax.xml.bind.annotation.XmlType;
  *         &lt;element name="partPath" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="source" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="withReport" type="{http://www.w3.org/2001/XMLSchema}boolean" minOccurs="0"/>
- *         &lt;element name="wsItemPK" type="{http://www.talend.com/mdm}wsItemPK" minOccurs="0"/>
+ *         &lt;element name="wsItemPK" type="{http://www.talend.com/mdm}WSItemPK" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -31,7 +31,7 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsDropItem", propOrder = {
+@XmlType(name = "WSDropItem", propOrder = {
     "invokeBeforeDeleting",
     "override",
     "partPath",
@@ -39,20 +39,20 @@ import javax.xml.bind.annotation.XmlType;
     "withReport",
     "wsItemPK"
 })
-public class WsDropItem {
+public class WSDropItem {
 
     protected Boolean invokeBeforeDeleting;
     protected Boolean override;
     protected String partPath;
     protected String source;
     protected Boolean withReport;
-    protected WsItemPK wsItemPK;
+    protected WSItemPK wsItemPK;
 
     /**
      * Default no-arg constructor
      * 
      */
-    public WsDropItem() {
+    public WSDropItem() {
         super();
     }
 
@@ -60,7 +60,7 @@ public class WsDropItem {
      * Fully-initialising value constructor
      * 
      */
-    public WsDropItem(final Boolean invokeBeforeDeleting, final Boolean override, final String partPath, final String source, final Boolean withReport, final WsItemPK wsItemPK) {
+    public WSDropItem(final Boolean invokeBeforeDeleting, final Boolean override, final String partPath, final String source, final Boolean withReport, final WSItemPK wsItemPK) {
         this.invokeBeforeDeleting = invokeBeforeDeleting;
         this.override = override;
         this.partPath = partPath;
@@ -194,10 +194,10 @@ public class WsDropItem {
      * 
      * @return
      *     possible object is
-     *     {@link WsItemPK }
+     *     {@link WSItemPK }
      *     
      */
-    public WsItemPK getWsItemPK() {
+    public WSItemPK getWsItemPK() {
         return wsItemPK;
     }
 
@@ -206,10 +206,10 @@ public class WsDropItem {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsItemPK }
+     *     {@link WSItemPK }
      *     
      */
-    public void setWsItemPK(WsItemPK value) {
+    public void setWsItemPK(WSItemPK value) {
         this.wsItemPK = value;
     }
 

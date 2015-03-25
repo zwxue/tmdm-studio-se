@@ -7,12 +7,12 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsPartialPutItem complex type.
+ * <p>Java class for WSPartialPutItem complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsPartialPutItem">
+ * &lt;complexType name="WSPartialPutItem">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
@@ -34,7 +34,7 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsPartialPutItem", propOrder = {
+@XmlType(name = "WSPartialPutItem", propOrder = {
     "datacluster",
     "datamodel",
     "keyXPath",
@@ -45,7 +45,7 @@ import javax.xml.bind.annotation.XmlType;
     "startingPosition",
     "xml"
 })
-public class WsPartialPutItem {
+public class WSPartialPutItem {
 
     protected String datacluster;
     protected String datamodel;
@@ -61,7 +61,7 @@ public class WsPartialPutItem {
      * Default no-arg constructor
      * 
      */
-    public WsPartialPutItem() {
+    public WSPartialPutItem() {
         super();
     }
 
@@ -69,7 +69,7 @@ public class WsPartialPutItem {
      * Fully-initialising value constructor
      * 
      */
-    public WsPartialPutItem(final String datacluster, final String datamodel, final String keyXPath, final Boolean overwrite, final String pivot, final boolean report, final String source, final Integer startingPosition, final String xml) {
+    public WSPartialPutItem(final String datacluster, final String datamodel, final String keyXPath, final Boolean overwrite, final String pivot, final boolean report, final String source, final Integer startingPosition, final String xml) {
         this.datacluster = datacluster;
         this.datamodel = datamodel;
         this.keyXPath = keyXPath;

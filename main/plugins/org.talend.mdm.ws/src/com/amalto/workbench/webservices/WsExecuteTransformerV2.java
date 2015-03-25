@@ -7,17 +7,17 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsExecuteTransformerV2 complex type.
+ * <p>Java class for WSExecuteTransformerV2 complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsExecuteTransformerV2">
+ * &lt;complexType name="WSExecuteTransformerV2">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="wsTransformerContext" type="{http://www.talend.com/mdm}wsTransformerContext" minOccurs="0"/>
- *         &lt;element name="wsTypedContent" type="{http://www.talend.com/mdm}wsTypedContent" minOccurs="0"/>
+ *         &lt;element name="wsTransformerContext" type="{http://www.talend.com/mdm}WSTransformerContext" minOccurs="0"/>
+ *         &lt;element name="wsTypedContent" type="{http://www.talend.com/mdm}WSTypedContent" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -27,20 +27,20 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsExecuteTransformerV2", propOrder = {
+@XmlType(name = "WSExecuteTransformerV2", propOrder = {
     "wsTransformerContext",
     "wsTypedContent"
 })
-public class WsExecuteTransformerV2 {
+public class WSExecuteTransformerV2 {
 
-    protected WsTransformerContext wsTransformerContext;
-    protected WsTypedContent wsTypedContent;
+    protected WSTransformerContext wsTransformerContext;
+    protected WSTypedContent wsTypedContent;
 
     /**
      * Default no-arg constructor
      * 
      */
-    public WsExecuteTransformerV2() {
+    public WSExecuteTransformerV2() {
         super();
     }
 
@@ -48,7 +48,7 @@ public class WsExecuteTransformerV2 {
      * Fully-initialising value constructor
      * 
      */
-    public WsExecuteTransformerV2(final WsTransformerContext wsTransformerContext, final WsTypedContent wsTypedContent) {
+    public WSExecuteTransformerV2(final WSTransformerContext wsTransformerContext, final WSTypedContent wsTypedContent) {
         this.wsTransformerContext = wsTransformerContext;
         this.wsTypedContent = wsTypedContent;
     }
@@ -58,10 +58,10 @@ public class WsExecuteTransformerV2 {
      * 
      * @return
      *     possible object is
-     *     {@link WsTransformerContext }
+     *     {@link WSTransformerContext }
      *     
      */
-    public WsTransformerContext getWsTransformerContext() {
+    public WSTransformerContext getWsTransformerContext() {
         return wsTransformerContext;
     }
 
@@ -70,10 +70,10 @@ public class WsExecuteTransformerV2 {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsTransformerContext }
+     *     {@link WSTransformerContext }
      *     
      */
-    public void setWsTransformerContext(WsTransformerContext value) {
+    public void setWsTransformerContext(WSTransformerContext value) {
         this.wsTransformerContext = value;
     }
 
@@ -82,10 +82,10 @@ public class WsExecuteTransformerV2 {
      * 
      * @return
      *     possible object is
-     *     {@link WsTypedContent }
+     *     {@link WSTypedContent }
      *     
      */
-    public WsTypedContent getWsTypedContent() {
+    public WSTypedContent getWsTypedContent() {
         return wsTypedContent;
     }
 
@@ -94,10 +94,10 @@ public class WsExecuteTransformerV2 {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsTypedContent }
+     *     {@link WSTypedContent }
      *     
      */
-    public void setWsTypedContent(WsTypedContent value) {
+    public void setWsTypedContent(WSTypedContent value) {
         this.wsTypedContent = value;
     }
 

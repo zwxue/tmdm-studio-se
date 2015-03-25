@@ -7,12 +7,12 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsmdmJob complex type.
+ * <p>Java class for WSMDMJob complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsmdmJob">
+ * &lt;complexType name="WSMDMJob">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
@@ -28,12 +28,12 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsmdmJob", propOrder = {
+@XmlType(name = "WSMDMJob", propOrder = {
     "jobName",
     "jobVersion",
     "suffix"
 })
-public class WsmdmJob {
+public class WSMDMJob {
 
     protected String jobName;
     protected String jobVersion;
@@ -43,7 +43,7 @@ public class WsmdmJob {
      * Default no-arg constructor
      * 
      */
-    public WsmdmJob() {
+    public WSMDMJob() {
         super();
     }
 
@@ -51,7 +51,7 @@ public class WsmdmJob {
      * Fully-initialising value constructor
      * 
      */
-    public WsmdmJob(final String jobName, final String jobVersion, final String suffix) {
+    public WSMDMJob(final String jobName, final String jobVersion, final String suffix) {
         this.jobName = jobName;
         this.jobVersion = jobVersion;
         this.suffix = suffix;

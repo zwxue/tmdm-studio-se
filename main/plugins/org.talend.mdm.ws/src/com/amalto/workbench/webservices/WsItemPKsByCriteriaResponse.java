@@ -10,16 +10,16 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsItemPKsByCriteriaResponse complex type.
+ * <p>Java class for WSItemPKsByCriteriaResponse complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsItemPKsByCriteriaResponse">
+ * &lt;complexType name="WSItemPKsByCriteriaResponse">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="results" type="{http://www.talend.com/mdm}wsItemPKsByCriteriaResponseResults" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element name="results" type="{http://www.talend.com/mdm}WSItemPKsByCriteriaResponseResults" maxOccurs="unbounded" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -29,19 +29,19 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsItemPKsByCriteriaResponse", propOrder = {
+@XmlType(name = "WSItemPKsByCriteriaResponse", propOrder = {
     "results"
 })
-public class WsItemPKsByCriteriaResponse {
+public class WSItemPKsByCriteriaResponse {
 
     @XmlElement(nillable = true)
-    protected List<WsItemPKsByCriteriaResponseResults> results;
+    protected List<WSItemPKsByCriteriaResponseResults> results;
 
     /**
      * Default no-arg constructor
      * 
      */
-    public WsItemPKsByCriteriaResponse() {
+    public WSItemPKsByCriteriaResponse() {
         super();
     }
 
@@ -49,7 +49,7 @@ public class WsItemPKsByCriteriaResponse {
      * Fully-initialising value constructor
      * 
      */
-    public WsItemPKsByCriteriaResponse(final List<WsItemPKsByCriteriaResponseResults> results) {
+    public WSItemPKsByCriteriaResponse(final List<WSItemPKsByCriteriaResponseResults> results) {
         this.results = results;
     }
 
@@ -71,13 +71,13 @@ public class WsItemPKsByCriteriaResponse {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link WsItemPKsByCriteriaResponseResults }
+     * {@link WSItemPKsByCriteriaResponseResults }
      * 
      * 
      */
-    public List<WsItemPKsByCriteriaResponseResults> getResults() {
+    public List<WSItemPKsByCriteriaResponseResults> getResults() {
         if (results == null) {
-            results = new ArrayList<WsItemPKsByCriteriaResponseResults>();
+            results = new ArrayList<WSItemPKsByCriteriaResponseResults>();
         }
         return this.results;
     }

@@ -10,16 +10,16 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsViewPKArray complex type.
+ * <p>Java class for WSViewPKArray complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsViewPKArray">
+ * &lt;complexType name="WSViewPKArray">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="wsViewPK" type="{http://www.talend.com/mdm}wsViewPK" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element name="wsViewPK" type="{http://www.talend.com/mdm}WSViewPK" maxOccurs="unbounded" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -29,19 +29,19 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsViewPKArray", propOrder = {
+@XmlType(name = "WSViewPKArray", propOrder = {
     "wsViewPK"
 })
-public class WsViewPKArray {
+public class WSViewPKArray {
 
     @XmlElement(nillable = true)
-    protected List<WsViewPK> wsViewPK;
+    protected List<WSViewPK> wsViewPK;
 
     /**
      * Default no-arg constructor
      * 
      */
-    public WsViewPKArray() {
+    public WSViewPKArray() {
         super();
     }
 
@@ -49,7 +49,7 @@ public class WsViewPKArray {
      * Fully-initialising value constructor
      * 
      */
-    public WsViewPKArray(final List<WsViewPK> wsViewPK) {
+    public WSViewPKArray(final List<WSViewPK> wsViewPK) {
         this.wsViewPK = wsViewPK;
     }
 
@@ -71,13 +71,13 @@ public class WsViewPKArray {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link WsViewPK }
+     * {@link WSViewPK }
      * 
      * 
      */
-    public List<WsViewPK> getWsViewPK() {
+    public List<WSViewPK> getWsViewPK() {
         if (wsViewPK == null) {
-            wsViewPK = new ArrayList<WsViewPK>();
+            wsViewPK = new ArrayList<WSViewPK>();
         }
         return this.wsViewPK;
     }

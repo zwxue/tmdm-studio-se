@@ -7,20 +7,20 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsWhereCondition complex type.
+ * <p>Java class for WSWhereCondition complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsWhereCondition">
+ * &lt;complexType name="WSWhereCondition">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
  *         &lt;element name="leftPath" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="operator" type="{http://www.talend.com/mdm}wsWhereOperator" minOccurs="0"/>
+ *         &lt;element name="operator" type="{http://www.talend.com/mdm}WSWhereOperator" minOccurs="0"/>
  *         &lt;element name="rightValueOrPath" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="spellCheck" type="{http://www.w3.org/2001/XMLSchema}boolean"/>
- *         &lt;element name="stringPredicate" type="{http://www.talend.com/mdm}wsStringPredicate" minOccurs="0"/>
+ *         &lt;element name="stringPredicate" type="{http://www.talend.com/mdm}WSStringPredicate" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -30,26 +30,26 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsWhereCondition", propOrder = {
+@XmlType(name = "WSWhereCondition", propOrder = {
     "leftPath",
     "operator",
     "rightValueOrPath",
     "spellCheck",
     "stringPredicate"
 })
-public class WsWhereCondition {
+public class WSWhereCondition {
 
     protected String leftPath;
-    protected WsWhereOperator operator;
+    protected WSWhereOperator operator;
     protected String rightValueOrPath;
     protected boolean spellCheck;
-    protected WsStringPredicate stringPredicate;
+    protected WSStringPredicate stringPredicate;
 
     /**
      * Default no-arg constructor
      * 
      */
-    public WsWhereCondition() {
+    public WSWhereCondition() {
         super();
     }
 
@@ -57,7 +57,7 @@ public class WsWhereCondition {
      * Fully-initialising value constructor
      * 
      */
-    public WsWhereCondition(final String leftPath, final WsWhereOperator operator, final String rightValueOrPath, final boolean spellCheck, final WsStringPredicate stringPredicate) {
+    public WSWhereCondition(final String leftPath, final WSWhereOperator operator, final String rightValueOrPath, final boolean spellCheck, final WSStringPredicate stringPredicate) {
         this.leftPath = leftPath;
         this.operator = operator;
         this.rightValueOrPath = rightValueOrPath;
@@ -94,10 +94,10 @@ public class WsWhereCondition {
      * 
      * @return
      *     possible object is
-     *     {@link WsWhereOperator }
+     *     {@link WSWhereOperator }
      *     
      */
-    public WsWhereOperator getOperator() {
+    public WSWhereOperator getOperator() {
         return operator;
     }
 
@@ -106,10 +106,10 @@ public class WsWhereCondition {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsWhereOperator }
+     *     {@link WSWhereOperator }
      *     
      */
-    public void setOperator(WsWhereOperator value) {
+    public void setOperator(WSWhereOperator value) {
         this.operator = value;
     }
 
@@ -158,10 +158,10 @@ public class WsWhereCondition {
      * 
      * @return
      *     possible object is
-     *     {@link WsStringPredicate }
+     *     {@link WSStringPredicate }
      *     
      */
-    public WsStringPredicate getStringPredicate() {
+    public WSStringPredicate getStringPredicate() {
         return stringPredicate;
     }
 
@@ -170,10 +170,10 @@ public class WsWhereCondition {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsStringPredicate }
+     *     {@link WSStringPredicate }
      *     
      */
-    public void setStringPredicate(WsStringPredicate value) {
+    public void setStringPredicate(WSStringPredicate value) {
         this.stringPredicate = value;
     }
 

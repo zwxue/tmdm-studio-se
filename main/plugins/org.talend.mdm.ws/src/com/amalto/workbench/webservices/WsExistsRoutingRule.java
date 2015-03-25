@@ -7,16 +7,16 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsExistsRoutingRule complex type.
+ * <p>Java class for WSExistsRoutingRule complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsExistsRoutingRule">
+ * &lt;complexType name="WSExistsRoutingRule">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="wsRoutingRulePK" type="{http://www.talend.com/mdm}wsRoutingRulePK" minOccurs="0"/>
+ *         &lt;element name="wsRoutingRulePK" type="{http://www.talend.com/mdm}WSRoutingRulePK" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -26,18 +26,18 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsExistsRoutingRule", propOrder = {
+@XmlType(name = "WSExistsRoutingRule", propOrder = {
     "wsRoutingRulePK"
 })
-public class WsExistsRoutingRule {
+public class WSExistsRoutingRule {
 
-    protected WsRoutingRulePK wsRoutingRulePK;
+    protected WSRoutingRulePK wsRoutingRulePK;
 
     /**
      * Default no-arg constructor
      * 
      */
-    public WsExistsRoutingRule() {
+    public WSExistsRoutingRule() {
         super();
     }
 
@@ -45,7 +45,7 @@ public class WsExistsRoutingRule {
      * Fully-initialising value constructor
      * 
      */
-    public WsExistsRoutingRule(final WsRoutingRulePK wsRoutingRulePK) {
+    public WSExistsRoutingRule(final WSRoutingRulePK wsRoutingRulePK) {
         this.wsRoutingRulePK = wsRoutingRulePK;
     }
 
@@ -54,10 +54,10 @@ public class WsExistsRoutingRule {
      * 
      * @return
      *     possible object is
-     *     {@link WsRoutingRulePK }
+     *     {@link WSRoutingRulePK }
      *     
      */
-    public WsRoutingRulePK getWsRoutingRulePK() {
+    public WSRoutingRulePK getWsRoutingRulePK() {
         return wsRoutingRulePK;
     }
 
@@ -66,10 +66,10 @@ public class WsExistsRoutingRule {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsRoutingRulePK }
+     *     {@link WSRoutingRulePK }
      *     
      */
-    public void setWsRoutingRulePK(WsRoutingRulePK value) {
+    public void setWsRoutingRulePK(WSRoutingRulePK value) {
         this.wsRoutingRulePK = value;
     }
 

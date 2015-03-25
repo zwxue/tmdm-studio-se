@@ -17,7 +17,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="return" type="{http://www.talend.com/mdm}wsDroppedItemPK" minOccurs="0"/>
+ *         &lt;element name="return" type="{http://www.talend.com/mdm}WSDroppedItemPK" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -33,7 +33,7 @@ import javax.xml.bind.annotation.XmlType;
 public class DropItemResponse {
 
     @XmlElement(name = "return")
-    protected WsDroppedItemPK _return;
+    protected WSDroppedItemPK _return;
 
     /**
      * Default no-arg constructor
@@ -47,7 +47,7 @@ public class DropItemResponse {
      * Fully-initialising value constructor
      * 
      */
-    public DropItemResponse(final WsDroppedItemPK _return) {
+    public DropItemResponse(final WSDroppedItemPK _return) {
         this._return = _return;
     }
 
@@ -56,10 +56,10 @@ public class DropItemResponse {
      * 
      * @return
      *     possible object is
-     *     {@link WsDroppedItemPK }
+     *     {@link WSDroppedItemPK }
      *     
      */
-    public WsDroppedItemPK getReturn() {
+    public WSDroppedItemPK getReturn() {
         return _return;
     }
 
@@ -68,10 +68,10 @@ public class DropItemResponse {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsDroppedItemPK }
+     *     {@link WSDroppedItemPK }
      *     
      */
-    public void setReturn(WsDroppedItemPK value) {
+    public void setReturn(WSDroppedItemPK value) {
         this._return = value;
     }
 

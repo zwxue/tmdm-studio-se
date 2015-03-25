@@ -17,7 +17,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="return" type="{http://www.talend.com/mdm}wsStoredProcedurePK" minOccurs="0"/>
+ *         &lt;element name="return" type="{http://www.talend.com/mdm}WSStoredProcedurePK" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -33,7 +33,7 @@ import javax.xml.bind.annotation.XmlType;
 public class DeleteStoredProcedureResponse {
 
     @XmlElement(name = "return")
-    protected WsStoredProcedurePK _return;
+    protected WSStoredProcedurePK _return;
 
     /**
      * Default no-arg constructor
@@ -47,7 +47,7 @@ public class DeleteStoredProcedureResponse {
      * Fully-initialising value constructor
      * 
      */
-    public DeleteStoredProcedureResponse(final WsStoredProcedurePK _return) {
+    public DeleteStoredProcedureResponse(final WSStoredProcedurePK _return) {
         this._return = _return;
     }
 
@@ -56,10 +56,10 @@ public class DeleteStoredProcedureResponse {
      * 
      * @return
      *     possible object is
-     *     {@link WsStoredProcedurePK }
+     *     {@link WSStoredProcedurePK }
      *     
      */
-    public WsStoredProcedurePK getReturn() {
+    public WSStoredProcedurePK getReturn() {
         return _return;
     }
 
@@ -68,10 +68,10 @@ public class DeleteStoredProcedureResponse {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsStoredProcedurePK }
+     *     {@link WSStoredProcedurePK }
      *     
      */
-    public void setReturn(WsStoredProcedurePK value) {
+    public void setReturn(WSStoredProcedurePK value) {
         this._return = value;
     }
 

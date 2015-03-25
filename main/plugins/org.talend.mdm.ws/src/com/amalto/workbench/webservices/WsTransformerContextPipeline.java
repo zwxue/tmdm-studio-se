@@ -10,16 +10,16 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsTransformerContextPipeline complex type.
+ * <p>Java class for WSTransformerContextPipeline complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsTransformerContextPipeline">
+ * &lt;complexType name="WSTransformerContextPipeline">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="pipelineItem" type="{http://www.talend.com/mdm}wsTransformerContextPipelinePipelineItem" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element name="pipelineItem" type="{http://www.talend.com/mdm}WSTransformerContextPipelinePipelineItem" maxOccurs="unbounded" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -29,19 +29,19 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsTransformerContextPipeline", propOrder = {
+@XmlType(name = "WSTransformerContextPipeline", propOrder = {
     "pipelineItem"
 })
-public class WsTransformerContextPipeline {
+public class WSTransformerContextPipeline {
 
     @XmlElement(nillable = true)
-    protected List<WsTransformerContextPipelinePipelineItem> pipelineItem;
+    protected List<WSTransformerContextPipelinePipelineItem> pipelineItem;
 
     /**
      * Default no-arg constructor
      * 
      */
-    public WsTransformerContextPipeline() {
+    public WSTransformerContextPipeline() {
         super();
     }
 
@@ -49,7 +49,7 @@ public class WsTransformerContextPipeline {
      * Fully-initialising value constructor
      * 
      */
-    public WsTransformerContextPipeline(final List<WsTransformerContextPipelinePipelineItem> pipelineItem) {
+    public WSTransformerContextPipeline(final List<WSTransformerContextPipelinePipelineItem> pipelineItem) {
         this.pipelineItem = pipelineItem;
     }
 
@@ -71,13 +71,13 @@ public class WsTransformerContextPipeline {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link WsTransformerContextPipelinePipelineItem }
+     * {@link WSTransformerContextPipelinePipelineItem }
      * 
      * 
      */
-    public List<WsTransformerContextPipelinePipelineItem> getPipelineItem() {
+    public List<WSTransformerContextPipelinePipelineItem> getPipelineItem() {
         if (pipelineItem == null) {
-            pipelineItem = new ArrayList<WsTransformerContextPipelinePipelineItem>();
+            pipelineItem = new ArrayList<WSTransformerContextPipelinePipelineItem>();
         }
         return this.pipelineItem;
     }

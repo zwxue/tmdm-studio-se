@@ -17,7 +17,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="return" type="{http://www.talend.com/mdm}wsDigest" minOccurs="0"/>
+ *         &lt;element name="return" type="{http://www.talend.com/mdm}WSDigest" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -33,7 +33,7 @@ import javax.xml.bind.annotation.XmlType;
 public class GetDigestResponse {
 
     @XmlElement(name = "return")
-    protected WsDigest _return;
+    protected WSDigest _return;
 
     /**
      * Default no-arg constructor
@@ -47,7 +47,7 @@ public class GetDigestResponse {
      * Fully-initialising value constructor
      * 
      */
-    public GetDigestResponse(final WsDigest _return) {
+    public GetDigestResponse(final WSDigest _return) {
         this._return = _return;
     }
 
@@ -56,10 +56,10 @@ public class GetDigestResponse {
      * 
      * @return
      *     possible object is
-     *     {@link WsDigest }
+     *     {@link WSDigest }
      *     
      */
-    public WsDigest getReturn() {
+    public WSDigest getReturn() {
         return _return;
     }
 
@@ -68,10 +68,10 @@ public class GetDigestResponse {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsDigest }
+     *     {@link WSDigest }
      *     
      */
-    public void setReturn(WsDigest value) {
+    public void setReturn(WSDigest value) {
         this._return = value;
     }
 

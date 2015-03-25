@@ -17,7 +17,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="return" type="{http://www.talend.com/mdm}wsVersion" minOccurs="0"/>
+ *         &lt;element name="return" type="{http://www.talend.com/mdm}WSVersion" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -33,7 +33,7 @@ import javax.xml.bind.annotation.XmlType;
 public class GetComponentVersionResponse {
 
     @XmlElement(name = "return")
-    protected WsVersion _return;
+    protected WSVersion _return;
 
     /**
      * Default no-arg constructor
@@ -47,7 +47,7 @@ public class GetComponentVersionResponse {
      * Fully-initialising value constructor
      * 
      */
-    public GetComponentVersionResponse(final WsVersion _return) {
+    public GetComponentVersionResponse(final WSVersion _return) {
         this._return = _return;
     }
 
@@ -56,10 +56,10 @@ public class GetComponentVersionResponse {
      * 
      * @return
      *     possible object is
-     *     {@link WsVersion }
+     *     {@link WSVersion }
      *     
      */
-    public WsVersion getReturn() {
+    public WSVersion getReturn() {
         return _return;
     }
 
@@ -68,10 +68,10 @@ public class GetComponentVersionResponse {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsVersion }
+     *     {@link WSVersion }
      *     
      */
-    public void setReturn(WsVersion value) {
+    public void setReturn(WSVersion value) {
         this._return = value;
     }
 

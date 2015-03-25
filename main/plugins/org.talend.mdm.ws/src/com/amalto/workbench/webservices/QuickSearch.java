@@ -16,7 +16,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="arg0" type="{http://www.talend.com/mdm}wsQuickSearch" minOccurs="0"/>
+ *         &lt;element name="arg0" type="{http://www.talend.com/mdm}WSQuickSearch" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -31,7 +31,7 @@ import javax.xml.bind.annotation.XmlType;
 })
 public class QuickSearch {
 
-    protected WsQuickSearch arg0;
+    protected WSQuickSearch arg0;
 
     /**
      * Default no-arg constructor
@@ -45,7 +45,7 @@ public class QuickSearch {
      * Fully-initialising value constructor
      * 
      */
-    public QuickSearch(final WsQuickSearch arg0) {
+    public QuickSearch(final WSQuickSearch arg0) {
         this.arg0 = arg0;
     }
 
@@ -54,10 +54,10 @@ public class QuickSearch {
      * 
      * @return
      *     possible object is
-     *     {@link WsQuickSearch }
+     *     {@link WSQuickSearch }
      *     
      */
-    public WsQuickSearch getArg0() {
+    public WSQuickSearch getArg0() {
         return arg0;
     }
 
@@ -66,10 +66,10 @@ public class QuickSearch {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsQuickSearch }
+     *     {@link WSQuickSearch }
      *     
      */
-    public void setArg0(WsQuickSearch value) {
+    public void setArg0(WSQuickSearch value) {
         this.arg0 = value;
     }
 

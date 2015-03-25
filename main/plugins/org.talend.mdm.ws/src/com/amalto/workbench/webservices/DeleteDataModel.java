@@ -16,7 +16,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="arg0" type="{http://www.talend.com/mdm}wsDeleteDataModel" minOccurs="0"/>
+ *         &lt;element name="arg0" type="{http://www.talend.com/mdm}WSDeleteDataModel" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -31,7 +31,7 @@ import javax.xml.bind.annotation.XmlType;
 })
 public class DeleteDataModel {
 
-    protected WsDeleteDataModel arg0;
+    protected WSDeleteDataModel arg0;
 
     /**
      * Default no-arg constructor
@@ -45,7 +45,7 @@ public class DeleteDataModel {
      * Fully-initialising value constructor
      * 
      */
-    public DeleteDataModel(final WsDeleteDataModel arg0) {
+    public DeleteDataModel(final WSDeleteDataModel arg0) {
         this.arg0 = arg0;
     }
 
@@ -54,10 +54,10 @@ public class DeleteDataModel {
      * 
      * @return
      *     possible object is
-     *     {@link WsDeleteDataModel }
+     *     {@link WSDeleteDataModel }
      *     
      */
-    public WsDeleteDataModel getArg0() {
+    public WSDeleteDataModel getArg0() {
         return arg0;
     }
 
@@ -66,10 +66,10 @@ public class DeleteDataModel {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsDeleteDataModel }
+     *     {@link WSDeleteDataModel }
      *     
      */
-    public void setArg0(WsDeleteDataModel value) {
+    public void setArg0(WSDeleteDataModel value) {
         this.arg0 = value;
     }
 

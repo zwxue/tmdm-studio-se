@@ -17,7 +17,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="return" type="{http://www.talend.com/mdm}wsStringArray" minOccurs="0"/>
+ *         &lt;element name="return" type="{http://www.talend.com/mdm}WSStringArray" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -33,7 +33,7 @@ import javax.xml.bind.annotation.XmlType;
 public class GetFullPathValuesResponse {
 
     @XmlElement(name = "return")
-    protected WsStringArray _return;
+    protected WSStringArray _return;
 
     /**
      * Default no-arg constructor
@@ -47,7 +47,7 @@ public class GetFullPathValuesResponse {
      * Fully-initialising value constructor
      * 
      */
-    public GetFullPathValuesResponse(final WsStringArray _return) {
+    public GetFullPathValuesResponse(final WSStringArray _return) {
         this._return = _return;
     }
 
@@ -56,10 +56,10 @@ public class GetFullPathValuesResponse {
      * 
      * @return
      *     possible object is
-     *     {@link WsStringArray }
+     *     {@link WSStringArray }
      *     
      */
-    public WsStringArray getReturn() {
+    public WSStringArray getReturn() {
         return _return;
     }
 
@@ -68,10 +68,10 @@ public class GetFullPathValuesResponse {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsStringArray }
+     *     {@link WSStringArray }
      *     
      */
-    public void setReturn(WsStringArray value) {
+    public void setReturn(WSStringArray value) {
         this._return = value;
     }
 

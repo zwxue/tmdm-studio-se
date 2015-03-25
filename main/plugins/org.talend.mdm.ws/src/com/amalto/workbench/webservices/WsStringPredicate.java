@@ -6,12 +6,12 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsStringPredicate.
+ * <p>Java class for WSStringPredicate.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * <p>
  * <pre>
- * &lt;simpleType name="wsStringPredicate">
+ * &lt;simpleType name="WSStringPredicate">
  *   &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string">
  *     &lt;enumeration value="NONE"/>
  *     &lt;enumeration value="OR"/>
@@ -24,9 +24,9 @@ import javax.xml.bind.annotation.XmlType;
  * </pre>
  * 
  */
-@XmlType(name = "wsStringPredicate")
+@XmlType(name = "WSStringPredicate")
 @XmlEnum
-public enum WsStringPredicate {
+public enum WSStringPredicate {
 
     NONE,
     OR,
@@ -39,7 +39,7 @@ public enum WsStringPredicate {
         return name();
     }
 
-    public static WsStringPredicate fromValue(String v) {
+    public static WSStringPredicate fromValue(String v) {
         return valueOf(v);
     }
 

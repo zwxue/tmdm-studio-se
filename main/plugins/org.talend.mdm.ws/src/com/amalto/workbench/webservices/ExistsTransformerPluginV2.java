@@ -16,7 +16,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="arg0" type="{http://www.talend.com/mdm}wsExistsTransformerPluginV2" minOccurs="0"/>
+ *         &lt;element name="arg0" type="{http://www.talend.com/mdm}WSExistsTransformerPluginV2" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -31,7 +31,7 @@ import javax.xml.bind.annotation.XmlType;
 })
 public class ExistsTransformerPluginV2 {
 
-    protected WsExistsTransformerPluginV2 arg0;
+    protected WSExistsTransformerPluginV2 arg0;
 
     /**
      * Default no-arg constructor
@@ -45,7 +45,7 @@ public class ExistsTransformerPluginV2 {
      * Fully-initialising value constructor
      * 
      */
-    public ExistsTransformerPluginV2(final WsExistsTransformerPluginV2 arg0) {
+    public ExistsTransformerPluginV2(final WSExistsTransformerPluginV2 arg0) {
         this.arg0 = arg0;
     }
 
@@ -54,10 +54,10 @@ public class ExistsTransformerPluginV2 {
      * 
      * @return
      *     possible object is
-     *     {@link WsExistsTransformerPluginV2 }
+     *     {@link WSExistsTransformerPluginV2 }
      *     
      */
-    public WsExistsTransformerPluginV2 getArg0() {
+    public WSExistsTransformerPluginV2 getArg0() {
         return arg0;
     }
 
@@ -66,10 +66,10 @@ public class ExistsTransformerPluginV2 {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsExistsTransformerPluginV2 }
+     *     {@link WSExistsTransformerPluginV2 }
      *     
      */
-    public void setArg0(WsExistsTransformerPluginV2 value) {
+    public void setArg0(WSExistsTransformerPluginV2 value) {
         this.arg0 = value;
     }
 

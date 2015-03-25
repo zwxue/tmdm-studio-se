@@ -7,16 +7,16 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsPutDataCluster complex type.
+ * <p>Java class for WSPutDataCluster complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsPutDataCluster">
+ * &lt;complexType name="WSPutDataCluster">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="wsDataCluster" type="{http://www.talend.com/mdm}wsDataCluster" minOccurs="0"/>
+ *         &lt;element name="wsDataCluster" type="{http://www.talend.com/mdm}WSDataCluster" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -26,18 +26,18 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsPutDataCluster", propOrder = {
+@XmlType(name = "WSPutDataCluster", propOrder = {
     "wsDataCluster"
 })
-public class WsPutDataCluster {
+public class WSPutDataCluster {
 
-    protected WsDataCluster wsDataCluster;
+    protected WSDataCluster wsDataCluster;
 
     /**
      * Default no-arg constructor
      * 
      */
-    public WsPutDataCluster() {
+    public WSPutDataCluster() {
         super();
     }
 
@@ -45,7 +45,7 @@ public class WsPutDataCluster {
      * Fully-initialising value constructor
      * 
      */
-    public WsPutDataCluster(final WsDataCluster wsDataCluster) {
+    public WSPutDataCluster(final WSDataCluster wsDataCluster) {
         this.wsDataCluster = wsDataCluster;
     }
 
@@ -54,10 +54,10 @@ public class WsPutDataCluster {
      * 
      * @return
      *     possible object is
-     *     {@link WsDataCluster }
+     *     {@link WSDataCluster }
      *     
      */
-    public WsDataCluster getWsDataCluster() {
+    public WSDataCluster getWsDataCluster() {
         return wsDataCluster;
     }
 
@@ -66,10 +66,10 @@ public class WsPutDataCluster {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsDataCluster }
+     *     {@link WSDataCluster }
      *     
      */
-    public void setWsDataCluster(WsDataCluster value) {
+    public void setWsDataCluster(WSDataCluster value) {
         this.wsDataCluster = value;
     }
 

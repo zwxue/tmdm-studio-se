@@ -16,7 +16,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="arg0" type="{http://www.talend.com/mdm}wsPutBackgroundJob" minOccurs="0"/>
+ *         &lt;element name="arg0" type="{http://www.talend.com/mdm}WSPutBackgroundJob" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -31,7 +31,7 @@ import javax.xml.bind.annotation.XmlType;
 })
 public class PutBackgroundJob {
 
-    protected WsPutBackgroundJob arg0;
+    protected WSPutBackgroundJob arg0;
 
     /**
      * Default no-arg constructor
@@ -45,7 +45,7 @@ public class PutBackgroundJob {
      * Fully-initialising value constructor
      * 
      */
-    public PutBackgroundJob(final WsPutBackgroundJob arg0) {
+    public PutBackgroundJob(final WSPutBackgroundJob arg0) {
         this.arg0 = arg0;
     }
 
@@ -54,10 +54,10 @@ public class PutBackgroundJob {
      * 
      * @return
      *     possible object is
-     *     {@link WsPutBackgroundJob }
+     *     {@link WSPutBackgroundJob }
      *     
      */
-    public WsPutBackgroundJob getArg0() {
+    public WSPutBackgroundJob getArg0() {
         return arg0;
     }
 
@@ -66,10 +66,10 @@ public class PutBackgroundJob {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsPutBackgroundJob }
+     *     {@link WSPutBackgroundJob }
      *     
      */
-    public void setArg0(WsPutBackgroundJob value) {
+    public void setArg0(WSPutBackgroundJob value) {
         this.arg0 = value;
     }
 

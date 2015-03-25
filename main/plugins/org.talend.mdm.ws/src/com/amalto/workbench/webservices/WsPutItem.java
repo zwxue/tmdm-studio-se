@@ -7,18 +7,18 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsPutItem complex type.
+ * <p>Java class for WSPutItem complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsPutItem">
+ * &lt;complexType name="WSPutItem">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
  *         &lt;element name="isUpdate" type="{http://www.w3.org/2001/XMLSchema}boolean" minOccurs="0"/>
- *         &lt;element name="wsDataClusterPK" type="{http://www.talend.com/mdm}wsDataClusterPK" minOccurs="0"/>
- *         &lt;element name="wsDataModelPK" type="{http://www.talend.com/mdm}wsDataModelPK" minOccurs="0"/>
+ *         &lt;element name="wsDataClusterPK" type="{http://www.talend.com/mdm}WSDataClusterPK" minOccurs="0"/>
+ *         &lt;element name="wsDataModelPK" type="{http://www.talend.com/mdm}WSDataModelPK" minOccurs="0"/>
  *         &lt;element name="xmlString" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
@@ -29,24 +29,24 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsPutItem", propOrder = {
+@XmlType(name = "WSPutItem", propOrder = {
     "isUpdate",
     "wsDataClusterPK",
     "wsDataModelPK",
     "xmlString"
 })
-public class WsPutItem {
+public class WSPutItem {
 
     protected Boolean isUpdate;
-    protected WsDataClusterPK wsDataClusterPK;
-    protected WsDataModelPK wsDataModelPK;
+    protected WSDataClusterPK wsDataClusterPK;
+    protected WSDataModelPK wsDataModelPK;
     protected String xmlString;
 
     /**
      * Default no-arg constructor
      * 
      */
-    public WsPutItem() {
+    public WSPutItem() {
         super();
     }
 
@@ -54,7 +54,7 @@ public class WsPutItem {
      * Fully-initialising value constructor
      * 
      */
-    public WsPutItem(final Boolean isUpdate, final WsDataClusterPK wsDataClusterPK, final WsDataModelPK wsDataModelPK, final String xmlString) {
+    public WSPutItem(final Boolean isUpdate, final WSDataClusterPK wsDataClusterPK, final WSDataModelPK wsDataModelPK, final String xmlString) {
         this.isUpdate = isUpdate;
         this.wsDataClusterPK = wsDataClusterPK;
         this.wsDataModelPK = wsDataModelPK;
@@ -90,10 +90,10 @@ public class WsPutItem {
      * 
      * @return
      *     possible object is
-     *     {@link WsDataClusterPK }
+     *     {@link WSDataClusterPK }
      *     
      */
-    public WsDataClusterPK getWsDataClusterPK() {
+    public WSDataClusterPK getWsDataClusterPK() {
         return wsDataClusterPK;
     }
 
@@ -102,10 +102,10 @@ public class WsPutItem {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsDataClusterPK }
+     *     {@link WSDataClusterPK }
      *     
      */
-    public void setWsDataClusterPK(WsDataClusterPK value) {
+    public void setWsDataClusterPK(WSDataClusterPK value) {
         this.wsDataClusterPK = value;
     }
 
@@ -114,10 +114,10 @@ public class WsPutItem {
      * 
      * @return
      *     possible object is
-     *     {@link WsDataModelPK }
+     *     {@link WSDataModelPK }
      *     
      */
-    public WsDataModelPK getWsDataModelPK() {
+    public WSDataModelPK getWsDataModelPK() {
         return wsDataModelPK;
     }
 
@@ -126,10 +126,10 @@ public class WsPutItem {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsDataModelPK }
+     *     {@link WSDataModelPK }
      *     
      */
-    public void setWsDataModelPK(WsDataModelPK value) {
+    public void setWsDataModelPK(WSDataModelPK value) {
         this.wsDataModelPK = value;
     }
 

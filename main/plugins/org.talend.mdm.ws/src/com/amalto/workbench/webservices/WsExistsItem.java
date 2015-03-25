@@ -7,16 +7,16 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsExistsItem complex type.
+ * <p>Java class for WSExistsItem complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsExistsItem">
+ * &lt;complexType name="WSExistsItem">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="wsItemPK" type="{http://www.talend.com/mdm}wsItemPK" minOccurs="0"/>
+ *         &lt;element name="wsItemPK" type="{http://www.talend.com/mdm}WSItemPK" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -26,18 +26,18 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsExistsItem", propOrder = {
+@XmlType(name = "WSExistsItem", propOrder = {
     "wsItemPK"
 })
-public class WsExistsItem {
+public class WSExistsItem {
 
-    protected WsItemPK wsItemPK;
+    protected WSItemPK wsItemPK;
 
     /**
      * Default no-arg constructor
      * 
      */
-    public WsExistsItem() {
+    public WSExistsItem() {
         super();
     }
 
@@ -45,7 +45,7 @@ public class WsExistsItem {
      * Fully-initialising value constructor
      * 
      */
-    public WsExistsItem(final WsItemPK wsItemPK) {
+    public WSExistsItem(final WSItemPK wsItemPK) {
         this.wsItemPK = wsItemPK;
     }
 
@@ -54,10 +54,10 @@ public class WsExistsItem {
      * 
      * @return
      *     possible object is
-     *     {@link WsItemPK }
+     *     {@link WSItemPK }
      *     
      */
-    public WsItemPK getWsItemPK() {
+    public WSItemPK getWsItemPK() {
         return wsItemPK;
     }
 
@@ -66,10 +66,10 @@ public class WsExistsItem {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsItemPK }
+     *     {@link WSItemPK }
      *     
      */
-    public void setWsItemPK(WsItemPK value) {
+    public void setWsItemPK(WSItemPK value) {
         this.wsItemPK = value;
     }
 

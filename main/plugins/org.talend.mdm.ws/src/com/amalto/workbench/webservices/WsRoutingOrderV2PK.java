@@ -7,17 +7,17 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsRoutingOrderV2PK complex type.
+ * <p>Java class for WSRoutingOrderV2PK complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsRoutingOrderV2PK">
+ * &lt;complexType name="WSRoutingOrderV2PK">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
  *         &lt;element name="name" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="status" type="{http://www.talend.com/mdm}wsRoutingOrderV2Status" minOccurs="0"/>
+ *         &lt;element name="status" type="{http://www.talend.com/mdm}WSRoutingOrderV2Status" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -27,20 +27,20 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsRoutingOrderV2PK", propOrder = {
+@XmlType(name = "WSRoutingOrderV2PK", propOrder = {
     "name",
     "status"
 })
-public class WsRoutingOrderV2PK {
+public class WSRoutingOrderV2PK {
 
     protected String name;
-    protected WsRoutingOrderV2Status status;
+    protected WSRoutingOrderV2Status status;
 
     /**
      * Default no-arg constructor
      * 
      */
-    public WsRoutingOrderV2PK() {
+    public WSRoutingOrderV2PK() {
         super();
     }
 
@@ -48,7 +48,7 @@ public class WsRoutingOrderV2PK {
      * Fully-initialising value constructor
      * 
      */
-    public WsRoutingOrderV2PK(final String name, final WsRoutingOrderV2Status status) {
+    public WSRoutingOrderV2PK(final String name, final WSRoutingOrderV2Status status) {
         this.name = name;
         this.status = status;
     }
@@ -82,10 +82,10 @@ public class WsRoutingOrderV2PK {
      * 
      * @return
      *     possible object is
-     *     {@link WsRoutingOrderV2Status }
+     *     {@link WSRoutingOrderV2Status }
      *     
      */
-    public WsRoutingOrderV2Status getStatus() {
+    public WSRoutingOrderV2Status getStatus() {
         return status;
     }
 
@@ -94,10 +94,10 @@ public class WsRoutingOrderV2PK {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsRoutingOrderV2Status }
+     *     {@link WSRoutingOrderV2Status }
      *     
      */
-    public void setStatus(WsRoutingOrderV2Status value) {
+    public void setStatus(WSRoutingOrderV2Status value) {
         this.status = value;
     }
 

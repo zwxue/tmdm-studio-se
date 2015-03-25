@@ -7,16 +7,16 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsGetRoutingOrderV2ByCriteriaWithPaging complex type.
+ * <p>Java class for WSGetRoutingOrderV2ByCriteriaWithPaging complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsGetRoutingOrderV2ByCriteriaWithPaging">
+ * &lt;complexType name="WSGetRoutingOrderV2ByCriteriaWithPaging">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="wsSearchCriteriaWithPaging" type="{http://www.talend.com/mdm}wsRoutingOrderV2SearchCriteriaWithPaging" minOccurs="0"/>
+ *         &lt;element name="wsSearchCriteriaWithPaging" type="{http://www.talend.com/mdm}WSRoutingOrderV2SearchCriteriaWithPaging" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -26,18 +26,18 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsGetRoutingOrderV2ByCriteriaWithPaging", propOrder = {
+@XmlType(name = "WSGetRoutingOrderV2ByCriteriaWithPaging", propOrder = {
     "wsSearchCriteriaWithPaging"
 })
-public class WsGetRoutingOrderV2ByCriteriaWithPaging {
+public class WSGetRoutingOrderV2ByCriteriaWithPaging {
 
-    protected WsRoutingOrderV2SearchCriteriaWithPaging wsSearchCriteriaWithPaging;
+    protected WSRoutingOrderV2SearchCriteriaWithPaging wsSearchCriteriaWithPaging;
 
     /**
      * Default no-arg constructor
      * 
      */
-    public WsGetRoutingOrderV2ByCriteriaWithPaging() {
+    public WSGetRoutingOrderV2ByCriteriaWithPaging() {
         super();
     }
 
@@ -45,7 +45,7 @@ public class WsGetRoutingOrderV2ByCriteriaWithPaging {
      * Fully-initialising value constructor
      * 
      */
-    public WsGetRoutingOrderV2ByCriteriaWithPaging(final WsRoutingOrderV2SearchCriteriaWithPaging wsSearchCriteriaWithPaging) {
+    public WSGetRoutingOrderV2ByCriteriaWithPaging(final WSRoutingOrderV2SearchCriteriaWithPaging wsSearchCriteriaWithPaging) {
         this.wsSearchCriteriaWithPaging = wsSearchCriteriaWithPaging;
     }
 
@@ -54,10 +54,10 @@ public class WsGetRoutingOrderV2ByCriteriaWithPaging {
      * 
      * @return
      *     possible object is
-     *     {@link WsRoutingOrderV2SearchCriteriaWithPaging }
+     *     {@link WSRoutingOrderV2SearchCriteriaWithPaging }
      *     
      */
-    public WsRoutingOrderV2SearchCriteriaWithPaging getWsSearchCriteriaWithPaging() {
+    public WSRoutingOrderV2SearchCriteriaWithPaging getWsSearchCriteriaWithPaging() {
         return wsSearchCriteriaWithPaging;
     }
 
@@ -66,10 +66,10 @@ public class WsGetRoutingOrderV2ByCriteriaWithPaging {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsRoutingOrderV2SearchCriteriaWithPaging }
+     *     {@link WSRoutingOrderV2SearchCriteriaWithPaging }
      *     
      */
-    public void setWsSearchCriteriaWithPaging(WsRoutingOrderV2SearchCriteriaWithPaging value) {
+    public void setWsSearchCriteriaWithPaging(WSRoutingOrderV2SearchCriteriaWithPaging value) {
         this.wsSearchCriteriaWithPaging = value;
     }
 

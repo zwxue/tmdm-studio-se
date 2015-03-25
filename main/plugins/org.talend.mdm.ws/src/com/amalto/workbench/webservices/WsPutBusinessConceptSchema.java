@@ -7,17 +7,17 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsPutBusinessConceptSchema complex type.
+ * <p>Java class for WSPutBusinessConceptSchema complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsPutBusinessConceptSchema">
+ * &lt;complexType name="WSPutBusinessConceptSchema">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
  *         &lt;element name="businessConceptSchema" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="wsDataModelPK" type="{http://www.talend.com/mdm}wsDataModelPK" minOccurs="0"/>
+ *         &lt;element name="wsDataModelPK" type="{http://www.talend.com/mdm}WSDataModelPK" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -27,20 +27,20 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsPutBusinessConceptSchema", propOrder = {
+@XmlType(name = "WSPutBusinessConceptSchema", propOrder = {
     "businessConceptSchema",
     "wsDataModelPK"
 })
-public class WsPutBusinessConceptSchema {
+public class WSPutBusinessConceptSchema {
 
     protected String businessConceptSchema;
-    protected WsDataModelPK wsDataModelPK;
+    protected WSDataModelPK wsDataModelPK;
 
     /**
      * Default no-arg constructor
      * 
      */
-    public WsPutBusinessConceptSchema() {
+    public WSPutBusinessConceptSchema() {
         super();
     }
 
@@ -48,7 +48,7 @@ public class WsPutBusinessConceptSchema {
      * Fully-initialising value constructor
      * 
      */
-    public WsPutBusinessConceptSchema(final String businessConceptSchema, final WsDataModelPK wsDataModelPK) {
+    public WSPutBusinessConceptSchema(final String businessConceptSchema, final WSDataModelPK wsDataModelPK) {
         this.businessConceptSchema = businessConceptSchema;
         this.wsDataModelPK = wsDataModelPK;
     }
@@ -82,10 +82,10 @@ public class WsPutBusinessConceptSchema {
      * 
      * @return
      *     possible object is
-     *     {@link WsDataModelPK }
+     *     {@link WSDataModelPK }
      *     
      */
-    public WsDataModelPK getWsDataModelPK() {
+    public WSDataModelPK getWsDataModelPK() {
         return wsDataModelPK;
     }
 
@@ -94,10 +94,10 @@ public class WsPutBusinessConceptSchema {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsDataModelPK }
+     *     {@link WSDataModelPK }
      *     
      */
-    public void setWsDataModelPK(WsDataModelPK value) {
+    public void setWsDataModelPK(WSDataModelPK value) {
         this.wsDataModelPK = value;
     }
 

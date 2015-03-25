@@ -17,7 +17,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="return" type="{http://www.talend.com/mdm}wsTransformerContext" minOccurs="0"/>
+ *         &lt;element name="return" type="{http://www.talend.com/mdm}WSTransformerContext" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -33,7 +33,7 @@ import javax.xml.bind.annotation.XmlType;
 public class ExtractThroughTransformerV2Response {
 
     @XmlElement(name = "return")
-    protected WsTransformerContext _return;
+    protected WSTransformerContext _return;
 
     /**
      * Default no-arg constructor
@@ -47,7 +47,7 @@ public class ExtractThroughTransformerV2Response {
      * Fully-initialising value constructor
      * 
      */
-    public ExtractThroughTransformerV2Response(final WsTransformerContext _return) {
+    public ExtractThroughTransformerV2Response(final WSTransformerContext _return) {
         this._return = _return;
     }
 
@@ -56,10 +56,10 @@ public class ExtractThroughTransformerV2Response {
      * 
      * @return
      *     possible object is
-     *     {@link WsTransformerContext }
+     *     {@link WSTransformerContext }
      *     
      */
-    public WsTransformerContext getReturn() {
+    public WSTransformerContext getReturn() {
         return _return;
     }
 
@@ -68,10 +68,10 @@ public class ExtractThroughTransformerV2Response {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsTransformerContext }
+     *     {@link WSTransformerContext }
      *     
      */
-    public void setReturn(WsTransformerContext value) {
+    public void setReturn(WSTransformerContext value) {
         this._return = value;
     }
 

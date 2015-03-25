@@ -17,7 +17,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="return" type="{http://www.talend.com/mdm}wsServiceGetDocument" minOccurs="0"/>
+ *         &lt;element name="return" type="{http://www.talend.com/mdm}WSServiceGetDocument" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -33,7 +33,7 @@ import javax.xml.bind.annotation.XmlType;
 public class GetServiceDocumentResponse {
 
     @XmlElement(name = "return")
-    protected WsServiceGetDocument _return;
+    protected WSServiceGetDocument _return;
 
     /**
      * Default no-arg constructor
@@ -47,7 +47,7 @@ public class GetServiceDocumentResponse {
      * Fully-initialising value constructor
      * 
      */
-    public GetServiceDocumentResponse(final WsServiceGetDocument _return) {
+    public GetServiceDocumentResponse(final WSServiceGetDocument _return) {
         this._return = _return;
     }
 
@@ -56,10 +56,10 @@ public class GetServiceDocumentResponse {
      * 
      * @return
      *     possible object is
-     *     {@link WsServiceGetDocument }
+     *     {@link WSServiceGetDocument }
      *     
      */
-    public WsServiceGetDocument getReturn() {
+    public WSServiceGetDocument getReturn() {
         return _return;
     }
 
@@ -68,10 +68,10 @@ public class GetServiceDocumentResponse {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsServiceGetDocument }
+     *     {@link WSServiceGetDocument }
      *     
      */
-    public void setReturn(WsServiceGetDocument value) {
+    public void setReturn(WSServiceGetDocument value) {
         this._return = value;
     }
 

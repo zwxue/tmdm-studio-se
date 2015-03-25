@@ -16,7 +16,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="arg0" type="{http://www.talend.com/mdm}wsGetRoutingOrderV2PKsByCriteria" minOccurs="0"/>
+ *         &lt;element name="arg0" type="{http://www.talend.com/mdm}WSGetRoutingOrderV2PKsByCriteria" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -31,7 +31,7 @@ import javax.xml.bind.annotation.XmlType;
 })
 public class GetRoutingOrderV2PKsByCriteria {
 
-    protected WsGetRoutingOrderV2PKsByCriteria arg0;
+    protected WSGetRoutingOrderV2PKsByCriteria arg0;
 
     /**
      * Default no-arg constructor
@@ -45,7 +45,7 @@ public class GetRoutingOrderV2PKsByCriteria {
      * Fully-initialising value constructor
      * 
      */
-    public GetRoutingOrderV2PKsByCriteria(final WsGetRoutingOrderV2PKsByCriteria arg0) {
+    public GetRoutingOrderV2PKsByCriteria(final WSGetRoutingOrderV2PKsByCriteria arg0) {
         this.arg0 = arg0;
     }
 
@@ -54,10 +54,10 @@ public class GetRoutingOrderV2PKsByCriteria {
      * 
      * @return
      *     possible object is
-     *     {@link WsGetRoutingOrderV2PKsByCriteria }
+     *     {@link WSGetRoutingOrderV2PKsByCriteria }
      *     
      */
-    public WsGetRoutingOrderV2PKsByCriteria getArg0() {
+    public WSGetRoutingOrderV2PKsByCriteria getArg0() {
         return arg0;
     }
 
@@ -66,10 +66,10 @@ public class GetRoutingOrderV2PKsByCriteria {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsGetRoutingOrderV2PKsByCriteria }
+     *     {@link WSGetRoutingOrderV2PKsByCriteria }
      *     
      */
-    public void setArg0(WsGetRoutingOrderV2PKsByCriteria value) {
+    public void setArg0(WSGetRoutingOrderV2PKsByCriteria value) {
         this.arg0 = value;
     }
 

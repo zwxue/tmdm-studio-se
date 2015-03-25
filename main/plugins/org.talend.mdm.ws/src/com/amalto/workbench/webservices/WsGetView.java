@@ -7,16 +7,16 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsGetView complex type.
+ * <p>Java class for WSGetView complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsGetView">
+ * &lt;complexType name="WSGetView">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="wsViewPK" type="{http://www.talend.com/mdm}wsViewPK" minOccurs="0"/>
+ *         &lt;element name="wsViewPK" type="{http://www.talend.com/mdm}WSViewPK" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -26,18 +26,18 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsGetView", propOrder = {
+@XmlType(name = "WSGetView", propOrder = {
     "wsViewPK"
 })
-public class WsGetView {
+public class WSGetView {
 
-    protected WsViewPK wsViewPK;
+    protected WSViewPK wsViewPK;
 
     /**
      * Default no-arg constructor
      * 
      */
-    public WsGetView() {
+    public WSGetView() {
         super();
     }
 
@@ -45,7 +45,7 @@ public class WsGetView {
      * Fully-initialising value constructor
      * 
      */
-    public WsGetView(final WsViewPK wsViewPK) {
+    public WSGetView(final WSViewPK wsViewPK) {
         this.wsViewPK = wsViewPK;
     }
 
@@ -54,10 +54,10 @@ public class WsGetView {
      * 
      * @return
      *     possible object is
-     *     {@link WsViewPK }
+     *     {@link WSViewPK }
      *     
      */
-    public WsViewPK getWsViewPK() {
+    public WSViewPK getWsViewPK() {
         return wsViewPK;
     }
 
@@ -66,10 +66,10 @@ public class WsGetView {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsViewPK }
+     *     {@link WSViewPK }
      *     
      */
-    public void setWsViewPK(WsViewPK value) {
+    public void setWsViewPK(WSViewPK value) {
         this.wsViewPK = value;
     }
 

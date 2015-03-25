@@ -7,16 +7,16 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsPutRoutingRule complex type.
+ * <p>Java class for WSPutRoutingRule complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsPutRoutingRule">
+ * &lt;complexType name="WSPutRoutingRule">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="wsRoutingRule" type="{http://www.talend.com/mdm}wsRoutingRule" minOccurs="0"/>
+ *         &lt;element name="wsRoutingRule" type="{http://www.talend.com/mdm}WSRoutingRule" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -26,18 +26,18 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsPutRoutingRule", propOrder = {
+@XmlType(name = "WSPutRoutingRule", propOrder = {
     "wsRoutingRule"
 })
-public class WsPutRoutingRule {
+public class WSPutRoutingRule {
 
-    protected WsRoutingRule wsRoutingRule;
+    protected WSRoutingRule wsRoutingRule;
 
     /**
      * Default no-arg constructor
      * 
      */
-    public WsPutRoutingRule() {
+    public WSPutRoutingRule() {
         super();
     }
 
@@ -45,7 +45,7 @@ public class WsPutRoutingRule {
      * Fully-initialising value constructor
      * 
      */
-    public WsPutRoutingRule(final WsRoutingRule wsRoutingRule) {
+    public WSPutRoutingRule(final WSRoutingRule wsRoutingRule) {
         this.wsRoutingRule = wsRoutingRule;
     }
 
@@ -54,10 +54,10 @@ public class WsPutRoutingRule {
      * 
      * @return
      *     possible object is
-     *     {@link WsRoutingRule }
+     *     {@link WSRoutingRule }
      *     
      */
-    public WsRoutingRule getWsRoutingRule() {
+    public WSRoutingRule getWsRoutingRule() {
         return wsRoutingRule;
     }
 
@@ -66,10 +66,10 @@ public class WsPutRoutingRule {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsRoutingRule }
+     *     {@link WSRoutingRule }
      *     
      */
-    public void setWsRoutingRule(WsRoutingRule value) {
+    public void setWsRoutingRule(WSRoutingRule value) {
         this.wsRoutingRule = value;
     }
 

@@ -16,7 +16,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="arg0" type="{http://www.talend.com/mdm}wsGetRolePKs" minOccurs="0"/>
+ *         &lt;element name="arg0" type="{http://www.talend.com/mdm}WSGetRolePKs" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -31,7 +31,7 @@ import javax.xml.bind.annotation.XmlType;
 })
 public class GetRolePKs {
 
-    protected WsGetRolePKs arg0;
+    protected WSGetRolePKs arg0;
 
     /**
      * Default no-arg constructor
@@ -45,7 +45,7 @@ public class GetRolePKs {
      * Fully-initialising value constructor
      * 
      */
-    public GetRolePKs(final WsGetRolePKs arg0) {
+    public GetRolePKs(final WSGetRolePKs arg0) {
         this.arg0 = arg0;
     }
 
@@ -54,10 +54,10 @@ public class GetRolePKs {
      * 
      * @return
      *     possible object is
-     *     {@link WsGetRolePKs }
+     *     {@link WSGetRolePKs }
      *     
      */
-    public WsGetRolePKs getArg0() {
+    public WSGetRolePKs getArg0() {
         return arg0;
     }
 
@@ -66,10 +66,10 @@ public class GetRolePKs {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsGetRolePKs }
+     *     {@link WSGetRolePKs }
      *     
      */
-    public void setArg0(WsGetRolePKs value) {
+    public void setArg0(WSGetRolePKs value) {
         this.arg0 = value;
     }
 

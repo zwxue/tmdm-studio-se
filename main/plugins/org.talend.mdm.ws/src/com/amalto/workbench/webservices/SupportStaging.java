@@ -16,7 +16,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="arg0" type="{http://www.talend.com/mdm}wsDataClusterPK" minOccurs="0"/>
+ *         &lt;element name="arg0" type="{http://www.talend.com/mdm}WSDataClusterPK" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -31,7 +31,7 @@ import javax.xml.bind.annotation.XmlType;
 })
 public class SupportStaging {
 
-    protected WsDataClusterPK arg0;
+    protected WSDataClusterPK arg0;
 
     /**
      * Default no-arg constructor
@@ -45,7 +45,7 @@ public class SupportStaging {
      * Fully-initialising value constructor
      * 
      */
-    public SupportStaging(final WsDataClusterPK arg0) {
+    public SupportStaging(final WSDataClusterPK arg0) {
         this.arg0 = arg0;
     }
 
@@ -54,10 +54,10 @@ public class SupportStaging {
      * 
      * @return
      *     possible object is
-     *     {@link WsDataClusterPK }
+     *     {@link WSDataClusterPK }
      *     
      */
-    public WsDataClusterPK getArg0() {
+    public WSDataClusterPK getArg0() {
         return arg0;
     }
 
@@ -66,10 +66,10 @@ public class SupportStaging {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsDataClusterPK }
+     *     {@link WSDataClusterPK }
      *     
      */
-    public void setArg0(WsDataClusterPK value) {
+    public void setArg0(WSDataClusterPK value) {
         this.arg0 = value;
     }
 

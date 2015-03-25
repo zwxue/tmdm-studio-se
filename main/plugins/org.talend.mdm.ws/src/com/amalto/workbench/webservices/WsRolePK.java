@@ -7,12 +7,12 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsRolePK complex type.
+ * <p>Java class for WSRolePK complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsRolePK">
+ * &lt;complexType name="WSRolePK">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
@@ -26,10 +26,10 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsRolePK", propOrder = {
+@XmlType(name = "WSRolePK", propOrder = {
     "pk"
 })
-public class WsRolePK {
+public class WSRolePK {
 
     protected String pk;
 
@@ -37,7 +37,7 @@ public class WsRolePK {
      * Default no-arg constructor
      * 
      */
-    public WsRolePK() {
+    public WSRolePK() {
         super();
     }
 
@@ -45,7 +45,7 @@ public class WsRolePK {
      * Fully-initialising value constructor
      * 
      */
-    public WsRolePK(final String pk) {
+    public WSRolePK(final String pk) {
         this.pk = pk;
     }
 

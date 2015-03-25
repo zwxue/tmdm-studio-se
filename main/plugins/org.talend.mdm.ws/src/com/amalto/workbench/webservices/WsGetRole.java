@@ -7,16 +7,16 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsGetRole complex type.
+ * <p>Java class for WSGetRole complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsGetRole">
+ * &lt;complexType name="WSGetRole">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="wsRolePK" type="{http://www.talend.com/mdm}wsRolePK" minOccurs="0"/>
+ *         &lt;element name="wsRolePK" type="{http://www.talend.com/mdm}WSRolePK" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -26,18 +26,18 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsGetRole", propOrder = {
+@XmlType(name = "WSGetRole", propOrder = {
     "wsRolePK"
 })
-public class WsGetRole {
+public class WSGetRole {
 
-    protected WsRolePK wsRolePK;
+    protected WSRolePK wsRolePK;
 
     /**
      * Default no-arg constructor
      * 
      */
-    public WsGetRole() {
+    public WSGetRole() {
         super();
     }
 
@@ -45,7 +45,7 @@ public class WsGetRole {
      * Fully-initialising value constructor
      * 
      */
-    public WsGetRole(final WsRolePK wsRolePK) {
+    public WSGetRole(final WSRolePK wsRolePK) {
         this.wsRolePK = wsRolePK;
     }
 
@@ -54,10 +54,10 @@ public class WsGetRole {
      * 
      * @return
      *     possible object is
-     *     {@link WsRolePK }
+     *     {@link WSRolePK }
      *     
      */
-    public WsRolePK getWsRolePK() {
+    public WSRolePK getWsRolePK() {
         return wsRolePK;
     }
 
@@ -66,10 +66,10 @@ public class WsGetRole {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsRolePK }
+     *     {@link WSRolePK }
      *     
      */
-    public void setWsRolePK(WsRolePK value) {
+    public void setWsRolePK(WSRolePK value) {
         this.wsRolePK = value;
     }
 

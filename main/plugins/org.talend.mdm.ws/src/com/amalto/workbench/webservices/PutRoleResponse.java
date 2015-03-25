@@ -17,7 +17,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="return" type="{http://www.talend.com/mdm}wsRolePK" minOccurs="0"/>
+ *         &lt;element name="return" type="{http://www.talend.com/mdm}WSRolePK" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -33,7 +33,7 @@ import javax.xml.bind.annotation.XmlType;
 public class PutRoleResponse {
 
     @XmlElement(name = "return")
-    protected WsRolePK _return;
+    protected WSRolePK _return;
 
     /**
      * Default no-arg constructor
@@ -47,7 +47,7 @@ public class PutRoleResponse {
      * Fully-initialising value constructor
      * 
      */
-    public PutRoleResponse(final WsRolePK _return) {
+    public PutRoleResponse(final WSRolePK _return) {
         this._return = _return;
     }
 
@@ -56,10 +56,10 @@ public class PutRoleResponse {
      * 
      * @return
      *     possible object is
-     *     {@link WsRolePK }
+     *     {@link WSRolePK }
      *     
      */
-    public WsRolePK getReturn() {
+    public WSRolePK getReturn() {
         return _return;
     }
 
@@ -68,10 +68,10 @@ public class PutRoleResponse {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsRolePK }
+     *     {@link WSRolePK }
      *     
      */
-    public void setReturn(WsRolePK value) {
+    public void setReturn(WSRolePK value) {
         this._return = value;
     }
 

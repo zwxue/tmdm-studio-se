@@ -16,7 +16,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="arg0" type="{http://www.talend.com/mdm}wsExistsDataModel" minOccurs="0"/>
+ *         &lt;element name="arg0" type="{http://www.talend.com/mdm}WSExistsDataModel" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -31,7 +31,7 @@ import javax.xml.bind.annotation.XmlType;
 })
 public class ExistsDataModel {
 
-    protected WsExistsDataModel arg0;
+    protected WSExistsDataModel arg0;
 
     /**
      * Default no-arg constructor
@@ -45,7 +45,7 @@ public class ExistsDataModel {
      * Fully-initialising value constructor
      * 
      */
-    public ExistsDataModel(final WsExistsDataModel arg0) {
+    public ExistsDataModel(final WSExistsDataModel arg0) {
         this.arg0 = arg0;
     }
 
@@ -54,10 +54,10 @@ public class ExistsDataModel {
      * 
      * @return
      *     possible object is
-     *     {@link WsExistsDataModel }
+     *     {@link WSExistsDataModel }
      *     
      */
-    public WsExistsDataModel getArg0() {
+    public WSExistsDataModel getArg0() {
         return arg0;
     }
 
@@ -66,10 +66,10 @@ public class ExistsDataModel {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsExistsDataModel }
+     *     {@link WSExistsDataModel }
      *     
      */
-    public void setArg0(WsExistsDataModel value) {
+    public void setArg0(WSExistsDataModel value) {
         this.arg0 = value;
     }
 

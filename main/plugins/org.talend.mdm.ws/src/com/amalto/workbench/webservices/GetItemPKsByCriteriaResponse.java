@@ -17,7 +17,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="return" type="{http://www.talend.com/mdm}wsItemPKsByCriteriaResponse" minOccurs="0"/>
+ *         &lt;element name="return" type="{http://www.talend.com/mdm}WSItemPKsByCriteriaResponse" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -33,7 +33,7 @@ import javax.xml.bind.annotation.XmlType;
 public class GetItemPKsByCriteriaResponse {
 
     @XmlElement(name = "return")
-    protected WsItemPKsByCriteriaResponse _return;
+    protected WSItemPKsByCriteriaResponse _return;
 
     /**
      * Default no-arg constructor
@@ -47,7 +47,7 @@ public class GetItemPKsByCriteriaResponse {
      * Fully-initialising value constructor
      * 
      */
-    public GetItemPKsByCriteriaResponse(final WsItemPKsByCriteriaResponse _return) {
+    public GetItemPKsByCriteriaResponse(final WSItemPKsByCriteriaResponse _return) {
         this._return = _return;
     }
 
@@ -56,10 +56,10 @@ public class GetItemPKsByCriteriaResponse {
      * 
      * @return
      *     possible object is
-     *     {@link WsItemPKsByCriteriaResponse }
+     *     {@link WSItemPKsByCriteriaResponse }
      *     
      */
-    public WsItemPKsByCriteriaResponse getReturn() {
+    public WSItemPKsByCriteriaResponse getReturn() {
         return _return;
     }
 
@@ -68,10 +68,10 @@ public class GetItemPKsByCriteriaResponse {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsItemPKsByCriteriaResponse }
+     *     {@link WSItemPKsByCriteriaResponse }
      *     
      */
-    public void setReturn(WsItemPKsByCriteriaResponse value) {
+    public void setReturn(WSItemPKsByCriteriaResponse value) {
         this._return = value;
     }
 

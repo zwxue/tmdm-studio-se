@@ -16,7 +16,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="arg0" type="{http://www.talend.com/mdm}wsExtractUsingTransformerThruView" minOccurs="0"/>
+ *         &lt;element name="arg0" type="{http://www.talend.com/mdm}WSExtractUsingTransformerThruView" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -31,7 +31,7 @@ import javax.xml.bind.annotation.XmlType;
 })
 public class ExtractUsingTransformerThruView {
 
-    protected WsExtractUsingTransformerThruView arg0;
+    protected WSExtractUsingTransformerThruView arg0;
 
     /**
      * Default no-arg constructor
@@ -45,7 +45,7 @@ public class ExtractUsingTransformerThruView {
      * Fully-initialising value constructor
      * 
      */
-    public ExtractUsingTransformerThruView(final WsExtractUsingTransformerThruView arg0) {
+    public ExtractUsingTransformerThruView(final WSExtractUsingTransformerThruView arg0) {
         this.arg0 = arg0;
     }
 
@@ -54,10 +54,10 @@ public class ExtractUsingTransformerThruView {
      * 
      * @return
      *     possible object is
-     *     {@link WsExtractUsingTransformerThruView }
+     *     {@link WSExtractUsingTransformerThruView }
      *     
      */
-    public WsExtractUsingTransformerThruView getArg0() {
+    public WSExtractUsingTransformerThruView getArg0() {
         return arg0;
     }
 
@@ -66,10 +66,10 @@ public class ExtractUsingTransformerThruView {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsExtractUsingTransformerThruView }
+     *     {@link WSExtractUsingTransformerThruView }
      *     
      */
-    public void setArg0(WsExtractUsingTransformerThruView value) {
+    public void setArg0(WSExtractUsingTransformerThruView value) {
         this.arg0 = value;
     }
 

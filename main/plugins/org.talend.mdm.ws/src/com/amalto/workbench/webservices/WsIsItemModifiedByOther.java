@@ -7,16 +7,16 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsIsItemModifiedByOther complex type.
+ * <p>Java class for WSIsItemModifiedByOther complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsIsItemModifiedByOther">
+ * &lt;complexType name="WSIsItemModifiedByOther">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="wsItem" type="{http://www.talend.com/mdm}wsItem" minOccurs="0"/>
+ *         &lt;element name="wsItem" type="{http://www.talend.com/mdm}WSItem" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -26,18 +26,18 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsIsItemModifiedByOther", propOrder = {
+@XmlType(name = "WSIsItemModifiedByOther", propOrder = {
     "wsItem"
 })
-public class WsIsItemModifiedByOther {
+public class WSIsItemModifiedByOther {
 
-    protected WsItem wsItem;
+    protected WSItem wsItem;
 
     /**
      * Default no-arg constructor
      * 
      */
-    public WsIsItemModifiedByOther() {
+    public WSIsItemModifiedByOther() {
         super();
     }
 
@@ -45,7 +45,7 @@ public class WsIsItemModifiedByOther {
      * Fully-initialising value constructor
      * 
      */
-    public WsIsItemModifiedByOther(final WsItem wsItem) {
+    public WSIsItemModifiedByOther(final WSItem wsItem) {
         this.wsItem = wsItem;
     }
 
@@ -54,10 +54,10 @@ public class WsIsItemModifiedByOther {
      * 
      * @return
      *     possible object is
-     *     {@link WsItem }
+     *     {@link WSItem }
      *     
      */
-    public WsItem getWsItem() {
+    public WSItem getWsItem() {
         return wsItem;
     }
 
@@ -66,10 +66,10 @@ public class WsIsItemModifiedByOther {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsItem }
+     *     {@link WSItem }
      *     
      */
-    public void setWsItem(WsItem value) {
+    public void setWsItem(WSItem value) {
         this.wsItem = value;
     }
 

@@ -16,7 +16,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="arg0" type="{http://www.talend.com/mdm}wsGetItemPKsByCriteria" minOccurs="0"/>
+ *         &lt;element name="arg0" type="{http://www.talend.com/mdm}WSGetItemPKsByCriteria" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -31,7 +31,7 @@ import javax.xml.bind.annotation.XmlType;
 })
 public class GetItemPKsByCriteria {
 
-    protected WsGetItemPKsByCriteria arg0;
+    protected WSGetItemPKsByCriteria arg0;
 
     /**
      * Default no-arg constructor
@@ -45,7 +45,7 @@ public class GetItemPKsByCriteria {
      * Fully-initialising value constructor
      * 
      */
-    public GetItemPKsByCriteria(final WsGetItemPKsByCriteria arg0) {
+    public GetItemPKsByCriteria(final WSGetItemPKsByCriteria arg0) {
         this.arg0 = arg0;
     }
 
@@ -54,10 +54,10 @@ public class GetItemPKsByCriteria {
      * 
      * @return
      *     possible object is
-     *     {@link WsGetItemPKsByCriteria }
+     *     {@link WSGetItemPKsByCriteria }
      *     
      */
-    public WsGetItemPKsByCriteria getArg0() {
+    public WSGetItemPKsByCriteria getArg0() {
         return arg0;
     }
 
@@ -66,10 +66,10 @@ public class GetItemPKsByCriteria {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsGetItemPKsByCriteria }
+     *     {@link WSGetItemPKsByCriteria }
      *     
      */
-    public void setArg0(WsGetItemPKsByCriteria value) {
+    public void setArg0(WSGetItemPKsByCriteria value) {
         this.arg0 = value;
     }
 

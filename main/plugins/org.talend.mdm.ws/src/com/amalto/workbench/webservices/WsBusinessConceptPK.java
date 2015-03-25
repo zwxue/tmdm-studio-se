@@ -10,12 +10,12 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsBusinessConceptPK complex type.
+ * <p>Java class for WSBusinessConceptPK complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsBusinessConceptPK">
+ * &lt;complexType name="WSBusinessConceptPK">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
@@ -30,11 +30,11 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsBusinessConceptPK", propOrder = {
+@XmlType(name = "WSBusinessConceptPK", propOrder = {
     "conceptName",
     "ids"
 })
-public class WsBusinessConceptPK {
+public class WSBusinessConceptPK {
 
     protected String conceptName;
     @XmlElement(nillable = true)
@@ -44,7 +44,7 @@ public class WsBusinessConceptPK {
      * Default no-arg constructor
      * 
      */
-    public WsBusinessConceptPK() {
+    public WSBusinessConceptPK() {
         super();
     }
 
@@ -52,7 +52,7 @@ public class WsBusinessConceptPK {
      * Fully-initialising value constructor
      * 
      */
-    public WsBusinessConceptPK(final String conceptName, final List<String> ids) {
+    public WSBusinessConceptPK(final String conceptName, final List<String> ids) {
         this.conceptName = conceptName;
         this.ids = ids;
     }

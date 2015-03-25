@@ -10,16 +10,16 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsTransformerPKArray complex type.
+ * <p>Java class for WSTransformerPKArray complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsTransformerPKArray">
+ * &lt;complexType name="WSTransformerPKArray">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="wsTransformerPK" type="{http://www.talend.com/mdm}wsTransformerPK" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element name="wsTransformerPK" type="{http://www.talend.com/mdm}WSTransformerPK" maxOccurs="unbounded" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -29,19 +29,19 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsTransformerPKArray", propOrder = {
+@XmlType(name = "WSTransformerPKArray", propOrder = {
     "wsTransformerPK"
 })
-public class WsTransformerPKArray {
+public class WSTransformerPKArray {
 
     @XmlElement(nillable = true)
-    protected List<WsTransformerPK> wsTransformerPK;
+    protected List<WSTransformerPK> wsTransformerPK;
 
     /**
      * Default no-arg constructor
      * 
      */
-    public WsTransformerPKArray() {
+    public WSTransformerPKArray() {
         super();
     }
 
@@ -49,7 +49,7 @@ public class WsTransformerPKArray {
      * Fully-initialising value constructor
      * 
      */
-    public WsTransformerPKArray(final List<WsTransformerPK> wsTransformerPK) {
+    public WSTransformerPKArray(final List<WSTransformerPK> wsTransformerPK) {
         this.wsTransformerPK = wsTransformerPK;
     }
 
@@ -71,13 +71,13 @@ public class WsTransformerPKArray {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link WsTransformerPK }
+     * {@link WSTransformerPK }
      * 
      * 
      */
-    public List<WsTransformerPK> getWsTransformerPK() {
+    public List<WSTransformerPK> getWsTransformerPK() {
         if (wsTransformerPK == null) {
-            wsTransformerPK = new ArrayList<WsTransformerPK>();
+            wsTransformerPK = new ArrayList<WSTransformerPK>();
         }
         return this.wsTransformerPK;
     }

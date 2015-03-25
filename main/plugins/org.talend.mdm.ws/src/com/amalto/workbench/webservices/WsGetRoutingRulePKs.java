@@ -7,12 +7,12 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsGetRoutingRulePKs complex type.
+ * <p>Java class for WSGetRoutingRulePKs complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsGetRoutingRulePKs">
+ * &lt;complexType name="WSGetRoutingRulePKs">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
@@ -26,10 +26,10 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsGetRoutingRulePKs", propOrder = {
+@XmlType(name = "WSGetRoutingRulePKs", propOrder = {
     "regex"
 })
-public class WsGetRoutingRulePKs {
+public class WSGetRoutingRulePKs {
 
     protected String regex;
 
@@ -37,7 +37,7 @@ public class WsGetRoutingRulePKs {
      * Default no-arg constructor
      * 
      */
-    public WsGetRoutingRulePKs() {
+    public WSGetRoutingRulePKs() {
         super();
     }
 
@@ -45,7 +45,7 @@ public class WsGetRoutingRulePKs {
      * Fully-initialising value constructor
      * 
      */
-    public WsGetRoutingRulePKs(final String regex) {
+    public WSGetRoutingRulePKs(final String regex) {
         this.regex = regex;
     }
 

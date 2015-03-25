@@ -7,17 +7,17 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsExtractUsingTransformer complex type.
+ * <p>Java class for WSExtractUsingTransformer complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsExtractUsingTransformer">
+ * &lt;complexType name="WSExtractUsingTransformer">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="wsItemPK" type="{http://www.talend.com/mdm}wsItemPK" minOccurs="0"/>
- *         &lt;element name="wsTransformerPK" type="{http://www.talend.com/mdm}wsTransformerPK" minOccurs="0"/>
+ *         &lt;element name="wsItemPK" type="{http://www.talend.com/mdm}WSItemPK" minOccurs="0"/>
+ *         &lt;element name="wsTransformerPK" type="{http://www.talend.com/mdm}WSTransformerPK" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -27,20 +27,20 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsExtractUsingTransformer", propOrder = {
+@XmlType(name = "WSExtractUsingTransformer", propOrder = {
     "wsItemPK",
     "wsTransformerPK"
 })
-public class WsExtractUsingTransformer {
+public class WSExtractUsingTransformer {
 
-    protected WsItemPK wsItemPK;
-    protected WsTransformerPK wsTransformerPK;
+    protected WSItemPK wsItemPK;
+    protected WSTransformerPK wsTransformerPK;
 
     /**
      * Default no-arg constructor
      * 
      */
-    public WsExtractUsingTransformer() {
+    public WSExtractUsingTransformer() {
         super();
     }
 
@@ -48,7 +48,7 @@ public class WsExtractUsingTransformer {
      * Fully-initialising value constructor
      * 
      */
-    public WsExtractUsingTransformer(final WsItemPK wsItemPK, final WsTransformerPK wsTransformerPK) {
+    public WSExtractUsingTransformer(final WSItemPK wsItemPK, final WSTransformerPK wsTransformerPK) {
         this.wsItemPK = wsItemPK;
         this.wsTransformerPK = wsTransformerPK;
     }
@@ -58,10 +58,10 @@ public class WsExtractUsingTransformer {
      * 
      * @return
      *     possible object is
-     *     {@link WsItemPK }
+     *     {@link WSItemPK }
      *     
      */
-    public WsItemPK getWsItemPK() {
+    public WSItemPK getWsItemPK() {
         return wsItemPK;
     }
 
@@ -70,10 +70,10 @@ public class WsExtractUsingTransformer {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsItemPK }
+     *     {@link WSItemPK }
      *     
      */
-    public void setWsItemPK(WsItemPK value) {
+    public void setWsItemPK(WSItemPK value) {
         this.wsItemPK = value;
     }
 
@@ -82,10 +82,10 @@ public class WsExtractUsingTransformer {
      * 
      * @return
      *     possible object is
-     *     {@link WsTransformerPK }
+     *     {@link WSTransformerPK }
      *     
      */
-    public WsTransformerPK getWsTransformerPK() {
+    public WSTransformerPK getWsTransformerPK() {
         return wsTransformerPK;
     }
 
@@ -94,10 +94,10 @@ public class WsExtractUsingTransformer {
      * 
      * @param value
      *     allowed object is
-     *     {@link WsTransformerPK }
+     *     {@link WSTransformerPK }
      *     
      */
-    public void setWsTransformerPK(WsTransformerPK value) {
+    public void setWsTransformerPK(WSTransformerPK value) {
         this.wsTransformerPK = value;
     }
 

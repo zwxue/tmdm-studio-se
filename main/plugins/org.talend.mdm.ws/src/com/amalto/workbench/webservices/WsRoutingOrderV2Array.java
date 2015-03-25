@@ -10,16 +10,16 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsRoutingOrderV2Array complex type.
+ * <p>Java class for WSRoutingOrderV2Array complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsRoutingOrderV2Array">
+ * &lt;complexType name="WSRoutingOrderV2Array">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="wsRoutingOrder" type="{http://www.talend.com/mdm}wsRoutingOrderV2" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element name="wsRoutingOrder" type="{http://www.talend.com/mdm}WSRoutingOrderV2" maxOccurs="unbounded" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -29,19 +29,19 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsRoutingOrderV2Array", propOrder = {
+@XmlType(name = "WSRoutingOrderV2Array", propOrder = {
     "wsRoutingOrder"
 })
-public class WsRoutingOrderV2Array {
+public class WSRoutingOrderV2Array {
 
     @XmlElement(nillable = true)
-    protected List<WsRoutingOrderV2> wsRoutingOrder;
+    protected List<WSRoutingOrderV2> wsRoutingOrder;
 
     /**
      * Default no-arg constructor
      * 
      */
-    public WsRoutingOrderV2Array() {
+    public WSRoutingOrderV2Array() {
         super();
     }
 
@@ -49,7 +49,7 @@ public class WsRoutingOrderV2Array {
      * Fully-initialising value constructor
      * 
      */
-    public WsRoutingOrderV2Array(final List<WsRoutingOrderV2> wsRoutingOrder) {
+    public WSRoutingOrderV2Array(final List<WSRoutingOrderV2> wsRoutingOrder) {
         this.wsRoutingOrder = wsRoutingOrder;
     }
 
@@ -71,13 +71,13 @@ public class WsRoutingOrderV2Array {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link WsRoutingOrderV2 }
+     * {@link WSRoutingOrderV2 }
      * 
      * 
      */
-    public List<WsRoutingOrderV2> getWsRoutingOrder() {
+    public List<WSRoutingOrderV2> getWsRoutingOrder() {
         if (wsRoutingOrder == null) {
-            wsRoutingOrder = new ArrayList<WsRoutingOrderV2>();
+            wsRoutingOrder = new ArrayList<WSRoutingOrderV2>();
         }
         return this.wsRoutingOrder;
     }

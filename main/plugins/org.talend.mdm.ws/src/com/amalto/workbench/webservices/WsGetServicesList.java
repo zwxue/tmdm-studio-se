@@ -7,12 +7,12 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for wsGetServicesList complex type.
+ * <p>Java class for WSGetServicesList complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="wsGetServicesList">
+ * &lt;complexType name="WSGetServicesList">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
@@ -26,10 +26,10 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wsGetServicesList", propOrder = {
+@XmlType(name = "WSGetServicesList", propOrder = {
     "language"
 })
-public class WsGetServicesList {
+public class WSGetServicesList {
 
     protected String language;
 
@@ -37,7 +37,7 @@ public class WsGetServicesList {
      * Default no-arg constructor
      * 
      */
-    public WsGetServicesList() {
+    public WSGetServicesList() {
         super();
     }
 
@@ -45,7 +45,7 @@ public class WsGetServicesList {
      * Fully-initialising value constructor
      * 
      */
-    public WsGetServicesList(final String language) {
+    public WSGetServicesList(final String language) {
         this.language = language;
     }
 
