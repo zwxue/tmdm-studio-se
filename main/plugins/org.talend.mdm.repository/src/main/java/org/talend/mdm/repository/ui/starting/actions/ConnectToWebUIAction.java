@@ -29,6 +29,8 @@ import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 import org.talend.mdm.workbench.serverexplorer.core.ServerDefService;
 import org.talend.mdm.workbench.serverexplorer.ui.dialogs.SelectServerDefDialog;
 
+import com.amalto.workbench.utils.Util;
+
 public class ConnectToWebUIAction implements IIntroAction {
 
     private static Logger log = Logger.getLogger(ConnectToWebUIAction.class);
@@ -59,8 +61,8 @@ public class ConnectToWebUIAction implements IIntroAction {
     }
 
     private String getUrl() {
-        String path = "/general/secure/";//$NON-NLS-1$
-        String defaultHostPort = "http://localhost:8180"; //$NON-NLS-1$
+        String path = "/talendmdm";//$NON-NLS-1$
+        String defaultHostPort = "http://localhost:8080"; //$NON-NLS-1$
         List<IRepositoryViewObject> viewObjects = ServerDefService.getAllServerDefViewObjects();
         if (viewObjects == null || viewObjects.size() == 0) {
             return defaultHostPort + path;
@@ -69,7 +71,8 @@ public class ConnectToWebUIAction implements IIntroAction {
         SelectServerDefDialog selServerDlg = getSelectServerDefDialog();
         if (selServerDlg.open() == IDialogConstants.OK_ID) {
             MDMServerDef serverDef = selServerDlg.getSelectedServerDef();
-            return serverDef.getProtocol() + serverDef.getHost() + ":" + serverDef.getPort() + path; //$NON-NLS-1$ 
+            return serverDef.getProtocol() + serverDef.getHost()
+                    + ":" + serverDef.getPort() + Util.getContextPath(serverDef.getPath()); //$NON-NLS-1$ 
         }
         return null;
     }
