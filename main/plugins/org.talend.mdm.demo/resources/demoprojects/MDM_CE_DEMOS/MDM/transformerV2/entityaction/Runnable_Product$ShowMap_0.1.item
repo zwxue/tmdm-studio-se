@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<mdmserverobject:WsTransformerV2E xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:mdmserverobject="http://www.talend.org/mdmserverobject" xmi:id="_t1LnwXdIEeGMK_tLGnzsJg" name="Runnable_Product#ShowMap" description="[EN:Show on map][FR:Voir sur la carte]">  
+<mdmserverobject:WSTransformerV2E xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:mdmserverobject="http://www.talend.org/mdmserverobject" xmi:id="_t1LnwXdIEeGMK_tLGnzsJg" name="Runnable_Product#ShowMap" description="[EN:Show on map][FR:Voir sur la carte]">  
   <processSteps xmi:id="_t1LnwndIEeGMK_tLGnzsJg" pluginJNDI="amalto/local/transformer/plugin/xslt" description="Retrieve the complete item from the update report" parameters="&lt;xsl:stylesheet xmlns:xsl=&quot;http://www.w3.org/1999/XSL/Transform&quot;  xmlns:mdm=&quot;java:com.amalto.core.plugin.base.xslt.MdmExtension&quot; version=&quot;1.0&quot;> &lt;xsl:output method=&quot;xml&quot; indent=&quot;yes&quot; omit-xml-declaration=&quot;yes&quot; /> &lt;xsl:template match=&quot;/&quot; priority=&quot;1&quot;>&#xA;&lt;exchange> &lt;report>&#xA; &lt;xsl:copy-of select=&quot;Update&quot;/> &lt;/report>  &lt;item>&lt;xsl:copy-of select='mdm:getItemProjection(Update/RevisionID,Update/DataCluster,Update/Concept,Update/Key)'/>&lt;/item>&lt;/exchange> &lt;/xsl:template> &lt;/xsl:stylesheet>&#xA;">
     <inputMappings xmi:id="_t1Lnw3dIEeGMK_tLGnzsJg" pipelineVariable="_DEFAULT_" pluginVariable="xml"/>
     <outputMappings xmi:id="_t1LnxHdIEeGMK_tLGnzsJg" pipelineVariable="item_xml" pluginVariable="text"/>
@@ -12,4 +12,4 @@
     <inputMappings xmi:id="_t1LnyXdIEeGMK_tLGnzsJg" pipelineVariable="decode_xml" pluginVariable="text"/>
     <outputMappings xmi:id="_t1LnyndIEeGMK_tLGnzsJg" pipelineVariable="output_url" pluginVariable="result"/>
   </processSteps>
-</mdmserverobject:WsTransformerV2E>
+</mdmserverobject:WSTransformerV2E>

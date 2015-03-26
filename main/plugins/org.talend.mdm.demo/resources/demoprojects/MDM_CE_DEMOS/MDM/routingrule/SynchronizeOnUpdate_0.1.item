@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<mdmserverobject:WsRoutingRuleE xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:mdmserverobject="http://www.talend.org/mdmserverobject" xmi:id="_t4uD8HdIEeGMK_tLGnzsJg" name="SynchronizeOnUpdate" description="Synchronize Products updates with applications" concept="*" serviceJNDI="amalto/local/service/callJob" parameters="&lt;configuration> &#xA;    &lt;url>ltj://SynchronizeApps/0.1&lt;/url>  &#xA;    &lt;contextParam> &#xA;        &lt;name>exchangeMessage&lt;/name>  &#xA;        &lt;value>{exchange_data}&lt;/value> &#xA;    &lt;/contextParam> &#xA;&lt;/configuration>" condition="OpIsUpdate And ContainerIsProduct And ModelIsProduct And EntityIsProduct">  
+<mdmserverobject:WSRoutingRuleE xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:mdmserverobject="http://www.talend.org/mdmserverobject" xmi:id="_t4uD8HdIEeGMK_tLGnzsJg" name="SynchronizeOnUpdate" description="Synchronize Products updates with applications" concept="*" serviceJNDI="amalto/local/service/callJob" parameters="&lt;configuration> &#xA;    &lt;url>ltj://SynchronizeApps/0.1&lt;/url>  &#xA;    &lt;contextParam> &#xA;        &lt;name>exchangeMessage&lt;/name>  &#xA;        &lt;value>{exchange_data}&lt;/value> &#xA;    &lt;/contextParam> &#xA;&lt;/configuration>" condition="OpIsUpdate And ContainerIsProduct And ModelIsProduct And EntityIsProduct">  
   <wsRoutingRuleExpressions xmi:id="_t4uD8XdIEeGMK_tLGnzsJg" name="OpIsUpdate" xpath="Update/OperationType" value="UPDATE">
     <wsOperator xmi:id="_t4uD8ndIEeGMK_tLGnzsJg" value="EQUALS"/>
   </wsRoutingRuleExpressions>
@@ -12,4 +12,4 @@
   <wsRoutingRuleExpressions xmi:id="_t4uD93dIEeGMK_tLGnzsJg" name="EntityIsProduct" xpath="Update/Concept" value="Product">
     <wsOperator xmi:id="_t4uD-HdIEeGMK_tLGnzsJg" value="EQUALS"/>
   </wsRoutingRuleExpressions>
-</mdmserverobject:WsRoutingRuleE>
+</mdmserverobject:WSRoutingRuleE>

@@ -39,8 +39,8 @@ public class MDMImportItemUtil {
     private static String[] migrateFileExtensions = new String[] { "properties", "item" }; //$NON-NLS-1$ //$NON-NLS-2$
 
     static {
-        replaceStringMap.put("mdmserverobject:WS", "mdmserverobject:Ws");//$NON-NLS-1$ //$NON-NLS-2$
-        replaceStringMap.put("mdmproperties:WS", "mdmproperties:Ws");//$NON-NLS-1$ //$NON-NLS-2$
+        replaceStringMap.put("mdmserverobject:Ws", "mdmserverobject:WS");//$NON-NLS-1$ //$NON-NLS-2$
+        replaceStringMap.put("mdmproperties:Ws", "mdmproperties:WS");//$NON-NLS-1$ //$NON-NLS-2$
     }
 
     public static File buildUpdatedFile(Object fileorDirectory) {

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<mdmserverobject:WsViewE xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:mdmserverobject="http://www.talend.org/mdmserverobject" xmi:id="_t9LtM3dIEeGMK_tLGnzsJg" name="Browse_items_Product" description="[FR:Produit][EN:Product]" transformerPK="">  
+<mdmserverobject:WSViewE xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:mdmserverobject="http://www.talend.org/mdmserverobject" xmi:id="_t9LtM3dIEeGMK_tLGnzsJg" name="Browse_items_Product" description="[FR:Produit][EN:Product]" transformerPK="">  
   <searchableBusinessElements>Product/Id</searchableBusinessElements>
   <searchableBusinessElements>Product/Name</searchableBusinessElements>
   <searchableBusinessElements>Product/Description</searchableBusinessElements>
@@ -11,4 +11,4 @@
   <viewableBusinessElements>Product/Price</viewableBusinessElements>
   <viewableBusinessElements>Product/Availability</viewableBusinessElements>
   <isTransformerActive xmi:id="_t9LtNHdIEeGMK_tLGnzsJg"/>
-</mdmserverobject:WsViewE>
+</mdmserverobject:WSViewE>

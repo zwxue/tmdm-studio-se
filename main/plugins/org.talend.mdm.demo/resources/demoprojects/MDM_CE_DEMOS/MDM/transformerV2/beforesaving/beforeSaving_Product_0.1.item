@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<mdmserverobject:WsTransformerV2E xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:mdmserverobject="http://www.talend.org/mdmserverobject" xmi:id="_t3FFM3dIEeGMK_tLGnzsJg" name="beforeSaving_Product" description="">  
+<mdmserverobject:WSTransformerV2E xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:mdmserverobject="http://www.talend.org/mdmserverobject" xmi:id="_t3FFM3dIEeGMK_tLGnzsJg" name="beforeSaving_Product" description="">  
   <processSteps xmi:id="_t3FFNHdIEeGMK_tLGnzsJg" pluginJNDI="amalto/local/transformer/plugin/callJob" description="Call TOS job" parameters="&#xA;&lt;configuration> &#xA;    &lt;url>ltj://ValidatePriceChange/0.1&lt;/url>  &#xA;    &lt;contextParam> &#xA;        &lt;name>exchangeMessage&lt;/name>  &#xA;        &lt;value>{_DEFAULT_}&lt;/value> &#xA;    &lt;/contextParam> &#xA;&lt;/configuration>&#xA;">
     <inputMappings xmi:id="_t3FFNXdIEeGMK_tLGnzsJg" pipelineVariable="_DEFAULT_" pluginVariable="text"/>
     <outputMappings xmi:id="_t3FFNndIEeGMK_tLGnzsJg" pipelineVariable="output_report" pluginVariable="result"/>
   </processSteps>
-</mdmserverobject:WsTransformerV2E>
+</mdmserverobject:WSTransformerV2E>
