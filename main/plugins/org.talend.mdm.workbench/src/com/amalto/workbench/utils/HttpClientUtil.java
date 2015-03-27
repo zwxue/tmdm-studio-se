@@ -33,17 +33,20 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.http.HttpEntity;
+import org.apache.http.HttpHost;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.HttpVersion;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
+import org.apache.http.client.AuthCache;
 import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.methods.HttpEntityEnclosingRequestBase;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.methods.HttpUriRequest;
+import org.apache.http.client.protocol.ClientContext;
 import org.apache.http.conn.ClientConnectionManager;
 import org.apache.http.conn.scheme.Scheme;
 import org.apache.http.conn.scheme.SchemeRegistry;
@@ -53,13 +56,17 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.entity.mime.MultipartEntity;
 import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.entity.mime.content.StringBody;
+import org.apache.http.impl.auth.BasicScheme;
+import org.apache.http.impl.client.BasicAuthCache;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.CoreConnectionPNames;
 import org.apache.http.params.HttpParams;
 import org.apache.http.params.HttpProtocolParams;
+import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.HTTP;
+import org.apache.http.protocol.HttpContext;
 import org.apache.http.util.EntityUtils;
 
 import com.amalto.workbench.i18n.Messages;
@@ -102,7 +109,27 @@ public class HttpClientUtil {
         AuthScope authScope = new AuthScope(uri.getHost(), uri.getPort());
         UsernamePasswordCredentials credentials = new UsernamePasswordCredentials(username, password);
         client.getCredentialsProvider().setCredentials(authScope, credentials);
+
         return client;
+    }
+
+    private static HttpContext getPreemptiveContext(String url) {
+        URI uri = URI.create(url);
+        HttpHost targetHost = new HttpHost(uri.getHost(), uri.getPort());
+        
+        return getPreemptiveContext(targetHost);
+    }
+
+    private static HttpContext getPreemptiveContext(HttpHost targetHost) {
+        AuthCache authCache = new BasicAuthCache();
+        BasicScheme basicAuth = new BasicScheme();
+        authCache.put(targetHost, basicAuth);
+
+        // Add AuthCache to the execution context
+        BasicHttpContext localcontext = new BasicHttpContext();
+        localcontext.setAttribute(ClientContext.AUTH_CACHE, authCache);
+
+        return localcontext;
     }
 
     public static String getStringContentByHttpget(String url) throws XtentisException {
@@ -132,7 +159,7 @@ public class HttpClientUtil {
     private static <T> T commonGetRequest(DefaultHttpClient client, String url, String message, Class<T> t)
             throws XtentisException {
         HttpGet get = new HttpGet(url);
-        return getResponseContent(client, get, message, t);
+        return getResponseContent(client, get, null, message, t);
     }
 
     private static HttpUriRequest createUploadRequest(String URL, String userName, String localFilename, String filename,
@@ -157,26 +184,33 @@ public class HttpClientUtil {
             entity.addPart("fileName", StringBody.create(filename, STRING_CONTENT_TYPE, null)); //$NON-NLS-1$
         }
         request.setEntity(entity);
-        addStudioToken(userName, request);
+        String[] tokenPair = getStudioToken(userName);
+        if (tokenPair != null) {
+            request.addHeader(tokenPair[0], tokenPair[1]);
+        }
 
         return request;
     }
 
-    private static void addStudioToken(String userName, HttpPost request) {
+    private static String[] getStudioToken(String userName) {
         IWebServiceHook webServiceHook = Util.getWebServiceHook();
         if (webServiceHook != null) {
-            String tokenKey = webServiceHook.getTokenKey();
-            String studioToken = webServiceHook.buildStudioToken(userName);
-            request.addHeader(tokenKey, studioToken);
+            String[] tokenPair = new String[2];
+            tokenPair[0] = webServiceHook.getTokenKey();
+            tokenPair[1] = webServiceHook.buildStudioToken(userName);
+
+            return tokenPair;
         }
+        return null;
     }
 
     public static String uploadFileToAppServer(String URL, String localFilename, String username, String password)
             throws XtentisException {
         HttpUriRequest request = createUploadFileToServerRequest(URL, username, localFilename);
         DefaultHttpClient client = wrapAuthClient(URL, username, password);
+        HttpContext preemptiveContext = getPreemptiveContext(URL);
         String errMessage = Messages.Util_21 + "%s" + Messages.Util_22 + "%s"; //$NON-NLS-1$//$NON-NLS-2$
-        String content = getTextContent(client, request, errMessage);
+        String content = getTextContent(client, request, preemptiveContext, errMessage);
         if (null == content) {
             throw new XtentisException("no response content"); //$NON-NLS-1$
         }
@@ -194,14 +228,17 @@ public class HttpClientUtil {
             entity.addPart(path, new FileBody(new File(fileName)));
             request.setEntity(entity);
         }
-        addStudioToken(userName, request);
+        String[] tokenPair = getStudioToken(userName);
+        if (tokenPair != null) {
+            request.addHeader(tokenPair[0], tokenPair[1]);
+        }
         return request;
     }
 
     public static byte[] getResourceFile(String uri) throws XtentisException {
         HttpUriRequest request = new HttpGet(uri);
         DefaultHttpClient client = wrapAuthClient(uri, "admin", "talend"); //$NON-NLS-1$ //$NON-NLS-2$
-        byte[] data = getByteArrayStreamContent(client, request, "{}"); //$NON-NLS-1$
+        byte[] data = getByteArrayStreamContent(client, request, null, "{}"); //$NON-NLS-1$
         if (null == data) {
             throw new XtentisException("no response data"); //$NON-NLS-1$
         }
@@ -249,14 +286,15 @@ public class HttpClientUtil {
         return null;
     }
 
-    private static String getTextContent(DefaultHttpClient client, HttpUriRequest request, String message)
+    private static String getTextContent(DefaultHttpClient client, HttpUriRequest request, HttpContext context, String message)
             throws XtentisException {
-        return getResponseContent(client, request, message, String.class);
+        return getResponseContent(client, request, context, message, String.class);
     }
 
-    private static byte[] getByteArrayStreamContent(DefaultHttpClient client, HttpUriRequest request, String message)
+    private static byte[] getByteArrayStreamContent(DefaultHttpClient client, HttpUriRequest request, HttpContext context,
+            String message)
             throws XtentisException {
-        return getResponseContent(client, request, message, byte[].class);
+        return getResponseContent(client, request, context, message, byte[].class);
     }
 
     private static InputStream getResponseContentStream(DefaultHttpClient client, HttpUriRequest request, String message)
@@ -299,14 +337,15 @@ public class HttpClientUtil {
         }
     }
 
-    private static <T> T getResponseContent(DefaultHttpClient client, HttpUriRequest request, String message, Class<T> clz)
+    private static <T> T getResponseContent(DefaultHttpClient client, HttpUriRequest request, HttpContext context,
+            String message, Class<T> clz)
             throws XtentisException {
         if (null == request) {
             throw new IllegalArgumentException("null request"); //$NON-NLS-1$
         }
         HttpResponse response = null;
         try {
-            response = client.execute(request);
+            response = client.execute(request, context);
             return wrapResponse(response, message, clz);
         } catch (XtentisException ex) {
             throw ex;
@@ -332,7 +371,7 @@ public class HttpClientUtil {
         HttpUriRequest request = new HttpGet(url);
         try {
             DefaultHttpClient client = wrapAuthClient(url, userName, password);
-            byte[] data = getByteArrayStreamContent(client, request, null);
+            byte[] data = getByteArrayStreamContent(client, request, null, null);
             if (null == data) {
                 throw new IOException("no response content"); //$NON-NLS-1$
             }
@@ -346,8 +385,9 @@ public class HttpClientUtil {
             String password, HashMap<String, String> picturePathMap) throws XtentisException {
         HttpUriRequest request = createUploadRequest(URL, username, localFilename, filename, imageCatalog, picturePathMap);
         DefaultHttpClient client = wrapAuthClient(URL, username, password);
+        HttpContext preemptiveContext = getPreemptiveContext(URL);
         String errMessage = Messages.Util_25 + "%s" + Messages.Util_26 + "%s"; //$NON-NLS-1$//$NON-NLS-2$
-        String content = getTextContent(client, request, errMessage);
+        String content = getTextContent(client, request, preemptiveContext, errMessage);
         if (null == content) {
             throw new XtentisException("no response content"); //$NON-NLS-1$
         }
@@ -372,10 +412,10 @@ public class HttpClientUtil {
                 url += "?force=" + force.toString(); //$NON-NLS-1$
             }
             HttpUriRequest request = null;
-            request = createModelRequest(url, isUpdate, xsd);
+            request = createModelRequest(url, username, isUpdate, xsd);
             DefaultHttpClient httpClient = wrapAuthClient(url, username, password);
             String errMessage = Messages.Util_21 + "%s" + Messages.Util_22 + "%s"; //$NON-NLS-1$//$NON-NLS-2$
-            String content = getTextContent(httpClient, request, errMessage);
+            String content = getTextContent(httpClient, request, null, errMessage);
 
             return content;
         } catch (UnsupportedEncodingException e) {
@@ -386,7 +426,7 @@ public class HttpClientUtil {
         return null;
     }
 
-    private static HttpUriRequest createModelRequest(String url, boolean isUpdate, String content)
+    private static HttpUriRequest createModelRequest(String url, String username, boolean isUpdate, String content)
             throws UnsupportedEncodingException {
 
         HttpEntityEnclosingRequestBase request = null;
@@ -398,25 +438,36 @@ public class HttpClientUtil {
 
         StringEntity entity = new StringEntity(content, DEFAULT_CHARSET);
         request.setEntity(entity);
+        request.addHeader(username, content);
+        String[] tokenPair = getStudioToken(username);
+        if (tokenPair != null) {
+            request.addHeader(tokenPair[0], tokenPair[1]);
+        }
         return request;
 
     }
 
     public static String invokeMatchSimulation(String protocol, String host, int port, String contextPath, String userName,
             String password, String modelName, String entityName, String records) throws XtentisException {
-        String url = protocol + host + ":" + port + contextPath + "/tasks/matching/explain/?model=" + modelName + "&type=" //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$
+        String url = protocol
+                + host
+                + ":" + port + contextPath + "/services/rest/tasks/matching/explain/?model=" + modelName + "&type=" //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$
                 + entityName;
         String contentType = "application/xml;charset=UTF-8"; //$NON-NLS-1$
         try {
             HttpPost request = new HttpPost(url);
             request.setHeader(HTTP.CONTENT_TYPE, contentType);
+            String[] tokenPair = getStudioToken(userName);
+            if (tokenPair != null) {
+                request.addHeader(tokenPair[0], tokenPair[1]);
+            }
 
             StringEntity entity = new StringEntity(records, HTTP.UTF_8);
             request.setEntity(entity);
 
             DefaultHttpClient client = wrapAuthClient(url, userName, password);
             String errMessage = Messages.Util_21 + "%s" + Messages.Util_22 + "%s"; //$NON-NLS-1$//$NON-NLS-2$
-            String content = getTextContent(client, request, errMessage);
+            String content = getTextContent(client, request, null, errMessage);
             return content;
         } catch (UnsupportedEncodingException e) {
             log.error(e.getMessage(), e);
