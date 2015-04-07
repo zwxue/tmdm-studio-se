@@ -56,6 +56,7 @@ import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 import org.talend.mdm.repository.plugin.RepositoryPlugin;
 import org.talend.mdm.repository.ui.dialogs.datacontent.DataProcessRuleDialog;
 
+import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.webservices.WSItem;
 
 /**
@@ -222,7 +223,8 @@ public class ImportDataContentProcess extends AbstractDataContentProcess {
 
         protected void importClusterContents(IProgressMonitor monitor) {
 
-            String url = serverDef.getProtocol() + serverDef.getHost() + ":" + serverDef.getPort() + "/datamanager/loadServlet"; //$NON-NLS-1$ //$NON-NLS-2$
+            String url = serverDef.getProtocol() + serverDef.getHost()
+                    + ":" + serverDef.getPort() + Util.getContextPath(serverDef.getPath()) + "/datamanager/loadServlet"; //$NON-NLS-1$ //$NON-NLS-2$
             String userName = serverDef.getUser();
             String password = serverDef.getPasswd();
             Reader reader = null;

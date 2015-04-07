@@ -20,9 +20,6 @@
         <field name="dataModelName">
             <bind-xml name="data-model-name" node="element" />
         </field>
-        <field name="dataModelRevision">
-            <bind-xml name="data-model-revision" node="element" />
-        </field>
         <field name="content">
             <bind-xml name="content" node="element" />
         </field>
