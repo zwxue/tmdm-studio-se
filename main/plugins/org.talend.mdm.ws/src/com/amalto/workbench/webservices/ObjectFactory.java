@@ -69,6 +69,7 @@ public class ObjectFactory {
     private final static QName _SupportStagingResponse_QNAME = new QName("http://www.talend.com/mdm", "supportStagingResponse");
     private final static QName _GetDigestResponse_QNAME = new QName("http://www.talend.com/mdm", "getDigestResponse");
     private final static QName _GetStoredProcedurePKsResponse_QNAME = new QName("http://www.talend.com/mdm", "getStoredProcedurePKsResponse");
+    private final static QName _RouteItemV2Response_QNAME = new QName("http://www.talend.com/mdm", "routeItemV2Response");
     private final static QName _GetTransformerV2Response_QNAME = new QName("http://www.talend.com/mdm", "getTransformerV2Response");
     private final static QName _DeleteItemWithReport_QNAME = new QName("http://www.talend.com/mdm", "deleteItemWithReport");
     private final static QName _CheckServiceConfigurationResponse_QNAME = new QName("http://www.talend.com/mdm", "checkServiceConfigurationResponse");
@@ -250,6 +251,7 @@ public class ObjectFactory {
     private final static QName _GetMDMJob_QNAME = new QName("http://www.talend.com/mdm", "getMDMJob");
     private final static QName _InitMDMResponse_QNAME = new QName("http://www.talend.com/mdm", "initMDMResponse");
     private final static QName _ExtractThroughTransformerV2_QNAME = new QName("http://www.talend.com/mdm", "extractThroughTransformerV2");
+    private final static QName _RouteItemV2_QNAME = new QName("http://www.talend.com/mdm", "routeItemV2");
     private final static QName _ProcessBytesUsingTransformerAsBackgroundJobResponse_QNAME = new QName("http://www.talend.com/mdm", "processBytesUsingTransformerAsBackgroundJobResponse");
     private final static QName _DeleteRoleResponse_QNAME = new QName("http://www.talend.com/mdm", "deleteRoleResponse");
     private final static QName _ServiceAction_QNAME = new QName("http://www.talend.com/mdm", "serviceAction");
@@ -328,6 +330,14 @@ public class ObjectFactory {
      */
     public DeleteItemWithReport createDeleteItemWithReport() {
         return new DeleteItemWithReport();
+    }
+
+    /**
+     * Create an instance of {@link RouteItemV2Response }
+     * 
+     */
+    public RouteItemV2Response createRouteItemV2Response() {
+        return new RouteItemV2Response();
     }
 
     /**
@@ -1987,6 +1997,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link RouteItemV2 }
+     * 
+     */
+    public RouteItemV2 createRouteItemV2() {
+        return new RouteItemV2();
+    }
+
+    /**
      * Create an instance of {@link XPathsSearchResponse }
      * 
      */
@@ -2328,6 +2346,14 @@ public class ObjectFactory {
      */
     public WSMenu createWSMenu() {
         return new WSMenu();
+    }
+
+    /**
+     * Create an instance of {@link WSRouteItemV2 }
+     * 
+     */
+    public WSRouteItemV2 createWSRouteItemV2() {
+        return new WSRouteItemV2();
     }
 
     /**
@@ -4360,6 +4386,15 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link RouteItemV2Response }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://www.talend.com/mdm", name = "routeItemV2Response")
+    public JAXBElement<RouteItemV2Response> createRouteItemV2Response(RouteItemV2Response value) {
+        return new JAXBElement<RouteItemV2Response>(_RouteItemV2Response_QNAME, RouteItemV2Response.class, null, value);
+    }
+
+    /**
      * Create an instance of {@link JAXBElement }{@code <}{@link GetTransformerV2Response }{@code >}}
      * 
      */
@@ -5986,6 +6021,15 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "http://www.talend.com/mdm", name = "extractThroughTransformerV2")
     public JAXBElement<ExtractThroughTransformerV2> createExtractThroughTransformerV2(ExtractThroughTransformerV2 value) {
         return new JAXBElement<ExtractThroughTransformerV2>(_ExtractThroughTransformerV2_QNAME, ExtractThroughTransformerV2 .class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link RouteItemV2 }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://www.talend.com/mdm", name = "routeItemV2")
+    public JAXBElement<RouteItemV2> createRouteItemV2(RouteItemV2 value) {
+        return new JAXBElement<RouteItemV2>(_RouteItemV2_QNAME, RouteItemV2 .class, null, value);
     }
 
     /**

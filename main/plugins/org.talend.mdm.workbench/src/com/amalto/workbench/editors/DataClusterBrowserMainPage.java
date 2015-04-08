@@ -117,6 +117,7 @@ import com.amalto.workbench.webservices.WSItemPK;
 import com.amalto.workbench.webservices.WSPutItem;
 import com.amalto.workbench.webservices.WSPutItemWithReport;
 import com.amalto.workbench.webservices.WSRegexDataModelPKs;
+import com.amalto.workbench.webservices.WSRouteItemV2;
 import com.amalto.workbench.webservices.WSStringArray;
 
 public class DataClusterBrowserMainPage extends AMainPage implements IXObjectModelListener {
@@ -1170,33 +1171,33 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                     MessageDialog.openError(shell, Messages.DataClusterBrowserMainPage_118,
                             Messages.bind(Messages.DataClusterBrowserMainPage_119, e.getLocalizedMessage()));
                 }// try
-                int i = 0;
-                for (LineItem lineItem : lineItems) {
 
-                    String itemID = ((WSDataClusterPK) getXObject().getWsKey()).getPk() + "." + lineItem.getConcept() + "." //$NON-NLS-1$ //$NON-NLS-2$
-                            + Util.joinStrings(lineItem.getIds(), Messages.DataClusterBrowserMainPage_120);
-                    monitor.subTask(Messages.bind(Messages.DataClusterBrowserMainPage_121, (i++), itemID));
-                    if (monitor.isCanceled()) {
-                        MessageDialog.openWarning(this.parentShell, Messages.DataClusterBrowserMainPage_123,
-                                Messages.bind(Messages.DataClusterBrowserMainPage_124, i));
-                        return;
-                    }
+                if (service != null) {
+                    int i = 0;
+                    for (LineItem lineItem : lineItems) {
 
-                    // *** TMDM-8080, temp omitted start ***//
-                    // try {
-                    // port.routeItemV2(new WSRouteItemV2(new WSItemPK((WSDataClusterPK) getXObject().getWSKey(),
-                    // lineItem
-                    // .getConcept(), Arrays.asList(lineItem.getIds()))));
-                    // } catch (Exception e) {
-                    // log.error(e.getMessage(), e);
-                    // if (!Util.handleConnectionException(shell, e, null)) {
-                    // MessageDialog.openError(shell, Messages.DataClusterBrowserMainPage_127,
-                    // Messages.bind(Messages.DataClusterBrowserMainPage_128, itemID));
-                    // }
-                    // }// try
-                    // *** TMDM-8080, temp omitted end ***//
-                    monitor.worked(1);
-                }// for
+                        String itemID = ((WSDataClusterPK) getXObject().getWsKey()).getPk() + "." + lineItem.getConcept() + "." //$NON-NLS-1$ //$NON-NLS-2$
+                                + Util.joinStrings(lineItem.getIds(), Messages.DataClusterBrowserMainPage_120);
+                        monitor.subTask(Messages.bind(Messages.DataClusterBrowserMainPage_121, (i++), itemID));
+                        if (monitor.isCanceled()) {
+                            MessageDialog.openWarning(this.parentShell, Messages.DataClusterBrowserMainPage_123,
+                                    Messages.bind(Messages.DataClusterBrowserMainPage_124, i));
+                            return;
+                        }
+
+                        try {
+                            service.routeItemV2(new WSRouteItemV2(new WSItemPK(lineItem.getConcept(), Arrays.asList(lineItem
+                                    .getIds()), (WSDataClusterPK) getXObject().getWsKey())));
+                        } catch (Exception e) {
+                            log.error(e.getMessage(), e);
+                            if (!Util.handleConnectionException(shell, e, null)) {
+                                MessageDialog.openError(shell, Messages.DataClusterBrowserMainPage_127,
+                                        Messages.bind(Messages.DataClusterBrowserMainPage_128, itemID));
+                            }
+                        }// try
+                        monitor.worked(1);
+                    }// for
+                }
                 monitor.done();
             }// run
         }// class DeleteItemsWithProgress
