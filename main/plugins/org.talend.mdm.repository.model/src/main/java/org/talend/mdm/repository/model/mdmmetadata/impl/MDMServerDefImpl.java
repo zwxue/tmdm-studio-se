@@ -154,7 +154,7 @@ public class MDMServerDefImpl extends AbstractMetadataObjectImpl implements MDMS
      * @generated NOT
      * @ordered
      */
-    protected static final String PORT_EDEFAULT = "8080"; //$NON-NLS-1$
+    protected static final String PORT_EDEFAULT = "8180"; //$NON-NLS-1$
 
     /**
      * The cached value of the '{@link #getPort() <em>Port</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc
