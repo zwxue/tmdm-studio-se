@@ -68,7 +68,17 @@ public class CommandStack implements IMementoAware {
         }
         String commandId = cmd.getCommandId();
         if (commandId != null && commandId.equals(cmdId)) {
-            commands.add(cmd);
+            if (cmd.getCommandType() == ICommand.CMD_MODIFY) {
+                ICommand lastCommand = getLastCommand(commands);
+                if (lastCommand != null && lastCommand.getCommandType() == ICommand.CMD_MODIFY) {
+                    // do nothing skip repeat command
+                } else {
+                    commands.add(cmd);
+                }
+            } else {
+                commands.add(cmd);
+            }
+
             if (updateValidCmd) {
                 calValidDeployCommand();
             }
