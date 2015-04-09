@@ -224,7 +224,7 @@ public class ImportDataContentProcess extends AbstractDataContentProcess {
         protected void importClusterContents(IProgressMonitor monitor) {
 
             String url = serverDef.getProtocol() + serverDef.getHost()
-                    + ":" + serverDef.getPort() + Util.getContextPath(serverDef.getPath()) + "/datamanager/loadServlet"; //$NON-NLS-1$ //$NON-NLS-2$
+                    + ":" + serverDef.getPort() + Util.getContextPath(serverDef.getPath()) + "/services/bulkload"; //$NON-NLS-1$ //$NON-NLS-2$
             String userName = serverDef.getUser();
             String password = serverDef.getPasswd();
             Reader reader = null;
