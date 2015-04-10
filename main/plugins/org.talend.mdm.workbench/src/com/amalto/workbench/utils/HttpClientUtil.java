@@ -192,7 +192,7 @@ public class HttpClientUtil {
         return request;
     }
 
-    private static String[] getStudioToken(String userName) {
+    public static String[] getStudioToken(String userName) {
         IWebServiceHook webServiceHook = Util.getWebServiceHook();
         if (webServiceHook != null) {
             String[] tokenPair = new String[2];
