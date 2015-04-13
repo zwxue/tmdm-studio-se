@@ -263,7 +263,8 @@ public class ImportServerObjectWizard extends Wizard {
                 new AuthScope(treeObj.getEndpointHost(), Integer.valueOf(treeObj.getEndpointPort())),
                 new UsernamePasswordCredentials(treeObj.getUsername(), treeObj.getPassword()));
         HttpGet httpget = new HttpGet(workflowURL);
-        // System.out.println("executing request" + httpget.getRequestLine());
+        HttpClientUtil.addStudioToken(httpget, treeObj.getUsername());
+
         HttpResponse response = httpclient.execute(httpget);
         if (response.getStatusLine().getStatusCode() == 200) {
             HttpEntity entity = response.getEntity();

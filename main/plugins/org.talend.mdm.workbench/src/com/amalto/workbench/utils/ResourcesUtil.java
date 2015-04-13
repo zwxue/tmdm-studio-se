@@ -72,6 +72,7 @@ public class ResourcesUtil {
                 new UsernamePasswordCredentials(treeObject.getUsername(), treeObject.getPassword()));
 
         HttpGet httpget = new HttpGet(uri);
+        HttpClientUtil.addStudioToken(httpget, treeObject.getUsername());
 
         log.info(Messages.ResourcesUtil_Loginfo + httpget.getRequestLine());
 

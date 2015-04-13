@@ -34,6 +34,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpHost;
+import org.apache.http.HttpMessage;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.HttpVersion;
@@ -184,12 +185,15 @@ public class HttpClientUtil {
             entity.addPart("fileName", StringBody.create(filename, STRING_CONTENT_TYPE, null)); //$NON-NLS-1$
         }
         request.setEntity(entity);
-        String[] tokenPair = getStudioToken(userName);
-        if (tokenPair != null) {
-            request.addHeader(tokenPair[0], tokenPair[1]);
-        }
-
+        addStudioToken(request, userName);
         return request;
+    }
+
+    public static void addStudioToken(HttpMessage httpMessage, String userName) {
+        if (httpMessage != null && userName != null) {
+            String[] studioToken = getStudioToken(userName);
+            httpMessage.addHeader(studioToken[0], studioToken[1]);
+        }
     }
 
     public static String[] getStudioToken(String userName) {
@@ -228,16 +232,20 @@ public class HttpClientUtil {
             entity.addPart(path, new FileBody(new File(fileName)));
             request.setEntity(entity);
         }
-        String[] tokenPair = getStudioToken(userName);
-        if (tokenPair != null) {
-            request.addHeader(tokenPair[0], tokenPair[1]);
-        }
+        addStudioToken(request, userName);
         return request;
     }
 
-    public static byte[] getResourceFile(String uri) throws XtentisException {
+    public static byte[] getResourceFile(String uri, String userName, String password) throws XtentisException {
         HttpUriRequest request = new HttpGet(uri);
-        DefaultHttpClient client = wrapAuthClient(uri, "admin", "talend"); //$NON-NLS-1$ //$NON-NLS-2$
+        if (userName == null) {
+            userName = "admin"; //$NON-NLS-1$
+        }
+        if (password == null) {
+            password = "talend"; //$NON-NLS-1$
+        }
+        addStudioToken(request, userName);
+        DefaultHttpClient client = wrapAuthClient(uri, userName, password);
         byte[] data = getByteArrayStreamContent(client, request, null, "{}"); //$NON-NLS-1$
         if (null == data) {
             throw new XtentisException("no response data"); //$NON-NLS-1$
@@ -369,6 +377,7 @@ public class HttpClientUtil {
 
     public static byte[] downloadFile(String url, String userName, String password) throws IOException {
         HttpUriRequest request = new HttpGet(url);
+        addStudioToken(request, userName);
         try {
             DefaultHttpClient client = wrapAuthClient(url, userName, password);
             byte[] data = getByteArrayStreamContent(client, request, null, null);
@@ -439,10 +448,7 @@ public class HttpClientUtil {
         StringEntity entity = new StringEntity(content, DEFAULT_CHARSET);
         request.setEntity(entity);
         request.addHeader(username, content);
-        String[] tokenPair = getStudioToken(username);
-        if (tokenPair != null) {
-            request.addHeader(tokenPair[0], tokenPair[1]);
-        }
+        addStudioToken(request, username);
         return request;
 
     }
@@ -457,10 +463,7 @@ public class HttpClientUtil {
         try {
             HttpPost request = new HttpPost(url);
             request.setHeader(HTTP.CONTENT_TYPE, contentType);
-            String[] tokenPair = getStudioToken(userName);
-            if (tokenPair != null) {
-                request.addHeader(tokenPair[0], tokenPair[1]);
-            }
+            addStudioToken(request, userName);
 
             StringEntity entity = new StringEntity(records, HTTP.UTF_8);
             request.setEntity(entity);

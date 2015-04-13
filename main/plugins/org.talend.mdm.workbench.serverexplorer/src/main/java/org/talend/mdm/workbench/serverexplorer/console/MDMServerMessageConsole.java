@@ -337,10 +337,7 @@ public abstract class MDMServerMessageConsole extends MessageConsole implements 
 
         String monitorURL = buildMonitorURL(position);
         HttpGet httpGet = new HttpGet(monitorURL);
-        String[] studioToken = HttpClientUtil.getStudioToken(serverDef.getUser());
-        if (studioToken != null) {
-            httpGet.addHeader(studioToken[0], studioToken[1]);
-        }
+        HttpClientUtil.addStudioToken(httpGet, serverDef.getUser());
 
         MessageConsoleStream errorMsgStream = newErrorMessageStream();
         InputStream is = null;
@@ -500,10 +497,7 @@ public abstract class MDMServerMessageConsole extends MessageConsole implements 
             DefaultHttpClient httpClient = createHttpClient();
             String monitorURL = buildURL();
             HttpGet httpGet = new HttpGet(monitorURL);
-            String[] studioToken = HttpClientUtil.getStudioToken(serverDef.getUser());
-            if (studioToken != null) {
-                httpGet.addHeader(studioToken[0], studioToken[1]);
-            }
+            HttpClientUtil.addStudioToken(httpGet, serverDef.getUser());
             monitor.worked(20);
             HttpResponse response = httpClient.execute(httpGet);
             monitor.worked(40);
