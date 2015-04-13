@@ -56,6 +56,7 @@ import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 import org.talend.mdm.repository.plugin.RepositoryPlugin;
 import org.talend.mdm.repository.ui.dialogs.datacontent.DataProcessRuleDialog;
 
+import com.amalto.workbench.service.IWebServiceHook;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.webservices.WSItem;
 
@@ -290,6 +291,12 @@ public class ImportDataContentProcess extends AbstractDataContentProcess {
                 String datamodel = keys[2];
                 BulkloadClient bulkloadClient = new BulkloadClient(url, userName, password, null, cluster, concept, datamodel);
                 bulkloadClient.setOptions(new BulkloadOptions(false, false, 500));
+                IWebServiceHook webServiceHook = Util.getWebServiceHook();
+                if (webServiceHook != null) {
+                    String tokenKey = webServiceHook.getTokenKey();
+                    String studioToken = webServiceHook.buildStudioToken(userName);
+                    bulkloadClient.setToken(tokenKey, studioToken);
+                }
 
                 StringBuilder sb = new StringBuilder();
                 for (String xml : entry.getValue()) {
