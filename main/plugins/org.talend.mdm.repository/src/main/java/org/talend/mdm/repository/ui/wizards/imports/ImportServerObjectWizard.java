@@ -32,13 +32,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.auth.AuthScope;
-import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -106,6 +100,7 @@ import com.amalto.workbench.models.TreeParent;
 import com.amalto.workbench.providers.XtentisServerObjectsRetriever;
 import com.amalto.workbench.utils.HttpClientUtil;
 import com.amalto.workbench.utils.Util;
+import com.amalto.workbench.utils.XtentisException;
 import com.amalto.workbench.widgets.LabelCombo;
 import com.amalto.workbench.widgets.WidgetFactory;
 
@@ -258,21 +253,18 @@ public class ImportServerObjectWizard extends Wizard {
         if (matcher.matches()) {
             workflowURL = matcher.group(1) + "--" + matcher.group(2);
         }
-        DefaultHttpClient httpclient = new DefaultHttpClient();
-        httpclient.getCredentialsProvider().setCredentials(
-                new AuthScope(treeObj.getEndpointHost(), Integer.valueOf(treeObj.getEndpointPort())),
-                new UsernamePasswordCredentials(treeObj.getUsername(), treeObj.getPassword()));
-        HttpGet httpget = new HttpGet(workflowURL);
-        HttpClientUtil.addStudioToken(httpget, treeObj.getUsername());
+        InputStream is = null;
+        try {
+            is = HttpClientUtil.getInStreamContentByHttpget(workflowURL, treeObj.getUsername(), treeObj.getPassword());
+        } catch (XtentisException e) {
+            log.error(e.getMessage(), e);
+        }
 
-        HttpResponse response = httpclient.execute(httpget);
-        if (response.getStatusLine().getStatusCode() == 200) {
-            HttpEntity entity = response.getEntity();
+        if (is != null) {
 
             String encodedID = URLEncoder.encode(treeObj.getDisplayName(), UTF8);
             File tempFolder = IOUtil.getWorkspaceTempFolder();
             String filename = tempFolder.getAbsolutePath() + File.separator + encodedID + ".bar";//$NON-NLS-1$
-            InputStream is = entity.getContent();
             OutputStream os = null;
             File barFile = new File(filename);
             try {

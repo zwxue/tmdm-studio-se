@@ -19,12 +19,8 @@ import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.protocol.HTTP;
@@ -65,28 +61,12 @@ public class ResourcesUtil {
     }
 
     private static String getXMLString(String uri, TreeObject treeObject) {
-        DefaultHttpClient httpclient = new DefaultHttpClient();
-        httpclient = HttpClientUtil.enableSSL(httpclient, uri);
-        httpclient.getCredentialsProvider().setCredentials(
-                new AuthScope(getEndpointHost(uri), Integer.valueOf(getEndpointPort(uri))),
-                new UsernamePasswordCredentials(treeObject.getUsername(), treeObject.getPassword()));
-
-        HttpGet httpget = new HttpGet(uri);
-        HttpClientUtil.addStudioToken(httpget, treeObject.getUsername());
-
-        log.info(Messages.ResourcesUtil_Loginfo + httpget.getRequestLine());
-
-        // Create a response handler
-        ResponseHandler<String> responseHandler = new BasicResponseHandler();
         String responseBody = "";//$NON-NLS-1$
         try {
-            responseBody = httpclient.execute(httpget, responseHandler);
-        } catch (ClientProtocolException e) {
-            log.error(e.getMessage(), e);
-        } catch (IOException e) {
+            responseBody = HttpClientUtil.getStringContentByHttpget(uri, treeObject.getUsername(), treeObject.getPassword());
+        } catch (XtentisException e) {
             log.error(e.getMessage(), e);
         }
-        httpclient.getConnectionManager().shutdown();
         return responseBody;
 
     }

@@ -30,6 +30,7 @@ import org.apache.http.Header;
 import org.apache.http.HttpResponse;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
+import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.conn.HttpHostConnectException;
 import org.apache.http.impl.client.DefaultHttpClient;
@@ -333,11 +334,26 @@ public abstract class MDMServerMessageConsole extends MessageConsole implements 
         }, 0, getRefrehFrequency());
     }
 
+    private HttpResponse executeByHttpget(String url, String userName, String password) {
+        HttpGet httpGet = new HttpGet(url);
+        HttpClientUtil.addStudioToken(httpGet, serverDef.getUser());
+        DefaultHttpClient httpClient = createHttpClient();
+
+        HttpResponse response = null;
+        try {
+            response = httpClient.execute(httpGet);
+        } catch (ClientProtocolException e) {
+            log.error(e.getMessage(), e);
+        } catch (IOException e) {
+            log.error(e.getMessage(), e);
+        }
+
+        return response;
+    }
+
     private void doMonitor() {
 
         String monitorURL = buildMonitorURL(position);
-        HttpGet httpGet = new HttpGet(monitorURL);
-        HttpClientUtil.addStudioToken(httpGet, serverDef.getUser());
 
         MessageConsoleStream errorMsgStream = newErrorMessageStream();
         InputStream is = null;
@@ -345,8 +361,7 @@ public abstract class MDMServerMessageConsole extends MessageConsole implements 
         MessageConsoleStream msgStream = null;
         InputStreamReader isr = null;
         try {
-            DefaultHttpClient httpClient = createHttpClient();
-            HttpResponse response = httpClient.execute(httpGet);
+            HttpResponse response = executeByHttpget(monitorURL, serverDef.getUser(), serverDef.getPasswd());
             int code = response.getStatusLine().getStatusCode();
             if (HTTP_STATUS_OK == code) {
                 modifyChunkedPosition(response);
@@ -493,13 +508,9 @@ public abstract class MDMServerMessageConsole extends MessageConsole implements 
         InputStream is = null;
         OutputStream os = null;
         try {
-
-            DefaultHttpClient httpClient = createHttpClient();
             String monitorURL = buildURL();
-            HttpGet httpGet = new HttpGet(monitorURL);
-            HttpClientUtil.addStudioToken(httpGet, serverDef.getUser());
-            monitor.worked(20);
-            HttpResponse response = httpClient.execute(httpGet);
+
+            HttpResponse response = executeByHttpget(monitorURL, serverDef.getUser(), serverDef.getPasswd());
             monitor.worked(40);
             int code = response.getStatusLine().getStatusCode();
 

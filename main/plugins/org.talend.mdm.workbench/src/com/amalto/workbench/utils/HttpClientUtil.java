@@ -139,7 +139,7 @@ public class HttpClientUtil {
 
     public static String getStringContentByHttpget(String url, String username, String password) throws XtentisException {
         DefaultHttpClient client = wrapAuthClient(url, username, password);
-        return commonGetRequest(client, url, "", String.class); //$NON-NLS-1$
+        return commonGetRequest(client, url, username, "", String.class); //$NON-NLS-1$
     }
 
     public static byte[] getByteArrayContentByHttpget(String url) throws XtentisException {
@@ -152,14 +152,32 @@ public class HttpClientUtil {
         return getResponseContentStream(client, get, ""); //$NON-NLS-1$
     }
 
-    private static <T> T commonGetRequest(String url, Class<T> t) throws XtentisException {
-        DefaultHttpClient client = createClient();
-        return commonGetRequest(client, url, "", t); //$NON-NLS-1$
+    public static InputStream getInStreamContentByHttpget(String url, String userName, String password)
+            throws XtentisException {
+        InputStream inputStream = null;
+
+        DefaultHttpClient wrapAuthClient = wrapAuthClient(url, userName, password);
+
+        HttpGet get = new HttpGet(url);
+        addStudioToken(get, userName);
+
+        inputStream = getResponseContentStream(wrapAuthClient, get, ""); //$NON-NLS-1$
+
+        return inputStream;
     }
 
-    private static <T> T commonGetRequest(DefaultHttpClient client, String url, String message, Class<T> t)
+    private static <T> T commonGetRequest(String url, Class<T> t) throws XtentisException {
+        DefaultHttpClient client = createClient();
+        return commonGetRequest(client, url, null, "", t); //$NON-NLS-1$
+    }
+
+    private static <T> T commonGetRequest(DefaultHttpClient client, String url, String username, String message, Class<T> t)
             throws XtentisException {
         HttpGet get = new HttpGet(url);
+        if (username != null) {
+            addStudioToken(get, username);
+        }
+
         return getResponseContent(client, get, null, message, t);
     }
 
@@ -253,15 +271,6 @@ public class HttpClientUtil {
         return data;
     }
 
-    @SuppressWarnings("unused")
-    private static <T> T getResponseContent(DefaultHttpClient client, HttpUriRequest request, ResponseHandler<T> handler)
-            throws Exception {
-        if (null == request) {
-            throw new IllegalArgumentException("null request"); //$NON-NLS-1$
-        }
-        return client.execute(request, handler);
-    }
-
     private static <T> T wrapResponse(HttpResponse response, String message, Class<T> clz) throws XtentisException,
             IllegalStateException, IOException {
         HttpEntity content = response.getEntity();
@@ -343,6 +352,15 @@ public class HttpClientUtil {
                 }
             }
         }
+    }
+
+    @SuppressWarnings("unused")
+    private static <T> T getResponseContent(DefaultHttpClient client, HttpUriRequest request, ResponseHandler<T> handler)
+            throws Exception {
+        if (null == request) {
+            throw new IllegalArgumentException("null request"); //$NON-NLS-1$
+        }
+        return client.execute(request, handler);
     }
 
     private static <T> T getResponseContent(DefaultHttpClient client, HttpUriRequest request, HttpContext context,
