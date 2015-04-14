@@ -21,7 +21,8 @@ Require-Bundle: org.apache.commons.collections,
  org.eclipse.ui.forms,
  org.talend.mdm.commmon,
  org.eclipse.core.expressions,
- org.talend.core.repository
+ org.talend.core.repository,
+ org.eclipse.e4.core.commands
 Bundle-ActivationPolicy: lazy
 Export-Package: org.talend.mdm.repository.core.marker,
  org.talend.mdm.repository.ui.markers

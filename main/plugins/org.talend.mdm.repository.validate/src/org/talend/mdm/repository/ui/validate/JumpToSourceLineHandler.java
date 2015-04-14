@@ -20,6 +20,7 @@ import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.expressions.EvaluationContext;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.e4.core.commands.ExpressionContext;
 import org.eclipse.ui.views.markers.MarkerItem;
 import org.eclipse.ui.views.markers.MarkerViewHandler;
 import org.talend.mdm.repository.core.marker.IValidationMarker;
@@ -84,8 +85,14 @@ public class JumpToSourceLineHandler extends MarkerViewHandler {
     @Override
     public void setEnabled(Object evaluationContext) {
         if (evaluationContext != null) {
-            EvaluationContext context = (EvaluationContext) evaluationContext;
-            Object defaultVariable = context.getDefaultVariable();
+            Object defaultVariable = null;
+            if (evaluationContext instanceof ExpressionContext) {
+                ExpressionContext exc = (ExpressionContext) evaluationContext;
+                defaultVariable = exc.getDefaultVariable();
+            } else if (evaluationContext instanceof EvaluationContext) {
+                EvaluationContext context = (EvaluationContext) evaluationContext;
+                defaultVariable = context.getDefaultVariable();
+            }
 
             if (defaultVariable instanceof List) {
                 selectedObjs = (List) defaultVariable;
