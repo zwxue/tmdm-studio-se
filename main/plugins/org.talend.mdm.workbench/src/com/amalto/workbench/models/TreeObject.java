@@ -141,9 +141,9 @@ public class TreeObject implements IAdaptable, Comparable<TreeObject> {
 
     public final static String DATAMODELTYPES_URI = "/pubcomponent/secure/dataModelsTypes/";//$NON-NLS-1$
 
-    public final static String CUSTOM_TYPES_URI = "/pubcomponent/secure/customTypesSets/";//$NON-NLS-1$
+    public final static String CUSTOM_TYPES_URI = "/pubcomponent/customTypesSets/";//$NON-NLS-1$
 
-    public final static String PICTURES_URI = "/pubcomponent/secure/pictures/";//$NON-NLS-1$
+    public final static String PICTURES_URI = "/pubcomponent/pictures/";//$NON-NLS-1$
 
     public final static String BARFILE_URI = "/pubcomponent/secure/barFile/";//$NON-NLS-1$
 
