@@ -465,7 +465,6 @@ public class HttpClientUtil {
 
         StringEntity entity = new StringEntity(content, DEFAULT_CHARSET);
         request.setEntity(entity);
-        request.addHeader(username, content);
         addStudioToken(request, username);
         return request;
 
