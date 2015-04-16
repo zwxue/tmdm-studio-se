@@ -33,7 +33,6 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -62,8 +61,8 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.ws.BindingProvider;
 import javax.xml.ws.WebServiceException;
-import javax.xml.ws.handler.MessageContext;
 
+import org.apache.commons.collections.map.MultiKeyMap;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.ObjectUtils;
 import org.apache.commons.lang.StringUtils;
@@ -131,7 +130,6 @@ import org.eclipse.xsd.util.XSDConstants;
 import org.eclipse.xsd.util.XSDSchemaLocator;
 import org.osgi.framework.Bundle;
 import org.talend.core.GlobalServiceRegister;
-import org.talend.mdm.commmon.util.core.Crypt;
 import org.talend.mdm.commmon.util.core.EUUIDCustomType;
 import org.talend.mdm.commmon.util.core.ICoreConstants;
 import org.talend.mdm.commmon.util.webapp.XSystemObjects;
@@ -167,12 +165,10 @@ import com.amalto.workbench.webservices.WSDataModelPK;
 import com.amalto.workbench.webservices.WSGetComponentVersion;
 import com.amalto.workbench.webservices.WSGetDataModel;
 import com.amalto.workbench.webservices.WSGetViewPKs;
-import com.amalto.workbench.webservices.WSPing;
 import com.amalto.workbench.webservices.WSRegexDataClusterPKs;
 import com.amalto.workbench.webservices.WSRegexDataModelPKs;
 import com.amalto.workbench.webservices.WSRoutingRuleExpression;
 import com.amalto.workbench.webservices.WSRoutingRuleOperator;
-import com.amalto.workbench.webservices.WSString;
 import com.amalto.workbench.webservices.WSStringPredicate;
 import com.amalto.workbench.webservices.WSVersion;
 import com.amalto.workbench.webservices.WSViewPK;
@@ -347,7 +343,9 @@ public class Util {
         }
     }
 
-    public static String default_endpoint_address = "http://localhost:8080/talendmdm/services/soap";//$NON-NLS-1$
+    private static MultiKeyMap cachedMDMService = new MultiKeyMap();// cache the TMDMService instance
+
+    public static String default_endpoint_address = "http://localhost:8180/talendmdm/services/soap";//$NON-NLS-1$
 
     private static IWebServiceHook webServceHook;
 
@@ -359,8 +357,18 @@ public class Util {
             if (xobject == null) {
                 return null;
             }
-            return getMDMService(new URL(xobject.getEndpointAddress()), xobject.getUniverse(), xobject.getUsername(),
-                    xobject.getPassword());
+            String endpointAddress = xobject.getEndpointAddress();
+            String universe = xobject.getUniverse();
+            String username = xobject.getUsername();
+            String password = xobject.getPassword();
+
+            TMDMService mdmService = (TMDMService) cachedMDMService.get(endpointAddress, universe, username, password);
+            if (mdmService == null) {
+                mdmService = getMDMService(new URL(endpointAddress), universe, username, password);
+                cachedMDMService.put(endpointAddress, universe, username, password, mdmService);
+            }
+
+            return mdmService;
         } catch (MalformedURLException e) {
             throw new XtentisException(Messages.Util_0 + xobject.getEndpointAddress());
         }
@@ -368,7 +376,13 @@ public class Util {
 
     public static TMDMService getMDMService(String universe, String username, String password) throws XtentisException {
         try {
-            return getMDMService(new URL(default_endpoint_address), universe, username, password);
+            TMDMService mdmService = (TMDMService) cachedMDMService.get(default_endpoint_address, universe, username, password);
+            if (mdmService == null) {
+                mdmService = getMDMService(new URL(default_endpoint_address), universe, username, password);
+                cachedMDMService.put(default_endpoint_address, universe, username, password, mdmService);
+            }
+
+            return mdmService;
         } catch (MalformedURLException e) {
             String err = Messages.Util_1 + default_endpoint_address + Messages.Util_2;
             throw new XtentisException(err);
@@ -376,88 +390,13 @@ public class Util {
     }
 
     public static TMDMService getMDMService(URL url, String universe, String username, String password) throws XtentisException {
-        return getMDMService(url, universe, username, password, true);
-    }
-
-    // ////////////////
-    public static void main(String[] args) {
-        try {
-            String end1 = "/services";
-            String end2 = "/soap";
-            TMDMService mdmService = getMDMServiceInner(new URL("http://localhost:8080/talendmdm-6.0-SNAPSHOT/services/soap"),
-                    "", "administrator", "administrator");
-            WSString ping = mdmService.ping(new WSPing("aass"));
-            System.out.println(ping.getValue());
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        } catch (XtentisException e) {
-            e.printStackTrace();
+        TMDMService mdmService = (TMDMService) cachedMDMService.get(url, universe, username, password);
+        if (mdmService == null) {
+            mdmService = getMDMService(url, universe, username, password, true);
+            cachedMDMService.put(url, universe, username, password, mdmService);
         }
+        return mdmService;
     }
-
-    public static TMDMService getMDMServiceInner(URL url, String universe, final String username, final String password)
-            throws XtentisException {
-        try {
-            Authenticator.setDefault(new Authenticator() {
-
-                @Override
-                protected PasswordAuthentication getPasswordAuthentication() {
-                    return new PasswordAuthentication(username, password.toCharArray());
-                }
-            });
-
-            TMDMService_Service service_service = new TMDMService_Service(url);
-
-            TMDMService service = service_service.getTMDMPort();
-
-            BindingProvider stub = (BindingProvider) service;
-
-            stub.getRequestContext().put(BindingProvider.SESSION_MAINTAIN_PROPERTY, false);
-
-            Map<String, Object> context = stub.getRequestContext();
-
-            if (universe == null || universe.trim().length() == 0) {
-                context.put(BindingProvider.USERNAME_PROPERTY, username);
-            } else {
-                context.put(BindingProvider.USERNAME_PROPERTY, universe + '/' + username);
-            }
-
-            context.put(BindingProvider.PASSWORD_PROPERTY, password);
-            preRequestSendingHook(stub, username);
-
-            Authenticator.setDefault(null);
-            return service;
-        } catch (WebServiceException e) {
-            Throwable throwable = analyseWebServiceException(e);
-            String message = throwable.getMessage();
-            if (message == null) {
-                message = ""; //$NON-NLS-1$
-            }
-            log.error(message, throwable);
-
-            throw new XtentisException(Messages.bind(Messages.UnableAccessEndpoint, url, message), throwable);
-        }
-    }
-
-    final static String TOKEN_KEY = "t_stoken"; //$NON-NLS-1$
-
-    public static void preRequestSendingHook(BindingProvider provider, String username) {
-        Crypt crypt;
-        try {
-            crypt = Crypt.getDESCryptInstance("c1Stdio!"); //$NON-NLS-1$
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-        String studioToken = crypt.encryptHexString(username);
-
-        Map<String, List<String>> headers = new HashMap<String, List<String>>();
-        List<String> values = Collections.singletonList(studioToken);
-        headers.put(TOKEN_KEY, values);
-
-        provider.getRequestContext().put(MessageContext.HTTP_REQUEST_HEADERS, headers);
-    }
-
-    // ///////////////////////////////////////////////////////
 
     public static TMDMService getMDMService(URL url, String universe, final String username, final String password,
             boolean showMissingJarDialog) throws XtentisException {
@@ -517,85 +456,6 @@ public class Util {
             throw new XtentisException(Messages.bind(Messages.UnableAccessEndpoint, url, message), throwable);
         }
     }
-
-    /************************** web service old implements ****************************/
-    // public static XtentisPort getPort(TreeObject xobject) throws XtentisException {
-    // try {
-    // if (xobject == null) {
-    // return null;
-    // }
-    // return getPort(new URL(xobject.getEndpointAddress()), xobject.getUniverse(), xobject.getUsername(),
-    // xobject.getPassword());
-    // } catch (MalformedURLException e) {
-    // throw new XtentisException(Messages.Util_0 + xobject.getEndpointAddress());
-    // }
-    // }
-    //
-    // public static XtentisPort getPort(String universe, String username, String password) throws XtentisException {
-    // try {
-    // return getPort(new URL(default_endpoint_address), universe, username, password);
-    // } catch (MalformedURLException e) {
-    // String err = Messages.Util_1 + default_endpoint_address + Messages.Util_2;
-    // throw new XtentisException(err);
-    // }
-    // }
-    //
-    // public static XtentisPort getPort(URL url, String universe, String username, String password) throws
-    // XtentisException {
-    // return getPort(url, universe, username, password, true);
-    // }
-    //
-    // public static XtentisPort getPort(URL url, String universe, String username, String password, boolean
-    // showMissingJarDialog)
-    // throws XtentisException {
-    // boolean checkResult = MissingJarService.getInstance().checkMissingJar(showMissingJarDialog);
-    // if (!checkResult) {
-    //            throw new MissingJarsException("Missing dependency libraries."); //$NON-NLS-1$
-    // }
-    // try {
-    //
-    // SSLContext sslContext = SSLContextProvider.getContext();
-    // HttpsURLConnection.setDefaultHostnameVerifier(SSLContextProvider.getHostnameVerifier());
-    // HttpsURLConnection.setDefaultSSLSocketFactory(sslContext.getSocketFactory());
-    // XtentisService service = new XtentisService(url);
-    //
-    // XtentisPort port = service.getXtentisPort();
-    //
-    // BindingProvider stub = (BindingProvider) port;
-    //
-    // // Do not maintain session via cookies
-    // stub.getRequestContext().put(BindingProvider.SESSION_MAINTAIN_PROPERTY, false);
-    //
-    // Map<String, Object> context = stub.getRequestContext();
-    // // // dynamic set endpointAddress
-    // // context.put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, endpointAddress);
-    //
-    // // authentication
-    // if (universe == null || universe.trim().length() == 0) {
-    // context.put(BindingProvider.USERNAME_PROPERTY, username);
-    // } else {
-    // context.put(BindingProvider.USERNAME_PROPERTY, universe + '/' + username);
-    // }
-    //
-    // context.put(BindingProvider.PASSWORD_PROPERTY, password);
-    // IWebServiceHook wsHook = getWebServiceHook();
-    // if (wsHook != null) {
-    // wsHook.preRequestSendingHook(stub, username);
-    // }
-    //
-    // Authenticator.setDefault(null);
-    // return port;
-    // } catch (WebServiceException e) {
-    // Throwable throwable = analyseWebServiceException(e);
-    // String message = throwable.getMessage();
-    // if (message == null) {
-    //                message = ""; //$NON-NLS-1$
-    // }
-    // log.error(message, throwable);
-    //
-    // throw new XtentisException(Messages.bind(Messages.UnableAccessEndpoint, url, message), throwable);
-    // }
-    // }
 
     public static XtentisException convertWebServiceException(WebServiceException wsEx) {
         Throwable throwable = analyseWebServiceException(wsEx);
