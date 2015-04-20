@@ -27,9 +27,12 @@ import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.core.runtime.CoreRuntimePlugin;
 import org.talend.dataquality.properties.TDQMatchRuleItem;
 import org.talend.mdm.repository.core.AbstractRepositoryAction;
+import org.talend.mdm.repository.core.IRepositoryNodeConfiguration;
+import org.talend.mdm.repository.core.IRepositoryNodeResourceProvider;
 import org.talend.mdm.repository.core.IServerObjectRepositoryType;
 import org.talend.mdm.repository.core.command.CommandManager;
 import org.talend.mdm.repository.core.service.ContainerCacheService;
+import org.talend.mdm.repository.extension.RepositoryNodeConfigurationManager;
 import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.models.FolderRepositoryObject;
@@ -92,6 +95,10 @@ public abstract class AbstractRemoveCommandStackAction extends AbstractRepositor
 
     private void removeServerObject(IRepositoryViewObject viewObj) {
         try {
+            ERepositoryObjectType type = viewObj.getRepositoryObjectType();
+            String label = viewObj.getLabel();
+            String version = viewObj.getVersion();
+            //
             String id = viewObj.getId();
             List<IRepositoryViewObject> viewObjs = new ArrayList<IRepositoryViewObject>();
             viewObjs.add(viewObj);
@@ -99,9 +106,20 @@ public abstract class AbstractRemoveCommandStackAction extends AbstractRepositor
             ContainerCacheService.remove(id);
             factory.deleteObjectPhysical(viewObj);
             CommandManager.getInstance().removeCommandStack(id);
-
+            //
+            postRemove(type, label, version);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
+        }
+    }
+
+    private void postRemove(ERepositoryObjectType type, String name, String version) {
+        IRepositoryNodeConfiguration configuration = RepositoryNodeConfigurationManager.getConfiguration(type);
+        if (configuration != null) {
+            IRepositoryNodeResourceProvider resourceProvider = configuration.getResourceProvider();
+            if (resourceProvider != null) {
+                resourceProvider.postDelete(name, version);
+            }
         }
     }
 

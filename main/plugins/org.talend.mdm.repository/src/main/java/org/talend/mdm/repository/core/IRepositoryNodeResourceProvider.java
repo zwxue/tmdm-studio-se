@@ -2,7 +2,7 @@
 //
 // Talend Community Edition
 //
-// Copyright (C) 2006-2015 Talend ¨C www.talend.com
+// Copyright (C) 2006-2015 Talend ï¿½C www.talend.com
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
@@ -34,20 +34,22 @@ import org.talend.core.model.repository.ERepositoryObjectType;
  */
 public interface IRepositoryNodeResourceProvider {
 
-    public ERepositoryObjectType getRepositoryObjectType(Item item);
+    ERepositoryObjectType getRepositoryObjectType(Item item);
 
-    public Resource create(IProject project, Item item, int classifierID, IPath path) throws PersistenceException;
+    Resource create(IProject project, Item item, int classifierID, IPath path) throws PersistenceException;
 
-    public Resource save(Item item) throws PersistenceException;
+    Resource save(Item item) throws PersistenceException;
 
-    public Item createNewItem(ERepositoryObjectType type);
+    Item createNewItem(ERepositoryObjectType type);
 
-    public boolean canHandleRepObjType(ERepositoryObjectType type);
+    boolean canHandleRepObjType(ERepositoryObjectType type);
 
-    public boolean canHandleItem(Item item);
+    boolean canHandleItem(Item item);
 
-    public boolean needSaveReferenceFile();
+    boolean needSaveReferenceFile();
 
-    public void handleReferenceFile(Item item);
+    void handleReferenceFile(Item item);
+
+    void postDelete(String name, String version);
 
 }
