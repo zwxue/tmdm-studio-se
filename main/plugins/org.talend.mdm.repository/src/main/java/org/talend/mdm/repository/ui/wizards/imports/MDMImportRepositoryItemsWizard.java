@@ -402,7 +402,7 @@ public class MDMImportRepositoryItemsWizard extends ImportItemsWizard {
             if (sourceTarFile == null) {
                 return;
             }
-            directory = MDMImportItemUtil.buildUpdatedFile(sourceTarFile);
+            directory = MDMImportItemUtil.buildUnzippedTempFile(sourceTarFile);
             manager = ResourcesManagerFactory.getInstance().createResourcesManager();
             if (!manager.collectPath2Object(directory)) {
                 return;
@@ -412,13 +412,13 @@ public class MDMImportRepositoryItemsWizard extends ImportItemsWizard {
             if (sourceFile == null) {
                 return;
             }
-            directory = MDMImportItemUtil.buildUpdatedFile(sourceFile);
+            directory = MDMImportItemUtil.buildUnzippedTempFile(sourceFile);
             manager = ResourcesManagerFactory.getInstance().createResourcesManager();
             if (!manager.collectPath2Object(directory)) {
                 return;
             }
         } else if (!importFromArchieve && directory.isDirectory()) {
-            directory = MDMImportItemUtil.buildUpdatedFile(directory);
+            directory = MDMImportItemUtil.buildUnzippedTempFile(directory);
             manager = ResourcesManagerFactory.getInstance().createResourcesManager();
             if (!manager.collectPath2Object(directory)) {
                 return;
