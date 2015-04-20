@@ -13,11 +13,6 @@
 package org.talend.mdm.repository.ui.wizards.imports;
 
 import java.io.File;
-import java.io.FilenameFilter;
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.zip.ZipFile;
 
 import org.apache.log4j.Logger;
@@ -34,16 +29,7 @@ public class MDMImportItemUtil {
 
     private static Logger log = Logger.getLogger(MDMImportItemUtil.class);
 
-    private static Map<String, String> replaceStringMap = new HashMap<String, String>();
-
-    private static String[] migrateFileExtensions = new String[] { "properties", "item" }; //$NON-NLS-1$ //$NON-NLS-2$
-
-    static {
-        replaceStringMap.put("mdmserverobject:Ws", "mdmserverobject:WS");//$NON-NLS-1$ //$NON-NLS-2$
-        replaceStringMap.put("mdmproperties:Ws", "mdmproperties:WS");//$NON-NLS-1$ //$NON-NLS-2$
-    }
-
-    public static File buildUpdatedFile(Object fileorDirectory) {
+    public static File buildUnzippedTempFile(Object fileorDirectory) {
         File tempFile = null;
         try {
             if (fileorDirectory instanceof File) {
@@ -51,11 +37,10 @@ public class MDMImportItemUtil {
                 FilesUtils.copyDirectory((File) fileorDirectory, new File(targetFolder));
 
                 tempFile = new File(new File(targetFolder), ((File) fileorDirectory).getName());
-                updateFile(tempFile);
             } else if (fileorDirectory instanceof ZipFile) {
-                tempFile = updateZipFile((ZipFile) fileorDirectory);
+                tempFile = upZipFile((ZipFile) fileorDirectory);
             } else if (fileorDirectory instanceof TarFile) {
-                tempFile = updateTarFile((TarFile) fileorDirectory);
+                tempFile = upzipFile((TarFile) fileorDirectory);
             }
 
             return tempFile;
@@ -66,13 +51,12 @@ public class MDMImportItemUtil {
         return null;
     }
 
-    private static File updateZipFile(ZipFile zfile) {
+    private static File upZipFile(ZipFile zfile) {
         String targetFolder = IOUtil.getTempFolder().getAbsolutePath();
         try {
             ZipToFile.unZipFile(zfile.getName(), targetFolder);
 
             File file = new File(targetFolder);
-            updateFile(file);
             return file.listFiles()[0];
         } catch (Exception e) {
             log.error(e.getMessage(), e);
@@ -82,13 +66,12 @@ public class MDMImportItemUtil {
     }
 
     @SuppressWarnings("restriction")
-    private static File updateTarFile(TarFile tarFile) {
+    private static File upzipFile(TarFile tarFile) {
 
         String targetFolder = IOUtil.getTempFolder().getAbsolutePath();
         try {
             IOUtil.extractTarFile(tarFile.getName(), targetFolder);
             File file = new File(targetFolder);
-            updateFile(file);
 
             return file.listFiles()[0];
         } catch (Exception e) {
@@ -96,46 +79,5 @@ public class MDMImportItemUtil {
         }
 
         return null;
-    }
-
-    public static void updateFile(final File dir) {
-        if (dir.isDirectory() && needUpdate(dir)) {
-            FilesUtils.migrateFolder(dir, migrateFileExtensions, replaceStringMap, log);
-        }
-    }
-
-    private static boolean needUpdate(final File dir) {
-        FilenameFilter filter = new FilenameFilter() {
-
-            public boolean accept(File fdir, String name) {
-                for (String suffix : migrateFileExtensions) {
-                    if (name.endsWith(suffix)) {
-                        return true;
-                    }
-                }
-
-                return false;
-            }
-        };
-
-        List<File> allFiles = FilesUtils.getAllFilesFromFolder(dir, filter);
-        if(allFiles.size() > 0) {
-            File file = allFiles.get(0);
-            List<String> contentLines = null;
-            try {
-                contentLines = FilesUtils.getContentLines(file.getAbsolutePath());
-            } catch (IOException e) {//
-            }
-            
-            if (contentLines != null) {
-                for (String content : contentLines) {
-                    if (content.contains("mdmserverobject:WS") || content.contains("mdmproperties:WS")) { //$NON-NLS-1$ //$NON-NLS-2$
-                        return true;
-                    }
-                }
-            }
-        }
-        
-        return false;
     }
 }
