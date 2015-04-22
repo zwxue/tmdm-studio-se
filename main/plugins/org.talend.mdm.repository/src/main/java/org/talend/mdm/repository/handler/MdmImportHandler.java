@@ -25,7 +25,6 @@ public class MdmImportHandler extends ImportRepTypeHandler {
 
     @Override
     public void afterImportingItems(IProgressMonitor monitor, ResourcesManager resManager, ImportItem selectedImportItem) {
-        super.afterImportingItems(monitor, resManager, selectedImportItem);
 
         try {
             IRepositoryViewObject object = factory.getSpecificVersion(selectedImportItem.getItemId(),
@@ -36,6 +35,7 @@ public class MdmImportHandler extends ImportRepTypeHandler {
         } catch (PersistenceException e) {
             log.error(e.getMessage(), e);
         }
+        super.afterImportingItems(monitor, resManager, selectedImportItem);
     }
 
     protected void update(IRepositoryViewObject object, ImportItem selectedImportItem) throws PersistenceException {

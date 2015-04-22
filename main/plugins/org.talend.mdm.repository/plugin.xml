@@ -668,7 +668,7 @@
                class="org.talend.mdm.repository.handler.MdmImportHandler">
             <parameter
                   name="type"
-                  value="MDM.DataModel,MDM.Role,MDM.Menu,MDM.DataCluster,MDM.StoredProcedure,MDM.Universe,MDM.SynchronizationPlan,MDM.View,MDM.Workflow,MDM.TransformerV2,MDM.RoutingRule,MDM.EventManager,MDM.ServiceConfiguration,MDM.Resource,MDM.CustomForm,MDM.ServerDef">
+                  value="MDM.DataModel,MDM.Role,MDM.Menu,MDM.DataCluster,MDM.StoredProcedure,MDM.Universe,MDM.SynchronizationPlan,MDM.View,MDM.TransformerV2,MDM.RoutingRule,MDM.EventManager,MDM.ServiceConfiguration,MDM.Resource,MDM.CustomForm,MDM.ServerDef">
             </parameter>
          </importItemsHandler>
       </importItemsProvider>
