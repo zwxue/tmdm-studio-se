@@ -192,7 +192,7 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
                     TreeObject.DATA_CLUSTER, null, null);
             List<WSDataClusterPK> xdcPKs = null;
             try {
-                xdcPKs = service.getDataClusterPKs(new WSRegexDataClusterPKs("")).getWsDataClusterPKs();//$NON-NLS-1$
+                xdcPKs = service.getDataClusterPKs(new WSRegexDataClusterPKs("*")).getWsDataClusterPKs();//$NON-NLS-1$
             } catch (Exception e) {
                 log.error(e.getMessage(), e);
             }
