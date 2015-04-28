@@ -362,11 +362,7 @@ public class Util {
             String username = xobject.getUsername();
             String password = xobject.getPassword();
 
-            TMDMService mdmService = (TMDMService) cachedMDMService.get(endpointAddress, universe, username, password);
-            if (mdmService == null) {
-                mdmService = getMDMService(new URL(endpointAddress), universe, username, password);
-                cachedMDMService.put(endpointAddress, universe, username, password, mdmService);
-            }
+            TMDMService mdmService = getMDMService(new URL(endpointAddress), universe, username, password);
 
             return mdmService;
         } catch (MalformedURLException e) {
@@ -376,11 +372,7 @@ public class Util {
 
     public static TMDMService getMDMService(String universe, String username, String password) throws XtentisException {
         try {
-            TMDMService mdmService = (TMDMService) cachedMDMService.get(default_endpoint_address, universe, username, password);
-            if (mdmService == null) {
-                mdmService = getMDMService(new URL(default_endpoint_address), universe, username, password);
-                cachedMDMService.put(default_endpoint_address, universe, username, password, mdmService);
-            }
+            TMDMService mdmService = getMDMService(new URL(default_endpoint_address), universe, username, password);
 
             return mdmService;
         } catch (MalformedURLException e) {
@@ -390,71 +382,75 @@ public class Util {
     }
 
     public static TMDMService getMDMService(URL url, String universe, String username, String password) throws XtentisException {
-        TMDMService mdmService = (TMDMService) cachedMDMService.get(url, universe, username, password);
-        if (mdmService == null) {
-            mdmService = getMDMService(url, universe, username, password, true);
-            cachedMDMService.put(url, universe, username, password, mdmService);
-        }
+        TMDMService mdmService = getMDMService(url, universe, username, password, true);
+
         return mdmService;
     }
 
     public static TMDMService getMDMService(URL url, String universe, final String username, final String password,
             boolean showMissingJarDialog) throws XtentisException {
-        boolean checkResult = MissingJarService.getInstance().checkMissingJar(showMissingJarDialog);
-        if (!checkResult) {
-            throw new MissingJarsException("Missing dependency libraries."); //$NON-NLS-1$
-        }
-        try {
+        TMDMService service = (TMDMService) cachedMDMService.get(url, universe, username, password);
+        if (service == null) {
+            boolean checkResult = MissingJarService.getInstance().checkMissingJar(showMissingJarDialog);
+            if (!checkResult) {
+                throw new MissingJarsException("Missing dependency libraries."); //$NON-NLS-1$
+            }
 
-            SSLContext sslContext = SSLContextProvider.getContext();
-            HttpsURLConnection.setDefaultHostnameVerifier(SSLContextProvider.getHostnameVerifier());
-            HttpsURLConnection.setDefaultSSLSocketFactory(sslContext.getSocketFactory());
+            try {
 
-            Authenticator.setDefault(new Authenticator() {
+                SSLContext sslContext = SSLContextProvider.getContext();
+                HttpsURLConnection.setDefaultHostnameVerifier(SSLContextProvider.getHostnameVerifier());
+                HttpsURLConnection.setDefaultSSLSocketFactory(sslContext.getSocketFactory());
 
-                @Override
-                protected PasswordAuthentication getPasswordAuthentication() {
-                    return new PasswordAuthentication(username, password.toCharArray());
+                Authenticator.setDefault(new Authenticator() {
+
+                    @Override
+                    protected PasswordAuthentication getPasswordAuthentication() {
+                        return new PasswordAuthentication(username, password.toCharArray());
+                    }
+                });
+
+                TMDMService_Service service_service = new TMDMService_Service(url);
+
+                service = service_service.getTMDMPort();
+
+                BindingProvider stub = (BindingProvider) service;
+
+                // Do not maintain session via cookies
+                stub.getRequestContext().put(BindingProvider.SESSION_MAINTAIN_PROPERTY, false);
+
+                Map<String, Object> context = stub.getRequestContext();
+                // // dynamic set endpointAddress
+                // context.put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, endpointAddress);
+
+                // authentication
+                if (universe == null || universe.trim().length() == 0) {
+                    context.put(BindingProvider.USERNAME_PROPERTY, username);
+                } else {
+                    context.put(BindingProvider.USERNAME_PROPERTY, universe + '/' + username);
                 }
-            });
 
-            TMDMService_Service service_service = new TMDMService_Service(url);
+                context.put(BindingProvider.PASSWORD_PROPERTY, password);
+                IWebServiceHook wsHook = getWebServiceHook();
+                if (wsHook != null) {
+                    wsHook.preRequestSendingHook(stub, username);
+                }
 
-            TMDMService service = service_service.getTMDMPort();
+                cachedMDMService.put(url, universe, username, password, service);
+            } catch (WebServiceException e) {
+                Throwable throwable = analyseWebServiceException(e);
+                String message = throwable.getMessage();
+                if (message == null) {
+                    message = ""; //$NON-NLS-1$
+                }
+                log.error(message, throwable);
 
-            BindingProvider stub = (BindingProvider) service;
-
-            // Do not maintain session via cookies
-            stub.getRequestContext().put(BindingProvider.SESSION_MAINTAIN_PROPERTY, false);
-
-            Map<String, Object> context = stub.getRequestContext();
-            // // dynamic set endpointAddress
-            // context.put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, endpointAddress);
-
-            // authentication
-            if (universe == null || universe.trim().length() == 0) {
-                context.put(BindingProvider.USERNAME_PROPERTY, username);
-            } else {
-                context.put(BindingProvider.USERNAME_PROPERTY, universe + '/' + username);
+                throw new XtentisException(Messages.bind(Messages.UnableAccessEndpoint, url, message), throwable);
             }
 
-            context.put(BindingProvider.PASSWORD_PROPERTY, password);
-            IWebServiceHook wsHook = getWebServiceHook();
-            if (wsHook != null) {
-                wsHook.preRequestSendingHook(stub, username);
-            }
-
-            return service;
-        } catch (WebServiceException e) {
-            Throwable throwable = analyseWebServiceException(e);
-            String message = throwable.getMessage();
-            if (message == null) {
-                message = ""; //$NON-NLS-1$
-            }
-            log.error(message, throwable);
-
-            throw new XtentisException(Messages.bind(Messages.UnableAccessEndpoint, url, message), throwable);
         }
+
+        return service;
     }
 
     public static XtentisException convertWebServiceException(WebServiceException wsEx) {
