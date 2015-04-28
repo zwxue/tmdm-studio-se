@@ -67,18 +67,17 @@ import org.talend.mdm.repository.core.command.ICommand;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.model.mdmproperties.MdmpropertiesPackage;
-import org.talend.mdm.repository.model.mdmproperties.WSCustomFormItem;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
-import org.talend.mdm.repository.model.mdmserverobject.WSCustomFormE;
 import org.talend.mdm.repository.plugin.RepositoryPlugin;
 import org.talend.mdm.repository.ui.dialogs.consistency.ConfirmConflictMessageDialog;
 import org.talend.mdm.repository.ui.dialogs.consistency.ConsistencyConflictDialog;
 import org.talend.mdm.repository.ui.preferences.PreferenceConstants;
+import org.talend.mdm.repository.ui.wizards.imports.IConsistencyServiceExAdapter;
 import org.talend.mdm.repository.utils.DigestUtil;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 import org.talend.mdm.repository.utils.UIUtil;
-import org.talend.mdm.webservice.WSCustomForm;
 
+import com.amalto.workbench.exadapter.ExAdapterManager;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.utils.XtentisException;
 import com.amalto.workbench.webservices.TMDMService;
@@ -91,11 +90,6 @@ import com.amalto.workbench.webservices.WSLong;
  * 
  */
 public class ConsistencyService {
-
-    /**
-     *
-     */
-    private static final String OBJ_NAME_DIVIDE = ".."; //$NON-NLS-1$
 
     public static final int CONFLICT_STRATEGY_DEFAULT = 0;
 
@@ -255,11 +249,14 @@ public class ConsistencyService {
 
     private static final String TIMESTAMP = "timeStamp"; //$NON-NLS-1$
 
+    private IConsistencyServiceExAdapter exAdapter;
+
     public static ConsistencyService getInstance() {
         return instance;
     }
 
     private ConsistencyService() {
+        exAdapter = ExAdapterManager.getAdapter(this, IConsistencyServiceExAdapter.class);
     }
 
     private String calculateDigestValueByEMFResource(Resource resource) {
@@ -750,24 +747,22 @@ public class ConsistencyService {
     }
 
     private String getObjectName(IRepositoryViewObject viewObj) {
-        ERepositoryObjectType type = viewObj.getRepositoryObjectType();
         String objectName = viewObj.getLabel();
-        if (type == IServerObjectRepositoryType.TYPE_CUSTOM_FORM) {
-            WSCustomFormItem item = (WSCustomFormItem) viewObj.getProperty().getItem();
-            WSCustomFormE customForm = item.getCustomForm();
-            objectName = customForm.getDatamodel() + OBJ_NAME_DIVIDE + customForm.getEntity() + OBJ_NAME_DIVIDE + objectName;
+
+        if (exAdapter != null) {
+            objectName = exAdapter.getObjectNameForDigest(viewObj);
         }
+
         return objectName;
     }
 
     private String getObjectName(TreeObject treeObj) {
-        int type = treeObj.getType();
         String objectName = treeObj.getDisplayName();
-        ;
-        if (type == TreeObject.CUSTOM_FORM) {
-            WSCustomForm customForm = (WSCustomForm) treeObj.getWsObject();
-            objectName = customForm.getDatamodel() + OBJ_NAME_DIVIDE + customForm.getEntity() + OBJ_NAME_DIVIDE + objectName;
+
+        if (exAdapter != null) {
+            objectName = exAdapter.getObjectNameForDigest(treeObj);
         }
+
         return objectName;
     }
 
