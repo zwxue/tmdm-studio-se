@@ -190,7 +190,6 @@ public class ImportItemsWizard extends Wizard {
     private void closeOpenEditors() {
         IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
         int length = page.getEditors().length;
-        String version = Messages.ImportItemsWizard_2;
         String tabEndpointAddress = Messages.ImportItemsWizard_3;
         String unserName = null;
         int j = 0;
@@ -199,20 +198,18 @@ public class ImportItemsWizard extends Wizard {
             if (part instanceof XObjectBrowser) {
                 TreeObject obj = (TreeObject) ((XObjectBrowserInput) part.getEditorInput()).getModel();
                 if (obj != null) {
-                    version = obj.getUniverse();
                     tabEndpointAddress = obj.getEndpointAddress();
                     unserName = obj.getUsername();
                 }
             } else if (part instanceof XObjectEditor) {
                 TreeObject obj = (TreeObject) ((XObjectEditorInput) part.getEditorInput()).getModel();
                 if (obj != null) {
-                    version = obj.getUniverse();
                     tabEndpointAddress = obj.getEndpointAddress();
                     unserName = obj.getUsername();
                 }
             }
             if (serverRoot != null) {
-                if (serverRoot.getUniverse().equals(version) && serverRoot.getEndpointAddress().equals(tabEndpointAddress)
+                if (serverRoot.getEndpointAddress().equals(tabEndpointAddress)
                         && serverRoot.getUsername().equals(unserName)) {
                     if (part.isDirty() && isSaveModifiedEditor(part.getTitle())) {
                         part.doSave(new NullProgressMonitor());
@@ -357,16 +354,12 @@ public class ImportItemsWizard extends Wizard {
                     TreeObject.ROUTING_RULE, null, null);
             TreeParent storeprocedures = new TreeParent(EXtentisObjects.StoredProcedure.getDisplayName(), reserverRoot,
                     TreeObject.STORED_PROCEDURE, null, null);
-            TreeParent syncplans = new TreeParent(EXtentisObjects.SynchronizationPlan.getDisplayName(), reserverRoot,
-                    TreeObject.SYNCHRONIZATIONPLAN, null, null);
             TreeParent transformers = new TreeParent(EXtentisObjects.Transformer.getDisplayName(), reserverRoot,
                     TreeObject.TRANSFORMER, null, null);
             TreeParent pictures = new TreeParent(EXtentisObjects.PICTURESRESOURCE.getDisplayName(), reserverRoot,
                     TreeObject.PICTURES_RESOURCE, null, null);
             // add by ymli
             TreeParent workflow = new TreeParent(EXtentisObjects.Workflow.getDisplayName(), reserverRoot, TreeObject.WORKFLOW,
-                    null, null);
-            TreeParent universes = new TreeParent(EXtentisObjects.Universe.getDisplayName(), reserverRoot, TreeObject.UNIVERSE,
                     null, null);
             TreeParent views = new TreeParent(EXtentisObjects.View.getDisplayName(), reserverRoot, TreeObject.VIEW, null, null);
             reserverRoot.addChild(clusters);
@@ -375,13 +368,11 @@ public class ImportItemsWizard extends Wizard {
             reserverRoot.addChild(roles);
 
             reserverRoot.addChild(storeprocedures);
-            reserverRoot.addChild(syncplans);
             eventManager.addChild(transformers);
             eventManager.addChild(routingrules);
             reserverRoot.addChild(eventManager);
             reserverRoot.addChild(pictures);
             reserverRoot.addChild(workflow);
-            reserverRoot.addChild(universes);
             reserverRoot.addChild(views);
             monitor.worked(readCount);
             // caculate step and interval
@@ -418,9 +409,6 @@ public class ImportItemsWizard extends Wizard {
                 case TreeObject.STORED_PROCEDURE:
                     storeprocedures.addChild(obj);
                     break;
-                case TreeObject.SYNCHRONIZATIONPLAN:
-                    syncplans.addChild(obj);
-                    break;
                 case TreeObject.TRANSFORMER:
                     transformers.addChild(obj);
                     break;
@@ -429,9 +417,6 @@ public class ImportItemsWizard extends Wizard {
                     break;
                 case TreeObject.WORKFLOW_PROCESS:
                     workflow.addChild(obj);
-                    break;
-                case TreeObject.UNIVERSE:
-                    universes.addChild(obj);
                     break;
                 case TreeObject.VIEW:
                     views.addChild(obj);
@@ -516,532 +501,7 @@ public class ImportItemsWizard extends Wizard {
     }
 
     public void doImport(Object[] selectedObjs, IProgressMonitor monitor) {
-        // TreeObject[] objs = null;
-        // if (selectedObjs.length > 0 && selectedObjs[0] instanceof TreeObject) {
-        // objs = Arrays.asList(selectedObjs).toArray(new TreeObject[0]);
-        // }
-        // if (objs == null || objs.length == 0) {
-        // return;
-        // }
-        // monitor.beginTask(Messages.ImportItemsWizard_16, IProgressMonitor.UNKNOWN);
-        // Reader reader = null;
-        // // sort the objs for first import data_model.
-        // Arrays.sort(objs, new Comparator<Object>() {
-        //
-        // public int compare(Object o1, Object o2) {
-        // return ((TreeObject) o1).getType() - ((TreeObject) o2).getType();
-        // }
-        // });
-        // LocalTreeObjectRepository.getInstance().mergeImportCategory(objs, serverRoot);
-        // boolean isOverrideAll = false;
-        // HashMap<String, String> picturePathMap = new HashMap<String, String>();
-        // String[] subItems;
-        // for (TreeObject item : objs) {
-        //
-        // if (item.getType() == TreeObject.PICTURES_RESOURCE) {
-        //
-        // subItems = item.getItems();
-        //
-        // for (String subItem : subItems) {
-        // try {
-        // HttpClientUtil
-        // .uploadImageFile(
-        //                                        serverRoot.getEndpointIpAddress() + "/imageserver/secure/ImageUploadServlet",//$NON-NLS-1$
-        //                                        importFolder + "/" + subItem, subItem, null, serverRoot.getUsername(), serverRoot.getPassword(), picturePathMap);//$NON-NLS-1$
-        // } catch (Exception e2) {
-        // log.error(e2.getMessage(), e2);
-        // }
-        // }
-        // }
-        // }
-        //
-        // for (TreeObject item : objs) {
-        // switch (item.getType()) {
-        //
-        // case TreeObject.DATA_CLUSTER:
-        // // datacluster
-        // monitor.subTask(Messages.ImportItemsWizard_17);
-        // subItems = item.getItems();
-        //
-        // for (String subItem : subItems) {
-        // try {
-        //                        reader = new InputStreamReader(new FileInputStream(importFolder + "/" + subItem), "UTF-8");//$NON-NLS-1$//$NON-NLS-2$
-        // WSDataCluster model = new WSDataCluster();
-        // model = (WSDataCluster) Unmarshaller.unmarshal(WSDataCluster.class, reader);
-        // if (port.existsDataCluster(new WSExistsDataCluster(new WSDataClusterPK(model.getName()))).isTrue()) {
-        // if (!isOverrideAll) {
-        // int result = isOveride(model.getName(), TreeObject.DATACONTAINER);
-        // if (result == IDialogConstants.CANCEL_ID) {
-        // return;
-        // }
-        // if (result == IDialogConstants.YES_TO_ALL_ID) {
-        // isOverrideAll = true;
-        // }
-        // if (result == IDialogConstants.NO_ID) {
-        // break;
-        // }
-        //
-        // }
-        // }
-        // port.putDataCluster(new WSPutDataCluster(model));
-        // } catch (Exception e1) {
-        // log.error(e1.getMessage(), e1);
-        // } finally {
-        // try {
-        // if (reader != null) {
-        // reader.close();
-        // }
-        // } catch (Exception e) {
-        // }
-        // }
-        //
-        // try {
-        // importClusterContents(item, port, picturePathMap);
-        // } catch (Exception e) {
-        // MessageDialog.openWarning(null, Messages.Warning, e.getLocalizedMessage());
-        // }
-        // }
-        // monitor.worked(1);
-        // break;
-        // case TreeObject.DATA_MODEL:
-        // monitor.subTask(Messages.ImportItemsWizard_19);
-        // subItems = item.getItems();
-        //
-        // for (String subItem : subItems) {
-        // try {
-        //                        reader = new InputStreamReader(new FileInputStream(importFolder + "/" + subItem), "UTF-8");//$NON-NLS-1$//$NON-NLS-2$
-        // WSDataModel model = new WSDataModel();
-        // model = (WSDataModel) Unmarshaller.unmarshal(WSDataModel.class, reader);
-        // if (port.existsDataModel(new WSExistsDataModel(new WSDataModelPK(model.getName()))).isTrue()) {
-        // if (!isOverrideAll) {
-        // int result = isOveride(model.getName(), TreeObject.DATAMODEL_);
-        // if (result == IDialogConstants.CANCEL_ID) {
-        // return;
-        // }
-        // if (result == IDialogConstants.YES_TO_ALL_ID) {
-        // isOverrideAll = true;
-        // }
-        // if (result == IDialogConstants.NO_ID) {
-        // break;
-        // }
-        //
-        // }
-        // }
-        // port.putDataModel(new WSPutDataModel(model));
-        // } catch (Exception e2) {
-        // log.error(e2.getMessage(), e2);
-        // } finally {
-        // try {
-        // if (reader != null) {
-        // reader.close();
-        // }
-        // } catch (Exception e) {
-        // }
-        // }
-        // }
-        //
-        // monitor.worked(1);
-        // break;
-        // case TreeObject.MENU:
-        // monitor.subTask(Messages.ImportItemsWizard_20);
-        // subItems = item.getItems();
-        //
-        // for (String subItem : subItems) {
-        // try {
-        //                        reader = new InputStreamReader(new FileInputStream(importFolder + "/" + subItem), "UTF-8");//$NON-NLS-1$//$NON-NLS-2$
-        // WSMenu memu = new WSMenu();
-        // memu = (WSMenu) Unmarshaller.unmarshal(WSMenu.class, reader);
-        // if (port.existsMenu(new WSExistsMenu(new WSMenuPK(memu.getName()))).isTrue()) {
-        // if (!isOverrideAll) {
-        // int result = isOveride(memu.getName(), TreeObject.MENU_);
-        // if (result == IDialogConstants.CANCEL_ID) {
-        // return;
-        // }
-        // if (result == IDialogConstants.YES_TO_ALL_ID) {
-        // isOverrideAll = true;
-        // }
-        // if (result == IDialogConstants.NO_ID) {
-        // break;
-        // }
-        //
-        // }
-        // }
-        // port.putMenu(new WSPutMenu(memu));
-        // } catch (Exception e2) {
-        // log.error(e2.getMessage(), e2);
-        // } finally {
-        // try {
-        // if (reader != null) {
-        // reader.close();
-        // }
-        // } catch (Exception e) {
-        // }
-        // }
-        // }
-        //
-        // monitor.worked(1);
-        // break;
-        // case TreeObject.ROLE:
-        // if (Util.IsEnterPrise()) {
-        // monitor.subTask(Messages.ImportItemsWizard_21);
-        // subItems = item.getItems();
-        //
-        // for (String subItem : subItems) {
-        // try {
-        //                            reader = new InputStreamReader(new FileInputStream(importFolder + "/" + subItem), "UTF-8");//$NON-NLS-1$//$NON-NLS-2$
-        // WSRole role = new WSRole();
-        // role = (WSRole) Unmarshaller.unmarshal(WSRole.class, reader);
-        // if (port.existsRole(new WSExistsRole(new WSRolePK(role.getName()))).isTrue()) {
-        // if (!isOverrideAll) {
-        // int result = isOveride(role.getName(), TreeObject.ROLE_);
-        // if (result == IDialogConstants.CANCEL_ID) {
-        // return;
-        // }
-        // if (result == IDialogConstants.YES_TO_ALL_ID) {
-        // isOverrideAll = true;
-        // }
-        // if (result == IDialogConstants.NO_ID) {
-        // break;
-        // }
-        //
-        // }
-        // }
-        // port.putRole(new WSPutRole(role));
-        // } catch (Exception e2) {
-        // log.error(e2.getMessage(), e2);
-        // } finally {
-        // try {
-        // if (reader != null) {
-        // reader.close();
-        // }
-        // } catch (Exception e) {
-        // }
-        // }
-        // }
-        //
-        // monitor.worked(1);
-        // }
-        // break;
-        // case TreeObject.ROUTING_RULE:
-        // monitor.subTask(Messages.ImportItemsWizard_22);
-        // subItems = item.getItems();
-        //
-        // for (String subItem : subItems) {
-        // try {
-        //                        reader = new InputStreamReader(new FileInputStream(importFolder + "/" + subItem), "UTF-8");//$NON-NLS-1$//$NON-NLS-2$
-        // WSRoutingRule routingRule = new WSRoutingRule();
-        // routingRule = (WSRoutingRule) Unmarshaller.unmarshal(WSRoutingRule.class, reader);
-        //
-        // if (routingRule.getWSRoutingRuleExpressions() != null) {
-        // for (WSRoutingRuleExpression rule : routingRule.getWSRoutingRuleExpressions()) {
-        // if (rule.getWSOperator() == null) {
-        // rule.setWSOperator(WSRoutingRuleOperator.CONTAINS);
-        // }
-        // }
-        // }
-        // if (port.existsRoutingRule(new WSExistsRoutingRule(new WSRoutingRulePK(routingRule.getName()))).isTrue()) {
-        // if (!isOverrideAll) {
-        // int result = isOveride(routingRule.getName(), TreeObject.ROUTINGRULE_);
-        // if (result == IDialogConstants.CANCEL_ID) {
-        // return;
-        // }
-        // if (result == IDialogConstants.YES_TO_ALL_ID) {
-        // isOverrideAll = true;
-        // }
-        // if (result == IDialogConstants.NO_ID) {
-        // break;
-        // }
-        //
-        // }
-        // }
-        // port.putRoutingRule(new WSPutRoutingRule(routingRule));
-        // } catch (Exception e2) {
-        // log.error(e2.getMessage(), e2);
-        // } finally {
-        // try {
-        // if (reader != null) {
-        // reader.close();
-        // }
-        // } catch (Exception e) {
-        // }
-        // }
-        // }
-        //
-        // monitor.worked(1);
-        // break;
-        // case TreeObject.STORED_PROCEDURE:
-        // monitor.subTask(Messages.ImportItemsWizard_23);
-        // subItems = item.getItems();
-        //
-        // for (String subItem : subItems) {
-        // try {
-        //                        reader = new InputStreamReader(new FileInputStream(importFolder + "/" + subItem), "UTF-8");//$NON-NLS-1$//$NON-NLS-2$
-        // WSStoredProcedure model = new WSStoredProcedure();
-        // model = (WSStoredProcedure) Unmarshaller.unmarshal(WSStoredProcedure.class, reader);
-        // if (model.isRefreshCache() == null) {
-        // model.setRefreshCache(false);
-        // }
-        // if (port.existsStoredProcedure(new WSExistsStoredProcedure(new WSStoredProcedurePK(model.getName())))
-        // .isTrue()) {
-        // if (!isOverrideAll) {
-        // int result = isOveride(model.getName(), TreeObject.STOREDPROCEDURE_);
-        // if (result == IDialogConstants.CANCEL_ID) {
-        // return;
-        // }
-        // if (result == IDialogConstants.YES_TO_ALL_ID) {
-        // isOverrideAll = true;
-        // }
-        // if (result == IDialogConstants.NO_ID) {
-        // break;
-        // }
-        //
-        // }
-        // }
-        // port.putStoredProcedure(new WSPutStoredProcedure(model));
-        //
-        // } catch (Exception e2) {
-        // log.error(e2.getMessage(), e2);
-        // } finally {
-        // try {
-        // if (reader != null) {
-        // reader.close();
-        // }
-        // } catch (Exception e) {
-        // }
-        // }
-        // }
-        //
-        // monitor.worked(1);
-        // break;
-        // case TreeObject.SYNCHRONIZATIONPLAN:
-        // if (Util.IsEnterPrise()) {
-        // monitor.subTask(Messages.ImportItemsWizard_24);
-        // subItems = item.getItems();
-        //
-        // for (String subItem : subItems) {
-        // try {
-        //                            reader = new InputStreamReader(new FileInputStream(importFolder + "/" + subItem), "UTF-8");//$NON-NLS-1$//$NON-NLS-2$
-        // WSSynchronizationPlan model = new WSSynchronizationPlan();
-        // model = (WSSynchronizationPlan) Unmarshaller.unmarshal(WSSynchronizationPlan.class, reader);
-        // if (port.existsSynchronizationPlan(
-        // new WSExistsSynchronizationPlan(new WSSynchronizationPlanPK(model.getName()))).isTrue()) {
-        // if (!isOverrideAll) {
-        // int result = isOveride(model.getName(), TreeObject.SYNCHRONIZATIONPLAN_);
-        // if (result == IDialogConstants.CANCEL_ID) {
-        // return;
-        // }
-        // if (result == IDialogConstants.YES_TO_ALL_ID) {
-        // isOverrideAll = true;
-        // }
-        // if (result == IDialogConstants.NO_ID) {
-        // break;
-        // }
-        //
-        // }
-        // }
-        // port.putSynchronizationPlan(new WSPutSynchronizationPlan(model));
-        // } catch (Exception e2) {
-        // log.error(e2.getMessage(), e2);
-        // } finally {
-        // try {
-        // if (reader != null) {
-        // reader.close();
-        // }
-        // } catch (Exception e) {
-        // }
-        // }
-        // }
-        //
-        // monitor.worked(1);
-        // }
-        // break;
-        //
-        // // add by ymli. fix the bug:0012882: Allow workflow bars to be imported
-        // case TreeObject.WORKFLOW_PROCESS:
-        // monitor.subTask(Messages.ImportItemsWizard_25);
-        // // available models
-        // java.util.List<IAvailableModel> availablemodels = AvailableModelUtil.getAvailableModels();
-        // for (IAvailableModel model : availablemodels) {
-        //                    if (model.toString().indexOf("WorkflowAvailableModel") != -1) {//$NON-NLS-1$
-        // model.doImport(item, importFolder);
-        // }
-        // }
-        // monitor.worked(1);
-        // break;
-        // case TreeObject.TRANSFORMER:
-        // monitor.subTask(Messages.ImportItemsWizard_26);
-        // subItems = item.getItems();
-        //
-        // for (String subItem : subItems) {
-        // try {
-        //                        reader = new InputStreamReader(new FileInputStream(importFolder + "/" + subItem), "UTF-8");//$NON-NLS-1$//$NON-NLS-2$
-        //
-        //                        if (isV2Transformer(importFolder + "/" + subItem)) {//$NON-NLS-1$
-        //
-        // WSTransformerV2 model = new WSTransformerV2();
-        // model = (WSTransformerV2) Unmarshaller.unmarshal(WSTransformerV2.class, reader);
-        // if (port.existsTransformerV2(new WSExistsTransformerV2(new WSTransformerV2PK(model.getName())))
-        // .isTrue()) {
-        // if (!isOverrideAll) {
-        // int result = isOveride(model.getName(), TreeObject.TRANSFORMER_);
-        // if (result == IDialogConstants.CANCEL_ID) {
-        // return;
-        // }
-        // if (result == IDialogConstants.YES_TO_ALL_ID) {
-        // isOverrideAll = true;
-        // }
-        // if (result == IDialogConstants.NO_ID) {
-        // break;
-        // }
-        //
-        // }
-        // }
-        // port.putTransformerV2(new WSPutTransformerV2(model));
-        //
-        // } else {
-        //
-        // WSTransformer model = new WSTransformer();
-        // model = (WSTransformer) Unmarshaller.unmarshal(WSTransformer.class, reader);
-        // if (port.existsTransformer(new WSExistsTransformer(new WSTransformerPK(model.getName()))).isTrue()) {
-        // if (!isOverrideAll) {
-        // int result = isOveride(model.getName(), TreeObject.TRANSFORMER_);
-        // if (result == IDialogConstants.CANCEL_ID) {
-        // return;
-        // }
-        // if (result == IDialogConstants.YES_TO_ALL_ID) {
-        // isOverrideAll = true;
-        // }
-        // if (result == IDialogConstants.NO_ID) {
-        // break;
-        // }
-        //
-        // }
-        // }
-        // port.putTransformer(new WSPutTransformer(model));
-        //
-        // }
-        //
-        // } catch (Exception e2) {
-        // log.error(e2.getMessage(), e2);
-        // } finally {
-        // try {
-        // if (reader != null) {
-        // reader.close();
-        // }
-        // } catch (Exception e) {
-        // }
-        // }
-        // }
-        //
-        // monitor.worked(1);
-        // break;
-        // case TreeObject.UNIVERSE:
-        // if (Util.IsEnterPrise()) {
-        // monitor.subTask(Messages.ImportItemsWizard_27);
-        // subItems = item.getItems();
-        //
-        // for (String subItem : subItems) {
-        // try {
-        //                            reader = new InputStreamReader(new FileInputStream(importFolder + "/" + subItem), "UTF-8");//$NON-NLS-1$//$NON-NLS-2$
-        // WSUniverse model = new WSUniverse();
-        // model = (WSUniverse) Unmarshaller.unmarshal(WSUniverse.class, reader);
-        // if (port.existsUniverse(new WSExistsUniverse(new WSUniversePK(model.getName()))).isTrue()) {
-        // if (!isOverrideAll) {
-        // int result = isOveride(model.getName(), TreeObject.UNIVERSE_);
-        // if (result == IDialogConstants.CANCEL_ID) {
-        // return;
-        // }
-        // if (result == IDialogConstants.YES_TO_ALL_ID) {
-        // isOverrideAll = true;
-        // }
-        // if (result == IDialogConstants.NO_ID) {
-        // break;
-        // }
-        //
-        // }
-        // }
-        // port.putUniverse(new WSPutUniverse(model));
-        // } catch (Exception e2) {
-        // log.error(e2.getMessage(), e2);
-        // } finally {
-        // try {
-        // if (reader != null) {
-        // reader.close();
-        // }
-        // } catch (Exception e) {
-        // }
-        // }
-        // }
-        //
-        // monitor.worked(1);
-        // }
-        // break;
-        // case TreeObject.VIEW:
-        // monitor.subTask(Messages.ImportItemsWizard_28);
-        // subItems = item.getItems();
-        //
-        // for (String subItem : subItems) {
-        // try {
-        //                        reader = new InputStreamReader(new FileInputStream(importFolder + "/" + subItem), "UTF-8");//$NON-NLS-1$//$NON-NLS-2$
-        // WSView model = new WSView();
-        // model = (WSView) Unmarshaller.unmarshal(WSView.class, reader);
-        // if (model.getIsTransformerActive() == null) {
-        // model.setIsTransformerActive(new WSBoolean(false));
-        // }
-        // if (model.getTransformerPK() == null) {
-        //                            model.setTransformerPK("");//$NON-NLS-1$
-        // }
-        // // TODO: because the operator and stringPredicate can not be export,so if there is any where
-        // // condition
-        // // now it will add the default operator and string predicate for all the where conditions
-        // // automatically.
-        // // maybe it needs to be modified later.
-        // if (model.getWhereConditions() != null) {
-        // for (WSWhereCondition ws : model.getWhereConditions()) {
-        // if (ws.getOperator() == null) {
-        // ws.setOperator(WSWhereOperator.CONTAINS);
-        // }
-        //
-        // if (ws.getStringPredicate() == null) {
-        // ws.setStringPredicate(WSStringPredicate.NONE);
-        // }
-        // }
-        // }
-        // if (port.existsView(new WSExistsView(new WSViewPK(model.getName()))).isTrue()) {
-        // if (!isOverrideAll) {
-        // int result = isOveride(model.getName(), TreeObject.VIEW_);
-        // if (result == IDialogConstants.CANCEL_ID) {
-        // return;
-        // }
-        // if (result == IDialogConstants.YES_TO_ALL_ID) {
-        // isOverrideAll = true;
-        // }
-        // if (result == IDialogConstants.NO_ID) {
-        // break;
-        // }
-        //
-        // }
-        // }
-        //
-        // port.putView(new WSPutView(model));
-        // } catch (Exception e2) {
-        // log.error(e2.getMessage(), e2);
-        // } finally {
-        // try {
-        // if (reader != null) {
-        // reader.close();
-        // }
-        // } catch (Exception e) {
-        // }
-        // }
-        // }
-        //
-        // monitor.worked(1);
-        // break;
-        // }
-        // }
-        //
-        // monitor.done();
+        // empty
     }
 
     private boolean isV2Transformer(String inputPath) throws DocumentException, FileNotFoundException {
