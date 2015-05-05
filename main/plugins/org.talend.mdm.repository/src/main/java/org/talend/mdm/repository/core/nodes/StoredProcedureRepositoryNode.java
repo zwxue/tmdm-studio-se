@@ -2,7 +2,7 @@
 //
 // Talend Community Edition
 //
-// Copyright (C) 2006-2015 Talend ¨C www.talend.com
+// Copyright (C) 2006-2015 Talend â€“ www.talend.com
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
@@ -31,6 +31,6 @@ import org.talend.mdm.repository.core.ServerObjectImage;
 public class StoredProcedureRepositoryNode extends RepositoryNodeAdapter {
 
     public StoredProcedureRepositoryNode() {
-        super(ServerObjectImage.SYNCHRONIZATIONPLAN_ICON, IServerObjectOrdinal.SYNCHRONIZATIONPLAN);
+        super(ServerObjectImage.STOREPROCEDURE_ICON, IServerObjectOrdinal.STORE_PROCEDURE);
     }
 }

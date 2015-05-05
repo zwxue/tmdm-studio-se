@@ -107,24 +107,6 @@ public interface MdmpropertiesFactory extends EFactory {
     WSStoredProcedureItem createWSStoredProcedureItem();
 
     /**
-     * Returns a new object of class '<em>WS Universe Item</em>'.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @return a new object of class '<em>WS Universe Item</em>'.
-     * @generated
-     */
-    WSUniverseItem createWSUniverseItem();
-
-    /**
-     * Returns a new object of class '<em>WS Synchronization Plan Item</em>'.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @return a new object of class '<em>WS Synchronization Plan Item</em>'.
-     * @generated
-     */
-    WSSynchronizationPlanItem createWSSynchronizationPlanItem();
-
-    /**
      * Returns a new object of class '<em>WS View Item</em>'.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->

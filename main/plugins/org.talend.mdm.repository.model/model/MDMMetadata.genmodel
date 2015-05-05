@@ -16,7 +16,6 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMMetadata.ecore#//MDMServerDef/tempPasswd"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMMetadata.ecore#//MDMServerDef/path"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMMetadata.ecore#//MDMServerDef/port"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMMetadata.ecore#//MDMServerDef/universe"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMMetadata.ecore#//MDMServerDef/url"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMMetadata.ecore#//MDMServerDef/user"/>
       <genOperations ecoreOperation="MDMMetadata.ecore#//MDMServerDef/validate">

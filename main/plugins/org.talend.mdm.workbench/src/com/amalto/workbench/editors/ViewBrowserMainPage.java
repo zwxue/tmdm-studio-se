@@ -399,8 +399,8 @@ public class ViewBrowserMainPage extends AMainPage implements IXObjectModelListe
     }
 
     protected java.util.List<WSDataClusterPK> getDataClusterPKs() throws MalformedURLException, XtentisException {
-        return Util.getAllDataClusterPKs(new URL(getXObject().getEndpointAddress()), getXObject().getUniverse(), getXObject()
-                .getUsername(), getXObject().getPassword());
+        return Util.getAllDataClusterPKs(new URL(getXObject().getEndpointAddress()), getXObject().getUsername(), getXObject()
+                .getPassword());
     }
 
     @Override

@@ -429,9 +429,7 @@ public class ImportServerObjectWizard extends Wizard {
         types.add(TreeObject.ROUTING_RULE);
         types.add(TreeObject.MENU);
         types.add(TreeObject.ROLE);
-        types.add(TreeObject.SYNCHRONIZATIONPLAN);
         types.add(TreeObject.STORED_PROCEDURE);
-        types.add(TreeObject.UNIVERSE);
         types.add(TreeObject.VIEW);
         types.add(TreeObject.WORKFLOW_PROCESS);
         IProxyRepositoryFactory factory = CoreRuntimePlugin.getInstance().getProxyRepositoryFactory();
@@ -722,8 +720,8 @@ public class ImportServerObjectWizard extends Wizard {
 
             String url = serverDef.getProtocol() + serverDef.getHost() + ":" + serverDef.getPort() //$NON-NLS-1$ 
                     + serverDef.getPath();
-            final XtentisServerObjectsRetriever retriever = new XtentisServerObjectsRetriever(serverDef.getName(),
-                    url, serverDef.getUser(), serverDef.getPasswd(), serverDef.getUniverse());
+            final XtentisServerObjectsRetriever retriever = new XtentisServerObjectsRetriever(serverDef.getName(), url,
+                    serverDef.getUser(), serverDef.getPasswd());
 
             retriever.setRetriveWSObject(true);
             retriever.run(m);
@@ -846,9 +844,6 @@ public class ImportServerObjectWizard extends Wizard {
                         }
                         txtServer.setText(serverDef.getName());
 
-                        if (exAdapter != null) {
-                            exAdapter.refreshUniverseCombo(serverDef);
-                        }
                         retriveServerRoot();
                     }
 
@@ -857,9 +852,6 @@ public class ImportServerObjectWizard extends Wizard {
                     checkCompleted();
                 }
             });
-            if (exAdapter != null) {
-                exAdapter.initVersionCombo(serverDef, toolkit, serverGroup);
-            }
             // create viewer
             treeViewer = new TreeObjectCheckTreeViewer((TreeParent) serverRoot);
             treeViewer.addButtonSelectionListener(new SelectionAdapter() {

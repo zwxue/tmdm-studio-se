@@ -380,13 +380,12 @@ public class DataClusterDialog extends Dialog {
     private boolean getAllDataContainers(List<TreeObject> dataContainers) {
         MDMServerDef serverDef = getSelectedMdmServerDef();
 
-        String universe = serverDef.getUniverse();
         String username = serverDef.getUser();
         String password = serverDef.getPasswd();
         String serverName = serverDef.getName();
         String endpointaddress = serverDef.getUrl();
 
-        boolean canConnect = checkConnection(endpointaddress, username, password, universe);
+        boolean canConnect = checkConnection(endpointaddress, username, password);
         if (!canConnect) {
             MessageDialog.openError(site.getShell(), Messages.DataClusterDialog_7, Messages.DataClusterDialog_8);
             return false;
@@ -394,10 +393,9 @@ public class DataClusterDialog extends Dialog {
 
         List<WSDataClusterPK> xdcPKs = null;
         try {
-            TMDMService service = Util.getMDMService(new URL(endpointaddress), universe, username, password);
-            TreeParent serverRoot = new TreeParent(serverName, null, TreeObject._SERVER_, endpointaddress,
-                    ("".equals(universe) ? ""//$NON-NLS-1$//$NON-NLS-2$
-                            : universe + "/") + username + ":" + (password == null ? "" : password));//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
+            TMDMService service = Util.getMDMService(new URL(endpointaddress), username, password);
+            TreeParent serverRoot = new TreeParent(serverName, null, TreeObject._SERVER_, endpointaddress, username
+                    + ":" + (password == null ? "" : password));//$NON-NLS-1$//$NON-NLS-2$
 
             xdcPKs = service.getDataClusterPKs(new WSRegexDataClusterPKs("*")).getWsDataClusterPKs();//$NON-NLS-1$
             for (WSDataClusterPK pk : xdcPKs) {
@@ -425,10 +423,10 @@ public class DataClusterDialog extends Dialog {
         return true;
     }
 
-    private boolean checkConnection(String endpointaddress, String username, String password, String universe) {
+    private boolean checkConnection(String endpointaddress, String username, String password) {
         ILegendServerDefService serverDefService = (ILegendServerDefService) GlobalServiceRegister.getDefault().getService(
                 ILegendServerDefService.class);
-        return serverDefService.checkServerDefConnection(endpointaddress, username, password, universe);
+        return serverDefService.checkServerDefConnection(endpointaddress, username, password);
     }
 
     private MDMServerDef getSelectedMdmServerDef() {
@@ -521,8 +519,8 @@ public class DataClusterDialog extends Dialog {
         @Override
         public void run() {
             try {
-                final TMDMService service = Util.getMDMService(new URL(oldServerDef.getUrl()), oldServerDef.getUniverse(),
-                        oldServerDef.getUser(), oldServerDef.getPasswd());
+                final TMDMService service = Util.getMDMService(new URL(oldServerDef.getUrl()), oldServerDef.getUser(),
+                        oldServerDef.getPasswd());
                 boolean created = NewItemHandler.getNewInstance().createItemRecord(service, shell,
                         new WSDataClusterPK(getDataContainer()), true);
                 if (created) {

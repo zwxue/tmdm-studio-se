@@ -312,18 +312,16 @@ public class OpenObjectAction extends AbstractRepositoryAction implements IIntro
         }
 
         String serverName = serverDef.getName();
-        String universe = serverDef.getUniverse();
         String username = serverDef.getUser();
         String password = serverDef.getPasswd();
         String endpointaddress = serverDef.getProtocol() + serverDef.getHost() + ":" + serverDef.getPort() //$NON-NLS-1$ 
                 + serverDef.getPath();
-        TreeParent serverRoot = new TreeParent(serverName, null, TreeObject._SERVER_, endpointaddress, ("".equals(universe) ? ""//$NON-NLS-1$//$NON-NLS-2$
-                : universe + "/") + username + ":" + (password == null ? "" : password));//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
+        TreeParent serverRoot = new TreeParent(serverName, null, TreeObject._SERVER_, endpointaddress, username
+                + ":" + (password == null ? "" : password));//$NON-NLS-1$//$NON-NLS-2$
         UserInfo user = new UserInfo();
         user.setUsername(username);
         user.setPassword(password);
         user.setServerUrl(endpointaddress);
-        user.setUniverse(universe);
 
         serverRoot.setUser(user);
         return serverRoot;

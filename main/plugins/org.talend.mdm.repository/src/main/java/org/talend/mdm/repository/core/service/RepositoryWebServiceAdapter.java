@@ -14,10 +14,8 @@ package org.talend.mdm.repository.core.service;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
@@ -34,7 +32,6 @@ import org.talend.mdm.repository.core.service.wsimpl.servicedoc.LoggingGetDocume
 import org.talend.mdm.repository.core.service.wsimpl.servicedoc.LoggingSmtpGetDocument;
 import org.talend.mdm.repository.core.service.wsimpl.servicedoc.SVNGetDocument;
 import org.talend.mdm.repository.core.service.wsimpl.servicedoc.SmtpGetDocument;
-import org.talend.mdm.repository.core.service.wsimpl.servicedoc.SynchronizationServiceGetDocument;
 import org.talend.mdm.repository.core.service.wsimpl.servicedoc.WorkflowContextGetDocument;
 import org.talend.mdm.repository.core.service.wsimpl.servicedoc.WorkflowGetDocument;
 import org.talend.mdm.repository.core.service.wsimpl.transformplugin.AbstractPluginDetail;
@@ -53,10 +50,8 @@ import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 import org.talend.mdm.workbench.serverexplorer.ui.dialogs.SelectServerDefDialog;
 
-import com.amalto.workbench.models.KeyValue;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.models.TreeParent;
-import com.amalto.workbench.utils.EXtentisObjects;
 import com.amalto.workbench.utils.UserInfo;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.XtentisException;
@@ -93,7 +88,7 @@ public class RepositoryWebServiceAdapter {
                 return null;
             }
 
-            TMDMService service = Util.getMDMService(new URL(serverDef.getUrl()), serverDef.getUniverse(), serverDef.getUser(),
+            TMDMService service = Util.getMDMService(new URL(serverDef.getUrl()), serverDef.getUser(),
                     serverDef.getPasswd(), showMissingJarDialog);
 
             return service;
@@ -171,7 +166,6 @@ public class RepositoryWebServiceAdapter {
             addGetDoc(documentServiceMap, new LoggingSmtpGetDocument(twoLettersLanguageCode));
             addGetDoc(documentServiceMap, new SmtpGetDocument(twoLettersLanguageCode));
             addGetDoc(documentServiceMap, new SVNGetDocument(twoLettersLanguageCode));
-            addGetDoc(documentServiceMap, new SynchronizationServiceGetDocument(twoLettersLanguageCode));
             addGetDoc(documentServiceMap, new WorkflowGetDocument(twoLettersLanguageCode));
             addGetDoc(documentServiceMap, new WorkflowContextGetDocument(twoLettersLanguageCode));
         }
@@ -195,58 +189,10 @@ public class RepositoryWebServiceAdapter {
         }
     }
 
-    public static String[] getTheObjectsForUniverse() {
-        String[] objects = new String[] { "Routing Engine V2", "Synchronization Plan", "Service", "Universe", "Routing Rule", //$NON-NLS-1$ //$NON-NLS-2$//$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
-                "Background Job", "Menu", "Transformer V2", "Stored Procedure", "View", "Routing Order V2 Active",//$NON-NLS-1$ //$NON-NLS-2$//$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$
-                "Routing Order V2 Failed", "Item", "Data Model", "Routing Order V2 Completed", "Synchronization Conflict", //$NON-NLS-1$ //$NON-NLS-2$//$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
-                "Transformer Plugin V2", "Role", "Data Cluster", "Configuration Info" };//$NON-NLS-1$ //$NON-NLS-2$//$NON-NLS-3$ //$NON-NLS-4$
-        return objects;
-
-    }
-
-    public static List<String> getListForUniverseMap() {
-        List<String> list = new ArrayList<String>();
-
-        list.add("Transformer V2"); //$NON-NLS-1$
-        list.add("View");//$NON-NLS-1$
-        list.add("Data Model");//$NON-NLS-1$
-        list.add("Role");//$NON-NLS-1$
-        list.add("Routing Rule");//$NON-NLS-1$
-        list.add("Stored Procedure");//$NON-NLS-1$
-        list.add("Menu");//$NON-NLS-1$
-        list.add("Synchronization Plan");//$NON-NLS-1$
-
-        return list;
-    }
-
-    public static String[] getItemsAlgorithmsStringsForSynchronization() {
-
-        String algorithms[] = new String[] { "Local Wins", "Manual", "Remote Wins" };//$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-
-        return algorithms;
-    }
-
-    public static String[] getObjectsAlgorithmsStringsForSynchronization() {
-
-        String algorithms[] = new String[] { "Local Wins", "Remote Wins" };//$NON-NLS-1$ //$NON-NLS-2$
-
-        return algorithms;
-    }
-
-    public static String[] getXtentisObjectsForSynchronizationPlans() {
-
-        String objects[] = new String[] {
-                "Background Job", "Data Cluster", "Data Model", "Item", "Menu", "Role", "Routing Engine V2", "Routing Order V2 Active",//$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$
-                "Routing Order V2 Completed", "Routing Order V2 Failed", "Routing Rule", "Service", "Stored Procedure", "Synchronization Conflict",//$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$
-                "Transformer Plugin V2", "Transformer V2", "Universe", "View" };//$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-
-        return objects;
-    }
-
     public static String[] getTheObjectsForRole() {
-        String[] objects = new String[] { "Routing Engine V2", "Synchronization Plan", "Service", "Universe", "Routing Rule", //$NON-NLS-1$ //$NON-NLS-2$//$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+        String[] objects = new String[] { "Routing Engine V2", "Service", "Routing Rule", //$NON-NLS-1$ //$NON-NLS-2$//$NON-NLS-3$ 
                 "Background Job", "Menu", "Transformer V2", "Stored Procedure", "View", "Routing Order V2 Active",//$NON-NLS-1$ //$NON-NLS-2$//$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$
-                "Routing Order V2 Failed", "Item", "Data Model", "Routing Order V2 Completed", "Synchronization Conflict", //$NON-NLS-1$ //$NON-NLS-2$//$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+                "Routing Order V2 Failed", "Item", "Data Model", "Routing Order V2 Completed", //$NON-NLS-1$ //$NON-NLS-2$//$NON-NLS-3$ //$NON-NLS-4$ 
                 "Transformer Plugin V2", "Role", "Data Cluster", "Configuration Info", "Custom Layout" };//$NON-NLS-1$ //$NON-NLS-2$//$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
         return objects;
 
@@ -256,21 +202,6 @@ public class RepositoryWebServiceAdapter {
         String[] comblist = new String[] { "smtp", "svn", "workflow" }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
         return comblist;
-
-    }
-
-    public static List<KeyValue> getListForUniverseXtentisObjects() {
-        List<KeyValue> list = new ArrayList<KeyValue>();
-        list.add(new KeyValue("Data Model", ""));//$NON-NLS-1$ //$NON-NLS-2$
-        list.add(new KeyValue("Menu", ""));//$NON-NLS-1$ //$NON-NLS-2$
-        list.add(new KeyValue("Role", ""));//$NON-NLS-1$ //$NON-NLS-2$
-        list.add(new KeyValue(EXtentisObjects.RoutingRule.getDisplayName(), ""));//$NON-NLS-1$
-        list.add(new KeyValue("Stored Procedure", ""));//$NON-NLS-1$ //$NON-NLS-2$
-        list.add(new KeyValue("Synchronization Plan", ""));//$NON-NLS-1$ //$NON-NLS-2$
-        list.add(new KeyValue(EXtentisObjects.Transformer.getDisplayName(), ""));//$NON-NLS-1$
-        list.add(new KeyValue("View", ""));//$NON-NLS-1$ //$NON-NLS-2$
-
-        return list;
 
     }
 
@@ -289,18 +220,16 @@ public class RepositoryWebServiceAdapter {
 
     public static void resetXObject(MDMServerDef serverDef, TreeObject xobject) {
         String serverName = serverDef.getHost();
-        String universe = serverDef.getUniverse();
         String username = serverDef.getUser();
         String password = serverDef.getPasswd();
         String endpointaddress = serverDef.getProtocol() + serverDef.getHost() + ":" + serverDef.getPort() //$NON-NLS-1$ 
                 + serverDef.getPath();
-        TreeParent serverRoot = new TreeParent(serverName, null, TreeObject._SERVER_, endpointaddress, ("".equals(universe) ? ""//$NON-NLS-1$//$NON-NLS-2$
-                : universe + "/") + username + ":" + (password == null ? "" : password));//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
+        TreeParent serverRoot = new TreeParent(serverName, null, TreeObject._SERVER_, endpointaddress, username
+                + ":" + (password == null ? "" : password));//$NON-NLS-1$//$NON-NLS-2$
         UserInfo user = new UserInfo();
         user.setUsername(username);
         user.setPassword(password);
         user.setServerUrl(endpointaddress);
-        user.setUniverse(universe);
 
         serverRoot.setUser(user);
 

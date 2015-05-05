@@ -111,14 +111,6 @@ public class MdmpropertiesAdapterFactory extends AdapterFactoryImpl {
                 return createWSStoredProcedureItemAdapter();
             }
             @Override
-            public Adapter caseWSUniverseItem(WSUniverseItem object) {
-                return createWSUniverseItemAdapter();
-            }
-            @Override
-            public Adapter caseWSSynchronizationPlanItem(WSSynchronizationPlanItem object) {
-                return createWSSynchronizationPlanItemAdapter();
-            }
-            @Override
             public Adapter caseWSViewItem(WSViewItem object) {
                 return createWSViewItemAdapter();
             }
@@ -317,34 +309,6 @@ public class MdmpropertiesAdapterFactory extends AdapterFactoryImpl {
      * @generated
      */
     public Adapter createWSStoredProcedureItemAdapter() {
-        return null;
-    }
-
-    /**
-     * Creates a new adapter for an object of class '{@link org.talend.mdm.repository.model.mdmproperties.WSUniverseItem <em>WS Universe Item</em>}'.
-     * <!-- begin-user-doc -->
-     * This default implementation returns null so that we can easily ignore cases;
-     * it's useful to ignore a case when inheritance will catch all the cases anyway.
-     * <!-- end-user-doc -->
-     * @return the new adapter.
-     * @see org.talend.mdm.repository.model.mdmproperties.WSUniverseItem
-     * @generated
-     */
-    public Adapter createWSUniverseItemAdapter() {
-        return null;
-    }
-
-    /**
-     * Creates a new adapter for an object of class '{@link org.talend.mdm.repository.model.mdmproperties.WSSynchronizationPlanItem <em>WS Synchronization Plan Item</em>}'.
-     * <!-- begin-user-doc -->
-     * This default implementation returns null so that we can easily ignore cases;
-     * it's useful to ignore a case when inheritance will catch all the cases anyway.
-     * <!-- end-user-doc -->
-     * @return the new adapter.
-     * @see org.talend.mdm.repository.model.mdmproperties.WSSynchronizationPlanItem
-     * @generated
-     */
-    public Adapter createWSSynchronizationPlanItemAdapter() {
         return null;
     }
 

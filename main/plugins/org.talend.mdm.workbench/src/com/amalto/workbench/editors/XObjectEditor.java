@@ -304,10 +304,6 @@ public class XObjectEditor extends FormEditor implements IXObjectModelListener, 
             return ImageCache.getCreatedImage(EImage.DOCUMENTS.getPath());
         } else if (object.getType() == TreeObject.SUBSCRIPTION_ENGINE) {
             return ImageCache.getCreatedImage(EImage.SUBSCRIPTION_ENGINE.getPath());
-        } else if (object.getType() == TreeObject.SYNCHRONIZATIONPLAN) {
-            return ImageCache.getCreatedImage(EImage.SYNCHRONIZATIONPLAN.getPath());
-        } else if (object.getType() == TreeObject.UNIVERSE) {
-            return ImageCache.getCreatedImage(EImage.UNIVERSE.getPath());
         } else if (object.getType() == TreeObject.SERVICE_CONFIGURATION) {
             return ImageCache.getCreatedImage(EImage.SERVICE_CONFIGURATION.getPath());
         } else if (object.getType() == TreeObject.RESOURCES || object.getType() == TreeObject.DATA_MODEL_RESOURCE

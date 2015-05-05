@@ -611,17 +611,6 @@ public class DataClusterComposite extends Composite implements IPagingListener {
 
             }
 
-            // *** TMDM-8080, temp omitted start ***//
-            // WSUniverse currentUniverse = service.getCurrentUniverse(new WSGetCurrentUniverse());
-            //            String currentUniverseName = "";//$NON-NLS-1$
-            // if (currentUniverse != null) {
-            // currentUniverseName = currentUniverse.getName();
-            // }
-            //            if (currentUniverseName != null && currentUniverseName.equals("[HEAD]")) { //$NON-NLS-1$
-            //                currentUniverseName = "";//$NON-NLS-1$
-            // }
-            // *** TMDM-8080, temp omitted end ***//
-
             // add by myli; fix the bug:0013077: if the data is too much, just get the entities from the model instead
             // of from the container.
 
@@ -629,28 +618,6 @@ public class DataClusterComposite extends Composite implements IPagingListener {
 
             //            WSString countStr = port.count(new WSCount(new WSDataClusterPK(cluster.getName()), "*", null, 100)); //$NON-NLS-1$
             // long count = Long.parseLong(countStr.getValue());
-
-            // *** TMDM-8080, temp substituted start ***//
-            // WSConceptRevisionMap conceptsRevisionMap = service
-            // .getConceptsInDataClusterWithRevisions(new WSGetConceptsInDataClusterWithRevisions(new WSDataClusterPK(
-            // clusterName), new WSUniversePK(currentUniverseName)));
-            // if (conceptsRevisionMap != null) {
-            // List<MapEntry> wsConceptRevisionMapMapEntries = conceptsRevisionMap.getMapEntry();
-            //
-            // List<String> concepts = new ArrayList<String>();
-            // for (MapEntry entry : wsConceptRevisionMapMapEntries) {
-            // String concept = entry.getConcept();
-            // String revision = entry.getRevision();
-            //                    if (revision == null || revision.equals("")) { //$NON-NLS-1$
-            //                        revision = "HEAD";//$NON-NLS-1$
-            // }
-            //                    concepts.add(concept + " " + "[" + revision + "]");//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
-            // }
-            // conceptCombo.removeAll();
-            //                conceptCombo.add("*");//$NON-NLS-1$
-            // for (String concept : concepts) {
-            // conceptCombo.add(concept);
-            // }
 
             WSStringArray conceptsInDataCluster = service.getConceptsInDataCluster(new WSGetConceptsInDataCluster(
                     new WSDataClusterPK(clusterName)));
@@ -661,8 +628,6 @@ public class DataClusterComposite extends Composite implements IPagingListener {
                 for (String concept : concepts) {
                     conceptCombo.add(concept);
                 }
-                // *** TMDM-8080, temp substituted end ***//
-
             } else {
                 boolean selected = doSelectDataModelForEntityRecords(clusterName);
                 if (!selected) {
@@ -789,12 +754,10 @@ public class DataClusterComposite extends Composite implements IPagingListener {
 
             String serverName = serverRoot.getName();
             String password = user.getPassword();
-            String universe = user.getUniverse();
             String url = user.getServerUrl();
             String username = user.getUsername();
 
-            final XtentisServerObjectsRetriever retriever = new XtentisServerObjectsRetriever(serverName, url, username,
-                    password, universe);
+            final XtentisServerObjectsRetriever retriever = new XtentisServerObjectsRetriever(serverName, url, username, password);
 
             retriever.setRetriveWSObject(true);
 
@@ -949,17 +912,15 @@ public class DataClusterComposite extends Composite implements IPagingListener {
         }
 
         String serverName = serverDef.getName();
-        String universe = serverDef.getUniverse();
         String username = serverDef.getUser();
         String password = serverDef.getPasswd();
         String endpointaddress = serverDef.getUrl();
-        TreeParent serverRoot = new TreeParent(serverName, null, TreeObject._SERVER_, endpointaddress, ("".equals(universe) ? ""//$NON-NLS-1$//$NON-NLS-2$
-                : universe + "/") + username + ":" + (password == null ? "" : password));//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
+        TreeParent serverRoot = new TreeParent(serverName, null, TreeObject._SERVER_, endpointaddress, username
+                + ":" + (password == null ? "" : password));//$NON-NLS-1$//$NON-NLS-2$
         UserInfo user = new UserInfo();
         user.setUsername(username);
         user.setPassword(password);
         user.setServerUrl(endpointaddress);
-        user.setUniverse(universe);
 
         serverRoot.setUser(user);
 

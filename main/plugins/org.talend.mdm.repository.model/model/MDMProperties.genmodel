@@ -39,12 +39,6 @@
     <genClasses ecoreClass="MDMProperties.ecore#//WSStoredProcedureItem">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference MDMProperties.ecore#//WSStoredProcedureItem/wsStoredProcedure"/>
     </genClasses>
-    <genClasses ecoreClass="MDMProperties.ecore#//WSUniverseItem">
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference MDMProperties.ecore#//WSUniverseItem/wsUniverse"/>
-    </genClasses>
-    <genClasses ecoreClass="MDMProperties.ecore#//WSSynchronizationPlanItem">
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference MDMProperties.ecore#//WSSynchronizationPlanItem/wsSynchronizationPlan"/>
-    </genClasses>
     <genClasses ecoreClass="MDMProperties.ecore#//WSViewItem">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference MDMProperties.ecore#//WSViewItem/wsView"/>
     </genClasses>

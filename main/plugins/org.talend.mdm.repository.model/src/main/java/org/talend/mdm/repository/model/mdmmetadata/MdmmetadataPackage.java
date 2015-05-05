@@ -349,22 +349,13 @@ public interface MdmmetadataPackage extends EPackage {
 	int MDM_SERVER_DEF__PORT = ConnectionPackage.ABSTRACT_METADATA_OBJECT_FEATURE_COUNT + 4;
 
 	/**
-     * The feature id for the '<em><b>Universe</b></em>' attribute.
-     * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-     * @generated
-     * @ordered
-     */
-	int MDM_SERVER_DEF__UNIVERSE = ConnectionPackage.ABSTRACT_METADATA_OBJECT_FEATURE_COUNT + 5;
-
-	/**
      * The feature id for the '<em><b>Url</b></em>' attribute.
      * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
      * @generated
      * @ordered
      */
-	int MDM_SERVER_DEF__URL = ConnectionPackage.ABSTRACT_METADATA_OBJECT_FEATURE_COUNT + 6;
+	int MDM_SERVER_DEF__URL = ConnectionPackage.ABSTRACT_METADATA_OBJECT_FEATURE_COUNT + 5;
 
 	/**
      * The feature id for the '<em><b>User</b></em>' attribute.
@@ -373,7 +364,7 @@ public interface MdmmetadataPackage extends EPackage {
      * @generated
      * @ordered
      */
-	int MDM_SERVER_DEF__USER = ConnectionPackage.ABSTRACT_METADATA_OBJECT_FEATURE_COUNT + 7;
+	int MDM_SERVER_DEF__USER = ConnectionPackage.ABSTRACT_METADATA_OBJECT_FEATURE_COUNT + 6;
 
 	/**
      * The feature id for the '<em><b>Enabled</b></em>' attribute.
@@ -382,7 +373,7 @@ public interface MdmmetadataPackage extends EPackage {
      * @generated
      * @ordered
      */
-    int MDM_SERVER_DEF__ENABLED = ConnectionPackage.ABSTRACT_METADATA_OBJECT_FEATURE_COUNT + 8;
+    int MDM_SERVER_DEF__ENABLED = ConnectionPackage.ABSTRACT_METADATA_OBJECT_FEATURE_COUNT + 7;
 
     /**
      * The feature id for the '<em><b>Algorithm</b></em>' attribute.
@@ -391,7 +382,7 @@ public interface MdmmetadataPackage extends EPackage {
      * @generated
      * @ordered
      */
-    int MDM_SERVER_DEF__ALGORITHM = ConnectionPackage.ABSTRACT_METADATA_OBJECT_FEATURE_COUNT + 9;
+    int MDM_SERVER_DEF__ALGORITHM = ConnectionPackage.ABSTRACT_METADATA_OBJECT_FEATURE_COUNT + 8;
 
     /**
      * The number of structural features of the '<em>MDM Server Def</em>' class.
@@ -400,7 +391,7 @@ public interface MdmmetadataPackage extends EPackage {
      * @generated
      * @ordered
      */
-	int MDM_SERVER_DEF_FEATURE_COUNT = ConnectionPackage.ABSTRACT_METADATA_OBJECT_FEATURE_COUNT + 10;
+	int MDM_SERVER_DEF_FEATURE_COUNT = ConnectionPackage.ABSTRACT_METADATA_OBJECT_FEATURE_COUNT + 9;
 
 
 	/**
@@ -467,17 +458,6 @@ public interface MdmmetadataPackage extends EPackage {
      * @generated
      */
 	EAttribute getMDMServerDef_Port();
-
-	/**
-     * Returns the meta object for the attribute '{@link org.talend.mdm.repository.model.mdmmetadata.MDMServerDef#getUniverse <em>Universe</em>}'.
-     * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-     * @return the meta object for the attribute '<em>Universe</em>'.
-     * @see org.talend.mdm.repository.model.mdmmetadata.MDMServerDef#getUniverse()
-     * @see #getMDMServerDef()
-     * @generated
-     */
-	EAttribute getMDMServerDef_Universe();
 
 	/**
      * Returns the meta object for the attribute '{@link org.talend.mdm.repository.model.mdmmetadata.MDMServerDef#getUrl <em>Url</em>}'.
@@ -594,14 +574,6 @@ public interface MdmmetadataPackage extends EPackage {
          * @generated
          */
 		EAttribute MDM_SERVER_DEF__PORT = eINSTANCE.getMDMServerDef_Port();
-
-		/**
-         * The meta object literal for the '<em><b>Universe</b></em>' attribute feature.
-         * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-         * @generated
-         */
-		EAttribute MDM_SERVER_DEF__UNIVERSE = eINSTANCE.getMDMServerDef_Universe();
 
 		/**
          * The meta object literal for the '<em><b>Url</b></em>' attribute feature.

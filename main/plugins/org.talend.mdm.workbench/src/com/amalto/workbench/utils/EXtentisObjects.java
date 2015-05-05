@@ -38,8 +38,6 @@ public enum EXtentisObjects {
     View("View", "View", TreeObject.VIEW, true), //$NON-NLS-1$//$NON-NLS-2$
     Menu("Menu", "Menu", TreeObject.MENU, true), //$NON-NLS-1$//$NON-NLS-2$
     SubscriptionEngine("Event Manager", "Subscription Engine", TreeObject.SUBSCRIPTION_ENGINE), //$NON-NLS-1$//$NON-NLS-2$
-    Universe("Version", "Universe", TreeObject.UNIVERSE), //$NON-NLS-1$//$NON-NLS-2$
-    SynchronizationPlan("Synchronization Plan", "Synchronization Plan", TreeObject.SYNCHRONIZATIONPLAN, true), //$NON-NLS-1$//$NON-NLS-2$
     ServiceConfiguration("Service Configuration", "Service Configuration", TreeObject.SERVICE_CONFIGURATION), //$NON-NLS-1$//$NON-NLS-2$
     Workflow("Workflow", "Workflow Processes", TreeObject.WORKFLOW), //$NON-NLS-1$//$NON-NLS-2$
     JobRegistry("Job Repository", "Job Repository", TreeObject.JOB_REGISTRY), //$NON-NLS-1$//$NON-NLS-2$

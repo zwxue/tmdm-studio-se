@@ -320,8 +320,7 @@ public abstract class AbstractNodeCheckTreeViewer {
             return false;
         }
         if (!Util.IsEnterPrise()) {
-            if (node.getType() == TreeObject.ROLE || node.getType() == TreeObject.UNIVERSE
-                    || node.getType() == TreeObject.SYNCHRONIZATIONPLAN) {
+            if (node.getType() == TreeObject.ROLE) {
                 return false;
             }
         }

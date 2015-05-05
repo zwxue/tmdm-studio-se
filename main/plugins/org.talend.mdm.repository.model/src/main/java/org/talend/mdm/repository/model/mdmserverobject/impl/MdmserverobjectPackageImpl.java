@@ -11,25 +11,15 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EcorePackage;
-
 import org.eclipse.emf.ecore.impl.EPackageImpl;
-
 import org.talend.dataquality.analysis.AnalysisPackage;
-
 import org.talend.dataquality.domain.DomainPackage;
-
 import org.talend.dataquality.expressions.ExpressionsPackage;
-
 import org.talend.dataquality.indicators.IndicatorsPackage;
-
 import org.talend.dataquality.properties.PropertiesPackage;
-
 import org.talend.dataquality.reports.ReportsPackage;
-
 import org.talend.dataquality.rules.RulesPackage;
-
 import org.talend.mdm.repository.model.mdmmetadata.MdmmetadataPackage;
-
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
 import org.talend.mdm.repository.model.mdmserverobject.MdmserverobjectFactory;
 import org.talend.mdm.repository.model.mdmserverobject.MdmserverobjectPackage;
@@ -56,25 +46,16 @@ import org.talend.mdm.repository.model.mdmserverobject.WSServiceConfigurationE;
 import org.talend.mdm.repository.model.mdmserverobject.WSServicePutConfigurationE;
 import org.talend.mdm.repository.model.mdmserverobject.WSStoredProcedureE;
 import org.talend.mdm.repository.model.mdmserverobject.WSStringPredicateE;
-import org.talend.mdm.repository.model.mdmserverobject.WSSynchronizationPlanE;
-import org.talend.mdm.repository.model.mdmserverobject.WSSynchronizationPlanItemsSynchronizationsE;
-import org.talend.mdm.repository.model.mdmserverobject.WSSynchronizationPlanXtentisObjectsSynchronizationsE;
-import org.talend.mdm.repository.model.mdmserverobject.WSSynchronizationPlanXtentisObjectsSynchronizationsSynchronizationsE;
 import org.talend.mdm.repository.model.mdmserverobject.WSTransformerProcessStepE;
 import org.talend.mdm.repository.model.mdmserverobject.WSTransformerV2E;
 import org.talend.mdm.repository.model.mdmserverobject.WSTransformerVariablesMappingE;
 import org.talend.mdm.repository.model.mdmserverobject.WSTypedContentE;
-import org.talend.mdm.repository.model.mdmserverobject.WSUniverseE;
-import org.talend.mdm.repository.model.mdmserverobject.WSUniverseItemsRevisionIDsE;
-import org.talend.mdm.repository.model.mdmserverobject.WSUniverseXtentisObjectsRevisionIDsE;
 import org.talend.mdm.repository.model.mdmserverobject.WSViewE;
 import org.talend.mdm.repository.model.mdmserverobject.WSWhereConditionE;
 import org.talend.mdm.repository.model.mdmserverobject.WSWhereOperatorE;
 import org.talend.mdm.repository.model.mdmserverobject.WSWorkflowDeployE;
 import org.talend.mdm.repository.model.mdmserverobject.WSWorkflowE;
-
 import org.talend.mdm.repository.model.mdmserverobject.matchrule.MatchRulePackage;
-
 import org.talend.mdm.repository.model.mdmserverobject.matchrule.impl.MatchRulePackageImpl;
 
 /**
@@ -181,55 +162,6 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * @generated
      */
     private EClass wsStoredProcedureEEClass = null;
-
-    /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    private EClass wsUniverseEEClass = null;
-
-    /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    private EClass wsUniverseXtentisObjectsRevisionIDsEEClass = null;
-
-    /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    private EClass wsUniverseItemsRevisionIDsEEClass = null;
-
-    /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    private EClass wsSynchronizationPlanEEClass = null;
-
-    /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    private EClass wsSynchronizationPlanItemsSynchronizationsEEClass = null;
-
-    /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    private EClass wsSynchronizationPlanXtentisObjectsSynchronizationsEEClass = null;
-
-    /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    private EClass wsSynchronizationPlanXtentisObjectsSynchronizationsSynchronizationsEEClass = null;
 
     /**
      * <!-- begin-user-doc -->
@@ -403,7 +335,9 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * @generated
      */
     public static MdmserverobjectPackage init() {
-        if (isInited) return (MdmserverobjectPackage)EPackage.Registry.INSTANCE.getEPackage(MdmserverobjectPackage.eNS_URI);
+        if (isInited) {
+            return (MdmserverobjectPackage)EPackage.Registry.INSTANCE.getEPackage(MdmserverobjectPackage.eNS_URI);
+        }
 
         // Obtain or create and register package
         MdmserverobjectPackageImpl theMdmserverobjectPackage = (MdmserverobjectPackageImpl)(EPackage.Registry.INSTANCE.get(eNS_URI) instanceof MdmserverobjectPackageImpl ? EPackage.Registry.INSTANCE.get(eNS_URI) : new MdmserverobjectPackageImpl());
@@ -445,6 +379,7 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EClass getMDMServerObject() {
         return mdmServerObjectEClass;
     }
@@ -454,6 +389,7 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getMDMServerObject_Name() {
         return (EAttribute)mdmServerObjectEClass.getEStructuralFeatures().get(0);
     }
@@ -463,6 +399,7 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getMDMServerObject_Description() {
         return (EAttribute)mdmServerObjectEClass.getEStructuralFeatures().get(1);
     }
@@ -472,6 +409,7 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getMDMServerObject_System() {
         return (EAttribute)mdmServerObjectEClass.getEStructuralFeatures().get(2);
     }
@@ -481,6 +419,7 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EReference getMDMServerObject_LastServerDef() {
         return (EReference)mdmServerObjectEClass.getEStructuralFeatures().get(3);
     }
@@ -490,6 +429,7 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getMDMServerObject_Type() {
         return (EAttribute)mdmServerObjectEClass.getEStructuralFeatures().get(4);
     }
@@ -499,6 +439,7 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getMDMServerObject_Timestamp() {
         return (EAttribute)mdmServerObjectEClass.getEStructuralFeatures().get(5);
     }
@@ -508,6 +449,7 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getMDMServerObject_DigestValue() {
         return (EAttribute)mdmServerObjectEClass.getEStructuralFeatures().get(6);
     }
@@ -517,6 +459,7 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getMDMServerObject_CurrentDigestValue() {
         return (EAttribute)mdmServerObjectEClass.getEStructuralFeatures().get(7);
     }
@@ -526,6 +469,7 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getMDMServerObject_LastServerName() {
         return (EAttribute)mdmServerObjectEClass.getEStructuralFeatures().get(8);
     }
@@ -535,6 +479,7 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EClass getWSMenuE() {
         return wsMenuEEClass;
     }
@@ -544,6 +489,7 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EReference getWSMenuE_MenuEntries() {
         return (EReference)wsMenuEEClass.getEStructuralFeatures().get(0);
     }
@@ -553,6 +499,7 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EClass getWSMenuEntryE() {
         return wsMenuEntryEEClass;
     }
@@ -562,6 +509,7 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getWSMenuEntryE_Id() {
         return (EAttribute)wsMenuEntryEEClass.getEStructuralFeatures().get(0);
     }
@@ -571,6 +519,7 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getWSMenuEntryE_Application() {
         return (EAttribute)wsMenuEntryEEClass.getEStructuralFeatures().get(1);
     }
@@ -580,6 +529,7 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getWSMenuEntryE_Context() {
         return (EAttribute)wsMenuEntryEEClass.getEStructuralFeatures().get(2);
     }
@@ -589,6 +539,7 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getWSMenuEntryE_Icon() {
         return (EAttribute)wsMenuEntryEEClass.getEStructuralFeatures().get(3);
     }
@@ -598,6 +549,7 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EReference getWSMenuEntryE_Descriptions() {
         return (EReference)wsMenuEntryEEClass.getEStructuralFeatures().get(4);
     }
@@ -607,6 +559,7 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EReference getWSMenuEntryE_SubMenus() {
         return (EReference)wsMenuEntryEEClass.getEStructuralFeatures().get(5);
     }
@@ -616,6 +569,7 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EClass getWSMenuMenuEntriesDescriptionsE() {
         return wsMenuMenuEntriesDescriptionsEEClass;
     }
@@ -625,6 +579,7 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getWSMenuMenuEntriesDescriptionsE_Language() {
         return (EAttribute)wsMenuMenuEntriesDescriptionsEEClass.getEStructuralFeatures().get(0);
     }
@@ -634,6 +589,7 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getWSMenuMenuEntriesDescriptionsE_Label() {
         return (EAttribute)wsMenuMenuEntriesDescriptionsEEClass.getEStructuralFeatures().get(1);
     }
@@ -643,6 +599,7 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EClass getWSRoleE() {
         return wsRoleEEClass;
     }
@@ -652,6 +609,7 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EReference getWSRoleE_Specification() {
         return (EReference)wsRoleEEClass.getEStructuralFeatures().get(0);
     }
@@ -661,6 +619,7 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EClass getWSRoleSpecificationE() {
         return wsRoleSpecificationEEClass;
     }
@@ -670,6 +629,7 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getWSRoleSpecificationE_Admin() {
         return (EAttribute)wsRoleSpecificationEEClass.getEStructuralFeatures().get(0);
     }
@@ -679,6 +639,7 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getWSRoleSpecificationE_ObjectType() {
         return (EAttribute)wsRoleSpecificationEEClass.getEStructuralFeatures().get(1);
     }
@@ -688,6 +649,7 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EReference getWSRoleSpecificationE_Instance() {
         return (EReference)wsRoleSpecificationEEClass.getEStructuralFeatures().get(2);
     }
@@ -697,6 +659,7 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EClass getWSRoleSpecificationInstanceE() {
         return wsRoleSpecificationInstanceEEClass;
     }
@@ -706,6 +669,7 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getWSRoleSpecificationInstanceE_InstanceName() {
         return (EAttribute)wsRoleSpecificationInstanceEEClass.getEStructuralFeatures().get(0);
     }
@@ -715,6 +679,7 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getWSRoleSpecificationInstanceE_Writable() {
         return (EAttribute)wsRoleSpecificationInstanceEEClass.getEStructuralFeatures().get(1);
     }
@@ -724,6 +689,7 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getWSRoleSpecificationInstanceE_Parameter() {
         return (EAttribute)wsRoleSpecificationInstanceEEClass.getEStructuralFeatures().get(2);
     }
@@ -733,6 +699,7 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EClass getWSViewE() {
         return wsViewEEClass;
     }
@@ -742,6 +709,7 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getWSViewE_SearchableBusinessElements() {
         return (EAttribute)wsViewEEClass.getEStructuralFeatures().get(0);
     }
@@ -751,6 +719,7 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getWSViewE_ViewableBusinessElements() {
         return (EAttribute)wsViewEEClass.getEStructuralFeatures().get(1);
     }
@@ -760,6 +729,7 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getWSViewE_TransformerActive() {
         return (EAttribute)wsViewEEClass.getEStructuralFeatures().get(2);
     }
@@ -769,6 +739,7 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EReference getWSViewE_WhereConditions() {
         return (EReference)wsViewEEClass.getEStructuralFeatures().get(3);
     }
@@ -778,6 +749,7 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EReference getWSViewE_IsTransformerActive() {
         return (EReference)wsViewEEClass.getEStructuralFeatures().get(4);
     }
@@ -787,6 +759,7 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getWSViewE_TransformerPK() {
         return (EAttribute)wsViewEEClass.getEStructuralFeatures().get(5);
     }
@@ -796,6 +769,7 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EClass getWSWhereConditionE() {
         return wsWhereConditionEEClass;
     }
@@ -805,6 +779,7 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getWSWhereConditionE_LeftPath() {
         return (EAttribute)wsWhereConditionEEClass.getEStructuralFeatures().get(0);
     }
@@ -814,6 +789,7 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getWSWhereConditionE_RightValueOrPath() {
         return (EAttribute)wsWhereConditionEEClass.getEStructuralFeatures().get(1);
     }
@@ -823,6 +799,7 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EReference getWSWhereConditionE_StringPredicate() {
         return (EReference)wsWhereConditionEEClass.getEStructuralFeatures().get(2);
     }
@@ -832,6 +809,7 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EReference getWSWhereConditionE_Operator() {
         return (EReference)wsWhereConditionEEClass.getEStructuralFeatures().get(3);
     }
@@ -841,6 +819,7 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getWSWhereConditionE_SpellCheck() {
         return (EAttribute)wsWhereConditionEEClass.getEStructuralFeatures().get(4);
     }
@@ -850,6 +829,7 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EClass getWSWhereOperatorE() {
         return wsWhereOperatorEEClass;
     }
@@ -859,6 +839,7 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getWSWhereOperatorE_Value() {
         return (EAttribute)wsWhereOperatorEEClass.getEStructuralFeatures().get(0);
     }
@@ -868,6 +849,7 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EClass getWSStringPredicateE() {
         return wsStringPredicateEEClass;
     }
@@ -877,6 +859,7 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getWSStringPredicateE_Value() {
         return (EAttribute)wsStringPredicateEEClass.getEStructuralFeatures().get(0);
     }
@@ -886,6 +869,7 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EClass getWSDataModelE() {
         return wsDataModelEEClass;
     }
@@ -895,6 +879,7 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getWSDataModelE_XsdSchema() {
         return (EAttribute)wsDataModelEEClass.getEStructuralFeatures().get(0);
     }
@@ -904,6 +889,7 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EClass getWSDataClusterE() {
         return wsDataClusterEEClass;
     }
@@ -913,6 +899,7 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getWSDataClusterE_Vocabulary() {
         return (EAttribute)wsDataClusterEEClass.getEStructuralFeatures().get(0);
     }
@@ -922,6 +909,7 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EClass getWSStoredProcedureE() {
         return wsStoredProcedureEEClass;
     }
@@ -931,6 +919,7 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getWSStoredProcedureE_Procedure() {
         return (EAttribute)wsStoredProcedureEEClass.getEStructuralFeatures().get(0);
     }
@@ -940,6 +929,7 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getWSStoredProcedureE_RefreshCache() {
         return (EAttribute)wsStoredProcedureEEClass.getEStructuralFeatures().get(1);
     }
@@ -949,339 +939,7 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
-    public EClass getWSUniverseE() {
-        return wsUniverseEEClass;
-    }
-
-    /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    public EAttribute getWSUniverseE_DefaultItemsRevisionID() {
-        return (EAttribute)wsUniverseEEClass.getEStructuralFeatures().get(0);
-    }
-
-    /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    public EReference getWSUniverseE_XtentisObjectsRevisionIDs() {
-        return (EReference)wsUniverseEEClass.getEStructuralFeatures().get(1);
-    }
-
-    /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    public EReference getWSUniverseE_ItemsRevisionIDs() {
-        return (EReference)wsUniverseEEClass.getEStructuralFeatures().get(2);
-    }
-
-    /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    public EClass getWSUniverseXtentisObjectsRevisionIDsE() {
-        return wsUniverseXtentisObjectsRevisionIDsEEClass;
-    }
-
-    /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    public EAttribute getWSUniverseXtentisObjectsRevisionIDsE_XtentisObjectName() {
-        return (EAttribute)wsUniverseXtentisObjectsRevisionIDsEEClass.getEStructuralFeatures().get(0);
-    }
-
-    /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    public EAttribute getWSUniverseXtentisObjectsRevisionIDsE_RevisionID() {
-        return (EAttribute)wsUniverseXtentisObjectsRevisionIDsEEClass.getEStructuralFeatures().get(1);
-    }
-
-    /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    public EClass getWSUniverseItemsRevisionIDsE() {
-        return wsUniverseItemsRevisionIDsEEClass;
-    }
-
-    /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    public EAttribute getWSUniverseItemsRevisionIDsE_ConceptPattern() {
-        return (EAttribute)wsUniverseItemsRevisionIDsEEClass.getEStructuralFeatures().get(0);
-    }
-
-    /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    public EAttribute getWSUniverseItemsRevisionIDsE_RevisionID() {
-        return (EAttribute)wsUniverseItemsRevisionIDsEEClass.getEStructuralFeatures().get(1);
-    }
-
-    /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    public EClass getWSSynchronizationPlanE() {
-        return wsSynchronizationPlanEEClass;
-    }
-
-    /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    public EAttribute getWSSynchronizationPlanE_RemoteSystemName() {
-        return (EAttribute)wsSynchronizationPlanEEClass.getEStructuralFeatures().get(0);
-    }
-
-    /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    public EAttribute getWSSynchronizationPlanE_RemoteSystemURL() {
-        return (EAttribute)wsSynchronizationPlanEEClass.getEStructuralFeatures().get(1);
-    }
-
-    /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    public EAttribute getWSSynchronizationPlanE_RemoteSystemUsername() {
-        return (EAttribute)wsSynchronizationPlanEEClass.getEStructuralFeatures().get(2);
-    }
-
-    /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    public EAttribute getWSSynchronizationPlanE_RemoteSystemPassword() {
-        return (EAttribute)wsSynchronizationPlanEEClass.getEStructuralFeatures().get(3);
-    }
-
-    /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    public EAttribute getWSSynchronizationPlanE_TisURL() {
-        return (EAttribute)wsSynchronizationPlanEEClass.getEStructuralFeatures().get(4);
-    }
-
-    /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    public EAttribute getWSSynchronizationPlanE_TisUsername() {
-        return (EAttribute)wsSynchronizationPlanEEClass.getEStructuralFeatures().get(5);
-    }
-
-    /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    public EAttribute getWSSynchronizationPlanE_TisPassword() {
-        return (EAttribute)wsSynchronizationPlanEEClass.getEStructuralFeatures().get(6);
-    }
-
-    /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    public EAttribute getWSSynchronizationPlanE_TisParameters() {
-        return (EAttribute)wsSynchronizationPlanEEClass.getEStructuralFeatures().get(7);
-    }
-
-    /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    public EReference getWSSynchronizationPlanE_XtentisObjectsSynchronizations() {
-        return (EReference)wsSynchronizationPlanEEClass.getEStructuralFeatures().get(8);
-    }
-
-    /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    public EReference getWSSynchronizationPlanE_ItemsSynchronizations() {
-        return (EReference)wsSynchronizationPlanEEClass.getEStructuralFeatures().get(9);
-    }
-
-    /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    public EClass getWSSynchronizationPlanItemsSynchronizationsE() {
-        return wsSynchronizationPlanItemsSynchronizationsEEClass;
-    }
-
-    /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    public EAttribute getWSSynchronizationPlanItemsSynchronizationsE_ConceptName() {
-        return (EAttribute)wsSynchronizationPlanItemsSynchronizationsEEClass.getEStructuralFeatures().get(0);
-    }
-
-    /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    public EAttribute getWSSynchronizationPlanItemsSynchronizationsE_IdsPattern() {
-        return (EAttribute)wsSynchronizationPlanItemsSynchronizationsEEClass.getEStructuralFeatures().get(1);
-    }
-
-    /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    public EAttribute getWSSynchronizationPlanItemsSynchronizationsE_LocalCluster() {
-        return (EAttribute)wsSynchronizationPlanItemsSynchronizationsEEClass.getEStructuralFeatures().get(2);
-    }
-
-    /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    public EAttribute getWSSynchronizationPlanItemsSynchronizationsE_LocalRevisionID() {
-        return (EAttribute)wsSynchronizationPlanItemsSynchronizationsEEClass.getEStructuralFeatures().get(3);
-    }
-
-    /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    public EAttribute getWSSynchronizationPlanItemsSynchronizationsE_RemoteCluster() {
-        return (EAttribute)wsSynchronizationPlanItemsSynchronizationsEEClass.getEStructuralFeatures().get(4);
-    }
-
-    /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    public EAttribute getWSSynchronizationPlanItemsSynchronizationsE_RemoteRevisionID() {
-        return (EAttribute)wsSynchronizationPlanItemsSynchronizationsEEClass.getEStructuralFeatures().get(5);
-    }
-
-    /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    public EAttribute getWSSynchronizationPlanItemsSynchronizationsE_Algorithm() {
-        return (EAttribute)wsSynchronizationPlanItemsSynchronizationsEEClass.getEStructuralFeatures().get(6);
-    }
-
-    /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    public EClass getWSSynchronizationPlanXtentisObjectsSynchronizationsE() {
-        return wsSynchronizationPlanXtentisObjectsSynchronizationsEEClass;
-    }
-
-    /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    public EAttribute getWSSynchronizationPlanXtentisObjectsSynchronizationsE_XtentisObjectName() {
-        return (EAttribute)wsSynchronizationPlanXtentisObjectsSynchronizationsEEClass.getEStructuralFeatures().get(0);
-    }
-
-    /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    public EReference getWSSynchronizationPlanXtentisObjectsSynchronizationsE_Synchronizations() {
-        return (EReference)wsSynchronizationPlanXtentisObjectsSynchronizationsEEClass.getEStructuralFeatures().get(1);
-    }
-
-    /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    public EClass getWSSynchronizationPlanXtentisObjectsSynchronizationsSynchronizationsE() {
-        return wsSynchronizationPlanXtentisObjectsSynchronizationsSynchronizationsEEClass;
-    }
-
-    /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    public EAttribute getWSSynchronizationPlanXtentisObjectsSynchronizationsSynchronizationsE_InstancePattern() {
-        return (EAttribute)wsSynchronizationPlanXtentisObjectsSynchronizationsSynchronizationsEEClass.getEStructuralFeatures().get(0);
-    }
-
-    /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    public EAttribute getWSSynchronizationPlanXtentisObjectsSynchronizationsSynchronizationsE_LocalRevisionID() {
-        return (EAttribute)wsSynchronizationPlanXtentisObjectsSynchronizationsSynchronizationsEEClass.getEStructuralFeatures().get(1);
-    }
-
-    /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    public EAttribute getWSSynchronizationPlanXtentisObjectsSynchronizationsSynchronizationsE_RemoteRevisionID() {
-        return (EAttribute)wsSynchronizationPlanXtentisObjectsSynchronizationsSynchronizationsEEClass.getEStructuralFeatures().get(2);
-    }
-
-    /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    public EAttribute getWSSynchronizationPlanXtentisObjectsSynchronizationsSynchronizationsE_Algorithm() {
-        return (EAttribute)wsSynchronizationPlanXtentisObjectsSynchronizationsSynchronizationsEEClass.getEStructuralFeatures().get(3);
-    }
-
-    /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
+    @Override
     public EClass getWSBooleanE() {
         return wsBooleanEEClass;
     }
@@ -1291,6 +949,7 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getWSBooleanE__true() {
         return (EAttribute)wsBooleanEEClass.getEStructuralFeatures().get(0);
     }
@@ -1300,6 +959,7 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EClass getWSWorkflowDeployE() {
         return wsWorkflowDeployEEClass;
     }
@@ -1309,6 +969,7 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getWSWorkflowDeployE_Filename() {
         return (EAttribute)wsWorkflowDeployEEClass.getEStructuralFeatures().get(0);
     }
@@ -1318,6 +979,7 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EClass getWSTransformerV2E() {
         return wsTransformerV2EEClass;
     }
@@ -1327,6 +989,7 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EReference getWSTransformerV2E_ProcessSteps() {
         return (EReference)wsTransformerV2EEClass.getEStructuralFeatures().get(0);
     }
@@ -1336,6 +999,7 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EClass getWSTransformerProcessStepE() {
         return wsTransformerProcessStepEEClass;
     }
@@ -1345,6 +1009,7 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getWSTransformerProcessStepE_PluginJNDI() {
         return (EAttribute)wsTransformerProcessStepEEClass.getEStructuralFeatures().get(0);
     }
@@ -1354,6 +1019,7 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getWSTransformerProcessStepE_Description() {
         return (EAttribute)wsTransformerProcessStepEEClass.getEStructuralFeatures().get(1);
     }
@@ -1363,6 +1029,7 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getWSTransformerProcessStepE_Parameters() {
         return (EAttribute)wsTransformerProcessStepEEClass.getEStructuralFeatures().get(2);
     }
@@ -1372,6 +1039,7 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getWSTransformerProcessStepE_Disabled() {
         return (EAttribute)wsTransformerProcessStepEEClass.getEStructuralFeatures().get(3);
     }
@@ -1381,6 +1049,7 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EReference getWSTransformerProcessStepE_InputMappings() {
         return (EReference)wsTransformerProcessStepEEClass.getEStructuralFeatures().get(4);
     }
@@ -1390,6 +1059,7 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EReference getWSTransformerProcessStepE_OutputMappings() {
         return (EReference)wsTransformerProcessStepEEClass.getEStructuralFeatures().get(5);
     }
@@ -1399,6 +1069,7 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EClass getWSTransformerVariablesMappingE() {
         return wsTransformerVariablesMappingEEClass;
     }
@@ -1408,6 +1079,7 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getWSTransformerVariablesMappingE_PipelineVariable() {
         return (EAttribute)wsTransformerVariablesMappingEEClass.getEStructuralFeatures().get(0);
     }
@@ -1417,6 +1089,7 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getWSTransformerVariablesMappingE_PluginVariable() {
         return (EAttribute)wsTransformerVariablesMappingEEClass.getEStructuralFeatures().get(1);
     }
@@ -1426,6 +1099,7 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EReference getWSTransformerVariablesMappingE_HardCoding() {
         return (EReference)wsTransformerVariablesMappingEEClass.getEStructuralFeatures().get(2);
     }
@@ -1435,6 +1109,7 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EClass getWSTypedContentE() {
         return wsTypedContentEEClass;
     }
@@ -1444,6 +1119,7 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getWSTypedContentE_Url() {
         return (EAttribute)wsTypedContentEEClass.getEStructuralFeatures().get(0);
     }
@@ -1453,6 +1129,7 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getWSTypedContentE_ContentType() {
         return (EAttribute)wsTypedContentEEClass.getEStructuralFeatures().get(1);
     }
@@ -1462,6 +1139,7 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EReference getWSTypedContentE_WsBytes() {
         return (EReference)wsTypedContentEEClass.getEStructuralFeatures().get(2);
     }
@@ -1471,6 +1149,7 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EClass getWSByteArrayE() {
         return wsByteArrayEEClass;
     }
@@ -1480,6 +1159,7 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getWSByteArrayE_Bytes() {
         return (EAttribute)wsByteArrayEEClass.getEStructuralFeatures().get(0);
     }
@@ -1489,6 +1169,7 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EClass getWSRoutingRuleE() {
         return wsRoutingRuleEEClass;
     }
@@ -1498,6 +1179,7 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getWSRoutingRuleE_Synchronous() {
         return (EAttribute)wsRoutingRuleEEClass.getEStructuralFeatures().get(0);
     }
@@ -1507,6 +1189,7 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getWSRoutingRuleE_Concept() {
         return (EAttribute)wsRoutingRuleEEClass.getEStructuralFeatures().get(1);
     }
@@ -1516,6 +1199,7 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getWSRoutingRuleE_ServiceJNDI() {
         return (EAttribute)wsRoutingRuleEEClass.getEStructuralFeatures().get(2);
     }
@@ -1525,6 +1209,7 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getWSRoutingRuleE_Parameters() {
         return (EAttribute)wsRoutingRuleEEClass.getEStructuralFeatures().get(3);
     }
@@ -1534,6 +1219,7 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getWSRoutingRuleE_Condition() {
         return (EAttribute)wsRoutingRuleEEClass.getEStructuralFeatures().get(4);
     }
@@ -1543,6 +1229,7 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getWSRoutingRuleE_Deactive() {
         return (EAttribute)wsRoutingRuleEEClass.getEStructuralFeatures().get(5);
     }
@@ -1552,6 +1239,7 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getWSRoutingRuleE_ExecuteOrder() {
         return (EAttribute)wsRoutingRuleEEClass.getEStructuralFeatures().get(6);
     }
@@ -1561,6 +1249,7 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EReference getWSRoutingRuleE_WsRoutingRuleExpressions() {
         return (EReference)wsRoutingRuleEEClass.getEStructuralFeatures().get(7);
     }
@@ -1570,6 +1259,7 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EClass getWSRoutingRuleExpressionE() {
         return wsRoutingRuleExpressionEEClass;
     }
@@ -1579,6 +1269,7 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getWSRoutingRuleExpressionE_Name() {
         return (EAttribute)wsRoutingRuleExpressionEEClass.getEStructuralFeatures().get(0);
     }
@@ -1588,6 +1279,7 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getWSRoutingRuleExpressionE_Xpath() {
         return (EAttribute)wsRoutingRuleExpressionEEClass.getEStructuralFeatures().get(1);
     }
@@ -1597,6 +1289,7 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getWSRoutingRuleExpressionE_Value() {
         return (EAttribute)wsRoutingRuleExpressionEEClass.getEStructuralFeatures().get(2);
     }
@@ -1606,6 +1299,7 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EReference getWSRoutingRuleExpressionE_WsOperator() {
         return (EReference)wsRoutingRuleExpressionEEClass.getEStructuralFeatures().get(3);
     }
@@ -1615,6 +1309,7 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EClass getWSRoutingRuleOperatorE() {
         return wsRoutingRuleOperatorEEClass;
     }
@@ -1624,6 +1319,7 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getWSRoutingRuleOperatorE_Value() {
         return (EAttribute)wsRoutingRuleOperatorEEClass.getEStructuralFeatures().get(0);
     }
@@ -1633,6 +1329,7 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EClass getWSJobModelE() {
         return wsJobModelEEClass;
     }
@@ -1642,6 +1339,7 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EClass getWSEventManagerE() {
         return wsEventManagerEEClass;
     }
@@ -1651,6 +1349,7 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EClass getWSServiceConfigurationE() {
         return wsServiceConfigurationEEClass;
     }
@@ -1660,6 +1359,7 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EReference getWSServiceConfigurationE_ServicePutConfigurations() {
         return (EReference)wsServiceConfigurationEEClass.getEStructuralFeatures().get(0);
     }
@@ -1669,6 +1369,7 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EClass getWSServicePutConfigurationE() {
         return wsServicePutConfigurationEEClass;
     }
@@ -1678,6 +1379,7 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getWSServicePutConfigurationE_JndiName() {
         return (EAttribute)wsServicePutConfigurationEEClass.getEStructuralFeatures().get(0);
     }
@@ -1687,6 +1389,7 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getWSServicePutConfigurationE_Configuration() {
         return (EAttribute)wsServicePutConfigurationEEClass.getEStructuralFeatures().get(1);
     }
@@ -1696,6 +1399,7 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EClass getWSWorkflowE() {
         return wsWorkflowEEClass;
     }
@@ -1705,6 +1409,7 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getWSWorkflowE_FileContent() {
         return (EAttribute)wsWorkflowEEClass.getEStructuralFeatures().get(0);
     }
@@ -1714,6 +1419,7 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EClass getWSResourceE() {
         return wsResourceEEClass;
     }
@@ -1723,6 +1429,7 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getWSResourceE_FileExtension() {
         return (EAttribute)wsResourceEEClass.getEStructuralFeatures().get(0);
     }
@@ -1732,6 +1439,7 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getWSResourceE_FileContent() {
         return (EAttribute)wsResourceEEClass.getEStructuralFeatures().get(1);
     }
@@ -1741,6 +1449,7 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getWSResourceE_ImageCatalog() {
         return (EAttribute)wsResourceEEClass.getEStructuralFeatures().get(2);
     }
@@ -1750,6 +1459,7 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EClass getWSCustomFormE() {
         return wsCustomFormEEClass;
     }
@@ -1759,6 +1469,7 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getWSCustomFormE_Filename() {
         return (EAttribute)wsCustomFormEEClass.getEStructuralFeatures().get(0);
     }
@@ -1768,6 +1479,7 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getWSCustomFormE_Datamodel() {
         return (EAttribute)wsCustomFormEEClass.getEStructuralFeatures().get(1);
     }
@@ -1777,6 +1489,7 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getWSCustomFormE_Entity() {
         return (EAttribute)wsCustomFormEEClass.getEStructuralFeatures().get(2);
     }
@@ -1786,6 +1499,7 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getWSCustomFormE_Xml() {
         return (EAttribute)wsCustomFormEEClass.getEStructuralFeatures().get(3);
     }
@@ -1795,6 +1509,7 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getWSCustomFormE_Role() {
         return (EAttribute)wsCustomFormEEClass.getEStructuralFeatures().get(4);
     }
@@ -1804,6 +1519,7 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EClass getWSMatchRuleE() {
         return wsMatchRuleEEClass;
     }
@@ -1813,6 +1529,7 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getWSMatchRuleE_ConfigurationXmlContent() {
         return (EAttribute)wsMatchRuleEEClass.getEStructuralFeatures().get(0);
     }
@@ -1822,6 +1539,7 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EReference getWSMatchRuleE_PK() {
         return (EReference)wsMatchRuleEEClass.getEStructuralFeatures().get(1);
     }
@@ -1831,6 +1549,7 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EClass getWSMatchRulePKE() {
         return wsMatchRulePKEEClass;
     }
@@ -1840,6 +1559,7 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getWSMatchRulePKE_Pk() {
         return (EAttribute)wsMatchRulePKEEClass.getEStructuralFeatures().get(0);
     }
@@ -1849,6 +1569,7 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public MdmserverobjectFactory getMdmserverobjectFactory() {
         return (MdmserverobjectFactory)getEFactoryInstance();
     }
@@ -1868,7 +1589,9 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * @generated
      */
     public void createPackageContents() {
-        if (isCreated) return;
+        if (isCreated) {
+            return;
+        }
         isCreated = true;
 
         // Create classes and their features
@@ -1941,50 +1664,6 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
         wsStoredProcedureEEClass = createEClass(WS_STORED_PROCEDURE_E);
         createEAttribute(wsStoredProcedureEEClass, WS_STORED_PROCEDURE_E__PROCEDURE);
         createEAttribute(wsStoredProcedureEEClass, WS_STORED_PROCEDURE_E__REFRESH_CACHE);
-
-        wsUniverseEEClass = createEClass(WS_UNIVERSE_E);
-        createEAttribute(wsUniverseEEClass, WS_UNIVERSE_E__DEFAULT_ITEMS_REVISION_ID);
-        createEReference(wsUniverseEEClass, WS_UNIVERSE_E__XTENTIS_OBJECTS_REVISION_IDS);
-        createEReference(wsUniverseEEClass, WS_UNIVERSE_E__ITEMS_REVISION_IDS);
-
-        wsUniverseXtentisObjectsRevisionIDsEEClass = createEClass(WS_UNIVERSE_XTENTIS_OBJECTS_REVISION_IDS_E);
-        createEAttribute(wsUniverseXtentisObjectsRevisionIDsEEClass, WS_UNIVERSE_XTENTIS_OBJECTS_REVISION_IDS_E__XTENTIS_OBJECT_NAME);
-        createEAttribute(wsUniverseXtentisObjectsRevisionIDsEEClass, WS_UNIVERSE_XTENTIS_OBJECTS_REVISION_IDS_E__REVISION_ID);
-
-        wsUniverseItemsRevisionIDsEEClass = createEClass(WS_UNIVERSE_ITEMS_REVISION_IDS_E);
-        createEAttribute(wsUniverseItemsRevisionIDsEEClass, WS_UNIVERSE_ITEMS_REVISION_IDS_E__CONCEPT_PATTERN);
-        createEAttribute(wsUniverseItemsRevisionIDsEEClass, WS_UNIVERSE_ITEMS_REVISION_IDS_E__REVISION_ID);
-
-        wsSynchronizationPlanEEClass = createEClass(WS_SYNCHRONIZATION_PLAN_E);
-        createEAttribute(wsSynchronizationPlanEEClass, WS_SYNCHRONIZATION_PLAN_E__REMOTE_SYSTEM_NAME);
-        createEAttribute(wsSynchronizationPlanEEClass, WS_SYNCHRONIZATION_PLAN_E__REMOTE_SYSTEM_URL);
-        createEAttribute(wsSynchronizationPlanEEClass, WS_SYNCHRONIZATION_PLAN_E__REMOTE_SYSTEM_USERNAME);
-        createEAttribute(wsSynchronizationPlanEEClass, WS_SYNCHRONIZATION_PLAN_E__REMOTE_SYSTEM_PASSWORD);
-        createEAttribute(wsSynchronizationPlanEEClass, WS_SYNCHRONIZATION_PLAN_E__TIS_URL);
-        createEAttribute(wsSynchronizationPlanEEClass, WS_SYNCHRONIZATION_PLAN_E__TIS_USERNAME);
-        createEAttribute(wsSynchronizationPlanEEClass, WS_SYNCHRONIZATION_PLAN_E__TIS_PASSWORD);
-        createEAttribute(wsSynchronizationPlanEEClass, WS_SYNCHRONIZATION_PLAN_E__TIS_PARAMETERS);
-        createEReference(wsSynchronizationPlanEEClass, WS_SYNCHRONIZATION_PLAN_E__XTENTIS_OBJECTS_SYNCHRONIZATIONS);
-        createEReference(wsSynchronizationPlanEEClass, WS_SYNCHRONIZATION_PLAN_E__ITEMS_SYNCHRONIZATIONS);
-
-        wsSynchronizationPlanItemsSynchronizationsEEClass = createEClass(WS_SYNCHRONIZATION_PLAN_ITEMS_SYNCHRONIZATIONS_E);
-        createEAttribute(wsSynchronizationPlanItemsSynchronizationsEEClass, WS_SYNCHRONIZATION_PLAN_ITEMS_SYNCHRONIZATIONS_E__CONCEPT_NAME);
-        createEAttribute(wsSynchronizationPlanItemsSynchronizationsEEClass, WS_SYNCHRONIZATION_PLAN_ITEMS_SYNCHRONIZATIONS_E__IDS_PATTERN);
-        createEAttribute(wsSynchronizationPlanItemsSynchronizationsEEClass, WS_SYNCHRONIZATION_PLAN_ITEMS_SYNCHRONIZATIONS_E__LOCAL_CLUSTER);
-        createEAttribute(wsSynchronizationPlanItemsSynchronizationsEEClass, WS_SYNCHRONIZATION_PLAN_ITEMS_SYNCHRONIZATIONS_E__LOCAL_REVISION_ID);
-        createEAttribute(wsSynchronizationPlanItemsSynchronizationsEEClass, WS_SYNCHRONIZATION_PLAN_ITEMS_SYNCHRONIZATIONS_E__REMOTE_CLUSTER);
-        createEAttribute(wsSynchronizationPlanItemsSynchronizationsEEClass, WS_SYNCHRONIZATION_PLAN_ITEMS_SYNCHRONIZATIONS_E__REMOTE_REVISION_ID);
-        createEAttribute(wsSynchronizationPlanItemsSynchronizationsEEClass, WS_SYNCHRONIZATION_PLAN_ITEMS_SYNCHRONIZATIONS_E__ALGORITHM);
-
-        wsSynchronizationPlanXtentisObjectsSynchronizationsEEClass = createEClass(WS_SYNCHRONIZATION_PLAN_XTENTIS_OBJECTS_SYNCHRONIZATIONS_E);
-        createEAttribute(wsSynchronizationPlanXtentisObjectsSynchronizationsEEClass, WS_SYNCHRONIZATION_PLAN_XTENTIS_OBJECTS_SYNCHRONIZATIONS_E__XTENTIS_OBJECT_NAME);
-        createEReference(wsSynchronizationPlanXtentisObjectsSynchronizationsEEClass, WS_SYNCHRONIZATION_PLAN_XTENTIS_OBJECTS_SYNCHRONIZATIONS_E__SYNCHRONIZATIONS);
-
-        wsSynchronizationPlanXtentisObjectsSynchronizationsSynchronizationsEEClass = createEClass(WS_SYNCHRONIZATION_PLAN_XTENTIS_OBJECTS_SYNCHRONIZATIONS_SYNCHRONIZATIONS_E);
-        createEAttribute(wsSynchronizationPlanXtentisObjectsSynchronizationsSynchronizationsEEClass, WS_SYNCHRONIZATION_PLAN_XTENTIS_OBJECTS_SYNCHRONIZATIONS_SYNCHRONIZATIONS_E__INSTANCE_PATTERN);
-        createEAttribute(wsSynchronizationPlanXtentisObjectsSynchronizationsSynchronizationsEEClass, WS_SYNCHRONIZATION_PLAN_XTENTIS_OBJECTS_SYNCHRONIZATIONS_SYNCHRONIZATIONS_E__LOCAL_REVISION_ID);
-        createEAttribute(wsSynchronizationPlanXtentisObjectsSynchronizationsSynchronizationsEEClass, WS_SYNCHRONIZATION_PLAN_XTENTIS_OBJECTS_SYNCHRONIZATIONS_SYNCHRONIZATIONS_E__REMOTE_REVISION_ID);
-        createEAttribute(wsSynchronizationPlanXtentisObjectsSynchronizationsSynchronizationsEEClass, WS_SYNCHRONIZATION_PLAN_XTENTIS_OBJECTS_SYNCHRONIZATIONS_SYNCHRONIZATIONS_E__ALGORITHM);
 
         wsBooleanEEClass = createEClass(WS_BOOLEAN_E);
         createEAttribute(wsBooleanEEClass, WS_BOOLEAN_E__TRUE);
@@ -2084,7 +1763,9 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * @generated
      */
     public void initializePackageContents() {
-        if (isInitialized) return;
+        if (isInitialized) {
+            return;
+        }
         isInitialized = true;
 
         // Initialize package
@@ -2111,8 +1792,6 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
         wsDataModelEEClass.getESuperTypes().add(this.getMDMServerObject());
         wsDataClusterEEClass.getESuperTypes().add(this.getMDMServerObject());
         wsStoredProcedureEEClass.getESuperTypes().add(this.getMDMServerObject());
-        wsUniverseEEClass.getESuperTypes().add(this.getMDMServerObject());
-        wsSynchronizationPlanEEClass.getESuperTypes().add(this.getMDMServerObject());
         wsWorkflowDeployEEClass.getESuperTypes().add(this.getMDMServerObject());
         wsTransformerV2EEClass.getESuperTypes().add(this.getMDMServerObject());
         wsRoutingRuleEEClass.getESuperTypes().add(this.getMDMServerObject());
@@ -2196,50 +1875,6 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
         initEClass(wsStoredProcedureEEClass, WSStoredProcedureE.class, "WSStoredProcedureE", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
         initEAttribute(getWSStoredProcedureE_Procedure(), ecorePackage.getEString(), "procedure", null, 0, 1, WSStoredProcedureE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
         initEAttribute(getWSStoredProcedureE_RefreshCache(), ecorePackage.getEBoolean(), "refreshCache", null, 0, 1, WSStoredProcedureE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-        initEClass(wsUniverseEEClass, WSUniverseE.class, "WSUniverseE", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-        initEAttribute(getWSUniverseE_DefaultItemsRevisionID(), ecorePackage.getEString(), "defaultItemsRevisionID", null, 0, 1, WSUniverseE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-        initEReference(getWSUniverseE_XtentisObjectsRevisionIDs(), this.getWSUniverseXtentisObjectsRevisionIDsE(), null, "xtentisObjectsRevisionIDs", null, 0, -1, WSUniverseE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-        initEReference(getWSUniverseE_ItemsRevisionIDs(), this.getWSUniverseItemsRevisionIDsE(), null, "itemsRevisionIDs", null, 0, -1, WSUniverseE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-        initEClass(wsUniverseXtentisObjectsRevisionIDsEEClass, WSUniverseXtentisObjectsRevisionIDsE.class, "WSUniverseXtentisObjectsRevisionIDsE", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-        initEAttribute(getWSUniverseXtentisObjectsRevisionIDsE_XtentisObjectName(), ecorePackage.getEString(), "xtentisObjectName", null, 0, 1, WSUniverseXtentisObjectsRevisionIDsE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-        initEAttribute(getWSUniverseXtentisObjectsRevisionIDsE_RevisionID(), ecorePackage.getEString(), "revisionID", null, 0, 1, WSUniverseXtentisObjectsRevisionIDsE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-        initEClass(wsUniverseItemsRevisionIDsEEClass, WSUniverseItemsRevisionIDsE.class, "WSUniverseItemsRevisionIDsE", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-        initEAttribute(getWSUniverseItemsRevisionIDsE_ConceptPattern(), ecorePackage.getEString(), "conceptPattern", null, 0, 1, WSUniverseItemsRevisionIDsE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-        initEAttribute(getWSUniverseItemsRevisionIDsE_RevisionID(), ecorePackage.getEString(), "revisionID", null, 0, 1, WSUniverseItemsRevisionIDsE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-        initEClass(wsSynchronizationPlanEEClass, WSSynchronizationPlanE.class, "WSSynchronizationPlanE", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-        initEAttribute(getWSSynchronizationPlanE_RemoteSystemName(), ecorePackage.getEString(), "remoteSystemName", null, 0, 1, WSSynchronizationPlanE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-        initEAttribute(getWSSynchronizationPlanE_RemoteSystemURL(), ecorePackage.getEString(), "remoteSystemURL", null, 0, 1, WSSynchronizationPlanE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-        initEAttribute(getWSSynchronizationPlanE_RemoteSystemUsername(), ecorePackage.getEString(), "remoteSystemUsername", null, 0, 1, WSSynchronizationPlanE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-        initEAttribute(getWSSynchronizationPlanE_RemoteSystemPassword(), ecorePackage.getEString(), "remoteSystemPassword", null, 0, 1, WSSynchronizationPlanE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-        initEAttribute(getWSSynchronizationPlanE_TisURL(), ecorePackage.getEString(), "tisURL", null, 0, 1, WSSynchronizationPlanE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-        initEAttribute(getWSSynchronizationPlanE_TisUsername(), ecorePackage.getEString(), "tisUsername", null, 0, 1, WSSynchronizationPlanE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-        initEAttribute(getWSSynchronizationPlanE_TisPassword(), ecorePackage.getEString(), "tisPassword", null, 0, 1, WSSynchronizationPlanE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-        initEAttribute(getWSSynchronizationPlanE_TisParameters(), ecorePackage.getEString(), "tisParameters", null, 0, 1, WSSynchronizationPlanE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-        initEReference(getWSSynchronizationPlanE_XtentisObjectsSynchronizations(), this.getWSSynchronizationPlanXtentisObjectsSynchronizationsE(), null, "xtentisObjectsSynchronizations", null, 0, -1, WSSynchronizationPlanE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-        initEReference(getWSSynchronizationPlanE_ItemsSynchronizations(), this.getWSSynchronizationPlanItemsSynchronizationsE(), null, "itemsSynchronizations", null, 0, -1, WSSynchronizationPlanE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-        initEClass(wsSynchronizationPlanItemsSynchronizationsEEClass, WSSynchronizationPlanItemsSynchronizationsE.class, "WSSynchronizationPlanItemsSynchronizationsE", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-        initEAttribute(getWSSynchronizationPlanItemsSynchronizationsE_ConceptName(), ecorePackage.getEString(), "conceptName", null, 0, 1, WSSynchronizationPlanItemsSynchronizationsE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-        initEAttribute(getWSSynchronizationPlanItemsSynchronizationsE_IdsPattern(), ecorePackage.getEString(), "idsPattern", null, 0, 1, WSSynchronizationPlanItemsSynchronizationsE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-        initEAttribute(getWSSynchronizationPlanItemsSynchronizationsE_LocalCluster(), ecorePackage.getEString(), "localCluster", null, 0, 1, WSSynchronizationPlanItemsSynchronizationsE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-        initEAttribute(getWSSynchronizationPlanItemsSynchronizationsE_LocalRevisionID(), ecorePackage.getEString(), "localRevisionID", null, 0, 1, WSSynchronizationPlanItemsSynchronizationsE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-        initEAttribute(getWSSynchronizationPlanItemsSynchronizationsE_RemoteCluster(), ecorePackage.getEString(), "remoteCluster", null, 0, 1, WSSynchronizationPlanItemsSynchronizationsE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-        initEAttribute(getWSSynchronizationPlanItemsSynchronizationsE_RemoteRevisionID(), ecorePackage.getEString(), "remoteRevisionID", null, 0, 1, WSSynchronizationPlanItemsSynchronizationsE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-        initEAttribute(getWSSynchronizationPlanItemsSynchronizationsE_Algorithm(), ecorePackage.getEString(), "algorithm", null, 0, 1, WSSynchronizationPlanItemsSynchronizationsE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-        initEClass(wsSynchronizationPlanXtentisObjectsSynchronizationsEEClass, WSSynchronizationPlanXtentisObjectsSynchronizationsE.class, "WSSynchronizationPlanXtentisObjectsSynchronizationsE", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-        initEAttribute(getWSSynchronizationPlanXtentisObjectsSynchronizationsE_XtentisObjectName(), ecorePackage.getEString(), "xtentisObjectName", null, 0, 1, WSSynchronizationPlanXtentisObjectsSynchronizationsE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-        initEReference(getWSSynchronizationPlanXtentisObjectsSynchronizationsE_Synchronizations(), this.getWSSynchronizationPlanXtentisObjectsSynchronizationsSynchronizationsE(), null, "synchronizations", null, 0, -1, WSSynchronizationPlanXtentisObjectsSynchronizationsE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-        initEClass(wsSynchronizationPlanXtentisObjectsSynchronizationsSynchronizationsEEClass, WSSynchronizationPlanXtentisObjectsSynchronizationsSynchronizationsE.class, "WSSynchronizationPlanXtentisObjectsSynchronizationsSynchronizationsE", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-        initEAttribute(getWSSynchronizationPlanXtentisObjectsSynchronizationsSynchronizationsE_InstancePattern(), ecorePackage.getEString(), "instancePattern", null, 0, 1, WSSynchronizationPlanXtentisObjectsSynchronizationsSynchronizationsE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-        initEAttribute(getWSSynchronizationPlanXtentisObjectsSynchronizationsSynchronizationsE_LocalRevisionID(), ecorePackage.getEString(), "localRevisionID", null, 0, 1, WSSynchronizationPlanXtentisObjectsSynchronizationsSynchronizationsE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-        initEAttribute(getWSSynchronizationPlanXtentisObjectsSynchronizationsSynchronizationsE_RemoteRevisionID(), ecorePackage.getEString(), "remoteRevisionID", null, 0, 1, WSSynchronizationPlanXtentisObjectsSynchronizationsSynchronizationsE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-        initEAttribute(getWSSynchronizationPlanXtentisObjectsSynchronizationsSynchronizationsE_Algorithm(), ecorePackage.getEString(), "algorithm", null, 0, 1, WSSynchronizationPlanXtentisObjectsSynchronizationsSynchronizationsE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
         initEClass(wsBooleanEEClass, WSBooleanE.class, "WSBooleanE", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
         initEAttribute(getWSBooleanE__true(), ecorePackage.getEBoolean(), "_true", null, 0, 1, WSBooleanE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

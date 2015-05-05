@@ -273,10 +273,8 @@ public enum EImage {
     ROUTINE("icons/routine.gif"), //$NON-NLS-1$
     PROCESS("icons/process.png"), //$NON-NLS-1$
     JOB("icons/process_icon.gif"), //$NON-NLS-1$
-    SYNCHRONIZATIONPLAN("icons/catchuprelease_rls.gif"), //$NON-NLS-1$
     SERVICE_CONFIGURATION("icons/service_config.png"), //$NON-NLS-1$
     WORKFLOW_PROCESS("icons/workflow_process.png"), //$NON-NLS-1$
-    UNIVERSE("icons/universe.png"), //$NON-NLS-1$
     RENAME("icons/rename.png"), //$NON-NLS-1$
     RESOURCES("icons/resources.png"), //$NON-NLS-1$
     PRIMARYKEY("icons/primarykey.png"), //$NON-NLS-1$
@@ -292,8 +290,6 @@ public enum EImage {
     HIER_VIEW("icons/hier_view.gif"), //$NON-NLS-1$
     MANAGE_USERS("icons/manage_users.png"), //$NON-NLS-1$
     REPORTING("icons/reporting.png"), //$NON-NLS-1$
-    SYNCHRO_ITEM("icons/synchro_item.png"), //$NON-NLS-1$
-    SYNCHRONIZE("icons/synchronize.png"), //$NON-NLS-1$
     TRASH("icons/trash.png"), //$NON-NLS-1$
     UPDATEREPORT("icons/updatereport.png"), //$NON-NLS-1$
     WORKFLOWTASKS("icons/workflowtasks.png"), //$NON-NLS-1$

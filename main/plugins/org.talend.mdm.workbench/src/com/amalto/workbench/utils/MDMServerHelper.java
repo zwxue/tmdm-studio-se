@@ -46,8 +46,6 @@ public class MDMServerHelper {
 
     public static final String PASSWORD = "password"; //$NON-NLS-1$
 
-    public static final String UNIVERSE = "universe"; //$NON-NLS-1$
-
     public static final String workbenchConfigFile = Platform.getInstanceLocation().getURL().getPath()
             + "/mdm_workbench_config.xml"; //$NON-NLS-1$
 
@@ -65,11 +63,13 @@ public class MDMServerHelper {
 
     public static MDMServerDef getServer(String name) {
         Element rootElement = getRootElement();
-        if (rootElement == null)
+        if (rootElement == null) {
             return null;
+        }
         Element serverElement = getServerElement(rootElement, name);
-        if (serverElement != null)
+        if (serverElement != null) {
             return getServer(serverElement);
+        }
         return null;
     }
 
@@ -78,9 +78,8 @@ public class MDMServerHelper {
         String url = serverElement.element(URL).getText();
         String user = serverElement.element(USER).getText();
         String password = serverElement.element(PASSWORD).getText();
-        String universe = serverElement.element(UNIVERSE) != null ? serverElement.element(UNIVERSE).getText() : ""; //$NON-NLS-1$
         password = PasswordUtil.decryptPassword(password);
-        MDMServerDef def = MDMServerDef.parse(url, user, password, universe, name);
+        MDMServerDef def = MDMServerDef.parse(url, user, password, name);
         return def;
     }
 
@@ -134,33 +133,31 @@ public class MDMServerHelper {
         Element prop = root.addElement(MDMServerHelper.PROPERTIES);
         addServerProperties(prop, serverDef);
         Element name = prop.element(MDMServerHelper.NAME);
-        if (name == null)
+        if (name == null) {
             name = prop.addElement(MDMServerHelper.NAME);
+        }
         name.setText(serverDef.getName());
     }
 
     private static void addServerProperties(Element prop, MDMServerDef serverDef) {
         Element url = prop.element(MDMServerHelper.URL);
-        if (url == null)
+        if (url == null) {
             url = prop.addElement(MDMServerHelper.URL);
+        }
         url.setText(serverDef.getUrl());
 
         Element user = prop.element(MDMServerHelper.USER);
-        if (user == null)
+        if (user == null) {
             user = prop.addElement(MDMServerHelper.USER);
+        }
         user.setText(serverDef.getUser());
 
         Element password = prop.element(MDMServerHelper.PASSWORD);
-        if (password == null)
+        if (password == null) {
             password = prop.addElement(MDMServerHelper.PASSWORD);
+        }
         password.setText(PasswordUtil.encryptPassword(serverDef.getPasswd()));
 
-        if (serverDef.getUniverse() != null) {
-            Element universe = prop.element(MDMServerHelper.UNIVERSE);
-            if (universe == null)
-                universe = prop.addElement(MDMServerHelper.UNIVERSE);
-            universe.setText(serverDef.getUniverse());
-        }
     }
 
     private static Element getRootElement() {
@@ -189,8 +186,9 @@ public class MDMServerHelper {
             Element nameElement = serverElement.element(MDMServerHelper.NAME);
             if (nameElement != null) {
                 String name = nameElement.getText();
-                if (matchingName.equals(name))
+                if (matchingName.equals(name)) {
                     return serverElement;
+                }
             }
         }
         return null;

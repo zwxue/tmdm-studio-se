@@ -76,50 +76,6 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//WSStoredProcedureE/procedure"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//WSStoredProcedureE/refreshCache"/>
     </genClasses>
-    <genClasses ecoreClass="MDMServerObject.ecore#//WSUniverseE">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//WSUniverseE/defaultItemsRevisionID"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference MDMServerObject.ecore#//WSUniverseE/xtentisObjectsRevisionIDs"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference MDMServerObject.ecore#//WSUniverseE/itemsRevisionIDs"/>
-    </genClasses>
-    <genClasses ecoreClass="MDMServerObject.ecore#//WSUniverseXtentisObjectsRevisionIDsE">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//WSUniverseXtentisObjectsRevisionIDsE/xtentisObjectName"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//WSUniverseXtentisObjectsRevisionIDsE/revisionID"/>
-    </genClasses>
-    <genClasses ecoreClass="MDMServerObject.ecore#//WSUniverseItemsRevisionIDsE">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//WSUniverseItemsRevisionIDsE/conceptPattern"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//WSUniverseItemsRevisionIDsE/revisionID"/>
-    </genClasses>
-    <genClasses ecoreClass="MDMServerObject.ecore#//WSSynchronizationPlanE">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//WSSynchronizationPlanE/remoteSystemName"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//WSSynchronizationPlanE/remoteSystemURL"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//WSSynchronizationPlanE/remoteSystemUsername"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//WSSynchronizationPlanE/remoteSystemPassword"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//WSSynchronizationPlanE/tisURL"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//WSSynchronizationPlanE/tisUsername"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//WSSynchronizationPlanE/tisPassword"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//WSSynchronizationPlanE/tisParameters"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference MDMServerObject.ecore#//WSSynchronizationPlanE/xtentisObjectsSynchronizations"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference MDMServerObject.ecore#//WSSynchronizationPlanE/itemsSynchronizations"/>
-    </genClasses>
-    <genClasses ecoreClass="MDMServerObject.ecore#//WSSynchronizationPlanItemsSynchronizationsE">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//WSSynchronizationPlanItemsSynchronizationsE/conceptName"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//WSSynchronizationPlanItemsSynchronizationsE/idsPattern"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//WSSynchronizationPlanItemsSynchronizationsE/localCluster"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//WSSynchronizationPlanItemsSynchronizationsE/localRevisionID"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//WSSynchronizationPlanItemsSynchronizationsE/remoteCluster"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//WSSynchronizationPlanItemsSynchronizationsE/remoteRevisionID"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//WSSynchronizationPlanItemsSynchronizationsE/algorithm"/>
-    </genClasses>
-    <genClasses ecoreClass="MDMServerObject.ecore#//WSSynchronizationPlanXtentisObjectsSynchronizationsE">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//WSSynchronizationPlanXtentisObjectsSynchronizationsE/xtentisObjectName"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference MDMServerObject.ecore#//WSSynchronizationPlanXtentisObjectsSynchronizationsE/synchronizations"/>
-    </genClasses>
-    <genClasses ecoreClass="MDMServerObject.ecore#//WSSynchronizationPlanXtentisObjectsSynchronizationsSynchronizationsE">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//WSSynchronizationPlanXtentisObjectsSynchronizationsSynchronizationsE/instancePattern"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//WSSynchronizationPlanXtentisObjectsSynchronizationsSynchronizationsE/localRevisionID"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//WSSynchronizationPlanXtentisObjectsSynchronizationsSynchronizationsE/remoteRevisionID"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//WSSynchronizationPlanXtentisObjectsSynchronizationsSynchronizationsE/algorithm"/>
-    </genClasses>
     <genClasses ecoreClass="MDMServerObject.ecore#//WSBooleanE">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//WSBooleanE/_true"/>
     </genClasses>

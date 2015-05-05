@@ -23,7 +23,6 @@ import org.eclipse.jface.operation.IRunnableWithProgress;
 
 import com.amalto.workbench.availablemodel.AvailableModelUtil;
 import com.amalto.workbench.availablemodel.IAvailableModel;
-import com.amalto.workbench.exadapter.ExAdapterManager;
 import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.models.TreeParent;
@@ -78,28 +77,15 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
 
     private String password;
 
-    private String universe;
-
     private TreeParent serverRoot;
-
-    private boolean isExistUniverse = true;
 
     private boolean retriveWSObject;
 
-    private IXtentisServerObjectsRetrieverExAdapter exAdapter;
-
-    public XtentisServerObjectsRetriever(String serverName, String endpointaddress, String username, String password,
-            String universe) {
+    public XtentisServerObjectsRetriever(String serverName, String endpointaddress, String username, String password) {
         this.serverName = serverName;
         this.endpointaddress = endpointaddress;
         this.username = username;
         this.password = password;
-        this.universe = universe;
-        this.exAdapter = ExAdapterManager.getAdapter(this, IXtentisServerObjectsRetrieverExAdapter.class);
-    }
-
-    public boolean isExistUniverse() {
-        return isExistUniverse;
     }
 
     public boolean isRetriveWSObject() {
@@ -118,8 +104,8 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
             monitor.beginTask(Messages.bind(Messages.XtentisServerObjectsRetriever_1, IConstants.TALEND),
                     Messages.XtentisServerObjectsRetriever_3.equals(username) ? 12 : 9);
             // server
-            serverRoot = new TreeParent(serverName, null, TreeObject._SERVER_, endpointaddress, ("".equals(universe) ? ""//$NON-NLS-1$//$NON-NLS-2$
-                    : universe + "/") + username + ":" + (password == null ? "" : password));//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
+            serverRoot = new TreeParent(serverName, null, TreeObject._SERVER_, endpointaddress, username
+                    + ":" + (password == null ? "" : password));//$NON-NLS-1$//$NON-NLS-2$
 
             // init load category
             monitor.subTask(Messages.XtentisServerObjectsRetriever_4);
@@ -128,7 +114,7 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
             LocalTreeObjectRepository.getInstance().setLazySaveStrategy(true, serverRoot);
             monitor.worked(1);
             // Access to server and get port
-            TMDMService service = Util.getMDMService(new URL(endpointaddress), universe, username, password);
+            TMDMService service = Util.getMDMService(new URL(endpointaddress), username, password);
             service.ping(new WSPing(Messages.XtentisServerObjectsRetriever_5));// viewer user can't use studio
 
             monitor.worked(1);
@@ -152,7 +138,6 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
             user.setUsername(username);
             user.setPassword(password);
             user.setServerUrl(endpointaddress);
-            user.setUniverse(universe);
 
             serverRoot.setUser(user);
 
@@ -402,11 +387,6 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
                 model.addTreeObjects(service, monitor, serverRoot);
             }
 
-            // *** TMDM-8080, temp omitted start ***//
-            // WSUniverse wUuniverse = service.getCurrentUniverse(new WSGetCurrentUniverse());
-            // addRevision(wUuniverse);
-            // *** TMDM-8080, temp omitted end ***//
-
             monitor.done();
         } catch (Exception e) {
             if (monitor.isCanceled()) {
@@ -418,53 +398,7 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
         }
     }// run
 
-    /**
-     * add revisionID to each treeobject
-     * 
-     * @param universe
-     */
-    // *** TMDM-8080, temp omitted start ***//
-    // private void addRevision(WSUniverse universe) {
-    // if (universe == null) {
-    // return;
-    // }
-    // if (exAdapter != null) {
-    // exAdapter.addRevision(universe, serverRoot, username);
-    // } else {
-    //            String name = serverRoot.getDisplayName() + " " + username;//$NON-NLS-1$
-    // serverRoot.setDisplayName(name);
-    // }
-    // }
-    // *** TMDM-8080, temp omitted end ***//
-
     public TreeParent getServerRoot() {
         return serverRoot;
     }
-
-    // *** TMDM-8080, temp omitted start ***//
-    // public void resetDisplayName(TreeParent parent, List<XtentisObjectsRevisionIDs> ids) {
-    // for (TreeObject node : parent.getChildren()) {
-    // EXtentisObjects object = EXtentisObjects.getXtentisObjexts().get(String.valueOf(node.getType()));
-    // if (object == null || !object.isRevision()) {
-    // continue;
-    // }
-    // boolean isSet = false;
-    // for (WSUniverse.XtentisObjectsRevisionIDs id : ids) {
-    // if (id.getXtentisObjectName().equals(object.getName())) {
-    // if (id.getRevisionID() != null && id.getRevisionID().length() > 0) {
-    //                        node.setDisplayName(node.getDisplayName() + " ["//$NON-NLS-1$
-    //                                + id.getRevisionID().replaceAll("\\[", "").replaceAll("\\]", "").trim() + "]");//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$//$NON-NLS-5$
-    // } else {
-    //                        node.setDisplayName(node.getDisplayName() + " [" + IConstants.HEAD + "]");//$NON-NLS-1$//$NON-NLS-2$
-    // }
-    // isSet = true;
-    // break;
-    // }
-    // }
-    // if (!isSet) {
-    //                node.setDisplayName(node.getDisplayName() + " [" + IConstants.HEAD + "]");//$NON-NLS-1$//$NON-NLS-2$
-    // }
-    // }
-    // }
-    // *** TMDM-8080, temp omitted end ***//
 }

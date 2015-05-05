@@ -676,7 +676,7 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
 
         // check connection before sending data
         monitor.setTaskName(Messages.DeployOnMDMExportWizardPage_checkConnection);
-        boolean success = checkConnection(server.getUrl(), user, password, server.getUniverse());
+        boolean success = checkConnection(server.getUrl(), user, password);
 
         if (!success) {
             Display.getDefault().syncExec(new Runnable() {
@@ -755,12 +755,12 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
         return true;
     }
 
-    private boolean checkConnection(String endpointaddress, String username, String password, String universe) {
+    private boolean checkConnection(String endpointaddress, String username, String password) {
         try {
             ILegendServerDefService serverDefService = (ILegendServerDefService) GlobalServiceRegister.getDefault().getService(
                     ILegendServerDefService.class);
             if (serverDefService != null) {
-                return serverDefService.checkServerDefConnection(endpointaddress, username, password, universe);
+                return serverDefService.checkServerDefConnection(endpointaddress, username, password);
             }
         } catch (Exception e) {
             log.error(e.getMessage(), e);

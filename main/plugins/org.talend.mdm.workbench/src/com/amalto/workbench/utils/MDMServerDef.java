@@ -20,7 +20,7 @@ public class MDMServerDef {
     /**
      * 
      */
-    private static final String DEFAULT_PROTOCOL = "http://";
+    private static final String DEFAULT_PROTOCOL = "http://"; //$NON-NLS-1$
 
     public static final String DEFAULT_PATH = "/talendmdm/services/soap";//$NON-NLS-1$
 
@@ -33,8 +33,6 @@ public class MDMServerDef {
     private String user = "";//$NON-NLS-1$
 
     private String passwd = "";//$NON-NLS-1$
-
-    private String universe = ""; //$NON-NLS-1$
 
     private String protocol = DEFAULT_PROTOCOL;
 
@@ -58,15 +56,13 @@ public class MDMServerDef {
 
     private String path = DEFAULT_PATH;
 
-    public MDMServerDef(String name, String protocol, String host, String port, String path, String user, String passwd,
-            String universe) {
+    public MDMServerDef(String name, String protocol, String host, String port, String path, String user, String passwd) {
         this.name = name;
         this.host = host;
         this.port = port;
         this.path = path;
         this.user = user;
         this.passwd = passwd;
-        this.universe = universe;
         if (protocol == null) {
             this.protocol = DEFAULT_PROTOCOL;
         } else {
@@ -126,14 +122,6 @@ public class MDMServerDef {
         this.path = path;
     }
 
-    public String getUniverse() {
-        return universe;
-    }
-
-    public void setUniverse(String universe) {
-        this.universe = universe;
-    }
-
     public String getUrl() {
         StringBuilder sb = new StringBuilder(protocol);
 
@@ -145,7 +133,7 @@ public class MDMServerDef {
         return sb.toString();
     }
 
-    public static MDMServerDef parse(String protocol, String url, String user, String passwd, String universe, String name) {
+    public static MDMServerDef parse(String protocol, String url, String user, String passwd, String name) {
         String patternUrl = "^" + protocol + "(.+):(\\d+)(/.*)";//$NON-NLS-1$ //$NON-NLS-2$
         Matcher m = Pattern.compile(patternUrl).matcher(url);
 
@@ -157,10 +145,10 @@ public class MDMServerDef {
         String port = m.group(2);
         String path = m.group(3);
 
-        return new MDMServerDef(name, protocol, host, port, path, user, passwd, universe);
+        return new MDMServerDef(name, protocol, host, port, path, user, passwd);
     }
 
-    public static MDMServerDef parse(String url, String user, String passwd, String universe, String name) {
-        return parse(DEFAULT_PROTOCOL, url, user, passwd, universe, name);
+    public static MDMServerDef parse(String url, String user, String passwd, String name) {
+        return parse(DEFAULT_PROTOCOL, url, user, passwd, name);
     }
 }

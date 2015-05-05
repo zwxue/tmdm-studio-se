@@ -99,7 +99,7 @@ public class ProjectDecisionDialog extends Dialog {
             }
 
             TMDMService port = Util.getMDMService(new URL(transformerObject.getEndpointAddress()),
-                    transformerObject.getUniverse(), transformerObject.getUsername(), transformerObject.getPassword());
+                    transformerObject.getUsername(), transformerObject.getPassword());
 
             // Grab the available Clusters
             List<WSDataClusterPK> dcpks = port.getDataClusterPKs(new WSRegexDataClusterPKs(".*")).getWsDataClusterPKs();//$NON-NLS-1$

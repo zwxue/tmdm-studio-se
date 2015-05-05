@@ -89,8 +89,8 @@ public class EditXObjectAction extends Action {
             }
 
             // Access to server and get port
-            TMDMService service = Util.getMDMService(new URL(xobject.getEndpointAddress()), xobject.getUniverse(),
-                    xobject.getUsername(), xobject.getPassword());
+            TMDMService service = Util.getMDMService(new URL(xobject.getEndpointAddress()), xobject.getUsername(),
+                    xobject.getPassword());
 
             switch (xobject.getType()) {
             case TreeObject.DATA_MODEL:
@@ -137,8 +137,6 @@ public class EditXObjectAction extends Action {
                 break;
 
             case TreeObject.ROLE:
-            case TreeObject.UNIVERSE:
-            case TreeObject.SYNCHRONIZATIONPLAN:
                 if (exAdapter != null) {
                     exAdapter.run(service, xobject);
                 }

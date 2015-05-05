@@ -270,8 +270,7 @@ public class StoredProcedureMainPage extends AMainPage implements ITextListener 
         dataClusterCombo.removeAll();
         List<WSDataClusterPK> dataClusterPKs;
         try {
-            dataClusterPKs = Util.getAllDataClusterPKs(new URL(getXObject().getEndpointAddress()), getXObject().getUniverse(),
-                    getXObject().getUsername(), getXObject().getPassword());
+            dataClusterPKs = Util.getAllDataClusterPKs(new URL(getXObject().getEndpointAddress()), getXObject().getUsername(), getXObject().getPassword());
         } catch (Exception ex) {
             MessageDialog.openError(
                     StoredProcedureMainPage.this.getSite().getShell(),

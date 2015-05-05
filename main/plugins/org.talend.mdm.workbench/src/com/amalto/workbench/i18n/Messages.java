@@ -141,12 +141,6 @@ public class Messages extends NLS {
 
     public static String XObjectEditor_Saving;
 
-    public static String XObjectRevisionBrowser_ErrorMsg;
-
-    public static String XObjectRevisionBrowser_ErrorMsg1;
-
-    public static String XObjectRevisionBrowser_Saving;
-
     public static String XpathSelectDialog_DataModels;
 
     public static String XpathSelectDialog_Filter;
@@ -574,20 +568,6 @@ public class Messages extends NLS {
     public static String NameStartWith;
 
     public static String BrowseNameExists;
-
-    public static String BrowseRevisionAction_BrowseRevision;
-
-    public static String BrowseRevisionAction_ErrorMsg;
-
-    public static String BrowseRevisionMainPage_ErrorRefreshingPage;
-
-    public static String BrowseRevisionMainPage_ErrorRefreshingPageX;
-
-    public static String BrowseRevisionMainPage_RevisionBrowser;
-
-    public static String BrowseRevisionMainPage_RevisionID;
-
-    public static String BrowseRevisionMainPage_Version;
 
     public static String BrowseViewAction_BrowseContent;
 
@@ -1152,86 +1132,6 @@ public class Messages extends NLS {
     public static String NewGroupDialog_Sequence;
 
     public static String NewGroupDialog_SubElementGroup;
-
-    public static String NewXObjectAction_ActionTip;
-
-    public static String NewXObjectAction_DataCluster;
-
-    public static String NewXObjectAction_DataModel;
-
-    public static String NewXObjectAction_DialogTip;
-
-    public static String NewXObjectAction_EnterNameForInstance;
-
-    public static String NewXObjectAction_ErrorCreatingInstance;
-
-    public static String NewXObjectAction_ErrorMsg;
-
-    public static String NewXObjectAction_ErrorMsg10;
-
-    public static String NewXObjectAction_ErrorMsg11;
-
-    public static String NewXObjectAction_ErrorMsg12;
-
-    public static String NewXObjectAction_ErrorMsg13;
-
-    public static String NewXObjectAction_ErrorMsg14;
-
-    public static String NewXObjectAction_ErrorMsg2;
-
-    public static String NewXObjectAction_ErrorMsg3;
-
-    public static String NewXObjectAction_ErrorMsg4;
-
-    public static String NewXObjectAction_ErrorMsg5;
-
-    public static String NewXObjectAction_ErrorMsg6;
-
-    public static String NewXObjectAction_ErrorMsg7;
-
-    public static String NewXObjectAction_ErrorMsg8;
-
-    public static String NewXObjectAction_ErrorMsg9;
-
-    public static String NewXObjectAction_ErrorMsgA;
-
-    public static String NewXObjectAction_NameCannotBeEmpty;
-
-    public static String NewXObjectAction_NameCannotContainInvalid;
-
-    public static String NewXObjectAction_NewCustom;
-
-    public static String NewXObjectAction_NewDataContainer;
-
-    public static String NewXObjectAction_NewDataModel;
-
-    public static String NewXObjectAction_NewInboundAdapter;
-
-    public static String NewXObjectAction_NewInboundPlugin;
-
-    public static String NewXObjectAction_NewMenu;
-
-    public static String NewXObjectAction_NewOutboundAdapter;
-
-    public static String NewXObjectAction_NewOutboundPlugin;
-
-    public static String NewXObjectAction_NewProcess;
-
-    public static String NewXObjectAction_NewResource;
-
-    public static String NewXObjectAction_NewStoredProc;
-
-    public static String NewXObjectAction_NewSynPlan;
-
-    public static String NewXObjectAction_NewTrigger;
-
-    public static String NewXObjectAction_NewVersion;
-
-    public static String NewXObjectAction_NewView;
-
-    public static String NewXObjectAction_Title1;
-
-    public static String NewXObjectAction_Title2;
 
     public static String NewXSDIndentityConstraintValidator_BElemntAlreadyHasUniqueKey;
 
@@ -2197,10 +2097,6 @@ public class Messages extends NLS {
 
     public static String ImportItemsAction_ImportObjects;
 
-    public static String ImportItemsWizard_0;
-
-    public static String ImportItemsWizard_1;
-
     public static String ImportItemsWizard_10;
 
     public static String ImportItemsWizard_11;
@@ -2212,32 +2108,6 @@ public class Messages extends NLS {
     public static String ImportItemsWizard_14;
 
     public static String ImportItemsWizard_15;
-
-    public static String ImportItemsWizard_16;
-
-    public static String ImportItemsWizard_17;
-
-    public static String ImportItemsWizard_19;
-
-    public static String ImportItemsWizard_2;
-
-    public static String ImportItemsWizard_20;
-
-    public static String ImportItemsWizard_21;
-
-    public static String ImportItemsWizard_22;
-
-    public static String ImportItemsWizard_23;
-
-    public static String ImportItemsWizard_24;
-
-    public static String ImportItemsWizard_25;
-
-    public static String ImportItemsWizard_26;
-
-    public static String ImportItemsWizard_27;
-
-    public static String ImportItemsWizard_28;
 
     public static String ImportItemsWizard_29;
 
@@ -2629,11 +2499,7 @@ public class Messages extends NLS {
 
     public static String ExportItemsWizard_11;
 
-    public static String ExportItemsWizard_12;
-
     public static String ExportItemsWizard_13;
-
-    public static String ExportItemsWizard_14;
 
     public static String ExportItemsWizard_15;
 
@@ -2918,42 +2784,6 @@ public class Messages extends NLS {
     public static String CopyXObjectAction_ErrorMsg2;
 
     public static String PasteSelectedItem;
-
-    public static String PasteXObjectAction_ActionTip;
-
-    public static String PasteXObjectAction_DialogTitle1;
-
-    public static String PasteXObjectAction_DialogTitle2;
-
-    public static String PasteXObjectAction_DialogTitle3;
-
-    public static String PasteXObjectAction_ErrorMsg;
-
-    public static String PasteXObjectAction_ErrorMsg1;
-
-    public static String PasteXObjectAction_MsgContent;
-
-    public static String PasteXObjectAction_MsgContent10;
-
-    public static String PasteXObjectAction_MsgContent10t;
-
-    public static String PasteXObjectAction_MsgContent2;
-
-    public static String PasteXObjectAction_MsgContent3;
-
-    public static String PasteXObjectAction_MsgContent4;
-
-    public static String PasteXObjectAction_MsgContent5;
-
-    public static String PasteXObjectAction_MsgContent6;
-
-    public static String PasteXObjectAction_MsgContent7;
-
-    public static String PasteXObjectAction_MsgContent8;
-
-    public static String PasteXObjectAction_MsgContent9;
-
-    public static String PasteXObjectAction_NameCannotBeEmpty;
 
     public static String PluginDetailsDialog_Close;
 

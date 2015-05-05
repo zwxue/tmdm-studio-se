@@ -12,7 +12,6 @@
 // ============================================================================
 package com.amalto.workbench.dialogs;
 
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -136,19 +135,6 @@ public class AddBrowseItemsWizard extends Wizard {
         }
 
         return false;
-    }
-
-    private TMDMService getXtentisPort() {
-        try {
-            if (service == null) {
-                service = Util.getMDMService(new URL(page.getXObject().getEndpointAddress()), page.getXObject().getUniverse(),
-                        page.getXObject().getUsername(), page.getXObject().getPassword());
-            }
-        } catch (Exception e) {
-            log.error(e.getMessage(), e);
-        }
-
-        return service;
     }
 
     protected void newBrowseItemView(String browseItem) {

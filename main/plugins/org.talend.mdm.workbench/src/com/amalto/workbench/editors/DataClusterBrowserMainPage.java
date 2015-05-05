@@ -1315,11 +1315,9 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
             UserInfo user = serverRoot.getUser();
             String serverName = serverRoot.getName();
             String password = user.getPassword();
-            String universe = user.getUniverse();
             String url = user.getServerUrl();
             String username = user.getUsername();
-            final XtentisServerObjectsRetriever retriever = new XtentisServerObjectsRetriever(serverName, url, username,
-                    password, universe);
+            final XtentisServerObjectsRetriever retriever = new XtentisServerObjectsRetriever(serverName, url, username, password);
             retriever.setRetriveWSObject(true);
             try {
                 retriever.run(new NullProgressMonitor());

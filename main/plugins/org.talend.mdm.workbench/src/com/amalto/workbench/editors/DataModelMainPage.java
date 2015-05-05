@@ -1056,8 +1056,8 @@ public class DataModelMainPage extends EditorPart implements ModifyListener, IGo
     }
 
     protected void doSave(WSDataModel wsObject) throws Exception {
-        TMDMService port = Util.getMDMService(new URL(xobject.getEndpointAddress()), xobject.getUniverse(),
-                xobject.getUsername(), xobject.getPassword());
+        TMDMService port = Util
+                .getMDMService(new URL(xobject.getEndpointAddress()), xobject.getUsername(), xobject.getPassword());
         port.putDataModel(new WSPutDataModel(wsObject));
         if (exAdapter != null) {
             exAdapter.doSave(port, wsObject.getName(), Messages.DataModelText);

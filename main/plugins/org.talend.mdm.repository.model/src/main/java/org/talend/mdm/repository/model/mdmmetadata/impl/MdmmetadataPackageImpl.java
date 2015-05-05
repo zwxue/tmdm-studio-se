@@ -152,7 +152,7 @@ public class MdmmetadataPackageImpl extends EPackageImpl implements MdmmetadataP
 	 * <!-- end-user-doc -->
      * @generated
      */
-	public EAttribute getMDMServerDef_Universe() {
+	public EAttribute getMDMServerDef_Url() {
         return (EAttribute)mdmServerDefEClass.getEStructuralFeatures().get(5);
     }
 
@@ -161,17 +161,8 @@ public class MdmmetadataPackageImpl extends EPackageImpl implements MdmmetadataP
 	 * <!-- end-user-doc -->
      * @generated
      */
-	public EAttribute getMDMServerDef_Url() {
-        return (EAttribute)mdmServerDefEClass.getEStructuralFeatures().get(6);
-    }
-
-	/**
-     * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-     * @generated
-     */
 	public EAttribute getMDMServerDef_User() {
-        return (EAttribute)mdmServerDefEClass.getEStructuralFeatures().get(7);
+        return (EAttribute)mdmServerDefEClass.getEStructuralFeatures().get(6);
     }
 
 	/**
@@ -180,7 +171,7 @@ public class MdmmetadataPackageImpl extends EPackageImpl implements MdmmetadataP
      * @generated
      */
     public EAttribute getMDMServerDef_Enabled() {
-        return (EAttribute)mdmServerDefEClass.getEStructuralFeatures().get(8);
+        return (EAttribute)mdmServerDefEClass.getEStructuralFeatures().get(7);
     }
 
     /**
@@ -189,7 +180,7 @@ public class MdmmetadataPackageImpl extends EPackageImpl implements MdmmetadataP
      * @generated
      */
     public EAttribute getMDMServerDef_Algorithm() {
-        return (EAttribute)mdmServerDefEClass.getEStructuralFeatures().get(9);
+        return (EAttribute)mdmServerDefEClass.getEStructuralFeatures().get(8);
     }
 
     /**
@@ -226,7 +217,6 @@ public class MdmmetadataPackageImpl extends EPackageImpl implements MdmmetadataP
         createEAttribute(mdmServerDefEClass, MDM_SERVER_DEF__TEMP_PASSWD);
         createEAttribute(mdmServerDefEClass, MDM_SERVER_DEF__PATH);
         createEAttribute(mdmServerDefEClass, MDM_SERVER_DEF__PORT);
-        createEAttribute(mdmServerDefEClass, MDM_SERVER_DEF__UNIVERSE);
         createEAttribute(mdmServerDefEClass, MDM_SERVER_DEF__URL);
         createEAttribute(mdmServerDefEClass, MDM_SERVER_DEF__USER);
         createEAttribute(mdmServerDefEClass, MDM_SERVER_DEF__ENABLED);
@@ -273,7 +263,6 @@ public class MdmmetadataPackageImpl extends EPackageImpl implements MdmmetadataP
         initEAttribute(getMDMServerDef_TempPasswd(), ecorePackage.getEString(), "tempPasswd", null, 0, 1, MDMServerDef.class, IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
         initEAttribute(getMDMServerDef_Path(), ecorePackage.getEString(), "path", null, 0, 1, MDMServerDef.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
         initEAttribute(getMDMServerDef_Port(), ecorePackage.getEString(), "port", null, 0, 1, MDMServerDef.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-        initEAttribute(getMDMServerDef_Universe(), ecorePackage.getEString(), "universe", null, 0, 1, MDMServerDef.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
         initEAttribute(getMDMServerDef_Url(), ecorePackage.getEString(), "url", null, 0, 1, MDMServerDef.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
         initEAttribute(getMDMServerDef_User(), ecorePackage.getEString(), "user", null, 0, 1, MDMServerDef.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
         initEAttribute(getMDMServerDef_Enabled(), ecorePackage.getEBoolean(), "enabled", "true", 0, 1, MDMServerDef.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

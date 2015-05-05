@@ -103,10 +103,6 @@ public class RepositoryQueryService {
         return findAllServerObjectNames(IServerObjectRepositoryType.TYPE_TRANSFORMERV2);
     }
 
-    public static List<String> findAllUniverseNames() {
-        return findAllServerObjectNames(IServerObjectRepositoryType.TYPE_UNIVERSE);
-    }
-
     public static List<String> findAllCustomFormNames() {
         return findAllServerObjectNames(IServerObjectRepositoryType.TYPE_CUSTOM_FORM);
     }
@@ -245,9 +241,7 @@ public class RepositoryQueryService {
             typeMap.put(TreeObject.MENU, IServerObjectRepositoryType.TYPE_MENU);
             typeMap.put(TreeObject.ROLE, IServerObjectRepositoryType.TYPE_ROLE);
             typeMap.put(TreeObject.ROUTING_RULE, IServerObjectRepositoryType.TYPE_ROUTINGRULE);
-            typeMap.put(TreeObject.UNIVERSE, IServerObjectRepositoryType.TYPE_UNIVERSE);
             typeMap.put(TreeObject.STORED_PROCEDURE, IServerObjectRepositoryType.TYPE_STOREPROCEDURE);
-            typeMap.put(TreeObject.SYNCHRONIZATIONPLAN, IServerObjectRepositoryType.TYPE_SYNCHRONIZATIONPLAN);
             typeMap.put(TreeObject.VIEW, IServerObjectRepositoryType.TYPE_VIEW);
             typeMap.put(TreeObject.PICTURES_RESOURCE, IServerObjectRepositoryType.TYPE_RESOURCE);
             typeMap.put(TreeObject.WORKFLOW_PROCESS, IServerObjectRepositoryType.TYPE_WORKFLOW);

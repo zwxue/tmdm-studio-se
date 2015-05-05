@@ -72,8 +72,7 @@ public class TestTriggerAction extends AbstractRepositoryAction implements Selec
             return;
         }
 
-        boolean canConnect = checkConnection(serverDef.getUrl(), serverDef.getUser(), serverDef.getPasswd(),
-                serverDef.getUniverse());
+        boolean canConnect = checkConnection(serverDef.getUrl(), serverDef.getUser(), serverDef.getPasswd());
         if (!canConnect) {
             MessageDialog.openError(getShell(), Messages.RoutingRuleMainPage2_CheckConnection,
                     Messages.RoutingRuleMainPage2_UnableToConnect);
@@ -81,8 +80,7 @@ public class TestTriggerAction extends AbstractRepositoryAction implements Selec
         }
 
         try {
-            service = Util.getMDMService(new URL(serverDef.getUrl()), serverDef.getUniverse(), serverDef.getUser(),
-                    serverDef.getPasswd());
+            service = Util.getMDMService(new URL(serverDef.getUrl()), serverDef.getUser(), serverDef.getPasswd());
             IWorkbenchPartSite site = commonViewer.getCommonNavigator().getSite();
             dialog = new DataClusterDialog(getShell(), new TreeObject(), site);
             dialog.setDefaultServerDef(serverDef);
@@ -157,16 +155,15 @@ public class TestTriggerAction extends AbstractRepositoryAction implements Selec
         mdmServerDef.setName(serverDef.getName());
         mdmServerDef.setPasswd(serverDef.getPasswd());
         mdmServerDef.setPath(serverDef.getPath());
-        mdmServerDef.setUniverse(serverDef.getUniverse());
         mdmServerDef.setUser(serverDef.getUser());
 
         return mdmServerDef;
     }
 
-    private boolean checkConnection(String endpointaddress, String username, String password, String universe) {
+    private boolean checkConnection(String endpointaddress, String username, String password) {
         ILegendServerDefService serverDefService = (ILegendServerDefService) GlobalServiceRegister.getDefault().getService(
                 ILegendServerDefService.class);
-        return serverDefService.checkServerDefConnection(endpointaddress, username, password, universe);
+        return serverDefService.checkServerDefConnection(endpointaddress, username, password);
     }
 
     public void widgetSelected(SelectionEvent e) {

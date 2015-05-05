@@ -819,170 +819,6 @@ public interface MdmpropertiesPackage extends EPackage {
     int WS_STORED_PROCEDURE_ITEM_FEATURE_COUNT = MDM_SERVER_OBJECT_ITEM_FEATURE_COUNT + 1;
 
     /**
-     * The meta object id for the '{@link org.talend.mdm.repository.model.mdmproperties.impl.WSUniverseItemImpl <em>WS Universe Item</em>}' class.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @see org.talend.mdm.repository.model.mdmproperties.impl.WSUniverseItemImpl
-     * @see org.talend.mdm.repository.model.mdmproperties.impl.MdmpropertiesPackageImpl#getWSUniverseItem()
-     * @generated
-     */
-    int WS_UNIVERSE_ITEM = 9;
-
-    /**
-     * The feature id for the '<em><b>Property</b></em>' reference.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     * @ordered
-     */
-    int WS_UNIVERSE_ITEM__PROPERTY = MDM_SERVER_OBJECT_ITEM__PROPERTY;
-
-    /**
-     * The feature id for the '<em><b>State</b></em>' reference.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     * @ordered
-     */
-    int WS_UNIVERSE_ITEM__STATE = MDM_SERVER_OBJECT_ITEM__STATE;
-
-    /**
-     * The feature id for the '<em><b>Parent</b></em>' reference.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     * @ordered
-     */
-    int WS_UNIVERSE_ITEM__PARENT = MDM_SERVER_OBJECT_ITEM__PARENT;
-
-    /**
-     * The feature id for the '<em><b>Reference Resources</b></em>' reference list.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     * @ordered
-     */
-    int WS_UNIVERSE_ITEM__REFERENCE_RESOURCES = MDM_SERVER_OBJECT_ITEM__REFERENCE_RESOURCES;
-
-    /**
-     * The feature id for the '<em><b>File Extension</b></em>' attribute.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     * @ordered
-     */
-    int WS_UNIVERSE_ITEM__FILE_EXTENSION = MDM_SERVER_OBJECT_ITEM__FILE_EXTENSION;
-
-    /**
-     * The feature id for the '<em><b>Need Version</b></em>' attribute.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     * @ordered
-     */
-    int WS_UNIVERSE_ITEM__NEED_VERSION = MDM_SERVER_OBJECT_ITEM__NEED_VERSION;
-
-    /**
-     * The feature id for the '<em><b>Ws Universe</b></em>' reference.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     * @ordered
-     */
-    int WS_UNIVERSE_ITEM__WS_UNIVERSE = MDM_SERVER_OBJECT_ITEM_FEATURE_COUNT + 0;
-
-    /**
-     * The number of structural features of the '<em>WS Universe Item</em>' class.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     * @ordered
-     */
-    int WS_UNIVERSE_ITEM_FEATURE_COUNT = MDM_SERVER_OBJECT_ITEM_FEATURE_COUNT + 1;
-
-    /**
-     * The meta object id for the '{@link org.talend.mdm.repository.model.mdmproperties.impl.WSSynchronizationPlanItemImpl <em>WS Synchronization Plan Item</em>}' class.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @see org.talend.mdm.repository.model.mdmproperties.impl.WSSynchronizationPlanItemImpl
-     * @see org.talend.mdm.repository.model.mdmproperties.impl.MdmpropertiesPackageImpl#getWSSynchronizationPlanItem()
-     * @generated
-     */
-    int WS_SYNCHRONIZATION_PLAN_ITEM = 10;
-
-    /**
-     * The feature id for the '<em><b>Property</b></em>' reference.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     * @ordered
-     */
-    int WS_SYNCHRONIZATION_PLAN_ITEM__PROPERTY = MDM_SERVER_OBJECT_ITEM__PROPERTY;
-
-    /**
-     * The feature id for the '<em><b>State</b></em>' reference.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     * @ordered
-     */
-    int WS_SYNCHRONIZATION_PLAN_ITEM__STATE = MDM_SERVER_OBJECT_ITEM__STATE;
-
-    /**
-     * The feature id for the '<em><b>Parent</b></em>' reference.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     * @ordered
-     */
-    int WS_SYNCHRONIZATION_PLAN_ITEM__PARENT = MDM_SERVER_OBJECT_ITEM__PARENT;
-
-    /**
-     * The feature id for the '<em><b>Reference Resources</b></em>' reference list.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     * @ordered
-     */
-    int WS_SYNCHRONIZATION_PLAN_ITEM__REFERENCE_RESOURCES = MDM_SERVER_OBJECT_ITEM__REFERENCE_RESOURCES;
-
-    /**
-     * The feature id for the '<em><b>File Extension</b></em>' attribute.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     * @ordered
-     */
-    int WS_SYNCHRONIZATION_PLAN_ITEM__FILE_EXTENSION = MDM_SERVER_OBJECT_ITEM__FILE_EXTENSION;
-
-    /**
-     * The feature id for the '<em><b>Need Version</b></em>' attribute.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     * @ordered
-     */
-    int WS_SYNCHRONIZATION_PLAN_ITEM__NEED_VERSION = MDM_SERVER_OBJECT_ITEM__NEED_VERSION;
-
-    /**
-     * The feature id for the '<em><b>Ws Synchronization Plan</b></em>' reference.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     * @ordered
-     */
-    int WS_SYNCHRONIZATION_PLAN_ITEM__WS_SYNCHRONIZATION_PLAN = MDM_SERVER_OBJECT_ITEM_FEATURE_COUNT + 0;
-
-    /**
-     * The number of structural features of the '<em>WS Synchronization Plan Item</em>' class.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     * @ordered
-     */
-    int WS_SYNCHRONIZATION_PLAN_ITEM_FEATURE_COUNT = MDM_SERVER_OBJECT_ITEM_FEATURE_COUNT + 1;
-
-    /**
      * The meta object id for the '{@link org.talend.mdm.repository.model.mdmproperties.impl.WSViewItemImpl <em>WS View Item</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -990,7 +826,7 @@ public interface MdmpropertiesPackage extends EPackage {
      * @see org.talend.mdm.repository.model.mdmproperties.impl.MdmpropertiesPackageImpl#getWSViewItem()
      * @generated
      */
-    int WS_VIEW_ITEM = 11;
+    int WS_VIEW_ITEM = 9;
 
     /**
      * The feature id for the '<em><b>Property</b></em>' reference.
@@ -1072,7 +908,7 @@ public interface MdmpropertiesPackage extends EPackage {
      * @see org.talend.mdm.repository.model.mdmproperties.impl.MdmpropertiesPackageImpl#getWSWorkflowDeployItem()
      * @generated
      */
-    int WS_WORKFLOW_DEPLOY_ITEM = 12;
+    int WS_WORKFLOW_DEPLOY_ITEM = 10;
 
     /**
      * The feature id for the '<em><b>Property</b></em>' reference.
@@ -1154,7 +990,7 @@ public interface MdmpropertiesPackage extends EPackage {
      * @see org.talend.mdm.repository.model.mdmproperties.impl.MdmpropertiesPackageImpl#getWSTransformerV2Item()
      * @generated
      */
-    int WS_TRANSFORMER_V2_ITEM = 13;
+    int WS_TRANSFORMER_V2_ITEM = 11;
 
     /**
      * The feature id for the '<em><b>Property</b></em>' reference.
@@ -1236,7 +1072,7 @@ public interface MdmpropertiesPackage extends EPackage {
      * @see org.talend.mdm.repository.model.mdmproperties.impl.MdmpropertiesPackageImpl#getWSRoutingRuleItem()
      * @generated
      */
-    int WS_ROUTING_RULE_ITEM = 14;
+    int WS_ROUTING_RULE_ITEM = 12;
 
     /**
      * The feature id for the '<em><b>Property</b></em>' reference.
@@ -1318,7 +1154,7 @@ public interface MdmpropertiesPackage extends EPackage {
      * @see org.talend.mdm.repository.model.mdmproperties.impl.MdmpropertiesPackageImpl#getWSJobModelItem()
      * @generated
      */
-    int WS_JOB_MODEL_ITEM = 15;
+    int WS_JOB_MODEL_ITEM = 13;
 
     /**
      * The feature id for the '<em><b>Property</b></em>' reference.
@@ -1400,7 +1236,7 @@ public interface MdmpropertiesPackage extends EPackage {
      * @see org.talend.mdm.repository.model.mdmproperties.impl.MdmpropertiesPackageImpl#getWSEventManagerItem()
      * @generated
      */
-    int WS_EVENT_MANAGER_ITEM = 16;
+    int WS_EVENT_MANAGER_ITEM = 14;
 
     /**
      * The feature id for the '<em><b>Property</b></em>' reference.
@@ -1482,7 +1318,7 @@ public interface MdmpropertiesPackage extends EPackage {
      * @see org.talend.mdm.repository.model.mdmproperties.impl.MdmpropertiesPackageImpl#getWSServiceConfigurationItem()
      * @generated
      */
-    int WS_SERVICE_CONFIGURATION_ITEM = 17;
+    int WS_SERVICE_CONFIGURATION_ITEM = 15;
 
     /**
      * The feature id for the '<em><b>Property</b></em>' reference.
@@ -1564,7 +1400,7 @@ public interface MdmpropertiesPackage extends EPackage {
      * @see org.talend.mdm.repository.model.mdmproperties.impl.MdmpropertiesPackageImpl#getWSWorkflowItem()
      * @generated
      */
-    int WS_WORKFLOW_ITEM = 18;
+    int WS_WORKFLOW_ITEM = 16;
 
     /**
      * The feature id for the '<em><b>Property</b></em>' reference.
@@ -1646,7 +1482,7 @@ public interface MdmpropertiesPackage extends EPackage {
      * @see org.talend.mdm.repository.model.mdmproperties.impl.MdmpropertiesPackageImpl#getWSResourceItem()
      * @generated
      */
-    int WS_RESOURCE_ITEM = 19;
+    int WS_RESOURCE_ITEM = 17;
 
     /**
      * The feature id for the '<em><b>Property</b></em>' reference.
@@ -1728,7 +1564,7 @@ public interface MdmpropertiesPackage extends EPackage {
      * @see org.talend.mdm.repository.model.mdmproperties.impl.MdmpropertiesPackageImpl#getWSCustomFormItem()
      * @generated
      */
-    int WS_CUSTOM_FORM_ITEM = 20;
+    int WS_CUSTOM_FORM_ITEM = 18;
 
     /**
      * The feature id for the '<em><b>Property</b></em>' reference.
@@ -1810,7 +1646,7 @@ public interface MdmpropertiesPackage extends EPackage {
      * @see org.talend.mdm.repository.model.mdmproperties.impl.MdmpropertiesPackageImpl#getWorkspaceRootItem()
      * @generated
      */
-    int WORKSPACE_ROOT_ITEM = 21;
+    int WORKSPACE_ROOT_ITEM = 19;
 
     /**
      * The feature id for the '<em><b>Property</b></em>' reference.
@@ -1910,7 +1746,7 @@ public interface MdmpropertiesPackage extends EPackage {
      * @see org.talend.mdm.repository.model.mdmproperties.impl.MdmpropertiesPackageImpl#getWSMatchRuleItem()
      * @generated
      */
-    int WS_MATCH_RULE_ITEM = 22;
+    int WS_MATCH_RULE_ITEM = 20;
 
     /**
      * The feature id for the '<em><b>Property</b></em>' reference.
@@ -1992,7 +1828,7 @@ public interface MdmpropertiesPackage extends EPackage {
      * @see org.talend.mdm.repository.model.mdmproperties.impl.MdmpropertiesPackageImpl#getERepositoryObjectType()
      * @generated
      */
-    int EREPOSITORY_OBJECT_TYPE = 23;
+    int EREPOSITORY_OBJECT_TYPE = 21;
 
 
     /**
@@ -2183,48 +2019,6 @@ public interface MdmpropertiesPackage extends EPackage {
      * @generated
      */
     EReference getWSStoredProcedureItem_WsStoredProcedure();
-
-    /**
-     * Returns the meta object for class '{@link org.talend.mdm.repository.model.mdmproperties.WSUniverseItem <em>WS Universe Item</em>}'.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @return the meta object for class '<em>WS Universe Item</em>'.
-     * @see org.talend.mdm.repository.model.mdmproperties.WSUniverseItem
-     * @generated
-     */
-    EClass getWSUniverseItem();
-
-    /**
-     * Returns the meta object for the reference '{@link org.talend.mdm.repository.model.mdmproperties.WSUniverseItem#getWsUniverse <em>Ws Universe</em>}'.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @return the meta object for the reference '<em>Ws Universe</em>'.
-     * @see org.talend.mdm.repository.model.mdmproperties.WSUniverseItem#getWsUniverse()
-     * @see #getWSUniverseItem()
-     * @generated
-     */
-    EReference getWSUniverseItem_WsUniverse();
-
-    /**
-     * Returns the meta object for class '{@link org.talend.mdm.repository.model.mdmproperties.WSSynchronizationPlanItem <em>WS Synchronization Plan Item</em>}'.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @return the meta object for class '<em>WS Synchronization Plan Item</em>'.
-     * @see org.talend.mdm.repository.model.mdmproperties.WSSynchronizationPlanItem
-     * @generated
-     */
-    EClass getWSSynchronizationPlanItem();
-
-    /**
-     * Returns the meta object for the reference '{@link org.talend.mdm.repository.model.mdmproperties.WSSynchronizationPlanItem#getWsSynchronizationPlan <em>Ws Synchronization Plan</em>}'.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @return the meta object for the reference '<em>Ws Synchronization Plan</em>'.
-     * @see org.talend.mdm.repository.model.mdmproperties.WSSynchronizationPlanItem#getWsSynchronizationPlan()
-     * @see #getWSSynchronizationPlanItem()
-     * @generated
-     */
-    EReference getWSSynchronizationPlanItem_WsSynchronizationPlan();
 
     /**
      * Returns the meta object for class '{@link org.talend.mdm.repository.model.mdmproperties.WSViewItem <em>WS View Item</em>}'.
@@ -2672,42 +2466,6 @@ public interface MdmpropertiesPackage extends EPackage {
          * @generated
          */
         EReference WS_STORED_PROCEDURE_ITEM__WS_STORED_PROCEDURE = eINSTANCE.getWSStoredProcedureItem_WsStoredProcedure();
-
-        /**
-         * The meta object literal for the '{@link org.talend.mdm.repository.model.mdmproperties.impl.WSUniverseItemImpl <em>WS Universe Item</em>}' class.
-         * <!-- begin-user-doc -->
-         * <!-- end-user-doc -->
-         * @see org.talend.mdm.repository.model.mdmproperties.impl.WSUniverseItemImpl
-         * @see org.talend.mdm.repository.model.mdmproperties.impl.MdmpropertiesPackageImpl#getWSUniverseItem()
-         * @generated
-         */
-        EClass WS_UNIVERSE_ITEM = eINSTANCE.getWSUniverseItem();
-
-        /**
-         * The meta object literal for the '<em><b>Ws Universe</b></em>' reference feature.
-         * <!-- begin-user-doc -->
-         * <!-- end-user-doc -->
-         * @generated
-         */
-        EReference WS_UNIVERSE_ITEM__WS_UNIVERSE = eINSTANCE.getWSUniverseItem_WsUniverse();
-
-        /**
-         * The meta object literal for the '{@link org.talend.mdm.repository.model.mdmproperties.impl.WSSynchronizationPlanItemImpl <em>WS Synchronization Plan Item</em>}' class.
-         * <!-- begin-user-doc -->
-         * <!-- end-user-doc -->
-         * @see org.talend.mdm.repository.model.mdmproperties.impl.WSSynchronizationPlanItemImpl
-         * @see org.talend.mdm.repository.model.mdmproperties.impl.MdmpropertiesPackageImpl#getWSSynchronizationPlanItem()
-         * @generated
-         */
-        EClass WS_SYNCHRONIZATION_PLAN_ITEM = eINSTANCE.getWSSynchronizationPlanItem();
-
-        /**
-         * The meta object literal for the '<em><b>Ws Synchronization Plan</b></em>' reference feature.
-         * <!-- begin-user-doc -->
-         * <!-- end-user-doc -->
-         * @generated
-         */
-        EReference WS_SYNCHRONIZATION_PLAN_ITEM__WS_SYNCHRONIZATION_PLAN = eINSTANCE.getWSSynchronizationPlanItem_WsSynchronizationPlan();
 
         /**
          * The meta object literal for the '{@link org.talend.mdm.repository.model.mdmproperties.impl.WSViewItemImpl <em>WS View Item</em>}' class.

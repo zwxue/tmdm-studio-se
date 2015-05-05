@@ -126,10 +126,6 @@ public class ServerTreeLabelProvider extends ColumnLabelProvider implements ICol
             return ImageCache.getCreatedImage(EImage.JOB.getPath());
         } else if (object.getType() == TreeObject.SERVICE_CONFIGURATION) {
             return ImageCache.getCreatedImage(EImage.SERVICE_CONFIGURATION.getPath());
-        } else if (object.getType() == TreeObject.UNIVERSE) {
-            return ImageCache.getCreatedImage(EImage.UNIVERSE.getPath());
-        } else if (object.getType() == TreeObject.SYNCHRONIZATIONPLAN) {
-            return ImageCache.getCreatedImage(EImage.SYNCHRONIZATIONPLAN.getPath());
         } else if (object.getType() == TreeObject.CATEGORY_FOLDER) {
             return ImageCache.getCreatedImage("icons/folder.gif");//$NON-NLS-1$
         } else if (object.getType() == TreeObject.BUILT_IN_CATEGORY_FOLDER) {

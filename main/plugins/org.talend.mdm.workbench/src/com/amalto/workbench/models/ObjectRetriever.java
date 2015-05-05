@@ -42,8 +42,6 @@ public class ObjectRetriever implements IRunnableWithProgress {
 
     private String password;
 
-    private String universe;
-
     private String objectName = "";//$NON-NLS-1$
 
     /**
@@ -52,15 +50,13 @@ public class ObjectRetriever implements IRunnableWithProgress {
      * @param endpointaddress
      * @param username
      * @param password
-     * @param universe
      */
-    public ObjectRetriever(TreeParent parentObject, String endpointaddress, String username, String password, String universe) {
+    public ObjectRetriever(TreeParent parentObject, String endpointaddress, String username, String password) {
         super();
         this.parentObject = parentObject;
         this.endpointaddress = endpointaddress;
         this.username = username;
         this.password = password;
-        this.universe = universe;
     }
 
     public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
@@ -76,21 +72,7 @@ public class ObjectRetriever implements IRunnableWithProgress {
                 objectName = "JobAvailableModel";//$NON-NLS-1$
                 break;
             }
-            TMDMService service = Util.getMDMService(new URL(endpointaddress), universe, username, password);
-            // port.ping(new WSPing("Hello MDM!"));
-            // monitor.worked(1);
-
-            // WSUniverse wUuniverse = null;
-            // wUuniverse = port.getCurrentUniverse(new WSGetCurrentUniverse());
-            // monitor.subTask("Accessing server....");
-            //
-            // UserInfo user = new UserInfo();
-            // user.setUsername(username);
-            // user.setPassword(password);
-            // user.setServerUrl(endpointaddress);
-            // user.setUniverse(universe);
-            // user.setWsUuniverse(wUuniverse);
-            // parentObject.setUser(user);
+            TMDMService service = Util.getMDMService(new URL(endpointaddress), username, password);
 
             // commented this by jsxie to fix bug 21371
             // parentObject.getServerRoot().removeChildFromUI(parentObject);

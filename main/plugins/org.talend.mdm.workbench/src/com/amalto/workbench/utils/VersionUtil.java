@@ -69,12 +69,6 @@ public class VersionUtil {
         case TreeObject.ROUTING_RULE:
             type = "Routing Rule";//$NON-NLS-1$
             break;
-        case TreeObject.UNIVERSE:
-            type = "Universe";//$NON-NLS-1$
-            break;
-        case TreeObject.SYNCHRONIZATIONPLAN:
-            type = "Synchronization Plan";//$NON-NLS-1$
-            break;
         }
         return type;
     }
@@ -124,16 +118,6 @@ public class VersionUtil {
             break;
         case TreeObject.ROUTING_RULE:
             instance = (xobject.isXObject() ? ((WSRoutingRulePK) xobject.getWsKey()).getPk() : null);
-            break;
-        case TreeObject.UNIVERSE:
-            // *** TMDM-8080, temp omitted start ***//
-            // instance = (xobject.isXObject() ? ((WSUniversePK) xobject.getWsKey()).getPk() : null);
-            // *** TMDM-8080, temp omitted end ***//
-            break;
-        case TreeObject.SYNCHRONIZATIONPLAN:
-            // *** TMDM-8080, temp omitted start ***//
-            // instance = (xobject.isXObject() ? ((WSSynchronizationPlanPK) xobject.getWsKey()).getPk() : null);
-            // *** TMDM-8080, temp omitted end ***//
             break;
         }
         return instance;

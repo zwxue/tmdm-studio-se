@@ -21,8 +21,6 @@ public class UserInfo {
 
     private String serverUrl;
 
-    private String universe;
-
     public UserInfo() {
     }
     
@@ -50,11 +48,4 @@ public class UserInfo {
         this.serverUrl = serverUrl;
     }
 
-    public String getUniverse() {
-        return universe;
-    }
-
-    public void setUniverse(String universe) {
-        this.universe = universe;
-    }
 }

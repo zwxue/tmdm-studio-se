@@ -250,13 +250,13 @@ public class ServerDefService implements ILegendServerDefService {
      * @throws Exception
      */
     public static void checkMDMConnection(MDMServerDef serverDef) throws MalformedURLException, XtentisException {
-        checkMDMConnection(serverDef.getUrl(), serverDef.getUser(), serverDef.getPasswd(), serverDef.getUniverse());
+        checkMDMConnection(serverDef.getUrl(), serverDef.getUser(), serverDef.getPasswd());
     }
 
-    public static void checkMDMConnection(String endpointaddress, String username, String password, String universe)
+    public static void checkMDMConnection(String endpointaddress, String username, String password)
             throws MalformedURLException, XtentisException {
         try {
-            TMDMService port = Util.getMDMService(new URL(endpointaddress), universe, username, password);
+            TMDMService port = Util.getMDMService(new URL(endpointaddress), username, password);
             port.ping(new WSPing("ServerExplorer")); //$NON-NLS-1$
         } catch (javax.xml.ws.WebServiceException e) {
             XtentisException xtentisException = Util.convertWebServiceException(e);
@@ -269,9 +269,9 @@ public class ServerDefService implements ILegendServerDefService {
 
     }
 
-    public boolean checkServerDefConnection(String endpointaddress, String username, String password, String universe) {
+    public boolean checkServerDefConnection(String endpointaddress, String username, String password) {
         try {
-            checkMDMConnection(endpointaddress, username, password, universe);
+            checkMDMConnection(endpointaddress, username, password);
             return true;
         } catch (Exception e) {
             log.error(e.getMessage(), e);
@@ -312,8 +312,7 @@ public class ServerDefService implements ILegendServerDefService {
                 String url = serverDef.getProtocol() + serverDef.getHost() + ":" + serverDef.getPort() //$NON-NLS-1$ 
                         + serverDef.getPath();
                 com.amalto.workbench.utils.MDMServerDef legendDef = com.amalto.workbench.utils.MDMServerDef.parse(
-                        serverDef.getProtocol(), url, serverDef.getUser(), serverDef.getPasswd(), serverDef.getUniverse(),
-                        serverDef.getName());
+                        serverDef.getProtocol(), url, serverDef.getUser(), serverDef.getPasswd(), serverDef.getName());
                 legendDefs.add(legendDef);
             }
 

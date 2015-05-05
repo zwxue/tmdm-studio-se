@@ -25,5 +25,5 @@ public interface ILegendServerDefService extends IService {
 
     public List<MDMServerDef> getLegendServerDefs();
 
-    public boolean checkServerDefConnection(String endpointaddress, String username, String password, String universe);
+    public boolean checkServerDefConnection(String endpointaddress, String username, String password);
 }

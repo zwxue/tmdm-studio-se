@@ -634,8 +634,6 @@ public class Messages extends NLS {
 
     public static String Version;
 
-    public static String VersionInteractiveHandler_label;
-
     public static String ViewInputDialog_Default;
 
     public static String ViewInputDialog_Entity;
@@ -661,10 +659,6 @@ public class Messages extends NLS {
     public static String ServiceConfigurationInteractiveHandler_label;
 
     public static String SimpleXpathInputDialogR_title;
-
-    public static String SynchronizationPlanInteractiveHandler_label;
-
-    public static String SynchronizationXX_Desc;
 
     public static String Overwrite_Exists_Items;
 

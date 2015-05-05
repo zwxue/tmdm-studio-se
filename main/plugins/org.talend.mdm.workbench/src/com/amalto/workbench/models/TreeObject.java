@@ -65,10 +65,6 @@ public class TreeObject implements IAdaptable, Comparable<TreeObject> {
 
     public final static int MENU = 17;
 
-    public final static int UNIVERSE = 18;
-
-    public final static int SYNCHRONIZATIONPLAN = 19;
-
     public final static int TRANSFORMER_PLUGIN = 20;
 
     public final static int CATEGORY_FOLDER = 21;
@@ -129,11 +125,7 @@ public class TreeObject implements IAdaptable, Comparable<TreeObject> {
 
     public final static String STOREDPROCEDURE_ = "storedprocedure";//$NON-NLS-1$
 
-    public final static String SYNCHRONIZATIONPLAN_ = "synchronizationplan";//$NON-NLS-1$
-
     public final static String TRANSFORMER_ = "transformer";//$NON-NLS-1$
-
-    public final static String UNIVERSE_ = "universe";//$NON-NLS-1$
 
     public final static String VIEW_ = "view";//$NON-NLS-1$
 
@@ -432,13 +424,6 @@ public class TreeObject implements IAdaptable, Comparable<TreeObject> {
             return getServerRoot().getUser().getPassword();
         }
         return password;
-    }
-
-    public String getUniverse() {
-        if (getServerRoot() != null) {
-            return getServerRoot().getUser().getUniverse();
-        }
-        return null;
     }
 
     public String getEndpointAddress() {

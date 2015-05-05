@@ -356,11 +356,10 @@ public class Util {
                 return null;
             }
             String endpointAddress = xobject.getEndpointAddress();
-            String universe = xobject.getUniverse();
             String username = xobject.getUsername();
             String password = xobject.getPassword();
 
-            TMDMService mdmService = getMDMService(new URL(endpointAddress), universe, username, password);
+            TMDMService mdmService = getMDMService(new URL(endpointAddress), username, password);
 
             return mdmService;
         } catch (MalformedURLException e) {
@@ -368,9 +367,9 @@ public class Util {
         }
     }
 
-    public static TMDMService getMDMService(String universe, String username, String password) throws XtentisException {
+    public static TMDMService getMDMService(String username, String password) throws XtentisException {
         try {
-            TMDMService mdmService = getMDMService(new URL(default_endpoint_address), universe, username, password);
+            TMDMService mdmService = getMDMService(new URL(default_endpoint_address), username, password);
 
             return mdmService;
         } catch (MalformedURLException e) {
@@ -379,15 +378,15 @@ public class Util {
         }
     }
 
-    public static TMDMService getMDMService(URL url, String universe, String username, String password) throws XtentisException {
-        TMDMService mdmService = getMDMService(url, universe, username, password, true);
+    public static TMDMService getMDMService(URL url, String username, String password) throws XtentisException {
+        TMDMService mdmService = getMDMService(url, username, password, true);
 
         return mdmService;
     }
 
-    public static TMDMService getMDMService(URL url, String universe, final String username, final String password,
+    public static TMDMService getMDMService(URL url, final String username, final String password,
             boolean showMissingJarDialog) throws XtentisException {
-        TMDMService service = (TMDMService) cachedMDMService.get(url, universe, username, password);
+        TMDMService service = (TMDMService) cachedMDMService.get(url, username, password);
         if (service == null) {
             boolean checkResult = MissingJarService.getInstance().checkMissingJar(showMissingJarDialog);
             if (!checkResult) {
@@ -414,19 +413,15 @@ public class Util {
                 // context.put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, endpointAddress);
 
                 // authentication
-                if (universe == null || universe.trim().length() == 0) {
-                    context.put(BindingProvider.USERNAME_PROPERTY, username);
-                } else {
-                    context.put(BindingProvider.USERNAME_PROPERTY, universe + '/' + username);
-                }
-
+                context.put(BindingProvider.USERNAME_PROPERTY, username);
                 context.put(BindingProvider.PASSWORD_PROPERTY, password);
+
                 IWebServiceHook wsHook = getWebServiceHook();
                 if (wsHook != null) {
                     wsHook.preRequestSendingHook(stub, username);
                 }
 
-                cachedMDMService.put(url, universe, username, password, service);
+                cachedMDMService.put(url, username, password, service);
             } catch (WebServiceException e) {
                 Throwable throwable = analyseWebServiceException(e);
                 String message = throwable.getMessage();
@@ -475,10 +470,10 @@ public class Util {
         return webServceHook;
     }
 
-    public static List<WSDataModelPK> getAllDataModelPKs(URL url, String universe, String username, String password)
+    public static List<WSDataModelPK> getAllDataModelPKs(URL url, String username, String password)
             throws XtentisException {
         try {
-            TMDMService port = Util.getMDMService(url, universe, username, password);
+            TMDMService port = Util.getMDMService(url, username, password);
             return port.getDataModelPKs(new WSRegexDataModelPKs("*")).getWsDataModelPKs();//$NON-NLS-1$
         } catch (Exception e) {
             log.error(e.getMessage(), e);
@@ -486,10 +481,10 @@ public class Util {
         }
     }
 
-    public static List<WSDataClusterPK> getAllDataClusterPKs(URL url, String universe, String username, String password)
+    public static List<WSDataClusterPK> getAllDataClusterPKs(URL url, String username, String password)
             throws XtentisException {
         try {
-            TMDMService port = Util.getMDMService(url, universe, username, password);
+            TMDMService port = Util.getMDMService(url, username, password);
             return port.getDataClusterPKs(new WSRegexDataClusterPKs("*")).getWsDataClusterPKs();//$NON-NLS-1$
         } catch (Exception e) {
             log.error(e.getMessage(), e);
@@ -497,13 +492,13 @@ public class Util {
         }
     }
 
-    public static List<WSViewPK> getAllViewPKs(URL url, String universe, String username, String password, String regex)
+    public static List<WSViewPK> getAllViewPKs(URL url, String username, String password, String regex)
             throws XtentisException {
         try {
             if ((regex == null) || ("".equals(regex))) {
                 regex = "*";//$NON-NLS-1$
             }
-            TMDMService port = Util.getMDMService(url, universe, username, password);
+            TMDMService port = Util.getMDMService(url, username, password);
             return port.getViewPKs(new WSGetViewPKs(regex)).getWsViewPK();
         } catch (Exception e) {
             log.error(e.getMessage(), e);
@@ -2463,25 +2458,6 @@ public class Util {
         }
     }
 
-    public static boolean hasUniverse(TreeObject xobject) {
-        if (xobject.isXObject()) {
-            return false;
-        }
-        switch (xobject.getType()) {
-        case TreeObject.DATA_MODEL:
-        case TreeObject.VIEW:
-        case TreeObject.MENU:
-        case TreeObject.ROLE:
-        case TreeObject.ROUTING_RULE:
-        case TreeObject.SYNCHRONIZATIONPLAN:
-        case TreeObject.STORED_PROCEDURE:
-        case TreeObject.TRANSFORMER:
-            return true;
-        default:
-            return false;
-        }
-    }
-
     public static boolean hasTags(TreeObject xobject) {
         if (xobject.isXObject()) {
             return true;
@@ -2493,10 +2469,8 @@ public class Util {
         case TreeObject.MENU:
         case TreeObject.ROLE:
         case TreeObject.ROUTING_RULE:
-        case TreeObject.SYNCHRONIZATIONPLAN:
         case TreeObject.STORED_PROCEDURE:
         case TreeObject.TRANSFORMER:
-        case TreeObject.UNIVERSE: // is necessary
             return true;
         default:
             return false;
@@ -2676,7 +2650,7 @@ public class Util {
 
     public static String getRevision(TreeObject xobject) {
         String revision = "";//$NON-NLS-1$
-        if (xobject.getType() != TreeObject.DATA_CLUSTER && xobject.getType() != TreeObject.UNIVERSE) {
+        if (xobject.getType() != TreeObject.DATA_CLUSTER) {
             TreeParent parent = xobject.findServerFolder(xobject.getType());
 
             if (parent != null) {
@@ -2926,20 +2900,8 @@ public class Util {
             menu = EImage.MENU.getPath();
         } else if (menuName.equalsIgnoreCase("Manage users")) {
             menu = EImage.MANAGE_USERS.getPath();
-        } else if (menuName.equalsIgnoreCase("Reporting")) {
-            menu = EImage.REPORTING.getPath();
-        } else if (menuName.equalsIgnoreCase("Service Schedule")) {
-            menu = EImage.MENU.getPath();
-        } else if (menuName.equalsIgnoreCase("SynchronizationAction")) {
-            menu = EImage.SYNCHRONIZE.getPath();
-        } else if (menuName.equalsIgnoreCase("SynchronizationItem")) {
-            menu = EImage.SYNCHRO_ITEM.getPath();
-        } else if (menuName.equalsIgnoreCase("Universe Manager")) {
-            menu = EImage.UNIVERSE.getPath();
         } else if (menuName.equalsIgnoreCase("UpdateReport")) {
             menu = EImage.UPDATEREPORT.getPath();
-        } else if (menuName.equalsIgnoreCase("WorkflowTasks")) {
-            menu = EImage.WORKFLOWTASKS.getPath();
         }
         return ImageCache.getImage(menu).createImage();
     }
@@ -3029,7 +2991,7 @@ public class Util {
         return checkInCopyTypeElement(selectedObjs) || checkInCOpyTypeParticle(selectedObjs);
     }
 
-    public static String checkOnVersionCompatibility(String url, String username, String password, String universe) {
+    public static String checkOnVersionCompatibility(String url, String username, String password) {
         IProduct product = Platform.getProduct();
         String versionComp = "";//$NON-NLS-1$
         try {
@@ -3046,7 +3008,7 @@ public class Util {
             int major = Integer.parseInt(match.group(1));
             int minor = Integer.parseInt(match.group(2));
             int rev = match.group(4) != null && !match.group(4).equals("") ? Integer.parseInt(match.group(4)) : 0;//$NON-NLS-1$
-            TMDMService service = Util.getMDMService(new URL(url), universe, username, password);
+            TMDMService service = Util.getMDMService(new URL(url), username, password);
             WSVersion wsVersion = service.getComponentVersion(new WSGetComponentVersion(WSComponent.DATA_MANAGER, null));
             versionComp += Messages.Util_47 + wsVersion.getMajor() + Messages.Util_48 + wsVersion.getMinor() + Messages.Util_49
                     + wsVersion.getRevision();

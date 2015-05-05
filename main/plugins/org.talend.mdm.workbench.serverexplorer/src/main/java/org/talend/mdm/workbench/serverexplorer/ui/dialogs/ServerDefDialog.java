@@ -40,7 +40,6 @@ import org.talend.mdm.workbench.serverexplorer.core.ServerDefService;
 import org.talend.mdm.workbench.serverexplorer.i18n.Messages;
 import org.talend.repository.model.IProxyRepositoryFactory;
 
-import com.amalto.workbench.exadapter.ExAdapterManager;
 import com.amalto.workbench.service.MissingJarsException;
 import com.amalto.workbench.utils.PasswordUtil;
 import com.amalto.workbench.utils.XtentisException;
@@ -83,8 +82,6 @@ public class ServerDefDialog extends TitleAreaDialog {
 
     private static final int CHECK_CONNECTION_ID = 1024;
 
-    private IServerDefDialogExAdapter exAdapter;
-
     public MDMServerDef getServerDef() {
         return this.serverDef;
     }
@@ -106,8 +103,6 @@ public class ServerDefDialog extends TitleAreaDialog {
             this.serverDef = MdmmetadataFactory.eINSTANCE.createMDMServerDef();
             this.serverDef.setAlgorithm(PasswordUtil.ALGORITHM_COMMON_V2);
         }
-        exAdapter = ExAdapterManager.getAdapter(this, IServerDefDialogExAdapter.class);
-
     }
 
     /**
@@ -181,10 +176,6 @@ public class ServerDefDialog extends TitleAreaDialog {
             sharePwdBtn.setToolTipText(Messages.OnlyApplicableShared);
         }
 
-        if (exAdapter != null) {
-            exAdapter.createDialogArea(container);
-        }
-
         // init value
         initValue();
         // init listener
@@ -217,10 +208,6 @@ public class ServerDefDialog extends TitleAreaDialog {
                 newPassword = passwordText.getText().trim();
             }
         });
-
-        if (exAdapter != null) {
-            exAdapter.initListener();
-        }
 
     }
 
@@ -318,9 +305,6 @@ public class ServerDefDialog extends TitleAreaDialog {
             serverDef.setPasswd(encryptedPassword);
             serverDef.setTempPasswd(null);
         }
-        if (exAdapter != null) {
-            exAdapter.updateUI2Model(serverDef);
-        }
     }
 
     private void initValue() {
@@ -354,9 +338,6 @@ public class ServerDefDialog extends TitleAreaDialog {
 
         newPassword = passwordText.getText().trim();
 
-        if (exAdapter != null) {
-            exAdapter.initValue(serverDef);
-        }
         if (!isUpdateServerDef) {
             sharePwdBtn.setSelection(true);
         }

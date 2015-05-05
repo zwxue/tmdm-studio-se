@@ -2,7 +2,7 @@
 //
 // Talend Community Edition
 //
-// Copyright (C) 2006-2015 Talend ¨C www.talend.com
+// Copyright (C) 2006-2015 Talend â€“ www.talend.com
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
@@ -38,10 +38,6 @@ public interface IServerObjectOrdinal {
     public static final int VIEW = 12;
 
     public static final int STORE_PROCEDURE = 13;
-
-    public static final int SYNCHRONIZATIONPLAN = 14;
-
-    public static final int UNIVERSE = 15;
 
     public static final int WORKFLOW_PROCESS = 16;
 

@@ -13,15 +13,10 @@ import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EcorePackage;
-
 import org.eclipse.emf.ecore.impl.EPackageImpl;
-
 import org.talend.core.model.properties.PropertiesPackage;
-
 import org.talend.core.model.repository.ERepositoryObjectType;
-
 import org.talend.mdm.repository.model.mdmmetadata.MdmmetadataPackage;
-
 import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
 import org.talend.mdm.repository.model.mdmproperties.MDMItem;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerDefItem;
@@ -40,14 +35,11 @@ import org.talend.mdm.repository.model.mdmproperties.WSRoleItem;
 import org.talend.mdm.repository.model.mdmproperties.WSRoutingRuleItem;
 import org.talend.mdm.repository.model.mdmproperties.WSServiceConfigurationItem;
 import org.talend.mdm.repository.model.mdmproperties.WSStoredProcedureItem;
-import org.talend.mdm.repository.model.mdmproperties.WSSynchronizationPlanItem;
 import org.talend.mdm.repository.model.mdmproperties.WSTransformerV2Item;
-import org.talend.mdm.repository.model.mdmproperties.WSUniverseItem;
 import org.talend.mdm.repository.model.mdmproperties.WSViewItem;
 import org.talend.mdm.repository.model.mdmproperties.WSWorkflowDeployItem;
 import org.talend.mdm.repository.model.mdmproperties.WSWorkflowItem;
 import org.talend.mdm.repository.model.mdmproperties.WorkspaceRootItem;
-
 import org.talend.mdm.repository.model.mdmserverobject.MdmserverobjectPackage;
 
 /**
@@ -119,20 +111,6 @@ public class MdmpropertiesPackageImpl extends EPackageImpl implements Mdmpropert
      * @generated
      */
     private EClass wsStoredProcedureItemEClass = null;
-
-    /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    private EClass wsUniverseItemEClass = null;
-
-    /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    private EClass wsSynchronizationPlanItemEClass = null;
 
     /**
      * <!-- begin-user-doc -->
@@ -264,7 +242,9 @@ public class MdmpropertiesPackageImpl extends EPackageImpl implements Mdmpropert
      * @generated
      */
     public static MdmpropertiesPackage init() {
-        if (isInited) return (MdmpropertiesPackage)EPackage.Registry.INSTANCE.getEPackage(MdmpropertiesPackage.eNS_URI);
+        if (isInited) {
+            return (MdmpropertiesPackage)EPackage.Registry.INSTANCE.getEPackage(MdmpropertiesPackage.eNS_URI);
+        }
 
         // Obtain or create and register package
         MdmpropertiesPackageImpl theMdmpropertiesPackage = (MdmpropertiesPackageImpl)(EPackage.Registry.INSTANCE.get(eNS_URI) instanceof MdmpropertiesPackageImpl ? EPackage.Registry.INSTANCE.get(eNS_URI) : new MdmpropertiesPackageImpl());
@@ -294,6 +274,7 @@ public class MdmpropertiesPackageImpl extends EPackageImpl implements Mdmpropert
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EClass getMDMItem() {
         return mdmItemEClass;
     }
@@ -303,6 +284,7 @@ public class MdmpropertiesPackageImpl extends EPackageImpl implements Mdmpropert
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EClass getMDMServerDefItem() {
         return mdmServerDefItemEClass;
     }
@@ -312,6 +294,7 @@ public class MdmpropertiesPackageImpl extends EPackageImpl implements Mdmpropert
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EReference getMDMServerDefItem_ServerDef() {
         return (EReference)mdmServerDefItemEClass.getEStructuralFeatures().get(0);
     }
@@ -321,6 +304,7 @@ public class MdmpropertiesPackageImpl extends EPackageImpl implements Mdmpropert
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EClass getMDMServerObjectItem() {
         return mdmServerObjectItemEClass;
     }
@@ -330,6 +314,7 @@ public class MdmpropertiesPackageImpl extends EPackageImpl implements Mdmpropert
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EClass getWSMenuItem() {
         return wsMenuItemEClass;
     }
@@ -339,6 +324,7 @@ public class MdmpropertiesPackageImpl extends EPackageImpl implements Mdmpropert
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EReference getWSMenuItem_WsMenu() {
         return (EReference)wsMenuItemEClass.getEStructuralFeatures().get(0);
     }
@@ -348,6 +334,7 @@ public class MdmpropertiesPackageImpl extends EPackageImpl implements Mdmpropert
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EClass getWSRoleItem() {
         return wsRoleItemEClass;
     }
@@ -357,6 +344,7 @@ public class MdmpropertiesPackageImpl extends EPackageImpl implements Mdmpropert
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EReference getWSRoleItem_WsRole() {
         return (EReference)wsRoleItemEClass.getEStructuralFeatures().get(0);
     }
@@ -366,6 +354,7 @@ public class MdmpropertiesPackageImpl extends EPackageImpl implements Mdmpropert
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EClass getContainerItem() {
         return containerItemEClass;
     }
@@ -375,6 +364,7 @@ public class MdmpropertiesPackageImpl extends EPackageImpl implements Mdmpropert
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getContainerItem_Label() {
         return (EAttribute)containerItemEClass.getEStructuralFeatures().get(0);
     }
@@ -384,6 +374,7 @@ public class MdmpropertiesPackageImpl extends EPackageImpl implements Mdmpropert
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getContainerItem_RepObjType() {
         return (EAttribute)containerItemEClass.getEStructuralFeatures().get(1);
     }
@@ -393,6 +384,7 @@ public class MdmpropertiesPackageImpl extends EPackageImpl implements Mdmpropert
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getContainerItem_Data() {
         return (EAttribute)containerItemEClass.getEStructuralFeatures().get(2);
     }
@@ -402,6 +394,7 @@ public class MdmpropertiesPackageImpl extends EPackageImpl implements Mdmpropert
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EClass getWSDataModelItem() {
         return wsDataModelItemEClass;
     }
@@ -411,6 +404,7 @@ public class MdmpropertiesPackageImpl extends EPackageImpl implements Mdmpropert
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EReference getWSDataModelItem_WsDataModel() {
         return (EReference)wsDataModelItemEClass.getEStructuralFeatures().get(0);
     }
@@ -420,6 +414,7 @@ public class MdmpropertiesPackageImpl extends EPackageImpl implements Mdmpropert
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EClass getWSDataClusterItem() {
         return wsDataClusterItemEClass;
     }
@@ -429,6 +424,7 @@ public class MdmpropertiesPackageImpl extends EPackageImpl implements Mdmpropert
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EReference getWSDataClusterItem_WsDataCluster() {
         return (EReference)wsDataClusterItemEClass.getEStructuralFeatures().get(0);
     }
@@ -438,6 +434,7 @@ public class MdmpropertiesPackageImpl extends EPackageImpl implements Mdmpropert
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EClass getWSStoredProcedureItem() {
         return wsStoredProcedureItemEClass;
     }
@@ -447,6 +444,7 @@ public class MdmpropertiesPackageImpl extends EPackageImpl implements Mdmpropert
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EReference getWSStoredProcedureItem_WsStoredProcedure() {
         return (EReference)wsStoredProcedureItemEClass.getEStructuralFeatures().get(0);
     }
@@ -456,42 +454,7 @@ public class MdmpropertiesPackageImpl extends EPackageImpl implements Mdmpropert
      * <!-- end-user-doc -->
      * @generated
      */
-    public EClass getWSUniverseItem() {
-        return wsUniverseItemEClass;
-    }
-
-    /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    public EReference getWSUniverseItem_WsUniverse() {
-        return (EReference)wsUniverseItemEClass.getEStructuralFeatures().get(0);
-    }
-
-    /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    public EClass getWSSynchronizationPlanItem() {
-        return wsSynchronizationPlanItemEClass;
-    }
-
-    /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    public EReference getWSSynchronizationPlanItem_WsSynchronizationPlan() {
-        return (EReference)wsSynchronizationPlanItemEClass.getEStructuralFeatures().get(0);
-    }
-
-    /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
+    @Override
     public EClass getWSViewItem() {
         return wsViewItemEClass;
     }
@@ -501,6 +464,7 @@ public class MdmpropertiesPackageImpl extends EPackageImpl implements Mdmpropert
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EReference getWSViewItem_WsView() {
         return (EReference)wsViewItemEClass.getEStructuralFeatures().get(0);
     }
@@ -510,6 +474,7 @@ public class MdmpropertiesPackageImpl extends EPackageImpl implements Mdmpropert
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EClass getWSWorkflowDeployItem() {
         return wsWorkflowDeployItemEClass;
     }
@@ -519,6 +484,7 @@ public class MdmpropertiesPackageImpl extends EPackageImpl implements Mdmpropert
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EReference getWSWorkflowDeployItem_WsWorkflowDeploy() {
         return (EReference)wsWorkflowDeployItemEClass.getEStructuralFeatures().get(0);
     }
@@ -528,6 +494,7 @@ public class MdmpropertiesPackageImpl extends EPackageImpl implements Mdmpropert
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EClass getWSTransformerV2Item() {
         return wsTransformerV2ItemEClass;
     }
@@ -537,6 +504,7 @@ public class MdmpropertiesPackageImpl extends EPackageImpl implements Mdmpropert
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EReference getWSTransformerV2Item_WsTransformerV2() {
         return (EReference)wsTransformerV2ItemEClass.getEStructuralFeatures().get(0);
     }
@@ -546,6 +514,7 @@ public class MdmpropertiesPackageImpl extends EPackageImpl implements Mdmpropert
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EClass getWSRoutingRuleItem() {
         return wsRoutingRuleItemEClass;
     }
@@ -555,6 +524,7 @@ public class MdmpropertiesPackageImpl extends EPackageImpl implements Mdmpropert
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EReference getWSRoutingRuleItem_WsRoutingRule() {
         return (EReference)wsRoutingRuleItemEClass.getEStructuralFeatures().get(0);
     }
@@ -564,6 +534,7 @@ public class MdmpropertiesPackageImpl extends EPackageImpl implements Mdmpropert
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EClass getWSJobModelItem() {
         return wsJobModelItemEClass;
     }
@@ -573,6 +544,7 @@ public class MdmpropertiesPackageImpl extends EPackageImpl implements Mdmpropert
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EReference getWSJobModelItem_WsJobModelItem() {
         return (EReference)wsJobModelItemEClass.getEStructuralFeatures().get(0);
     }
@@ -582,6 +554,7 @@ public class MdmpropertiesPackageImpl extends EPackageImpl implements Mdmpropert
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EClass getWSEventManagerItem() {
         return wsEventManagerItemEClass;
     }
@@ -591,6 +564,7 @@ public class MdmpropertiesPackageImpl extends EPackageImpl implements Mdmpropert
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EReference getWSEventManagerItem_WsEventManager() {
         return (EReference)wsEventManagerItemEClass.getEStructuralFeatures().get(0);
     }
@@ -600,6 +574,7 @@ public class MdmpropertiesPackageImpl extends EPackageImpl implements Mdmpropert
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EClass getWSServiceConfigurationItem() {
         return wsServiceConfigurationItemEClass;
     }
@@ -609,6 +584,7 @@ public class MdmpropertiesPackageImpl extends EPackageImpl implements Mdmpropert
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EReference getWSServiceConfigurationItem_WsServiceConfiguration() {
         return (EReference)wsServiceConfigurationItemEClass.getEStructuralFeatures().get(0);
     }
@@ -618,6 +594,7 @@ public class MdmpropertiesPackageImpl extends EPackageImpl implements Mdmpropert
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EClass getWSWorkflowItem() {
         return wsWorkflowItemEClass;
     }
@@ -627,6 +604,7 @@ public class MdmpropertiesPackageImpl extends EPackageImpl implements Mdmpropert
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EReference getWSWorkflowItem_WsWorkflow() {
         return (EReference)wsWorkflowItemEClass.getEStructuralFeatures().get(0);
     }
@@ -636,6 +614,7 @@ public class MdmpropertiesPackageImpl extends EPackageImpl implements Mdmpropert
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EClass getWSResourceItem() {
         return wsResourceItemEClass;
     }
@@ -645,6 +624,7 @@ public class MdmpropertiesPackageImpl extends EPackageImpl implements Mdmpropert
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EReference getWSResourceItem_Resource() {
         return (EReference)wsResourceItemEClass.getEStructuralFeatures().get(0);
     }
@@ -654,6 +634,7 @@ public class MdmpropertiesPackageImpl extends EPackageImpl implements Mdmpropert
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EClass getWSCustomFormItem() {
         return wsCustomFormItemEClass;
     }
@@ -663,6 +644,7 @@ public class MdmpropertiesPackageImpl extends EPackageImpl implements Mdmpropert
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EReference getWSCustomFormItem_CustomForm() {
         return (EReference)wsCustomFormItemEClass.getEStructuralFeatures().get(0);
     }
@@ -672,6 +654,7 @@ public class MdmpropertiesPackageImpl extends EPackageImpl implements Mdmpropert
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EClass getWorkspaceRootItem() {
         return workspaceRootItemEClass;
     }
@@ -681,6 +664,7 @@ public class MdmpropertiesPackageImpl extends EPackageImpl implements Mdmpropert
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getWorkspaceRootItem_Label() {
         return (EAttribute)workspaceRootItemEClass.getEStructuralFeatures().get(0);
     }
@@ -690,6 +674,7 @@ public class MdmpropertiesPackageImpl extends EPackageImpl implements Mdmpropert
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EClass getWSMatchRuleItem() {
         return wsMatchRuleItemEClass;
     }
@@ -699,6 +684,7 @@ public class MdmpropertiesPackageImpl extends EPackageImpl implements Mdmpropert
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EReference getWSMatchRuleItem_MdmMatchRule() {
         return (EReference)wsMatchRuleItemEClass.getEStructuralFeatures().get(0);
     }
@@ -708,6 +694,7 @@ public class MdmpropertiesPackageImpl extends EPackageImpl implements Mdmpropert
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EDataType getERepositoryObjectType() {
         return eRepositoryObjectTypeEDataType;
     }
@@ -717,6 +704,7 @@ public class MdmpropertiesPackageImpl extends EPackageImpl implements Mdmpropert
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public MdmpropertiesFactory getMdmpropertiesFactory() {
         return (MdmpropertiesFactory)getEFactoryInstance();
     }
@@ -736,7 +724,9 @@ public class MdmpropertiesPackageImpl extends EPackageImpl implements Mdmpropert
      * @generated
      */
     public void createPackageContents() {
-        if (isCreated) return;
+        if (isCreated) {
+            return;
+        }
         isCreated = true;
 
         // Create classes and their features
@@ -766,12 +756,6 @@ public class MdmpropertiesPackageImpl extends EPackageImpl implements Mdmpropert
 
         wsStoredProcedureItemEClass = createEClass(WS_STORED_PROCEDURE_ITEM);
         createEReference(wsStoredProcedureItemEClass, WS_STORED_PROCEDURE_ITEM__WS_STORED_PROCEDURE);
-
-        wsUniverseItemEClass = createEClass(WS_UNIVERSE_ITEM);
-        createEReference(wsUniverseItemEClass, WS_UNIVERSE_ITEM__WS_UNIVERSE);
-
-        wsSynchronizationPlanItemEClass = createEClass(WS_SYNCHRONIZATION_PLAN_ITEM);
-        createEReference(wsSynchronizationPlanItemEClass, WS_SYNCHRONIZATION_PLAN_ITEM__WS_SYNCHRONIZATION_PLAN);
 
         wsViewItemEClass = createEClass(WS_VIEW_ITEM);
         createEReference(wsViewItemEClass, WS_VIEW_ITEM__WS_VIEW);
@@ -828,7 +812,9 @@ public class MdmpropertiesPackageImpl extends EPackageImpl implements Mdmpropert
      * @generated
      */
     public void initializePackageContents() {
-        if (isInitialized) return;
+        if (isInitialized) {
+            return;
+        }
         isInitialized = true;
 
         // Initialize package
@@ -857,8 +843,6 @@ public class MdmpropertiesPackageImpl extends EPackageImpl implements Mdmpropert
         wsDataModelItemEClass.getESuperTypes().add(this.getMDMServerObjectItem());
         wsDataClusterItemEClass.getESuperTypes().add(this.getMDMServerObjectItem());
         wsStoredProcedureItemEClass.getESuperTypes().add(this.getMDMServerObjectItem());
-        wsUniverseItemEClass.getESuperTypes().add(this.getMDMServerObjectItem());
-        wsSynchronizationPlanItemEClass.getESuperTypes().add(this.getMDMServerObjectItem());
         wsViewItemEClass.getESuperTypes().add(this.getMDMServerObjectItem());
         wsWorkflowDeployItemEClass.getESuperTypes().add(this.getMDMServerObjectItem());
         wsTransformerV2ItemEClass.getESuperTypes().add(this.getMDMServerObjectItem());
@@ -905,12 +889,6 @@ public class MdmpropertiesPackageImpl extends EPackageImpl implements Mdmpropert
 
         initEClass(wsStoredProcedureItemEClass, WSStoredProcedureItem.class, "WSStoredProcedureItem", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
         initEReference(getWSStoredProcedureItem_WsStoredProcedure(), theMdmserverobjectPackage.getWSStoredProcedureE(), null, "wsStoredProcedure", null, 0, 1, WSStoredProcedureItem.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-        initEClass(wsUniverseItemEClass, WSUniverseItem.class, "WSUniverseItem", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-        initEReference(getWSUniverseItem_WsUniverse(), theMdmserverobjectPackage.getWSUniverseE(), null, "wsUniverse", null, 0, 1, WSUniverseItem.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-        initEClass(wsSynchronizationPlanItemEClass, WSSynchronizationPlanItem.class, "WSSynchronizationPlanItem", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-        initEReference(getWSSynchronizationPlanItem_WsSynchronizationPlan(), theMdmserverobjectPackage.getWSSynchronizationPlanE(), null, "wsSynchronizationPlan", null, 0, 1, WSSynchronizationPlanItem.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
         initEClass(wsViewItemEClass, WSViewItem.class, "WSViewItem", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
         initEReference(getWSViewItem_WsView(), theMdmserverobjectPackage.getWSViewE(), null, "wsView", null, 0, 1, WSViewItem.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

@@ -21,7 +21,6 @@ import org.talend.core.model.metadata.builder.connection.AbstractMetadataObject;
  *   <li>{@link org.talend.mdm.repository.model.mdmmetadata.MDMServerDef#getTempPasswd <em>Temp Passwd</em>}</li>
  *   <li>{@link org.talend.mdm.repository.model.mdmmetadata.MDMServerDef#getPath <em>Path</em>}</li>
  *   <li>{@link org.talend.mdm.repository.model.mdmmetadata.MDMServerDef#getPort <em>Port</em>}</li>
- *   <li>{@link org.talend.mdm.repository.model.mdmmetadata.MDMServerDef#getUniverse <em>Universe</em>}</li>
  *   <li>{@link org.talend.mdm.repository.model.mdmmetadata.MDMServerDef#getUrl <em>Url</em>}</li>
  *   <li>{@link org.talend.mdm.repository.model.mdmmetadata.MDMServerDef#getUser <em>User</em>}</li>
  *   <li>{@link org.talend.mdm.repository.model.mdmmetadata.MDMServerDef#isEnabled <em>Enabled</em>}</li>
@@ -164,32 +163,6 @@ public interface MDMServerDef extends AbstractMetadataObject {
      * @generated
      */
 	void setPort(String value);
-
-	/**
-     * Returns the value of the '<em><b>Universe</b></em>' attribute.
-     * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Universe</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-     * @return the value of the '<em>Universe</em>' attribute.
-     * @see #setUniverse(String)
-     * @see org.talend.mdm.repository.model.mdmmetadata.MdmmetadataPackage#getMDMServerDef_Universe()
-     * @model
-     * @generated
-     */
-	String getUniverse();
-
-	/**
-     * Sets the value of the '{@link org.talend.mdm.repository.model.mdmmetadata.MDMServerDef#getUniverse <em>Universe</em>}' attribute.
-     * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-     * @param value the new value of the '<em>Universe</em>' attribute.
-     * @see #getUniverse()
-     * @generated
-     */
-	void setUniverse(String value);
 
 	/**
      * Returns the value of the '<em><b>Url</b></em>' attribute.

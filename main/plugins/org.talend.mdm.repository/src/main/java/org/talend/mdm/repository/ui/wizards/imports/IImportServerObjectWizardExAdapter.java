@@ -15,12 +15,10 @@ package org.talend.mdm.repository.ui.wizards.imports;
 import java.util.List;
 
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.swt.widgets.Group;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 
 import com.amalto.workbench.exadapter.IExAdapter;
 import com.amalto.workbench.models.TreeParent;
-import com.amalto.workbench.widgets.WidgetFactory;
 
 /**
  * created by HHB on 2014-1-7 Detailled comment
@@ -31,10 +29,6 @@ public interface IImportServerObjectWizardExAdapter extends IExAdapter<ImportSer
     void syncWorkflow();
 
     void retrieverCustomForms(MDMServerDef serverDef, TreeParent parent, IProgressMonitor monitor);
-
-    void initVersionCombo(final MDMServerDef serverDef, WidgetFactory toolkit, Group serverGroup);
-
-    void refreshUniverseCombo(MDMServerDef serverDef);
 
     void updateRelations(List<String> importedIds);
 }
