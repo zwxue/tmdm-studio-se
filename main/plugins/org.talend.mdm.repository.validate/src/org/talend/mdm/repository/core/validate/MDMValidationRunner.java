@@ -35,6 +35,7 @@ import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.wst.validation.internal.ValOperation;
@@ -252,9 +253,14 @@ public class MDMValidationRunner extends WorkspaceJob {
                     @Override
                     public void run() {
                         IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+
                         if (page != null && UIUtil.isMDMPerspective(page)) {
+                            IWorkbenchPart activepart = page.getActivePart();
                             try {
                                 page.showView(MDMProblemView.VIEW_ID);
+                                if (activepart != null) {
+                                    page.activate(activepart);
+                                }
                             } catch (PartInitException e) {
                                 log.error(e.getMessage(), e);
                             }

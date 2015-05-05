@@ -137,10 +137,9 @@ public class MDMProblemView extends MarkerSupportView implements IValidationMark
                     }
                 }
             }
-            if (selectedElements.size() > 0) {
-                MarkerContentGenerator generator = getGenerator();
-                updateSelectedResource(generator, selectedElements.toArray(), part == null);
-            }
+
+            MarkerContentGenerator generator = getGenerator();
+            updateSelectedResource(generator, selectedElements.toArray(), part == null);
         }
     }
 

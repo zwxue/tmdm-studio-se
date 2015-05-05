@@ -82,7 +82,7 @@ public class ValidateMarkerUtil implements IValidationMarker {
                         try {
                             view = page.findView(MDMProblemView.VIEW_ID);
                             if (view == null) {
-                                view = page.showView(MDMProblemView.VIEW_ID);
+                                view = page.showView(MDMProblemView.VIEW_ID, null, IWorkbenchPage.VIEW_CREATE);
                             }
                             if (view != null) {
                                 ((MDMProblemView) view).updateViewTitle();
