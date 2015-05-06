@@ -753,10 +753,6 @@ public class Messages extends NLS {
 
     public static String RefreshXObjectAction_Text;
 
-    public static String FKFilterDialog_ConfirmContent;
-
-    public static String FKFilterDialog_CustomFilters;
-
     public static String FKInfos_resolve;
 
     public static String FKIntegrityComposite_AllowFKIntergrityOverride;
@@ -2270,12 +2266,6 @@ public class Messages extends NLS {
     public static String FacetsListInputDialog_NewItem;
 
     public static String FailedExportXSD;
-
-    public static String ForeignKeyFilterComposite_CustomFilters;
-
-    public static String ForeignKeyFilterComposite_defineCustomeFilter;
-
-    public static String ForeignKeyFilterComposite_defineWarningMsg;
 
     public static String ForeignKeyFilterComposite_Operator;
 

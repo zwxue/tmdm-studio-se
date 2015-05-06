@@ -16,8 +16,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.commons.lang.StringEscapeUtils;
-
 import com.amalto.workbench.models.KeyValue;
 import com.amalto.workbench.models.Line;
 
@@ -28,27 +26,16 @@ import com.amalto.workbench.models.Line;
  */
 public class FKFilterParser {
 
-    public static final String CUSTOM_FILTERS_PREFIX = "$CFFP:";//$NON-NLS-1$
-
     public static final String endSeparator = "#"; //$NON-NLS-1$
-
-    private static final String blank = "";//$NON-NLS-1$
 
     private static final String two$$ = "$$";//$NON-NLS-1$
 
     private static final String quot = "&quot;";//$NON-NLS-1$
 
-    public static String parseFilter(String filter, List<Line> lines, String[] keyNames) {
-        String customFilter = blank;
+    public static void parseFilter(String filter, List<Line> lines, String[] keyNames) {
         if (filter != null && filter.length() > 0) {
-            if (filter.startsWith(CUSTOM_FILTERS_PREFIX)) {
-                customFilter = StringEscapeUtils.unescapeXml(filter);
-            } else {
-                lines.addAll(buildLine(filter, keyNames));
-            }
+            lines.addAll(buildLine(filter, keyNames));
         }
-
-        return customFilter;
     }
 
     private static List<Line> buildLine(String criteria, String[] keyNames) {
@@ -109,13 +96,6 @@ public class FKFilterParser {
         }
 
         return innerValue;
-    }
-
-    public static String getDeParseredCustomFilter(String orginalCustomFilter) {
-        String filter = CUSTOM_FILTERS_PREFIX + orginalCustomFilter;
-        filter = StringEscapeUtils.escapeXml(filter);
-
-        return filter;
     }
 
 }

@@ -14,26 +14,13 @@ package com.amalto.workbench.detailtabs.sections.composites;
 
 import java.util.ArrayList;
 
-import org.apache.commons.lang.StringEscapeUtils;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ComboBoxCellEditor;
 import org.eclipse.jface.viewers.ICellModifier;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.CLabel;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
-import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Group;
-import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeColumn;
 
@@ -42,8 +29,6 @@ import com.amalto.workbench.detailtabs.sections.model.annotationinfo.relationshi
 import com.amalto.workbench.detailtabs.sections.model.annotationinfo.relationship.ForeignKeyFilterAnnoInfoDefUnit;
 import com.amalto.workbench.detailtabs.sections.providers.ForeignKeyFilterCellModifier;
 import com.amalto.workbench.i18n.Messages;
-import com.amalto.workbench.image.EImage;
-import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.infoextractor.IAllDataModelHolder;
 import com.amalto.workbench.providers.ColumnTextExtractor;
 import com.amalto.workbench.providers.CommonTableLabelProvider;
@@ -52,10 +37,6 @@ import com.amalto.workbench.widgets.celleditor.XPathCellEditor;
 import com.amalto.workbench.widgets.composites.ComplexAnnotaionInfoComposite;
 
 public class ForeignKeyFilterComposite extends ComplexAnnotaionInfoComposite<ForeignKeyFilterAnnoInfoDefUnit> {
-    private final String CUSTOM_FILTERS_PREFIX = "$CFFP:";//$NON-NLS-1$
-
-    private Text txtCustomFilter;
-
     private IAllDataModelHolder dataModelHolder;
 
     public ForeignKeyFilterComposite(Composite parent, int style, IAllDataModelHolder dataModelHolder,BasePropertySection section) {
@@ -78,63 +59,6 @@ public class ForeignKeyFilterComposite extends ComplexAnnotaionInfoComposite<For
 
     @Override
     protected void createExtentArea() {
-        Composite comp = new Composite(this, SWT.NONE);
-        comp.setLayout(new GridLayout(2, false));
-        defineCF = new Button(comp, SWT.CHECK);
-        defineCF.setText(Messages.ForeignKeyFilterComposite_defineCustomeFilter);
-        warnLabel = new CLabel(comp, SWT.LEFT | SWT.WRAP);
-
-        Image warnImage = ImageCache.getCreatedImage(EImage.WARN_TSK.getPath());
-        warnLabel.setImage(warnImage);
-        warnLabel.setText(Messages.ForeignKeyFilterComposite_defineWarningMsg);
-        warnLabel.setVisible(false);
-        defineCF.addSelectionListener(getWarnSelectionListener());
-
-        Group gpCustomFilter = new Group(this, SWT.NORMAL);
-        gpCustomFilter.setText(Messages.ForeignKeyFilterComposite_CustomFilters);
-        groupLayoutData = new GridData(SWT.FILL, SWT.FILL, true, true);
-        groupLayoutData.minimumHeight = 60;
-        gpCustomFilter.setLayoutData(groupLayoutData);
-        gpCustomFilter.setLayout(new GridLayout());
-
-        txtCustomFilter = new Text(gpCustomFilter, SWT.MULTI | SWT.V_SCROLL);
-        GridData gdTxtCustomFilter = new GridData(SWT.FILL, SWT.FILL, true, true);
-        gdTxtCustomFilter.heightHint = 35;
-        txtCustomFilter.setLayoutData(gdTxtCustomFilter);
-        txtCustomFilter.addModifyListener(getCustomFilterModifyListener());
-    }
-
-    private SelectionListener getWarnSelectionListener() {
-        SelectionListener listener = new SelectionAdapter() {
-
-            @Override
-            public void widgetSelected(SelectionEvent e) {
-                showCustomFilterText(defineCF.getSelection());
-            }
-        };
-
-        return listener;
-    }
-
-    private ModifyListener modifyListener;
-
-    private Button defineCF;
-
-    private CLabel warnLabel;
-
-    private GridData groupLayoutData;
-
-    private ModifyListener getCustomFilterModifyListener() {
-        if(modifyListener == null) {
-            modifyListener = new ModifyListener() {
-                public void modifyText(ModifyEvent e) {
-                    if (section != null)
-                        section.autoCommit();
-                }
-            };
-        }
-
-        return modifyListener;
     }
 
     @Override
@@ -204,56 +128,18 @@ public class ForeignKeyFilterComposite extends ComplexAnnotaionInfoComposite<For
 
         for (Object eachPara : parameters) {
 
-            if (eachPara instanceof IAllDataModelHolder)
+            if (eachPara instanceof IAllDataModelHolder) {
                 dataModelHolder = (IAllDataModelHolder) eachPara;
+            }
         }
     }
 
-    private String getCustomFilter() {
-        return txtCustomFilter.getText().trim();
-    }
-
-    private boolean hasCustomFilter() {
-        return !"".equals(getCustomFilter().trim());//$NON-NLS-1$
-    }
-
     public String getFilterExpression() {
-
-        if (hasCustomFilter())
-            return ForeignKeyFilterAnnoInfo.getFKFilterByRawCustomFilterStr(getCustomFilter());
-
         return ForeignKeyFilterAnnoInfo.getFKFilterByFKFilterCfgInfos(infos.toArray(new ForeignKeyFilterAnnoInfoDefUnit[0]));
     }
 
     public void setFilter(String filterExpression) {
-    	String filter=ForeignKeyFilterAnnoInfo.getCustomFilterInfo(filterExpression);
-
-        boolean isCustomFilter = filter.startsWith(CUSTOM_FILTERS_PREFIX);
-        defineCF.setSelection(isCustomFilter);
-
-        showCustomFilterText(isCustomFilter);
-
-        if (isCustomFilter) {
-            filter = StringEscapeUtils.unescapeXml(filter).substring(6);
-        }
-
-        txtCustomFilter.removeModifyListener(getCustomFilterModifyListener());
-
-
-        if (!filter.equals(txtCustomFilter.getText())) {
-            txtCustomFilter.setText(filter);
-        }
-
-        txtCustomFilter.addModifyListener(getCustomFilterModifyListener());
         setInfos(ForeignKeyFilterAnnoInfo.getFKFilterCfgInfos(filterExpression));
-
-    }
-
-    private void showCustomFilterText(boolean show) {
-        warnLabel.setVisible(show);
-        txtCustomFilter.setVisible(show);
-        groupLayoutData.exclude = !show;
-        layout();
     }
 
     @Override
