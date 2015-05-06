@@ -661,17 +661,42 @@
       <extension
          point="org.talend.repository.items.importexport.handler">
       <importItemsProvider
-            id="org.talend.mdm.workbench.item"
-            name="MDM  importer"
+            id="org.talend.mdm.common.importItemsProvider"
+            name="MDM Common importer"
             priority="NORMAL">
          <importItemsHandler
-               class="org.talend.mdm.repository.handler.MdmImportHandler">
+               class="org.talend.mdm.repository.ui.wizards.imports.handlers.CommonMdmImportHandler">
             <parameter
                   name="type"
-                  value="MDM.DataModel,MDM.Role,MDM.Menu,MDM.DataCluster,MDM.StoredProcedure,MDM.View,MDM.TransformerV2,MDM.RoutingRule,MDM.EventManager,MDM.ServiceConfiguration,MDM.Resource,MDM.CustomForm,MDM.ServerDef">
+                  value="MDM.Role,MDM.Menu,MDM.DataCluster,MDM.StoredProcedure,MDM.RoutingRule,MDM.EventManager,MDM.ServiceConfiguration,MDM.Resource,MDM.CustomForm,MDM.ServerDef">
             </parameter>
          </importItemsHandler>
       </importItemsProvider>
+      <importItemsProvider
+            id="org.talend.mdm.viewProcess.importItemsProvider"
+            name="MDM View Process importer"
+            priority="NORMAL">
+         <importItemsHandler
+               class="org.talend.mdm.repository.ui.wizards.imports.handlers.ViewProcessImportHandler">
+            <parameter
+                  name="type"
+                  value="MDM.View,MDM.TransformerV2">
+            </parameter>
+         </importItemsHandler>
+      </importItemsProvider>
+      <importItemsProvider
+            id="org.talend.mdm.datamodel.importItemsProvider"
+            name="MDM DataModel importer"
+            priority="NORMAL">
+         <importItemsHandler
+               class="org.talend.mdm.repository.ui.wizards.imports.handlers.DataModelImportHandler">
+            <parameter
+                  name="type"
+                  value="MDM.DataModel">
+            </parameter>
+         </importItemsHandler>
+      </importItemsProvider>
+
    </extension>
    <extension
             point="org.talend.mdm.workbench.infoholder">

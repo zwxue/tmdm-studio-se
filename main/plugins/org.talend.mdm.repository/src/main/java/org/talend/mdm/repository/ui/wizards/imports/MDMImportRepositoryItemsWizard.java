@@ -97,6 +97,7 @@ import com.amalto.workbench.widgets.WidgetFactory;
 /**
  * DOC hywang class global comment. Detailled comment
  */
+@Deprecated
 public class MDMImportRepositoryItemsWizard extends ImportItemsWizard {
 
     private ImportItemUtil repositoryUtil = new ImportItemUtil();

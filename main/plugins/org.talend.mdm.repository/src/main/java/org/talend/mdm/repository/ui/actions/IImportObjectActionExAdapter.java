@@ -20,6 +20,7 @@ import com.amalto.workbench.exadapter.IExAdapter;
  * created by HHB on 2014-2-28 Detailled comment
  * 
  */
+@Deprecated
 public interface IImportObjectActionExAdapter extends IExAdapter<ImportObjectAction.OriginalObjectAction> {
 
     void updateRelation(Item item);

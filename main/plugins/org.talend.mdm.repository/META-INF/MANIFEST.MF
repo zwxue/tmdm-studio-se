@@ -49,7 +49,8 @@ Require-Bundle: org.eclipse.core.runtime,
  org.talend.dataquality,
  org.talend.dataquality.record.linkage.ui,
  org.talend.dataprofiler.core,
- org.talend.repository.items.importexport
+ org.talend.repository.items.importexport,
+ org.talend.repository.items.importexport.ui
 Bundle-ActivationPolicy: lazy
 Eclipse-RegisterBuddy: org.talend.testutils
 Bundle-ClassPath: .,
@@ -70,7 +71,6 @@ Export-Package: org.talend.mdm.repository.core,
  org.talend.mdm.repository.core.service,
  org.talend.mdm.repository.core.service.interactive,
  org.talend.mdm.repository.extension,
- org.talend.mdm.repository.handler,
  org.talend.mdm.repository.i18n,
  org.talend.mdm.repository.models,
  org.talend.mdm.repository.ui.actions,
@@ -89,6 +89,7 @@ Export-Package: org.talend.mdm.repository.core,
  org.talend.mdm.repository.ui.wizards,
  org.talend.mdm.repository.ui.wizards.exports.viewers,
  org.talend.mdm.repository.ui.wizards.imports,
+ org.talend.mdm.repository.ui.wizards.imports.handlers,
  org.talend.mdm.repository.ui.wizards.process,
  org.talend.mdm.repository.utils
 Import-Package: com.amalto.workbench.webservices,

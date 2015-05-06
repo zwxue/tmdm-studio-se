@@ -1,4 +1,4 @@
-package org.talend.mdm.repository.handler;
+package org.talend.mdm.repository.ui.wizards.imports.handlers;
 
 import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -10,6 +10,8 @@ import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.core.repository.model.ProxyRepositoryFactory;
 import org.talend.mdm.repository.core.command.CommandManager;
 import org.talend.mdm.repository.core.command.ICommand;
+import org.talend.mdm.repository.core.service.ContainerCacheService;
+import org.talend.mdm.repository.core.service.ImportService;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
@@ -17,24 +19,27 @@ import org.talend.repository.items.importexport.handlers.imports.ImportRepTypeHa
 import org.talend.repository.items.importexport.handlers.model.ImportItem;
 import org.talend.repository.items.importexport.manager.ResourcesManager;
 
-public class MdmImportHandler extends ImportRepTypeHandler {
+public class CommonMdmImportHandler extends ImportRepTypeHandler {
 
     private ProxyRepositoryFactory factory = ProxyRepositoryFactory.getInstance();
 
-    private static Logger log = Logger.getLogger(MdmImportHandler.class);
+    private static Logger log = Logger.getLogger(CommonMdmImportHandler.class);
 
     @Override
     public void afterImportingItems(IProgressMonitor monitor, ResourcesManager resManager, ImportItem selectedImportItem) {
 
         try {
-            IRepositoryViewObject object = factory.getSpecificVersion(selectedImportItem.getItemId(),
-                    selectedImportItem.getItemVersion(), true);
+            String itemId = selectedImportItem.getItemId();
+            IRepositoryViewObject object = factory.getSpecificVersion(itemId, selectedImportItem.getItemVersion(), true);
             if (null != object) {
                 update(object, selectedImportItem);
             }
+            // update imported id
+            ImportService.importedId(itemId);
         } catch (PersistenceException e) {
             log.error(e.getMessage(), e);
         }
+
         super.afterImportingItems(monitor, resManager, selectedImportItem);
     }
 
@@ -70,5 +75,7 @@ public class MdmImportHandler extends ImportRepTypeHandler {
                 CommandManager.getInstance().pushCommand(ICommand.CMD_ADD, selectedImportItem.getItemId(), name);
             }
         }
+        // update cache
+        ContainerCacheService.put(object);
     }
 }

@@ -20,6 +20,7 @@ import com.amalto.workbench.exadapter.IExAdapter;
  * created by HHB on 2014-1-9 Detailled comment
  * 
  */
+@Deprecated
 public interface IMDMImportRepositoryItemsWizardExAdapter extends IExAdapter<MDMImportRepositoryItemsWizard> {
 
     void syncWorkflow();

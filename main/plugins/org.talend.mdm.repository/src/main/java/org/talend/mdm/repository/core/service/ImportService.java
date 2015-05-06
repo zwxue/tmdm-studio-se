@@ -12,6 +12,8 @@
 // ============================================================================
 package org.talend.mdm.repository.core.service;
 
+import java.util.LinkedList;
+import java.util.List;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -26,6 +28,8 @@ public class ImportService {
     private static Lock lock = new ReentrantLock();
 
     private static Condition condition = lock.newCondition();
+
+    private static List<String> importedIds = new LinkedList<String>();
 
     public static boolean isImporting() {
         lock.lock();
@@ -53,6 +57,9 @@ public class ImportService {
     public static void setImporting(boolean importing) {
         lock.lock();
         try {
+            if (importing) {
+                importedIds.clear();
+            }
             ImportService.importing = importing;
             if (!importing) {
                 condition.signal();
@@ -60,6 +67,14 @@ public class ImportService {
         } finally {
             lock.unlock();
         }
+    }
+
+    public static void importedId(String id) {
+        importedIds.add(id);
+    }
+
+    public static List<String> getImportedIds() {
+        return importedIds;
     }
 
 }

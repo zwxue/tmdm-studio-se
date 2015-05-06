@@ -51,6 +51,7 @@ import com.amalto.workbench.widgets.FilteredCheckboxTree;
 /**
  * DOC hbhong class global comment. Detailled comment
  */
+@Deprecated
 public class ImportRepositoryObjectCheckTreeViewer extends AbstractNodeCheckTreeViewer {
 
     private ImportItemUtil repositoryUtil;
