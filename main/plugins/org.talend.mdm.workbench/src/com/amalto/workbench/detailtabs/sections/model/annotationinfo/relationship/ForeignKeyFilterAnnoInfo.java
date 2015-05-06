@@ -16,7 +16,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.commons.lang.StringEscapeUtils;
 import org.eclipse.xsd.XSDComponent;
 
 import com.amalto.workbench.detailtabs.sections.handlers.CommitHandler;
@@ -24,8 +23,6 @@ import com.amalto.workbench.detailtabs.sections.handlers.ElementForeignKeyFilter
 import com.amalto.workbench.detailtabs.sections.model.annotationinfo.SingleContentAnnotationInfo;
 
 public class ForeignKeyFilterAnnoInfo extends SingleContentAnnotationInfo {
-
-    private static final String CUSTOM_FILTERS_PREFIX = "$CFFP:";//$NON-NLS-1$
 
     public ForeignKeyFilterAnnoInfo(XSDComponent sourceComponent, String fkFilter) {
         super(sourceComponent, fkFilter);
@@ -35,22 +32,11 @@ public class ForeignKeyFilterAnnoInfo extends SingleContentAnnotationInfo {
         return new ElementForeignKeyFilterCommitHandler(this);
     }
 
-    public static boolean isCustomFilter(String filterExpression) {
-        return filterExpression.startsWith(CUSTOM_FILTERS_PREFIX);
-    }
-
-    public static String getCustomFilterInfo(String filterExpression) {
-
-        if (isCustomFilter(filterExpression))
-            return filterExpression;
-
-        return "";//$NON-NLS-1$
-    }
-
     public static ForeignKeyFilterAnnoInfoDefUnit[] getFKFilterCfgInfos(String filterExpression) {
 
-        if ("".equals(filterExpression) || isCustomFilter(filterExpression))//$NON-NLS-1$
+        if ("".equals(filterExpression)) { //$NON-NLS-1$
             return new ForeignKeyFilterAnnoInfoDefUnit[0];
+        }
 
         List<ForeignKeyFilterAnnoInfoDefUnit> fkFilterInfos = new ArrayList<ForeignKeyFilterAnnoInfoDefUnit>();
 
@@ -74,14 +60,6 @@ public class ForeignKeyFilterAnnoInfo extends SingleContentAnnotationInfo {
 
     }
 
-    public static String getFKFilterByRawCustomFilterStr(String inputedFilterStr) {
-
-        if (inputedFilterStr.startsWith(CUSTOM_FILTERS_PREFIX))
-            return inputedFilterStr;
-
-        return StringEscapeUtils.escapeXml(CUSTOM_FILTERS_PREFIX + inputedFilterStr);
-    }
-
     public static String getFKFilterByFKFilterCfgInfos(ForeignKeyFilterAnnoInfoDefUnit[] fkFilterCfgInfos) {
 
         StringBuffer sb = new StringBuffer();
@@ -89,8 +67,9 @@ public class ForeignKeyFilterAnnoInfo extends SingleContentAnnotationInfo {
 
             if (eachFKFilterInfo.getXpath().trim().length() == 0 && eachFKFilterInfo.getOperator().trim().length() == 0
                     && eachFKFilterInfo.getNormalizeValue().trim().length() == 0
-                    && eachFKFilterInfo.getPredicate().trim().length() == 0)
+                    && eachFKFilterInfo.getPredicate().trim().length() == 0) {
                 continue;
+            }
 
             sb.append(eachFKFilterInfo.getXpath() + "$$" + eachFKFilterInfo.getOperator() + "$$"//$NON-NLS-1$//$NON-NLS-2$
                     + eachFKFilterInfo.getNormalizeValue() + "$$" + eachFKFilterInfo.getPredicate() + "#");//$NON-NLS-1$//$NON-NLS-2$

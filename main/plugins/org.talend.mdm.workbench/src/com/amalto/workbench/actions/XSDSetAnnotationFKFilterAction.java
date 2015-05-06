@@ -25,7 +25,6 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.xsd.XSDAnnotation;
 import org.eclipse.xsd.XSDComponent;
-import org.eclipse.xsd.XSDConcreteComponent;
 import org.eclipse.xsd.XSDElementDeclaration;
 import org.eclipse.xsd.XSDParticle;
 import org.w3c.dom.Element;
@@ -111,15 +110,6 @@ public class XSDSetAnnotationFKFilterAction extends UndoAction {
 
     protected FKFilterDialog getNewFKFilterDialog(Shell shell, String filter, DataModelMainPage page, String conceptName) {
         return new FKFilterDialog(shell, Messages.SetForeignKeyFilter, filter, page, conceptName);
-    }
-
-    private String getConceptName(XSDConcreteComponent element) {
-        XSDConcreteComponent parent = element.getContainer();
-        if (parent instanceof XSDElementDeclaration) {
-            return ((XSDElementDeclaration) parent).getElement().getAttributes().getNamedItem("name").getNodeValue();//$NON-NLS-1$
-        } else {
-            return getConceptName(parent);
-        }
     }
 
     @Override

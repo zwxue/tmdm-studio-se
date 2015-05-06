@@ -17,32 +17,20 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.eclipse.jface.dialogs.Dialog;
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.CLabel;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
-import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.TableItem;
-import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import com.amalto.workbench.editors.DataModelMainPage;
-import com.amalto.workbench.i18n.Messages;
-import com.amalto.workbench.image.EImage;
-import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.Line;
 import com.amalto.workbench.models.TreeParent;
 import com.amalto.workbench.utils.FKFilterParser;
@@ -66,15 +54,7 @@ public class FKFilterDialog extends Dialog {
 
     String conceptName;
 
-    Text customFiltersText;
-
     protected String dataModelName;
-
-    private Button defineCF;
-
-    private CLabel warnLabel;
-
-    private GridData groupLayoutData;
 
     private Composite dialogAreaComposite;
 
@@ -136,34 +116,6 @@ public class FKFilterDialog extends Dialog {
         viewer.setWidth(680);
         viewer.getMainComposite().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 2, 3));
 
-        Composite comp = new Composite(dialogAreaComposite, SWT.NONE);
-        comp.setLayout(new GridLayout(2, false));
-        defineCF = new Button(comp, SWT.CHECK);
-        defineCF.setText(Messages.ForeignKeyFilterComposite_defineCustomeFilter);
-        warnLabel = new CLabel(comp, SWT.LEFT | SWT.WRAP);
-
-        Image warnImage = ImageCache.getCreatedImage(EImage.WARN_TSK.getPath());
-        warnLabel.setImage(warnImage);
-        warnLabel.setText(Messages.ForeignKeyFilterComposite_defineWarningMsg);
-        warnLabel.setVisible(false);
-        defineCF.addSelectionListener(getWarnSelectionListener());
-
-        // the text box of the custom filters
-        Group customFiltersGroup = new Group(dialogAreaComposite, SWT.NONE);
-        customFiltersGroup.setVisible(true);
-        customFiltersGroup.setText(Messages.FKFilterDialog_CustomFilters);
-        groupLayoutData = new GridData(SWT.FILL, SWT.FILL, true, false, 2, 1);
-        groupLayoutData.heightHint = 60;
-        groupLayoutData.widthHint = 300;
-        customFiltersGroup.setLayoutData(groupLayoutData);
-        customFiltersGroup.setLayout(new GridLayout(1, false));
-
-        customFiltersText = new Text(customFiltersGroup, SWT.MULTI | SWT.BORDER | SWT.WRAP | SWT.V_SCROLL);
-        customFiltersText.setEditable(true);
-        GridData customFiltersTextGridData = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
-        customFiltersTextGridData.heightHint = 50;
-        customFiltersText.setLayoutData(customFiltersTextGridData);
-
         parent.getShell().addDisposeListener(new DisposeListener() {
 
             public void widgetDisposed(DisposeEvent e) {
@@ -190,15 +142,8 @@ public class FKFilterDialog extends Dialog {
         List<Line> lines = new ArrayList<Line>();
 
         String[] keyNames = getKeyNames();
-        String parsedFilter = FKFilterParser.parseFilter(filter, lines, keyNames);
+        FKFilterParser.parseFilter(filter, lines, keyNames);
 
-        boolean isEmpty = parsedFilter.isEmpty();
-        defineCF.setSelection(!isEmpty);
-        showCustomFilterText(!isEmpty);
-        if (!isEmpty) {
-            filter = parsedFilter;
-            customFiltersText.setText(filter.substring(6));
-        }
         viewer.getViewer().setInput(lines);
     }
 
@@ -213,14 +158,6 @@ public class FKFilterDialog extends Dialog {
 
     @Override
     protected void okPressed() {
-
-        TableItem[] items = viewer.getViewer().getTable().getItems();
-        if (items.length > 0 && customFiltersText.getText() != null && customFiltersText.getText().trim().length() > 0) {
-            if (!MessageDialog.openConfirm(null, Messages.Confirm,
-                    Messages.FKFilterDialog_ConfirmContent))
-                return;
-        }
-
         XpathSelectDialog.setContext(null);
         deactiveAllCellEditors();
         resetFilter();
@@ -243,11 +180,6 @@ public class FKFilterDialog extends Dialog {
     }
 
     private String resetFilter() {
-        if (customFiltersText.getText() != null && customFiltersText.getText().trim().length() > 0) {
-            filter = FKFilterParser.getDeParseredCustomFilter(customFiltersText.getText().trim());
-            return filter;
-        }
-
         List<Line> lines = new ArrayList<Line>();
         TableItem[] items = viewer.getViewer().getTable().getItems();
         if (items.length > 0) {
@@ -261,28 +193,9 @@ public class FKFilterDialog extends Dialog {
         return filter;
     }
 
-    private SelectionListener getWarnSelectionListener() {
-        SelectionListener listener = new SelectionAdapter() {
-
-            @Override
-            public void widgetSelected(SelectionEvent e) {
-                showCustomFilterText(defineCF.getSelection());
-            }
-        };
-
-        return listener;
-    }
-
     @Override
     protected Point getInitialSize() {
         return new Point(700, 400);
-    }
-
-    private void showCustomFilterText(boolean show) {
-        warnLabel.setVisible(show);
-        customFiltersText.setVisible(show);
-        groupLayoutData.exclude = !show;
-        dialogAreaComposite.layout();
     }
 
     public String getFilter() {

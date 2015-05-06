@@ -1497,10 +1497,6 @@ public class Util {
 
             String source = e.getAttribute("source");//$NON-NLS-1$
             if (source.equals("X_ForeignKey_Filter")) { //$NON-NLS-1$
-                if (nodeValue.startsWith(FKFilterParser.CUSTOM_FILTERS_PREFIX)) {
-                    continue;
-                }
-
                 StringBuilder build = new StringBuilder();
                 String[] splits = nodeValue.split(FKFilterParser.endSeparator);
                 for (String str : splits) {
