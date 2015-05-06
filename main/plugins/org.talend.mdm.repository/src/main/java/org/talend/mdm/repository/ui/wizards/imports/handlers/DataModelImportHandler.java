@@ -14,7 +14,6 @@ package org.talend.mdm.repository.ui.wizards.imports.handlers;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.talend.core.model.properties.Item;
-import org.talend.mdm.repository.ui.wizards.imports.IMDMImportRepositoryItemsWizardExAdapter;
 import org.talend.repository.items.importexport.handlers.model.ImportItem;
 import org.talend.repository.items.importexport.manager.ResourcesManager;
 
@@ -26,10 +25,10 @@ import com.amalto.workbench.exadapter.ExAdapterManager;
  */
 public class DataModelImportHandler extends CommonMdmImportHandler {
 
-    private IMDMImportRepositoryItemsWizardExAdapter exAdapter;
+    private IDataModelImportHandlerExAdapter exAdapter;
 
     public DataModelImportHandler() {
-        this.exAdapter = ExAdapterManager.getAdapter(this, IMDMImportRepositoryItemsWizardExAdapter.class);
+        this.exAdapter = ExAdapterManager.getAdapter(this, IDataModelImportHandlerExAdapter.class);
     }
 
     @Override

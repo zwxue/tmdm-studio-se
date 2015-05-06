@@ -612,19 +612,7 @@ public class Messages extends NLS {
 
     public static String MDMExportRepositoryItemsWizard_exportItem;
 
-    public static String MDMImportRepositoryItemsWizard_badFormat;
-
-    public static String MDMImportRepositoryItemsWizard_canNotRead;
-
-    public static String MDMImportRepositoryItemsWizard_errorMsg;
-
-    public static String MDMImportRepositoryItemsWizard_internalError;
-
-    public static String MDMImportRepositoryItemsWizard_refreshServer;
-
-    public static String MDMImportRepositoryItemsWizard_searchProject;
-
-    public static String MDMImportRepositoryItemsWizard_toImport;
+    public static String MDMImportItemsWizardPage_refreshServer;
 
     public static String MenuInteractiveHandler_label;
 

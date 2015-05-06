@@ -156,7 +156,7 @@ public class MDMImportItemsWizardPage extends ImportItemsWizardPage {
     }
 
     private void refreshRepositoryViewJob() {
-        new UIJob(Messages.MDMImportRepositoryItemsWizard_refreshServer) {
+        new UIJob(Messages.MDMImportItemsWizardPage_refreshServer) {
 
             @Override
             public IStatus runInUIThread(IProgressMonitor monitor) {
