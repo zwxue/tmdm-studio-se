@@ -215,7 +215,8 @@
   <node componentName="tMDMConnection" componentVersion="0.102" offsetLabelX="0" offsetLabelY="0" posX="224" posY="64">
     <elementParameter field="TEXT" name="UNIQUE_NAME" value="tMDMConnection_1"/>
     <elementParameter field="DIRECTORY" name="JAVA_LIBRARY_PATH" value="/Users/pascal/dev/talend/installs/nightlybuilds/TOS_MDM-Studio-20141007_0301-V6.0.0SNAP/configuration/lib/java"/>
-    <elementParameter field="TEXT" name="MDMURL" value="&quot;http://&quot; + context.host + &quot;:&quot; + context.port + &quot;/talendmdm/services/soap&quot;"/>
+    <elementParameter field="CLOSED_LIST" name="SERVERVERSION" value="s60"/>
+    <elementParameter field="TEXT" name="MDMURL" value="&quot;http://localhost:8180/talendmdm/services/soap&quot;"/>
     <elementParameter field="TEXT" name="USER" value="context.user"/>
     <elementParameter field="PASSWORD" name="PASS" value="4D9onkGJm3elS7/MEZC34fT3q6F0Z4TqEncrypt"/>
     <elementParameter field="TEXT" name="UNIVERSE" value=""/>
