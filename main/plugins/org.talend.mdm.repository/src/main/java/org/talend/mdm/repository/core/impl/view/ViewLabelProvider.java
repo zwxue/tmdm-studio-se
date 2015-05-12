@@ -39,7 +39,7 @@ import org.talend.mdm.repository.utils.RepositoryTransformUtil;
  */
 public class ViewLabelProvider extends AbstractLabelProvider {
 
-    private static final Image IMG = EclipseResourceManager.getImage(RepositoryPlugin.PLUGIN_ID, "icons/view.png"); //$NON-NLS-1$;
+    private static final Image IMG = EclipseResourceManager.getImage(RepositoryPlugin.PLUGIN_ID, "icons/MDM-view.png"); //$NON-NLS-1$;
 
     public String getCategoryLabel(ERepositoryObjectType type) {
         return "View"; //$NON-NLS-1$

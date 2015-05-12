@@ -67,10 +67,10 @@ public enum EImage {
     CONSOLE_VIEW("icons/console_view.gif"), //$NON-NLS-1$
     COPY_EDIT("icons/copy_edit.gif"), //$NON-NLS-1$
     COPY("icons/copy.gif"), //$NON-NLS-1$
-    CUSTOM_FORM("icons/customform.png"), //$NON-NLS-1$
+    CUSTOM_FORM("icons/MDM-custom-layout_white.png"), //$NON-NLS-1$
     CUT_EDIT("icons/cut_edit.gif"), //$NON-NLS-1$
-    DATA_CLUSTER("icons/datacluster.png"), //$NON-NLS-1$
-    DATA_MODEL("icons/datamodel.png"), //$NON-NLS-1$
+    DATA_CLUSTER("icons/MDM-data-container_white.png"), //$NON-NLS-1$
+    DATA_MODEL("icons/MDM-data-model_white.png"), //$NON-NLS-1$
     DEFAULT_PERSP("icons/default_persp.gif"), //$NON-NLS-1$
     DEFAULTS_PS("icons/defaults_ps.gif"), //$NON-NLS-1$
     DEFAULTVIEW_MISC("icons/defaultview_misc.gif"), //$NON-NLS-1$
@@ -148,7 +148,7 @@ public enum EImage {
     LOGFILEVIEWER("icons/logfileviewer.gif"), //$NON-NLS-1$
     LOGOUT("icons/logout.gif"), //$NON-NLS-1$
     LPRIO_TSK("icons/lprio_tsk.gif"), //$NON-NLS-1$
-    MENU("icons/menu.gif"), //$NON-NLS-1$
+    MENU("icons/MDM-menu_white.png"), //$NON-NLS-1$
     MIN_VIEW("icons/min_view.gif"), //$NON-NLS-1$
     NEW_PERSP("icons/new_persp.gif"), //$NON-NLS-1$
     NEW_WIZ("icons/new_wiz.gif"), //$NON-NLS-1$
@@ -190,8 +190,8 @@ public enum EImage {
     REFRESHLOGFILEACTION("icons/refreshlogfileaction.gif"), //$NON-NLS-1$
     RELEASE_RLS("icons/release_rls.gif"), //$NON-NLS-1$
     REM_CO("icons/rem_co.gif"), //$NON-NLS-1$
-    ROLE("icons/role.gif"), //$NON-NLS-1$
-    ROUTING_RULE("icons/routing_rule.png"), //$NON-NLS-1$
+    ROLE("icons/MDM-role_white.png"), //$NON-NLS-1$
+    ROUTING_RULE("icons/MDM-trigger-white.png"), //$NON-NLS-1$
     SAMPLE("icons/sample.gif"), //$NON-NLS-1$
     SANDGLASS("icons/sandglass.gif"), //$NON-NLS-1$
     SAVE_EDIT("icons/save_edit.gif"), //$NON-NLS-1$
@@ -220,9 +220,9 @@ public enum EImage {
     STEP_CURRENT("icons/step_current.gif"), //$NON-NLS-1$
     STEP_DONE("icons/step_done.gif"), //$NON-NLS-1$
     STEP_INTO("icons/stepinto.gif"), //$NON-NLS-1$
-    STORED_PROCEDURE("icons/stored_procedure.gif"), //$NON-NLS-1$
+    STORED_PROCEDURE("icons/MDM-stored-procedure_white.png"), //$NON-NLS-1$
     SUBMENU("icons/submenu.gif"), //$NON-NLS-1$
-    SUBSCRIPTION_ENGINE("icons/sub_engine.png"), //$NON-NLS-1$
+    SUBSCRIPTION_ENGINE("icons/MDM-event-management_white.png"), //$NON-NLS-1$
     EVENTM_ANAGEMENT("icons/Events_management.png"), //$NON-NLS-1$
     SYNCED("icons/synced.gif"), //$NON-NLS-1$
     SYNCH_PARTICIPANTS("icons/synch_participants.gif"), //$NON-NLS-1$
@@ -241,7 +241,7 @@ public enum EImage {
     THIN_SHOW_TOOLBAR("icons/thin_show_toolbar.GIF"), //$NON-NLS-1$
     THIN_VIEW_MENU("icons/thin_view_menu.GIF"), //$NON-NLS-1$
     TOOLBAR("icons/toolbar.gif"), //$NON-NLS-1$
-    TRANSFORMER("icons/transformer.png"), //$NON-NLS-1$
+    TRANSFORMER("icons/MDM-process_white.png"), //$NON-NLS-1$
     // TRASH("icons/trash.gif"),//$NON-NLS-1$
     TREE_MODE("icons/tree_mode.gif"), //$NON-NLS-1$
     TREE_OBJECT("icons/tree_object.gif"), //$NON-NLS-1$
@@ -254,7 +254,7 @@ public enum EImage {
     VERSION_CONTROLLED("icons/version_controlled.gif"), //$NON-NLS-1$
     VERSIONING("icons/versioning.gif"), //$NON-NLS-1$
     VIEW_MENU("icons/view_menu.gif"), //$NON-NLS-1$
-    VIEW("icons/view.png"), //$NON-NLS-1$
+    VIEW("icons/MDM-view_white.png"), //$NON-NLS-1$
     WAITING_OVR("icons/waiting_ovr.gif"), //$NON-NLS-1$
     WAITING("icons/waiting.gif"), //$NON-NLS-1$
     WARN_TSK("icons/warn_tsk.gif"), //$NON-NLS-1$
@@ -273,10 +273,10 @@ public enum EImage {
     ROUTINE("icons/routine.gif"), //$NON-NLS-1$
     PROCESS("icons/process.png"), //$NON-NLS-1$
     JOB("icons/process_icon.gif"), //$NON-NLS-1$
-    SERVICE_CONFIGURATION("icons/service_config.png"), //$NON-NLS-1$
-    WORKFLOW_PROCESS("icons/workflow_process.png"), //$NON-NLS-1$
+    SERVICE_CONFIGURATION("icons/MDM-service-configuration_white.png"), //$NON-NLS-1$
+    WORKFLOW_PROCESS("icons/MDM-workflow_white.png"), //$NON-NLS-1$
     RENAME("icons/rename.png"), //$NON-NLS-1$
-    RESOURCES("icons/resources.png"), //$NON-NLS-1$
+    RESOURCES("icons/MDM-resource_white.png"), //$NON-NLS-1$
     PRIMARYKEY("icons/primarykey.png"), //$NON-NLS-1$
     SECURITYANNOTATION("icons/securityannotation.png"), //$NON-NLS-1$
     SIMPLETYPE("icons/simple_type.png"), //$NON-NLS-1$

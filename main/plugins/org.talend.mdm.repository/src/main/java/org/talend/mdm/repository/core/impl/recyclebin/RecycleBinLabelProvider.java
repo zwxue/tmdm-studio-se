@@ -2,7 +2,7 @@
 //
 // Talend Community Edition
 //
-// Copyright (C) 2006-2015 Talend ¨C www.talend.com
+// Copyright (C) 2006-2015 Talend ï¿½C www.talend.com
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
@@ -41,16 +41,15 @@ import org.talend.mdm.repository.utils.EclipseResourceManager;
  */
 public class RecycleBinLabelProvider extends AbstractLabelProvider {
 
-    private static final Image EMPTY_IMG = EclipseResourceManager.getImage(RepositoryPlugin.PLUGIN_ID,
-            "icons/recycle_bin_empty.png"); //$NON-NLS-1$;
+    private static final Image EMPTY_IMG = EclipseResourceManager.getImage(RepositoryPlugin.PLUGIN_ID, "icons/recycle-bin.png"); //$NON-NLS-1$;
 
-    private static final Image FULL_IMG = EclipseResourceManager.getImage(RepositoryPlugin.PLUGIN_ID,
-            "icons/recycle_bin_full.png"); //$NON-NLS-1$;
+    private static final Image FULL_IMG = EclipseResourceManager.getImage(RepositoryPlugin.PLUGIN_ID, "icons/recycle-bin.png"); //$NON-NLS-1$;
 
     public String getCategoryLabel(ERepositoryObjectType type) {
         return "Recycle bin"; //$NON-NLS-1$
     }
 
+    @Override
     public Image getCategoryImage(Item item) {
         return null;
     }

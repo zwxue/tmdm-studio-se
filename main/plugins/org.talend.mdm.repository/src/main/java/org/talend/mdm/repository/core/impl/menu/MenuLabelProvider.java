@@ -36,7 +36,7 @@ import org.talend.mdm.repository.utils.EclipseResourceManager;
  */
 public class MenuLabelProvider extends AbstractLabelProvider {
 
-    private static final Image IMG = EclipseResourceManager.getImage(RepositoryPlugin.PLUGIN_ID, "icons/menu.gif"); //$NON-NLS-1$;
+    private static final Image IMG = EclipseResourceManager.getImage(RepositoryPlugin.PLUGIN_ID, "icons/MDM-menu.png"); //$NON-NLS-1$;
 
     public String getCategoryLabel(ERepositoryObjectType type) {
         return "Menu"; //$NON-NLS-1$

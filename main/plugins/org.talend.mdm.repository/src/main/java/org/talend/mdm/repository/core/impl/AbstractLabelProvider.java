@@ -47,6 +47,12 @@ public abstract class AbstractLabelProvider implements IRepositoryNodeLabelProvi
 
     private static final Image FOLDER_IMG = EclipseResourceManager.getImage(RepositoryPlugin.PLUGIN_ID, "icons/folder.gif"); //$NON-NLS-1$
 
+    private static Image IMG_CLOSE_FOLDER = EclipseResourceManager.getImage(RepositoryPlugin.PLUGIN_ID,
+            "icons/directory-close.png"); //$NON-NLS-1$
+
+    private static Image IMG_OPEN_FOLDER = EclipseResourceManager
+            .getImage(RepositoryPlugin.PLUGIN_ID, "icons/directory-open.png"); //$NON-NLS-1$
+
     private static final Color COLOR_GREY = EclipseResourceManager.getColor(SWT.COLOR_DARK_GRAY);
 
     private static final Color COLOR_BLACK = EclipseResourceManager.getColor(SWT.COLOR_BLACK);
@@ -82,11 +88,15 @@ public abstract class AbstractLabelProvider implements IRepositoryNodeLabelProvi
                     return getCategoryImage(item);
                 case FolderType.FOLDER:
                 case FolderType.STABLE_SYSTEM_FOLDER:
-                    return FOLDER_IMG;
+                    return IMG_CLOSE_FOLDER;
                 }
             }
         }
         return null;
+    }
+
+    private boolean isCollapsed(Object element) {
+        return false;
     }
 
     public String getDescription(Object anElement) {

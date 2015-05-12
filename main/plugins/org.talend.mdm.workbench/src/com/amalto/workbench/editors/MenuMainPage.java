@@ -65,6 +65,7 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import com.amalto.workbench.dialogs.MenuEntryDialog;
 import com.amalto.workbench.i18n.Messages;
+import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.providers.XObjectEditorInput;
@@ -210,7 +211,7 @@ public class MenuMainPage extends AMainPageV2 {
 
                 @Override
                 public Image getImage(Object element) {
-                    return ImageCache.getImage("icons/menu.gif").createImage();//$NON-NLS-1$
+                    return ImageCache.getCreatedImage(EImage.MENU.getPath());
                 }
             });
 

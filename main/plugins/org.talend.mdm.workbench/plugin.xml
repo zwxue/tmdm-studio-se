@@ -25,7 +25,7 @@
       <editor
             class="com.amalto.workbench.editors.xsdeditor.XSDEditor"
             default="false"
-            icon="icons/datamodel.png"
+            icon="icons/MDM-data-model_white.png"
             id="com.amalto.workbench.editors.xsdeditor.XSDEditor"
             name="com.amalto.workbench.editors.xsdeditor.XSDEditor">
       </editor>
@@ -46,7 +46,7 @@
       <perspective
             class="com.amalto.workbench.views.MDMPerspective"
             fixed="false"
-            icon="icons/MDM_16px.png"
+            icon="icons/MDM-perspective_16px.png"
             id="org.talend.mdm.perspective"
             name="MDM">
       </perspective>
