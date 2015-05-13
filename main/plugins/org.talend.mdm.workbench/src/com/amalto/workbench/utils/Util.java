@@ -25,8 +25,10 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.net.Authenticator;
 import java.net.ConnectException;
 import java.net.MalformedURLException;
+import java.net.PasswordAuthentication;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
@@ -398,7 +400,13 @@ public class Util {
                 SSLContext sslContext = SSLContextProvider.getContext();
                 HttpsURLConnection.setDefaultHostnameVerifier(SSLContextProvider.getHostnameVerifier());
                 HttpsURLConnection.setDefaultSSLSocketFactory(sslContext.getSocketFactory());
+                Authenticator.setDefault(new Authenticator() {
 
+                    @Override
+                    protected PasswordAuthentication getPasswordAuthentication() {
+                        return new PasswordAuthentication(username, password.toCharArray());
+                    }
+                });
                 TMDMService_Service service_service = new TMDMService_Service(url);
 
                 service = service_service.getTMDMPort();

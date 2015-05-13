@@ -34,7 +34,7 @@ public class WSRootLabelProvider implements IRepositoryNodeLabelProvider {
     static Logger log = Logger.getLogger(WSRootLabelProvider.class);
 
     private static final Image IMG_REPOSITORY = EclipseResourceManager.getImage(RepositoryPlugin.PLUGIN_ID,
-            "icons/repository.gif"); //$NON-NLS-1$;
+            "icons/MDM-local-repository.png"); //$NON-NLS-1$;
 
     private static final Image IMG_SVN_REPOSITORY = EclipseResourceManager.getImage(RepositoryPlugin.PLUGIN_ID,
             "icons/svn_repository.gif"); //$NON-NLS-1$;

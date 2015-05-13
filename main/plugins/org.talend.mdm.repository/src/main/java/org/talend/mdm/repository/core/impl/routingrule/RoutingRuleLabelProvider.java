@@ -36,7 +36,7 @@ import org.talend.mdm.repository.utils.EclipseResourceManager;
  */
 public class RoutingRuleLabelProvider extends AbstractLabelProvider {
 
-    private static final Image IMG = EclipseResourceManager.getImage(RepositoryPlugin.PLUGIN_ID, "icons/routing_rule.png"); //$NON-NLS-1$;
+    private static final Image IMG = EclipseResourceManager.getImage(RepositoryPlugin.PLUGIN_ID, "icons/MDM-trigger.png"); //$NON-NLS-1$;
 
     public String getCategoryLabel(ERepositoryObjectType type) {
         return "Trigger"; //$NON-NLS-1$

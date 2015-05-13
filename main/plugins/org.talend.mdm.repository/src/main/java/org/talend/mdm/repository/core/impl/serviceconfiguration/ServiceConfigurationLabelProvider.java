@@ -36,7 +36,8 @@ import org.talend.mdm.repository.utils.EclipseResourceManager;
  */
 public class ServiceConfigurationLabelProvider extends AbstractLabelProvider {
 
-    private static final Image IMG = EclipseResourceManager.getImage(RepositoryPlugin.PLUGIN_ID, "icons/service_config.png"); //$NON-NLS-1$;
+    private static final Image IMG = EclipseResourceManager.getImage(RepositoryPlugin.PLUGIN_ID,
+            "icons/MDM-service-configuration.png"); //$NON-NLS-1$;
 
     public String getCategoryLabel(ERepositoryObjectType type) {
         return "Service Configuration"; //$NON-NLS-1$

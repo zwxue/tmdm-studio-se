@@ -204,6 +204,7 @@
   <node componentName="tMDMOutput" componentVersion="0.102" offsetLabelX="0" offsetLabelY="0" posX="800" posY="160">
     <elementParameter field="TEXT" name="UNIQUE_NAME" value="tMDMOutput_2"/>
     <elementParameter field="COLUMN_LIST" name="XMLFIELD" value="xml"/>
+    <elementParameter field="CLOSED_LIST" name="SERVERVERSION" value="s60"/>
     <elementParameter field="CHECK" name="USE_EXISTING_CONNECTION" value="false"/>
     <elementParameter field="COMPONENT_LIST" name="CONNECTION" value=""/>
     <elementParameter field="TEXT" name="MDMURL" value="&quot;http://&quot; + context.host + &quot;:&quot; + context.port + &quot;/talendmdm/services/soap&quot;"/>

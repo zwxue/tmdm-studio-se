@@ -210,7 +210,9 @@ public class HttpClientUtil {
     public static void addStudioToken(HttpMessage httpMessage, String userName) {
         if (httpMessage != null && userName != null) {
             String[] studioToken = getStudioToken(userName);
-            httpMessage.addHeader(studioToken[0], studioToken[1]);
+            if(studioToken != null && studioToken.length == 2) {
+                httpMessage.addHeader(studioToken[0], studioToken[1]);
+            }
         }
     }
 
