@@ -13,20 +13,26 @@
 package org.talend.mdm.repository.ui.editors;
 
 import org.eclipse.core.resources.IFile;
-import org.eclipse.ui.part.FileEditorInput;
+import org.eclipse.core.resources.ResourceAttributes;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
+import org.eclipse.emf.common.ui.URIEditorInput;
+import org.eclipse.emf.common.util.URI;
 import org.talend.core.model.properties.Item;
 import org.talend.core.model.repository.IRepositoryViewObject;
 
 /**
  * DOC hbhong class global comment. Detailled comment
  */
-public class WorkflowEditorInput extends FileEditorInput implements IRepositoryViewEditorInput {
+public class WorkflowEditorInput extends URIEditorInput implements IRepositoryViewEditorInput {
 
     public static String EDITOR_ID = "org.bonitasoft.studio.model.process.diagram.part.ProcessDiagramEditorID"; //$NON-NLS-1$
 
     private final IRepositoryViewObject viewObject;
 
     private String version;
+
+    private IFile file;
 
     public String getVersion() {
         return this.version;
@@ -42,9 +48,15 @@ public class WorkflowEditorInput extends FileEditorInput implements IRepositoryV
      * @param file
      */
     public WorkflowEditorInput(IRepositoryViewObject viewObject, IFile file) {
-        super(file);
+        super(getResourceURI(file));
         this.viewObject = viewObject;
+        this.file = file;
         version = viewObject.getVersion();
+    }
+
+    static URI getResourceURI(IFile file) {
+        IPath fullPath = file.getFullPath();
+        return URI.createPlatformResourceURI(fullPath.toOSString(), true);
     }
 
     /*
@@ -57,7 +69,10 @@ public class WorkflowEditorInput extends FileEditorInput implements IRepositoryV
     }
 
     public Item getInputItem() {
-        return viewObject.getProperty().getItem();
+        if (viewObject.getProperty() != null) {
+            return viewObject.getProperty().getItem();
+        }
+        return null;
     }
 
     public IRepositoryViewObject getViewObject() {
@@ -72,8 +87,17 @@ public class WorkflowEditorInput extends FileEditorInput implements IRepositoryV
 
     public void setReadOnly(boolean readOnly) {
         this.readOnly = readOnly;
-        if (getFile() != null) {
-            getFile().setReadOnly(readOnly);
+        if (file != null) {
+            ResourceAttributes attributes = file.getResourceAttributes();
+            if (attributes == null) {
+                return;
+            }
+            attributes.setReadOnly(readOnly);
+            try {
+                file.setResourceAttributes(attributes);
+            } catch (CoreException e) {
+                // failure is not an option
+            }
         }
     }
 
@@ -83,5 +107,9 @@ public class WorkflowEditorInput extends FileEditorInput implements IRepositoryV
             return viewObject.getLabel() + "_" + getVersion() + ".proc"; //$NON-NLS-1$ //$NON-NLS-2$
         }
         return super.getName();
+    }
+
+    public IFile getFile() {
+        return file;
     }
 }
