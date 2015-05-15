@@ -104,8 +104,7 @@ public class ImpactResultDialog extends Dialog {
 
     private final Map<IRepositoryViewObject, ImpactOperation> result = new HashMap<IRepositoryViewObject, ModelImpactAnalyseService.ImpactOperation>();
 
-    private static final Image IMG_MODEL = EclipseResourceManager
-            .getImage(RepositoryPlugin.PLUGIN_ID, "icons/MDM-data-model.png"); //$NON-NLS-1$;
+    private static final Image IMG_MODEL = EclipseResourceManager.getImage(RepositoryPlugin.PLUGIN_ID, "icons/datamodel.png"); //$NON-NLS-1$;
 
     private static final Image IMG_HIGH = EclipseResourceManager.getImage(RepositoryPlugin.PLUGIN_ID, "icons/high.gif"); //$NON-NLS-1$;
 

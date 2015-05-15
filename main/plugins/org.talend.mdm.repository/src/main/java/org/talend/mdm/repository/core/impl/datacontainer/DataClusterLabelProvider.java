@@ -36,7 +36,7 @@ import org.talend.mdm.repository.utils.EclipseResourceManager;
  */
 public class DataClusterLabelProvider extends AbstractLabelProvider {
 
-    private static final Image IMG = EclipseResourceManager.getImage(RepositoryPlugin.PLUGIN_ID, "icons/MDM-data-container.png"); //$NON-NLS-1$;
+    private static final Image IMG = EclipseResourceManager.getImage(RepositoryPlugin.PLUGIN_ID, "icons/datacluster.png"); //$NON-NLS-1$;
 
     public String getCategoryLabel(ERepositoryObjectType type) {
         return "Data Container"; //$NON-NLS-1$

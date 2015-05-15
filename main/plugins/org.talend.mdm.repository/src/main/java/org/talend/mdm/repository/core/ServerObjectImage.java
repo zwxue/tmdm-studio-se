@@ -19,12 +19,12 @@ import org.talend.commons.ui.runtime.image.IImage;
  * 
  */
 public enum ServerObjectImage implements IImage {
-    MENU_ICON("/icons/menu.gif"), //$NON-NLS-1$
-    ROLE_ICON("/icons/role.gif"), //$NON-NLS-1$
+    MENU_ICON("/icons/menu.png"), //$NON-NLS-1$
+    ROLE_ICON("/icons/role.png"), //$NON-NLS-1$
     VIEW_ICON("/icons/view.png"), //$NON-NLS-1$
     DATAMODEL_ICON("/icons/datamodel.png"), //$NON-NLS-1$
     DATACLUSTER_ICON("/icons/datacluster.png"), //$NON-NLS-1$
-    STOREPROCEDURE_ICON("/icons/stored_procedure.gif"), //$NON-NLS-1$
+    STOREPROCEDURE_ICON("/icons/stored_procedure.png"), //$NON-NLS-1$
     WORKFLOW_ICON("/icons/workflow_process.png"), //$NON-NLS-1$
     TRANSFORMERV2_ICON("/icons/transformer.png"), //$NON-NLS-1$
     ROUTINGRULE_ICON("/icons/routing_rule.png"), //$NON-NLS-1$

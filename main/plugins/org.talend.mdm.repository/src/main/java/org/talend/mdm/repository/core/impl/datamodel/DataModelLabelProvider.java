@@ -36,7 +36,7 @@ import org.talend.mdm.repository.utils.EclipseResourceManager;
  */
 public class DataModelLabelProvider extends AbstractLabelProvider {
 
-    private static final Image IMG = EclipseResourceManager.getImage(RepositoryPlugin.PLUGIN_ID, "icons/MDM-data-model.png"); //$NON-NLS-1$;
+    private static final Image IMG = EclipseResourceManager.getImage(RepositoryPlugin.PLUGIN_ID, "icons/datamodel.png"); //$NON-NLS-1$;
 
     public String getCategoryLabel(ERepositoryObjectType type) {
         return "Data Model"; //$NON-NLS-1$

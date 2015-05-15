@@ -39,7 +39,7 @@ import org.talend.mdm.repository.utils.RepositoryTransformUtil;
  */
 public class TransformerV2LabelProvider extends AbstractLabelProvider {
 
-    private static final Image IMG = EclipseResourceManager.getImage(RepositoryPlugin.PLUGIN_ID, "icons/MDM-process.png"); //$NON-NLS-1$;
+    private static final Image IMG = EclipseResourceManager.getImage(RepositoryPlugin.PLUGIN_ID, "icons/transformer.png"); //$NON-NLS-1$;
 
     public String getCategoryLabel(ERepositoryObjectType type) {
         return Messages.TransformerV2XX_ProcessCategoryName;

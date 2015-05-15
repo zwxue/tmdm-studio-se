@@ -239,27 +239,27 @@ public class XObjectBrowser extends FormEditor implements IXObjectModelListener 
         if (object.getType() == TreeObject._SERVER_) {
             return ImageCache.getCreatedImage(EImage.TALEND_PICTO_SMALL.getPath());
         } else if (object.getType() == TreeObject.DATA_CLUSTER) {
-            return ImageCache.getCreatedImage(EImage.DATA_CLUSTER.getPath());
+            return ImageCache.getCreatedImage(EImage.DATA_CLUSTER_WHITE.getPath());
         } else if (object.getType() == TreeObject.DATA_MODEL) {
-            return ImageCache.getCreatedImage(EImage.DATA_MODEL.getPath());
+            return ImageCache.getCreatedImage(EImage.DATA_MODEL_WHITE.getPath());
         } else if (object.getType() == TreeObject.MENU) {
-            return ImageCache.getCreatedImage(EImage.MENU.getPath());
+            return ImageCache.getCreatedImage(EImage.MENU_WHITE.getPath());
         } else if (object.getType() == TreeObject.TRANSFORMER) {
-            return ImageCache.getCreatedImage(EImage.TRANSFORMER.getPath());
+            return ImageCache.getCreatedImage(EImage.TRANSFORMER_WHITE.getPath());
         } else if (object.getType() == TreeObject.ROLE) {
-            return ImageCache.getCreatedImage(EImage.ROLE.getPath());
+            return ImageCache.getCreatedImage(EImage.ROLE_WHITE.getPath());
         } else if (object.getType() == TreeObject.STORED_PROCEDURE) {
-            return ImageCache.getCreatedImage(EImage.STORED_PROCEDURE.getPath());
+            return ImageCache.getCreatedImage(EImage.STORED_PROCEDURE_WHITE.getPath());
         } else if (object.getType() == TreeObject.ROUTING_RULE) {
-            return ImageCache.getCreatedImage(EImage.ROUTING_RULE.getPath());
+            return ImageCache.getCreatedImage(EImage.ROUTING_RULE_WHITE.getPath());
         } else if (object.getType() == TreeObject.VIEW) {
-            return ImageCache.getCreatedImage(EImage.VIEW.getPath());
+            return ImageCache.getCreatedImage(EImage.VIEW_WHITE.getPath());
         } else if (object.getType() == TreeObject.DOCUMENT) {
             return ImageCache.getCreatedImage(EImage.DOCUMENTS.getPath());
         } else if (object.getType() == TreeObject.SUBSCRIPTION_ENGINE) {
-            return ImageCache.getCreatedImage(EImage.SUBSCRIPTION_ENGINE.getPath());
+            return ImageCache.getCreatedImage(EImage.SUBSCRIPTION_ENGINE_WHITE.getPath());
         } else if (object.getType() == TreeObject.WORKFLOW_PROCESS) {
-            return ImageCache.getCreatedImage(EImage.WORKFLOW_PROCESS.getPath());
+            return ImageCache.getCreatedImage(EImage.WORKFLOW_PROCESS_WHITE.getPath());
         } else if (object.getType() == TreeObject.JOB) {
             return ImageCache.getCreatedImage(EImage.JOB.getPath());
         }

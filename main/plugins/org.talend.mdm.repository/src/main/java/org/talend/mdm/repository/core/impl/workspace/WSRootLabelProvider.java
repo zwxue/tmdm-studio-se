@@ -34,7 +34,7 @@ public class WSRootLabelProvider implements IRepositoryNodeLabelProvider {
     static Logger log = Logger.getLogger(WSRootLabelProvider.class);
 
     private static final Image IMG_REPOSITORY = EclipseResourceManager.getImage(RepositoryPlugin.PLUGIN_ID,
-            "icons/MDM-local-repository.png"); //$NON-NLS-1$;
+            "icons/repository.png"); //$NON-NLS-1$;
 
     private static final Image IMG_SVN_REPOSITORY = EclipseResourceManager.getImage(RepositoryPlugin.PLUGIN_ID,
             "icons/svn_repository.gif"); //$NON-NLS-1$;
@@ -44,16 +44,18 @@ public class WSRootLabelProvider implements IRepositoryNodeLabelProvider {
     }
 
     public String getText(Object element) {
-        if (isSVNRepository())
+        if (isSVNRepository()) {
             return Messages.WSRootLabelProvider_svn;
+        }
         return Messages.WSRootLabelProvider_localRepository;
     }
 
     public Image getImage(Object element) {
-        if (isSVNRepository())
+        if (isSVNRepository()) {
             return IMG_SVN_REPOSITORY;
-        else
+        } else {
             return IMG_REPOSITORY;
+        }
     }
 
     public String getDescription(Object anElement) {

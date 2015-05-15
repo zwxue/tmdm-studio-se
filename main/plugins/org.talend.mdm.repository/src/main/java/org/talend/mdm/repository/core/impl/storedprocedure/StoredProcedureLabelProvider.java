@@ -36,8 +36,7 @@ import org.talend.mdm.repository.utils.EclipseResourceManager;
  */
 public class StoredProcedureLabelProvider extends AbstractLabelProvider {
 
-    private static final Image IMG = EclipseResourceManager
-            .getImage(RepositoryPlugin.PLUGIN_ID, "icons/MDM-stored-procedure.png"); //$NON-NLS-1$;
+    private static final Image IMG = EclipseResourceManager.getImage(RepositoryPlugin.PLUGIN_ID, "icons/stored_procedure.png"); //$NON-NLS-1$;
 
     public String getCategoryLabel(ERepositoryObjectType type) {
         return "Stored Procedure"; //$NON-NLS-1$

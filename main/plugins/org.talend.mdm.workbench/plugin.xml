@@ -25,7 +25,7 @@
       <editor
             class="com.amalto.workbench.editors.xsdeditor.XSDEditor"
             default="false"
-            icon="icons/MDM-data-model_white.png"
+            icon="icons/datamodel_white.png"
             id="com.amalto.workbench.editors.xsdeditor.XSDEditor"
             name="com.amalto.workbench.editors.xsdeditor.XSDEditor">
       </editor>

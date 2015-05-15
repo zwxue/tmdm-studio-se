@@ -280,7 +280,7 @@
       <editor
             class="org.talend.mdm.repository.ui.editors.XSDEditor2"
             default="false"
-            icon="icons/MDM-data-model_white.png"
+            icon="icons/datamodel_white.png"
             id="org.talend.mdm.repository.ui.editors.XSDEditor2"
             name="org.talend.mdm.repository.ui.editors.XSDEditor2">
       </editor>

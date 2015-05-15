@@ -36,8 +36,7 @@ import org.talend.mdm.repository.utils.EclipseResourceManager;
  */
 public class EventManagerLabelProvider extends AbstractLabelProvider {
 
-    private static final Image IMG = EclipseResourceManager
-            .getImage(RepositoryPlugin.PLUGIN_ID, "icons/MDM-event-management.png"); //$NON-NLS-1$;
+    private static final Image IMG = EclipseResourceManager.getImage(RepositoryPlugin.PLUGIN_ID, "icons/events_management.png"); //$NON-NLS-1$;
 
     public String getCategoryLabel(ERepositoryObjectType type) {
         return "Event Management"; //$NON-NLS-1$
