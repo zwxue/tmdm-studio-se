@@ -99,11 +99,6 @@ public class MDMRepositoryLabelProvider extends ColumnLabelProvider implements I
         return null;
     }
 
-    private boolean isCollapsed(Object element) {
-
-        return true;
-    }
-
     @Override
     public String getText(Object element) {
         IRepositoryNodeLabelProvider provider = getLabelProvider(element);

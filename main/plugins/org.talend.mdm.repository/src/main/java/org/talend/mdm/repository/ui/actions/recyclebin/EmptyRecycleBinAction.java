@@ -31,7 +31,7 @@ public class EmptyRecycleBinAction extends AbstractRemoveCommandStackAction {
     static Logger log = Logger.getLogger(EmptyRecycleBinAction.class);
 
     private static final ImageDescriptor EMPTY_IMG = EclipseResourceManager.getImageDescriptor(RepositoryPlugin.PLUGIN_ID,
-            "icons/recycle_bin_empty.png"); //$NON-NLS-1$;
+            "icons/recycle-bin.png"); //$NON-NLS-1$;
 
     /**
      * DOC hbhong EmptyRecycleBinAction constructor comment.
@@ -43,10 +43,12 @@ public class EmptyRecycleBinAction extends AbstractRemoveCommandStackAction {
         setImageDescriptor(EMPTY_IMG);
     }
 
+    @Override
     public String getGroupName() {
         return GROUP_EDIT;
     }
 
+    @Override
     protected void doRun() {
         Object selObj = getSelectedObject().get(0);
         FolderRepositoryObject conRepObj = (FolderRepositoryObject) selObj;
@@ -62,6 +64,7 @@ public class EmptyRecycleBinAction extends AbstractRemoveCommandStackAction {
         }
     }
 
+    @Override
     public boolean isVisible(IRepositoryViewObject viewObj) {
         Object selObj = getSelectedObject().get(0);
         FolderRepositoryObject conRepObj = (FolderRepositoryObject) selObj;

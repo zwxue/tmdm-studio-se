@@ -27,6 +27,7 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.ui.navigator.CommonViewer;
 import org.talend.core.model.properties.FolderType;
 import org.talend.core.model.properties.Item;
 import org.talend.core.model.properties.Property;
@@ -36,6 +37,7 @@ import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
 import org.talend.mdm.repository.plugin.RepositoryPlugin;
+import org.talend.mdm.repository.ui.navigator.MDMRepositoryView;
 import org.talend.mdm.repository.utils.EclipseResourceManager;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 
@@ -87,16 +89,23 @@ public abstract class AbstractLabelProvider implements IRepositoryNodeLabelProvi
                 case FolderType.SYSTEM_FOLDER:
                     return getCategoryImage(item);
                 case FolderType.FOLDER:
-                case FolderType.STABLE_SYSTEM_FOLDER:
+                case FolderType.STABLE_SYSTEM_FOLDER: {
+                    if (isExpanded(element)) {
+                        return IMG_OPEN_FOLDER;
+                    }
+
                     return IMG_CLOSE_FOLDER;
+                }
                 }
             }
         }
         return null;
     }
 
-    private boolean isCollapsed(Object element) {
-        return false;
+    private boolean isExpanded(Object element) {
+        CommonViewer commonViewer = MDMRepositoryView.show().getCommonViewer();
+        boolean expanded = commonViewer.getExpandedState(element);
+        return expanded;
     }
 
     public String getDescription(Object anElement) {

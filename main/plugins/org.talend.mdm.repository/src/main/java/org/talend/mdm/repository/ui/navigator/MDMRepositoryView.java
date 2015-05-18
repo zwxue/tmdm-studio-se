@@ -38,8 +38,13 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
+import org.eclipse.jface.viewers.ITreeViewerListener;
+import org.eclipse.jface.viewers.TreeExpansionEvent;
+import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Tree;
+import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
@@ -65,6 +70,8 @@ import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 import org.talend.commons.exception.LoginException;
 import org.talend.commons.exception.PersistenceException;
 import org.talend.commons.runtime.model.repository.ERepositoryStatus;
+import org.talend.commons.ui.runtime.image.ECoreImage;
+import org.talend.commons.ui.runtime.image.ImageProvider;
 import org.talend.core.model.general.Project;
 import org.talend.core.model.properties.Item;
 import org.talend.core.model.properties.Property;
@@ -79,6 +86,7 @@ import org.talend.mdm.repository.core.IServerObjectRepositoryType;
 import org.talend.mdm.repository.core.command.CommandManager;
 import org.talend.mdm.repository.core.service.ContainerCacheService;
 import org.talend.mdm.repository.i18n.Messages;
+import org.talend.mdm.repository.models.FolderRepositoryObject;
 import org.talend.mdm.repository.plugin.RepositoryPlugin;
 import org.talend.mdm.repository.ui.actions.DeployAllAction;
 import org.talend.mdm.repository.ui.actions.ExportObjectAction;
@@ -137,6 +145,7 @@ public class MDMRepositoryView extends CommonNavigator implements ITabbedPropert
         CommonViewer viewer = super.createCommonViewerObject(aParent);
         viewer.setLabelProvider(new MDMNavigatorDecoratingLabelProvider(viewer.getNavigatorContentService()
                 .createCommonLabelProvider()));
+        viewer.addTreeListener(new TreeViewerListener(viewer));
         ColumnViewerToolTipSupport.enableFor(viewer);
         return viewer;
 
@@ -556,6 +565,66 @@ public class MDMRepositoryView extends CommonNavigator implements ITabbedPropert
                 getCommonViewer().refresh(viewObj);
                 break;
             }
+        }
+    }
+
+    class TreeViewerListener implements ITreeViewerListener {
+
+        private TreeViewer viewer;
+
+        public TreeViewerListener(TreeViewer viewer) {
+            this.viewer = viewer;
+        }
+
+        public void treeCollapsed(TreeExpansionEvent event) {
+            Object element = event.getElement();
+            if (element instanceof FolderRepositoryObject) {
+                FolderRepositoryObject fro = (FolderRepositoryObject) element;
+                String path = fro.getPath();
+                if (!path.isEmpty()) {
+                    TreeItem item = getObject(viewer.getTree(), event.getElement());
+                    if (item != null) {
+                        item.setImage(ImageProvider.getImage(ECoreImage.FOLDER_CLOSE_ICON));
+                    }
+                }
+            }
+        }
+
+        public void treeExpanded(TreeExpansionEvent event) {
+            Object element = event.getElement();
+            if (element instanceof FolderRepositoryObject) {
+                FolderRepositoryObject fro = (FolderRepositoryObject) element;
+                String path = fro.getPath();
+                if (!path.isEmpty()) {
+                    TreeItem item = getObject(viewer.getTree(), event.getElement());
+                    if (item != null) {
+                        item.setImage(ImageProvider.getImage(ECoreImage.FOLDER_OPEN_ICON));
+                    }
+                }
+            }
+        }
+
+        private TreeItem getObject(Tree tree, Object objectToFind) {
+            for (TreeItem item : tree.getItems()) {
+                TreeItem toReturn = getObject(item, objectToFind);
+                if (toReturn != null) {
+                    return toReturn;
+                }
+            }
+            return null;
+        }
+
+        private TreeItem getObject(TreeItem parent, Object objectToFind) {
+            for (TreeItem currentChild : parent.getItems()) {
+                if (objectToFind.equals(currentChild.getData())) {
+                    return currentChild;
+                }
+                TreeItem toReturn = getObject(currentChild, objectToFind);
+                if (toReturn != null) {
+                    return toReturn;
+                }
+            }
+            return null;
         }
     }
 }

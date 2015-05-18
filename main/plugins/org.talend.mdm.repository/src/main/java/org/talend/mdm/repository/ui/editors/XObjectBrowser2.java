@@ -40,7 +40,7 @@ public class XObjectBrowser2 extends XObjectBrowser implements ISvnHistory {
 
     public static final String EDITOR_ID = "org.talend.mdm.repository.ui.editors.XObjectBrowser2"; //$NON-NLS-1$
 
-    private final String masterImgPath = "icons/dataclustermaster_white.png"; //$NON-NLS-1$
+    private final String masterImgPath = "icons/datacluster.png"; //$NON-NLS-1$
 
     protected boolean stagingDBExist;
 
