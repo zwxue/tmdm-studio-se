@@ -84,10 +84,12 @@ public class CopyUrlAction extends AbstractRepositoryAction {
         }
 
         // copy url to clipboard
-        Clipboard cb = new Clipboard(Display.getCurrent());
-        String textData = result.toString();
-        TextTransfer transfer = TextTransfer.getInstance();
-        cb.setContents(new Object[] { textData }, new Transfer[] { transfer });
-        cb.dispose();
+        if (result.length() != 0) {
+            Clipboard cb = new Clipboard(Display.getCurrent());
+            String textData = result.toString();
+            TextTransfer transfer = TextTransfer.getInstance();
+            cb.setContents(new Object[] { textData }, new Transfer[] { transfer });
+            cb.dispose();
+        }
     }
 }
