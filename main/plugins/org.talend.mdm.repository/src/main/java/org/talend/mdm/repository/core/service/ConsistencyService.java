@@ -728,7 +728,7 @@ public class ConsistencyService {
         // key
         String type = viewObj.getRepositoryObjectType().getKey();
         String objectName = getObjectName(viewObj);
-        WSDigestKey key = new WSDigestKey(type, objectName);
+        WSDigestKey key = new WSDigestKey(objectName, type);
         // value
         WSDigest value = new WSDigest(getLocalDigestValue(item), 0L, key);
         WSLong timeValue = service.updateDigest(value);
@@ -790,7 +790,7 @@ public class ConsistencyService {
                 }
 
                 if (type != null && objectName != null) {
-                    WSDigest digest = service.getDigest(new WSDigestKey(type, objectName));
+                    WSDigest digest = service.getDigest(new WSDigestKey(objectName, type));
                     result.put(obj, digest);
                 }
 

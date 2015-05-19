@@ -661,7 +661,7 @@ public class RepositoryViewObjectCheckedWidget extends Composite {
                 // key
                 String type = viewObj.getRepositoryObjectType().getKey();
                 String objectName = viewObj.getLabel();
-                WSDigestKey key = new WSDigestKey(type, objectName);
+                WSDigestKey key = new WSDigestKey(objectName, type);
                 consistencyData.setLocalDigestTime(new WSDigest(ld, localTimestamp, key));
 
                 // init compare result;

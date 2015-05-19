@@ -253,7 +253,7 @@ public class TreeObjectCheckTreeViewer extends AbstractNodeCheckTreeViewer {
                         // key
                         String type = viewObj.getRepositoryObjectType().getKey();
                         String objectName = viewObj.getLabel();
-                        WSDigestKey key = new WSDigestKey(type, objectName);
+                        WSDigestKey key = new WSDigestKey(objectName, type);
                         consistencyData.setLocalDigestTime(new WSDigest(ld, localTimestamp, key));
                         // init compare result;
                         CompareResultEnum result;
