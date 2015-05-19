@@ -22,17 +22,13 @@ import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.viewers.CheckboxTreeViewer;
 import org.eclipse.jface.viewers.ICheckStateListener;
-import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
@@ -69,33 +65,6 @@ public class RepositoryCheckTreeViewer {
 
     protected List<TreeObject> checkItems = new ArrayList<TreeObject>();
 
-    protected String defaultTagText;
-
-    protected boolean isTagEditable;
-
-    protected VersionTagWidget vwidget;
-
-    protected SelectionListener tagSelectionListener;
-
-    protected SelectionListener restoreSelectionListener;
-
-    protected IDoubleClickListener tagsViewerDoubleClickListener;
-
-    // *** TMDM-8080, temp omitted start ***//
-    // private List<WSVersioningUniverseVersions.TagStructure> hisEntries;
-    // *** TMDM-8080, temp omitted end ***//
-
-    public RepositoryCheckTreeViewer(IStructuredSelection selection, String defaultTagText, boolean isTagEditable) {
-        this.selection = selection;
-        Object firstElement = selection.getFirstElement();
-        if (firstElement != null && firstElement instanceof TreeObject) {
-            serverRoot = ((TreeObject) firstElement).getServerRoot();
-        }
-        checkItems = selection.toList();
-        this.defaultTagText = defaultTagText;
-        this.isTagEditable = isTagEditable;
-    }
-
     public RepositoryCheckTreeViewer(IStructuredSelection selection) {
         this.selection = selection;
         Object firstElement = selection.getFirstElement();
@@ -116,74 +85,6 @@ public class RepositoryCheckTreeViewer {
 
     public void setServerRoot(TreeParent serverRoot) {
         this.serverRoot = serverRoot;
-    }
-
-    public SashForm createContents(Composite parent) {
-        // Splitter
-        final GridData data = new GridData();
-        data.heightHint = 400;
-        data.widthHint = 700;
-        sash = new SashForm(parent, SWT.HORIZONTAL | SWT.SMOOTH);
-        sash.setLayoutData(data);
-
-        GridLayout layout = new GridLayout();
-        layout.marginLeft = 0;
-        layout.marginRight = 0;
-        sash.setLayout(layout);
-        // create tree
-        createItemList(sash);
-        // create button
-        Composite buttonComposite = new Composite(sash, SWT.ERROR);
-        layout = new GridLayout();
-        layout.marginLeft = 0;
-        layout.marginRight = 0;
-        buttonComposite.setLayout(layout);
-
-        moveButton = new Button(buttonComposite, SWT.PUSH);
-        moveButton.setText("<<"); //$NON-NLS-1$
-        moveButton.setToolTipText("Show server tree"); //$NON-NLS-1$
-
-        final GridData layoutData = new GridData();
-        layoutData.verticalAlignment = GridData.CENTER;
-        layoutData.horizontalAlignment = GridData.CENTER;
-        layoutData.grabExcessHorizontalSpace = true;
-        layoutData.grabExcessVerticalSpace = true;
-        layoutData.widthHint = 30;
-        moveButton.setLayoutData(layoutData);
-
-        // create version composite
-        Composite versionComposite = new Composite(sash, SWT.NONE);
-        layout = new GridLayout();
-        layout.marginLeft = 0;
-        layout.marginRight = 0;
-        versionComposite.setLayout(layout);
-
-        // *** TMDM-8080, temp substituted start ***//
-        //        vwidget = new VersionTagWidget(versionComposite, "Universe", defaultTagText, isTagEditable, tagSelectionListener,//$NON-NLS-1$
-        // restoreSelectionListener, tagsViewerDoubleClickListener, this.hisEntries);
-        vwidget = new VersionTagWidget(versionComposite, "Universe", defaultTagText, isTagEditable, tagSelectionListener,//$NON-NLS-1$
-                restoreSelectionListener, tagsViewerDoubleClickListener, null);
-        // *** TMDM-8080, temp substituted end ***//
-
-        sash.setWeights(new int[] { 20, 2, 21 });
-        // add listner
-        moveButton.addSelectionListener(new SelectionAdapter() {
-
-            @Override
-            public void widgetSelected(final SelectionEvent e) {
-                if (moveButton.getText().equals("<<")) { //$NON-NLS-1$
-                    sash.setWeights(new int[] { 0, 2, 23 });
-                    moveButton.setText(">>"); //$NON-NLS-1$
-
-                } else if (moveButton.getText().equals(">>")) { //$NON-NLS-1$
-                    sash.setWeights(new int[] { 20, 2, 21 });
-                    moveButton.setText("<<"); //$NON-NLS-1$    
-                    moveButton.setToolTipText("Hide server tree"); //$NON-NLS-1$
-                }
-            }
-        });
-
-        return sash;
     }
 
     Label itemLabel = null;
@@ -286,48 +187,6 @@ public class RepositoryCheckTreeViewer {
 
     protected void createTreeViewer(Composite itemComposite) {
 
-        // filteredCheckboxTree = new FilteredCheckboxTree(itemComposite, SWT.BORDER | SWT.V_SCROLL | SWT.H_SCROLL |
-        // SWT.MULTI) {
-        //
-        // @Override
-        // protected CheckboxTreeViewer doCreateTreeViewer(Composite parent, int style) {
-        // exportItemsTreeView = new CheckboxRepositoryView();
-        // try {
-        // exportItemsTreeView.init(repositoryView.getViewSite());
-        // } catch (PartInitException e) {
-        // log.error(e.getMessage(), e);
-        // }
-        // exportItemsTreeView.createPartControl(parent);
-        // exportItemsTreeView.getViewer().setInput(repositoryView.getSite());
-        // return (CheckboxTreeViewer) exportItemsTreeView.getViewer();
-        // }
-        //
-        // @Override
-        // protected void refreshCompleted() {
-        // getViewer().expandToLevel(3);
-        // restoreCheckedElements();
-        // }
-        //
-        // @Override
-        // protected boolean isNodeCollectable(TreeItem item) {
-        // // Object obj = item.getData();
-        // // if (obj instanceof RepositoryNode) {
-        // // RepositoryNode node = (RepositoryNode) obj;
-        // // if (node.getObjectType() == ERepositoryObjectType.METADATA_CONNECTIONS) {
-        // // return true;
-        // // }
-        // // }
-        // return false;
-        // }
-        // };
-        // exportItemsTreeView.getViewer().addFilter(new ViewerFilter() {
-        //
-        // @Override
-        // public boolean select(Viewer viewer, Object parentElement, Object element) {
-        // TreeObject node = (TreeObject) element;
-        // return filterRepositoryNode(node);
-        // }
-        // });
     }
 
     public void addCheckStateListener(ICheckStateListener listener) {
@@ -418,89 +277,6 @@ public class RepositoryCheckTreeViewer {
         });
         // setButtonLayoutData(collapseBtn);
     }
-
-    public SelectionListener getTagSelectionListener() {
-        return tagSelectionListener;
-    }
-
-    public void setTagSelectionListener(SelectionListener tagSelectionListener) {
-        this.tagSelectionListener = tagSelectionListener;
-    }
-
-    public SelectionListener getRestoreSelectionListener() {
-        return restoreSelectionListener;
-    }
-
-    public void setRestoreSelectionListener(SelectionListener restoreSelectionListener) {
-        this.restoreSelectionListener = restoreSelectionListener;
-    }
-
-    public IDoubleClickListener getTagsViewerDoubleClickListener() {
-        return tagsViewerDoubleClickListener;
-    }
-
-    public void setTagsViewerDoubleClickListener(IDoubleClickListener tagsViewerDoubleClickListener) {
-        this.tagsViewerDoubleClickListener = tagsViewerDoubleClickListener;
-    }
-
-    // *** TMDM-8080, temp omitted start ***//
-    // public void setHisEntries(List<WSVersioningUniverseVersions.TagStructure> hisEntries) {
-    //
-    // this.hisEntries = hisEntries;
-    //
-    // }
-    // *** TMDM-8080, temp omitted end ***//
-
-    public String getComment() {
-
-        return vwidget.getCommentText().getText().trim();
-
-    }
-
-    public String getTagText() {
-
-        return vwidget.getTagText().getText().trim();
-
-    }
-
-    // *** TMDM-8080, temp omitted start ***//
-    // public void refreshHistoryTable(List<WSVersioningUniverseVersions.TagStructure> hisEntries) {
-    // this.vwidget.refreshData(hisEntries);
-    // }
-    // *** TMDM-8080, temp omitted end ***//
-
-    public TableViewer getTagsViewer() {
-
-        return this.vwidget.getTagsViewer();
-
-    }
-
-    // /**
-    // *
-    // * A repository view with checkbox on the left.
-    // */
-    // protected class CheckboxRepositoryView extends ServerView {
-    //
-    // @Override
-    // protected TreeViewer createTreeViewer(Composite parent) {
-    // return new CheckboxRepositoryTreeViewer(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL);
-    // }
-    //
-    // /*
-    // * (non-Javadoc)
-    // *
-    // * @see org.talend.repository.ui.views.RepositoryView#createPartControl(org.eclipse.swt.widgets.Composite)
-    // */
-    // @Override
-    // public void createPartControl(Composite parent) {
-    // super.createPartControl(parent);
-    //
-    // }
-    //
-    // @Override
-    // public void initView() {
-    // }
-    // }
 
     public void addButtonSelectionListener(SelectionListener listener) {
         this.bunListener = listener;

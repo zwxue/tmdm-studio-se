@@ -23,16 +23,13 @@ import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.viewers.CheckboxTreeViewer;
 import org.eclipse.jface.viewers.ICheckStateListener;
-import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
-import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
@@ -52,7 +49,6 @@ import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.models.TreeParent;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.widgets.FilteredCheckboxTree;
-import com.amalto.workbench.widgets.VersionTagWidget;
 
 /**
  * DOC hbhong class global comment. <BR>
@@ -71,10 +67,6 @@ public abstract class AbstractNodeCheckTreeViewer {
 
     protected FilteredCheckboxTree filteredCheckboxTree;
 
-    // *** TMDM-8080, temp omitted start ***//
-    // private ArrayList<TagStructure> hisEntries;
-    // *** TMDM-8080, temp omitted end ***//
-
     protected boolean isTagEditable;
 
     Label itemLabel = null;
@@ -83,21 +75,13 @@ public abstract class AbstractNodeCheckTreeViewer {
 
     Collection<TreeObject> optimizedCheckNodes = new ArrayList<TreeObject>();
 
-    protected SelectionListener restoreSelectionListener;
-
     protected SashForm sash;
 
     protected IStructuredSelection selection;
 
     protected TreeParent serverRoot;
 
-    protected SelectionListener tagSelectionListener;
-
-    protected IDoubleClickListener tagsViewerDoubleClickListener;
-
     protected TreeViewer viewer;
-
-    protected VersionTagWidget vwidget;
 
     public AbstractNodeCheckTreeViewer(IStructuredSelection selection) {
         this.selection = selection;
@@ -130,74 +114,6 @@ public abstract class AbstractNodeCheckTreeViewer {
 
     public void addCheckStateListener(ICheckStateListener listener) {
         filteredCheckboxTree.getViewer().addCheckStateListener(listener);
-    }
-
-    public SashForm createContents(Composite parent) {
-        // Splitter
-        final GridData data = new GridData();
-        data.heightHint = 400;
-        data.widthHint = 700;
-        sash = new SashForm(parent, SWT.HORIZONTAL | SWT.SMOOTH);
-        sash.setLayoutData(data);
-
-        GridLayout layout = new GridLayout();
-        layout.marginLeft = 0;
-        layout.marginRight = 0;
-        sash.setLayout(layout);
-        // create tree
-        createItemList(sash);
-        // create button
-        Composite buttonComposite = new Composite(sash, SWT.ERROR);
-        layout = new GridLayout();
-        layout.marginLeft = 0;
-        layout.marginRight = 0;
-        buttonComposite.setLayout(layout);
-
-        moveButton = new Button(buttonComposite, SWT.PUSH);
-        moveButton.setText("<<"); //$NON-NLS-1$
-        moveButton.setToolTipText("Show server tree"); //$NON-NLS-1$
-
-        final GridData layoutData = new GridData();
-        layoutData.verticalAlignment = GridData.CENTER;
-        layoutData.horizontalAlignment = GridData.CENTER;
-        layoutData.grabExcessHorizontalSpace = true;
-        layoutData.grabExcessVerticalSpace = true;
-        layoutData.widthHint = 30;
-        moveButton.setLayoutData(layoutData);
-
-        // create version composite
-        Composite versionComposite = new Composite(sash, SWT.NONE);
-        layout = new GridLayout();
-        layout.marginLeft = 0;
-        layout.marginRight = 0;
-        versionComposite.setLayout(layout);
-
-        // *** TMDM-8080, temp substituted start ***//
-        //        vwidget = new VersionTagWidget(versionComposite, "Universe", defaultTagText, isTagEditable, tagSelectionListener,//$NON-NLS-1$
-        // restoreSelectionListener, tagsViewerDoubleClickListener, this.hisEntries);
-        vwidget = new VersionTagWidget(versionComposite, "Universe", defaultTagText, isTagEditable, tagSelectionListener,//$NON-NLS-1$
-                restoreSelectionListener, tagsViewerDoubleClickListener, null);
-        // *** TMDM-8080, temp substituted end ***//
-
-        sash.setWeights(new int[] { 20, 2, 21 });
-        // add listner
-        moveButton.addSelectionListener(new SelectionAdapter() {
-
-            @Override
-            public void widgetSelected(final SelectionEvent e) {
-                if (moveButton.getText().equals("<<")) { //$NON-NLS-1$
-                    sash.setWeights(new int[] { 0, 2, 23 });
-                    moveButton.setText(">>"); //$NON-NLS-1$
-
-                } else if (moveButton.getText().equals(">>")) { //$NON-NLS-1$
-                    sash.setWeights(new int[] { 20, 2, 21 });
-                    moveButton.setText("<<"); //$NON-NLS-1$    
-                    moveButton.setToolTipText("Hide server tree"); //$NON-NLS-1$
-                }
-            }
-        });
-
-        return sash;
     }
 
     /**
@@ -396,63 +312,13 @@ public abstract class AbstractNodeCheckTreeViewer {
         return ret.toArray();
     }
 
-    public String getComment() {
-
-        return vwidget.getCommentText().getText().trim();
-
-    }
-
-    public SelectionListener getRestoreSelectionListener() {
-        return restoreSelectionListener;
-    }
-
-    public SelectionListener getTagSelectionListener() {
-        return tagSelectionListener;
-    }
-
-    public TableViewer getTagsViewer() {
-
-        return this.vwidget.getTagsViewer();
-
-    }
-
-    public IDoubleClickListener getTagsViewerDoubleClickListener() {
-        return tagsViewerDoubleClickListener;
-    }
-
-    public String getTagText() {
-
-        return vwidget.getTagText().getText().trim();
-
-    }
-
     public TreeViewer getViewer() {
         return viewer;
     }
 
     public void refresh() {
-
-        // // if user has select some items in repository view, mark them as checked
-        // for (TreeObject obj : checkItems) {
-        // if (obj instanceof TreeParent) {
-        //
-        // repositoryNodes.addAll(Util.getChildrenObj((TreeParent) obj));
-        //
-        // } else {
-        // repositoryNodes.add(obj);
-        //
-        // }
-        // }
-        //
-        // ((CheckboxTreeViewer) viewer).setCheckedElements(repositoryNodes.toArray());
-
+        // empty
     }
-
-    // *** TMDM-8080, temp omitted start ***//
-    // public void refreshHistoryTable(ArrayList<TagStructure> hisEntries) {
-    // this.vwidget.refreshData(hisEntries);
-    // }
-    // *** TMDM-8080, temp omitted end ***//
 
     public void removeCheckStateListener(ICheckStateListener listener) {
         filteredCheckboxTree.getViewer().removeCheckStateListener(listener);
@@ -467,32 +333,12 @@ public abstract class AbstractNodeCheckTreeViewer {
         viewer = filteredCheckboxTree.getViewer();
     }
 
-    // *** TMDM-8080, temp omitted start ***//
-    // public void setHisEntries(ArrayList<TagStructure> hisEntries) {
-    //
-    // this.hisEntries = hisEntries;
-    //
-    // }
-    // *** TMDM-8080, temp omitted end ***//
-
     public void setItemText(String text) {
         itemLabel.setText(text);
     }
 
-    public void setRestoreSelectionListener(SelectionListener restoreSelectionListener) {
-        this.restoreSelectionListener = restoreSelectionListener;
-    }
-
     public void setServerRoot(TreeParent serverRoot) {
         this.serverRoot = serverRoot;
-    }
-
-    public void setTagSelectionListener(SelectionListener tagSelectionListener) {
-        this.tagSelectionListener = tagSelectionListener;
-    }
-
-    public void setTagsViewerDoubleClickListener(IDoubleClickListener tagsViewerDoubleClickListener) {
-        this.tagsViewerDoubleClickListener = tagsViewerDoubleClickListener;
     }
 
     public void setViewer(TreeViewer viewer) {

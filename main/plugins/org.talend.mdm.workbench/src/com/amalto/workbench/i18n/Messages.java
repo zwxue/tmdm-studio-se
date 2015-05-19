@@ -785,16 +785,6 @@ public class Messages extends NLS {
 
     public static String VariableDefinitionDialog_VariableAssign;
 
-    public static String VersionTagWidget_Comment;
-
-    public static String VersionTagWidget_GroupText;
-
-    public static String VersionTagWidget_GroupTextX;
-
-    public static String VersionTagWidget_Restore;
-
-    public static String VersionTagWidget_RestoreX;
-
     public static String ViewBrowserMainPage_Conditions;
 
     public static String ViewBrowserMainPage_ErrorMsg;
@@ -1279,21 +1269,7 @@ public class Messages extends NLS {
 
     public static String DataClusterBrowserMainPage_48;
 
-    public static String DataClusterBrowserMainPage_49;
-
     public static String DataClusterBrowserMainPage_5;
-
-    public static String DataClusterBrowserMainPage_50;
-
-    public static String DataClusterBrowserMainPage_52;
-
-    public static String DataClusterBrowserMainPage_54;
-
-    public static String DataClusterBrowserMainPage_56;
-
-    public static String DataClusterBrowserMainPage_57;
-
-    public static String DataClusterBrowserMainPage_59;
 
     public static String DataClusterBrowserMainPage_6;
 

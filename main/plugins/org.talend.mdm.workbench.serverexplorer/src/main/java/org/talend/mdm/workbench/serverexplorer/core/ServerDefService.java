@@ -279,25 +279,6 @@ public class ServerDefService implements ILegendServerDefService {
         }
     }
 
-    public static String refreshServerCache(MDMServerDef serverDef) {
-        // *** TMDM-8080, temp omitted start ***//
-        // String endpointaddress = serverDef.getUrl();
-        // String username = serverDef.getUser();
-        // String password = serverDef.getPasswd();
-        // String universe = serverDef.getUniverse();
-        // try {
-        // TMDMService port = Util.getMDMService(new URL(endpointaddress), universe, username, password);
-        // WSString ret = port.refreshCache();
-        // return ret.getValue();
-        // } catch (MalformedURLException e) {
-        // log.error(e.getMessage(), e);
-        // } catch (XtentisException e) {
-        // log.error(e.getMessage(), e);
-        // }
-        // *** TMDM-8080, temp omitted end ***//
-        return null;
-    }
-
     /*
      * (non-Javadoc)
      * 

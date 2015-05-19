@@ -28,10 +28,6 @@ import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
@@ -54,7 +50,6 @@ import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.part.ViewPart;
-import org.eclipse.ui.progress.UIJob;
 import org.talend.core.GlobalServiceRegister;
 import org.talend.core.IService;
 import org.talend.core.model.repository.IRepositoryViewObject;
@@ -87,9 +82,6 @@ public class ServerExplorer extends ViewPart {
 
     static final ImageDescriptor IMG_EVENTMANAGER = MDMServerExplorerPlugin.imageDescriptorFromPlugin(
             MDMServerExplorerPlugin.PLUGIN_ID, "icons/sub_engine.png"); //$NON-NLS-1$
-
-    static final ImageDescriptor IMG_REFRESH = MDMServerExplorerPlugin.imageDescriptorFromPlugin(
-            MDMServerExplorerPlugin.PLUGIN_ID, "icons/refresh.gif"); //$NON-NLS-1$
 
     public static final String ID = "org.talend.mdm.workbench.serverexplorer.ui.views.ServerExplorer"; //$NON-NLS-1$
 
@@ -218,7 +210,6 @@ public class ServerExplorer extends ViewPart {
         allActions.add(new EditServerDefAction());
         allActions.add(new CheckConnectionAction());
         allActions.add(new EventManageAction());
-        allActions.add(new RefreshServerCacheAction());
 
         ShowServerConsoleAction showServerConsoleAction = new ShowServerConsoleAction();
         showServerConsoleAction.initSelectionProvider(treeViewer);
@@ -321,50 +312,6 @@ public class ServerExplorer extends ViewPart {
                 }
             }
         }
-    }
-
-    class RefreshServerCacheAction extends Action {
-
-        public RefreshServerCacheAction() {
-            setImageDescriptor(IMG_REFRESH);
-            setText(Messages.ServerExplorer_RefreshServerCache);
-        }
-
-        @Override
-        public void run() {
-            UIJob refreshServerJob = new UIJob(Messages.ServerExplorer_RefreshServerCache) {
-
-                @Override
-                public IStatus runInUIThread(IProgressMonitor monitor) {
-
-                    IRepositoryViewObject viewObject = getCurSelectedViewObject();
-                    if (viewObject != null) {
-                        MDMServerDefItem mdmItem = getMDMItem(viewObject);
-                        if (mdmItem != null) {
-                            MDMServerDef serverDef = mdmItem.getServerDef();
-                            serverDef = serverDef.getDecryptedServerDef();
-                            String returnMsg = null;
-                            try {
-                                ServerDefService.checkMDMConnection(serverDef);
-                                returnMsg = ServerDefService.refreshServerCache(serverDef);
-                            } catch (XtentisException e) {
-                                returnMsg = Messages.ServerExplorer_ConnectSSLFailed;
-                            } catch (MalformedURLException e) {
-                                returnMsg = Messages.ServerExplorer_ConnectFailed;
-                            }
-                            MessageDialog.openInformation(getSite().getShell(), Messages.ServerExplorer_RefreshServerCache,
-                                    returnMsg);
-
-                        }
-                    }
-
-                    return Status.OK_STATUS;
-                }
-            };
-
-            refreshServerJob.run(new NullProgressMonitor());
-        }
-
     }
 
     class CheckConnectionAction extends Action {
