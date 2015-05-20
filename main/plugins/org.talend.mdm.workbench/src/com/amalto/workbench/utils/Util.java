@@ -25,10 +25,8 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.StringReader;
 import java.io.StringWriter;
-import java.net.Authenticator;
 import java.net.ConnectException;
 import java.net.MalformedURLException;
-import java.net.PasswordAuthentication;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
@@ -388,6 +386,8 @@ public class Util {
 
     public static TMDMService getMDMService(URL url, final String username, final String password,
             boolean showMissingJarDialog) throws XtentisException {
+        url = checkAndAddSuffix(url);
+
         TMDMService service = (TMDMService) cachedMDMService.get(url, username, password);
         if (service == null) {
             boolean checkResult = MissingJarService.getInstance().checkMissingJar(showMissingJarDialog);
@@ -400,13 +400,6 @@ public class Util {
                 SSLContext sslContext = SSLContextProvider.getContext();
                 HttpsURLConnection.setDefaultHostnameVerifier(SSLContextProvider.getHostnameVerifier());
                 HttpsURLConnection.setDefaultSSLSocketFactory(sslContext.getSocketFactory());
-                Authenticator.setDefault(new Authenticator() {
-
-                    @Override
-                    protected PasswordAuthentication getPasswordAuthentication() {
-                        return new PasswordAuthentication(username, password.toCharArray());
-                    }
-                });
                 TMDMService_Service service_service = new TMDMService_Service(url);
 
                 service = service_service.getTMDMPort();
@@ -444,6 +437,21 @@ public class Util {
         }
 
         return service;
+    }
+
+    private static URL checkAndAddSuffix(URL url) {
+        String protocol = url.getProtocol();
+        if (protocol.equals("http")) {//$NON-NLS-1$
+            String suffix = "wsdl"; //$NON-NLS-1$
+            if (!suffix.equalsIgnoreCase(url.getQuery())) {
+                try {
+                    url = new URL(url.toString() + "?wsdl"); //$NON-NLS-1$
+                } catch (MalformedURLException e) {
+                    log.error(e.getMessage(), e);
+                }
+            }
+        }
+        return url;
     }
 
     public static XtentisException convertWebServiceException(WebServiceException wsEx) {
