@@ -83,15 +83,20 @@ import com.amalto.workbench.providers.XObjectBrowserInput;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.XtentisException;
 import com.amalto.workbench.webservices.TMDMService;
+import com.amalto.workbench.webservices.WSDeleteRoutingOrderV2;
+import com.amalto.workbench.webservices.WSExecuteRoutingOrderV2Asynchronously;
+import com.amalto.workbench.webservices.WSExecuteRoutingOrderV2Synchronously;
 import com.amalto.workbench.webservices.WSGetRoutingOrderV2ByCriteriaWithPaging;
 import com.amalto.workbench.webservices.WSGetServicesList;
 import com.amalto.workbench.webservices.WSRoutingEngineV2Action;
 import com.amalto.workbench.webservices.WSRoutingEngineV2ActionCode;
 import com.amalto.workbench.webservices.WSRoutingEngineV2Status;
 import com.amalto.workbench.webservices.WSRoutingOrderV2;
+import com.amalto.workbench.webservices.WSRoutingOrderV2PK;
 import com.amalto.workbench.webservices.WSRoutingOrderV2SearchCriteriaWithPaging;
 import com.amalto.workbench.webservices.WSRoutingOrderV2Status;
 import com.amalto.workbench.webservices.WSServicesListItem;
+import com.amalto.workbench.webservices.WSString;
 import com.amalto.workbench.widgets.CalendarSelectWidget;
 import com.amalto.workbench.widgets.IPagingListener;
 import com.amalto.workbench.widgets.PageingToolBar;
@@ -249,7 +254,6 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
                     );
             statusCombo.add("FAILED");//$NON-NLS-1$
             statusCombo.add("COMPLETED");//$NON-NLS-1$
-            statusCombo.add("ACTIVE");//$NON-NLS-1$
             statusCombo.select(0);
 
             // to
@@ -705,11 +709,7 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
             WSRoutingOrderV2Status status = null;
 
             String statusText = statusCombo.getItem(statusCombo.getSelectionIndex());
-            if ("ACTIVE".equals(statusText)) {//$NON-NLS-1$
-                timeCreatedMin = from;
-                timeCreatedMax = to;
-                status = WSRoutingOrderV2Status.ACTIVE;
-            } else if ("COMPLETED".equals(statusText)) {//$NON-NLS-1$
+            if ("COMPLETED".equals(statusText)) {//$NON-NLS-1$
                 timeLastRunCompletedMin = from;
                 timeLastRunCompletedMax = to;
                 status = WSRoutingOrderV2Status.COMPLETED;
@@ -943,12 +943,8 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
                                             + Messages.RoutingEngineV2BrowserMainPage_WarningMsgB);
                             return;
                         }
-                        // *** TMDM-8080, temp omitted start ***//
-                        // service.deleteRoutingOrderV2(new WSDeleteRoutingOrderV2(new
-                        // WSRoutingOrderV2PK(lineItem.getName(),
-                        // lineItem
-                        // .getStatus())));
-                        // *** TMDM-8080, temp omitted end ***//
+                        service.deleteRoutingOrderV2(new WSDeleteRoutingOrderV2(new WSRoutingOrderV2PK(lineItem.getName(),
+                                lineItem.getStatus())));
                         monitor.worked(1);
                     }// for
 
@@ -1089,19 +1085,17 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
                     }
 
                     try {
-                        // *** TMDM-8080, temp omitted start ***//
-                        // if (synchronously) {
-                        // WSString wsResult = service
-                        // .executeRoutingOrderV2Synchronously(new WSExecuteRoutingOrderV2Synchronously(
-                        // new WSRoutingOrderV2PK(lineItem.getName(), lineItem.getStatus())));
-                        // if (wsResult.getValue() != null) {
-                        //                                results += lineItem.getName() + ": " + wsResult.getValue(); //$NON-NLS-1$
-                        // }
-                        // } else {
-                        // service.executeRoutingOrderV2Asynchronously(new WSExecuteRoutingOrderV2Asynchronously(
-                        // new WSRoutingOrderV2PK(lineItem.getName(), lineItem.getStatus())));
-                        // }
-                        // *** TMDM-8080, temp omitted end ***//
+                        if (synchronously) {
+                            WSString wsResult = service
+                                    .executeRoutingOrderV2Synchronously(new WSExecuteRoutingOrderV2Synchronously(
+                                            new WSRoutingOrderV2PK(lineItem.getName(), lineItem.getStatus())));
+                            if (wsResult.getValue() != null) {
+                                results += lineItem.getName() + ": " + wsResult.getValue(); //$NON-NLS-1$
+                            }
+                        } else {
+                            service.executeRoutingOrderV2Asynchronously(new WSExecuteRoutingOrderV2Asynchronously(
+                                    new WSRoutingOrderV2PK(lineItem.getName(), lineItem.getStatus())));
+                        }
                         monitor.worked(1);
                     } catch (Exception e) {
                         log.error(e.getMessage(), e);
