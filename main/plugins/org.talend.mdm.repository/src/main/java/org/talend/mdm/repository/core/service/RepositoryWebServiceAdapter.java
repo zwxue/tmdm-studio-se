@@ -191,7 +191,7 @@ public class RepositoryWebServiceAdapter {
 
     public static String[] getTheObjectsForRole() {
         String[] objects = new String[] { "Routing Engine V2", "Service", "Routing Rule", //$NON-NLS-1$ //$NON-NLS-2$//$NON-NLS-3$ 
-                "Background Job", "Menu", "Transformer V2", "Stored Procedure", "View", "Routing Order V2 Active",//$NON-NLS-1$ //$NON-NLS-2$//$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$
+                "Background Job", "Menu", "Transformer V2", "Stored Procedure", "View", //$NON-NLS-1$ //$NON-NLS-2$//$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ 
                 "Routing Order V2 Failed", "Item", "Data Model", "Routing Order V2 Completed", //$NON-NLS-1$ //$NON-NLS-2$//$NON-NLS-3$ //$NON-NLS-4$ 
                 "Transformer Plugin V2", "Role", "Data Cluster", "Configuration Info", "Custom Layout" };//$NON-NLS-1$ //$NON-NLS-2$//$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
         return objects;
