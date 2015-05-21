@@ -441,7 +441,7 @@ public class Util {
 
     private static URL checkAndAddSuffix(URL url) {
         String protocol = url.getProtocol();
-        if (protocol.equals("http")) {//$NON-NLS-1$
+        if (protocol.equals("http") || protocol.equals("https")) {//$NON-NLS-1$ //$NON-NLS-2$
             String suffix = "wsdl"; //$NON-NLS-1$
             if (!suffix.equalsIgnoreCase(url.getQuery())) {
                 try {
