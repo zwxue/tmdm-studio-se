@@ -48,8 +48,8 @@ import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 import org.talend.mdm.repository.ui.widgets.AbstractNodeCheckTreeViewer;
 import org.talend.mdm.repository.utils.EclipseResourceManager;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
-import org.talend.mdm.webservice.WSWorkflowProcessDefinitionUUID;
 
+import com.amalto.workbench.exadapter.ExAdapterManager;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.models.TreeParent;
 import com.amalto.workbench.providers.ServerTreeContentProvider;
@@ -93,6 +93,8 @@ public class TreeObjectCheckTreeViewer extends AbstractNodeCheckTreeViewer {
 
     private Map<TreeObject, ConsistencyData> consistencyMap;
 
+    private ITreeObjectCheckTreeViewerExAdapter exAdapter;
+
     /**
      * DOC hbhong TreeObjectCheckTreeViewer constructor comment.
      * 
@@ -102,6 +104,7 @@ public class TreeObjectCheckTreeViewer extends AbstractNodeCheckTreeViewer {
      */
     public TreeObjectCheckTreeViewer(TreeParent serverRoot) {
         super(serverRoot);
+        exAdapter = ExAdapterManager.getAdapter(this, ITreeObjectCheckTreeViewerExAdapter.class);
     }
 
     public void initInput(MDMServerDef serverDef) {
@@ -210,8 +213,10 @@ public class TreeObjectCheckTreeViewer extends AbstractNodeCheckTreeViewer {
         if (treeObject != null) {
             int type = treeObject.getType();
             if (type == TreeObject.WORKFLOW_PROCESS) {
-                WSWorkflowProcessDefinitionUUID key = (WSWorkflowProcessDefinitionUUID) treeObject.getWsKey();
-                return key.getProcessName();
+                if (exAdapter != null) {
+                    return exAdapter.getWorkflowgTreeObjectName(treeObject);
+                }
+
             }
             return treeObject.getDisplayName();
         }

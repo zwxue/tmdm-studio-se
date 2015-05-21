@@ -90,6 +90,7 @@ Export-Package: org.talend.mdm.repository.core,
  org.talend.mdm.repository.ui.wizards.exports.viewers,
  org.talend.mdm.repository.ui.wizards.imports,
  org.talend.mdm.repository.ui.wizards.imports.handlers,
+ org.talend.mdm.repository.ui.wizards.imports.viewer,
  org.talend.mdm.repository.ui.wizards.process,
  org.talend.mdm.repository.utils
 Import-Package: com.amalto.workbench.webservices,

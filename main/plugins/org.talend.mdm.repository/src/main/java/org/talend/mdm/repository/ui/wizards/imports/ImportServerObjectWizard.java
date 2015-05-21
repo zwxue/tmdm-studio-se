@@ -12,27 +12,19 @@
 // ============================================================================
 package org.talend.mdm.repository.ui.wizards.imports;
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
 
-import org.apache.commons.io.IOUtils;
-import org.apache.http.client.ClientProtocolException;
 import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -83,14 +75,11 @@ import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
 import org.talend.mdm.repository.model.mdmserverobject.MdmserverobjectFactory;
 import org.talend.mdm.repository.model.mdmserverobject.WSResourceE;
-import org.talend.mdm.repository.model.mdmserverobject.WSWorkflowE;
 import org.talend.mdm.repository.ui.dialogs.lock.LockedObjectDialog;
 import org.talend.mdm.repository.ui.wizards.imports.viewer.TreeObjectCheckTreeViewer;
 import org.talend.mdm.repository.utils.Bean2EObjUtil;
-import org.talend.mdm.repository.utils.IOUtil;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 import org.talend.mdm.repository.utils.RepositoryTransformUtil;
-import org.talend.mdm.webservice.WSWorkflowProcessDefinitionUUID;
 import org.talend.mdm.workbench.serverexplorer.ui.dialogs.SelectServerDefDialog;
 import org.talend.repository.model.IProxyRepositoryFactory;
 
@@ -100,7 +89,6 @@ import com.amalto.workbench.models.TreeParent;
 import com.amalto.workbench.providers.XtentisServerObjectsRetriever;
 import com.amalto.workbench.utils.HttpClientUtil;
 import com.amalto.workbench.utils.Util;
-import com.amalto.workbench.utils.XtentisException;
 import com.amalto.workbench.widgets.LabelCombo;
 import com.amalto.workbench.widgets.WidgetFactory;
 
@@ -237,112 +225,11 @@ public class ImportServerObjectWizard extends Wizard {
             return handlePictureResourceObject(treeObj);
         }
         if (type == TreeObject.WORKFLOW_PROCESS) {
-            return handleWorkflowObject(treeObj);
-
+            if (exAdapter != null) {
+                return exAdapter.handleWorkflowObject(treeObj);
+            }
         }
         return null;
-    }
-
-    private WSWorkflowE handleWorkflowObject(TreeObject treeObj) throws IOException, ClientProtocolException,
-            UnsupportedEncodingException {
-        // WSWorkflowProcessDefinitionUUID wsKey = (WSWorkflowProcessDefinitionUUID) treeObj.getWsKey();
-        String workflowURL = treeObj.getEndpointIpAddress() + TreeObject.BARFILE_URI + treeObj.getDisplayName();
-        // correct the URL to Bonita 5.8 version
-        Pattern PATTERN_53 = Pattern.compile("(.+?)_(\\d+\\.\\d+)");
-        Matcher matcher = PATTERN_53.matcher(workflowURL);
-        if (matcher.matches()) {
-            workflowURL = matcher.group(1) + "--" + matcher.group(2);
-        }
-        InputStream is = null;
-        try {
-            is = HttpClientUtil.getInStreamContentByHttpget(workflowURL, treeObj.getUsername(), treeObj.getPassword());
-        } catch (XtentisException e) {
-            log.error(e.getMessage(), e);
-        }
-
-        if (is != null) {
-
-            String encodedID = URLEncoder.encode(treeObj.getDisplayName(), UTF8);
-            File tempFolder = IOUtil.getWorkspaceTempFolder();
-            String filename = tempFolder.getAbsolutePath() + File.separator + encodedID + ".bar";//$NON-NLS-1$
-            OutputStream os = null;
-            File barFile = new File(filename);
-            try {
-
-                os = new FileOutputStream(barFile);
-                int copy = IOUtils.copy(is, os);
-
-            } catch (Exception e) {
-                log.error(e.getMessage(), e);
-                return null;
-            } finally {
-                if (is != null) {
-                    try {
-                        is.close();
-                    } catch (Exception e) {
-                    }
-                }
-                if (os != null) {
-                    try {
-                        os.close();
-                    } catch (Exception e) {
-                    }
-                }
-
-            }
-            if (barFile.exists()) {
-                try {
-                    byte[] procBytes = extractBar(barFile);
-                    if (procBytes != null) {
-                        WSWorkflowE workflow = MdmserverobjectFactory.eINSTANCE.createWSWorkflowE();
-                        // workflow.setName(wsKey.getProcessName());
-                        workflow.setName(treeObj.getName());
-                        workflow.setFileContent(procBytes);
-                        return workflow;
-                    }
-                } finally {
-                    IOUtil.cleanFolder(tempFolder);
-                }
-            }
-
-        }
-        return null;
-    }
-
-    private byte[] extractBar(File barFile) {
-        ZipFile zipFile = null;
-        InputStream entryInputStream = null;
-        byte[] processBytes = null;
-        try {
-            zipFile = new ZipFile(barFile);
-
-            for (Enumeration entries = zipFile.entries(); entries.hasMoreElements();) {
-                ZipEntry entry = (ZipEntry) entries.nextElement();
-                if (!entry.isDirectory()) {
-                    if (entry.getName().endsWith(".proc")) { //$NON-NLS-1$
-                        entryInputStream = zipFile.getInputStream(entry);
-                        processBytes = IOUtils.toByteArray(entryInputStream);
-                    }
-                }
-            }
-        } catch (IOException e) {
-            log.error(e.getMessage(), e);
-        } finally {
-            if (entryInputStream != null) {
-                try {
-                    entryInputStream.close();
-                } catch (IOException e) {
-                }
-            }
-            if (zipFile != null) {
-                try {
-                    zipFile.close();
-                } catch (IOException e) {
-                }
-            }
-
-        }
-        return processBytes;
     }
 
     /**
@@ -393,24 +280,39 @@ public class ImportServerObjectWizard extends Wizard {
             return true;
         }
         List<IRepositoryViewObject> viewObjs = new LinkedList<IRepositoryViewObject>();
+        boolean forceContinueResetOperation = false;
+        Map<IRepositoryViewObject, TreeObject> objMap = new HashMap<IRepositoryViewObject, TreeObject>();
         for (Object obj : objs) {
             TreeObject treeObj = (TreeObject) obj;
             if (treeObj != null && treeObj instanceof TreeParent) {
                 continue;
             }
             String treeObjName = treeObj.getName();
+
             ERepositoryObjectType type = RepositoryQueryService.getRepositoryObjectType(treeObj.getType());
             if (type != null && treeObjName != null) {
                 String uniqueName = getUniqueName(treeObj, treeObjName);
                 IRepositoryViewObject viewObject = RepositoryResourceUtil.findViewObjectByName(type, uniqueName);
                 if (viewObject != null) {
                     viewObjs.add(viewObject);
+                    objMap.put(viewObject, treeObj);
+                } else {
+                    // not exist in local
+                    forceContinueResetOperation = true;
                 }
             }
         }
         LockedObjectDialog lockDialog = new LockedObjectDialog(getShell(), Messages.ImportServerObjectWizard_lockedObjectMessage,
-                viewObjs);
-        if (lockDialog.needShowDialog() && lockDialog.open() == IDialogConstants.CANCEL_ID) {
+                Messages.ImportServerObjectWizard_cancelImportingObjectMessage, viewObjs, forceContinueResetOperation);
+        if (lockDialog.needShowDialog()) {
+            int open = lockDialog.open();
+
+            if (open == IDialogConstants.OK_ID) {
+                if (lockDialog.canContinueRestOperation()) {
+                    selectedObjects = lockDialog.getUnlockedTreeObject(selectedObjects, objMap);
+                    return true;
+                }
+            }
             return false;
         }
         return true;
@@ -439,10 +341,12 @@ public class ImportServerObjectWizard extends Wizard {
                 monitor.subTask(treeObj.getDisplayName());
                 String treeObjName = treeObj.getName();
                 MDMServerObject eobj = handleSpecialTreeObject(treeObj);
-
+                if (treeObj.getType() == TreeObject.WORKFLOW_PROCESS) {
+                    continue;
+                }
                 if (eobj == null) {
                     if (!types.contains(treeObj.getType()) || treeObj.getWsObject() == null
-                            || ("JCAAdapers".equals(treeObj.getName()) && treeObj.getType() == TreeObject.DATA_CLUSTER)) {
+                            || ("JCAAdapers".equals(treeObj.getName()) && treeObj.getType() == TreeObject.DATA_CLUSTER)) { //$NON-NLS-1$
                         continue;
                     }
                     eobj = (MDMServerObject) Bean2EObjUtil.getInstance().convertFromBean2EObj(treeObj.getWsObject(), null);
@@ -454,38 +358,36 @@ public class ImportServerObjectWizard extends Wizard {
                 MDMServerObjectItem item = RepositoryQueryService.findServerObjectItemByNameWithDeleted(type, uniqueName, true);
 
                 if (item != null) {
-                    if (!RepositoryResourceUtil.isLockedItem(item)) {
-                        if (!isOverrideAll) {
-                            int result = isOveride(treeObj.getName(), TreeObject.getTypeName(treeObj.getType()));
-                            if (result == IDialogConstants.CANCEL_ID) {
-                                ImportService.setImporting(false);
-                                return importedIds;
-                            }
-                            if (result == IDialogConstants.YES_TO_ALL_ID) {
-                                isOverrideAll = true;
-                            }
-                            if (result == IDialogConstants.NO_ID) {
-                                break;
-                            }
+                    if (!isOverrideAll) {
+                        int result = isOveride(treeObj.getName(), TreeObject.getTypeName(treeObj.getType()));
+                        if (result == IDialogConstants.CANCEL_ID) {
+                            ImportService.setImporting(false);
+                            return importedIds;
                         }
-                        if (factory.isEditableAndLockIfPossible(item)) {
-                            item.setMDMServerObject(eobj);
-                            item.getState().setDeleted(false);
-                            // save
-                            RepositoryResourceUtil.saveItem(item, false);
-
-                            try {
-                                factory.unlock(item);
-                            } catch (PersistenceException e) {
-                                log.error(e.getMessage(), e);
-                            } catch (LoginException e) {
-                                log.error(e.getMessage(), e);
-                            }
-                            importedIds.add(item.getProperty().getId());
+                        if (result == IDialogConstants.YES_TO_ALL_ID) {
+                            isOverrideAll = true;
                         }
-
-                        CommandManager.getInstance().removeCommandStack(item.getProperty().getId());
+                        if (result == IDialogConstants.NO_ID) {
+                            break;
+                        }
                     }
+                    if (factory.isEditableAndLockIfPossible(item)) {
+                        item.setMDMServerObject(eobj);
+                        item.getState().setDeleted(false);
+                        // save
+                        RepositoryResourceUtil.saveItem(item, false);
+
+                        try {
+                            factory.unlock(item);
+                        } catch (PersistenceException e) {
+                            log.error(e.getMessage(), e);
+                        } catch (LoginException e) {
+                            log.error(e.getMessage(), e);
+                        }
+                        importedIds.add(item.getProperty().getId());
+                    }
+
+                    CommandManager.getInstance().removeCommandStack(item.getProperty().getId());
                 } else {
                     IRepositoryNodeConfiguration config = RepositoryNodeConfigurationManager.getConfiguration(type);
                     item = (MDMServerObjectItem) config.getResourceProvider().createNewItem(type);
@@ -524,7 +426,7 @@ public class ImportServerObjectWizard extends Wizard {
         }
 
         if (treeObj.getType() == TreeObject.ROUTING_RULE) {
-            if (treeObj.getPath().equals("Trigger")) {
+            if (treeObj.getPath().equals("Trigger")) { //$NON-NLS-1$
                 return "";//$NON-NLS-1$
             } else {
                 return treeObj.getPath().substring(8);
@@ -637,9 +539,8 @@ public class ImportServerObjectWizard extends Wizard {
                 return fileInfo[4];
             }
         }
-        if (type == TreeObject.WORKFLOW_PROCESS) {
-            WSWorkflowProcessDefinitionUUID wsKey = (WSWorkflowProcessDefinitionUUID) treeObj.getWsKey();
-            return wsKey.getProcessVersion();
+        if (type == TreeObject.WORKFLOW_PROCESS && exAdapter != null) {
+            return exAdapter.getWorkflowgTreeObjectVersion(treeObj);
         }
         return VersionUtils.DEFAULT_VERSION;
     }
@@ -662,9 +563,8 @@ public class ImportServerObjectWizard extends Wizard {
                 return fileInfo[3];
             }
         }
-        if (type == TreeObject.WORKFLOW_PROCESS) {
-            WSWorkflowProcessDefinitionUUID wsKey = (WSWorkflowProcessDefinitionUUID) treeObj.getWsKey();
-            return wsKey.getProcessName();
+        if (type == TreeObject.WORKFLOW_PROCESS && exAdapter != null) {
+            return exAdapter.getWorkflowgTreeObjectName(treeObj);
         }
         return treeObj.getName();
     }
@@ -698,8 +598,7 @@ public class ImportServerObjectWizard extends Wizard {
                     List<String> importedIds = doImport(selectedObjects, monitor);
                     commonViewer.refresh();
                     if (exAdapter != null) {
-                        // sync workflow object to bonita
-                        exAdapter.syncWorkflow();
+
                         exAdapter.updateRelations(importedIds);
                     }
                     return Status.OK_STATUS;
