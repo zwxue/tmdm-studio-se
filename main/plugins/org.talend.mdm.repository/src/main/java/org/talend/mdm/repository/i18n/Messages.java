@@ -434,6 +434,8 @@ public class Messages extends NLS {
 
     public static String ImportServerObjectAction_importServerObject;
 
+    public static String ImportServerObjectWizard_cancelImportingObjectMessage;
+
     public static String ImportServerObjectWizard_customForm;
 
     public static String ImportServerObjectWizard_loadCustomForm;

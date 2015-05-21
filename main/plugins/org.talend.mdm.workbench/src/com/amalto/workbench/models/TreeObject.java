@@ -13,7 +13,6 @@
 package com.amalto.workbench.models;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -24,6 +23,11 @@ import com.amalto.workbench.utils.LocalTreeObjectRepository;
 import com.amalto.workbench.utils.UserInfo;
 
 public class TreeObject implements IAdaptable, Comparable<TreeObject> {
+
+    /**
+     * 
+     */
+    private static final String DEFAULT_PORT = "8180"; //$NON-NLS-1$
 
     public static final String UNKNOWN = "Unknown";//$NON-NLS-1$
 
@@ -106,6 +110,7 @@ public class TreeObject implements IAdaptable, Comparable<TreeObject> {
     public final static int DATA_CLUSTER_CONTENTS = 23;
 
     public final static int CUSTOM_FORM = 36;
+
     // export folder name
     public final static String DATACONTAINER = "datacontainer";//$NON-NLS-1$
 
@@ -137,7 +142,7 @@ public class TreeObject implements IAdaptable, Comparable<TreeObject> {
 
     public final static String PICTURES_URI = "/pubcomponent/pictures/";//$NON-NLS-1$
 
-    public final static String BARFILE_URI = "/pubcomponent/secure/barFile/";//$NON-NLS-1$
+    public final static String BARFILE_URI = "/talendmdm/services/pubcomponent/barFile/";//$NON-NLS-1$
 
     public final static String BARFILE_PATH = "/workflow/";//$NON-NLS-1$
 
@@ -175,7 +180,6 @@ public class TreeObject implements IAdaptable, Comparable<TreeObject> {
 
     private String url;
 
-    
     public String getUrl() {
         return url;
     }
@@ -241,10 +245,8 @@ public class TreeObject implements IAdaptable, Comparable<TreeObject> {
         if (this.serverRoot == null) {
             if (this.type == TreeObject._SERVER_) {
                 return (TreeParent) this; // we are the server root
-            } else if (this.type == TreeObject._ROOT_)
-             {
-                if (((TreeParent) this).getChildren().length > 0)
-                 {
+            } else if (this.type == TreeObject._ROOT_) {
+                if (((TreeParent) this).getChildren().length > 0) {
                     return (TreeParent) ((TreeParent) this).getChildren()[0]; // we are the root
                 }
             }
@@ -303,8 +305,7 @@ public class TreeObject implements IAdaptable, Comparable<TreeObject> {
     }
 
     public static String getParentPath(TreeObject obj) {
-        if (obj == null || obj.getParent() == null)
-         {
+        if (obj == null || obj.getParent() == null) {
             return ""; //$NON-NLS-1$
         }
         if (obj.getParent().equals(obj.getServerRoot())) {
@@ -326,6 +327,7 @@ public class TreeObject implements IAdaptable, Comparable<TreeObject> {
         }
         return ""; //$NON-NLS-1$
     }
+
     public void addListener(IXObjectModelListener listener) {
         if (listeners == null) {
             listeners = new ArrayList<IXObjectModelListener>();
@@ -350,8 +352,7 @@ public class TreeObject implements IAdaptable, Comparable<TreeObject> {
         TreeObject current = this;
         do {
             if (current.listeners != null) {
-                for (Iterator<IXObjectModelListener> iter = current.listeners.iterator(); iter.hasNext();) {
-                    IXObjectModelListener listener = iter.next();
+                for (IXObjectModelListener listener : current.listeners) {
                     listener.handleEvent(eventType, objectParent, child);
                 }
             }
@@ -373,10 +374,10 @@ public class TreeObject implements IAdaptable, Comparable<TreeObject> {
         }
 
         TreeObject[] children = this.getServerRoot().getChildren();
-        for (int i = 0; i < children.length; i++) {
-            if (children[i] instanceof TreeParent) {
-                if (children[i].getType() == objectType) {
-                    return (TreeParent) children[i];
+        for (TreeObject element : children) {
+            if (element instanceof TreeParent) {
+                if (element.getType() == objectType) {
+                    return (TreeParent) element;
                 }
             }
         }
@@ -466,16 +467,15 @@ public class TreeObject implements IAdaptable, Comparable<TreeObject> {
     public String getEndpointPort() {
 
         String portAddress = getEndpointAddress();
-        if (portAddress == null)
-         {
-            return "8180";//$NON-NLS-1$
+        if (portAddress == null) {
+            return DEFAULT_PORT;
         }
         Pattern p = Pattern.compile(":(\\d+?)/");//$NON-NLS-1$
         Matcher m = p.matcher(portAddress);
         if (m.find()) {
             return m.group(1);
         } else {
-            return "8180";//$NON-NLS-1$
+            return DEFAULT_PORT;
         }
 
     }

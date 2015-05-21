@@ -47,7 +47,7 @@ public class LockedDirtyObjectDialog extends LockedObjectDialog {
      * @param inputObjs
      */
     public LockedDirtyObjectDialog(Shell parentShell, String multiObjAlertMsg, List<IRepositoryViewObject> inputObjs) {
-        super(parentShell, multiObjAlertMsg, inputObjs);
+        super(parentShell, multiObjAlertMsg, multiObjAlertMsg, inputObjs, false);
     }
 
     /**
@@ -60,7 +60,7 @@ public class LockedDirtyObjectDialog extends LockedObjectDialog {
      */
     public LockedDirtyObjectDialog(Shell parentShell, String multiObjAlertMsg, String singleObjAlertMsg,
             List<IRepositoryViewObject> inputObjs) {
-        super(parentShell, multiObjAlertMsg, singleObjAlertMsg, inputObjs);
+        super(parentShell, multiObjAlertMsg, singleObjAlertMsg, inputObjs, false);
     }
 
     @Override

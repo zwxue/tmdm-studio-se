@@ -13,8 +13,11 @@
 package org.talend.mdm.repository.ui.dialogs.lock;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
@@ -36,6 +39,8 @@ import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.plugin.RepositoryPlugin;
 import org.talend.mdm.repository.ui.navigator.MDMRepositoryLabelProvider;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
+
+import com.amalto.workbench.models.TreeObject;
 
 /**
  * DOC hbhong class global comment. Detailled comment
@@ -82,24 +87,18 @@ public class LockedObjectDialog extends Dialog {
 
     private String singleObjAlertMsg;
 
+    private boolean forceContinueResetOperation;
+
     public boolean canContinueRestOperation() {
         return this.continueRestOperation;
     }
 
-    /**
-     * Create the dialog.
-     * 
-     * @param parentShell
-     */
-    public LockedObjectDialog(Shell parentShell, String multiObjAlertMsg, List<IRepositoryViewObject> inputObjs) {
-        this(parentShell, multiObjAlertMsg, multiObjAlertMsg, inputObjs);
-    }
-
     public LockedObjectDialog(Shell parentShell, String multiObjAlertMsg, String singleObjAlertMsg,
-            List<IRepositoryViewObject> inputObjs) {
+            List<IRepositoryViewObject> inputObjs, boolean forceContinueResetOperation) {
         super(parentShell);
         this.mutliObjAlertMsg = multiObjAlertMsg;
         this.singleObjAlertMsg = singleObjAlertMsg;
+        this.forceContinueResetOperation = forceContinueResetOperation;
 
         initInput(inputObjs);
 
@@ -159,15 +158,42 @@ public class LockedObjectDialog extends Dialog {
         }
         // can continue
         continueRestOperation = true;
-        if (inputObjs.size() > 0) {
-            if (inputObjs.size() == lockedObjs.size()) {
-                continueRestOperation = false;
+        if (forceContinueResetOperation) {
+            continueRestOperation = true;
+        } else {
+            if (inputObjs.size() > 0) {
+                if (inputObjs.size() == lockedObjs.size()) {
+                    continueRestOperation = false;
+                }
             }
         }
     }
 
     public boolean needShowDialog() {
         return !lockedObjs.isEmpty();
+    }
+
+    public Object[] getUnlockedTreeObject(Object[] inputTreeObjs, Map<IRepositoryViewObject, TreeObject> objMap) {
+        if (inputTreeObjs == null || objMap == null) {
+            return null;
+        }
+        Set<Object> lockedTreeObjs = new HashSet<Object>();
+        // collect
+        for (IRepositoryViewObject lockedObj : lockedObjs) {
+            TreeObject lockedTreeObj = objMap.get(lockedObj);
+            if (lockedTreeObj != null) {
+                lockedTreeObjs.add(lockedTreeObj);
+            }
+        }
+        //
+        List<Object> newUnlockedTreeObjs = new LinkedList<Object>();
+        for (Object oldObj : inputTreeObjs) {
+            if (!lockedTreeObjs.contains(oldObj)) {
+                newUnlockedTreeObjs.add(oldObj);
+            }
+        }
+        return newUnlockedTreeObjs.toArray();
+
     }
 
     /**
