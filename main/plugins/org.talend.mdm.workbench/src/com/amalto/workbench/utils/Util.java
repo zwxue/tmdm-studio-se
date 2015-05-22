@@ -163,6 +163,7 @@ import com.amalto.workbench.webservices.WSDataModelPK;
 import com.amalto.workbench.webservices.WSGetComponentVersion;
 import com.amalto.workbench.webservices.WSGetDataModel;
 import com.amalto.workbench.webservices.WSGetViewPKs;
+import com.amalto.workbench.webservices.WSPing;
 import com.amalto.workbench.webservices.WSRegexDataClusterPKs;
 import com.amalto.workbench.webservices.WSRegexDataModelPKs;
 import com.amalto.workbench.webservices.WSRoutingRuleExpression;
@@ -388,8 +389,11 @@ public class Util {
             boolean showMissingJarDialog) throws XtentisException {
         url = checkAndAddSuffix(url);
 
+        boolean needCheck = true;
         TMDMService service = (TMDMService) cachedMDMService.get(url, username, password);
         if (service == null) {
+            needCheck = false;
+
             boolean checkResult = MissingJarService.getInstance().checkMissingJar(showMissingJarDialog);
             if (!checkResult) {
                 throw new MissingJarsException("Missing dependency libraries."); //$NON-NLS-1$
@@ -424,16 +428,27 @@ public class Util {
 
                 cachedMDMService.put(url, username, password, service);
             } catch (WebServiceException e) {
-                Throwable throwable = analyseWebServiceException(e);
-                String message = throwable.getMessage();
-                if (message == null) {
-                    message = ""; //$NON-NLS-1$
+                XtentisException ex = convertWebServiceException(e);
+                log.error(Messages.bind(Messages.UnableAccessEndpoint, url, e.getMessage()), e);
+                if (ex != null) {
+                    throw ex;
                 }
-                log.error(message, throwable);
-
-                throw new XtentisException(Messages.bind(Messages.UnableAccessEndpoint, url, message), throwable);
             }
 
+        }
+
+        if (needCheck) {
+            try {
+                service.ping(new WSPing());
+            } catch (WebServiceException e) {
+                cachedMDMService.remove(url, username, password);
+
+                XtentisException ex = convertWebServiceException(e);
+                log.error(Messages.bind(Messages.UnableAccessEndpoint, url, e.getMessage()), e);
+                if (ex != null) {
+                    throw ex;
+                }
+            }
         }
 
         return service;
