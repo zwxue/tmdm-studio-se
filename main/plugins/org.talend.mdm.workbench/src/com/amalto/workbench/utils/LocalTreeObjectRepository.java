@@ -656,7 +656,7 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
             return;
         }
         String xpath = "//" + model.getServerRoot().getUser().getUsername() + "/" + filterOutBlank(model.getDisplayName())//$NON-NLS-1$//$NON-NLS-2$
-                + "//child::*[text() = '" + TreeObject.CATEGORY_FOLDER + " and @Url='" + getURLFromTreeObject(model) + "']";//$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$
+                + "//child::*[text() = '" + TreeObject.CATEGORY_FOLDER + "' and @Url='" + getURLFromTreeObject(model) + "']";//$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$
         Document doc = credentials.get(UnifyUrl(model.getServerRoot().getWsKey().toString())).doc;
         String xpathForModel = getXPathForTreeObject(model);
         List<Element> elems = doc.selectNodes(xpathForModel);
