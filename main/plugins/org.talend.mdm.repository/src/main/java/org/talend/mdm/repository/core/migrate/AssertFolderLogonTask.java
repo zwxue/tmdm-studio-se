@@ -23,6 +23,7 @@ import org.talend.commons.ui.runtime.exception.ExceptionHandler;
 import org.talend.commons.utils.workbench.resources.ResourceUtils;
 import org.talend.core.model.general.Project;
 import org.talend.core.model.repository.ERepositoryObjectType;
+import org.talend.login.AbstractLoginTask;
 import org.talend.mdm.repository.core.migrate.impl.ProcessMigrateObjectPathRule;
 import org.talend.mdm.repository.core.migrate.impl.ViewMigrateObjectPathRule;
 import org.talend.repository.ProjectManager;
@@ -30,7 +31,7 @@ import org.talend.repository.ProjectManager;
 /**
  * DOC HHB class global comment. Detailled comment
  */
-public class AssertFolderLogonTask implements IRunnableWithProgress {
+public class AssertFolderLogonTask extends AbstractLoginTask implements IRunnableWithProgress {
 
     MigrateObjectPathHandler[] handlers;
 

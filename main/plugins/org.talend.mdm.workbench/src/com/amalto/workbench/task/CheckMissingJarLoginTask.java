@@ -16,6 +16,7 @@ import java.lang.reflect.InvocationTargetException;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
+import org.talend.login.AbstractLoginTask;
 
 import com.amalto.workbench.service.MissingJarService;
 
@@ -23,7 +24,7 @@ import com.amalto.workbench.service.MissingJarService;
  * created by HHB on 2013-11-01 Detailled comment
  * 
  */
-public class CheckMissingJarLoginTask implements IRunnableWithProgress {
+public class CheckMissingJarLoginTask extends AbstractLoginTask implements IRunnableWithProgress {
 
     /*
      * (non-Javadoc)
