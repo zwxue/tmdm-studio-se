@@ -31,7 +31,6 @@ import org.talend.commons.ui.runtime.exception.MessageBoxExceptionHandler;
 import org.talend.core.model.properties.Item;
 import org.talend.core.model.properties.Property;
 import org.talend.core.model.repository.ERepositoryObjectType;
-import org.talend.core.model.repository.IRepositoryObject;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.core.runtime.CoreRuntimePlugin;
 import org.talend.mdm.repository.core.IServerObjectRepositoryType;
@@ -92,10 +91,8 @@ public class MdmPropertiesWizard extends PropertiesWizard {
                 if (newName != null && factory.isEditableAndLockIfPossible(item)) {
 
                     serverObject.setName(newName);
-                    beforeSave(object, oldVersion);
                     item = RepositoryResourceUtil.assertItem(item);
                     factory.save(item, false);
-                    afterSave(object, oldVersion);
                     MDMServerDef lastServerDef = RepositoryResourceUtil.getLastServerDef(item);
                     if (!oldName.equals(newName) && lastServerDef != null) {
                         CommandManager.getInstance().pushCommand(ICommand.CMD_RENAME, object.getId(),
@@ -120,23 +117,6 @@ public class MdmPropertiesWizard extends PropertiesWizard {
 
         }
         return true;
-    }
-
-    /**
-     * DOC HHB Comment method "afterSave".
-     * 
-     * @param object
-     * @param oldVersion
-     */
-    protected void afterSave(IRepositoryObject object, String oldVersion) {
-        // do nothing
-    }
-
-    /**
-     * DOC HHB Comment method "beforeSave".
-     */
-    protected void beforeSave(IRepositoryViewObject object, String oldVersion) {
-        // do nothing
     }
 
     @Override
