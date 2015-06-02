@@ -28,9 +28,12 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.gef.EditPartFactory;
+import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
@@ -39,9 +42,14 @@ import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.osgi.util.NLS;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
+import org.eclipse.swt.custom.StackLayout;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Rectangle;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IPropertyListener;
@@ -57,6 +65,7 @@ import org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode;
 import org.eclipse.wst.xsd.ui.internal.adapters.CategoryAdapter;
 import org.eclipse.wst.xsd.ui.internal.adapters.RedefineCategoryAdapter;
 import org.eclipse.wst.xsd.ui.internal.adapters.XSDBaseAdapter;
+import org.eclipse.wst.xsd.ui.internal.adt.design.ADTFloatingToolbar;
 import org.eclipse.wst.xsd.ui.internal.editor.InternalXSDMultiPageEditor;
 import org.eclipse.wst.xsd.ui.internal.editor.XSDTabbedPropertySheetPage;
 import org.eclipse.xsd.XSDAnnotation;
@@ -510,6 +519,7 @@ public class XSDEditor extends InternalXSDMultiPageEditor implements IServerObje
     @Override
     protected void createPages() {
         super.createPages();
+
         fXSDSelectionListener = new XSDSelectionManagerSelectionListener();
         getSelectionManager().addSelectionChangedListener(fXSDSelectionListener);
 
@@ -529,6 +539,57 @@ public class XSDEditor extends InternalXSDMultiPageEditor implements IServerObje
                 preActivePageIndex = getActivePage();
             }
         });
+    }
+
+    @Override
+    protected Composite createGraphPageComposite() {
+        Composite parent = new Composite(getContainer(), SWT.FLAT);
+        parent.setBackground(ColorConstants.white);
+        parent.setLayout(new InternalLayout());// ////
+
+        floatingToolbar = new ADTFloatingToolbar(getModel());
+        floatingToolbar.createControl(parent);
+        floatingToolbar.getControl().setVisible(true);
+        EditPartFactory editPartFactory = getEditorModeManager().getCurrentMode().getEditPartFactory();
+        floatingToolbar.setEditPartFactory(editPartFactory);
+
+        createViewModeToolbar(parent);
+
+        return parent;
+    }
+
+    private class InternalLayout extends StackLayout {
+
+        public InternalLayout() {
+            super();
+        }
+
+        @Override
+        protected void layout(Composite composite, boolean flushCache) {
+            Control children[] = composite.getChildren();
+            Rectangle rect = composite.getClientArea();
+            rect.x += marginWidth;
+            rect.y += marginHeight;
+            rect.width -= 2 * marginWidth;
+            rect.height -= 2 * marginHeight;
+
+            for (int i = 0; i < children.length; i++) {
+                if (i == 0) // For the back to schema button
+                {
+                    if (floatingToolbar.getContents() != null) {
+                        org.eclipse.draw2d.geometry.Rectangle r = ((GraphicalEditPart) floatingToolbar.getContents()).getFigure()
+                                .getBounds();
+                        children[i].setBounds(rect.x + 10, rect.y + 10, r.width, Math.max(24, r.height));
+                    }
+                } else if (i == 1 && modeCombo != null) // For the drop down toolbar
+                {
+                    children[i].setBounds(rect.x + rect.width - 90 - maxLength, rect.y + 10, maxLength + 60, 26);
+                } else // For the main graph viewer
+                {
+                    children[i].setBounds(rect);
+                }
+            }
+        }
     }
 
     @Override
