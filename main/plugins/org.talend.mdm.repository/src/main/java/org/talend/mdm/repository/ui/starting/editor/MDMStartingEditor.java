@@ -17,6 +17,7 @@ import java.io.IOException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.browser.Browser;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
@@ -24,14 +25,23 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.EditorPart;
 import org.talend.commons.ui.html.BrowserDynamicPartLocationListener;
 import org.talend.commons.ui.runtime.exception.ExceptionHandler;
+import org.talend.mdm.repository.plugin.RepositoryPlugin;
 import org.talend.mdm.repository.ui.starting.helper.MDMStartingHelper;
-
+import org.talend.mdm.repository.utils.EclipseResourceManager;
 
 public class MDMStartingEditor extends EditorPart {
 
     public static final String ID = "org.talend.mdm.repository.ui.starting.editor.MDMStartingEditor";//$NON-NLS-1$
-    
+
+    protected static final String ICON_WHITE_PATH = "/icons/appli_white_16x16.png"; //$NON-NLS-1$
+
+    protected Image titleImage;
+
     private Browser browser;
+
+    public MDMStartingEditor() {
+        titleImage = EclipseResourceManager.getImage(RepositoryPlugin.class, ICON_WHITE_PATH);
+    }
 
     @Override
     public void createPartControl(Composite parent) {
@@ -39,7 +49,7 @@ public class MDMStartingEditor extends EditorPart {
             browser = new Browser(parent, SWT.NONE);
             browser.setText(MDMStartingHelper.getHelper().getHtmlContent());
             browser.addLocationListener(new BrowserDynamicPartLocationListener());
-            
+
             return;
         } catch (IOException e) {
             ExceptionHandler.process(e);
@@ -59,8 +69,9 @@ public class MDMStartingEditor extends EditorPart {
 
     @Override
     public void setFocus() {
-        if(browser != null)
+        if (browser != null) {
             browser.setFocus();
+        }
     }
 
     @Override
@@ -82,4 +93,13 @@ public class MDMStartingEditor extends EditorPart {
     public void doSaveAs() {
         // do nothing
     }
+
+    @Override
+    public Image getTitleImage() {
+        if (titleImage != null) {
+            return titleImage;
+        }
+        return super.getTitleImage();
+    }
+
 }
