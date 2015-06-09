@@ -67,8 +67,6 @@ public class Messages extends NLS {
 
     public static String DeployOnMDMExportWizardPage_DeployJobOnServer;
 
-    public static String DeployOnMDMExportWizardPage_distributedWar;
-
     public static String DeployOnMDMExportWizardPage_jobLabel;
 
     public static String DeployOnMDMExportWizardPage_jobName;

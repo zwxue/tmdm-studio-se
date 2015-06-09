@@ -394,8 +394,18 @@ public class AddBrowseItemsWizard extends Wizard {
                                 return;
                             }
                         }
-                        List<Line> lines = browseItemToRoles.get(BROWSE_ITEMS + declName);
-                        browseItemToRoles.remove(BROWSE_ITEMS + declName);
+
+                        // find the real key in browseItemToRoles
+                        String key = BROWSE_ITEMS + declName;
+                        for (String k : browseItemToRoles.keySet()) {
+                            if (k.startsWith(key)) {
+                                key = k;
+                                break;
+                            }
+                        }
+
+                        List<Line> lines = browseItemToRoles.get(key);
+                        browseItemToRoles.remove(key);
                         int prex = tValue.indexOf(BROWSE_ITEMS);
 
                         if (prex != -1 && (prex + BROWSE_ITEMS.length()) <= tValue.length()) {
@@ -462,6 +472,8 @@ public class AddBrowseItemsWizard extends Wizard {
             }
 
         }
+
+        private Map<XSDElementDeclaration, Map<String, List<Line>>> allItemToRoles = new HashMap<XSDElementDeclaration, Map<String, List<Line>>>();
 
         private boolean isCommitMultiChanges = false;
 

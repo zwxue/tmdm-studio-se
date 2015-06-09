@@ -17,6 +17,7 @@ import java.util.List;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
@@ -31,6 +32,7 @@ import org.talend.mdm.repository.plugin.RepositoryPlugin;
 import org.talend.mdm.repository.ui.editors.XObjectBrowser2;
 import org.talend.mdm.repository.ui.editors.XObjectBrowserInput2;
 import org.talend.mdm.repository.utils.EclipseResourceManager;
+import org.talend.mdm.workbench.serverexplorer.core.ServerDefService;
 import org.talend.mdm.workbench.serverexplorer.ui.actions.IEventMgrService;
 import org.talend.mdm.workbench.serverexplorer.ui.dialogs.SelectServerDefDialog;
 
@@ -61,6 +63,14 @@ public class MDMEventManagerAction extends AbstractRepositoryAction implements I
         }
         MDMServerDef serverDef = getServerDef();
         if (serverDef != null) {
+            try {
+                ServerDefService.checkMDMConnection(serverDef);
+            } catch (Exception e) {
+                MessageDialog.openError(getShell(), Messages.MDMEventManagerAction_CheckConnection,
+                        Messages.MDMEventManagerAction_connectFailed);
+                return;
+            }
+
             IRepositoryViewObject eventViewObj = getEventMangerViewObject();
             TreeObject treeObj = createModel();
 

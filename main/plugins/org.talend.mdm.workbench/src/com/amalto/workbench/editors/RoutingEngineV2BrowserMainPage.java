@@ -1135,11 +1135,7 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
                 return ro.getWsItemPK().getConceptName() + "[" + Util.joinStrings(ro.getWsItemPK().getIds(), ".") + "]";//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
             case 1:
                 Calendar cal = Calendar.getInstance();
-                if (WSRoutingOrderV2Status.ACTIVE.equals(ro.getStatus())) {
-                    cal.setTimeInMillis(ro.getTimeCreated());
-                } else {
-                    cal.setTimeInMillis(ro.getTimeLastRunCompleted());
-                }
+                cal.setTimeInMillis(ro.getTimeLastRunCompleted());
                 return sdf.format(cal.getTime());
             case 2:
                 return ro.getServiceJNDI().replaceFirst("amalto/local/service/", BLANK);//$NON-NLS-1$
