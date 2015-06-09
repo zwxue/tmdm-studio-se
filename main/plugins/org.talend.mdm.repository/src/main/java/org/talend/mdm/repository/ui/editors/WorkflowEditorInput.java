@@ -112,4 +112,19 @@ public class WorkflowEditorInput extends URIEditorInput implements IRepositoryVi
     public IFile getFile() {
         return file;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o instanceof URIEditorInput) {
+            URI trimFragment = this.getURI().trimFragment();
+            URI trimFragment2 = ((URIEditorInput) o).getURI().trimFragment();
+            return trimFragment.equals(trimFragment2);
+
+        }
+        return false;
+    }
+
 }

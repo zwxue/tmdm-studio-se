@@ -127,7 +127,11 @@ public abstract class AbstractRepositoryNodeResourceProvider implements IReposit
         // do nothing
     }
 
-    public void linkReferenceFile(Item item, IFile file) {
+    protected void linkReferenceFile(Item item, IFile file) {
+        linkReferenceFile(item, file, false);
+    }
+
+    public void linkReferenceFile(Item item, IFile file, boolean updateRefName) {
         try {
             file.refreshLocal(0, null);
             ReferenceFileItem fileItem = findReferenceFileItem(item, file);
@@ -138,8 +142,18 @@ public abstract class AbstractRepositoryNodeResourceProvider implements IReposit
                 ByteArray byteArray = PropertiesFactory.eINSTANCE.createByteArray();
                 byteArray.setInnerContentFromFile(file);
                 procFileItem.setContent(byteArray);
-                procFileItem.setExtension(file.getFileExtension());
-                // procFileItem.setName(file.getName());
+                String fileExt = file.getFileExtension();
+                procFileItem.setExtension(fileExt);
+                // set name
+                if (updateRefName) {
+                    String fileName = file.getName();
+                    int index = fileName.lastIndexOf(fileExt);
+                    if (index > 0) {
+                        String name = fileName.substring(0, index - 1);
+                        procFileItem.setName(name);
+                    }
+                }
+
                 // item.getReferenceResources().clear();
                 item.getReferenceResources().add(procFileItem);
             }
