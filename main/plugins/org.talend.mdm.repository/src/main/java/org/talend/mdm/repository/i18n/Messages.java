@@ -612,6 +612,10 @@ public class Messages extends NLS {
 
     public static String ExportObjectAction_label;
 
+    public static String MDMEventManagerAction_CheckConnection;
+
+    public static String MDMEventManagerAction_connectFailed;
+
     public static String MDMExportRepositoryItemsWizard_exportItem;
 
     public static String MDMImportItemsWizardPage_refreshServer;
