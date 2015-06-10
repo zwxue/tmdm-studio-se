@@ -36,20 +36,24 @@ public class XObjectEditorInput implements IEditorInput, IXObjectModelListener {
         this.model = model;
         this.name = name;
 
-        if (this.model instanceof TreeObject)
+        if (this.model instanceof TreeObject) {
             return;
+        }
         TreeObject xobject = (TreeObject) this.model;
         xobject.addListener(this);
     }
 
     public Object getAdapter(Class adapter) {
 
-        if (adapter.equals(XObjectEditor.class))
+        if (adapter.equals(XObjectEditor.class)) {
             return model;
-        if (adapter.equals(XObjectBrowser.class))
+        }
+        if (adapter.equals(XObjectBrowser.class)) {
             return model;
-        if (adapter.equals(Object.class))
+        }
+        if (adapter.equals(Object.class)) {
             return model;
+        }
 
         return null;
     }
@@ -73,16 +77,17 @@ public class XObjectEditorInput implements IEditorInput, IXObjectModelListener {
 
     public String getToolTipText() {
         TreeObject xobject = (TreeObject) model;
-        return xobject.getServerRoot().getDisplayName() + " - " + TreeObject.getTypeName(xobject.getType()) + " - "//$NON-NLS-1$//$NON-NLS-2$
-                + xobject.getDisplayName();
+        return xobject.getServerRoot().getDisplayName() + " - " + TreeObject.getTypeName(xobject.getType()); //$NON-NLS-1$
     }
 
     /**
      * Used to determine whether a new Editor should be opened or an existing one reused
      */
+    @Override
     public boolean equals(Object obj) {
-        if (!(obj instanceof XObjectEditorInput))
+        if (!(obj instanceof XObjectEditorInput)) {
             return false;
+        }
         return this.getToolTipText().equals(((XObjectEditorInput) obj).getToolTipText());
     }
 
