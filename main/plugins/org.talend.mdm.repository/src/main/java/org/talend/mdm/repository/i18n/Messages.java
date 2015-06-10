@@ -384,9 +384,15 @@ public class Messages extends NLS {
 
     public static String XObjectBrowser2_StagingAreaNotAvailable;
 
+    public static String XObjectBrowserInput2_eventmanager;
+
     public static String XObjectEditor2_saving;
 
     public static String XObjectEditor2_unableOpenEditor;
+
+    public static String XObjectEditorInput2_process;
+
+    public static String XObjectEditorInput2_trigger;
 
     public static String XSDDefaultXXR_BuildExpression;
 

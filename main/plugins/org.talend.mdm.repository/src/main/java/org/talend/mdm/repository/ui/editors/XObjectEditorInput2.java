@@ -14,6 +14,7 @@ package org.talend.mdm.repository.ui.editors;
 
 import org.talend.core.model.properties.Item;
 import org.talend.core.model.repository.IRepositoryViewObject;
+import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
 import org.talend.mdm.repository.utils.Bean2EObjUtil;
@@ -68,8 +69,16 @@ public class XObjectEditorInput2 extends XObjectEditorInput implements IReposito
     @Override
     public String getToolTipText() {
         TreeObject xobject = (TreeObject) getModel();
-        return TreeObject.getTypeName(xobject.getType()) + " - "//$NON-NLS-1$
-                + xobject.getDisplayName();
+
+        String sep = " - "; //$NON-NLS-1$
+        if (xobject.getType() == TreeObject.ROUTING_RULE) {
+            return Messages.XObjectEditorInput2_trigger + sep + xobject.getDisplayName();
+        } else if (xobject.getType() == TreeObject.TRANSFORMER) {
+            return Messages.XObjectEditorInput2_process + sep + xobject.getDisplayName();
+        } else {
+            return TreeObject.getTypeName(xobject.getType()) + " - "//$NON-NLS-1$
+                    + xobject.getDisplayName();
+        }
     }
 
     public String getEditorId() {

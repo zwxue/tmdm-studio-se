@@ -79,15 +79,30 @@ public class XObjectBrowserInput2 extends XObjectBrowserInput implements IReposi
         this.version = viewObject.getVersion();
     }
 
+    @Override
     public String getToolTipText() {
         TreeObject xobject = (TreeObject) getModel();
-        return TreeObject.getTypeName(xobject.getType()) + " - "//$NON-NLS-1$
-                + xobject.getDisplayName();
+        String sep = " - "; //$NON-NLS-1$
+        String serverName = null;
+        if (serverDef != null) {
+            serverName = serverDef.getName();
+        } else {
+            serverName = xobject.getServerRoot().getName();
+        }
+
+        if (xobject.getType() == TreeObject.SUBSCRIPTION_ENGINE) {
+            return serverName + sep + Messages.XObjectBrowserInput2_eventmanager;
+        } else if (xobject.getType() == TreeObject.DATA_CLUSTER) {
+            return serverName + sep + TreeObject.getTypeName(xobject.getType()) + sep + xobject.getDisplayName();
+        } else {
+            return TreeObject.getTypeName(xobject.getType()) + sep + xobject.getDisplayName();
+        }
     }
 
     public Item getInputItem() {
-        if (viewObject != null)
+        if (viewObject != null) {
             return viewObject.getProperty().getItem();
+        }
         return null;
     }
 
@@ -112,7 +127,9 @@ public class XObjectBrowserInput2 extends XObjectBrowserInput implements IReposi
     @Override
     public String getName() {
         if (getVersion() != null)
+         {
             return super.getName() + " " + getVersion(); //$NON-NLS-1$
+        }
         return super.getName();
     }
 }

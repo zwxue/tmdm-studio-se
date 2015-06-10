@@ -102,6 +102,11 @@ public class WorkflowEditorInput extends URIEditorInput implements IRepositoryVi
     }
 
     @Override
+    public String getToolTipText() {
+        return viewObject.getRepositoryObjectType().getLabel() + " - " + viewObject.getLabel(); //$NON-NLS-1$
+    }
+
+    @Override
     public String getName() {
         if (getVersion() != null) {
             return viewObject.getLabel() + "_" + getVersion() + ".proc"; //$NON-NLS-1$ //$NON-NLS-2$

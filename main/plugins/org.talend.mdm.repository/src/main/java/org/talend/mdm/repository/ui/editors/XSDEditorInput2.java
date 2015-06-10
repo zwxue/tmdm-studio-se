@@ -91,9 +91,17 @@ public class XSDEditorInput2 extends XSDEditorInput implements IRepositoryViewEd
     }
 
     @Override
+    public String getToolTipText() {
+        return TreeObject.getTypeName(treeObject.getType()) + " - "//$NON-NLS-1$
+                + treeObject.getDisplayName();
+    }
+
+    @Override
     public String getName() {
         if (getVersion() != null)
+         {
             return super.getName() + " " + getVersion(); //$NON-NLS-1$
+        }
         return super.getName();
     }
 }
