@@ -83,6 +83,7 @@ import org.talend.repository.ui.wizards.exportjob.JavaJobExportReArchieveCreator
 import org.talend.repository.ui.wizards.exportjob.scriptsmanager.JobJavaScriptsWSManager;
 import org.talend.repository.ui.wizards.exportjob.scriptsmanager.JobScriptsManager;
 import org.talend.repository.ui.wizards.exportjob.scriptsmanager.JobScriptsManager.ExportChoice;
+import org.talend.repository.ui.wizards.exportjob.util.ExportJobUtil;
 
 import com.amalto.workbench.service.ILegendServerDefService;
 import com.amalto.workbench.utils.HttpClientUtil;
@@ -763,7 +764,7 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
         JavaJobExportReArchieveCreator creator = null;
         String zipFile = getDestinationValue(p);
 
-        String tmpFolder = JavaJobExportReArchieveCreator.getTmpFolder();
+        String tmpFolder = ExportJobUtil.getTmpFolder();
         try {
             // unzip to tmpFolder
             ZipToFile.unZipFile(zipFile, tmpFolder);
@@ -794,7 +795,7 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
         } catch (Exception e) {
             ExceptionHandler.process(e);
         } finally {
-            JavaJobExportReArchieveCreator.deleteTempFiles();
+            ExportJobUtil.deleteTempFiles();
         }
     }
 
@@ -806,7 +807,7 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
 
         String zipFile = getDestinationValue(p);
 
-        String tmpFolder = JavaJobExportReArchieveCreator.getTmpFolder() + File.separator + "forJob"; //$NON-NLS-1$
+        String tmpFolder = ExportJobUtil.getTmpFolder() + File.separator + "forJob"; //$NON-NLS-1$
 
         try {
             // unzip to tmpFolder
@@ -856,7 +857,7 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
         } catch (Exception e) {
             ExceptionHandler.process(e);
         } finally {
-            JavaJobExportReArchieveCreator.deleteTempFiles();
+            ExportJobUtil.deleteTempFiles();
         }
 
     }
