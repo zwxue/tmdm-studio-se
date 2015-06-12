@@ -40,6 +40,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.graphics.Font;
+import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -48,6 +49,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Group;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.internal.wizards.datatransfer.WizardFileSystemResourceExportPage1;
 import org.talend.commons.exception.PersistenceException;
@@ -129,8 +131,6 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
     protected JobScriptsManager manager;
 
     protected String jobPurposeDescription;
-
-    private LabelledCombo exportTypeCombo;
 
     private SpagoBiServer mdmServer = null;
 
@@ -303,11 +303,14 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
             serverSpagoBi.select(0);
         }
 
-        List<String> types = new ArrayList<String>();
-        types.add(Messages.DeployOnMDMExportWizardPage_hostedZip);
-        exportTypeCombo = new LabelledCombo(optionsGroup, Messages.DeployOnMDMExportWizardPage_ExportType,
-                Messages.DeployOnMDMExportWizardPage_exportType, types);
-        exportTypeCombo.select(0);
+        Composite typeComp = new Composite(optionsGroup, SWT.NONE);
+        typeComp.setLayout(new FillLayout(SWT.HORIZONTAL));
+        typeComp.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 2, 1));
+        Label typeLabel = new Label(typeComp, SWT.NONE);
+        typeLabel.setText(Messages.DeployOnMDMExportWizardPage_ExportType);
+
+        Label contentLabel = new Label(typeComp, SWT.NONE);
+        contentLabel.setText(Messages.DeployOnMDMExportWizardPage_hostedZip);
 
         contextButton = new Button(optionsGroup, SWT.CHECK | SWT.LEFT);
         contextButton.setText(Messages.JobScriptsExportWizardPage_contextPerlScripts);
@@ -1041,23 +1044,12 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
     }
 
     protected String getDestinationValue(ExportFileResource p) {
-        String idealSuffix = getOutputSuffix();
-
-        String filename = getProcessName(p) + UNDERLINE + getProcessVersion(p) + idealSuffix;
+        String filename = getProcessName(p) + UNDERLINE + getProcessVersion(p) + EXT_ZIP;
         IPath tempPath;
         tempPath = Path.fromOSString(CorePlugin.getDefault().getPreferenceStore()
                 .getString(ITalendCorePrefConstants.FILE_PATH_TEMP));
         tempPath = tempPath.append(filename);
         return tempPath.toOSString();
-    }
-
-    /**
-     * Answer the suffix that files exported from this wizard should have. If this suffix is a file extension (which is
-     * typically the case) then it must include the leading period character.
-     * 
-     */
-    protected String getOutputSuffix() {
-        return EXT_ZIP;
     }
 
     /**
