@@ -15,10 +15,11 @@ package org.talend.mdm.repository.core.command.common;
 import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.emf.common.notify.Adapter;
+import org.eclipse.emf.common.util.BasicEList;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.ui.IEditorInput;
-import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorReference;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
@@ -117,7 +118,18 @@ public class UpdateLastServerCommand extends AbstractCommand {
                 log.error(e.getMessage(), e);
             }
         }
+        
+        // for job, remove dirty listener, will add it back after save
+        EList<Adapter> removed = new BasicEList<Adapter>();
+        if (item instanceof ProcessItem) {
+            Property prop1 = item.getProperty();
+            EList<Adapter> eAdapters = prop1.eAdapters();
+            removed.addAll(eAdapters);
+            eAdapters.clear();
+        }
+        
         RepositoryResourceUtil.setLastServerDef(item, serverDef);
+
         if (!(item instanceof ProcessItem)) {
             // for common object except job
             try {
@@ -130,14 +142,6 @@ public class UpdateLastServerCommand extends AbstractCommand {
                 // for job object
                 try {
                     RepositoryViewObjectResourceChangeManager.stopListening();
-                    IEditorReference editorRef = getJobEditor(item);
-                    if (editorRef != null) {
-                        IEditorPart editor = editorRef.getEditor(false);
-                        if (editor != null) {
-                            editor.doSave(new NullProgressMonitor());
-                            return;
-                        }
-                    }
 
                     factory.save(item);
                 } catch (PersistenceException e) {
@@ -152,6 +156,8 @@ public class UpdateLastServerCommand extends AbstractCommand {
                     log.error(e.getMessage(), e);
                 }
             }
+
+            item.getProperty().eAdapters().addAll(removed);
         }
     }
 
