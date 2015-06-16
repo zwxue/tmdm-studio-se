@@ -16,10 +16,8 @@ import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.emf.common.notify.Adapter;
-import org.eclipse.emf.common.util.BasicEList;
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorReference;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
@@ -32,6 +30,8 @@ import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.core.repository.model.ProxyRepositoryFactory;
 import org.talend.core.repository.ui.editor.RepositoryEditorInput;
 import org.talend.core.runtime.CoreRuntimePlugin;
+import org.talend.designer.core.ui.MultiPageTalendEditor;
+import org.talend.designer.core.ui.editor.ProcessEditorInput;
 import org.talend.mdm.repository.core.command.AbstractCommand;
 import org.talend.mdm.repository.core.command.CommandManager;
 import org.talend.mdm.repository.core.command.ICommand;
@@ -119,13 +119,18 @@ public class UpdateLastServerCommand extends AbstractCommand {
             }
         }
         
-        // for job, remove dirty listener, will add it back after save
-        EList<Adapter> removed = new BasicEList<Adapter>();
-        if (item instanceof ProcessItem) {
-            Property prop1 = item.getProperty();
-            EList<Adapter> eAdapters = prop1.eAdapters();
-            removed.addAll(eAdapters);
-            eAdapters.clear();
+        // for job
+        boolean jobEditorClosed = false;
+        if (isWorkInUI() && item instanceof ProcessItem) {
+            IEditorReference editorRef = getJobEditor(item);
+            if (editorRef != null) {
+                IEditorPart editor = editorRef.getEditor(false);
+                if (editor != null) {
+                    IWorkbenchPage page = editor.getEditorSite().getPage();
+                    jobEditorClosed = page.closeEditor(editor, false);
+                }
+            }
+
         }
         
         RepositoryResourceUtil.setLastServerDef(item, serverDef);
@@ -148,6 +153,16 @@ public class UpdateLastServerCommand extends AbstractCommand {
                     log.error(e.getMessage(), e);
                 } finally {
                     RepositoryViewObjectResourceChangeManager.startListening();
+                    if (jobEditorClosed) {
+                        try {
+                            final ProcessEditorInput fileEditorInput = new ProcessEditorInput((ProcessItem) item, true, true);
+                            IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+                            activePage.openEditor(fileEditorInput, MultiPageTalendEditor.ID, true);
+                        } catch (Exception e) {
+                            log.error(e.getMessage(), e);
+                        }
+                    }
+
                 }
             } else {// save under command line
                 try {
@@ -156,8 +171,6 @@ public class UpdateLastServerCommand extends AbstractCommand {
                     log.error(e.getMessage(), e);
                 }
             }
-
-            item.getProperty().eAdapters().addAll(removed);
         }
     }
 
