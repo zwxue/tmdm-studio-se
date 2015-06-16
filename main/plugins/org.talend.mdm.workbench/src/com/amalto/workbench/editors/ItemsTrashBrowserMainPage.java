@@ -580,21 +580,21 @@ public class ItemsTrashBrowserMainPage extends AMainPage implements IXObjectMode
                 super.run();
 
                 IStructuredSelection selection = ((IStructuredSelection) viewer.getSelection());
-                LineItem li = (LineItem) selection.getFirstElement();
+                List<?> list = selection.toList();
+                if (list != null && list.size() > 0) {
+                    TMDMService service = Util.getMDMService(getXObject());
+                    for (Object obj : list) {
+                        LineItem li = (LineItem) obj;
 
-                if (li == null) {
-                    return;
+                        WSDroppedItemPK wsDroppedItemPK = new WSDroppedItemPK(li.getPartPath(), new WSItemPK(li.getConcept(),
+                                Arrays.asList(li.getIds()), new WSDataClusterPK(li.getDataCluster())));
+
+                        service.recoverDroppedItem(new WSRecoverDroppedItem(wsDroppedItemPK));
+                    }
+
+                    // refresh the search
+                    ItemsTrashBrowserMainPage.this.resultsViewer.setInput(getResults(false));
                 }
-
-                WSDroppedItemPK wsDroppedItemPK = new WSDroppedItemPK(li.getPartPath(), new WSItemPK(li.getConcept(),
-                        Arrays.asList(li.getIds()), new WSDataClusterPK(li.getDataCluster())));
-
-                Util.getMDMService(getXObject()).recoverDroppedItem(new WSRecoverDroppedItem(wsDroppedItemPK));
-
-                // TODO response status deal
-
-                // refresh the search
-                ItemsTrashBrowserMainPage.this.resultsViewer.setInput(getResults(false));
 
             } catch (Exception e) {
                 if (!Util.handleConnectionException(shell, e, null)) {
@@ -626,7 +626,6 @@ public class ItemsTrashBrowserMainPage extends AMainPage implements IXObjectMode
             this.shell = shell;
             this.viewer = viewer;
             setImageDescriptor(ImageCache.getImage("icons/delete_obj.gif"));//$NON-NLS-1$
-            IStructuredSelection selection = ((IStructuredSelection) viewer.getSelection());
             setText(Messages.ItemsTrashBrowserMainPage_30);
             setToolTipText(Messages.ItemsTrashBrowserMainPage_30);
         }
@@ -638,23 +637,26 @@ public class ItemsTrashBrowserMainPage extends AMainPage implements IXObjectMode
 
                 // retrieve the item
                 IStructuredSelection selection = ((IStructuredSelection) viewer.getSelection());
-                LineItem li = (LineItem) selection.getFirstElement();
-                if (li == null) {
-                    return;
+
+                List<?> list = selection.toList();
+                if (list != null && list.size() > 0) {
+                    if (!MessageDialog.openConfirm(this.shell, Messages.ItemsTrashBrowserMainPage_32,
+                            Messages.ItemsTrashBrowserMainPage_33)) {
+                        return;
+                    }
+
+                    TMDMService service = Util.getMDMService(getXObject());
+                    for (Object obj : list) {
+                        LineItem li = (LineItem) obj;
+                        WSDroppedItemPK wsDroppedItemPK = new WSDroppedItemPK(li.getPartPath(), new WSItemPK(li.getConcept(),
+                                Arrays.asList(li.getIds()), new WSDataClusterPK(li.getDataCluster())));
+                        // run
+                        service.removeDroppedItem(new WSRemoveDroppedItem(wsDroppedItemPK));
+                    }
+
+                    // refresh the search
+                    ItemsTrashBrowserMainPage.this.resultsViewer.setInput(getResults(false));
                 }
-
-                if (!MessageDialog.openConfirm(this.shell, Messages.ItemsTrashBrowserMainPage_32,
-                        Messages.ItemsTrashBrowserMainPage_33)) {
-                    return;
-                }
-
-                WSDroppedItemPK wsDroppedItemPK = new WSDroppedItemPK(li.getPartPath(), new WSItemPK(li.getConcept(),
-                        Arrays.asList(li.getIds()), new WSDataClusterPK(li.getDataCluster())));
-                // run
-                Util.getMDMService(getXObject()).removeDroppedItem(new WSRemoveDroppedItem(wsDroppedItemPK));
-                // refresh the search
-                ItemsTrashBrowserMainPage.this.resultsViewer.setInput(getResults(false));
-
             } catch (Exception e) {
                 log.error(e.getMessage(), e);
                 if (!Util.handleConnectionException(shell, e, null)) {
