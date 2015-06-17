@@ -20,19 +20,11 @@ import com.amalto.workbench.detailtabs.sections.model.annotationinfo.ListContent
 
 public class ForeignKeyInfosAnnoInfo extends ListContentsAnnotationInfo {
 
-    private boolean isResolveAutoInWeb;
-
-    public ForeignKeyInfosAnnoInfo(XSDComponent sourceComponent, String[] infos, boolean isResolveAutoInWeb) {
+    public ForeignKeyInfosAnnoInfo(XSDComponent sourceComponent, String[] infos) {
         super(sourceComponent, infos);
-
-        this.isResolveAutoInWeb = isResolveAutoInWeb;
     }
 
     public CommitHandler<ForeignKeyInfosAnnoInfo> createCommitHandler() {
         return new ElementForeignKeyInfosCommitHandler(this);
-    }
-
-    public boolean isResolveAutoInWeb() {
-        return isResolveAutoInWeb;
     }
 }

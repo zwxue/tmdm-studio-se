@@ -753,8 +753,6 @@ public class Messages extends NLS {
 
     public static String RefreshXObjectAction_Text;
 
-    public static String FKInfos_resolve;
-
     public static String FKIntegrityComposite_AllowFKIntergrityOverride;
 
     public static String FKIntegrityComposite_ArgCannotbeNull;

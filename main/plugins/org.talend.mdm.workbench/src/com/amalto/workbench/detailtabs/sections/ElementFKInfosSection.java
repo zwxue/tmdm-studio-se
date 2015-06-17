@@ -19,10 +19,6 @@ import java.util.Set;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.xsd.XSDAnnotation;
 import org.eclipse.xsd.XSDComponent;
@@ -46,13 +42,9 @@ public class ElementFKInfosSection extends XpathSection {
 
 	private List<String> fkInfos = new ArrayList<String>();
 
-	private boolean isResolveAutoInWeb;
-
 	private XpathComposite composite;
 
 	private FixDMNameBasePropertySectionDataModelExtractor holder;
-
-	private Button chkResolveAutoInWeb;
 
 	Object[] getXSDSchemaChildren(XSDSchema schema) {
 		List<XSDElementDeclaration> declarations = new ArrayList<XSDElementDeclaration>();
@@ -81,9 +73,6 @@ public class ElementFKInfosSection extends XpathSection {
 	@Override
 	public void refresh() {
 		composite.setInfos(fkInfos.toArray(new String[0]));
-		removeUIListener();
-		chkResolveAutoInWeb.setSelection(isResolveAutoInWeb);
-		addUIListener();
 		updateSectionEnabled();
 	}
 
@@ -100,52 +89,19 @@ public class ElementFKInfosSection extends XpathSection {
             fkInfos.add(eachFKInfo);
         }
 
-		isResolveAutoInWeb = annoStruct.getRetrieveFKinfos();
 		holder.setDefaultDataModel(getDataModelName());
 		holder.setDefaultEntity(getEntityName());
 	}
 
 	@Override
 	protected ISubmittable getSubmittedObj() {
-        return new ForeignKeyInfosAnnoInfo(curXSDComponent, composite.getInfos(), isResolveAutoInWeb);
+        return new ForeignKeyInfosAnnoInfo(curXSDComponent, composite.getInfos());
 	}
 
 	@Override
 	protected void createControlsInSection(Composite compSectionClient) {
-		composite = new XpathComposite(compSectionClient, SWT.NONE, this) {
-			@Override
-			protected void createExtentUIArea(Composite parent) {
-				chkResolveAutoInWeb = new Button(this, SWT.CHECK);
-				chkResolveAutoInWeb.setText(Messages.FKInfos_resolve);
-				chkResolveAutoInWeb.setSelection(true);
-				chkResolveAutoInWeb.setLayoutData(new GridData());
-			}
-		};
+        composite = new XpathComposite(compSectionClient, SWT.NONE, this);
 		holder = new FixDMNameBasePropertySectionDataModelExtractor(this);
-	}
-
-	SelectionAdapter selectionListener = new SelectionAdapter() {
-		@Override
-		public void widgetSelected(SelectionEvent e) {
-            isResolveAutoInWeb = chkResolveAutoInWeb.getSelection();
-			autoCommit();
-		}
-	};
-
-	public void addUIListener() {
-		chkResolveAutoInWeb.addSelectionListener(selectionListener);
-	}
-
-	public void removeUIListener() {
-		chkResolveAutoInWeb.removeSelectionListener(selectionListener);
-	}
-
-	public boolean isResolveAutoInWeb() {
-		return chkResolveAutoInWeb.getSelection();
-	}
-
-	public void setIsResolveAutoInWeb(boolean isResolveAutoInWeb) {
-		chkResolveAutoInWeb.setSelection(isResolveAutoInWeb);
 	}
 
 	@Override
