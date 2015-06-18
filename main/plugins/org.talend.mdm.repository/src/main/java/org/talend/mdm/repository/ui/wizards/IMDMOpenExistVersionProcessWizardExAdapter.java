@@ -16,13 +16,10 @@ import org.talend.core.model.repository.IRepositoryViewObject;
 
 import com.amalto.workbench.exadapter.IExAdapter;
 
-
 /**
  * created by liusongbo on 2014-3-14
  */
 public interface IMDMOpenExistVersionProcessWizardExAdapter extends IExAdapter<MDMOpenExistVersionProcessWizard> {
 
     public boolean canOpen(IRepositoryViewObject viewObject, String originalVersion);
-
-    public void updateVersion(IRepositoryViewObject viewObj, String originalVersion);
 }

@@ -197,15 +197,7 @@ public class MDMOpenExistVersionProcessWizard extends OpenExistVersionProcessWiz
         }
         boolean refreshNewJob = super.refreshNewJob();
 
-        updateVersion();
-
         return refreshNewJob;
-    }
-
-    private void updateVersion() {
-        if (adapter != null) {
-            adapter.updateVersion(viewObject, getOriginVersion());
-        }
     }
 
     protected void beforeRefresh() {

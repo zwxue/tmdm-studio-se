@@ -31,17 +31,13 @@ import com.amalto.workbench.views.MDMPerspective;
  */
 public class UIUtil {
 
-    private static Boolean workInUI = null;
-
     public static boolean isWorkInUI() {
-        if (workInUI == null) {
-            try {
-                workInUI = PlatformUI.getWorkbench() != null;
-            } catch (Exception e) {
-                workInUI = false;
-            }
+
+        try {
+            return PlatformUI.getWorkbench() != null;
+        } catch (Exception e) {
+            return false;
         }
-        return workInUI;
     }
 
     public static IEditorPart findOpenedEditor(IEditorInput input) {
