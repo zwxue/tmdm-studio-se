@@ -162,13 +162,16 @@ public abstract class ComplexAnnotaionInfoComposite<T> extends Composite {
 
                 T createdDefaultObj = createDefaultInfoObj();
 
-                if (createdDefaultObj == null)
+                if (createdDefaultObj == null) {
                     return;
+                }
 
                 getInfos().add(createdDefaultObj);
 
                 tvInfos.refresh();
-                if(section!=null)section.autoCommit();
+                if(section!=null) {
+                    section.autoCommit();
+                }
             }
         });
     }
@@ -179,13 +182,16 @@ public abstract class ComplexAnnotaionInfoComposite<T> extends Composite {
             @Override
             public void widgetSelected(SelectionEvent e) {
 
-                if (!hasSelection())
+                if (!hasSelection()) {
                     return;
+                }
 
                 getInfos().remove(getSelection());
 
                 tvInfos.refresh();
-                if(section!=null)section.autoCommit();
+                if(section!=null) {
+                    section.autoCommit();
+                }
             }
         });
     }
@@ -200,7 +206,9 @@ public abstract class ComplexAnnotaionInfoComposite<T> extends Composite {
                 getInfos().clear();
 
                 tvInfos.refresh();
-                if(section!=null)section.autoCommit();
+                if(section!=null) {
+                    section.autoCommit();
+                }
             }
         });
 
@@ -212,11 +220,14 @@ public abstract class ComplexAnnotaionInfoComposite<T> extends Composite {
             @Override
             public void widgetSelected(SelectionEvent e) {
 
-                if (!hasSelection())
+                if (!hasSelection()) {
                     return;
+                }
 
                 moveInfoUp(getSelection());
-                if(section!=null)section.autoCommit();
+                if(section!=null) {
+                    section.autoCommit();
+                }
             }
         });
     }
@@ -228,11 +239,14 @@ public abstract class ComplexAnnotaionInfoComposite<T> extends Composite {
             @Override
             public void widgetSelected(SelectionEvent e) {
 
-                if (!hasSelection())
+                if (!hasSelection()) {
                     return;
+                }
 
                 moveInfoDown(getSelection());
-                if(section!=null)section.autoCommit();
+                if(section!=null) {
+                    section.autoCommit();
+                }
             }
         });
 
@@ -244,8 +258,9 @@ public abstract class ComplexAnnotaionInfoComposite<T> extends Composite {
             @Override
             public void widgetSelected(SelectionEvent e) {
 
-                if (!hasSelection())
+                if (!hasSelection()) {
                     return;
+                }
 
                 copyedObj = getSelection();
             }
@@ -259,16 +274,20 @@ public abstract class ComplexAnnotaionInfoComposite<T> extends Composite {
             @Override
             public void widgetSelected(SelectionEvent e) {
 
-                if (copyedObj == null)
+                if (copyedObj == null) {
                     return;
+                }
 
-                if (!validateBeforePaste(copyedObj))
+                if (!validateBeforePaste(copyedObj)) {
                     return;
+                }
 
                 getInfos().add(cloneCopyedObj(copyedObj));
 
                 tvInfos.refresh();
-                if(section!=null)section.autoCommit();
+                if(section!=null) {
+                    section.autoCommit();
+                }
             }
         });
 
@@ -282,8 +301,9 @@ public abstract class ComplexAnnotaionInfoComposite<T> extends Composite {
     private T getSelection() {
 
         if (!(tvInfos.getSelection() instanceof IStructuredSelection)
-                || ((IStructuredSelection) tvInfos.getSelection()).isEmpty())
+                || ((IStructuredSelection) tvInfos.getSelection()).isEmpty()) {
             return null;
+        }
 
         return (T) ((IStructuredSelection) tvInfos.getSelection()).getFirstElement();
     }
@@ -310,8 +330,9 @@ public abstract class ComplexAnnotaionInfoComposite<T> extends Composite {
 
     public void setInfos(List<T> objs) {
 
-        if (objs == null)
+        if (objs == null) {
             return;
+        }
 
         infos = objs;
         tvInfos.setInput(infos);
@@ -323,13 +344,15 @@ public abstract class ComplexAnnotaionInfoComposite<T> extends Composite {
 
         for (T eachInputedObj : objs) {
 
-            if (eachInputedObj == null)
+            if (eachInputedObj == null) {
                 continue;
+            }
 
             infos.add(eachInputedObj);
         }
 
-        this.tvInfos.refresh();
+        tvInfos.setInput(infos);
+        tvInfos.refresh();
     }
 
     @Override
