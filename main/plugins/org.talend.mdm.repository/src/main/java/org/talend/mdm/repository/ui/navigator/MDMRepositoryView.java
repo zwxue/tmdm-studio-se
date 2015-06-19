@@ -26,6 +26,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.apache.commons.logging.Log;
@@ -558,8 +559,9 @@ public class MDMRepositoryView extends CommonNavigator implements ITabbedPropert
                     rootPath);
             getCommonViewer().refresh(triggerCategoryObject);
         }
+        IRepositoryViewObject[] rootObjects = RepositoryResourceUtil.getCategoryViewObjectsWithRecycle();
 
-        IRepositoryViewObject[] categoryViewObjects = RepositoryResourceUtil.getCategoryViewObjects();
+        List<IRepositoryViewObject> categoryViewObjects = rootObjects[0].getChildren();
         for (IRepositoryViewObject viewObj : categoryViewObjects) {
             if (viewObj.getRepositoryObjectType().equals(type)) {
                 getCommonViewer().refresh(viewObj);
@@ -567,64 +569,65 @@ public class MDMRepositoryView extends CommonNavigator implements ITabbedPropert
             }
         }
     }
+}
 
-    class TreeViewerListener implements ITreeViewerListener {
+class TreeViewerListener implements ITreeViewerListener {
 
-        private TreeViewer viewer;
+    private TreeViewer viewer;
 
-        public TreeViewerListener(TreeViewer viewer) {
-            this.viewer = viewer;
-        }
+    public TreeViewerListener(TreeViewer viewer) {
+        this.viewer = viewer;
+    }
 
-        public void treeCollapsed(TreeExpansionEvent event) {
-            Object element = event.getElement();
-            if (element instanceof FolderRepositoryObject) {
-                FolderRepositoryObject fro = (FolderRepositoryObject) element;
-                String path = fro.getPath();
-                if (!path.isEmpty()) {
-                    TreeItem item = getObject(viewer.getTree(), event.getElement());
-                    if (item != null) {
-                        item.setImage(ImageProvider.getImage(ECoreImage.FOLDER_CLOSE_ICON));
-                    }
+    public void treeCollapsed(TreeExpansionEvent event) {
+        Object element = event.getElement();
+        if (element instanceof FolderRepositoryObject) {
+            FolderRepositoryObject fro = (FolderRepositoryObject) element;
+            String path = fro.getPath();
+            if (!path.isEmpty()) {
+                TreeItem item = getObject(viewer.getTree(), event.getElement());
+                if (item != null) {
+                    item.setImage(ImageProvider.getImage(ECoreImage.FOLDER_CLOSE_ICON));
                 }
             }
-        }
-
-        public void treeExpanded(TreeExpansionEvent event) {
-            Object element = event.getElement();
-            if (element instanceof FolderRepositoryObject) {
-                FolderRepositoryObject fro = (FolderRepositoryObject) element;
-                String path = fro.getPath();
-                if (!path.isEmpty()) {
-                    TreeItem item = getObject(viewer.getTree(), event.getElement());
-                    if (item != null) {
-                        item.setImage(ImageProvider.getImage(ECoreImage.FOLDER_OPEN_ICON));
-                    }
-                }
-            }
-        }
-
-        private TreeItem getObject(Tree tree, Object objectToFind) {
-            for (TreeItem item : tree.getItems()) {
-                TreeItem toReturn = getObject(item, objectToFind);
-                if (toReturn != null) {
-                    return toReturn;
-                }
-            }
-            return null;
-        }
-
-        private TreeItem getObject(TreeItem parent, Object objectToFind) {
-            for (TreeItem currentChild : parent.getItems()) {
-                if (objectToFind.equals(currentChild.getData())) {
-                    return currentChild;
-                }
-                TreeItem toReturn = getObject(currentChild, objectToFind);
-                if (toReturn != null) {
-                    return toReturn;
-                }
-            }
-            return null;
         }
     }
+
+    public void treeExpanded(TreeExpansionEvent event) {
+        Object element = event.getElement();
+        if (element instanceof FolderRepositoryObject) {
+            FolderRepositoryObject fro = (FolderRepositoryObject) element;
+            String path = fro.getPath();
+            if (!path.isEmpty()) {
+                TreeItem item = getObject(viewer.getTree(), event.getElement());
+                if (item != null) {
+                    item.setImage(ImageProvider.getImage(ECoreImage.FOLDER_OPEN_ICON));
+                }
+            }
+        }
+    }
+
+    private TreeItem getObject(Tree tree, Object objectToFind) {
+        for (TreeItem item : tree.getItems()) {
+            TreeItem toReturn = getObject(item, objectToFind);
+            if (toReturn != null) {
+                return toReturn;
+            }
+        }
+        return null;
+    }
+
+    private TreeItem getObject(TreeItem parent, Object objectToFind) {
+        for (TreeItem currentChild : parent.getItems()) {
+            if (objectToFind.equals(currentChild.getData())) {
+                return currentChild;
+            }
+            TreeItem toReturn = getObject(currentChild, objectToFind);
+            if (toReturn != null) {
+                return toReturn;
+            }
+        }
+        return null;
+    }
+
 }
