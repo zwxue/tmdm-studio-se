@@ -25,7 +25,7 @@ import org.eclipse.swt.widgets.Text;
 
 public abstract class EditableDialogCellEditor extends DialogCellEditor {
 
-    private Text txtEdit;
+    protected Text txtEdit;
 
     protected EditableDialogCellEditor(Composite parent) {
         super(parent);
@@ -63,10 +63,22 @@ public abstract class EditableDialogCellEditor extends DialogCellEditor {
         };
     }
 
-    private void doChange() {
-        markDirty();
-        doSetValue(txtEdit.getText().trim());
-        fireApplyEditorValue();
+    protected void doChange() {
+        if (validate()) {
+            markDirty();
+            doSetValue(txtEdit.getText().trim());
+            fireApplyEditorValue();
+        } else {
+            restoreValue();
+        }
+    }
+
+    protected void restoreValue() {
+        // do nothing
+    }
+
+    protected boolean validate() {
+        return true;
     }
 
     @Override
