@@ -371,7 +371,16 @@ public class ImportServerObjectWizard extends Wizard {
                             break;
                         }
                     }
-                    if (factory.isEditableAndLockIfPossible(item)) {
+
+                    if (!RepositoryResourceUtil.isLockedItem(item)) {
+                        try {
+                            factory.lock(item);
+                        } catch (PersistenceException e1) {
+                            log.error(e1.getMessage(), e1);
+                        } catch (LoginException e1) {
+                            log.error(e1.getMessage(), e1);
+                        }
+
                         item.setMDMServerObject(eobj);
                         item.getState().setDeleted(false);
                         // save
