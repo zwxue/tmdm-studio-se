@@ -12,10 +12,15 @@
 // ============================================================================
 package org.talend.mdm.repository.core.command.common;
 
+import java.util.Iterator;
+import java.util.Map;
+
 import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.emf.common.util.EMap;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorReference;
@@ -30,7 +35,6 @@ import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.core.repository.model.ProxyRepositoryFactory;
 import org.talend.core.repository.ui.editor.RepositoryEditorInput;
 import org.talend.core.runtime.CoreRuntimePlugin;
-import org.talend.designer.core.ui.MultiPageTalendEditor;
 import org.talend.designer.core.ui.editor.ProcessEditorInput;
 import org.talend.mdm.repository.core.command.AbstractCommand;
 import org.talend.mdm.repository.core.command.CommandManager;
@@ -119,20 +123,6 @@ public class UpdateLastServerCommand extends AbstractCommand {
             }
         }
         
-        // for job
-        boolean jobEditorClosed = false;
-        if (isWorkInUI() && item instanceof ProcessItem) {
-            IEditorReference editorRef = getJobEditor(item);
-            if (editorRef != null) {
-                IEditorPart editor = editorRef.getEditor(false);
-                if (editor != null) {
-                    IWorkbenchPage page = editor.getEditorSite().getPage();
-                    jobEditorClosed = page.closeEditor(editor, false);
-                }
-            }
-
-        }
-        
         RepositoryResourceUtil.setLastServerDef(item, serverDef);
 
         if (!(item instanceof ProcessItem)) {
@@ -147,22 +137,29 @@ public class UpdateLastServerCommand extends AbstractCommand {
                 // for job object
                 try {
                     RepositoryViewObjectResourceChangeManager.stopListening();
+                    IEditorReference editorRef = getJobEditor(item);
+                    if (editorRef != null) {
+                        IEditorPart editor = editorRef.getEditor(false);
+                        if (editor != null && editor.isDirty()) {
+
+                            // when save job editor, it only keep the additional properties that Process have
+                            ProcessEditorInput processEditorInput = (ProcessEditorInput) editor.getEditorInput();
+                            EMap additionalProperties = item.getProperty().getAdditionalProperties();
+                            Iterator iterator = additionalProperties.keySet().iterator();
+                            Map<Object, Object> processAdditionalProperties = processEditorInput.getLoadedProcess()
+                                    .getAdditionalProperties();
+                            processAdditionalProperties.putAll(additionalProperties.map());
+
+                            editor.doSave(new NullProgressMonitor());
+                            return;
+                        }
+                    }
 
                     factory.save(item);
                 } catch (PersistenceException e) {
                     log.error(e.getMessage(), e);
                 } finally {
                     RepositoryViewObjectResourceChangeManager.startListening();
-                    if (jobEditorClosed) {
-                        try {
-                            final ProcessEditorInput fileEditorInput = new ProcessEditorInput((ProcessItem) item, true, true);
-                            IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-                            activePage.openEditor(fileEditorInput, MultiPageTalendEditor.ID, true);
-                        } catch (Exception e) {
-                            log.error(e.getMessage(), e);
-                        }
-                    }
-
                 }
             } else {// save under command line
                 try {
