@@ -52,8 +52,10 @@ import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IMemento;
 import org.eclipse.ui.IPartListener2;
 import org.eclipse.ui.IPerspectiveDescriptor;
+import org.eclipse.ui.IPerspectiveRegistry;
 import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IViewSite;
+import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchPartReference;
@@ -62,7 +64,6 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PerspectiveAdapter;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.contexts.IContextService;
-import org.eclipse.ui.internal.WorkbenchPlugin;
 import org.eclipse.ui.navigator.CommonNavigator;
 import org.eclipse.ui.navigator.CommonViewer;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
@@ -482,14 +483,34 @@ public class MDMRepositoryView extends CommonNavigator implements ITabbedPropert
 
     private static boolean first = true;
 
-    public void switchToPerspective(String perspectiveId) {
-        if (currentPerspective == null || (perspectiveId != null && !perspectiveId.equals(currentPerspective.getId()))) {
-            IPerspectiveDescriptor perspective = WorkbenchPlugin.getDefault().getPerspectiveRegistry()
-                    .findPerspectiveWithId(perspectiveId);
-            if (perspective != null) {
-                PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().setPerspective(perspective);
+    public void switchToPerspective(final String perspectiveId) {
+        // Display.getDefault().asyncExec(new Runnable() {
+        //
+        // public void run() {
+        final IWorkbench workbench = PlatformUI.getWorkbench();
+        final IWorkbenchWindow window = workbench.getActiveWorkbenchWindow();
+        if (window != null) {
+            final IWorkbenchPage activePage = window.getActivePage();
+            if (activePage != null) {
+                final IPerspectiveDescriptor activePerspective = activePage.getPerspective();
+                if (activePerspective == null || !activePerspective.getId().equals(perspectiveId)) {
+                    final IPerspectiveRegistry registry = workbench.getPerspectiveRegistry();
+                    final IWorkbenchPage page = window.getActivePage();
+                    final IPerspectiveDescriptor desc = registry.findPerspectiveWithId(perspectiveId);
+                    page.setPerspective(desc);
+                }
             }
         }
+        // }
+        // });
+        // if (currentPerspective == null || (perspectiveId != null &&
+        // !perspectiveId.equals(currentPerspective.getId()))) {
+        // IPerspectiveDescriptor perspective = WorkbenchPlugin.getDefault().getPerspectiveRegistry()
+        // .findPerspectiveWithId(perspectiveId);
+        // if (perspective != null) {
+        // PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().setPerspective(perspective);
+        // }
+        // }
     }
 
     private DeployAllAction deployAll;
