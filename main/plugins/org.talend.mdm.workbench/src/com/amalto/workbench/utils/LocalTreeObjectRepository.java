@@ -172,7 +172,6 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
         Document doc = credentials.get(url).doc;
         String path = "//child::*[text() = '" + TreeObject.CATEGORY_FOLDER + "' and count(@Universe) = 0 and count(@Url) = 0"//$NON-NLS-1$//$NON-NLS-2$
                 + "]";//$NON-NLS-1$
-        System.out.println(doc.asXML());
         List<Element> categorys = doc.selectNodes(path);
 
         for (Element elem : categorys) {
