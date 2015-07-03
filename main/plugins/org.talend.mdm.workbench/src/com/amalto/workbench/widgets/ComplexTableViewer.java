@@ -65,6 +65,7 @@ import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.KeyValue;
 import com.amalto.workbench.models.Line;
 import com.amalto.workbench.models.TreeParent;
+import com.amalto.workbench.widgets.celleditor.XPathCellEditor;
 
 /**
  * This table viewer has: 1.input Texts, add button 2.normal tableviewer with up/down/delete button
@@ -977,6 +978,8 @@ public class ComplexTableViewer {
 
     class XpathCellEditor extends CellEditor implements ICellEditor {
 
+        private String oldPath = ""; //$NON-NLS-1$
+
         protected XpathWidget xpath;
 
         public XpathWidget getXpath() {
@@ -987,7 +990,6 @@ public class ComplexTableViewer {
             super(parent);
         }
 
-        // Modified by hhb,to fix bug 21784
         @Override
         protected Control createControl(Composite parent) {
 
@@ -1012,6 +1014,11 @@ public class ComplexTableViewer {
                 FocusAdapter focusListener = new FocusAdapter() {
 
                     @Override
+                    public void focusGained(FocusEvent e) {
+                        oldPath = xpath.getText().trim();
+                    }
+
+                    @Override
                     public void focusLost(FocusEvent e) {
                         afterLostFocus();
                     }
@@ -1029,7 +1036,6 @@ public class ComplexTableViewer {
                     public void keyReleased(KeyEvent e) {
 
                         if (e.character == SWT.CR) {
-                            xpath.setText(xpath.getText().trim());
                             deactive();
                         }
                     }
@@ -1037,6 +1043,7 @@ public class ComplexTableViewer {
                 });
 
             }
+
             return xpath.getComposite();
         }
 
@@ -1049,6 +1056,7 @@ public class ComplexTableViewer {
                     }
                 }
             });
+
         }
 
         @Override
@@ -1068,19 +1076,21 @@ public class ComplexTableViewer {
 
         public void deactive() {
             if (isActivated()) {
-                super.focusLost();
+                focusLost();
             }
         }
 
         @Override
         protected void doSetValue(Object value) {
-            //
-            // if(context && viewer.getTable().getSelection().length>0){
-            // Line line=(Line)viewer.getTable().getSelection()[0].getData();
-            // String context=line.keyValues.get(1).value;
-            // XpathSelectDialog.setContext("newXPath".equalsIgnoreCase(context)?null:context);
-            // }
             xpath.setText(value.toString().trim());
+        }
+
+        @Override
+        protected void focusLost() {
+            if (!XPathCellEditor.validateXpath(xpath.getText())) {
+                xpath.setText(oldPath);
+            }
+            super.focusLost();
         }
 
     }

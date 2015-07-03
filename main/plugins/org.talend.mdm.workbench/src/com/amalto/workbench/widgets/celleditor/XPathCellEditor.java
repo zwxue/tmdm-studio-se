@@ -90,7 +90,7 @@ public class XPathCellEditor extends EditableDialogCellEditor {
         return validateXpath(newValue);
     }
 
-    private boolean validateXpath(String value) {
+    public static boolean validateXpath(String value) {
         if (value.length() == 0) {
             return true;
         }
