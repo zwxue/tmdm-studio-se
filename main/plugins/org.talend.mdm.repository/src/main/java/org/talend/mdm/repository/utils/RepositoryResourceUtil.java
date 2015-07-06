@@ -784,6 +784,11 @@ public class RepositoryResourceUtil {
                 if (property != null) {
                     String fileName = ResourceFilenameHelper.getExpectedFileName(property.getLabel(), property.getVersion())
                             + DOT + ext;
+                    // patch for Bontia 6.X, the proc is using "-" as separator
+                    if (IServerObjectRepositoryType.TYPE_WORKFLOW == type) {
+                        int index = fileName.length() - (property.getVersion().length() + ext.length() + 2);
+                        fileName = fileName.substring(0, index) + "-" + fileName.substring(index + 1); //$NON-NLS-1$
+                    }
                     if (fileName != null && fileName.equals(name)) {
                         return viewObj;
                     }

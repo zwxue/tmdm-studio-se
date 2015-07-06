@@ -15,13 +15,11 @@ package org.talend.mdm.repository.core.service;
 import org.eclipse.core.runtime.MultiStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Status;
-import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.command.CommandManager;
 import org.talend.mdm.repository.core.command.ICommand;
 import org.talend.mdm.repository.core.service.DeployService.DeployStatus;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
-import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 
 import com.amalto.workbench.service.IUpdateLastServerService;
 
@@ -31,25 +29,15 @@ import com.amalto.workbench.service.IUpdateLastServerService;
  */
 public class UpdateLastServerService implements IUpdateLastServerService {
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * com.amalto.workbench.service.IUpdateLastServer#updateLastServerDefInfo(com.amalto.workbench.utils.MDMServerDef,
-     * java.lang.Object)
-     */
-    public void updateLastServerDefInfo(Object serverDef, String repositoryViewObjName, int repositoryViewObjType) {
-        if (serverDef == null || repositoryViewObjName == null || !(serverDef instanceof MDMServerDef))
+    public void updateLastServerDefInfo(Object serverDef, IRepositoryViewObject ViewObject) {
+        if (serverDef == null || ViewObject == null || !(serverDef instanceof MDMServerDef)) {
             return;
-
-        ERepositoryObjectType repositoryObjectType = RepositoryQueryService.getRepositoryObjectType(repositoryViewObjType);
-        IRepositoryViewObject workflowViewObject = RepositoryResourceUtil.findViewObjectByName(repositoryObjectType,
-                repositoryViewObjName);
+        }
 
         CommandManager cmdManager = CommandManager.getInstance();
         DeployService deployService = DeployService.getInstance();
         ICommand deployCmd = cmdManager.getNewCommand(ICommand.CMD_MODIFY);
-        deployCmd.init(workflowViewObject);
+        deployCmd.init(ViewObject);
         MultiStatus mStatus = new MultiStatus("PLUGIN_ID", Status.OK, "", null); //$NON-NLS-1$ //$NON-NLS-2$
 
         DeployStatus deployStatus = DeployStatus.getOKStatus(deployCmd, ""); //$NON-NLS-1$

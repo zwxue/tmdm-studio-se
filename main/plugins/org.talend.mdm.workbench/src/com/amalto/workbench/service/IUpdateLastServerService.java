@@ -13,6 +13,7 @@
 package com.amalto.workbench.service;
 
 import org.talend.core.IService;
+import org.talend.core.model.repository.IRepositoryViewObject;
 
 /**
  * created by liusongbo on 2012-11-20
@@ -20,11 +21,5 @@ import org.talend.core.IService;
  */
 public interface IUpdateLastServerService extends IService {
 
-    /**
-     * @param ser
-     * @param repositoryViewObjName
-     * @param repositoryViewObjType the valid value see constants in class TreeObject,like
-     * TreeObject.WORKFLOW_PROCESS,TreeObject.DATA_MODEL
-     */
-    public void updateLastServerDefInfo(Object serverDef, String repositoryViewObjName, int repositoryViewObjType);
+    void updateLastServerDefInfo(Object serverDef, IRepositoryViewObject workflowViewObject);
 }
