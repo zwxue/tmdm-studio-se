@@ -21,7 +21,7 @@ import org.talend.mdm.repository.ui.wizards.imports.ImportServerObjectWizard;
 import org.talend.mdm.repository.utils.EclipseResourceManager;
 
 /**
- * DOC achen  class global comment. Detailled comment
+ * DOC achen class global comment. Detailled comment
  */
 public class ImportServerObjectAction extends AbstractRepositoryAction {
 
@@ -36,14 +36,20 @@ public class ImportServerObjectAction extends AbstractRepositoryAction {
 
     public ImportServerObjectAction() {
         super(Messages.ImportServerObject);
-        // setImageDescriptor(ImageCache.getImage(EImage.IMPORT.getPath()));
         setImageDescriptor(IMPORT_SERVER_IMG);
     }
 
+    @Override
     public String getGroupName() {
         return GROUP_EXPORT;
     }
 
+    @Override
+    public void run() {
+        doRun();
+    }
+
+    @Override
     protected void doRun() {
         ImportServerObjectWizard wizard = new ImportServerObjectWizard(commonViewer);
 
