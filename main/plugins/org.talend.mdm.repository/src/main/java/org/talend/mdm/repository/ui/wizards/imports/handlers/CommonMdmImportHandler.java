@@ -6,6 +6,7 @@ import org.eclipse.emf.common.util.EMap;
 import org.talend.commons.exception.PersistenceException;
 import org.talend.core.model.properties.Item;
 import org.talend.core.model.properties.Property;
+import org.talend.core.model.properties.ReferenceFileItem;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.core.repository.model.ProxyRepositoryFactory;
 import org.talend.mdm.repository.core.command.CommandManager;
@@ -24,6 +25,19 @@ public class CommonMdmImportHandler extends ImportRepTypeHandler {
     private ProxyRepositoryFactory factory = ProxyRepositoryFactory.getInstance();
 
     private static Logger log = Logger.getLogger(CommonMdmImportHandler.class);
+
+    @Override
+    protected void beforeCreatingItem(ImportItem importItem) {
+        Property property = importItem.getProperty();
+        if (property != null) {
+            for (Object itemRefObj : property.getItem().getReferenceResources()) {
+                ReferenceFileItem refItem = (ReferenceFileItem) itemRefObj;
+                if (refItem.getName() != null) {
+                    refItem.setName(null);
+                }
+            }
+        }
+    }
 
     @Override
     public void afterImportingItems(IProgressMonitor monitor, ResourcesManager resManager, ImportItem selectedImportItem) {
