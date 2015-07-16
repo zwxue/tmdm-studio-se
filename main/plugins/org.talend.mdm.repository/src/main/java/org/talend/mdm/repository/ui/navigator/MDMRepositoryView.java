@@ -36,6 +36,8 @@ import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.e4.core.contexts.IEclipseContext;
+import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
@@ -59,11 +61,13 @@ import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchPartReference;
+import org.eclipse.ui.IWorkbenchPartSite;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PerspectiveAdapter;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.contexts.IContextService;
+import org.eclipse.ui.internal.PartSite;
 import org.eclipse.ui.navigator.CommonNavigator;
 import org.eclipse.ui.navigator.CommonViewer;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
@@ -450,10 +454,32 @@ public class MDMRepositoryView extends CommonNavigator implements ITabbedPropert
 
     private IPerspectiveDescriptor currentPerspective;
 
+    public String getCurrentPerspectiveId() {
+        if (currentPerspective != null) {
+            return currentPerspective.getId();
+        }
+        return null;
+    }
+
     PerspectiveAdapter perspectiveListener = new PerspectiveAdapter() {
 
         @Override
+        public void perspectiveDeactivated(IWorkbenchPage page, IPerspectiveDescriptor perspective) {
+            String pId = perspective.getId();
+            if (pId.equals(MDMPerspective.PERPECTIVE_ID)) {
+                IWorkbench workbench = page.getWorkbenchWindow().getWorkbench();
+                IEclipseContext activeContext = ((IEclipseContext) workbench.getService(IEclipseContext.class)).getActiveLeaf();
+                IWorkbenchPartSite site = MDMRepositoryView.this.getSite();
+                if (site instanceof PartSite) {
+                    MPart part = ((PartSite) site).getModel();
+                    activeContext.set("e4ActivePart", part); //$NON-NLS-1$
+                }
+            }
+        }
+
+        @Override
         public void perspectiveActivated(IWorkbenchPage page, IPerspectiveDescriptor perspective) {
+
             currentPerspective = perspective;
             if (first) {
                 first = false;
@@ -463,6 +489,7 @@ public class MDMRepositoryView extends CommonNavigator implements ITabbedPropert
             }
 
             if (MDMPerspective.PERPECTIVE_ID.equals(perspective.getId())) {
+
                 getCommonViewer().refresh();
             }
         }
@@ -501,16 +528,7 @@ public class MDMRepositoryView extends CommonNavigator implements ITabbedPropert
                 }
             }
         }
-        // }
-        // });
-        // if (currentPerspective == null || (perspectiveId != null &&
-        // !perspectiveId.equals(currentPerspective.getId()))) {
-        // IPerspectiveDescriptor perspective = WorkbenchPlugin.getDefault().getPerspectiveRegistry()
-        // .findPerspectiveWithId(perspectiveId);
-        // if (perspective != null) {
-        // PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().setPerspective(perspective);
-        // }
-        // }
+
     }
 
     private DeployAllAction deployAll;
