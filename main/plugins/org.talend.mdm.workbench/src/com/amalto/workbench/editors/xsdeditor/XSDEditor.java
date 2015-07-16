@@ -160,6 +160,7 @@ public class XSDEditor extends InternalXSDMultiPageEditor implements IServerObje
 
     @Override
     public void doSave(IProgressMonitor monitor) {
+        super.doSave(monitor);
         InputStream stream = null;
         try {
             EditorPart part = (EditorPart) getSelectedPage();
@@ -187,7 +188,6 @@ public class XSDEditor extends InternalXSDMultiPageEditor implements IServerObje
             log.error(e.getMessage(), e);
         } finally {
             IOUtils.closeQuietly(stream);
-            super.doSave(monitor);
             if (null != monitor) {
                 monitor.done();
             }
