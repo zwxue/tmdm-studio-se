@@ -28,16 +28,18 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.ui.IEditorInput;
-import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IEditorReference;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPartSite;
 import org.eclipse.ui.PlatformUI;
+import org.talend.core.GlobalServiceRegister;
 import org.talend.core.model.properties.Item;
 import org.talend.core.model.properties.ItemState;
 import org.talend.core.model.properties.ProcessItem;
 import org.talend.core.model.properties.PropertiesFactory;
 import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.core.model.repository.IRepositoryViewObject;
+import org.talend.designer.core.ui.MultiPageTalendEditor;
 import org.talend.designer.core.ui.editor.ProcessEditorInput;
 import org.talend.mdm.repository.core.impl.transformerV2.ITransformerV2NodeConsDef;
 import org.talend.mdm.repository.i18n.Messages;
@@ -49,9 +51,12 @@ import org.talend.mdm.repository.model.mdmserverobject.WSTransformerProcessStepE
 import org.talend.mdm.repository.model.mdmserverobject.WSTransformerV2E;
 import org.talend.mdm.repository.model.mdmserverobject.WSTransformerVariablesMappingE;
 import org.talend.mdm.repository.ui.actions.AbstractSimpleAddAction;
+import org.talend.mdm.repository.ui.wizards.process.IMDMJobTemplate;
 import org.talend.mdm.repository.ui.wizards.process.NewProcessWizard;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 import org.talend.mdm.repository.utils.RepositoryTransformUtil;
+
+import com.amalto.workbench.service.IValidateService;
 
 /**
  * DOC hbhong class global comment. Detailled comment <br/>
@@ -93,43 +98,38 @@ public class NewProcessAction extends AbstractSimpleAddAction implements ITransf
         wizardDialog.setPageSize(500, 260);
         if (wizardDialog.open() == IDialogConstants.OK_ID) {
             WSTransformerV2E newProcess = newProcessWizard.getNewProcess();
-            Item item = createServerObject(newProcess);
+            final Item item = createServerObject(newProcess);
             commonViewer.refresh(selectObj);
             commonViewer.expandToLevel(selectObj, 1);
-
             openEditor(item);
-            openJobEditor(item);
-        }
 
+            if (newProcessWizard.isCreateJob()) {
+                generateJobTemplate(newProcessWizard.getType(), newProcessWizard.getProcessName(),
+                        newProcessWizard.getReturnMessages(), newProcessWizard.isEnableRedirect(),
+                        newProcessWizard.getRedirectUrl(), newProcessWizard.getJobTemplates());
+                refreshJobEditorTitle(item);
+            }
+        }
     }
 
-    private void openJobEditor(Item item) {
+    private void refreshJobEditorTitle(Item item) {
         String label = item.getProperty().getLabel();
-        IRepositoryViewObject jobViewObject = RepositoryResourceUtil.findViewObjectByName(ERepositoryObjectType.PROCESS, label);
-        if (jobViewObject != null) {
-            IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-            IEditorPart[] editorReferences = activePage.getEditors();
 
-            ProcessItem jobItem = null;
-            if (editorReferences != null) {
-                for (IEditorPart editorPart : editorReferences) {
-                    IEditorInput editorInput = editorPart.getEditorInput();
-                    if (editorInput instanceof ProcessEditorInput) {
-                        ProcessEditorInput processInput = (ProcessEditorInput) editorInput;
-                        jobItem = (ProcessItem) processInput.getItem();
-
-                        String plabel = jobItem.getProperty().getLabel();
-                        if (plabel.equals(label)) {
-                            activePage.closeEditor(editorPart, false);
-                            break;
-                        }
-
-                        jobItem = null;
+        IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+        IEditorReference[] editorReferences = activePage.getEditorReferences();
+        if (editorReferences != null) {
+            for (IEditorReference editorPart : editorReferences) {
+                IEditorInput editorInput = editorPart.getEditor(false).getEditorInput();
+                if (editorInput instanceof ProcessEditorInput) {
+                    ProcessEditorInput processInput = (ProcessEditorInput) editorInput;
+                    ProcessItem jobItem = (ProcessItem) processInput.getItem();
+                    MultiPageTalendEditor jobEditor = (MultiPageTalendEditor) editorPart.getEditor(false);
+                    if (jobItem.getProperty().getLabel().equals(label)) {
+                        jobEditor.refreshName();
+                        break;
                     }
                 }
             }
-
-            openEditor(jobItem);
         }
     }
 
@@ -245,5 +245,43 @@ public class NewProcessAction extends AbstractSimpleAddAction implements ITransf
             path = RepositoryTransformUtil.getInstance().getProcessPath(processName, true);
         }
         return path;
+    }
+
+    public void generateJobTemplate(int type, String processName, String[] returnMessages, boolean enableRedirect,
+            String redirectUrl, List<IMDMJobTemplate> jobTemplates) {
+        if (type == ITransformerV2NodeConsDef.TYPE_SMARTVIEW) {// don't create job if smartview
+            return;
+        }
+
+        if (returnMessages == null || returnMessages.length < 2) {
+            throw new IllegalArgumentException();
+        }
+
+        String infoType = null;
+        String pMessage = null;
+        if (type == ITransformerV2NodeConsDef.TYPE_BEFOREDEL || type == ITransformerV2NodeConsDef.TYPE_BEFORESAVE) {
+            infoType = returnMessages[0];
+            pMessage = returnMessages[1];
+        }
+        if (type == ITransformerV2NodeConsDef.TYPE_ENTITYACTION || type == ITransformerV2NodeConsDef.TYPE_WELCOMEACTION) {
+            if (enableRedirect) {
+                pMessage = "<results><item><attr>" + redirectUrl + //$NON-NLS-1$
+                        "</attr></item></results>"; //$NON-NLS-1$
+            } else {
+                pMessage = ""; //$NON-NLS-1$
+            }
+        }
+        IValidateService validateService = (IValidateService) GlobalServiceRegister.getDefault().getService(
+                IValidateService.class);
+        for (IMDMJobTemplate job : jobTemplates) {
+            boolean result = true;
+
+            if (validateService != null) {
+                result = validateService.validateAndAlertObjectExistence(ERepositoryObjectType.PROCESS, processName, "Job"); //$NON-NLS-1$
+            }
+            if (result) {
+                job.generateJobTemplate(type, processName, infoType, pMessage);
+            }
+        }
     }
 }
