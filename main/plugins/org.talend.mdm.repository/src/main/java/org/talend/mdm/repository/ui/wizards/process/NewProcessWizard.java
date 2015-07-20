@@ -19,8 +19,6 @@ import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.ui.IWorkbenchPartSite;
-import org.talend.core.GlobalServiceRegister;
-import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.mdm.repository.core.impl.transformerV2.ITransformerV2NodeConsDef;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmserverobject.MdmserverobjectFactory;
@@ -28,7 +26,6 @@ import org.talend.mdm.repository.model.mdmserverobject.WSTransformerProcessStepE
 import org.talend.mdm.repository.model.mdmserverobject.WSTransformerV2E;
 import org.talend.mdm.repository.utils.JobTemplateUtil;
 
-import com.amalto.workbench.service.IValidateService;
 import com.amalto.workbench.utils.Util;
 
 /**
@@ -54,7 +51,18 @@ public class NewProcessWizard extends Wizard implements ITransformerV2NodeConsDe
 
     private WSTransformerV2E transformer;
 
-    List<IMDMJobTemplate> jobTemplates;
+    //
+    private Boolean toCreateJob;
+
+    private String[] returnMessages;
+
+    private String redirectUrl;
+
+    private String processName;
+
+    private boolean enableRedirect;
+
+    private List<IMDMJobTemplate> jobTemplates;
 
     private int type;// use it to decide which type of process can be create,if 0,all type is permitted
 
@@ -105,9 +113,20 @@ public class NewProcessWizard extends Wizard implements ITransformerV2NodeConsDe
         createProcessStep(steps, processType);
         transformer.getProcessSteps().addAll(steps);
 
-        // generate job template
-        generateJobTemplate();
+        saveParams();
         return true;
+    }
+
+    public Boolean isCreateJob() {
+        if (toCreateJob == null) {
+            toCreateJob = new Boolean(false);
+            if (jobTemplates != null && jobTemplates.size() > 0) {
+                IMDMJobTemplate jobtemplate = jobTemplates.get(0);
+                toCreateJob = jobtemplate.createJob();
+            }
+        }
+
+        return toCreateJob;
     }
 
     @Override
@@ -127,11 +146,8 @@ public class NewProcessWizard extends Wizard implements ITransformerV2NodeConsDe
      */
     private void createProcessStep(List<WSTransformerProcessStepE> steps, int processType) {
         String processName = inputProcessNamePage.getProcessName();
-        boolean createJob = false;
-        if (jobTemplates != null && jobTemplates.size() > 0) {
-            IMDMJobTemplate jobtemplate = jobTemplates.get(0);
-            createJob = jobtemplate.createJob();
-        }
+        boolean createJob = isCreateJob();
+
         switch (processType) {
         case TYPE_BEFOREDEL:
         case TYPE_BEFORESAVE:
@@ -197,42 +213,35 @@ public class NewProcessWizard extends Wizard implements ITransformerV2NodeConsDe
         }
     }
 
-    public String getInputName() {
-        return selectProcessTypePage.getInputName();
+    private void saveParams() {
+        type = inputProcessNamePage.getProcessType();// here used for create job
+        returnMessages = configReturnMessagePage.getMessageParams();
+        enableRedirect = configRedirectURLPage.isEnableRedirect();
+        redirectUrl = configRedirectURLPage.getUrl();
+        processName = inputProcessNamePage.getProcessName();
     }
 
-    public void generateJobTemplate() {
-        int type = inputProcessNamePage.getProcessType();
-        if (type == TYPE_SMARTVIEW) {// don't create job if smartview
-            return;
-        }
-        String[] messages = configReturnMessagePage.getMessageParams();
-        String infoType = null;
-        String pMessage = null;
-        if (type == TYPE_BEFOREDEL || type == TYPE_BEFORESAVE) {
-            infoType = messages[0];
-            pMessage = messages[1];
-        }
-        if (type == TYPE_ENTITYACTION || type == TYPE_WELCOMEACTION) {
-            if (configRedirectURLPage.isEnableRedirect()) {
-                pMessage = "<results><item><attr>" + configRedirectURLPage.getUrl() + //$NON-NLS-1$
-                        "</attr></item></results>"; //$NON-NLS-1$
-            } else {
-                pMessage = ""; //$NON-NLS-1$
-            }
-        }
-        IValidateService validateService = (IValidateService) GlobalServiceRegister.getDefault().getService(
-                IValidateService.class);
-        String processName = inputProcessNamePage.getProcessName();
-        for (IMDMJobTemplate job : jobTemplates) {
-            boolean result = true;
+    public int getType() {
+        return this.type;
+    }
 
-            if (validateService != null) {
-                result = validateService.validateAndAlertObjectExistence(ERepositoryObjectType.PROCESS, processName, "Job"); //$NON-NLS-1$
-            }
-            if (result) {
-                job.generateJobTemplate(type, processName, infoType, pMessage);
-            }
-        }
+    public String[] getReturnMessages() {
+        return this.returnMessages;
+    }
+
+    public String getRedirectUrl() {
+        return this.redirectUrl;
+    }
+
+    public String getProcessName() {
+        return this.processName;
+    }
+
+    public boolean isEnableRedirect() {
+        return this.enableRedirect;
+    }
+
+    public List<IMDMJobTemplate> getJobTemplates() {
+        return this.jobTemplates;
     }
 }
