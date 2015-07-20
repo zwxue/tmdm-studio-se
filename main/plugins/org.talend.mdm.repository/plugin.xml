@@ -598,6 +598,14 @@
             name="Update MDM Process Objects"
             version="5.1.2">
       </projecttask>
+            <projecttask
+                  beforeLogon="true"
+                  breaks="6.0.0"
+                  class="org.talend.mdm.repository.core.migrate.RemoveRefNameMT"
+                  id="org.talend.mdm.repository.core.migrate.RemoveRefNameMT"
+                  name="Remove MDM Reference Item Name"
+                  version="6.0.0">
+            </projecttask>
       
    </extension>
    <extension
