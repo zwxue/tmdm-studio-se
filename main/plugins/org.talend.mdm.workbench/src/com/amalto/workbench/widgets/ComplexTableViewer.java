@@ -65,7 +65,6 @@ import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.KeyValue;
 import com.amalto.workbench.models.Line;
 import com.amalto.workbench.models.TreeParent;
-import com.amalto.workbench.widgets.celleditor.XPathCellEditor;
 
 /**
  * This table viewer has: 1.input Texts, add button 2.normal tableviewer with up/down/delete button
@@ -1083,14 +1082,6 @@ public class ComplexTableViewer {
         @Override
         protected void doSetValue(Object value) {
             xpath.setText(value.toString().trim());
-        }
-
-        @Override
-        protected void focusLost() {
-            if (!XPathCellEditor.validateXpath(xpath.getText())) {
-                xpath.setText(oldPath);
-            }
-            super.focusLost();
         }
 
     }
