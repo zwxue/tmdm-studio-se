@@ -18,6 +18,7 @@ import javax.xml.bind.annotation.XmlType;
  *       &lt;sequence>
  *         &lt;element name="datacluster" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="datamodel" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element name="delete" type="{http://www.w3.org/2001/XMLSchema}boolean" minOccurs="0"/>
  *         &lt;element name="keyXPath" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="overwrite" type="{http://www.w3.org/2001/XMLSchema}boolean" minOccurs="0"/>
  *         &lt;element name="pivot" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
@@ -37,6 +38,7 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = "WSPartialPutItem", propOrder = {
     "datacluster",
     "datamodel",
+    "delete",
     "keyXPath",
     "overwrite",
     "pivot",
@@ -49,6 +51,7 @@ public class WSPartialPutItem {
 
     protected String datacluster;
     protected String datamodel;
+    protected Boolean delete;
     protected String keyXPath;
     protected Boolean overwrite;
     protected String pivot;
@@ -69,9 +72,10 @@ public class WSPartialPutItem {
      * Fully-initialising value constructor
      * 
      */
-    public WSPartialPutItem(final String datacluster, final String datamodel, final String keyXPath, final Boolean overwrite, final String pivot, final boolean report, final String source, final Integer startingPosition, final String xml) {
+    public WSPartialPutItem(final String datacluster, final String datamodel, final Boolean delete, final String keyXPath, final Boolean overwrite, final String pivot, final boolean report, final String source, final Integer startingPosition, final String xml) {
         this.datacluster = datacluster;
         this.datamodel = datamodel;
+        this.delete = delete;
         this.keyXPath = keyXPath;
         this.overwrite = overwrite;
         this.pivot = pivot;
@@ -127,6 +131,30 @@ public class WSPartialPutItem {
      */
     public void setDatamodel(String value) {
         this.datamodel = value;
+    }
+
+    /**
+     * Gets the value of the delete property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Boolean }
+     *     
+     */
+    public Boolean isDelete() {
+        return delete;
+    }
+
+    /**
+     * Sets the value of the delete property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Boolean }
+     *     
+     */
+    public void setDelete(Boolean value) {
+        this.delete = value;
     }
 
     /**
