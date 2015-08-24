@@ -15,6 +15,8 @@ package com.amalto.workbench.widgets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.ListenerList;
@@ -1084,6 +1086,24 @@ public class ComplexTableViewer {
             xpath.setText(value.toString().trim());
         }
 
+        @Override
+        protected void focusLost() {
+            if (!validateXpath(xpath.getText())) {
+                xpath.setText(oldPath);
+            }
+            super.focusLost();
+        }
+
+        private boolean validateXpath(String value) {
+            if (value.length() == 0) {
+                return true;
+            }
+            Pattern pattern = Pattern.compile("\\.|(\"|'|[a-zA-Z]|\\d|\\/)+"); //$NON-NLS-1$
+            Matcher matcher = pattern.matcher(value);
+            boolean matches = matcher.matches();
+
+            return matches;
+        }
     }
 
     public void addTableModifyListener(ITableModifyListener listener) {

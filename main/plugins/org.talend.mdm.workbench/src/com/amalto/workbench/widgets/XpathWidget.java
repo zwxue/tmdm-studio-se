@@ -159,18 +159,18 @@ public class XpathWidget implements SelectionListener {
             annotationButton.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
             annotationButton.addSelectionListener(this);
             if (readOnly) {
-                descriptionText = toolkit.createText(xpathAntionHolder, "", SWT.BORDER | SWT.MULTI | SWT.LEFT | SWT.READ_ONLY);//$NON-NLS-1$
+                descriptionText = toolkit.createText(xpathAntionHolder, "", SWT.BORDER | SWT.SINGLE | SWT.LEFT | SWT.READ_ONLY);//$NON-NLS-1$
             } else {
-                descriptionText = toolkit.createText(xpathAntionHolder, "", SWT.BORDER | SWT.MULTI | SWT.LEFT);//$NON-NLS-1$
+                descriptionText = toolkit.createText(xpathAntionHolder, "", SWT.BORDER | SWT.SINGLE | SWT.LEFT);//$NON-NLS-1$
             }
             descriptionText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
             descriptionText.addModifyListener(listenr);
 
         } else {
             if (readOnly) {
-                descriptionText = toolkit.createText(xpathAntionHolder, "", SWT.BORDER | SWT.MULTI | SWT.LEFT | SWT.READ_ONLY);//$NON-NLS-1$
+                descriptionText = toolkit.createText(xpathAntionHolder, "", SWT.BORDER | SWT.SINGLE | SWT.LEFT | SWT.READ_ONLY);//$NON-NLS-1$
             } else {
-                descriptionText = toolkit.createText(xpathAntionHolder, "", SWT.BORDER | SWT.MULTI | SWT.LEFT);//$NON-NLS-1$
+                descriptionText = toolkit.createText(xpathAntionHolder, "", SWT.BORDER | SWT.SINGLE | SWT.LEFT);//$NON-NLS-1$
             }
             descriptionText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
             descriptionText.addModifyListener(listenr);
