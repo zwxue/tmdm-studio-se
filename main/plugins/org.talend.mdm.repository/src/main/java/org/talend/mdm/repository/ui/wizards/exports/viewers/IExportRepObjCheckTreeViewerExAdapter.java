@@ -23,7 +23,7 @@ import com.amalto.workbench.exadapter.IExAdapter;
  * created by HHB on 2014-1-9 Detailled comment
  * 
  */
-public interface IExportRepositoryObjectCheckTreeViewerExAdapter extends IExAdapter<ExportRepositoryObjectCheckTreeViewer> {
+public interface IExportRepObjCheckTreeViewerExAdapter extends IExAdapter<ExportRepObjCheckTreeViewer> {
 
     void addSortedViewObjects(List<IRepositoryViewObject> sortedViewObjs);
 

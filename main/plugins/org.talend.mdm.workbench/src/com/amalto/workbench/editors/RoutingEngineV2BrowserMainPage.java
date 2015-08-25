@@ -12,13 +12,10 @@
 // ============================================================================
 package com.amalto.workbench.editors;
 
-import java.io.StringWriter;
-import java.lang.reflect.InvocationTargetException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -26,20 +23,15 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.GroupMarker;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.jface.dialogs.ProgressMonitorDialog;
-import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ILabelProviderListener;
-import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.ListViewer;
 import org.eclipse.jface.viewers.TableViewer;
@@ -63,7 +55,6 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Menu;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.Text;
@@ -71,9 +62,10 @@ import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.forms.widgets.FormToolkit;
-import org.exolab.castor.xml.Marshaller;
 
-import com.amalto.workbench.dialogs.DOMViewDialog;
+import com.amalto.workbench.editors.actions.DeleteItemsAction;
+import com.amalto.workbench.editors.actions.EditItemAction;
+import com.amalto.workbench.editors.actions.ExecuteRoutingOrdersAction;
 import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
@@ -83,20 +75,15 @@ import com.amalto.workbench.providers.XObjectBrowserInput;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.XtentisException;
 import com.amalto.workbench.webservices.TMDMService;
-import com.amalto.workbench.webservices.WSDeleteRoutingOrderV2;
-import com.amalto.workbench.webservices.WSExecuteRoutingOrderV2Asynchronously;
-import com.amalto.workbench.webservices.WSExecuteRoutingOrderV2Synchronously;
 import com.amalto.workbench.webservices.WSGetRoutingOrderV2ByCriteriaWithPaging;
 import com.amalto.workbench.webservices.WSGetServicesList;
 import com.amalto.workbench.webservices.WSRoutingEngineV2Action;
 import com.amalto.workbench.webservices.WSRoutingEngineV2ActionCode;
 import com.amalto.workbench.webservices.WSRoutingEngineV2Status;
 import com.amalto.workbench.webservices.WSRoutingOrderV2;
-import com.amalto.workbench.webservices.WSRoutingOrderV2PK;
 import com.amalto.workbench.webservices.WSRoutingOrderV2SearchCriteriaWithPaging;
 import com.amalto.workbench.webservices.WSRoutingOrderV2Status;
 import com.amalto.workbench.webservices.WSServicesListItem;
-import com.amalto.workbench.webservices.WSString;
 import com.amalto.workbench.widgets.CalendarSelectWidget;
 import com.amalto.workbench.widgets.IPagingListener;
 import com.amalto.workbench.widgets.PageingToolBar;
@@ -597,13 +584,16 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
                         RoutingEngineV2BrowserMainPage.this.getSite().getShell(),
                         RoutingEngineV2BrowserMainPage.this.resultsViewer));
                 manager.appendToGroup(IWorkbenchActionConstants.MB_ADDITIONS, new DeleteItemsAction(
-                        RoutingEngineV2BrowserMainPage.this.getSite().getShell(),
+                        RoutingEngineV2BrowserMainPage.this.getSite().getShell(), RoutingEngineV2BrowserMainPage.this,
+                        getXObject(),
                         RoutingEngineV2BrowserMainPage.this.resultsViewer));
                 manager.appendToGroup(IWorkbenchActionConstants.MB_ADDITIONS, new ExecuteRoutingOrdersAction(
-                        RoutingEngineV2BrowserMainPage.this.getSite().getShell(),
+                        RoutingEngineV2BrowserMainPage.this.getSite().getShell(), RoutingEngineV2BrowserMainPage.this,
+                        getXObject(),
                         RoutingEngineV2BrowserMainPage.this.resultsViewer, true));
                 manager.appendToGroup(IWorkbenchActionConstants.MB_ADDITIONS, new ExecuteRoutingOrdersAction(
-                        RoutingEngineV2BrowserMainPage.this.getSite().getShell(),
+                        RoutingEngineV2BrowserMainPage.this.getSite().getShell(), RoutingEngineV2BrowserMainPage.this,
+                        getXObject(),
                         RoutingEngineV2BrowserMainPage.this.resultsViewer, false // asynchronously
                         ));
             }
@@ -783,338 +773,6 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
     public void handleEvent(int type, TreeObject parent, TreeObject child) {
         refreshData();
     }
-
-    /***************************************************************
-     * Edit Item Action
-     *
-     * @author bgrieder
-     *
-     ***************************************************************/
-    class EditItemAction extends Action {
-
-        protected Shell shell = null;
-
-        protected Viewer viewer;
-
-        public EditItemAction(Shell shell, Viewer viewer) {
-            super();
-            this.shell = shell;
-            this.viewer = viewer;
-            setImageDescriptor(ImageCache.getImage("icons/edit_obj.gif"));//$NON-NLS-1$
-            setText(Messages.RoutingEngineV2BrowserMainPage_EditItem);
-            setToolTipText(Messages.RoutingEngineV2BrowserMainPage_ViewRoutingOrderDetails);
-        }
-
-        @Override
-        public void run() {
-            try {
-                super.run();
-
-                IStructuredSelection selection = ((IStructuredSelection) viewer.getSelection());
-
-                if (selection.isEmpty()) {
-                    return;
-                }
-
-                WSRoutingOrderV2 routingOrder = (WSRoutingOrderV2) selection.getFirstElement();
-
-                StringWriter sw = new StringWriter();
-                Marshaller.marshal(routingOrder, sw);
-
-                final DOMViewDialog d = new DOMViewDialog(RoutingEngineV2BrowserMainPage.this.getSite().getShell(), Util.parse(sw
-                        .toString()));
-                d.addListener(new Listener() {
-
-                    public void handleEvent(Event event) {
-                        d.close();
-                    }// handleEvent
-                });
-
-                d.setBlockOnOpen(true);
-                d.open();
-
-            } catch (Exception e) {
-                log.error(e.getMessage(), e);
-                MessageDialog.openError(shell, Messages._Error,
-                        Messages.bind(Messages.RoutingEngineV2BrowserMainPage_ErrorToViewRoutingOrder, e.getLocalizedMessage()));
-            }
-        }
-
-        @Override
-        public void runWithEvent(Event event) {
-            super.runWithEvent(event);
-        }
-
-    }
-
-    /***************************************************************
-     * Delete Items Action
-     *
-     * @author bgrieder
-     *
-     ***************************************************************/
-    class DeleteItemsAction extends Action {
-
-        protected Shell shell = null;
-
-        protected Viewer viewer;
-
-        public DeleteItemsAction(Shell shell, Viewer viewer) {
-            super();
-            this.shell = shell;
-            this.viewer = viewer;
-            setImageDescriptor(ImageCache.getImage("icons/delete_obj.gif"));//$NON-NLS-1$
-            IStructuredSelection selection = ((IStructuredSelection) viewer.getSelection());
-            if (selection.size() == 1) {
-                setText(Messages.RoutingEngineV2BrowserMainPage_DelSelectedItem);
-            } else {
-                setText(Messages.bind(Messages.RoutingEngineV2BrowserMainPage_DeleteThese, selection.size()));
-            }
-            setToolTipText("Delete the selected Routing Order" + (selection.size() > 1 ? "s" : TEXT));//$NON-NLS-1$//$NON-NLS-2$
-        }
-
-        @Override
-        public void run() {
-            try {
-                super.run();
-
-                // retrieve the list of items
-                IStructuredSelection selection = ((IStructuredSelection) viewer.getSelection());
-                List<WSRoutingOrderV2> lineItems = selection.toList();
-
-                if (lineItems.size() == 0) {
-                    return;
-                }
-
-                if (!MessageDialog.openConfirm(this.shell, Messages.RoutingEngineV2BrowserMainPage_ConfirmDeletion,
-                        Messages.bind(Messages.RoutingEngineV2BrowserMainPage_ErrorMsg2, lineItems.size()))) {
-                    return;
-                }
-
-                // Instantiate the Monitor with actual deletes
-                DeleteItemsWithProgress diwp = new DeleteItemsWithProgress(getXObject(), lineItems, this.shell);
-                // run
-                new ProgressMonitorDialog(this.shell).run(false, // fork
-                        true, // cancelable
-                        diwp);
-                // refresh the search
-                RoutingEngineV2BrowserMainPage.this.resultsViewer.setInput(getResults());
-
-            } catch (Exception e) {
-                log.error(e.getMessage(), e);
-                MessageDialog.openError(shell, Messages._Error,
-                        Messages.bind(Messages.RoutingEngineV2BrowserMainPage_ErrorMsg3, e.getLocalizedMessage()));
-            }
-        }
-
-        @Override
-        public void runWithEvent(Event event) {
-            super.runWithEvent(event);
-        }
-
-        // Progress Monitor that implements the actual delete
-        class DeleteItemsWithProgress implements IRunnableWithProgress {
-
-            TreeObject xObject;
-
-            Collection<WSRoutingOrderV2> lineItems;
-
-            Shell parentShell;
-
-            public DeleteItemsWithProgress(TreeObject object, Collection<WSRoutingOrderV2> lineItems, Shell shell) {
-                super();
-                this.xObject = object;
-                this.lineItems = lineItems;
-                this.parentShell = shell;
-            }
-
-            public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
-                try {
-                    monitor.beginTask(Messages.RoutingEngineV2BrowserMainPage_DeletingItems, lineItems.size());
-                    TMDMService service = getMDMService();
-
-                    int i = 0;
-                    for (WSRoutingOrderV2 lineItem : lineItems) {
-                        monitor.subTask(Messages.RoutingEngineV2BrowserMainPage_ProcessingItem + (i++));
-                        if (monitor.isCanceled()) {
-                            MessageDialog.openWarning(this.parentShell, Messages.RoutingEngineV2BrowserMainPage_UserCancelDel,
-                                    Messages.RoutingEngineV2BrowserMainPage_WarningMsg + i
-                                            + Messages.RoutingEngineV2BrowserMainPage_WarningMsgA
-                                            + Messages.RoutingEngineV2BrowserMainPage_WarningMsgB);
-                            return;
-                        }
-                        service.deleteRoutingOrderV2(new WSDeleteRoutingOrderV2(new WSRoutingOrderV2PK(lineItem.getName(),
-                                lineItem.getStatus())));
-                        monitor.worked(1);
-                    }// for
-
-                    monitor.done();
-                } catch (Exception e) {
-                    log.error(e.getMessage(), e);
-                    if (!Util.handleConnectionException(shell, e, Messages.RoutingEngineV2BrowserMainPage_ErrorDel)) {
-                        MessageDialog.openError(shell, Messages.RoutingEngineV2BrowserMainPage_ErrorDel,
-                                Messages.RoutingEngineV2BrowserMainPage_WarningMsg1 + e.getLocalizedMessage());
-                    }
-                }// try
-
-            }// run
-        }// class DeleteItemsWithProgress
-
-    }// class DeletItemsAction
-
-    /***************************************************************
-     * Execute Routing Orders
-     *
-     * @author bgrieder
-     *
-     ***************************************************************/
-    class ExecuteRoutingOrdersAction extends Action {
-
-        protected Shell shell = null;
-
-        protected Viewer viewer;
-
-        protected boolean synchronously = true;
-
-        public ExecuteRoutingOrdersAction(Shell shell, Viewer viewer, boolean synchronously) {
-            super();
-            this.shell = shell;
-            this.viewer = viewer;
-            this.synchronously = synchronously;
-            setImageDescriptor(ImageCache.getImage("icons/execute.gif"));//$NON-NLS-1$
-            IStructuredSelection selection = ((IStructuredSelection) viewer.getSelection());
-            if (selection.size() == 1) {
-                setText(Messages.RoutingEngineV2BrowserMainPage_Text
-                        + (synchronously ? Messages.RoutingEngineV2BrowserMainPage_Text2
-                                : Messages.RoutingEngineV2BrowserMainPage_Text3) + Messages.RoutingEngineV2BrowserMainPage_TextA);
-            } else {
-                setText(Messages.RoutingEngineV2BrowserMainPage_Text1
-                        + (synchronously ? Messages.RoutingEngineV2BrowserMainPage_Text2
-                                : Messages.RoutingEngineV2BrowserMainPage_Text3) + Messages.RoutingEngineV2BrowserMainPage_Text1A
-                        + selection.size() + Messages.RoutingEngineV2BrowserMainPage_Text1B);
-            }
-            setToolTipText(Messages.RoutingEngineV2BrowserMainPage_ActionTip
-                    + (synchronously ? Messages.RoutingEngineV2BrowserMainPage_Text2
-                            : Messages.RoutingEngineV2BrowserMainPage_Text3) + Messages.RoutingEngineV2BrowserMainPage_ActionTipA
-                    + (selection.size() > 1 ? "s" : TEXT));//$NON-NLS-1$
-        }
-
-        @Override
-        public void run() {
-            try {
-                super.run();
-
-                // retrieve the list of items
-                IStructuredSelection selection = ((IStructuredSelection) viewer.getSelection());
-                List<WSRoutingOrderV2> lineItems = selection.toList();
-
-                if (lineItems.size() == 0) {
-                    return;
-                }
-
-                if (!MessageDialog.openConfirm(this.shell, Messages.RoutingEngineV2BrowserMainPage_ConfirmTitle,
-                        Messages.RoutingEngineV2BrowserMainPage_ConfirmContent
-                                + (synchronously ? Messages.RoutingEngineV2BrowserMainPage_Text2
-                                        : Messages.RoutingEngineV2BrowserMainPage_Text3)
-                                + Messages.RoutingEngineV2BrowserMainPage_ConfirmContentA + lineItems.size()
-                                + Messages.RoutingEngineV2BrowserMainPage_B)) {
-                    return;
-                }
-
-                // Instantiate the Monitor with actual deletes
-                ExecuteRoutingOrdersWithProgress diwp = new ExecuteRoutingOrdersWithProgress(getXObject(), lineItems, this.shell);
-                // run
-                new ProgressMonitorDialog(this.shell).run(false, // fork
-                        true, // cancelable
-                        diwp);
-                // refresh the search
-                RoutingEngineV2BrowserMainPage.this.resultsViewer.setInput(getResults());
-
-            } catch (Exception e) {
-                log.error(e.getMessage(), e);
-                MessageDialog.openError(shell, Messages._Error,
-                        Messages.bind(Messages.RoutingEngineV2BrowserMainPage_ErrorMsg4, e.getLocalizedMessage()));
-            }
-        }
-
-        @Override
-        public void runWithEvent(Event event) {
-            super.runWithEvent(event);
-        }
-
-        // Progress Monitor that implements the actual delete
-        class ExecuteRoutingOrdersWithProgress implements IRunnableWithProgress {
-
-            TreeObject xObject;
-
-            Collection<WSRoutingOrderV2> lineItems;
-
-            Shell parentShell;
-
-            public ExecuteRoutingOrdersWithProgress(TreeObject object, Collection<WSRoutingOrderV2> lineItems, Shell shell) {
-                super();
-                this.xObject = object;
-                this.lineItems = lineItems;
-                this.parentShell = shell;
-            }
-
-            public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
-
-                monitor.beginTask(Messages.RoutingEngineV2BrowserMainPage_ExecutingRoutingOrders, lineItems.size());
-                TMDMService service = null;
-
-                try {
-                    service = getMDMService();
-                } catch (Exception e) {
-                    log.error(e.getMessage(), e);
-                    MessageDialog.openError(shell, Messages.RoutingEngineV2BrowserMainPage_ErrorExecuting,
-                            Messages.bind(Messages.RoutingEngineV2BrowserMainPage_ErrorMsg5, e.getLocalizedMessage()));
-                }// try
-
-                String results = TEXT;
-                for (WSRoutingOrderV2 lineItem : lineItems) {
-
-                    monitor.subTask(Messages.RoutingEngineV2BrowserMainPage_ExecutingRoutingOrder + lineItem.getName());
-
-                    if (monitor.isCanceled()) {
-                        MessageDialog.openWarning(this.parentShell, Messages.RoutingEngineV2BrowserMainPage_WarningTitle,
-                                Messages.RoutingEngineV2BrowserMainPage_WraningMsg + lineItem.getName()
-                                        + Messages.RoutingEngineV2BrowserMainPage_WraningMsgA
-                                        + Messages.RoutingEngineV2BrowserMainPage_WraningMsgB);
-                        return;
-                    }
-
-                    try {
-                        if (synchronously) {
-                            WSString wsResult = service
-                                    .executeRoutingOrderV2Synchronously(new WSExecuteRoutingOrderV2Synchronously(
-                                            new WSRoutingOrderV2PK(lineItem.getName(), lineItem.getStatus())));
-                            if (wsResult.getValue() != null) {
-                                results += lineItem.getName() + ": " + wsResult.getValue(); //$NON-NLS-1$
-                            }
-                        } else {
-                            service.executeRoutingOrderV2Asynchronously(new WSExecuteRoutingOrderV2Asynchronously(
-                                    new WSRoutingOrderV2PK(lineItem.getName(), lineItem.getStatus())));
-                        }
-                        monitor.worked(1);
-                    } catch (Exception e) {
-                        log.error(e.getMessage(), e);
-                        if (!Util.handleConnectionException(shell, e, Messages.RoutingEngineV2BrowserMainPage_ErrorExecuting)) {
-                            MessageDialog.openError(shell, Messages.RoutingEngineV2BrowserMainPage_ErrorExecuting,
-                                    Messages.bind(Messages.RoutingEngineV2BrowserMainPage_ErrorMsg6, e.getLocalizedMessage()));
-                        }
-                    }// try
-
-                }// for
-
-                monitor.done();
-                MessageDialog.openInformation(shell, Messages.RoutingEngineV2BrowserMainPage_InfoTitle, lineItems.size()
-                        + Messages.RoutingEngineV2BrowserMainPage_InfoContent + (TEXT.equals(results) ? TEXT : "\n" + results));//$NON-NLS-1$
-
-            }// run
-        }// class DeleteItemsWithProgress
-
-    }// class DeletItemsAction
 
     /***************************************************************
      * Table Label Provider
