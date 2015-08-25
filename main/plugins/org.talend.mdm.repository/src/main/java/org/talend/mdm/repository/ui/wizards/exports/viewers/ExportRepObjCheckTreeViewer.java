@@ -35,7 +35,7 @@ import com.amalto.workbench.widgets.FilteredCheckboxTree;
 /**
  * DOC hbhong class global comment. Detailled comment
  */
-public class ExportRepositoryObjectCheckTreeViewer extends AbstractNodeCheckTreeViewer {
+public class ExportRepObjCheckTreeViewer extends AbstractNodeCheckTreeViewer {
 
     /**
      * DOC hbhong RepositoryObjectCheckTreeViewer constructor comment.
@@ -44,11 +44,11 @@ public class ExportRepositoryObjectCheckTreeViewer extends AbstractNodeCheckTree
      */
     IRepositoryViewObject[] categoryViewObjects;
 
-    private IExportRepositoryObjectCheckTreeViewerExAdapter exAdapter;
+    private IExportRepObjCheckTreeViewerExAdapter exAdapter;
 
-    public ExportRepositoryObjectCheckTreeViewer(IStructuredSelection selection) {
+    public ExportRepObjCheckTreeViewer(IStructuredSelection selection) {
         super(selection);
-        this.exAdapter = ExAdapterManager.getAdapter(this, IExportRepositoryObjectCheckTreeViewerExAdapter.class);
+        this.exAdapter = ExAdapterManager.getAdapter(this, IExportRepObjCheckTreeViewerExAdapter.class);
     }
 
     @Override

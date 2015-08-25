@@ -36,7 +36,7 @@ import org.talend.mdm.repository.core.IServerObjectRepositoryType;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
 import org.talend.mdm.repository.models.FolderRepositoryObject;
-import org.talend.mdm.repository.ui.wizards.exports.viewers.ExportRepositoryObjectCheckTreeViewer;
+import org.talend.mdm.repository.ui.wizards.exports.viewers.ExportRepObjCheckTreeViewer;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 import org.talend.repository.local.ExportItemUtil;
 
@@ -47,7 +47,7 @@ import com.amalto.workbench.export.ExportItemsWizard;
  */
 public class MDMExportRepositoryItemsWizard extends ExportItemsWizard {
 
-    ExportRepositoryObjectCheckTreeViewer checkTreeViewer;
+    ExportRepObjCheckTreeViewer checkTreeViewer;
 
     private static Log log = LogFactory.getLog(MDMExportRepositoryItemsWizard.class);
 
@@ -58,7 +58,7 @@ public class MDMExportRepositoryItemsWizard extends ExportItemsWizard {
     // create a check box viewer
     @Override
     protected void createViewer() {
-        checkTreeViewer = new ExportRepositoryObjectCheckTreeViewer(sel);
+        checkTreeViewer = new ExportRepObjCheckTreeViewer(sel);
     }
 
     // do export is need to override ,use the system of TOS to export EMF files
