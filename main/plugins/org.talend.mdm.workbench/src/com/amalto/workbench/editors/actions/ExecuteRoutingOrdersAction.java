@@ -31,7 +31,6 @@ import org.eclipse.swt.widgets.Shell;
 import com.amalto.workbench.editors.RoutingEngineV2BrowserMainPage;
 import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.image.ImageCache;
-import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.webservices.TMDMService;
 import com.amalto.workbench.webservices.WSExecuteRoutingOrderV2Asynchronously;
@@ -52,14 +51,10 @@ public class ExecuteRoutingOrdersAction extends Action {
 
     private RoutingEngineV2BrowserMainPage routingEngineV2BrowserMainPage;
 
-    private TreeObject xObject;
-
-    public ExecuteRoutingOrdersAction(Shell shell, RoutingEngineV2BrowserMainPage routingEngineV2BrowserMainPage,
-            TreeObject xObject, Viewer viewer,
+    public ExecuteRoutingOrdersAction(Shell shell, RoutingEngineV2BrowserMainPage routingEngineV2BrowserMainPage, Viewer viewer,
             boolean synchronously) {
         this.shell = shell;
         this.routingEngineV2BrowserMainPage = routingEngineV2BrowserMainPage;
-        this.xObject = xObject;
         this.viewer = viewer;
         this.synchronously = synchronously;
 
@@ -103,7 +98,8 @@ public class ExecuteRoutingOrdersAction extends Action {
             }
 
             // Instantiate the Monitor with actual deletes
-            ExecuteRoutingOrdersWithProgress diwp = new ExecuteRoutingOrdersWithProgress(xObject, lineItems, this.shell);
+            ExecuteRoutingOrdersWithProgress diwp = new ExecuteRoutingOrdersWithProgress(
+                    (TMDMService) routingEngineV2BrowserMainPage.getAdapter(TMDMService.class), lineItems, this.shell);
             // run
             new ProgressMonitorDialog(this.shell).run(false, // fork
                     true, // cancelable
@@ -125,15 +121,16 @@ public class ExecuteRoutingOrdersAction extends Action {
 
     class ExecuteRoutingOrdersWithProgress implements IRunnableWithProgress {
 
-        TreeObject xObject;
 
         Collection<WSRoutingOrderV2> lineItems;
 
         Shell parentShell;
 
-        public ExecuteRoutingOrdersWithProgress(TreeObject object, Collection<WSRoutingOrderV2> lineItems, Shell shell) {
+        private TMDMService service;
+
+        public ExecuteRoutingOrdersWithProgress(TMDMService tmdmService, Collection<WSRoutingOrderV2> lineItems, Shell shell) {
             super();
-            this.xObject = object;
+            this.service = tmdmService;
             this.lineItems = lineItems;
             this.parentShell = shell;
         }
@@ -141,50 +138,44 @@ public class ExecuteRoutingOrdersAction extends Action {
         public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 
             monitor.beginTask(Messages.RoutingEngineV2BrowserMainPage_ExecutingRoutingOrders, lineItems.size());
-            TMDMService service = null;
-
-            try {
-                service = Util.getMDMService(xObject);
-            } catch (Exception e) {
-                log.error(e.getMessage(), e);
-                MessageDialog.openError(shell, Messages.RoutingEngineV2BrowserMainPage_ErrorExecuting,
-                        Messages.bind(Messages.RoutingEngineV2BrowserMainPage_ErrorMsg5, e.getLocalizedMessage()));
-            }// try
 
             String results = TEXT;
-            for (WSRoutingOrderV2 lineItem : lineItems) {
+            if (service != null) {
+                for (WSRoutingOrderV2 lineItem : lineItems) {
 
-                monitor.subTask(Messages.RoutingEngineV2BrowserMainPage_ExecutingRoutingOrder + lineItem.getName());
+                    monitor.subTask(Messages.RoutingEngineV2BrowserMainPage_ExecutingRoutingOrder + lineItem.getName());
 
-                if (monitor.isCanceled()) {
-                    MessageDialog.openWarning(this.parentShell, Messages.RoutingEngineV2BrowserMainPage_WarningTitle,
-                            Messages.RoutingEngineV2BrowserMainPage_WraningMsg + lineItem.getName()
-                                    + Messages.RoutingEngineV2BrowserMainPage_WraningMsgA
-                                    + Messages.RoutingEngineV2BrowserMainPage_WraningMsgB);
-                    return;
-                }
+                    if (monitor.isCanceled()) {
+                        MessageDialog.openWarning(this.parentShell, Messages.RoutingEngineV2BrowserMainPage_WarningTitle,
+                                Messages.RoutingEngineV2BrowserMainPage_WraningMsg + lineItem.getName()
+                                        + Messages.RoutingEngineV2BrowserMainPage_WraningMsgA
+                                        + Messages.RoutingEngineV2BrowserMainPage_WraningMsgB);
+                        return;
+                    }
 
-                try {
-                    if (synchronously) {
-                        WSString wsResult = service.executeRoutingOrderV2Synchronously(new WSExecuteRoutingOrderV2Synchronously(
-                                new WSRoutingOrderV2PK(lineItem.getName(), lineItem.getStatus())));
-                        if (wsResult.getValue() != null) {
-                            results += lineItem.getName() + ": " + wsResult.getValue(); //$NON-NLS-1$
+                    try {
+                        if (synchronously) {
+                            WSString wsResult = service
+                                    .executeRoutingOrderV2Synchronously(new WSExecuteRoutingOrderV2Synchronously(
+                                            new WSRoutingOrderV2PK(lineItem.getName(), lineItem.getStatus())));
+                            if (wsResult.getValue() != null) {
+                                results += lineItem.getName() + ": " + wsResult.getValue(); //$NON-NLS-1$
+                            }
+                        } else {
+                            service.executeRoutingOrderV2Asynchronously(new WSExecuteRoutingOrderV2Asynchronously(
+                                    new WSRoutingOrderV2PK(lineItem.getName(), lineItem.getStatus())));
                         }
-                    } else {
-                        service.executeRoutingOrderV2Asynchronously(new WSExecuteRoutingOrderV2Asynchronously(
-                                new WSRoutingOrderV2PK(lineItem.getName(), lineItem.getStatus())));
-                    }
-                    monitor.worked(1);
-                } catch (Exception e) {
-                    log.error(e.getMessage(), e);
-                    if (!Util.handleConnectionException(shell, e, Messages.RoutingEngineV2BrowserMainPage_ErrorExecuting)) {
-                        MessageDialog.openError(shell, Messages.RoutingEngineV2BrowserMainPage_ErrorExecuting,
-                                Messages.bind(Messages.RoutingEngineV2BrowserMainPage_ErrorMsg6, e.getLocalizedMessage()));
-                    }
-                }// try
+                        monitor.worked(1);
+                    } catch (Exception e) {
+                        log.error(e.getMessage(), e);
+                        if (!Util.handleConnectionException(shell, e, Messages.RoutingEngineV2BrowserMainPage_ErrorExecuting)) {
+                            MessageDialog.openError(shell, Messages.RoutingEngineV2BrowserMainPage_ErrorExecuting,
+                                    Messages.bind(Messages.RoutingEngineV2BrowserMainPage_ErrorMsg6, e.getLocalizedMessage()));
+                        }
+                    }// try
 
-            }// for
+                }// for
+            }
 
             monitor.done();
             MessageDialog.openInformation(shell, Messages.RoutingEngineV2BrowserMainPage_InfoTitle, lineItems.size()
