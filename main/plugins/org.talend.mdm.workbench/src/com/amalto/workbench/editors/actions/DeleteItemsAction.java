@@ -31,7 +31,6 @@ import org.eclipse.swt.widgets.Shell;
 import com.amalto.workbench.editors.RoutingEngineV2BrowserMainPage;
 import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.image.ImageCache;
-import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.webservices.TMDMService;
 import com.amalto.workbench.webservices.WSDeleteRoutingOrderV2;
@@ -54,13 +53,9 @@ public class DeleteItemsAction extends Action {
 
     private RoutingEngineV2BrowserMainPage routingEngineV2BrowserMainPage;
 
-    private TreeObject xObject;
-
-    public DeleteItemsAction(Shell shell, RoutingEngineV2BrowserMainPage routingEngineV2BrowserMainPage, TreeObject xObject,
-            Viewer viewer) {
+    public DeleteItemsAction(Shell shell, RoutingEngineV2BrowserMainPage routingEngineV2BrowserMainPage, Viewer viewer) {
         this.shell = shell;
         this.routingEngineV2BrowserMainPage = routingEngineV2BrowserMainPage;
-        this.xObject = xObject;
         this.viewer = viewer;
 
         setImageDescriptor(ImageCache.getImage("icons/delete_obj.gif"));//$NON-NLS-1$
@@ -92,7 +87,8 @@ public class DeleteItemsAction extends Action {
             }
 
             // Instantiate the Monitor with actual deletes
-            DeleteItemsWithProgress diwp = new DeleteItemsWithProgress(xObject, lineItems, this.shell);
+            DeleteItemsWithProgress diwp = new DeleteItemsWithProgress(
+                    (TMDMService) routingEngineV2BrowserMainPage.getAdapter(TMDMService.class), lineItems, this.shell);
             // run
             new ProgressMonitorDialog(this.shell).run(false, // fork
                     true, // cancelable
@@ -118,8 +114,11 @@ public class DeleteItemsAction extends Action {
 
         Shell parentShell;
 
-        public DeleteItemsWithProgress(TreeObject object, Collection<WSRoutingOrderV2> lineItems, Shell shell) {
+        private TMDMService service;
+
+        public DeleteItemsWithProgress(TMDMService mdmService, Collection<WSRoutingOrderV2> lineItems, Shell shell) {
             super();
+            this.service = mdmService;
             this.lineItems = lineItems;
             this.parentShell = shell;
         }
@@ -127,23 +126,25 @@ public class DeleteItemsAction extends Action {
         public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
             try {
                 monitor.beginTask(Messages.RoutingEngineV2BrowserMainPage_DeletingItems, lineItems.size());
-                TMDMService service = Util.getMDMService(xObject);
 
-                int i = 0;
-                for (WSRoutingOrderV2 lineItem : lineItems) {
-                    monitor.subTask(Messages.RoutingEngineV2BrowserMainPage_ProcessingItem + (i++));
-                    if (monitor.isCanceled()) {
-                        MessageDialog.openWarning(this.parentShell, Messages.RoutingEngineV2BrowserMainPage_UserCancelDel,
-                                Messages.RoutingEngineV2BrowserMainPage_WarningMsg + i
-                                        + Messages.RoutingEngineV2BrowserMainPage_WarningMsgA
-                                        + Messages.RoutingEngineV2BrowserMainPage_WarningMsgB);
-                        return;
-                    }
-                    service.deleteRoutingOrderV2(new WSDeleteRoutingOrderV2(new WSRoutingOrderV2PK(lineItem.getName(), lineItem
-                            .getStatus())));
-                    monitor.worked(1);
-                }// for
+                if (service != null) {
 
+                    int i = 0;
+                    for (WSRoutingOrderV2 lineItem : lineItems) {
+                        monitor.subTask(Messages.RoutingEngineV2BrowserMainPage_ProcessingItem + (i++));
+                        if (monitor.isCanceled()) {
+                            MessageDialog.openWarning(this.parentShell, Messages.RoutingEngineV2BrowserMainPage_UserCancelDel,
+                                    Messages.RoutingEngineV2BrowserMainPage_WarningMsg + i
+                                            + Messages.RoutingEngineV2BrowserMainPage_WarningMsgA
+                                            + Messages.RoutingEngineV2BrowserMainPage_WarningMsgB);
+                            return;
+                        }
+                        service.deleteRoutingOrderV2(new WSDeleteRoutingOrderV2(new WSRoutingOrderV2PK(lineItem.getName(),
+                                lineItem.getStatus())));
+                        monitor.worked(1);
+                    }// for
+
+                }
                 monitor.done();
             } catch (Exception e) {
                 log.error(e.getMessage(), e);

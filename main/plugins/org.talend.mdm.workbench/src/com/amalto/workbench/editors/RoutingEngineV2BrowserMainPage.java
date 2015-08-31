@@ -583,17 +583,15 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
                 manager.appendToGroup(IWorkbenchActionConstants.MB_ADDITIONS, new EditItemAction(
                         RoutingEngineV2BrowserMainPage.this.getSite().getShell(),
                         RoutingEngineV2BrowserMainPage.this.resultsViewer));
+
                 manager.appendToGroup(IWorkbenchActionConstants.MB_ADDITIONS, new DeleteItemsAction(
                         RoutingEngineV2BrowserMainPage.this.getSite().getShell(), RoutingEngineV2BrowserMainPage.this,
-                        getXObject(),
                         RoutingEngineV2BrowserMainPage.this.resultsViewer));
                 manager.appendToGroup(IWorkbenchActionConstants.MB_ADDITIONS, new ExecuteRoutingOrdersAction(
                         RoutingEngineV2BrowserMainPage.this.getSite().getShell(), RoutingEngineV2BrowserMainPage.this,
-                        getXObject(),
                         RoutingEngineV2BrowserMainPage.this.resultsViewer, true));
                 manager.appendToGroup(IWorkbenchActionConstants.MB_ADDITIONS, new ExecuteRoutingOrdersAction(
                         RoutingEngineV2BrowserMainPage.this.getSite().getShell(), RoutingEngineV2BrowserMainPage.this,
-                        getXObject(),
                         RoutingEngineV2BrowserMainPage.this.resultsViewer, false // asynchronously
                         ));
             }
@@ -919,4 +917,19 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
         }
     }
 
+    @Override
+    public Object getAdapter(Class adapter) {
+        if (adapter == TMDMService.class) {
+            TMDMService mdmService = null;
+            try {
+                mdmService = getMDMService();
+            } catch (XtentisException e) {
+                log.error(e.getMessage(), e);
+            }
+
+            return mdmService;
+        }
+
+        return super.getAdapter(adapter);
+    }
 }
