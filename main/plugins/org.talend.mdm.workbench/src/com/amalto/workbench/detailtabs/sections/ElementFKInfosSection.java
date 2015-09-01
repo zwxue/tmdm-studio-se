@@ -36,13 +36,15 @@ import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.models.infoextractor.IAllDataModelHolder;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.XSDAnnotationsStructure;
-import com.amalto.workbench.widgets.composites.XpathComposite;
+import com.amalto.workbench.widgets.composites.ElementFKInfoComposite;
 
 public class ElementFKInfosSection extends XpathSection {
 
 	private List<String> fkInfos = new ArrayList<String>();
 
-	private XpathComposite composite;
+    private String formatFKinfo = null;
+
+    private ElementFKInfoComposite composite;
 
 	private FixDMNameBasePropertySectionDataModelExtractor holder;
 
@@ -73,6 +75,7 @@ public class ElementFKInfosSection extends XpathSection {
 	@Override
 	public void refresh() {
 		composite.setInfos(fkInfos.toArray(new String[0]));
+        composite.setFormatFKInfo(formatFKinfo);
 		updateSectionEnabled();
 	}
 
@@ -89,18 +92,20 @@ public class ElementFKInfosSection extends XpathSection {
             fkInfos.add(eachFKInfo);
         }
 
+        formatFKinfo = annoStruct.getFormatForeignKeyInfo();//
+
 		holder.setDefaultDataModel(getDataModelName());
 		holder.setDefaultEntity(getEntityName());
 	}
 
 	@Override
 	protected ISubmittable getSubmittedObj() {
-        return new ForeignKeyInfosAnnoInfo(curXSDComponent, composite.getInfos());
+        return new ForeignKeyInfosAnnoInfo(curXSDComponent, composite.getInfos(), composite.getFormatFKInfo());
 	}
 
 	@Override
 	protected void createControlsInSection(Composite compSectionClient) {
-        composite = new XpathComposite(compSectionClient, SWT.NONE, this);
+        composite = new ElementFKInfoComposite(compSectionClient, SWT.NONE, this);
 		holder = new FixDMNameBasePropertySectionDataModelExtractor(this);
 	}
 

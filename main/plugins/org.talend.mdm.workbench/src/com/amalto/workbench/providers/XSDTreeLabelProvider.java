@@ -252,6 +252,8 @@ public class XSDTreeLabelProvider extends LabelProvider implements ITreePathLabe
                             return Messages.bind(Messages.XSDTreeLabelProvider_5, e.getChildNodes().item(0).getNodeValue());
                         } else if (source.equals("X_ForeignKeyInfo")) {//$NON-NLS-1$
                             return Messages.bind(Messages.XSDTreeLabelProvider_6, e.getChildNodes().item(0).getNodeValue());
+                        } else if (source.equals("X_ForeignKeyInfoFormat")) {//$NON-NLS-1$
+                            return Messages.bind(Messages.XSDTreeLabelProvider_20, e.getChildNodes().item(0).getNodeValue());
                         } else if (source.equals("X_PrimaryKeyInfo")) {//$NON-NLS-1$
                             return Messages.bind(Messages.XSDTreeLabelProvider_7, e.getChildNodes().item(0).getNodeValue());
                         } else if (source.equals("X_SourceSystem")) {//$NON-NLS-1$
@@ -290,7 +292,7 @@ public class XSDTreeLabelProvider extends LabelProvider implements ITreePathLabe
                             String pattern = (String) e.getFirstChild().getUserData("pattern_name");//$NON-NLS-1$
                             if (pattern == null) {
                                 Element el = Util.parse(e.getChildNodes().item(0).getNodeValue()).getDocumentElement();
-                                if (el.getAttributes().getNamedItem("name") != null) {
+                                if (el.getAttributes().getNamedItem("name") != null) { //$NON-NLS-1$
                                     pattern = el.getAttributes().getNamedItem("name").getTextContent();//$NON-NLS-1$
                                 }
                             }
@@ -510,6 +512,8 @@ public class XSDTreeLabelProvider extends LabelProvider implements ITreePathLabe
                             return ImageCache.getCreatedImage(EImage.ROUTINE.getPath());
                         } else if (source.equals("X_ForeignKeyInfo")) {//$NON-NLS-1$
                             return ImageCache.getCreatedImage(EImage.KEYINFO.getPath());
+                        } else if (source.equals("X_ForeignKeyInfoFormat")) {//$NON-NLS-1$
+                            return ImageCache.getCreatedImage(EImage.KEYINFO.getPath());
                             // fix bug 0013194 by rhou.
                         } else if (source.equals("X_FKIntegrity")) {//$NON-NLS-1$
                             return ImageCache.getCreatedImage(EImage.KEYINFO.getPath());
@@ -616,7 +620,7 @@ public class XSDTreeLabelProvider extends LabelProvider implements ITreePathLabe
         String tail = xsdSimpleTypeDefinition.getTargetNamespace() == null ? "" : xsdSimpleTypeDefinition.getTargetNamespace();//$NON-NLS-1$
         if (tail.equals(XSDConstants.SCHEMA_FOR_SCHEMA_URI_2001) || tail.equals(XSDConstants.SCHEMA_FOR_SCHEMA_URI_1999)) {
             tail = "";//$NON-NLS-1$
-        } else if (!tail.equals("")) {
+        } else if (!tail.equals("")) { //$NON-NLS-1$
             tail = " : " + tail;//$NON-NLS-1$
         }
         return s + tail;

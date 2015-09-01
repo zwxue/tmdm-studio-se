@@ -64,6 +64,7 @@ import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.utils.Util;
+import com.amalto.workbench.widgets.composites.FormatFKInfoComp;
 
 public class AnnotationOrderedListsDialog extends Dialog {
 
@@ -122,6 +123,10 @@ public class AnnotationOrderedListsDialog extends Dialog {
     public static final int AnnotationLookupField_ActionType = 1 << 5;
 
     public static final int AnnotationPrimaKeyInfo_ActionType = 1 << 6;
+
+    private String formatFKInfo;
+
+    private FormatFKInfoComp formatFkInfoGroup;
 
     /**
      * @param parentShell
@@ -228,6 +233,7 @@ public class AnnotationOrderedListsDialog extends Dialog {
                 if ((e.stateMask == 0) && (e.character == SWT.CR)) {
                     xPaths.add(AnnotationOrderedListsDialog.getControlText(textControl));
                     viewer.refresh();
+                    fireXPathsChanges();
                 }
             }
         });
@@ -284,6 +290,7 @@ public class AnnotationOrderedListsDialog extends Dialog {
                     xPaths.add(getControlText(textControl));
                 }
                 viewer.refresh();
+                fireXPathsChanges();
             };
         });
 
@@ -392,13 +399,14 @@ public class AnnotationOrderedListsDialog extends Dialog {
                     int targetPos = xPaths.indexOf(value.toString());
                     if (targetPos < 0) {
                         line.setLabel(value.toString());
-                        xPaths.add(value.toString());
+                        int index = xPaths.indexOf(orgValue);
+                        xPaths.remove(index);
+                        xPaths.add(index, value.toString());
                         viewer.update(line, null);
                     } else if (targetPos >= 0 && !value.toString().equals(orgValue)) {
                         MessageDialog.openInformation(null, Messages.Warning,
                                 Messages.AnnotationOrderedListsDialog_ValueAlreadyExists);
                     }
-                    return;
                 } else {
 
                     String[] attrs = roles.toArray(new String[] {});
@@ -413,10 +421,12 @@ public class AnnotationOrderedListsDialog extends Dialog {
                         return;
                     } else if (pos < 0) {
                         line.setLabel(value.toString());
-                        xPaths.set(xPaths.indexOf(orgValue), value.toString());
+                        xPaths.set(index, value.toString());
                         viewer.update(line, null);
                     }
                 }
+
+                fireXPathsChanges();
             }
 
             public Object getValue(Object element, String property) {
@@ -498,6 +508,7 @@ public class AnnotationOrderedListsDialog extends Dialog {
                             viewer.refresh();
                             viewer.getTable().setSelection(i - 1);
                             viewer.getTable().showSelection();
+                            fireXPathsChanges();
                         }
                         return;
                     }
@@ -528,6 +539,7 @@ public class AnnotationOrderedListsDialog extends Dialog {
                             viewer.refresh();
                             viewer.getTable().setSelection(i + 1);
                             viewer.getTable().showSelection();
+                            fireXPathsChanges();
                         }
                         return;
                     }
@@ -552,6 +564,7 @@ public class AnnotationOrderedListsDialog extends Dialog {
                     ArrayList<String> xPaths = (ArrayList<String>) viewer.getInput();
                     xPaths.remove(line.getLabel());
                     viewer.refresh();
+                    fireXPathsChanges();
                 }
             };
         });
@@ -581,7 +594,27 @@ public class AnnotationOrderedListsDialog extends Dialog {
             // 1, 1));
         }
 
+        if (actionType == AnnotationForeignKeyInfo_ActionType) {
+            createFKInfoFormatComp(composite);
+        }
+
         return composite;
+    }
+
+    private void createFKInfoFormatComp(Composite parent) {
+        formatFkInfoGroup = new FormatFKInfoComp(parent, SWT.NONE);
+        GridData layoutData = new GridData(SWT.FILL, SWT.FILL, true, true, 3, 1);
+        layoutData.heightHint = 120;
+        formatFkInfoGroup.setLayoutData(layoutData);
+
+        formatFkInfoGroup.setFkinfos(xPaths);
+        formatFkInfoGroup.setFormatFKInfo(formatFKInfo);
+    }
+
+    private void fireXPathsChanges() {
+        if (actionType == AnnotationForeignKeyInfo_ActionType) {
+            formatFkInfoGroup.setFkinfos(xPaths);
+        }
     }
 
     @Override
@@ -599,6 +632,8 @@ public class AnnotationOrderedListsDialog extends Dialog {
 
     @Override
     protected void okPressed() {
+        formatFKInfo = formatFkInfoGroup.getFormatFKInfo();
+
         setReturnCode(OK);
         getButton(IDialogConstants.OK_ID).setData("dialog", AnnotationOrderedListsDialog.this);//$NON-NLS-1$
         // no close let Action Handler handle it
@@ -625,6 +660,14 @@ public class AnnotationOrderedListsDialog extends Dialog {
 
     public boolean getRecursive() {
         return recursive;
+    }
+
+    public String getFormatFKInfo() {
+        return formatFKInfo;
+    }
+
+    public void setFormatFKInfo(String formatedFkInfo) {
+        this.formatFKInfo = formatedFkInfo;
     }
 
     private static String getControlText(Control textControl) {
@@ -666,5 +709,4 @@ public class AnnotationOrderedListsDialog extends Dialog {
             this.label = label;
         }
     }
-
 }

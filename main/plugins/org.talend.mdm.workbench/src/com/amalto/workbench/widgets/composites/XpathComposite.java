@@ -39,7 +39,7 @@ import com.amalto.workbench.utils.Util;
 
 public class XpathComposite extends ListStringContentsComposite {
 	
-	private XpathSection section;
+    protected XpathSection section;
 	
 	private ComboViewer comboInfos;
 
@@ -104,8 +104,9 @@ public class XpathComposite extends ListStringContentsComposite {
 		EList<XSDElementDeclaration> elementDeclarations = schema
 				.getElementDeclarations();
 		for (XSDElementDeclaration declaration : elementDeclarations) {
-			if (declaration.eContainer().equals(schema))
-				declarations.add(declaration);
+			if (declaration.eContainer().equals(schema)) {
+                declarations.add(declaration);
+            }
 		}
 
 		Object[] schemaChildren = Util.filterOutDuplicatedElems(declarations
@@ -182,8 +183,9 @@ public class XpathComposite extends ListStringContentsComposite {
 				SelectXPathDialog dialog = new SelectXPathDialog(PlatformUI
 						.getWorkbench().getActiveWorkbenchWindow().getShell(),
 						getDataholder(), getDatamodel(), getConcept(), null);
-				if (dialog.open() != Window.OK)
-					return;
+				if (dialog.open() != Window.OK) {
+                    return;
+                }
 				String xpath = dialog.getSelectedXPath();
 				if (null != xpath) {
 					XpathComposite.this.addInfoToInfoTree(xpath);

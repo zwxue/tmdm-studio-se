@@ -171,32 +171,36 @@ public abstract class ListStringContentsComposite extends Composite {
 
     protected void onAdd() {
 
-        if (!hasCandidateInfo() || infos.contains(getCandidateInfo()))
+        if (!hasCandidateInfo() || infos.contains(getCandidateInfo())) {
             return;
+        }
 
         addInfoToInfoTree(getCandidateInfo());
     }
 
     protected void onRemove() {
 
-        if (!hasSelectionInInfoTree())
+        if (!hasSelectionInInfoTree()) {
             return;
+        }
 
         removeInfoFromInfoTree(getSelectionFromInfoTree());
     }
 
     protected void onMoveUp() {
 
-        if (!hasSelectionInInfoTree())
+        if (!hasSelectionInInfoTree()) {
             return;
+        }
 
         moveInfoUp(getSelectionFromInfoTree());
     }
 
     protected void onMoveDown() {
 
-        if (!hasSelectionInInfoTree())
+        if (!hasSelectionInInfoTree()) {
             return;
+        }
 
         moveInfoDown(getSelectionFromInfoTree());
     }
@@ -207,20 +211,22 @@ public abstract class ListStringContentsComposite extends Composite {
 
     protected void addInfoToInfoTree(String info) {
         infos.add(info);
-        treeContentChanged = true;
+        setContentChanged(true);
 
         tvInfos.refresh();
-        if (section != null)
+        if (section != null) {
             section.autoCommit();
+        }
     }
 
     private void removeInfoFromInfoTree(String info) {
         infos.remove(info);
-        treeContentChanged = true;
+        setContentChanged(true);
 
         tvInfos.refresh();
-        if (section != null)
+        if (section != null) {
             section.autoCommit();
+        }
     }
 
     private boolean hasSelectionInInfoTree() {
@@ -235,8 +241,9 @@ public abstract class ListStringContentsComposite extends Composite {
 
         Object selectedObj = ((IStructuredSelection) targetViewer.getSelection()).getFirstElement();
 
-        if (selectedObj == null)
+        if (selectedObj == null) {
             return null;
+        }
 
         return selectedObj.toString();
     }
@@ -254,8 +261,9 @@ public abstract class ListStringContentsComposite extends Composite {
         infos.add(newIndex, info);
         tvInfos.refresh();
         setContentChanged(true);
-        if (section != null)
+        if (section != null) {
             section.autoCommit();
+        }
     }
 
     public void setInfos(String[] infos) {

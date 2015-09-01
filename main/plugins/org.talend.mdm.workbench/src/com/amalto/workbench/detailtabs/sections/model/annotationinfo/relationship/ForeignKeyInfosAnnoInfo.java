@@ -20,11 +20,18 @@ import com.amalto.workbench.detailtabs.sections.model.annotationinfo.ListContent
 
 public class ForeignKeyInfosAnnoInfo extends ListContentsAnnotationInfo {
 
-    public ForeignKeyInfosAnnoInfo(XSDComponent sourceComponent, String[] infos) {
+    private String formatFKinfo;
+
+    public ForeignKeyInfosAnnoInfo(XSDComponent sourceComponent, String[] infos, String formatFKInfo) {
         super(sourceComponent, infos);
+        this.formatFKinfo = formatFKInfo;
     }
 
     public CommitHandler<ForeignKeyInfosAnnoInfo> createCommitHandler() {
         return new ElementForeignKeyInfosCommitHandler(this);
+    }
+
+    public String getFormatFkInfo() {
+        return formatFKinfo;
     }
 }

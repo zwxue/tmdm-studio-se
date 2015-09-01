@@ -1247,6 +1247,8 @@ public class DataModelMainPage extends EditorPart implements ModifyListener, IGo
                     return 121;
                 } else if (source.equals("X_FKIntegrity_Override")) {//$NON-NLS-1$
                     return 122;
+                } else if (source.equals("X_ForeignKeyInfoFormat")) {//$NON-NLS-1$
+                    return 123;
                 }
             }
 
@@ -2613,6 +2615,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener, IGo
                 setAnnotationForeignKeyAction.run();
                 break;
             case 103:
+            case 123:
                 setAnnotationForeignKeyInfoAction.run();
                 break;
             case 112:

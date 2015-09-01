@@ -47,6 +47,7 @@ public class ElementForeignKeyInfosCommitHandler extends ListContentsCommitHandl
 
         try {
             xsdAnnoStruct.setForeignKeyInfos(Arrays.asList(getCommitedObj().getInfos()));
+            xsdAnnoStruct.setFormatForeignKeyInfo(getCommitedObj().getFormatFkInfo());
             doUpdateFKAnnotationStructure(xsdAnnoStruct);
         } catch (Exception e) {
             throw new CommitException(e.getMessage(), e);

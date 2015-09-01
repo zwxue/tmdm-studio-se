@@ -437,6 +437,28 @@ public class XSDAnnotationsStructure {
         return true;
     }
 
+    public boolean setFormatForeignKeyInfo(String formatedForeignKeyinfo) {
+        boolean somethingChanged = removeAppInfos("X_ForeignKeyInfoFormat");//$NON-NLS-1$
+        boolean added = false;
+        if (formatedForeignKeyinfo != null && !formatedForeignKeyinfo.isEmpty()) {
+            added = addAppInfo("X_ForeignKeyInfoFormat", formatedForeignKeyinfo);//$NON-NLS-1$
+        }
+
+        hasChanged |= somethingChanged | added;
+        return true;
+    }
+
+    public String getFormatForeignKeyInfo() {
+        LinkedHashMap<String, String> appInfos = getAppInfos("X_ForeignKeyInfoFormat");//$NON-NLS-1$
+
+        Collection<String> values = appInfos.values();
+        if (values.size() > 0) {
+            return values.iterator().next();
+        }
+
+        return "";
+    }
+
     public boolean setRetrieveFKinfos(Boolean retrieveFKinfos) {
         boolean somethingChanged = removeAppInfos("X_Retrieve_FKinfos");//$NON-NLS-1$
         if (retrieveFKinfos != null) {

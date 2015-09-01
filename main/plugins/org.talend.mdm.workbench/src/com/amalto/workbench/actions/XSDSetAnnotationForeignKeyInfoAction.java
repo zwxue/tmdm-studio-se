@@ -76,8 +76,10 @@ public class XSDSetAnnotationForeignKeyInfoAction extends UndoAction {
 
             dlg = getNewAnnotaionOrderedListsDialog(struc.getForeignKeyInfos().values());
 
+
             dlg.setLock(true);
             dlg.setRetrieveFKinfos(struc.getRetrieveFKinfos());
+            dlg.setFormatFKInfo(struc.getFormatForeignKeyInfo());
             dlg.setBlockOnOpen(true);
             int ret = dlg.open();
             if (ret == Window.CANCEL) {
@@ -86,6 +88,7 @@ public class XSDSetAnnotationForeignKeyInfoAction extends UndoAction {
 
             struc.setForeignKeyInfos(dlg.getXPaths());
             struc.setRetrieveFKinfos(dlg.isRetrieveFKinfos());
+            struc.setFormatForeignKeyInfo(dlg.getFormatFKInfo());
             if (struc.hasChanged()) {
                 page.refresh();
                 page.getTreeViewer().expandToLevel(xSDCom, 2);

@@ -1753,6 +1753,8 @@ public class Messages extends NLS {
 
     public static String XSDTreeLabelProvider_2;
 
+    public static String XSDTreeLabelProvider_20;
+
     public static String XSDTreeLabelProvider_21;
 
     public static String XSDTreeLabelProvider_22;
@@ -2248,6 +2250,10 @@ public class Messages extends NLS {
     public static String ForeignKeyFilterComposite_Value;
 
     public static String ForeignKeyFilterComposite_XPath;
+
+    public static String FormatFKInfoComp_availablexpath;
+
+    public static String FormatFKInfoComp_format;
 
     public static String SaveDataModuleXSDSchema;
 
