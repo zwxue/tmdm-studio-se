@@ -16,6 +16,7 @@ import org.apache.log4j.Logger;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbenchPage;
@@ -30,6 +31,7 @@ import org.talend.mdm.repository.extension.RepositoryNodeConfigurationManager;
 import org.talend.mdm.repository.ui.editors.IRepositoryViewEditorInput;
 import org.talend.mdm.repository.ui.navigator.MDMRepositoryView;
 import org.talend.mdm.repository.ui.wizards.MDMOpenExistVersionProcessWizard;
+import org.talend.repository.model.IRepositoryNode;
 import org.talend.repository.model.RepositoryNode;
 
 
@@ -52,7 +54,7 @@ public class MDMOpenExistVersionProcessAction extends AbstractBridgeRepositoryAc
             RepositoryObject repositoryObj = new RepositoryObject(node.getObject().getProperty());
             repositoryObj.setRepositoryNode(node.getObject().getRepositoryNode());
             MDMOpenExistVersionProcessWizard wizard = new MDMOpenExistVersionProcessWizard(repositoryObj);
-            PropertyManagerWizardDialog dialog = new PropertyManagerWizardDialog(Display.getCurrent().getActiveShell(), wizard);
+            WizardDialog dialog = new WizardDialog(Display.getCurrent().getActiveShell(), wizard);
             dialog.setPageSize(300, 250);
             if (dialog.open() == Dialog.OK) {
                 if(wizard.getViewObj()!=null){
@@ -68,7 +70,7 @@ public class MDMOpenExistVersionProcessAction extends AbstractBridgeRepositoryAc
         }
 
         @Override
-        protected IEditorPart getCorrespondingEditor(RepositoryNode node) {
+        protected IEditorPart getCorrespondingEditor(IRepositoryNode node) {
             IRepositoryViewObject viewObject = node.getObject();
             Item item = viewObject.getProperty().getItem();
             IRepositoryNodeConfiguration configuration = RepositoryNodeConfigurationManager.getConfiguration(item);
