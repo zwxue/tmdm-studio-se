@@ -24,6 +24,7 @@ package org.talend.mdm.repository.ui.actions.process;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.wizard.WizardDialog;
@@ -32,6 +33,7 @@ import org.eclipse.ui.IEditorReference;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPartSite;
 import org.eclipse.ui.PlatformUI;
+import org.talend.commons.exception.PersistenceException;
 import org.talend.core.GlobalServiceRegister;
 import org.talend.core.model.properties.Item;
 import org.talend.core.model.properties.ItemState;
@@ -39,9 +41,11 @@ import org.talend.core.model.properties.ProcessItem;
 import org.talend.core.model.properties.PropertiesFactory;
 import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.core.model.repository.IRepositoryViewObject;
+import org.talend.core.runtime.CoreRuntimePlugin;
 import org.talend.designer.core.ui.MultiPageTalendEditor;
 import org.talend.designer.core.ui.editor.ProcessEditorInput;
 import org.talend.mdm.repository.core.impl.transformerV2.ITransformerV2NodeConsDef;
+import org.talend.mdm.repository.core.service.ContainerCacheService;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
 import org.talend.mdm.repository.model.mdmproperties.MdmpropertiesFactory;
@@ -55,6 +59,7 @@ import org.talend.mdm.repository.ui.wizards.process.IMDMJobTemplate;
 import org.talend.mdm.repository.ui.wizards.process.NewProcessWizard;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 import org.talend.mdm.repository.utils.RepositoryTransformUtil;
+import org.talend.repository.model.IProxyRepositoryFactory;
 
 import com.amalto.workbench.service.IValidateService;
 
@@ -64,6 +69,7 @@ import com.amalto.workbench.service.IValidateService;
  */
 public class NewProcessAction extends AbstractSimpleAddAction implements ITransformerV2NodeConsDef {
 
+    private static Logger log = Logger.getLogger(NewProcessAction.class);
     /**
      * DOC AddProcess constructor comment.
      * 
@@ -114,8 +120,10 @@ public class NewProcessAction extends AbstractSimpleAddAction implements ITransf
 
     private void refreshJobEditorTitle(Item item) {
         String label = item.getProperty().getLabel();
+        // job name can not contains '#' and '$', see job's create procedure
+        label = label.replaceAll("#|\\$", ""); //$NON-NLS-1$ //$NON-NLS-2$
 
-        IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+        IWorkbenchPage activePage = getActivePage();
         IEditorReference[] editorReferences = activePage.getEditorReferences();
         if (editorReferences != null) {
             for (IEditorReference editorPart : editorReferences) {
@@ -124,13 +132,18 @@ public class NewProcessAction extends AbstractSimpleAddAction implements ITransf
                     ProcessEditorInput processInput = (ProcessEditorInput) editorInput;
                     ProcessItem jobItem = (ProcessItem) processInput.getItem();
                     MultiPageTalendEditor jobEditor = (MultiPageTalendEditor) editorPart.getEditor(false);
-                    if (jobItem.getProperty().getLabel().equals(label)) {
+                    String jobLabel = jobItem.getProperty().getLabel();
+                    if (jobLabel.equals(label)) {
                         jobEditor.refreshName();
                         break;
                     }
                 }
             }
         }
+    }
+
+    private IWorkbenchPage getActivePage() {
+        return PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
     }
 
     private int getType() {
@@ -276,11 +289,41 @@ public class NewProcessAction extends AbstractSimpleAddAction implements ITransf
         for (IMDMJobTemplate job : jobTemplates) {
             boolean result = true;
 
+            processName = processName.replaceAll("#|\\$", ""); //$NON-NLS-1$//$NON-NLS-2$
             if (validateService != null) {
                 result = validateService.validateAndAlertObjectExistence(ERepositoryObjectType.PROCESS, processName, "Job"); //$NON-NLS-1$
             }
             if (result) {
+                closeEditor(processName);
                 job.generateJobTemplate(type, processName, infoType, pMessage);
+            }
+        }
+    }
+
+    private void closeEditor(String processName) {
+        IWorkbenchPage activePage = getActivePage();
+        IEditorReference[] editorRef = activePage.getEditorReferences();
+        for (IEditorReference ref : editorRef) {
+            IEditorInput editorInput = ref.getEditor(false).getEditorInput();
+            if (editorInput instanceof ProcessEditorInput) {
+                ProcessEditorInput processInput = (ProcessEditorInput) editorInput;
+                ProcessItem jobItem = (ProcessItem) processInput.getItem();
+                if (jobItem.getProperty().getLabel().equals(processName)) {
+                    activePage.closeEditors(new IEditorReference[] { ref }, false);
+
+                    IRepositoryViewObject jobViewObject = RepositoryResourceUtil.findViewObjectByName(
+                            ERepositoryObjectType.PROCESS, processName);
+                    if (jobViewObject != null) {
+                        IProxyRepositoryFactory factory = CoreRuntimePlugin.getInstance().getProxyRepositoryFactory();
+                        try {
+                            factory.deleteObjectPhysical(jobViewObject);
+                            ContainerCacheService.remove(jobViewObject.getProperty());
+                        } catch (PersistenceException e) {
+                            log.error(e.getMessage(), e);
+                        }
+                    }
+                    break;
+                }
             }
         }
     }
