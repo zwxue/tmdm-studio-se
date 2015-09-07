@@ -45,7 +45,6 @@ import org.talend.core.runtime.CoreRuntimePlugin;
 import org.talend.designer.core.ui.MultiPageTalendEditor;
 import org.talend.designer.core.ui.editor.ProcessEditorInput;
 import org.talend.mdm.repository.core.impl.transformerV2.ITransformerV2NodeConsDef;
-import org.talend.mdm.repository.core.service.ContainerCacheService;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
 import org.talend.mdm.repository.model.mdmproperties.MdmpropertiesFactory;
@@ -317,7 +316,6 @@ public class NewProcessAction extends AbstractSimpleAddAction implements ITransf
                         IProxyRepositoryFactory factory = CoreRuntimePlugin.getInstance().getProxyRepositoryFactory();
                         try {
                             factory.deleteObjectPhysical(jobViewObject);
-                            ContainerCacheService.remove(jobViewObject.getProperty());
                         } catch (PersistenceException e) {
                             log.error(e.getMessage(), e);
                         }
