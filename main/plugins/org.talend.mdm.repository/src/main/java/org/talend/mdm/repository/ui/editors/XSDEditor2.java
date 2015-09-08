@@ -28,6 +28,8 @@ import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.IPropertyListener;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.ide.IGotoMarker;
+import org.eclipse.ui.part.MultiPageEditorPart;
+import org.eclipse.ui.part.MultiPageSelectionProvider;
 import org.eclipse.xsd.XSDDiagnostic;
 import org.eclipse.xsd.XSDSchema;
 import org.talend.commons.exception.LoginException;
@@ -94,13 +96,18 @@ public class XSDEditor2 extends XSDEditor implements ISvnHistory {
         } catch (PartInitException e) {
             log.error(e.getMessage(), e);
         }
+        // Add ER Editor
+        if (isEE()) {
+            exAdapter.addPage(xsdFile);
+        }
+
         // add repository view object in selectionprovider
         IRepositoryViewObject repositoryViewObj = editorInput.getViewObject();// ContainerCacheService.get(editorInput.getInputItem().getProperty());
         CompositeViewersSelectionProvider selectionProvider = (CompositeViewersSelectionProvider) dMainPage
                 .getSelectionProvider();
         selectionProvider.setRepositoryViewObj(repositoryViewObj);
         //
-        getSite().setSelectionProvider(dMainPage.getSelectionProvider());
+        getSite().setSelectionProvider(new MultiPageSelectionProvider(this));
 
         // add XSDSelectionListener
         XSDSelectionListener xsdListener = new XSDSelectionListener(this, dMainPage);
@@ -231,11 +238,6 @@ public class XSDEditor2 extends XSDEditor implements ISvnHistory {
         return dMainPage;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see com.amalto.workbench.editors.xsdeditor.XSDEditor#getAdapter(java.lang.Class)
-     */
     @Override
     public Object getAdapter(Class type) {
 
@@ -244,6 +246,9 @@ public class XSDEditor2 extends XSDEditor implements ISvnHistory {
             return dMainPage;
         } else if (type == XSDEditorInput2.class) {
             return getEditorInput();
+        }
+        if (type == MultiPageEditorPart.class) {
+            return this;
         }
         if (isEE()) {
             Object adapter = exAdapter.getAdapter(type);
@@ -255,12 +260,10 @@ public class XSDEditor2 extends XSDEditor implements ISvnHistory {
         return super.getAdapter(type);
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.eclipse.wst.xsd.ui.internal.adt.editor.CommonMultiPageEditor#init(org.eclipse.ui.IEditorSite,
-     * org.eclipse.ui.IEditorInput)
-     */
+    public void updateTabPageLabel(int index, String label) {
+        setPageText(index, label);
+    }
+
     @Override
     public void init(IEditorSite site, IEditorInput editorInput) throws PartInitException {
 
@@ -294,6 +297,15 @@ public class XSDEditor2 extends XSDEditor implements ISvnHistory {
             mapInfoDirty = exAdapter.isDirty();
         }
         return super.isDirty() || mapInfoDirty;
+    }
+
+    @Override
+    protected void doPageChanged(int newPageIndex) {
+
+        super.doPageChanged(newPageIndex);
+        if (isEE()) {
+            exAdapter.doPageChanged(newPageIndex);
+        }
     }
 
 }

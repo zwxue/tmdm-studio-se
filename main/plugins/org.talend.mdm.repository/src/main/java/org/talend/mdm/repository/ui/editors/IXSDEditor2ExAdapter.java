@@ -12,6 +12,7 @@
 // ============================================================================
 package org.talend.mdm.repository.ui.editors;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.ui.IEditorInput;
 import org.talend.core.model.properties.Item;
@@ -33,4 +34,8 @@ public interface IXSDEditor2ExAdapter extends IExAdapter<XSDEditor2> {
     void doSave(Item item, DataModelMainPage2 dMainPage, IProgressMonitor monitor);
 
     Object getAdapter(Class type);
+
+    void addPage(IFile xsdFile);
+
+    void doPageChanged(int newPageIndex);
 }

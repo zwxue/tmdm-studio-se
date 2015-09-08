@@ -209,12 +209,12 @@ public class XSDEditor extends InternalXSDMultiPageEditor implements IServerObje
         if (doUpdateSourceLocation && fXSDSelectionListener != null) {
             fXSDSelectionListener.doSetSelection();
         }
-        doPageChanged();
+        doPageChanged(newPageIndex);
         refreshPropertyView();
         setFocus();
     }
 
-    private void doPageChanged() {
+    protected void doPageChanged(int newPageIndex) {
         if (xobject == null) {
             return;
         }
@@ -225,8 +225,6 @@ public class XSDEditor extends InternalXSDMultiPageEditor implements IServerObje
                                                                  // to
                 DataModelMainPage mainPage = getDataModelEditorPage();
                 if (mainPage != null) {
-                    getEditorSite().setSelectionProvider(mainPage.getSelectionProvider());
-
                     String xsd = getTextEditor().getTextViewer().getDocument().get();
                     XSDSchema schema = Util.createXsdSchema(xsd, xobject);
                     mainPage.setXsdSchema(schema);
@@ -237,9 +235,10 @@ public class XSDEditor extends InternalXSDMultiPageEditor implements IServerObje
                     //
                     expandHelper.recoverExpandState(mainPage);
                 }
-            } else {
+            } else if (newPageIndex == SOURCE_PAGE_INDEX) {
+
                 // save DataModelMainPage's contents to file
-                getEditorSite().setSelectionProvider(getSelectionManager());
+                getTextEditor().getSite().setSelectionProvider(getSelectionManager());
                 DataModelMainPage mainPage = getDataModelEditorPage();
                 expandHelper.recordExpandState(mainPage);
                 if (mainPage != null && mainPage.isDirty()) {
@@ -576,7 +575,7 @@ public class XSDEditor extends InternalXSDMultiPageEditor implements IServerObje
             for (int i = 0; i < children.length; i++) {
                 if (i == 0) // For the back to schema button
                 {
-                    if (floatingToolbar.getContents() != null) {
+                    if (floatingToolbar != null && floatingToolbar.getContents() != null) {
                         org.eclipse.draw2d.geometry.Rectangle r = ((GraphicalEditPart) floatingToolbar.getContents()).getFigure()
                                 .getBounds();
                         children[i].setBounds(rect.x + 10, rect.y + 10, r.width, Math.max(24, r.height));
@@ -719,15 +718,17 @@ public class XSDEditor extends InternalXSDMultiPageEditor implements IServerObje
             if (activePageIndex == DESIGN_PAGE_INDEX || activePageIndex == SOURCE_PAGE_INDEX) {
                 return new XSDTabbedPropertySheetPage(this);
             }
-            return new TabbedPropertySheetPage(this) {
+            if (activePageIndex == MODEL_PAGE_INDEX) {
+                return new TabbedPropertySheetPage(this) {
 
-                @Override
-                public String getTitleText(ISelection selection) {
-                    String text = super.getTitleText(selection);
-                    text = isReadOnly() ? NLS.bind(Messages.XSDEditor_SheetPageTitle, text) : text;
-                    return text;
-                }
-            };
+                    @Override
+                    public String getTitleText(ISelection selection) {
+                        String text = super.getTitleText(selection);
+                        text = isReadOnly() ? NLS.bind(Messages.XSDEditor_SheetPageTitle, text) : text;
+                        return text;
+                    }
+                };
+            }
         }
 
         if (type == DataModelMainPage.class) {

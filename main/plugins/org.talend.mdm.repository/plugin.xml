@@ -279,6 +279,7 @@
       </editor>       
       <editor
             class="org.talend.mdm.repository.ui.editors.XSDEditor2"
+            contributorClass="org.talend.mdm.repository.ui.editors.XSDEditorActionContributor"
             default="false"
             icon="icons/datamodel_white.png"
             id="org.talend.mdm.repository.ui.editors.XSDEditor2"
