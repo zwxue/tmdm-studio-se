@@ -12,21 +12,31 @@
 // ============================================================================
 package com.amalto.workbench.widgets.composites;
 
+import org.eclipse.jface.preference.IPreferenceStore;
+import org.eclipse.jface.resource.StringConverter;
+import org.eclipse.jface.text.source.IOverviewRuler;
+import org.eclipse.jface.text.source.IVerticalRuler;
+import org.eclipse.jface.viewers.DoubleClickEvent;
+import org.eclipse.jface.viewers.IDoubleClickListener;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Text;
+import org.eclipse.swt.widgets.Group;
 
+import com.amalto.workbench.MDMWorbenchPlugin;
 import com.amalto.workbench.detailtabs.sections.XpathSection;
+import com.amalto.workbench.i18n.Messages;
 
 /**
  * created by liusongbo on Aug 31, 2015
  */
 public class ElementFKInfoComposite extends XpathComposite {
-
-    private Text formatText;
 
     private int caretPosition = 0;
 
@@ -34,7 +44,9 @@ public class ElementFKInfoComposite extends XpathComposite {
 
     private ModifyListener modifyListener;
 
-    private FormatFKInfoComp formatFkInfoComp;
+    private ElementFKInfoFormatViewer formatEditor;
+
+    private StyledText styledText;
 
     public ElementFKInfoComposite(Composite parent) {
         super(parent);
@@ -43,25 +55,54 @@ public class ElementFKInfoComposite extends XpathComposite {
     public ElementFKInfoComposite(Composite parent, int style, XpathSection section) {
         super(parent, style, section);
         createFormatFkUIArea(this);
+        addDoubleClickListener();
+    }
+
+    private void addDoubleClickListener() {
+        tvInfos.addDoubleClickListener(new IDoubleClickListener() {
+
+            public void doubleClick(DoubleClickEvent event) {
+                IStructuredSelection selection = (IStructuredSelection) tvInfos.getSelection();
+                String label = selection.getFirstElement().toString();
+                formatEditor.getTextWidget().insert(label);
+            }
+        });
     }
 
     protected void createFormatFkUIArea(Composite parent) {
-        formatFkInfoComp = new FormatFKInfoComp(parent, SWT.NONE);
-        GridData layoutData = new GridData(SWT.FILL, SWT.FILL, true, true, 3, 1);
-        layoutData.heightHint = 130;
-        formatFkInfoComp.setLayoutData(layoutData);
+        initializeDefaultPreferences();
 
-        formatFkInfoComp.setFkinfos(infos);
-        formatFkInfoComp.setFormatFKInfo(formatFKInfo);
+        Group formatGroup = new Group(parent, SWT.NONE);
+        GridData glayoutData = new GridData(SWT.FILL, SWT.FILL, true, true, 3, 1);
+        formatGroup.setLayoutData(glayoutData);
+        GridLayout layout = new GridLayout();
+        layout.marginLeft = 0;
+        layout.marginRight = 0;
+        layout.marginTop = 0;
+        layout.marginBottom = 0;
+        formatGroup.setLayout(layout);
+        formatGroup.setText(Messages.FormatFKInfoComp_format);
 
-        formatText = formatFkInfoComp.getFormatText();
+        IVerticalRuler verticalRuler = ElementFKInfoFormatHelper.createVerticalRuler();
+        IOverviewRuler overviewRuler = ElementFKInfoFormatHelper.createOverviewRuler();
+
+        formatEditor = new ElementFKInfoFormatViewer(formatGroup, verticalRuler, overviewRuler, true, SWT.V_SCROLL | SWT.H_SCROLL);
+        formatEditor.configure(new ElementFKInfoConfiguration());
+        formatEditor.initilize();
+
+        GridData layoutData = new GridData(GridData.FILL_BOTH);
+        layoutData.heightHint = 150;
+        formatEditor.getControl().setLayoutData(layoutData);
+        formatEditor.setFkinfos(infos);
+        formatEditor.setFormatFKInfo(formatFKInfo);
+        styledText = formatEditor.getTextWidget();
 
         modifyListener = new ModifyListener() {
 
 
             public void modifyText(ModifyEvent e) {
-                formatFKInfo = formatText.getText();
-                caretPosition = formatText.getCaretPosition();
+                formatFKInfo = styledText.getText();
+                caretPosition = styledText.getCaretOffset();
 
                 if (section != null) {
                     section.autoCommit();
@@ -72,11 +113,25 @@ public class ElementFKInfoComposite extends XpathComposite {
     }
 
     private void addModifyListener() {
-        formatText.addModifyListener(modifyListener);
+        styledText.addModifyListener(modifyListener);
     }
 
     private void removeModifyListener() {
-        formatText.removeModifyListener(modifyListener);
+        styledText.removeModifyListener(modifyListener);
+    }
+
+    public static final String PREF_COLOR_DEFAULT = "colorDefault"; //$NON-NLS-1$
+
+    public static final String PREF_COLOR_STRING = "colorString"; //$NON-NLS-1$
+
+    public static final String PREF_COLOR_KEYWORD = "colorKeyword"; //$NON-NLS-1$
+
+    public void initializeDefaultPreferences() {
+        IPreferenceStore store = MDMWorbenchPlugin.getDefault().getPreferenceStore();
+
+        store.setDefault(PREF_COLOR_DEFAULT, StringConverter.asString(new RGB(0, 128, 0)));
+        store.setDefault(PREF_COLOR_STRING, StringConverter.asString(new RGB(0, 0, 255)));
+        store.setDefault(PREF_COLOR_KEYWORD, StringConverter.asString(new RGB(0, 0, 128)));
     }
 
     @Override
@@ -92,11 +147,11 @@ public class ElementFKInfoComposite extends XpathComposite {
     }
 
     private void fireXPathsChanges() {
-        formatFkInfoComp.setFkinfos(infos);
+        formatEditor.setFkinfos(infos);
     }
 
     public String getFormatFKInfo() {
-        formatFKInfo = formatFkInfoComp.getFormatFKInfo();
+        formatFKInfo = formatEditor.getFormatFKInfo();
         return formatFKInfo;
     }
 
@@ -105,8 +160,8 @@ public class ElementFKInfoComposite extends XpathComposite {
 
         removeModifyListener();
 
-        formatText.setText(formatFKInfo);
-        formatText.setSelection(caretPosition);
+        styledText.setText(formatedFkInfo);
+        styledText.setSelection(caretPosition);
 
         addModifyListener();
     }

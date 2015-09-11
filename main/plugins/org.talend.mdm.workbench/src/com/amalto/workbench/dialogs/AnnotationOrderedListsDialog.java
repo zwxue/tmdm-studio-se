@@ -21,9 +21,15 @@ import org.apache.commons.logging.LogFactory;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.preference.IPreferenceStore;
+import org.eclipse.jface.resource.StringConverter;
+import org.eclipse.jface.text.source.IOverviewRuler;
+import org.eclipse.jface.text.source.IVerticalRuler;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ComboBoxCellEditor;
+import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.ICellModifier;
+import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
@@ -43,11 +49,13 @@ import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
@@ -58,13 +66,16 @@ import org.eclipse.xsd.XSDComponent;
 import org.eclipse.xsd.XSDElementDeclaration;
 import org.w3c.dom.Element;
 
+import com.amalto.workbench.MDMWorbenchPlugin;
 import com.amalto.workbench.editors.DataModelMainPage;
 import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.utils.Util;
-import com.amalto.workbench.widgets.composites.FormatFKInfoComp;
+import com.amalto.workbench.widgets.composites.ElementFKInfoConfiguration;
+import com.amalto.workbench.widgets.composites.ElementFKInfoFormatHelper;
+import com.amalto.workbench.widgets.composites.ElementFKInfoFormatViewer;
 
 public class AnnotationOrderedListsDialog extends Dialog {
 
@@ -126,7 +137,7 @@ public class AnnotationOrderedListsDialog extends Dialog {
 
     private String formatFKInfo;
 
-    private FormatFKInfoComp formatFkInfoGroup;
+    private ElementFKInfoFormatViewer formatEditor;
 
     /**
      * @param parentShell
@@ -596,25 +607,71 @@ public class AnnotationOrderedListsDialog extends Dialog {
 
         if (actionType == AnnotationForeignKeyInfo_ActionType) {
             createFKInfoFormatComp(composite);
+            addDoubleClickListener();
         }
 
         return composite;
     }
 
     private void createFKInfoFormatComp(Composite parent) {
-        formatFkInfoGroup = new FormatFKInfoComp(parent, SWT.NONE);
-        GridData layoutData = new GridData(SWT.FILL, SWT.FILL, true, true, 3, 1);
-        layoutData.heightHint = 120;
-        formatFkInfoGroup.setLayoutData(layoutData);
+        initializeDefaultPreferences();
 
-        formatFkInfoGroup.setFkinfos(xPaths);
-        formatFkInfoGroup.setFormatFKInfo(formatFKInfo);
+        Group formatGroup = new Group(parent, SWT.NONE);
+        GridData glayoutData = new GridData(SWT.FILL, SWT.FILL, true, true, 3, 1);
+        formatGroup.setLayoutData(glayoutData);
+        GridLayout layout = new GridLayout();
+        layout.marginLeft = 0;
+        layout.marginRight = 0;
+        layout.marginTop = 0;
+        layout.marginBottom = 0;
+        formatGroup.setLayout(layout);
+        formatGroup.setText(Messages.FormatFKInfoComp_format);
+
+        IVerticalRuler verticalRuler = ElementFKInfoFormatHelper.createVerticalRuler();
+        IOverviewRuler overviewRuler = ElementFKInfoFormatHelper.createOverviewRuler();
+
+        formatEditor = new ElementFKInfoFormatViewer(formatGroup, verticalRuler, overviewRuler, true,
+                SWT.V_SCROLL | SWT.H_SCROLL);
+        formatEditor.configure(new ElementFKInfoConfiguration());
+        formatEditor.initilize();
+
+
+        GridData layoutData = new GridData(GridData.FILL_BOTH);
+        layoutData.heightHint = 150;
+        formatEditor.getControl().setLayoutData(layoutData);
+        formatEditor.setFkinfos(xPaths);
+        formatEditor.setFormatFKInfo(formatFKInfo);
     }
 
     private void fireXPathsChanges() {
         if (actionType == AnnotationForeignKeyInfo_ActionType) {
-            formatFkInfoGroup.setFkinfos(xPaths);
+            formatEditor.setFkinfos(xPaths);
         }
+    }
+
+    private void addDoubleClickListener() {
+        viewer.addDoubleClickListener(new IDoubleClickListener() {
+
+            public void doubleClick(DoubleClickEvent event) {
+                IStructuredSelection selection = (IStructuredSelection) viewer.getSelection();
+                DescriptionLine line = (DescriptionLine) selection.getFirstElement();
+                formatEditor.getTextWidget().insert(line.getLabel());
+            }
+        });
+    }
+
+    public static final String PREF_COLOR_DEFAULT = "colorDefault"; //$NON-NLS-1$
+
+    public static final String PREF_COLOR_STRING = "colorString"; //$NON-NLS-1$
+
+    public static final String PREF_COLOR_KEYWORD = "colorKeyword"; //$NON-NLS-1$
+
+    public void initializeDefaultPreferences() {
+        IPreferenceStore store = MDMWorbenchPlugin.getDefault().getPreferenceStore();
+
+        store.setDefault(PREF_COLOR_DEFAULT, StringConverter.asString(new RGB(0, 128, 0)));
+        store.setDefault(PREF_COLOR_STRING, StringConverter.asString(new RGB(0, 0, 255)));
+        store.setDefault(PREF_COLOR_KEYWORD, StringConverter.asString(new RGB(0, 0, 128)));
     }
 
     @Override
@@ -632,7 +689,9 @@ public class AnnotationOrderedListsDialog extends Dialog {
 
     @Override
     protected void okPressed() {
-        formatFKInfo = formatFkInfoGroup.getFormatFKInfo();
+        if (formatEditor != null) {
+            formatFKInfo = formatEditor.getFormatFKInfo();
+        }
 
         setReturnCode(OK);
         getButton(IDialogConstants.OK_ID).setData("dialog", AnnotationOrderedListsDialog.this);//$NON-NLS-1$
