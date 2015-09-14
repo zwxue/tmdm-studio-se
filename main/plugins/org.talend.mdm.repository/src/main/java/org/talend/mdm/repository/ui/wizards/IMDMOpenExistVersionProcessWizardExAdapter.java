@@ -22,4 +22,6 @@ import com.amalto.workbench.exadapter.IExAdapter;
 public interface IMDMOpenExistVersionProcessWizardExAdapter extends IExAdapter<MDMOpenExistVersionProcessWizard> {
 
     public boolean canOpen(IRepositoryViewObject viewObject, String originalVersion);
+
+    public boolean performFinish(boolean createNewVersion);
 }
