@@ -16,6 +16,7 @@ import org.apache.log4j.Logger;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbenchPage;
@@ -32,9 +33,8 @@ import org.talend.mdm.repository.ui.navigator.MDMRepositoryView;
 import org.talend.mdm.repository.ui.wizards.MDMOpenExistVersionProcessWizard;
 import org.talend.repository.model.RepositoryNode;
 
-
 /**
- * DOC achen  class global comment. Detailled comment
+ * DOC achen class global comment. Detailled comment
  */
 public class MDMOpenExistVersionProcessAction extends AbstractBridgeRepositoryAction {
 
@@ -52,11 +52,11 @@ public class MDMOpenExistVersionProcessAction extends AbstractBridgeRepositoryAc
             RepositoryObject repositoryObj = new RepositoryObject(node.getObject().getProperty());
             repositoryObj.setRepositoryNode(node.getObject().getRepositoryNode());
             MDMOpenExistVersionProcessWizard wizard = new MDMOpenExistVersionProcessWizard(repositoryObj);
-            PropertyManagerWizardDialog dialog = new PropertyManagerWizardDialog(Display.getCurrent().getActiveShell(), wizard);
+            WizardDialog dialog = new WizardDialog(Display.getCurrent().getActiveShell(), wizard);
             dialog.setPageSize(300, 250);
             if (dialog.open() == Dialog.OK) {
-                if(wizard.getViewObj()!=null){
-                    obj=wizard.getViewObj();
+                if (wizard.getViewObj() != null) {
+                    obj = wizard.getViewObj();
                 }
 
                 if (obj == node.getObject()) {
@@ -78,8 +78,8 @@ public class MDMOpenExistVersionProcessAction extends AbstractBridgeRepositoryAc
                     IRepositoryViewEditorInput editorInput = actionProvider.getOpenEditorInput(viewObject);
                     if (editorInput != null) {
 
-                        IWorkbenchPage page = MDMRepositoryView.show().getCommonViewer().getCommonNavigator().getSite().getWorkbenchWindow()
-                                .getActivePage();
+                        IWorkbenchPage page = MDMRepositoryView.show().getCommonViewer().getCommonNavigator().getSite()
+                                .getWorkbenchWindow().getActivePage();
                         try {
                             return page.openEditor(editorInput, editorInput.getEditorId());
                         } catch (PartInitException e) {
@@ -105,7 +105,7 @@ public class MDMOpenExistVersionProcessAction extends AbstractBridgeRepositoryAc
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see org.talend.mdm.repository.core.AbstractRepositoryAction#getGroupName()
      */
     @Override
