@@ -28,6 +28,8 @@ import org.eclipse.jface.text.Position;
 import org.eclipse.jface.text.source.Annotation;
 import org.eclipse.jface.text.source.projection.ProjectionAnnotationModel;
 
+import com.amalto.workbench.i18n.Messages;
+
 /**
  * created by liusongbo on Sep 11, 2015
  *
@@ -87,32 +89,33 @@ public class ElementFKInfoAnnotaioner {
                 if (i == 0 || i == partitions.size() - 1) {
                     if (i == 0) {
                         if (partionContent.trim().startsWith(separator)) {
-                            addToAnnotations(0, partionContent.length(), "'+' should not be the starts", annotations);
+                            addToAnnotations(0, partionContent.length(), Messages.ElementFKInfoAnnotaioner_shouldNotAtStart, annotations);
                         }
 
-                        if (i != partitions.size() - 1 && !partionContent.trim().endsWith(separator)) {
-                            addToAnnotations(partion.getOffset(), partionContent.length(), "missing '+' after it",
+                        if (i != partitions.size() - 1 && !partionContent.trim().endsWith(separator)
+                                && !partionContent.trim().isEmpty()) {
+                            addToAnnotations(partion.getOffset(), partionContent.length(), Messages.ElementFKInfoAnnotaioner_missingAfter,
                                     annotations);
                         }
                     }
                     if (i == partitions.size() - 1) {
                         if (partionContent.trim().endsWith(separator)) {
-                            addToAnnotations(partion.getOffset(), partionContent.length(), "'+' should not be the ends",
+                            addToAnnotations(partion.getOffset(), partionContent.length(), Messages.ElementFKInfoAnnotaioner_shouldNotAtEnd,
                                     annotations);
                         }
 
                         if (i != 0 && !partionContent.trim().startsWith(separator) && !partionContent.trim().isEmpty()) {
-                            addToAnnotations(partion.getOffset(), partionContent.length(), "missing '+' before it",
+                            addToAnnotations(partion.getOffset(), partionContent.length(), Messages.ElementFKInfoAnnotaioner_missingBefore,
                                     annotations);
                         }
                     }
                 } else {
                     if (!partionContent.trim().startsWith(separator)) {
-                        addToAnnotations(partion.getOffset(), partionContent.length(), "missing '+' before it",
+                        addToAnnotations(partion.getOffset(), partionContent.length(), Messages.ElementFKInfoAnnotaioner_missingBefore,
                                 annotations);
                     }
                     if (!partionContent.trim().endsWith(separator)) {
-                        addToAnnotations(partion.getOffset(), partionContent.length(), "missing '+' after it",
+                        addToAnnotations(partion.getOffset(), partionContent.length(), Messages.ElementFKInfoAnnotaioner_missingAfter,
                                 annotations);
                     }
                 }
@@ -146,7 +149,8 @@ public class ElementFKInfoAnnotaioner {
                     handleMergedXpaths(partion, partition, xPaths, annotations);
                 } else {
                     if (!xPaths.contains(partion) && !partion.isEmpty()) {
-                        addToAnnotations(partionOffset, partionLength, partion + " is not a valid xpath", annotations);
+                        addToAnnotations(partionOffset, partionLength,
+                                Messages.bind(Messages.ElementFKInfoAnnotaioner_invalidXpath, partion), annotations);
                     }
                 }
             }
@@ -178,7 +182,8 @@ public class ElementFKInfoAnnotaioner {
 
                 int len = j - i;
                 if ((i == 0 || i == partion.length() - 1) || len > 1) {
-                    addToAnnotations(offset + i, len, partion.substring(i, j) + " is redundant", annotations);
+                    addToAnnotations(offset + i, len,
+                            Messages.bind(Messages.ElementFKInfoAnnotaioner_redundant, partion.substring(i, j)), annotations);
                 }
                 i = j - 1;
             } else {
@@ -190,7 +195,8 @@ public class ElementFKInfoAnnotaioner {
                 }
                 int len = j - i;
                 if (!xpaths.contains(partion.substring(i, j).trim())) {
-                    addToAnnotations(offset + i, len, partion.substring(i, j) + " is not a valid xpath",
+                    addToAnnotations(offset + i, len,
+                            Messages.bind(Messages.ElementFKInfoAnnotaioner_invalidXpath, partion.substring(i, j)),
                             annotations);
                 }
                 i = j - 1;

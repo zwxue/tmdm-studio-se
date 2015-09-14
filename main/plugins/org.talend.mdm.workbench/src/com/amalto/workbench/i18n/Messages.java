@@ -91,6 +91,18 @@ public class Messages extends NLS {
 
     public static String ElementFKFilterSection_ForeignKeyFilter;
 
+    public static String ElementFKInfoAnnotaioner_invalidXpath;
+
+    public static String ElementFKInfoAnnotaioner_missingAfter;
+
+    public static String ElementFKInfoAnnotaioner_missingBefore;
+
+    public static String ElementFKInfoAnnotaioner_redundant;
+
+    public static String ElementFKInfoAnnotaioner_shouldNotAtEnd;
+
+    public static String ElementFKInfoAnnotaioner_shouldNotAtStart;
+
     public static String ElementFKInfosSection_ForeignKeyInfos;
 
     public static String ElementFKSection_ForeignKey;
