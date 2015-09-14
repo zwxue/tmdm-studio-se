@@ -78,13 +78,6 @@ public class MDMOpenExistVersionProcessWizard extends OpenExistVersionProcessWiz
         setWindowTitle(Messages.MDMOpenExistVersionProcessWizard_NewObject);
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * org.talend.designer.core.ui.wizards.OpenExistVersionProcessWizard#openAnotherVersion(org.talend.repository.model
-     * .RepositoryNode, boolean)
-     */
     @Override
     protected void openAnotherVersion(final RepositoryNode node, final boolean readonly) {
         Display.getCurrent().asyncExec(new Runnable() {
@@ -210,5 +203,32 @@ public class MDMOpenExistVersionProcessWizard extends OpenExistVersionProcessWiz
         RepositoryNode node = new RepositoryNode(viewObject, repositoryNode.getParent(), repositoryNode.getType());
         processObject.setRepositoryNode(node);
         viewObject.setRepositoryNode(node);
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.talend.designer.core.ui.wizards.OpenExistVersionProcessWizard#performFinish()
+     */
+    @Override
+    public boolean performFinish() {
+        if (adapter != null) {
+            return adapter.performFinish(mainPage.isCreateNewVersionJob());
+        } else {
+            return super.performFinish();
+        }
+    }
+
+    public String getNewVersion() {
+        return mainPage.getNewVersion();
+    }
+
+    public boolean callParentPerformFinish() {
+        return super.performFinish();
+    }
+
+    public void openAnotherVersion() {
+        boolean locked = processObject.getRepositoryStatus().equals(ERepositoryStatus.LOCK_BY_USER);
+        openAnotherVersion((RepositoryNode) processObject.getRepositoryNode(), !locked);
     }
 }
