@@ -452,7 +452,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener, IGo
 
             xsdSchema = getXSDSchema(wsObject.getXsdSchema());
             createSash(mainComposite);
-
+            hookSelectionProvider();
             if (!isReadOnly()) {
                 createCompDropTarget();
                 hookContextMenu();
@@ -878,16 +878,14 @@ public class DataModelMainPage extends EditorPart implements ModifyListener, IGo
         createSchemaTreeComp(sash);
         // create type tree
         createTypeTreeComp(sash);
-        // init
-
-        selectionProvider = new CompositeViewersSelectionProvider(new Viewer[] { viewer, typesViewer });
 
         sash.setWeights(new int[] { 50, 50 });
         return sash;
     }
 
-    public ISelectionProvider getSiteSelectionProvider() {
-        return selectionProvider;
+    private void hookSelectionProvider() {
+        selectionProvider = new CompositeViewersSelectionProvider(new Viewer[] { viewer, typesViewer });
+        getSite().setSelectionProvider(selectionProvider);
     }
 
     private void createTypeTreeComp(Composite parent) {
