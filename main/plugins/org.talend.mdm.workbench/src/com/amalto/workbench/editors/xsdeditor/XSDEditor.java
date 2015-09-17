@@ -105,6 +105,8 @@ public class XSDEditor extends InternalXSDMultiPageEditor implements IServerObje
 
     protected static int MODEL_PAGE_INDEX = -1;
 
+    public static int SOURCE_PAGE_INDEX = 1;
+
     private TreeExpandHelper expandHelper = new TreeExpandHelper();
 
     protected int preActivePageIndex = -1;
@@ -200,6 +202,8 @@ public class XSDEditor extends InternalXSDMultiPageEditor implements IServerObje
 
     boolean doUpdateSourceLocation = false;
 
+    private int lastPageIndex = -1;
+
     @Override
     protected void pageChange(int newPageIndex) {
         resetTreeSelection(newPageIndex);
@@ -209,12 +213,13 @@ public class XSDEditor extends InternalXSDMultiPageEditor implements IServerObje
         if (doUpdateSourceLocation && fXSDSelectionListener != null) {
             fXSDSelectionListener.doSetSelection();
         }
-        doPageChanged(newPageIndex);
+        doPageChanged(newPageIndex, lastPageIndex);
         refreshPropertyView();
         setFocus();
+        lastPageIndex = newPageIndex;
     }
 
-    protected void doPageChanged(int newPageIndex) {
+    protected void doPageChanged(int newPageIndex, int lastPageIndex) {
         if (xobject == null) {
             return;
         }
@@ -224,12 +229,10 @@ public class XSDEditor extends InternalXSDMultiPageEditor implements IServerObje
                                                                  // contents
                                                                  // to
                 DataModelMainPage mainPage = getDataModelEditorPage();
-                if (mainPage != null) {
-                    String xsd = getTextEditor().getTextViewer().getDocument().get();
+                if (mainPage != null && lastPageIndex == SOURCE_PAGE_INDEX) {
+                    String xsd = getSourcePageDocument();
                     XSDSchema schema = Util.createXsdSchema(xsd, xobject);
                     mainPage.setXsdSchema(schema);
-                    mainPage.getTypeContentProvider().setXsdSchema(schema);
-                    mainPage.getSchemaContentProvider().setXsdSchema(schema);
                     mainPage.refresh();
 
                     //
@@ -266,6 +269,7 @@ public class XSDEditor extends InternalXSDMultiPageEditor implements IServerObje
             return (DataModelMainPage) editors[0];
         }
         return null;
+        // return (DataModelMainPage) getEditor(MODEL_PAGE_INDEX);
     }
 
     private class XSDSelectionManagerSelectionListener implements ISelectionChangedListener {
@@ -653,7 +657,7 @@ public class XSDEditor extends InternalXSDMultiPageEditor implements IServerObje
     }
 
     private Exception validateXsdSourceEditor() {
-        String xsd = getTextEditor().getTextViewer().getDocument().get();
+        String xsd = getSourcePageDocument();
         try {
             XSDSchema xsdSchema = Util.createXsdSchema(xsd, xobject);
             String error = validateDiagnoses(xsdSchema);
@@ -667,6 +671,10 @@ public class XSDEditor extends InternalXSDMultiPageEditor implements IServerObje
             log.error(e.getMessage(), e);
             return e;
         }
+    }
+
+    public String getSourcePageDocument() {
+        return getTextEditor().getTextViewer().getDocument().get();
     }
 
     /**

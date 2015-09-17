@@ -17,6 +17,7 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notifier;
@@ -30,6 +31,9 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.ide.IGotoMarker;
 import org.eclipse.ui.part.MultiPageEditorPart;
 import org.eclipse.ui.part.MultiPageSelectionProvider;
+import org.eclipse.ui.texteditor.IDocumentProvider;
+import org.eclipse.ui.texteditor.IDocumentProviderExtension;
+import org.eclipse.ui.texteditor.IDocumentProviderExtension3;
 import org.eclipse.xsd.XSDDiagnostic;
 import org.eclipse.xsd.XSDSchema;
 import org.talend.commons.exception.LoginException;
@@ -300,12 +304,35 @@ public class XSDEditor2 extends XSDEditor implements ISvnHistory {
     }
 
     @Override
-    protected void doPageChanged(int newPageIndex) {
-
-        super.doPageChanged(newPageIndex);
+    protected void doPageChanged(int newPageIndex, int lastPageIndex) {
+        if (newPageIndex == SOURCE_PAGE_INDEX) {
+            handleSourceActivation();
+        }
+        super.doPageChanged(newPageIndex, lastPageIndex);
         if (isEE()) {
-            exAdapter.doPageChanged(newPageIndex);
+            exAdapter.doPageChanged(newPageIndex, lastPageIndex);
         }
     }
 
+    // Just avoid popup querying reload dialog
+    void handleSourceActivation() {
+        final IDocumentProvider provider = getTextEditor().getDocumentProvider();
+        if (provider == null) {
+            return;
+        }
+
+        final IEditorInput input = getEditorInput();
+        if (provider instanceof IDocumentProviderExtension3) {
+
+            if (provider instanceof IDocumentProviderExtension) {
+                IDocumentProviderExtension extension = (IDocumentProviderExtension) provider;
+                try {
+                    extension.synchronize(input);
+                } catch (CoreException e) {
+                    log.error(e.getMessage(), e);
+                }
+            }
+
+        }
+    }
 }

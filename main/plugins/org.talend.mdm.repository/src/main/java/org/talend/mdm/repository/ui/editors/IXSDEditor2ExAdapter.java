@@ -37,5 +37,5 @@ public interface IXSDEditor2ExAdapter extends IExAdapter<XSDEditor2> {
 
     void addPage(IFile xsdFile);
 
-    void doPageChanged(int newPageIndex);
+    void doPageChanged(int newPageIndex, int lastPageIndex);
 }
