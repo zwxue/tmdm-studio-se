@@ -2,7 +2,7 @@
 <feature
       id="org.talend.rcp.branding.tombundle.feature"
       label="TEM TDQ Team Edition Feature"
-      version="6.1.0.qualifier"
+      version="6.1.1.qualifier"
       provider-name=".Talend SA.">
 
    <description url="http://www.example.com/description">
@@ -59,4 +59,16 @@
          version="0.0.0"
          unpack="false"/>
 
+   <plugin
+         id="org.talend.presentation.onboarding.resource.tos"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"/>
+
+   <plugin
+         id="org.talend.presentation.onboarding.resource.tos.nl"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         fragment="true"/>
 </feature>
