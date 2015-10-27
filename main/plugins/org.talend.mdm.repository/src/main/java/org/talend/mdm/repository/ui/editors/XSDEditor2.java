@@ -19,18 +19,16 @@ import org.apache.log4j.Logger;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.emf.common.notify.Adapter;
-import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.swt.custom.CTabFolder;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IFileEditorInput;
-import org.eclipse.ui.IPropertyListener;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.ide.IGotoMarker;
+import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.ui.part.MultiPageEditorPart;
-import org.eclipse.ui.part.MultiPageSelectionProvider;
 import org.eclipse.ui.texteditor.IDocumentProvider;
 import org.eclipse.ui.texteditor.IDocumentProviderExtension;
 import org.eclipse.ui.texteditor.IDocumentProviderExtension3;
@@ -46,7 +44,6 @@ import org.talend.mdm.repository.core.command.CommandManager;
 import org.talend.mdm.repository.core.command.ICommand;
 import org.talend.mdm.repository.core.service.DeployService;
 import org.talend.mdm.repository.core.service.IModelValidationService;
-import org.talend.mdm.repository.core.service.IModelValidationService.IModelValidateResult;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
@@ -111,7 +108,6 @@ public class XSDEditor2 extends XSDEditor implements ISvnHistory {
                 .getSelectionProvider();
         selectionProvider.setRepositoryViewObj(repositoryViewObj);
         //
-        getSite().setSelectionProvider(new MultiPageSelectionProvider(this));
 
         // add XSDSelectionListener
         XSDSelectionListener xsdListener = new XSDSelectionListener(this, dMainPage);
@@ -123,46 +119,57 @@ public class XSDEditor2 extends XSDEditor implements ISvnHistory {
         setXObject(treeObject);
         //
         folder = (CTabFolder) dMainPage.getMainControl().getParent();
-        folder.getItem(2).setText(treeObject.getDisplayName() + " " + Util.getRevision(treeObject));//$NON-NLS-1$
-        folder.getItem(0).setText(Messages.XSDEditor2_schemaDesign);
-        folder.getItem(1).setText(Messages.XSDEditor2_schemaSource);
+        folder.getItem(MODEL_PAGE_INDEX).setText(treeObject.getDisplayName() + " " + Util.getRevision(treeObject));//$NON-NLS-1$
+
+        folder.getItem(SOURCE_PAGE_INDEX).setText(Messages.XSDEditor2_schemaSource);
         // default use
         activePage(xsdFile);
-        this.addPropertyListener(new IPropertyListener() {
 
-            private boolean needValidate = false;
+    }
 
-            public void propertyChanged(Object source, int propId) {
-                if (propId == PROP_DIRTY) {
-                    if (isDirty()) {
-                        needValidate = true;
+    private boolean needValidate = false;
 
-                    } else if (needValidate) {
-                        needValidate = false;
-                        IRepositoryViewObject viewObject = getCurrentViewObject();
-                        validateModel(viewObject);
+    @Override
+    public String getPartName() {
+        IEditorInput input = getEditorInput();
+        if (input != null && input instanceof FileEditorInput) {
+            return ((FileEditorInput) input).getName();
+        } else {
+            return super.getPartName();
+        }
 
-                    }
-                }
+    }
+
+    @Override
+    public void propertyChanged(Object source, int propId) {
+
+        super.propertyChanged(source, propId);
+        if (propId == PROP_DIRTY) {
+            if (isDirty()) {
+                needValidate = true;
+
+            } else if (needValidate) {
+                needValidate = false;
+                IRepositoryViewObject viewObject = getCurrentViewObject();
+                validateModel(viewObject);
 
             }
-        });
+        }
     }
 
     private void activePage(IFile xsdFile) {
-        if (model != null) {
-            Notifier target = ((Adapter) model).getTarget();
-            XSDSchema xs = (XSDSchema) target;
-            xs.validate();
-            EList<XSDDiagnostic> diagnostics = xs.getAllDiagnostics();
-            if (!diagnostics.isEmpty()) {
-                setActivePage(SOURCE_PAGE_INDEX);
-                preActivePageIndex = SOURCE_PAGE_INDEX;
-                return;
-            }
+
+        XSDSchema xs = getXSDSchema();
+        xs.validate();
+        EList<XSDDiagnostic> diagnostics = xs.getAllDiagnostics();
+        if (!diagnostics.isEmpty()) {
+            setActivePage(SOURCE_PAGE_INDEX);
+            preActivePageIndex = SOURCE_PAGE_INDEX;
+            return;
         }
-        setActivePage(2);
-        preActivePageIndex = 2;
+        // }
+        setActivePage(MODEL_PAGE_INDEX);
+        preActivePageIndex = SOURCE_PAGE_INDEX;
     }
 
     @Override
@@ -225,16 +232,19 @@ public class XSDEditor2 extends XSDEditor implements ISvnHistory {
         }
     }
 
-    private int validateModel(IRepositoryViewObject viewObject) {
-        IModelValidationService service = (IModelValidationService) GlobalServiceRegister.getDefault().getService(
-                IModelValidationService.class);
-        List<IRepositoryViewObject> viewObjs = new ArrayList<IRepositoryViewObject>();
-        viewObjs.add(viewObject);
-        IModelValidateResult validateResult = service.validate(viewObjs, IModelValidationService.VALIDATE_AFTER_SAVE);
-        if (validateResult != null) {
-            return validateResult.getSelectedButton();
-        }
-        return IModelValidationService.BUTTON_CANCEL;
+    private void validateModel(final IRepositoryViewObject viewObject) {
+        Display.getDefault().asyncExec(new Runnable() {
+
+            public void run() {
+                IModelValidationService service = (IModelValidationService) GlobalServiceRegister.getDefault().getService(
+                        IModelValidationService.class);
+                List<IRepositoryViewObject> viewObjs = new ArrayList<IRepositoryViewObject>();
+                viewObjs.add(viewObject);
+                service.validate(viewObjs, IModelValidationService.VALIDATE_AFTER_SAVE);
+
+            }
+        });
+
     }
 
     @Override
@@ -254,6 +264,7 @@ public class XSDEditor2 extends XSDEditor implements ISvnHistory {
         if (type == MultiPageEditorPart.class) {
             return this;
         }
+
         if (isEE()) {
             Object adapter = exAdapter.getAdapter(type);
             if (adapter != null) {
@@ -335,4 +346,5 @@ public class XSDEditor2 extends XSDEditor implements ISvnHistory {
 
         }
     }
+
 }
