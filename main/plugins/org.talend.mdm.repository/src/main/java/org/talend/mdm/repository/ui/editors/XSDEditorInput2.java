@@ -66,9 +66,9 @@ public class XSDEditorInput2 extends XSDEditorInput implements IRepositoryViewEd
     }
 
     public Item getInputItem() {
-    	if(null != viewObject.getProperty()){
-    		return viewObject.getProperty().getItem();
-    	}
+        if (null != viewObject.getProperty()) {
+            return viewObject.getProperty().getItem();
+        }
         return null;
     }
 
@@ -98,9 +98,8 @@ public class XSDEditorInput2 extends XSDEditorInput implements IRepositoryViewEd
 
     @Override
     public String getName() {
-        if (getVersion() != null)
-         {
-            return super.getName() + " " + getVersion(); //$NON-NLS-1$
+        if (getVersion() != null) {
+            return treeObject.getDisplayName() + " " + getVersion(); //$NON-NLS-1$
         }
         return super.getName();
     }

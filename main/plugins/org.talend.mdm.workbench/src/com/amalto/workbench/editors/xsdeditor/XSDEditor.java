@@ -27,29 +27,25 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IMarker;
+import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
-import org.eclipse.gef.EditPartFactory;
-import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.jface.dialogs.ErrorDialog;
+import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.osgi.util.NLS;
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
-import org.eclipse.swt.custom.StackLayout;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.graphics.Rectangle;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IPropertyListener;
@@ -57,17 +53,25 @@ import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.part.EditorPart;
+import org.eclipse.ui.part.MultiPageEditorPart;
+import org.eclipse.ui.part.MultiPageSelectionProvider;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
+import org.eclipse.ui.views.properties.tabbed.ITabbedPropertySheetPageContributor;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
+import org.eclipse.wst.sse.core.StructuredModelManager;
+import org.eclipse.wst.sse.core.internal.provisional.IStructuredModel;
+import org.eclipse.wst.sse.core.internal.provisional.text.IStructuredDocument;
 import org.eclipse.wst.sse.ui.StructuredTextEditor;
+import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode;
 import org.eclipse.wst.xsd.ui.internal.adapters.CategoryAdapter;
 import org.eclipse.wst.xsd.ui.internal.adapters.RedefineCategoryAdapter;
 import org.eclipse.wst.xsd.ui.internal.adapters.XSDBaseAdapter;
-import org.eclipse.wst.xsd.ui.internal.adt.design.ADTFloatingToolbar;
-import org.eclipse.wst.xsd.ui.internal.editor.InternalXSDMultiPageEditor;
+import org.eclipse.wst.xsd.ui.internal.common.util.XSDDirectivesManager;
 import org.eclipse.wst.xsd.ui.internal.editor.XSDTabbedPropertySheetPage;
+import org.eclipse.wst.xsd.ui.internal.text.XSDModelAdapter;
 import org.eclipse.xsd.XSDAnnotation;
 import org.eclipse.xsd.XSDComplexTypeDefinition;
 import org.eclipse.xsd.XSDComponent;
@@ -83,6 +87,7 @@ import org.eclipse.xsd.XSDTerm;
 import org.eclipse.xsd.XSDTypeDefinition;
 import org.eclipse.xsd.XSDXPathDefinition;
 import org.talend.mdm.commmon.util.core.CommonUtil;
+import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.xml.sax.SAXParseException;
 
@@ -97,7 +102,8 @@ import com.amalto.workbench.views.MDMPerspective;
 import com.amalto.workbench.webservices.WSDataModel;
 
 @SuppressWarnings("restriction")
-public class XSDEditor extends InternalXSDMultiPageEditor implements IServerObjectEditorState {
+public class XSDEditor extends MultiPageEditorPart implements IServerObjectEditorState, ITabbedPropertySheetPageContributor,
+        IPropertyListener {
 
     private static Log log = LogFactory.getLog(XSDEditor.class);
 
@@ -105,7 +111,7 @@ public class XSDEditor extends InternalXSDMultiPageEditor implements IServerObje
 
     protected static int MODEL_PAGE_INDEX = -1;
 
-    public static int SOURCE_PAGE_INDEX = 1;
+    public static int SOURCE_PAGE_INDEX = 0;
 
     private TreeExpandHelper expandHelper = new TreeExpandHelper();
 
@@ -116,8 +122,6 @@ public class XSDEditor extends InternalXSDMultiPageEditor implements IServerObje
     protected TreeObject xobject;
 
     private XSDSelectionManagerSelectionListener fXSDSelectionListener;
-
-    private IPropertyListener dirtyNotifyListener;
 
     private byte[] fileContents = null;
 
@@ -142,27 +146,9 @@ public class XSDEditor extends InternalXSDMultiPageEditor implements IServerObje
     }
 
     @Override
-    public String getPartName() {
-        String part = super.getPartName();
-        if (part.endsWith(".xsd")) {//$NON-NLS-1$
-            return part.substring(0, part.length() - 4);
-        } else {
-            int start = part.lastIndexOf('_');
-            int end = part.lastIndexOf(' ');
-            if (start != -1 && end != -1) {
-                return part.substring(0, start) + part.substring(end);
-            }
-        }
-        return part;
-    }
-
-    protected void superDoSave(IProgressMonitor monitor) {
-        super.doSave(monitor);
-    }
-
-    @Override
     public void doSave(IProgressMonitor monitor) {
-        super.doSave(monitor);
+        XSDDirectivesManager.removeUnusedXSDImports(getXSDSchema());
+        structuredTextEditor.doSave(monitor);
         InputStream stream = null;
         try {
             EditorPart part = (EditorPart) getSelectedPage();
@@ -204,6 +190,12 @@ public class XSDEditor extends InternalXSDMultiPageEditor implements IServerObje
 
     private int lastPageIndex = -1;
 
+    private StructuredTextEditor structuredTextEditor;
+
+    private XSDSchema xsdSchema;
+
+    private ISelectionProvider editorSelectionProvider;
+
     @Override
     protected void pageChange(int newPageIndex) {
         resetTreeSelection(newPageIndex);
@@ -241,7 +233,6 @@ public class XSDEditor extends InternalXSDMultiPageEditor implements IServerObje
             } else if (newPageIndex == SOURCE_PAGE_INDEX) {
 
                 // save DataModelMainPage's contents to file
-                getTextEditor().getSite().setSelectionProvider(getSelectionManager());
                 DataModelMainPage mainPage = getDataModelEditorPage();
                 expandHelper.recordExpandState(mainPage);
                 if (mainPage != null && mainPage.isDirty()) {
@@ -252,8 +243,6 @@ public class XSDEditor extends InternalXSDMultiPageEditor implements IServerObje
                     IFile file = getXSDFile(xobject);
                     file.setCharset("utf-8", null);//$NON-NLS-1$
                     file.setContents(new ByteArrayInputStream(xsd.getBytes("utf-8")), IFile.FORCE, null);//$NON-NLS-1$
-
-                    initializeGraphicalViewer();
                 }
             }
         } catch (SAXParseException ex) {
@@ -473,20 +462,23 @@ public class XSDEditor extends InternalXSDMultiPageEditor implements IServerObje
             // has been done via the outline or properties and not the source
             // view). We don't want to be selecting
             // and unselecting things in the source when editing in the source!!
-            boolean makeSelection = true;
+            boolean isSourcePage = false;
             if (PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage() != null) {
                 IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-                if (page.getActivePart() instanceof InternalXSDMultiPageEditor) {
+                if (page.getActivePart() instanceof XSDEditor) {
                     if (getActiveEditor() instanceof StructuredTextEditor) {
-                        makeSelection = false;
+                        isSourcePage = true;
                     }
+                } else {
+                    return;
                 }
+
             }
 
             // do not fire selection in source editor if selection event came
-            // from source editor
-            if (event.getSource() != getTextEditor().getSelectionProvider() && makeSelection) {
-                ISelection selection = event.getSelection();
+
+            if (isSourcePage) {
+                ISelection selection = getDataModelEditorPage().getSelectionProvider().getSelection();
                 if (selection instanceof IStructuredSelection) {
                     List otherModelObjectList = new ArrayList();
                     for (Iterator i = ((IStructuredSelection) selection).iterator(); i.hasNext();) {
@@ -497,10 +489,8 @@ public class XSDEditor extends InternalXSDMultiPageEditor implements IServerObje
                         }
                     }
                     if (!otherModelObjectList.isEmpty()) {
-                        if (getActivePage() == SOURCE_PAGE_INDEX) {
-                            StructuredSelection nodeSelection = new StructuredSelection(otherModelObjectList);
-                            getTextEditor().getSelectionProvider().setSelection(nodeSelection);
-                        }
+                        StructuredSelection nodeSelection = new StructuredSelection(otherModelObjectList);
+                        getTextEditor().getSelectionProvider().setSelection(nodeSelection);
                     }
                 }
             }
@@ -509,7 +499,7 @@ public class XSDEditor extends InternalXSDMultiPageEditor implements IServerObje
         public void doSetSelection() {
             ISelection iSelection = getSelectionManager().getSelection();
             if (iSelection != null) {
-                Object firstElement = ((StructuredSelection) iSelection).getFirstElement();
+                Object firstElement = ((IStructuredSelection) iSelection).getFirstElement();
                 Object otherModelObject = getObjectForOtherModel(firstElement);
                 if (otherModelObject != null) {
                     StructuredSelection nodeSelection = new StructuredSelection(otherModelObject);
@@ -521,7 +511,8 @@ public class XSDEditor extends InternalXSDMultiPageEditor implements IServerObje
 
     @Override
     protected void createPages() {
-        super.createPages();
+        createSourcePage();
+        buildSchema();
 
         fXSDSelectionListener = new XSDSelectionManagerSelectionListener();
         getSelectionManager().addSelectionChangedListener(fXSDSelectionListener);
@@ -542,60 +533,17 @@ public class XSDEditor extends InternalXSDMultiPageEditor implements IServerObje
                 preActivePageIndex = getActivePage();
             }
         });
+
     }
 
-    @Override
-    protected Composite createGraphPageComposite() {
-        Composite parent = new Composite(getContainer(), SWT.FLAT);
-        parent.setBackground(ColorConstants.white);
-        parent.setLayout(new InternalLayout());// ////
-
-        floatingToolbar = new ADTFloatingToolbar(getModel());
-        floatingToolbar.createControl(parent);
-        floatingToolbar.getControl().setVisible(true);
-        EditPartFactory editPartFactory = getEditorModeManager().getCurrentMode().getEditPartFactory();
-        floatingToolbar.setEditPartFactory(editPartFactory);
-
-        createViewModeToolbar(parent);
-
-        return parent;
-    }
-
-    private class InternalLayout extends StackLayout {
-
-        public InternalLayout() {
-            super();
+    public ISelectionProvider getSelectionManager() {
+        if (editorSelectionProvider == null) {
+            editorSelectionProvider = new MultiPageSelectionProvider(this);
+            getSite().setSelectionProvider(editorSelectionProvider);
         }
-
-        @Override
-        protected void layout(Composite composite, boolean flushCache) {
-            Control children[] = composite.getChildren();
-            Rectangle rect = composite.getClientArea();
-            rect.x += marginWidth;
-            rect.y += marginHeight;
-            rect.width -= 2 * marginWidth;
-            rect.height -= 2 * marginHeight;
-
-            for (int i = 0; i < children.length; i++) {
-                if (i == 0) // For the back to schema button
-                {
-                    if (floatingToolbar != null && floatingToolbar.getContents() != null) {
-                        org.eclipse.draw2d.geometry.Rectangle r = ((GraphicalEditPart) floatingToolbar.getContents()).getFigure()
-                                .getBounds();
-                        children[i].setBounds(rect.x + 10, rect.y + 10, r.width, Math.max(24, r.height));
-                    }
-                } else if (i == 1 && modeCombo != null) // For the drop down toolbar
-                {
-                    children[i].setBounds(rect.x + rect.width - 90 - maxLength, rect.y + 10, maxLength + 60, 26);
-                } else // For the main graph viewer
-                {
-                    children[i].setBounds(rect);
-                }
-            }
-        }
+        return editorSelectionProvider;
     }
 
-    @Override
     protected void createSourcePage() {
         this.structuredTextEditor = new StructuredTextEditor() {
 
@@ -628,32 +576,11 @@ public class XSDEditor extends InternalXSDMultiPageEditor implements IServerObje
              * editor's dirty state, so affect combined editor's dirty state,then affect the combined editor's property
              * listener's execution, then lead to the editor's save and model validation.
              */
-            this.structuredTextEditor.addPropertyListener(getDirtyNotifyListener());
+
             firePropertyChange(1);
         } catch (PartInitException e) {
             ErrorDialog.openError(getSite().getShell(), Messages.XSDEditor_ErrorMessage, null, e.getStatus());
         }
-    }
-
-    private IPropertyListener getDirtyNotifyListener() {
-        if (dirtyNotifyListener == null) {
-            dirtyNotifyListener = new IPropertyListener() {
-
-                public void propertyChanged(Object source, int propId) {
-                    if (source == structuredTextEditor && propId == PROP_DIRTY) {
-                        boolean dirty = structuredTextEditor.isDirty();
-                        if (dirty) {
-                            DataModelMainPage dMainPage = getdMainPage();
-                            if (dMainPage != null) {
-                                dMainPage.setDirty(dirty);
-                            }
-                        }
-                    }
-                }
-            };
-        }
-
-        return dirtyNotifyListener;
     }
 
     private Exception validateXsdSourceEditor() {
@@ -675,6 +602,10 @@ public class XSDEditor extends InternalXSDMultiPageEditor implements IServerObje
 
     public String getSourcePageDocument() {
         return getTextEditor().getTextViewer().getDocument().get();
+    }
+
+    protected StructuredTextEditor getTextEditor() {
+        return structuredTextEditor;
     }
 
     /**
@@ -711,19 +642,18 @@ public class XSDEditor extends InternalXSDMultiPageEditor implements IServerObje
         return error;
     }
 
-    @Override
     public String getContributorId() {
         if (getActiveEditor() instanceof DataModelMainPage) {
             return CONTRUIBUTIONID_DATAMODELPAGE;
         }
-        return super.getContributorId();
+        return "org.eclipse.wst.xsd.ui.internal.editor"; //$NON-NLS-1$;
     }
 
     @Override
     public Object getAdapter(Class type) {
         if (type == IPropertySheetPage.class) {
             int activePageIndex = getActivePage();
-            if (activePageIndex == DESIGN_PAGE_INDEX || activePageIndex == SOURCE_PAGE_INDEX) {
+            if (activePageIndex == SOURCE_PAGE_INDEX) {
                 return new XSDTabbedPropertySheetPage(this);
             }
             if (activePageIndex == MODEL_PAGE_INDEX) {
@@ -809,11 +739,6 @@ public class XSDEditor extends InternalXSDMultiPageEditor implements IServerObje
         }
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see com.amalto.workbench.editors.IServerObjectEditorState#isLocalInput()
-     */
     public boolean isLocalInput() {
         return false;
     }
@@ -852,4 +777,71 @@ public class XSDEditor extends InternalXSDMultiPageEditor implements IServerObje
     public DataModelMainPage getdMainPage() {
         return null;
     }
+
+    public boolean isReadOnly() {
+        return false;
+    }
+
+    @Override
+    public void doSaveAs() {
+        // do nothing
+    }
+
+    @Override
+    public boolean isSaveAsAllowed() {
+        return false;
+    }
+
+    protected void buildSchema() {
+        try {
+            IEditorInput editorInput = getEditorInput();
+
+            Document document = null;
+            IDocument doc = structuredTextEditor.getDocumentProvider().getDocument(getEditorInput());
+            if (doc instanceof IStructuredDocument) {
+                IStructuredModel model = null;
+                try {
+                    // TODO: for StorageEditorInputs, should be forRead
+                    model = StructuredModelManager.getModelManager().getExistingModelForEdit(doc);
+                    if (model == null) {
+                        model = StructuredModelManager.getModelManager().getModelForEdit((IStructuredDocument) doc);
+                    }
+                    document = ((IDOMModel) model).getDocument();
+                } finally {
+                    if (model != null) {
+                        model.releaseFromEdit();
+                    }
+                }
+            }
+            Assert.isNotNull(document);
+
+            xsdSchema = XSDModelAdapter.lookupOrCreateSchema(document);
+        } catch (Exception e) {
+
+        }
+
+    }
+
+    public XSDSchema getXSDSchema() {
+        return this.xsdSchema;
+    }
+
+    public void propertyChanged(Object source, int propId) {
+        if (source == structuredTextEditor && propId == PROP_DIRTY) {
+            boolean dirty = structuredTextEditor.isDirty();
+            if (dirty) {
+                DataModelMainPage dMainPage = getdMainPage();
+                if (dMainPage != null) {
+                    dMainPage.setDirty(dirty);
+                }
+            }
+        }
+
+    }
+
+    public void gotoMarker(IMarker marker) {
+        setActivePage(SOURCE_PAGE_INDEX);
+        IDE.gotoMarker(structuredTextEditor, marker);
+    }
+
 }
