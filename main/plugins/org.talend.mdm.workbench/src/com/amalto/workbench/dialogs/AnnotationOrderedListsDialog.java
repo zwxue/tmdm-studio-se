@@ -15,6 +15,7 @@ package com.amalto.workbench.dialogs;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -23,8 +24,11 @@ import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.resource.StringConverter;
+import org.eclipse.jface.text.source.Annotation;
 import org.eclipse.jface.text.source.IOverviewRuler;
 import org.eclipse.jface.text.source.IVerticalRuler;
+import org.eclipse.jface.util.IPropertyChangeListener;
+import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ComboBoxCellEditor;
 import org.eclipse.jface.viewers.DoubleClickEvent;
@@ -77,7 +81,7 @@ import com.amalto.workbench.widgets.composites.ElementFKInfoConfiguration;
 import com.amalto.workbench.widgets.composites.ElementFKInfoFormatHelper;
 import com.amalto.workbench.widgets.composites.ElementFKInfoFormatViewer;
 
-public class AnnotationOrderedListsDialog extends Dialog {
+public class AnnotationOrderedListsDialog extends Dialog implements IPropertyChangeListener {
 
     private static Log log = LogFactory.getLog(AnnotationOrderedListsDialog.class);
 
@@ -632,6 +636,7 @@ public class AnnotationOrderedListsDialog extends Dialog {
 
         formatEditor = new ElementFKInfoFormatViewer(formatGroup, verticalRuler, overviewRuler, true,
                 SWT.V_SCROLL | SWT.H_SCROLL);
+        formatEditor.addPropertyChangeListener(this);
         formatEditor.configure(new ElementFKInfoConfiguration());
         formatEditor.initilize();
 
@@ -645,9 +650,11 @@ public class AnnotationOrderedListsDialog extends Dialog {
 
     private void fireXPathsChanges() {
         if (actionType == AnnotationForeignKeyInfo_ActionType) {
-            formatEditor.setFkinfos(xPaths);
+            Set<Annotation> updatedAnnotations = formatEditor.setFkinfos(xPaths);
+            updateOKBtnState(updatedAnnotations.size() == 0);
         }
     }
+
 
     private void addDoubleClickListener() {
         viewer.addDoubleClickListener(new IDoubleClickListener() {
@@ -672,6 +679,12 @@ public class AnnotationOrderedListsDialog extends Dialog {
         store.setDefault(PREF_COLOR_DEFAULT, StringConverter.asString(new RGB(0, 128, 0)));
         store.setDefault(PREF_COLOR_STRING, StringConverter.asString(new RGB(0, 0, 255)));
         store.setDefault(PREF_COLOR_KEYWORD, StringConverter.asString(new RGB(0, 0, 128)));
+    }
+
+    private void updateOKBtnState(boolean btnEnabled) {
+        if (getButton(IDialogConstants.OK_ID) != null) {
+            getButton(IDialogConstants.OK_ID).setEnabled(btnEnabled);
+        }
     }
 
     @Override
@@ -705,6 +718,12 @@ public class AnnotationOrderedListsDialog extends Dialog {
         // no close let Action Handler handle it
     }
 
+    public void propertyChange(PropertyChangeEvent event) {
+        Object newValue = event.getNewValue();
+        if (newValue instanceof Boolean) {
+            updateOKBtnState(((Boolean) newValue).booleanValue());
+        }
+    }
     /**************************************************************************************************
      * Public getters read by caller
      ***************************************************************************************************/

@@ -14,9 +14,11 @@ package com.amalto.workbench.widgets.composites;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -53,7 +55,7 @@ public class ElementFKInfoAnnotaioner {
         this.document = document;
     }
 
-    public void updateAnnotations(ProjectionAnnotationModel annoModel, DocumentEvent event) {
+    public Set<Annotation> updateAnnotations(ProjectionAnnotationModel annoModel, DocumentEvent event) {
         if (event != null) {
             this.document = event.fDocument;
         }
@@ -67,10 +69,14 @@ public class ElementFKInfoAnnotaioner {
                 List<ITypedRegion> partitions = Arrays.asList(document.computePartitioning(0, document.getLength()));
                 Map<Annotation, Position> addedAnnotations = buildAnnotations(partitions);
                 addAnnotationToModel(addedAnnotations);
+
+                return addedAnnotations.keySet();
             } catch (Exception e) {
                 log.error(e.getMessage(), e);
             }
         }
+
+        return new HashSet<Annotation>();
     }
 
     private Map<Annotation, Position> buildAnnotations(List<ITypedRegion> partitions)
@@ -226,8 +232,9 @@ public class ElementFKInfoAnnotaioner {
 
     }
 
-    public void setFKInfos(List<String> xPaths) {
+    public Set<Annotation> setFKInfos(List<String> xPaths) {
         this.xPaths = xPaths;
-        updateAnnotations(null, null);
+        Set<Annotation> updatedAnnotations = updateAnnotations(null, null);
+        return updatedAnnotations;
     }
 }

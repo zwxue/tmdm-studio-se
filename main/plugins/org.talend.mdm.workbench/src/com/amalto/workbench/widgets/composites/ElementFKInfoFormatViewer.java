@@ -14,6 +14,7 @@ package com.amalto.workbench.widgets.composites;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.resource.JFaceResources;
@@ -23,6 +24,7 @@ import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IDocumentListener;
 import org.eclipse.jface.text.IDocumentPartitioner;
 import org.eclipse.jface.text.rules.FastPartitioner;
+import org.eclipse.jface.text.source.Annotation;
 import org.eclipse.jface.text.source.IOverviewRuler;
 import org.eclipse.jface.text.source.ISourceViewer;
 import org.eclipse.jface.text.source.IVerticalRuler;
@@ -30,6 +32,8 @@ import org.eclipse.jface.text.source.SourceViewerConfiguration;
 import org.eclipse.jface.text.source.projection.ProjectionAnnotationModel;
 import org.eclipse.jface.text.source.projection.ProjectionSupport;
 import org.eclipse.jface.text.source.projection.ProjectionViewer;
+import org.eclipse.jface.util.IPropertyChangeListener;
+import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.texteditor.AbstractDecoratedTextEditorPreferenceConstants;
 import org.eclipse.ui.texteditor.AnnotationPreference;
@@ -73,6 +77,8 @@ public class ElementFKInfoFormatViewer extends ProjectionViewer {
     private MarkerAnnotationPreferences fAnnotationPreferences;
 
     private ElementFKInfoConfiguration config;
+
+    private IPropertyChangeListener propertyChangeListener;
 
     public ElementFKInfoFormatViewer(Composite parent, IVerticalRuler ruler, IOverviewRuler overviewRuler, boolean showsAnnotationOverview,
             int styles) {
@@ -162,7 +168,10 @@ public class ElementFKInfoFormatViewer extends ProjectionViewer {
         IDocumentListener validateListener = new IDocumentListener() {
 
             public void documentChanged(DocumentEvent event) {
-                getAnnotationer().updateAnnotations(annotationModel, event);
+                Set<Annotation> updatedAnnotations = getAnnotationer().updateAnnotations(annotationModel, event);
+                if (propertyChangeListener != null) {
+                    propertyChangeListener.propertyChange(new PropertyChangeEvent("", "", null, updatedAnnotations.size() == 0)); //$NON-NLS-1$ //$NON-NLS-2$
+                }
             }
 
             public void documentAboutToBeChanged(DocumentEvent event) {
@@ -187,9 +196,11 @@ public class ElementFKInfoFormatViewer extends ProjectionViewer {
         this.config = (ElementFKInfoConfiguration) configuration;
     }
 
-    public void setFkinfos(List<String> xPaths) {
-        getAnnotationer().setFKInfos(xPaths);
+    public Set<Annotation> setFkinfos(List<String> xPaths) {
+        Set<Annotation> updatedAnnotations = getAnnotationer().setFKInfos(xPaths);
         config.setFKInfos(xPaths);
+
+        return updatedAnnotations;
     }
 
     public void setFormatFKInfo(String formatFKInfo) {
@@ -199,5 +210,9 @@ public class ElementFKInfoFormatViewer extends ProjectionViewer {
     public String getFormatFKInfo() {
 
         return document.get();
+    }
+
+    public void addPropertyChangeListener(IPropertyChangeListener propChangeListener) {
+        this.propertyChangeListener = propChangeListener;
     }
 }
