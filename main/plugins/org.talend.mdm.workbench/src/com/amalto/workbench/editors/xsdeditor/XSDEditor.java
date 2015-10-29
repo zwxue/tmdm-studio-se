@@ -57,6 +57,7 @@ import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.part.EditorPart;
 import org.eclipse.ui.part.MultiPageEditorPart;
 import org.eclipse.ui.part.MultiPageSelectionProvider;
+import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
 import org.eclipse.ui.views.properties.tabbed.ITabbedPropertySheetPageContributor;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
@@ -196,6 +197,8 @@ public class XSDEditor extends MultiPageEditorPart implements IServerObjectEdito
 
     private ISelectionProvider editorSelectionProvider;
 
+    private XSDEditorContentOutline contentOutline;
+
     @Override
     protected void pageChange(int newPageIndex) {
         resetTreeSelection(newPageIndex);
@@ -207,6 +210,7 @@ public class XSDEditor extends MultiPageEditorPart implements IServerObjectEdito
         }
         doPageChanged(newPageIndex, lastPageIndex);
         refreshPropertyView();
+        updateContentOutlinePage();
         setFocus();
         lastPageIndex = newPageIndex;
     }
@@ -250,6 +254,11 @@ public class XSDEditor extends MultiPageEditorPart implements IServerObjectEdito
         } catch (Exception e) {
             log.error(e.getMessage(), e);
         }
+    }
+
+    private void updateContentOutlinePage() {
+        IContentOutlinePage outlinePage = (IContentOutlinePage) getActiveEditor().getAdapter(IContentOutlinePage.class);
+        contentOutline.setActiveOutlinePage(outlinePage);
     }
 
     private DataModelMainPage getDataModelEditorPage() {
@@ -534,6 +543,9 @@ public class XSDEditor extends MultiPageEditorPart implements IServerObjectEdito
             }
         });
 
+        // init content outline
+        this.contentOutline = new XSDEditorContentOutline(this);
+
     }
 
     public ISelectionProvider getSelectionManager() {
@@ -683,6 +695,9 @@ public class XSDEditor extends MultiPageEditorPart implements IServerObjectEdito
         // readOnly.
         if (XSDSchema.class == type && isReadOnly()) {
             return null;
+        }
+        if (IContentOutlinePage.class == type) {
+            return contentOutline;
         }
         return super.getAdapter(type);
 
