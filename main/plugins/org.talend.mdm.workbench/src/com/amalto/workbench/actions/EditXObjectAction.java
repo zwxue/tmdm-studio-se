@@ -24,7 +24,6 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
 
-import com.amalto.workbench.editors.xsdeditor.XSDEditorUtil;
 import com.amalto.workbench.exadapter.ExAdapterManager;
 import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.image.ImageCache;
@@ -55,6 +54,8 @@ import com.amalto.workbench.webservices.WSTransformerV2PK;
 import com.amalto.workbench.webservices.WSView;
 import com.amalto.workbench.webservices.WSViewPK;
 
+// This class should be not used after Ver 4.0
+@Deprecated
 public class EditXObjectAction extends Action {
 
     private static Log log = LogFactory.getLog(EditXObjectAction.class);
@@ -96,7 +97,7 @@ public class EditXObjectAction extends Action {
             case TreeObject.DATA_MODEL:
                 WSDataModel wsDataModel = service.getDataModel(new WSGetDataModel((WSDataModelPK) xobject.getWsKey()));
                 xobject.setWsObject(wsDataModel);
-                XSDEditorUtil.openDataModel(xobject, false);
+                // XSDEditorUtil.openDataModel(xobject, false);
                 return;
             case TreeObject.VIEW:
                 WSView wsView = service.getView(new WSGetView((WSViewPK) xobject.getWsKey()));

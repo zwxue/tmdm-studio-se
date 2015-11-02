@@ -97,12 +97,16 @@ public class DataModelNodeResourceProvider extends AbstractRepositoryNodeResourc
     public void handleReferenceFile(Item item) {
         IFile xsdFile = RepositoryResourceUtil.findReferenceFile(IServerObjectRepositoryType.TYPE_DATAMODEL, item, "xsd"); //$NON-NLS-1$
         IFile mapInfoFile = RepositoryResourceUtil.findReferenceFile(IServerObjectRepositoryType.TYPE_DATAMODEL, item, "mapinfo"); //$NON-NLS-1$
+        IFile erFile = RepositoryResourceUtil.findReferenceFile(IServerObjectRepositoryType.TYPE_DATAMODEL, item, "er"); //$NON-NLS-1$
         try {
 
             createOrUpdateFile(item, xsdFile);
             linkReferenceFile(item, xsdFile);
             if (mapInfoFile.getLocation().toFile().exists()) {
                 linkReferenceFile(item, mapInfoFile);
+            }
+            if (erFile.getLocation().toFile().exists()) {
+                linkReferenceFile(item, erFile);
             }
 
         } catch (UnsupportedEncodingException e) {

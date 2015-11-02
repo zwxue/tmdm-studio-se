@@ -118,17 +118,11 @@ public class XSDEditor extends MultiPageEditorPart implements IServerObjectEdito
 
     protected int preActivePageIndex = -1;
 
-    protected IEditorInput xsdInput;
-
     protected TreeObject xobject;
 
     private XSDSelectionManagerSelectionListener fXSDSelectionListener;
 
     private byte[] fileContents = null;
-
-    public void setXSDInput(IEditorInput input) {
-        this.xsdInput = input;
-    }
 
     public void setXObject(TreeObject xobject) {
         this.xobject = xobject;
@@ -262,12 +256,8 @@ public class XSDEditor extends MultiPageEditorPart implements IServerObjectEdito
     }
 
     private DataModelMainPage getDataModelEditorPage() {
-        IEditorPart[] editors = findEditors(xsdInput);
-        if (editors.length == 1 && editors[0] instanceof DataModelMainPage) {
-            return (DataModelMainPage) editors[0];
-        }
-        return null;
-        // return (DataModelMainPage) getEditor(MODEL_PAGE_INDEX);
+
+        return (DataModelMainPage) getEditor(MODEL_PAGE_INDEX);
     }
 
     private class XSDSelectionManagerSelectionListener implements ISelectionChangedListener {

@@ -115,7 +115,6 @@ public class XSDEditor2 extends XSDEditor implements ISvnHistory {
         dMainPage.getElementsViewer().addSelectionChangedListener(xsdListener);
         //
 
-        setXSDInput(xobjectEditorinput);
         setXObject(treeObject);
         //
         folder = (CTabFolder) dMainPage.getMainControl().getParent();
@@ -197,7 +196,7 @@ public class XSDEditor2 extends XSDEditor implements ISvnHistory {
     }
 
     private IRepositoryViewObject getCurrentViewObject() {
-        return ((IRepositoryViewEditorInput) xsdInput).getViewObject();
+        return ((IRepositoryViewEditorInput) getEditorInput()).getViewObject();
     }
 
     @Override

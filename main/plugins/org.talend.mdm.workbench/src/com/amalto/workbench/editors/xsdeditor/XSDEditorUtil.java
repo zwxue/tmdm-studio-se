@@ -26,19 +26,10 @@ import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.swt.custom.CTabFolder;
-import org.eclipse.ui.IEditorDescriptor;
-import org.eclipse.ui.IEditorInput;
-import org.eclipse.ui.IWorkbenchPage;
-import org.eclipse.ui.PlatformUI;
 
-import com.amalto.workbench.editors.DataModelMainPage;
 import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.models.TreeObject;
-import com.amalto.workbench.providers.XObjectEditorInput;
 import com.amalto.workbench.utils.EXtentisObjects;
-import com.amalto.workbench.utils.Util;
-import com.amalto.workbench.views.MDMPerspective;
 import com.amalto.workbench.webservices.WSDataModel;
 
 public class XSDEditorUtil {
@@ -136,47 +127,4 @@ public class XSDEditorUtil {
         return prj;
     }
 
-    public static void openDataModel(TreeObject xobject, boolean markdirty) throws Exception {
-
-        IFile pathToTempFile = XSDEditorUtil.createFile(xobject);
-        final XSDEditorInput input = new XSDEditorInput(pathToTempFile);
-        final IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-        IEditorDescriptor desc = PlatformUI.getWorkbench().getEditorRegistry()
-                .findEditor("com.amalto.workbench.editors.xsdeditor.XSDEditor");//$NON-NLS-1$
-        if (activePage.findEditor(input) != null) {
-            activePage.openEditor(input, desc.getId());
-            return;
-        }
-
-        final XSDEditor part = (XSDEditor) activePage.openEditor(input, desc.getId());// org.eclipse.wst.xsd.ui.internal.editor.InternalXSDMultiPageEditor
-
-        IEditorInput xobjectEditorinput = new XObjectEditorInput(xobject, xobject.getDisplayName());
-
-        final DataModelMainPage dMainPage = new DataModelMainPage(xobject);
-        part.addPage(dMainPage, xobjectEditorinput);
-
-        part.getSite().setSelectionProvider(dMainPage.getSelectionProvider());
-
-        // add XSDSelectionListener
-        XSDSelectionListener xsdListener = new XSDSelectionListener(part, dMainPage);
-        dMainPage.getTypesViewer().addSelectionChangedListener(xsdListener);
-        dMainPage.getElementsViewer().addSelectionChangedListener(xsdListener);
-
-        part.setXSDInput(xobjectEditorinput);
-        part.setXObject(xobject);
-        part.setActiveEditor(dMainPage);
-
-        // can't add DataModelMainPage the 3rd page, see 0019663
-        CTabFolder folder = (CTabFolder) dMainPage.getMainControl().getParent();
-        folder.getItem(2).setText(xobject.getDisplayName() + " " + Util.getRevision(xobject));//$NON-NLS-1$
-        folder.getItem(0).setText(Messages.XSDEditorUtil_SchemaDesign);
-        folder.getItem(1).setText(Messages.XSDEditorUtil_SchemaSource);
-        if (markdirty) {
-            dMainPage.markDirty();
-        }
-
-        PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().showView(MDMPerspective.VIEWID_PROPERTYVIEW);
-
-        PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().showView(MDMPerspective.VIEWID_OUTLINE);
-    }
 }
