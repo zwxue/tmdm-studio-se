@@ -708,8 +708,6 @@ public class Messages extends NLS {
 
     public static String WSRootLabelProvider_localRepository;
 
-    public static String WSRootLabelProvider_svn;
-
     public static String Deploy_fail_cause_text;
 
     public static String NeverDeploy_text;
