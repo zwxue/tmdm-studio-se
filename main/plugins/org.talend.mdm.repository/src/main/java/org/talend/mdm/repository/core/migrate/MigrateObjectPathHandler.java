@@ -23,12 +23,14 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.core.runtime.Path;
 import org.talend.commons.exception.PersistenceException;
 import org.talend.commons.runtime.model.emf.EmfHelper;
 import org.talend.commons.ui.runtime.exception.ExceptionHandler;
 import org.talend.core.model.properties.Item;
 import org.talend.core.model.properties.ItemState;
 import org.talend.core.model.properties.Property;
+import org.talend.core.repository.model.ProxyRepositoryFactory;
 
 /**
  * DOC HHB class global comment. Detailled comment
@@ -189,9 +191,9 @@ public class MigrateObjectPathHandler {
             IFolder folder = parentFolder.getFolder(name);
             if (!folder.exists()) {
                 try {
-                    folder.create(true, true, new NullProgressMonitor());
-                } catch (CoreException e) {
-                    ExceptionHandler.process(e);
+                    ProxyRepositoryFactory.getInstance().createFolder(rule.getRepositoryObjectType(), Path.EMPTY, name);
+                } catch (PersistenceException e) {
+                    log.error(e.getMessage(), e);
                 }
             }
         }

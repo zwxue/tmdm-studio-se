@@ -454,9 +454,8 @@ public class RepositoryResourceUtil {
 
                 IFolder folder = fsProject.getFolder(path);
                 if (!folder.exists()) {
-
-                    ResourceUtils.createFolder(folder);
-
+                    Path parentPath = new Path(pItem.getState().getPath());
+                    ProxyRepositoryFactory.getInstance().createFolder(project, type, parentPath, folderName);
                 }
 
             } else {
