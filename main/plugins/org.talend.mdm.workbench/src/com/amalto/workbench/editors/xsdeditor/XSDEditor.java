@@ -43,9 +43,7 @@ import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.osgi.util.NLS;
-import org.eclipse.swt.custom.CTabFolder;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IPropertyListener;
@@ -123,6 +121,8 @@ public class XSDEditor extends MultiPageEditorPart implements IServerObjectEdito
     private XSDSelectionManagerSelectionListener fXSDSelectionListener;
 
     private byte[] fileContents = null;
+
+    boolean hasXSDErrors = false;
 
     public void setXObject(TreeObject xobject) {
         this.xobject = xobject;
@@ -215,22 +215,24 @@ public class XSDEditor extends MultiPageEditorPart implements IServerObjectEdito
             return;
         }
         try {
-            if (getSelectedPage() instanceof DataModelMainPage) {// save the
-                                                                 // file's
-                                                                 // contents
-                                                                 // to
+            if (getSelectedPage() instanceof DataModelMainPage) {
                 DataModelMainPage mainPage = getDataModelEditorPage();
                 if (mainPage != null && lastPageIndex == SOURCE_PAGE_INDEX) {
-                    String xsd = getSourcePageDocument();
-                    XSDSchema schema = Util.createXsdSchema(xsd, xobject);
-                    mainPage.setXsdSchema(schema);
-                    mainPage.refresh();
+                    validateXsdSourceEditor();
+                    if (!hasXSDErrors) {
+                        String xsd = getSourcePageDocument();
+                        XSDSchema schema = Util.createXsdSchema(xsd, xobject);
+                        mainPage.setXsdSchema(schema);
+                        mainPage.refresh();
 
-                    //
-                    expandHelper.recoverExpandState(mainPage);
+                        //
+                        expandHelper.recoverExpandState(mainPage);
+                    }
                 }
             } else if (newPageIndex == SOURCE_PAGE_INDEX) {
-
+                if (hasXSDErrors) {
+                    return;
+                }
                 // save DataModelMainPage's contents to file
                 DataModelMainPage mainPage = getDataModelEditorPage();
                 expandHelper.recordExpandState(mainPage);
@@ -249,6 +251,10 @@ public class XSDEditor extends MultiPageEditorPart implements IServerObjectEdito
         } catch (Exception e) {
             log.error(e.getMessage(), e);
         }
+    }
+
+    public boolean hasXSDErrors() {
+        return this.hasXSDErrors;
     }
 
     private void updateContentOutlinePage() {
@@ -517,23 +523,6 @@ public class XSDEditor extends MultiPageEditorPart implements IServerObjectEdito
         fXSDSelectionListener = new XSDSelectionManagerSelectionListener();
         getSelectionManager().addSelectionChangedListener(fXSDSelectionListener);
 
-        ((CTabFolder) getContainer()).addSelectionListener(new SelectionAdapter() {
-
-            @Override
-            public void widgetSelected(SelectionEvent e) {
-                if (preActivePageIndex == SOURCE_PAGE_INDEX) {
-                    Exception exc = validateXsdSourceEditor();
-                    if (exc != null) {
-                        setActivePage(preActivePageIndex);
-                        ErrorExceptionDialog.openError(getSite().getShell(), Messages.XSDEditor_ChangedPageErrorTitle,
-                                CommonUtil.getErrMsgFromException(exc));
-                        return;
-                    }
-                }
-                preActivePageIndex = getActivePage();
-            }
-        });
-
         // init content outline
         this.contentOutline = new XSDEditorContentOutline(this);
 
@@ -586,21 +575,39 @@ public class XSDEditor extends MultiPageEditorPart implements IServerObjectEdito
         }
     }
 
-    private Exception validateXsdSourceEditor() {
+    public void validateXsdSourceEditor() {
         String xsd = getSourcePageDocument();
+        Exception ex = null;
         try {
             XSDSchema xsdSchema = Util.createXsdSchema(xsd, xobject);
             String error = validateDiagnoses(xsdSchema);
             if (!"".equals(error)) { //$NON-NLS-1$
-                return new IllegalAccessException(error);
+                ex = new IllegalAccessException(error);
             }
-            return null;
+
         } catch (SAXParseException e) {
-            return e;
+            ex = e;
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            return e;
+            ex = e;
         }
+
+        if (ex != null) {
+            hasXSDErrors = true;
+
+            ErrorExceptionDialog.openError(getSite().getShell(), Messages.XSDEditor_ChangedPageErrorTitle,
+                    CommonUtil.getErrMsgFromException(ex));
+            Display.getDefault().asyncExec(new Runnable() {
+
+                public void run() {
+                    setActivePage(SOURCE_PAGE_INDEX);
+                }
+            });
+
+            return;
+        }
+        hasXSDErrors = false;
+        return;
     }
 
     public String getSourcePageDocument() {
