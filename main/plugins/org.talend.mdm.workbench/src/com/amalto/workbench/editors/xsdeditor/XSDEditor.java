@@ -149,11 +149,12 @@ public class XSDEditor extends MultiPageEditorPart implements IServerObjectEdito
             EditorPart part = (EditorPart) getSelectedPage();
             String xsd = null;
             if (null != part) {
-                if (part instanceof DataModelMainPage) {
-                    DataModelMainPage dmp = (DataModelMainPage) getSelectedPage();
-                    xsd = dmp.getXSDSchemaString();
-                } else if (part instanceof StructuredTextEditor) {
+                if (part instanceof StructuredTextEditor) {
                     xsd = ((StructuredTextEditor) part).getTextViewer().getDocument().get();
+                } else {
+                    // main page or er editor
+                    DataModelMainPage dmp = getdMainPage();
+                    xsd = dmp.getXSDSchemaString();
                 }
             }
             if (null != xsd) {
