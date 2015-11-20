@@ -287,6 +287,8 @@ public class RepositoryNodeActionProviderAdapter implements IRepositoryNodeActio
 
     private static final String SVN_ACTION_PROVIDER_ID = "mdm.svn"; //$NON-NLS-1$
 
+    private static final String GIT_ACTION_PROVIDER_ID = "mdm.git"; //$NON-NLS-1$
+
     IRepositoryNodeActionProvider[] extendActionProviders;
 
     private IRepositoryNodeActionProvider[] getExtendActionProviders() {
@@ -295,8 +297,13 @@ public class RepositoryNodeActionProviderAdapter implements IRepositoryNodeActio
             boolean isOffline = ProxyRepositoryFactory.getInstance().getRepositoryContext().isOffline();
             if (!isLocalProj && !isOffline) {
                 IRepositoryNodeActionProvider svnProvider = ActionProviderManager.getActionProvider(SVN_ACTION_PROVIDER_ID);
-                if (svnProvider != null) {
-                    extendActionProviders = new IRepositoryNodeActionProvider[] { svnProvider };
+                IRepositoryNodeActionProvider gitProvider = ActionProviderManager.getActionProvider(GIT_ACTION_PROVIDER_ID);
+                if (svnProvider != null && gitProvider != null) {
+                    extendActionProviders = new IRepositoryNodeActionProvider[] { svnProvider, gitProvider };
+                } else if (svnProvider != null) {
+                    extendActionProviders = new IRepositoryNodeActionProvider[] { svnProvider, svnProvider };
+                } else if (gitProvider != null) {
+                    extendActionProviders = new IRepositoryNodeActionProvider[] { svnProvider, gitProvider };
                 }
             }
 
