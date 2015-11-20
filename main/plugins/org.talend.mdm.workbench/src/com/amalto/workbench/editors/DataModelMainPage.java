@@ -972,7 +972,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener, IGo
         });
     }
 
-    public void refreshData() {
+    private void refreshData() {
         try {
 
             WSDataModel wsObject = (WSDataModel) (xobject.getWsObject());
@@ -984,6 +984,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener, IGo
             String schema = Util.formatXsdSource(wsObject.getXsdSchema());
 
             XSDSchema xsd = Util.createXsdSchema(schema, xobject);
+            xsdSchema = xsd;
             schemaTreeContentProvider.setXsdSchema(xsd);
             getSchemaRoleFilterFromSchemaTree().setDataModelFilter(dataModelFilter);
             viewer.setInput(getSite());

@@ -19,7 +19,6 @@ import org.apache.log4j.Logger;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorInput;
@@ -32,8 +31,6 @@ import org.eclipse.ui.part.MultiPageEditorPart;
 import org.eclipse.ui.texteditor.IDocumentProvider;
 import org.eclipse.ui.texteditor.IDocumentProviderExtension;
 import org.eclipse.ui.texteditor.IDocumentProviderExtension3;
-import org.eclipse.xsd.XSDDiagnostic;
-import org.eclipse.xsd.XSDSchema;
 import org.talend.commons.exception.LoginException;
 import org.talend.commons.exception.PersistenceException;
 import org.talend.core.GlobalServiceRegister;
@@ -92,6 +89,7 @@ public class XSDEditor2 extends XSDEditor implements ISvnHistory {
             log.error(e.getMessage(), e);
         }
         dMainPage = new DataModelMainPage2(treeObject);
+        dMainPage.addPropertyListener(this);
         try {
             MODEL_PAGE_INDEX = addPage(dMainPage, xobjectEditorinput);
         } catch (PartInitException e) {
@@ -157,16 +155,12 @@ public class XSDEditor2 extends XSDEditor implements ISvnHistory {
     }
 
     private void activePage(IFile xsdFile) {
-
-        XSDSchema xs = getXSDSchema();
-        xs.validate();
-        EList<XSDDiagnostic> diagnostics = xs.getAllDiagnostics();
-        if (!diagnostics.isEmpty()) {
+        validateXsdSourceEditor();
+        if (hasXSDErrors()) {
             setActivePage(SOURCE_PAGE_INDEX);
             preActivePageIndex = SOURCE_PAGE_INDEX;
             return;
         }
-        // }
         setActivePage(MODEL_PAGE_INDEX);
         preActivePageIndex = SOURCE_PAGE_INDEX;
     }
@@ -326,6 +320,9 @@ public class XSDEditor2 extends XSDEditor implements ISvnHistory {
 
     // Just avoid popup querying reload dialog
     void handleSourceActivation() {
+        if (hasXSDErrors()) {
+            return;
+        }
         final IDocumentProvider provider = getTextEditor().getDocumentProvider();
         if (provider == null) {
             return;
