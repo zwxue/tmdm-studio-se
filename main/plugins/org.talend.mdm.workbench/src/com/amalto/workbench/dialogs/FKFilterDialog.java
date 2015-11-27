@@ -14,7 +14,9 @@ package com.amalto.workbench.dialogs;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.viewers.CellEditor;
@@ -39,6 +41,8 @@ import com.amalto.workbench.widgets.ComplexTableViewerColumn;
 import com.amalto.workbench.widgets.ICellEditor;
 import com.amalto.workbench.widgets.TisTableViewer;
 import com.amalto.workbench.widgets.WidgetFactory;
+import com.amalto.workbench.widgets.celleditor.DefaultXPathValidator;
+import com.amalto.workbench.widgets.celleditor.IXPathValidator;
 
 public class FKFilterDialog extends Dialog {
 
@@ -103,6 +107,11 @@ public class FKFilterDialog extends Dialog {
         viewer.setModelLock(lock);
         viewer.setXpath(true);
         viewer.setDatamodelName(dataModelName);
+
+        Map<ComplexTableViewerColumn, IXPathValidator> validators = new HashMap<ComplexTableViewerColumn, IXPathValidator>();
+        validators.put(columns[0], new DefaultXPathValidator());// set to "XPath" column the xpath validator
+        viewer.setValidators(validators);
+
         // viewer.setMainPage(page);//TODO
         // viewer.setConceptName(conceptName);
         // viewer.setContext(true);

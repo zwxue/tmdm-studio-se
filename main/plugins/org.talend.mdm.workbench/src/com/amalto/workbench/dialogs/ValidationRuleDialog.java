@@ -14,7 +14,9 @@ package com.amalto.workbench.dialogs;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -48,6 +50,8 @@ import com.amalto.workbench.widgets.ComplexTableViewerColumn;
 import com.amalto.workbench.widgets.ICellEditor;
 import com.amalto.workbench.widgets.TisTableViewer;
 import com.amalto.workbench.widgets.WidgetFactory;
+import com.amalto.workbench.widgets.celleditor.DefaultXPathValidator;
+import com.amalto.workbench.widgets.celleditor.IXPathValidator;
 
 public class ValidationRuleDialog extends Dialog {
 
@@ -117,6 +121,10 @@ public class ValidationRuleDialog extends Dialog {
         columns[2].setColumnWidth(300);
         columns[3].setColumnWidth(300);
         viewer = getNewTisTableViewer(Arrays.asList(columns), WidgetFactory.getWidgetFactory(), composite);
+
+        Map<ComplexTableViewerColumn, IXPathValidator> validators = new HashMap<ComplexTableViewerColumn, IXPathValidator>();
+        validators.put(columns[1], new DefaultXPathValidator());// set to "Context XPath" column the xpath validator
+        viewer.setValidators(validators);
 
       //Modified by hhb,to fix bug 21784
         TreeParent treeParent=(TreeParent) page.getAdapter(TreeParent.class);

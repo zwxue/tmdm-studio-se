@@ -14,9 +14,9 @@ package com.amalto.workbench.widgets;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.Map;
 
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.ListenerList;
@@ -67,6 +67,7 @@ import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.KeyValue;
 import com.amalto.workbench.models.Line;
 import com.amalto.workbench.models.TreeParent;
+import com.amalto.workbench.widgets.celleditor.IXPathValidator;
 
 /**
  * This table viewer has: 1.input Texts, add button 2.normal tableviewer with up/down/delete button
@@ -80,6 +81,8 @@ public class ComplexTableViewer {
     ListenerList modifyList = new ListenerList();
 
     protected List<ComplexTableViewerColumn> columns;
+
+    protected Map<ComplexTableViewerColumn, IXPathValidator> validators = new HashMap<ComplexTableViewerColumn, IXPathValidator>();
 
     protected Composite parent;
 
@@ -241,6 +244,13 @@ public class ComplexTableViewer {
         }
         return null;
 
+    }
+
+    public void setValidators(Map<ComplexTableViewerColumn, IXPathValidator> validators) {
+        this.validators = validators;
+        if (validators == null) {
+            this.validators = new HashMap<ComplexTableViewerColumn, IXPathValidator>();
+        }
     }
 
     public ComplexTableViewer(List<ComplexTableViewerColumn> columns, FormToolkit toolkit, Composite parent) {
@@ -581,7 +591,7 @@ public class ComplexTableViewer {
             } else if (columns.get(i).isCombo()) {
                 editors[i] = new ComboBoxCellEditor(table, columns.get(i).getComboValues(), SWT.READ_ONLY);
             } else if (columns.get(i).isXPATH()) {
-                editors[i] = new XpathCellEditor(table);
+                editors[i] = new XpathCellEditor(table, validators.get(columns.get(i)));
             } else if (columns.get(i).isMultiMessage()) {
                 editors[i] = new MultiMessageEditor(table);
                 multiMsg.setColumn(table.getColumn(i));
@@ -983,12 +993,15 @@ public class ComplexTableViewer {
 
         protected XpathWidget xpath;
 
+        private IXPathValidator validator;
+
         public XpathWidget getXpath() {
             return xpath;
         }
 
-        public XpathCellEditor(Composite parent) {
+        public XpathCellEditor(Composite parent, IXPathValidator ixPathValidator) {
             super(parent);
+            this.validator = ixPathValidator;
         }
 
         @Override
@@ -1088,21 +1101,10 @@ public class ComplexTableViewer {
 
         @Override
         protected void focusLost() {
-            if (!validateXpath(xpath.getText())) {
+            if (validator != null && !validator.validate(xpath.getText())) {
                 xpath.setText(oldPath);
             }
             super.focusLost();
-        }
-
-        private boolean validateXpath(String value) {
-            if (value.length() == 0) {
-                return true;
-            }
-            Pattern pattern = Pattern.compile("\\.|(\"|'|[a-zA-Z]|\\d|\\/)+"); //$NON-NLS-1$
-            Matcher matcher = pattern.matcher(value);
-            boolean matches = matcher.matches();
-
-            return matches;
         }
     }
 
@@ -1121,7 +1123,7 @@ public class ComplexTableViewer {
             } else if (columns.get(i).isCombo()) {
                 editors[i] = new ComboBoxCellEditor(table, columns.get(i).getComboValues(), SWT.READ_ONLY);
             } else if (columns.get(i).isXPATH()) {
-                editors[i] = new XpathCellEditor(table);
+                editors[i] = new XpathCellEditor(table, validators.get(columns.get(i)));
             } else if (columns.get(i).isMultiMessage()) {
                 editors[i] = new MultiMessageEditor(table);
                 multiMsg.setColumn(table.getColumn(i));
