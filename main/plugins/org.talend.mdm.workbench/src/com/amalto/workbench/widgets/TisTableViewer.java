@@ -366,7 +366,7 @@ public class TisTableViewer extends ComplexTableViewer {
             } else if (columns.get(i).isCombo()) {
                 editors[i] = new ComboBoxCellEditor(table, columns.get(i).getComboValues(), SWT.READ_ONLY);
             } else if (columns.get(i).isXPATH()) {
-                editors[i] = new XpathCellEditor(table);
+                editors[i] = new XpathCellEditor(table, validators.get(columns.get(i)));
             } else if (columns.get(i).isMultiMessage()) {
                 editors[i] = new MultiMessageEditor(table);
                 multiMsg.setColumn(table.getColumn(i));

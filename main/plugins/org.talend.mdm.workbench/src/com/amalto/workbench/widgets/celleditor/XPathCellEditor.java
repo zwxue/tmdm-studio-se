@@ -12,9 +12,6 @@
 // ============================================================================
 package com.amalto.workbench.widgets.celleditor;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -35,6 +32,8 @@ public class XPathCellEditor extends EditableDialogCellEditor {
 
     private boolean lock;
 
+    private IXPathValidator defaultXPathValidator = new DefaultXPathValidator();
+
     public XPathCellEditor(Composite parent, IAllDataModelHolder allDataModelHolder) {
         super(parent);
         this.allDataModelHolder = allDataModelHolder;
@@ -43,6 +42,12 @@ public class XPathCellEditor extends EditableDialogCellEditor {
     public XPathCellEditor(Composite parent, IAllDataModelHolder allDataModelHolder, IXPathUpdate xpathUpdate) {
         this(parent, allDataModelHolder);
         this.xpathUpdate = xpathUpdate;
+    }
+
+    public void setXPathValidator(IXPathValidator validator) {
+        if (validator != null) {
+            defaultXPathValidator = validator;
+        }
     }
 
     public IAllDataModelHolder getAllDataModelHolder() {
@@ -87,23 +92,12 @@ public class XPathCellEditor extends EditableDialogCellEditor {
     @Override
     protected boolean validate() {
         String newValue = txtEdit.getText().trim();
-        return validateXpath(newValue);
-    }
-
-    public static boolean validateXpath(String value) {
-        if (value.length() == 0) {
-            return true;
-        }
-        Pattern pattern = Pattern.compile("\\.|([a-zA-Z]|\\d|\\/)+"); //$NON-NLS-1$
-        Matcher matcher = pattern.matcher(value);
-        boolean matches = matcher.matches();
-
-        return matches;
+        return defaultXPathValidator.validate(newValue);
     }
 
     @Override
     protected void restoreValue() {
-        updateContents((String) doGetValue());
+        updateContents(doGetValue());
     }
 
 }
