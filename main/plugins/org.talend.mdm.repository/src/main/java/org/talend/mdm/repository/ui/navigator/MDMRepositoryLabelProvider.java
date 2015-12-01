@@ -36,16 +36,22 @@ import org.eclipse.ui.IMemento;
 import org.eclipse.ui.navigator.ICommonContentExtensionSite;
 import org.eclipse.ui.navigator.ICommonLabelProvider;
 import org.eclipse.ui.navigator.IDescriptionProvider;
-import org.talend.commons.exception.PersistenceException;
 import org.talend.core.GlobalServiceRegister;
+import org.talend.core.context.Context;
+import org.talend.core.context.RepositoryContext;
 import org.talend.core.model.properties.Item;
 import org.talend.core.model.properties.Property;
+import org.talend.core.model.properties.User;
 import org.talend.core.model.repository.IRepositoryViewObject;
+import org.talend.core.model.repository.LockInfo;
+import org.talend.core.repository.model.ProxyRepositoryFactory;
 import org.talend.core.runtime.CoreRuntimePlugin;
+import org.talend.core.services.IGITProviderService;
 import org.talend.mdm.repository.core.IRepositoryNodeConfiguration;
 import org.talend.mdm.repository.core.IRepositoryNodeLabelProvider;
 import org.talend.mdm.repository.core.service.IMDMSVNProviderService;
 import org.talend.mdm.repository.extension.RepositoryNodeConfigurationManager;
+import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 import org.talend.repository.model.IProxyRepositoryFactory;
 
@@ -63,6 +69,10 @@ public class MDMRepositoryLabelProvider extends ColumnLabelProvider implements I
     private IMDMSVNProviderService svnProviderService = null;
 
     private Boolean isInSvnMode = null;
+
+    private IGITProviderService gitProviderService;
+
+    private Boolean isInGitMode;
 
     @Override
     public void addListener(ILabelProviderListener listener) {
@@ -158,20 +168,42 @@ public class MDMRepositoryLabelProvider extends ColumnLabelProvider implements I
             }
         }
 
+        if (isInGitMode()) {
+            return getLockInfo(element);
+        }
+
+        return null;
+    }
+
+    private String getLockInfo(Object element) {
+        User currentLoginUser = ((RepositoryContext) CoreRuntimePlugin.getInstance().getContext()
+                .getProperty(Context.REPOSITORY_CONTEXT_KEY)).getUser();
+        String currentLogin = null;
+        if (currentLoginUser != null) {
+            currentLogin = currentLoginUser.getLogin();
+        }
+        IRepositoryViewObject viewObj = (IRepositoryViewObject) element;
+        Item item = viewObj.getProperty().getItem();
+        if (item != null) {
+            LockInfo lockInfo = ProxyRepositoryFactory.getInstance().getLockInfo(item);
+            if (!lockInfo.getUser().equals(currentLogin)) {
+                String login = lockInfo.getUser();
+                String application = lockInfo.getApplication();
+                if (login != null && !"".equals(login)) {//$NON-NLS-1$
+                    String content = Messages.bind(Messages.MDMRepositoryLabelProvider_lockinfo, login, application);
+                    return content;
+                }
+            }
+        }
+
         return null;
     }
 
     private boolean isInSvnMode() {
         if (isInSvnMode == null) {
-            try {
-                if (!factory.isLocalConnectionProvider()) {
-                    IMDMSVNProviderService service = getSvnProviderService();
-                    if (service != null && service.isProjectInSvnMode()) {
-                        isInSvnMode = Boolean.TRUE;
-                    }
-                }
-            } catch (PersistenceException e) {
-                log.error(e.getMessage(), e);
+            IMDMSVNProviderService service = getSvnProviderService();
+            if (service != null && service.isProjectInSvnMode()) {
+                isInSvnMode = Boolean.TRUE;
             }
 
             if (isInSvnMode == null) {
@@ -180,6 +212,21 @@ public class MDMRepositoryLabelProvider extends ColumnLabelProvider implements I
         }
 
         return isInSvnMode.booleanValue();
+    }
+
+    private boolean isInGitMode() {
+        if (isInGitMode == null) {
+            IGITProviderService service = getGitProviderService();
+            if (service != null && service.isProjectInGitMode()) {
+                isInGitMode = Boolean.TRUE;
+            }
+
+            if (isInGitMode == null) {
+                isInGitMode = Boolean.FALSE;
+            }
+        }
+
+        return isInGitMode.booleanValue();
     }
 
     private IMDMSVNProviderService getSvnProviderService() {
@@ -193,6 +240,20 @@ public class MDMRepositoryLabelProvider extends ColumnLabelProvider implements I
         }
 
         return svnProviderService;
+    }
+
+    private IGITProviderService getGitProviderService() {
+        if (gitProviderService == null) {
+            try {
+                gitProviderService = (IGITProviderService) GlobalServiceRegister.getDefault().getService(
+                        IGITProviderService.class);
+            } catch (Exception e) {
+                log.error(e.getMessage(), e);
+            }
+
+        }
+
+        return gitProviderService;
     }
 
     public void restoreState(IMemento aMemento) {

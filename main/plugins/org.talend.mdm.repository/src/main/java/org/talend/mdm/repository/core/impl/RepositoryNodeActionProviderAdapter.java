@@ -301,9 +301,9 @@ public class RepositoryNodeActionProviderAdapter implements IRepositoryNodeActio
                 if (svnProvider != null && gitProvider != null) {
                     extendActionProviders = new IRepositoryNodeActionProvider[] { svnProvider, gitProvider };
                 } else if (svnProvider != null) {
-                    extendActionProviders = new IRepositoryNodeActionProvider[] { svnProvider, svnProvider };
+                    extendActionProviders = new IRepositoryNodeActionProvider[] { svnProvider };
                 } else if (gitProvider != null) {
-                    extendActionProviders = new IRepositoryNodeActionProvider[] { svnProvider, gitProvider };
+                    extendActionProviders = new IRepositoryNodeActionProvider[] { gitProvider };
                 }
             }
 

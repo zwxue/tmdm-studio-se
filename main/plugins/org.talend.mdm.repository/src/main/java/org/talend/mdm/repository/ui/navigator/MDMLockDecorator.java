@@ -47,6 +47,9 @@ public class MDMLockDecorator implements ILightweightLabelDecorator {
     private static final ImageDescriptor IMG_G_LOCK = EclipseResourceManager.getImageDescriptor(RepositoryPlugin.PLUGIN_ID,
             "icons/locked_green_overlay.gif"); //$NON-NLS-1$
 
+    private static final ImageDescriptor IMG_R_LOCK = EclipseResourceManager.getImageDescriptor(RepositoryPlugin.PLUGIN_ID,
+            "icons/locked_red_overlay.gif"); //$NON-NLS-1$
+
     public void decorate(Object element, IDecoration decoration) {
         Item item = RepositoryResourceUtil.getItemFromRepViewObj(element);
         if (item != null) {
@@ -70,6 +73,8 @@ public class MDMLockDecorator implements ILightweightLabelDecorator {
         } else {
             if (status != ERepositoryStatus.LOCK_BY_OTHER) {
                 decoration.addOverlay(null, IDecoration.BOTTOM_LEFT);
+            } else {
+                decoration.addOverlay(IMG_R_LOCK, IDecoration.BOTTOM_LEFT);
             }
         }
     }

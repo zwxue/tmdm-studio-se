@@ -740,6 +740,8 @@ public class Messages extends NLS {
 
     public static String MDMOpenExistVersionProcessPage_lockedByUser;
 
+    public static String MDMRepositoryLabelProvider_lockinfo;
+
     public static String MDMRepositoryView_integration;
 
     public static String MDMRepositoryViewServiceExt_cannotFindJob;
