@@ -407,6 +407,15 @@ public class DataModelMainPage extends EditorPart implements ModifyListener, IGo
 
     }
 
+    public void firePropertyChange() {
+        Display.getDefault().asyncExec(new Runnable() {
+
+            public void run() {
+                firePropertyChange(PROP_DIRTY);
+            }
+        });
+    }
+
     private void doSetDirty(boolean dirty) {
         this.dirty = dirty;
     }
