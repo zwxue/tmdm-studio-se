@@ -29,6 +29,8 @@ import org.talend.mdm.repository.utils.EclipseResourceManager;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 import org.talend.repository.model.IProxyRepositoryFactory;
 
+import com.amalto.workbench.exadapter.ExAdapterManager;
+
 /**
  * created by liusongbo on 2013-4-25
  */
@@ -38,17 +40,18 @@ public class MDMLockDecorator implements ILightweightLabelDecorator {
 
     private boolean editableAsReadOnly;
 
+    private IMDMLockDecoratorExAdapter exAdapter;
+
     public MDMLockDecorator() {
         Context ctx = CoreRuntimePlugin.getInstance().getContext();
         RepositoryContext rc = (RepositoryContext) ctx.getProperty(Context.REPOSITORY_CONTEXT_KEY);
         this.editableAsReadOnly = rc.isEditableAsReadOnly();
+
+        exAdapter = ExAdapterManager.getAdapter(this, IMDMLockDecoratorExAdapter.class);
     }
 
     private static final ImageDescriptor IMG_G_LOCK = EclipseResourceManager.getImageDescriptor(RepositoryPlugin.PLUGIN_ID,
             "icons/locked_green_overlay.gif"); //$NON-NLS-1$
-
-    private static final ImageDescriptor IMG_R_LOCK = EclipseResourceManager.getImageDescriptor(RepositoryPlugin.PLUGIN_ID,
-            "icons/locked_red_overlay.gif"); //$NON-NLS-1$
 
     public void decorate(Object element, IDecoration decoration) {
         Item item = RepositoryResourceUtil.getItemFromRepViewObj(element);
@@ -68,13 +71,16 @@ public class MDMLockDecorator implements ILightweightLabelDecorator {
                 status = ERepositoryStatus.DEFAULT;
             }
         }
-        if (status == ERepositoryStatus.LOCK_BY_USER) {
-            decoration.addOverlay(IMG_G_LOCK, IDecoration.BOTTOM_LEFT);
+
+        if (exAdapter != null) {
+            exAdapter.decorateLockImage(decoration, status);
         } else {
-            if (status != ERepositoryStatus.LOCK_BY_OTHER) {
-                decoration.addOverlay(null, IDecoration.BOTTOM_LEFT);
+            if (status == ERepositoryStatus.LOCK_BY_USER) {
+                decoration.addOverlay(IMG_G_LOCK, IDecoration.BOTTOM_LEFT);
             } else {
-                decoration.addOverlay(IMG_R_LOCK, IDecoration.BOTTOM_LEFT);
+                if (status != ERepositoryStatus.LOCK_BY_OTHER) {
+                    decoration.addOverlay(null, IDecoration.BOTTOM_LEFT);
+                }
             }
         }
     }
