@@ -283,7 +283,7 @@ public class XSDEditor2 extends XSDEditor implements ISvnHistory {
     }
 
     public void fireDirtyPropChange() {
-        firePropertyChange(PROP_DIRTY);
+        getdMainPage().firePropertyChange();
     }
 
     private boolean isEE() {
