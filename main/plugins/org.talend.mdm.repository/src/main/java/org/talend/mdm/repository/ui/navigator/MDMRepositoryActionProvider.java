@@ -45,7 +45,7 @@ public class MDMRepositoryActionProvider extends CommonActionProvider implements
 
     private void initActions() {
         registerCommonAction(new OpenObjectAction());
-        registerCommonAction(new RefreshAction());
+        registerCommonAction(new RefreshAction(false));
         registerCommonAction(new CopyAction());
         registerCommonAction(new PasteAction());
     }
@@ -59,8 +59,9 @@ public class MDMRepositoryActionProvider extends CommonActionProvider implements
     private void fillActionBarsForActions(IActionBars actionBars) {
         for (AbstractRepositoryAction action : commonActionMap.values()) {
             String definitionId = action.getActionDefinitionId();
-            if (definitionId != null)
+            if (definitionId != null) {
                 actionBars.setGlobalActionHandler(definitionId, action);
+            }
         }
     }
 
