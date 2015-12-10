@@ -70,7 +70,6 @@ public class UtilTest {
         user.setUsername(username);
         user.setPassword(password);
         user.setServerUrl(endpointaddress);
-        user.setUniverse(universe);
 
         serverRoot.setUser(user);
         return serverRoot;
@@ -259,7 +258,7 @@ public class UtilTest {
 
     @Test
     public void testConvertWhereCondition() {
-        WSWhereCondition wc = new WSWhereCondition("Entity/Id", WSWhereOperator.CONTAINS, "id1", WSStringPredicate.OR, false); //$NON-NLS-1$ //$NON-NLS-2$
+        WSWhereCondition wc = new WSWhereCondition("Entity/Id", WSWhereOperator.CONTAINS, "id1", false, WSStringPredicate.OR); //$NON-NLS-1$ //$NON-NLS-2$
         String[] lines = Util.convertWhereCondition(wc);
         assertEquals(lines.length, 4);
         assertEquals(lines[0], "Entity/Id"); //$NON-NLS-1$

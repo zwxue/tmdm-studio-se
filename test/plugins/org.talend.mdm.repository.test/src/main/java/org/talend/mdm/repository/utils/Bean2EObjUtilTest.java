@@ -37,7 +37,7 @@ import org.talend.mdm.repository.model.mdmserverobject.WSMenuMenuEntriesDescript
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.webservices.WSMenu;
 import com.amalto.workbench.webservices.WSMenuEntry;
-import com.amalto.workbench.webservices.WSMenuEntry.Descriptions;
+import com.amalto.workbench.webservices.WSMenuMenuEntriesDescriptions;
 
 @PrepareForTest({ Bean2EObjUtil.class, System.class, IOUtil.class, EMFClassUtil.class, Logger.class })
 public class Bean2EObjUtilTest {
@@ -111,7 +111,7 @@ public class Bean2EObjUtilTest {
         menuEntry.setIcon("icon A"); //$NON-NLS-1$
         menuEntry.setId("id A"); //$NON-NLS-1$
 
-        Descriptions ds = new Descriptions();
+        WSMenuMenuEntriesDescriptions ds = new WSMenuMenuEntriesDescriptions();
         ds.setLabel("label A"); //$NON-NLS-1$
         ds.setLanguage("En"); //$NON-NLS-1$
         menuEntry.getDescriptions().add(ds);
@@ -132,7 +132,7 @@ public class Bean2EObjUtilTest {
         assertEquals(entry.getContext(), entryE.getContext());
         assertEquals(entry.getIcon(), entryE.getIcon());
         assertEquals(entry.getId(), entryE.getId());
-        List<Descriptions> ds = entry.getDescriptions();
+        List<WSMenuMenuEntriesDescriptions> ds = entry.getDescriptions();
         EList<WSMenuMenuEntriesDescriptionsE> des = entryE.getDescriptions();
         if (ds != null) {
             for (int i = 0; i < ds.size(); i++) {
@@ -141,7 +141,7 @@ public class Bean2EObjUtilTest {
         }
     }
 
-    private void checkDesc(Descriptions ds, WSMenuMenuEntriesDescriptionsE des) {
+    private void checkDesc(WSMenuMenuEntriesDescriptions ds, WSMenuMenuEntriesDescriptionsE des) {
         assertEquals(ds.getLabel(), des.getLabel());
         assertEquals(ds.getLanguage(), des.getLanguage());
     }
