@@ -21,8 +21,29 @@
       <import plugin="org.eclipse.xsd"/>
       <import plugin="org.talend.mdm.workbench"/>
       <import plugin="org.junit"/>
-	  <import plugin="org.talend.designer.routines.mdmprovider"/>
+      <import plugin="org.talend.designer.routines.mdmprovider"/>
    </requires>
 
+   <plugin
+         id="org.talend.designer.routines.mdmprovider.test"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         fragment="true"
+         unpack="false"/>
+
+   <plugin
+         id="org.talend.mdm.repository.test"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         fragment="true"/>
+
+   <plugin
+         id="org.talend.mdm.workbench.test"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         fragment="true"/>
 
 </feature>
