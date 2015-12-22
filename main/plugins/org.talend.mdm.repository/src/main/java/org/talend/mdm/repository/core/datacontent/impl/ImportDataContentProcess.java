@@ -276,10 +276,15 @@ public class ImportDataContentProcess extends AbstractDataContentProcess {
                 }
                 try {
                     InputStreamMerger manager = bulkloadClient.load();
-                    InputStream bin = new ByteArrayInputStream(sb.toString().getBytes("utf-8"));//$NON-NLS-1$
-                    manager.push(bin);
-                    // bulkloadClient.load(sb.toString());
-                    manager.close();
+                    synchronized (manager) {
+                        InputStream bin = new ByteArrayInputStream(sb.toString().getBytes("utf-8"));//$NON-NLS-1$
+                        manager.push(bin);
+                        manager.close();
+                        while (!manager.isAlreadyProcessed()) {
+                            manager.wait(100);
+                        }
+                        manager.notify();
+                    }
                 } catch (Exception e) {
                     log.error(e.getLocalizedMessage(), e);
                     String msg = Messages.bind(Messages.ImportDataClusterAction_importErrorMsg, concept, dName,
