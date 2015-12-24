@@ -319,7 +319,7 @@ public class ImportServerObjectWizard extends Wizard {
     }
 
     public List<String> doImport(Object[] objs, IProgressMonitor monitor) {
-        monitor.beginTask(Messages.Import_Objects, IProgressMonitor.UNKNOWN);
+        monitor.beginTask(Messages.Import_Objects, objs.length);
         List<String> importedIds = new LinkedList<String>();
         ImportService.setImporting(true);
 
@@ -416,6 +416,7 @@ public class ImportServerObjectWizard extends Wizard {
             } catch (IOException e) {
                 log.error(e.getMessage(), e);
             }
+            monitor.worked(1);
         }
         ImportService.setImporting(false);
         monitor.done();
@@ -593,18 +594,13 @@ public class ImportServerObjectWizard extends Wizard {
 
     class ImportProcess implements IRunnableWithProgress {
 
-        /*
-         * (non-Javadoc)
-         * 
-         * @see org.eclipse.jface.operation.IRunnableWithProgress#run(org.eclipse.core.runtime.IProgressMonitor)
-         */
-        public void run(IProgressMonitor arg0) throws InvocationTargetException, InterruptedException {
+        public void run(final IProgressMonitor wizardMonitor) throws InvocationTargetException, InterruptedException {
             UIJob job = new UIJob(Messages.Import_Objects) {
 
                 @Override
                 public IStatus runInUIThread(IProgressMonitor monitor) {
                     // isOverrideAll = btnOverwrite.getSelection();
-                    List<String> importedIds = doImport(selectedObjects, monitor);
+                    List<String> importedIds = doImport(selectedObjects, wizardMonitor);
                     commonViewer.refresh();
                     if (exAdapter != null) {
 

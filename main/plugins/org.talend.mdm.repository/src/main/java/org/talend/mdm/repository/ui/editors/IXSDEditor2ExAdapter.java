@@ -16,6 +16,7 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.ui.IEditorInput;
 import org.talend.core.model.properties.Item;
+import org.talend.mdm.repository.ui.actions.IPostOpenAction;
 
 import com.amalto.workbench.exadapter.IExAdapter;
 
@@ -23,7 +24,7 @@ import com.amalto.workbench.exadapter.IExAdapter;
  * created by HHB on 2014-1-9 Detailled comment
  * 
  */
-public interface IXSDEditor2ExAdapter extends IExAdapter<XSDEditor2> {
+public interface IXSDEditor2ExAdapter extends IExAdapter<XSDEditor2>, IPostOpenAction {
 
     void init(IEditorInput editorInput);
 
