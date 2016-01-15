@@ -85,6 +85,7 @@ public class Bean2EObjUtilTest {
         initBean(menu);
 
         Bean2EObjUtil util = Bean2EObjUtil.getInstance();
+        util.registerClassMap(WSMenu.class);
         EObject eObject = util.convertFromBean2EObj(menu, null);
         assertNotNull(eObject);
 
@@ -152,6 +153,7 @@ public class Bean2EObjUtilTest {
         initEObject(menuE);
         //
         Bean2EObjUtil util = Bean2EObjUtil.getInstance();
+        util.registerClassMap(WSMenu.class);
         WSMenu menu = (WSMenu) util.convertFromEObj2Bean(menuE);
         assertNotNull(menu);
 
