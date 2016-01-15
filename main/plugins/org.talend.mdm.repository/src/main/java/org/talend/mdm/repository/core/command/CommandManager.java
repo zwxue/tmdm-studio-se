@@ -60,7 +60,7 @@ public class CommandManager implements IMementoAware {
 
     IProxyRepositoryFactory factory = CoreRuntimePlugin.getInstance().getProxyRepositoryFactory();
 
-    private Map<String, CommandStack> map = new HashMap<String, CommandStack>();
+    protected Map<String, CommandStack> map = new HashMap<String, CommandStack>();
 
     public CommandStack findCommandStack(String id) {
         if (id == null) {
