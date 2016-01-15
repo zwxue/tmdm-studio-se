@@ -216,19 +216,20 @@ public class XSDEditor extends MultiPageEditorPart implements IServerObjectEdito
             return;
         }
         try {
-            if (getSelectedPage() instanceof DataModelMainPage) {
+            if (newPageIndex == MODEL_PAGE_INDEX) {
                 DataModelMainPage mainPage = getDataModelEditorPage();
-                if (mainPage != null && lastPageIndex == SOURCE_PAGE_INDEX) {
-                    validateXsdSourceEditor();
-                    if (!hasXSDErrors) {
-                        String xsd = getSourcePageDocument();
-                        XSDSchema schema = Util.createXsdSchema(xsd, xobject);
-                        mainPage.setXsdSchema(schema);
-                        mainPage.refresh();
-
-                        //
-                        expandHelper.recoverExpandState(mainPage);
+                if (mainPage != null) {
+                    if (lastPageIndex == SOURCE_PAGE_INDEX) {
+                        validateXsdSourceEditor();
+                        if (!hasXSDErrors) {
+                            String xsd = getSourcePageDocument();
+                            XSDSchema schema = Util.createXsdSchema(xsd, xobject);
+                            mainPage.setXsdSchema(schema);
+                        }
                     }
+                    mainPage.refresh();
+                    //
+                    expandHelper.recoverExpandState(mainPage);
                 }
             } else if (newPageIndex == SOURCE_PAGE_INDEX) {
                 if (hasXSDErrors) {
