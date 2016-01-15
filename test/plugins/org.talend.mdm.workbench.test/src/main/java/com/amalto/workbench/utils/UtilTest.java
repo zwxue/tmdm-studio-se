@@ -250,7 +250,7 @@ public class UtilTest {
 
     @Test
     public void testConvertRouteCondition() {
-        WSRoutingRuleExpression wr = new WSRoutingRuleExpression("name", "Entity/Id", WSRoutingRuleOperator.CONTAINS, "value"); //$NON-NLS-1$ //$NON-NLS-2$
+        WSRoutingRuleExpression wr = new WSRoutingRuleExpression("name", "value", WSRoutingRuleOperator.CONTAINS, "Entity/Id"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         String[] lines = Util.convertRouteCondition(wr);
         assertEquals(lines.length, 4);
         assertEquals(lines[0], "Entity/Id"); //$NON-NLS-1$
