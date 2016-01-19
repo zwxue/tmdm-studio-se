@@ -38,7 +38,7 @@ import com.amalto.workbench.image.ImageCache;
  */
 public abstract class AbstractSimpleAddAction extends AbstractRepositoryAction {
 
-    private static Logger log = Logger.getLogger(AbstractSimpleAddAction.class);
+    protected static Logger log = Logger.getLogger(AbstractSimpleAddAction.class);
 
     /**
      * DOC hbhong AddMenu constructor comment.
