@@ -21,6 +21,7 @@
 // ============================================================================
 package org.talend.mdm.repository.ui.actions.serviceconfiguration;
 
+import org.dom4j.DocumentException;
 import org.talend.core.model.properties.Item;
 import org.talend.core.model.properties.ItemState;
 import org.talend.core.model.properties.PropertiesFactory;
@@ -33,7 +34,7 @@ import org.talend.mdm.repository.model.mdmserverobject.WSServicePutConfiguration
 import org.talend.mdm.repository.ui.actions.AbstractSimpleAddAction;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 
-import com.amalto.workbench.editors.ServiceConfigrationMainPage;
+import com.amalto.workbench.utils.XmlUtil;
 
 /**
  * DOC jsxie class global comment. Detailled comment <br/>
@@ -59,7 +60,7 @@ public class NewServiceConfigurationAction extends AbstractSimpleAddAction {
                 + "<username/>  " + "\n" + " <password/>  " + "\n" + " <from/>  " + "\n" + " <to/>  " + "\n" + " <permanentbcc/>" //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$ //$NON-NLS-9$
                 + "\n" + " <process/>  " + "\n" + " <logfilename/> " + "\n" + " </configuration>";//$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$
 
-        putConfig1.setConfiguration(ServiceConfigrationMainPage.formartXml(configContent1));
+        putConfig1.setConfiguration(formatXml(configContent1));
 
         WSServicePutConfigurationE putConfig2 = MdmserverobjectFactory.eINSTANCE.createWSServicePutConfigurationE();
         putConfig2.setJndiName("svn"); //$NON-NLS-1$
@@ -68,14 +69,14 @@ public class NewServiceConfigurationAction extends AbstractSimpleAddAction {
                 " <username>admin</username>" + //$NON-NLS-1$
                 "</svn-configuration>"; //$NON-NLS-1$
 
-        putConfig2.setConfiguration(ServiceConfigrationMainPage.formartXml(configContent2));
+        putConfig2.setConfiguration(formatXml(configContent2));
 
         WSServicePutConfigurationE putConfig3 = MdmserverobjectFactory.eINSTANCE.createWSServicePutConfigurationE();
         putConfig3.setJndiName("workflow"); //$NON-NLS-1$
 
         String configContent3 = "  <workflow-configuration> <api-type>EJB2</api-type> </workflow-configuration>"; //$NON-NLS-1$
 
-        putConfig3.setConfiguration(ServiceConfigrationMainPage.formartXml(configContent3));
+        putConfig3.setConfiguration(formatXml(configContent3));
 
         WSServiceConfigurationE serConfig = MdmserverobjectFactory.eINSTANCE.createWSServiceConfigurationE();
         serConfig.setName(key);
@@ -85,6 +86,18 @@ public class NewServiceConfigurationAction extends AbstractSimpleAddAction {
         serConfig.getServicePutConfigurations().add(putConfig3);
 
         return serConfig;
+    }
+
+    private String formatXml(String doc) {
+        String formatXml = doc;
+        if (formatXml != null && formatXml.length() > 0) {
+            try {
+                formatXml = XmlUtil.formatPretty(formatXml, "UTF-8");//$NON-NLS-1$
+            } catch (DocumentException e) {
+                log.error(e.getMessage(), e);
+            }
+        }
+        return formatXml;
     }
 
     @Override
