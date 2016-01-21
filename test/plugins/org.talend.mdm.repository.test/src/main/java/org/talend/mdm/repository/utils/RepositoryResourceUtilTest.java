@@ -50,10 +50,12 @@ import org.talend.core.model.properties.PropertiesFactory;
 import org.talend.core.model.properties.Property;
 import org.talend.core.model.properties.User;
 import org.talend.core.model.repository.ERepositoryObjectType;
+import org.talend.core.model.repository.Folder;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.core.model.repository.RepositoryNodeProviderRegistryReader;
 import org.talend.core.model.repository.ResourceModelUtils;
 import org.talend.core.repository.model.IRepositoryFactory;
+import org.talend.core.repository.model.ProxyRepositoryFactory;
 import org.talend.core.runtime.CoreRuntimePlugin;
 import org.talend.mdm.repository.core.IRepositoryNodeConfiguration;
 import org.talend.mdm.repository.core.IRepositoryNodeLabelProvider;
@@ -78,10 +80,11 @@ import com.amalto.workbench.image.ImageCache;
 
 // @RunWith(PowerMockRunner.class)
 @PrepareForTest({ RepositoryResourceUtil.class, ImageDescriptor.class, JFaceResources.class, DefaultMessagesImpl.class,
-        ImageCache.class, ItemState.class, ProjectManager.class, CoreRuntimePlugin.class, InteractiveService.class,
-        ResourceModelUtils.class, FolderType.class, RepositoryNodeConfigurationManager.class, ResourceUtils.class,
-        ContainerCacheService.class, RepositoryQueryService.class, RepositoryNodeProviderRegistryReader.class,
-        ServerDefService.class, ERepositoryStatus.class, ExAdapterManager.class })
+    ImageCache.class, ItemState.class, ProjectManager.class, CoreRuntimePlugin.class, InteractiveService.class,
+    ResourceModelUtils.class, FolderType.class, RepositoryNodeConfigurationManager.class, ResourceUtils.class,
+    ContainerCacheService.class, RepositoryQueryService.class, RepositoryNodeProviderRegistryReader.class,
+    ServerDefService.class, ERepositoryStatus.class, ExAdapterManager.class, ProxyRepositoryFactory.class,
+ })
 public class RepositoryResourceUtilTest {
 
     @Rule
@@ -100,12 +103,7 @@ public class RepositoryResourceUtilTest {
         IRepositoryResourceUtilExAdapter mockAdapter = PowerMockito.mock(IRepositoryResourceUtilExAdapter.class);
         PowerMockito.mockStatic(ExAdapterManager.class);
         PowerMockito.when(ExAdapterManager.getAdapter(new RepositoryResourceUtil(), IRepositoryResourceUtilExAdapter.class))
-                .thenReturn(mockAdapter);
-
-        PowerMockito.mockStatic(ImageCache.class);
-        ImageDescriptor imgDesc = mock(ImageDescriptor.class);
-        when(ImageCache.getImage(anyString())).thenReturn(imgDesc);
-        //
+        .thenReturn(mockAdapter);
 
         PowerMockito.mockStatic(CoreRuntimePlugin.class);
         CoreRuntimePlugin coreRuntimePlugin = mock(CoreRuntimePlugin.class);
@@ -343,8 +341,8 @@ public class RepositoryResourceUtilTest {
         Project mockProject = mock(Project.class);
         when(ProjectManager.getInstance().getCurrentProject()).thenReturn(mockProject);
 
-        PowerMockito.mockStatic(ResourceModelUtils.class);
-        when(ResourceModelUtils.getProject(mockProject)).thenReturn(mockIProject);
+        PowerMockito.mockStatic(ResourceUtils.class);
+        when(ResourceUtils.getProject(mockProject)).thenReturn(mockIProject);
 
         String invalidPath = "mm:\\ss";
         when(desFolder.exists()).thenReturn(true);
@@ -353,7 +351,7 @@ public class RepositoryResourceUtilTest {
                 progressMonitor);
         PowerMockito.verifyStatic(Mockito.atLeastOnce());
         ProjectManager.getInstance();
-        ResourceModelUtils.getProject(Mockito.any(Project.class));
+        ResourceUtils.getProject(Mockito.any(Project.class));
         assertNull(copyOfFile);
 
         // verify if the file that defined by second parameter does not exist, return null
@@ -391,9 +389,9 @@ public class RepositoryResourceUtilTest {
         Project mockProject = mock(Project.class);
         when(ProjectManager.getInstance().getCurrentProject()).thenReturn(mockProject);
 
-        PowerMockito.mockStatic(ResourceModelUtils.class);
+        PowerMockito.mockStatic(ResourceUtils.class);
         IProject mockIProject = mock(IProject.class);
-        when(ResourceModelUtils.getProject(mockProject)).thenReturn(mockIProject);
+        when(ResourceUtils.getProject(mockProject)).thenReturn(mockIProject);
 
         Item mockItem = mock(Item.class);
         ItemState mockState = mock(ItemState.class);
@@ -451,20 +449,18 @@ public class RepositoryResourceUtilTest {
      */
     @Test
     public void testGetFolder() throws Exception {
-
         PowerMockito.mockStatic(ProjectManager.class);
         ProjectManager mockProjectManager = mock(ProjectManager.class);
-        Project mockProject = mock(Project.class);
-        IProject mockIProject = mock(IProject.class);
         when(ProjectManager.getInstance()).thenReturn(mockProjectManager);
+        Project mockProject = mock(Project.class);
         when(ProjectManager.getInstance().getCurrentProject()).thenReturn(mockProject);
 
-        PowerMockito.mockStatic(ResourceModelUtils.class);
-        when(ResourceModelUtils.getProject(Mockito.any(Project.class))).thenReturn(mockIProject);
-
         PowerMockito.mockStatic(ResourceUtils.class);
+        IProject mockIProject = mock(IProject.class);
+        when(ResourceUtils.getProject(mockProject)).thenReturn(mockIProject);
+
         IFolder mockFolder = mock(IFolder.class);
-        String processFolder = "process";
+        String processFolder = "process"; //$NON-NLS-1$
         when(ResourceUtils.getFolder(mockIProject, processFolder, true)).thenReturn(mockFolder);
 
         PowerMockito.mockStatic(ERepositoryObjectType.class);
@@ -510,11 +506,10 @@ public class RepositoryResourceUtilTest {
         when(ProjectManager.getInstance().getCurrentProject()).thenReturn(mockProject);
 
         IFolder mockFolder = mock(IFolder.class);
-        PowerMockito.mockStatic(ResourceModelUtils.class);
-        when(ResourceModelUtils.getProject(mockProject)).thenReturn(mockIProject);
+        PowerMockito.mockStatic(ResourceUtils.class);
+        when(ResourceUtils.getProject(mockProject)).thenReturn(mockIProject);
         when(mockIProject.getFolder(Mockito.anyString())).thenReturn(mockFolder);
         when(mockFolder.exists()).thenReturn(false);
-        PowerMockito.mockStatic(ResourceUtils.class);
         PowerMockito.doNothing().when(ResourceUtils.class, "createFolder", mockFolder);
 
         ItemState mockItemState = mock(ItemState.class);
@@ -527,14 +522,21 @@ public class RepositoryResourceUtilTest {
         ERepositoryObjectType mockType = mock(ERepositoryObjectType.class);
         when(mockType.getType()).thenReturn("mockType");
         when(ERepositoryObjectType.getFolderName(mockType)).thenReturn(processFolder);
+
+        PowerMockito.mockStatic(ProxyRepositoryFactory.class);
+        ProxyRepositoryFactory proxyRepositoryFactory = mock(ProxyRepositoryFactory.class);
+        when(ProxyRepositoryFactory.getInstance()).thenReturn(proxyRepositoryFactory);
+        Folder mockTalendFolder = mock(Folder.class);
+        when(
+                proxyRepositoryFactory.createFolder(any(Project.class), any(ERepositoryObjectType.class), any(IPath.class),
+                        anyString())).thenReturn(mockTalendFolder);
+
         IRepositoryViewObject folderViewObject = RepositoryResourceUtil.createFolderViewObject(mockType, folderName,
                 mockParentItem, isSystem);
 
         assertNotNull(folderViewObject);
-
-        PowerMockito.verifyStatic(Mockito.times(1));
-        ResourceUtils.createFolder(mockFolder);
-
+        verify(proxyRepositoryFactory, times(1)).createFolder(any(Project.class), any(ERepositoryObjectType.class),
+                any(IPath.class), anyString());
     }
 
     @Test
@@ -714,8 +716,8 @@ public class RepositoryResourceUtilTest {
         when(ProjectManager.getInstance().getCurrentProject()).thenReturn(mockProject);
 
         IProject mockIProject = mock(IProject.class);
-        PowerMockito.mockStatic(ResourceModelUtils.class);
-        when(ResourceModelUtils.getProject(mockProject)).thenReturn(mockIProject);
+        PowerMockito.mockStatic(ResourceUtils.class);
+        when(ResourceUtils.getProject(mockProject)).thenReturn(mockIProject);
 
         PowerMockito.mockStatic(ERepositoryObjectType.class);
         ERepositoryObjectType mockType = mock(ERepositoryObjectType.class);
