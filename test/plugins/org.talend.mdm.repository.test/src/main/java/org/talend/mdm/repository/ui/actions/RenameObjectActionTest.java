@@ -64,6 +64,7 @@ import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 import org.talend.repository.ProjectManager;
 import org.talend.repository.model.IProxyRepositoryFactory;
 
+import com.amalto.workbench.MDMWorbenchPlugin;
 import com.amalto.workbench.exadapter.ExAdapterManager;
 import com.amalto.workbench.image.ImageCache;
 
@@ -72,10 +73,10 @@ import com.amalto.workbench.image.ImageCache;
  */
 // @RunWith(PowerMockRunner.class)
 @PrepareForTest({ RenameObjectAction.class, ImageDescriptor.class, JFaceResources.class, DefaultMessagesImpl.class,
-        ImageCache.class, ItemState.class, CoreRuntimePlugin.class, ProjectManager.class,
-        RepositoryNodeConfigurationManager.class, IProxyRepositoryFactory.class, ProxyRepositoryFactory.class,
-        MessageDialog.class, RepositoryResourceUtil.class, ContainerCacheService.class,
-        RepositoryNodeProviderRegistryReader.class, RepositoryResourceUtil.class, ExAdapterManager.class })
+    ImageCache.class, ItemState.class, CoreRuntimePlugin.class, ProjectManager.class,
+    RepositoryNodeConfigurationManager.class, IProxyRepositoryFactory.class, ProxyRepositoryFactory.class,
+    MessageDialog.class, RepositoryResourceUtil.class, ContainerCacheService.class,
+    RepositoryNodeProviderRegistryReader.class, RepositoryResourceUtil.class, ExAdapterManager.class, MDMWorbenchPlugin.class })
 public class RenameObjectActionTest {
 
     @Rule
@@ -96,12 +97,15 @@ public class RenameObjectActionTest {
         ImageRegistry registry = mock(ImageRegistry.class);
         when(JFaceResources.getImageRegistry()).thenReturn(registry);
         PowerMockito.mockStatic(DefaultMessagesImpl.class);
-        when(DefaultMessagesImpl.getString(anyString())).thenReturn("anyString()");
+        when(DefaultMessagesImpl.getString(anyString())).thenReturn("anyString()"); //$NON-NLS-1$
 
         IRepositoryResourceUtilExAdapter mockAdapter = PowerMockito.mock(IRepositoryResourceUtilExAdapter.class);
         PowerMockito.mockStatic(ExAdapterManager.class);
         PowerMockito.when(ExAdapterManager.getAdapter(new RepositoryResourceUtil(), IRepositoryResourceUtilExAdapter.class))
-                .thenReturn(mockAdapter);
+        .thenReturn(mockAdapter);
+
+        PowerMockito.mockStatic(MDMWorbenchPlugin.class);
+        when(MDMWorbenchPlugin.getImageDescriptor(anyString())).thenReturn(mock(ImageDescriptor.class));
 
         PowerMockito.mockStatic(ImageCache.class);
         ImageDescriptor imgDesc = mock(ImageDescriptor.class);
@@ -153,7 +157,8 @@ public class RenameObjectActionTest {
     @Test
     public void doRunTest() throws Exception {
         RenameObjectAction renameAction = new RenameObjectAction();
-        RenameObjectAction renameActionM = spy(renameAction);
+        RenameObjectAction renameActionM = PowerMockito.spy(renameAction);
+
         CommonViewer commonViewerM = mock(CommonViewer.class);
         Whitebox.setInternalState(renameActionM, "commonViewer", commonViewerM); //$NON-NLS-1$
         // mock a mdm repositoryViewObject
@@ -163,7 +168,9 @@ public class RenameObjectActionTest {
         ContainerItem parentItemM = mock(ContainerItem.class);
         Property propertyM = mock(Property.class);
         Property parentPropertyM = mock(Property.class);
+        String name = "mockName"; //$NON-NLS-1$
         MDMServerObject mdmServerObjectM = mock(MDMServerObject.class);
+        when(mdmServerObjectM.getName()).thenReturn(name);
         ItemState itemStateM = mock(ItemState.class);
 
         //
@@ -183,9 +190,11 @@ public class RenameObjectActionTest {
 
         ERepositoryObjectType typeM = ERepositoryObjectType.PROCESS;
         when(resourceProviderM.getRepositoryObjectType(mdmItemM)).thenReturn(typeM);
+
+        PowerMockito.doReturn("NewName").when(renameActionM, "showRenameDlg", typeM, parentItemM, name); //$NON-NLS-1$ //$NON-NLS-2$
         //
         PowerMockito.mockStatic(ContainerCacheService.class);
-        when(ContainerCacheService.get(eq(typeM), eq(""))).thenReturn(parentRVO);
+        when(ContainerCacheService.get(eq(typeM), eq(""))).thenReturn(parentRVO); //$NON-NLS-1$
         Shell shellM = mock(Shell.class);
         Control controlM = mock(Control.class);
         when(commonViewerM.getControl()).thenReturn(controlM);
@@ -198,9 +207,9 @@ public class RenameObjectActionTest {
 
         InputDialog inputDialogM = mock(InputDialog.class);
         PowerMockito.whenNew(InputDialog.class).withArguments(eq(shellM), anyString(), anyString(), anyString(), anyObject())
-                .thenReturn(inputDialogM);
+        .thenReturn(inputDialogM);
         when(inputDialogM.open()).thenReturn(IDialogConstants.OK_ID);
-        when(inputDialogM.getValue()).thenReturn("NewName");
+        when(inputDialogM.getValue()).thenReturn("NewName"); //$NON-NLS-1$
 
         renameActionM.doRun();
     }

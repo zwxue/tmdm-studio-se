@@ -67,6 +67,7 @@ import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 import org.talend.repository.ProjectManager;
 import org.talend.repository.model.IProxyRepositoryFactory;
 
+import com.amalto.workbench.MDMWorbenchPlugin;
 import com.amalto.workbench.exadapter.ExAdapterManager;
 import com.amalto.workbench.image.ImageCache;
 
@@ -75,10 +76,10 @@ import com.amalto.workbench.image.ImageCache;
  */
 // @RunWith(PowerMockRunner.class)
 @PrepareForTest({ RemoveFromRepositoryAction.class, ImageDescriptor.class, JFaceResources.class, DefaultMessagesImpl.class,
-        ImageCache.class, ItemState.class, CoreRuntimePlugin.class, ProjectManager.class,
-        RepositoryNodeConfigurationManager.class, IProxyRepositoryFactory.class, ProxyRepositoryFactory.class,
-        MessageDialog.class, RepositoryResourceUtil.class, ContainerCacheService.class,
-        RepositoryNodeProviderRegistryReader.class, ExAdapterManager.class })
+    ImageCache.class, ItemState.class, CoreRuntimePlugin.class, ProjectManager.class,
+    RepositoryNodeConfigurationManager.class, IProxyRepositoryFactory.class, ProxyRepositoryFactory.class,
+    MessageDialog.class, RepositoryResourceUtil.class, ContainerCacheService.class,
+        RepositoryNodeProviderRegistryReader.class, ExAdapterManager.class, MDMWorbenchPlugin.class })
 public class RemoveFromRepositoryActionTest {
 
     @Rule
@@ -96,17 +97,12 @@ public class RemoveFromRepositoryActionTest {
         ImageRegistry registry = mock(ImageRegistry.class);
         when(JFaceResources.getImageRegistry()).thenReturn(registry);
         PowerMockito.mockStatic(DefaultMessagesImpl.class);
-        when(DefaultMessagesImpl.getString(anyString())).thenReturn("anyString()");
+        when(DefaultMessagesImpl.getString(anyString())).thenReturn("anyString()"); //$NON-NLS-1$
 
         IRepositoryResourceUtilExAdapter mockAdapter = PowerMockito.mock(IRepositoryResourceUtilExAdapter.class);
         PowerMockito.mockStatic(ExAdapterManager.class);
         PowerMockito.when(ExAdapterManager.getAdapter(new RepositoryResourceUtil(), IRepositoryResourceUtilExAdapter.class))
                 .thenReturn(mockAdapter);
-
-        PowerMockito.mockStatic(ImageCache.class);
-        ImageDescriptor imgDesc = mock(ImageDescriptor.class);
-        when(ImageCache.getImage(anyString())).thenReturn(imgDesc);
-        //
 
         PowerMockito.mockStatic(CoreRuntimePlugin.class);
         CoreRuntimePlugin coreRuntimePlugin = mock(CoreRuntimePlugin.class);
@@ -129,7 +125,7 @@ public class RemoveFromRepositoryActionTest {
         RecycleBinNodeConfiguration recycleBinNodeConfiguration = mock(RecycleBinNodeConfiguration.class);
         PowerMockito.whenNew(RecycleBinNodeConfiguration.class).withNoArguments().thenReturn(recycleBinNodeConfiguration);
 
-        stub(method(ProxyRepositoryFactory.class, "getInstance")).toReturn(repositoryFactory);
+        stub(method(ProxyRepositoryFactory.class, "getInstance")).toReturn(repositoryFactory); //$NON-NLS-1$
 
         when(CoreRuntimePlugin.getInstance().getProxyRepositoryFactory()).thenReturn(repositoryFactory);
 
@@ -152,10 +148,17 @@ public class RemoveFromRepositoryActionTest {
 
     @Test
     public void doRunTest() throws Exception {
+        PowerMockito.mockStatic(MDMWorbenchPlugin.class);
+        when(MDMWorbenchPlugin.getImageDescriptor(anyString())).thenReturn(mock(ImageDescriptor.class));
+
         RemoveFromRepositoryAction removeAction = new RemoveFromRepositoryAction();
-        RemoveFromRepositoryAction removeActionM = spy(removeAction);
+        RemoveFromRepositoryAction removeActionM = PowerMockito.spy(removeAction);
         CommonViewer commonViewerM = mock(CommonViewer.class);
         Whitebox.setInternalState(removeActionM, "commonViewer", commonViewerM); //$NON-NLS-1$
+
+        PowerMockito.doReturn(true).when(removeActionM, "confirm", 2); //$NON-NLS-1$
+        PowerMockito.doNothing().when(removeActionM, "warn"); //$NON-NLS-1$
+
         // mock a mdm repositoryViewObject
         IRepositoryViewObject objectRVO = mock(IRepositoryViewObject.class);
         MDMServerObjectItem mdmItemM = mock(MDMServerObjectItem.class);
@@ -194,7 +197,7 @@ public class RemoveFromRepositoryActionTest {
         selectedObjects.add(folderRO);
 
         when(removeActionM.getSelectedObject()).thenReturn(selectedObjects);
-        Whitebox.setInternalState(removeActionM, "lockedObjs", Collections.EMPTY_LIST);
+        Whitebox.setInternalState(removeActionM, "lockedObjs", Collections.EMPTY_LIST); //$NON-NLS-1$
         PowerMockito.mockStatic(MessageDialog.class);
         when(MessageDialog.openConfirm((Shell) anyObject(), anyString(), anyString())).thenReturn(true);
 
