@@ -55,13 +55,18 @@ public class RenameObjectAction extends AbstractRepositoryAction {
      * @param text
      */
     public RenameObjectAction() {
-        super(Messages.RenameObjectAction_rename);
+        super(""); //$NON-NLS-1$
         setImageDescriptor(ImageCache.getImage(EImage.RENAME.getPath()));
     }
 
     @Override
     public String getGroupName() {
         return GROUP_EDIT;
+    }
+
+    @Override
+    public String getText() {
+        return Messages.RenameObjectAction_rename;
     }
 
     @Override
