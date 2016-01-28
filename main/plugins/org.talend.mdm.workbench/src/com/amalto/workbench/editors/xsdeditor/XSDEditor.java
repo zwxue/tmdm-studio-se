@@ -238,7 +238,7 @@ public class XSDEditor extends MultiPageEditorPart implements IServerObjectEdito
                 // save DataModelMainPage's contents to file
                 DataModelMainPage mainPage = getDataModelEditorPage();
                 expandHelper.recordExpandState(mainPage);
-                if (mainPage != null && mainPage.isDirty()) {
+                if (mainPage != null && this.isDirty()) {
                     String xsd = mainPage.getXSDSchemaString();
                     xsd = Util.formatXsdSource(xsd);
                     WSDataModel wsDataModel = (WSDataModel) xobject.getWsObject();
