@@ -84,7 +84,7 @@ import com.amalto.workbench.image.ImageCache;
     ResourceModelUtils.class, FolderType.class, RepositoryNodeConfigurationManager.class, ResourceUtils.class,
     ContainerCacheService.class, RepositoryQueryService.class, RepositoryNodeProviderRegistryReader.class,
     ServerDefService.class, ERepositoryStatus.class, ExAdapterManager.class, ProxyRepositoryFactory.class,
- })
+})
 public class RepositoryResourceUtilTest {
 
     @Rule
@@ -549,6 +549,7 @@ public class RepositoryResourceUtilTest {
         List<IRepositoryViewObject> spychildren = PowerMockito.spy(children);
 
         FolderRepositoryObject mockParentFolderObject = mock(FolderRepositoryObject.class);
+        assertEquals(folderName, mockParentFolderObject.getClass().getName());// ///to print if is a mock object
         when(mockParentFolderObject.getChildren()).thenReturn(spychildren);
 
         PowerMockito.mockStatic(ContainerCacheService.class);
@@ -730,7 +731,7 @@ public class RepositoryResourceUtilTest {
         viewObjects.add(mock(IRepositoryViewObject.class));
         PowerMockito.mockStatic(RepositoryResourceUtil.class);
         when(RepositoryResourceUtil.findViewObjects(mockType, mockParentItem, mockFolder, useRepositoryViewObject, withDeleted))
-                .thenReturn(viewObjects);
+        .thenReturn(viewObjects);
 
         PowerMockito.doCallRealMethod().when(RepositoryResourceUtil.class, "findViewObjects", mockType, mockParentItem,
                 useRepositoryViewObject, withDeleted);
@@ -780,7 +781,7 @@ public class RepositoryResourceUtilTest {
         PowerMockito.doReturn(false).when(RepositoryResourceUtil.class, "isSVNFolder", mockResources[2]);
         IRepositoryViewObject mock1ViewObject = mock(IRepositoryViewObject.class);
         when(RepositoryResourceUtil.createFolderViewObject(mockType, "folder", mockParentItem, false))
-                .thenReturn(mock1ViewObject);
+        .thenReturn(mock1ViewObject);
 
         PowerMockito.mockStatic(ContainerCacheService.class);
         // to mock ContainerCacheService.get(type, resPath);
@@ -792,7 +793,7 @@ public class RepositoryResourceUtilTest {
         mockViewObjects.add(mock(IRepositoryViewObject.class));
         mockViewObjects.add(mock(IRepositoryViewObject.class));
         when(RepositoryResourceUtil.findViewObjectsInFolder(mockType, mockParentItem, useRepositoryViewObject, withDeleted))
-                .thenReturn(mockViewObjects);
+        .thenReturn(mockViewObjects);
 
         PowerMockito.doCallRealMethod().when(RepositoryResourceUtil.class, "findViewObjects", mockType, mockParentItem,
                 mockFolder, useRepositoryViewObject, withDeleted);
