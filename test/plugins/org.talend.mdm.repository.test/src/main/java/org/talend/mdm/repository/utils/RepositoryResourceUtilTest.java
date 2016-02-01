@@ -90,6 +90,18 @@ public class RepositoryResourceUtilTest {
     @Rule
     public PowerMockRule powerMockRule = new PowerMockRule();
 
+    class StubFolderRepositoryObject extends FolderRepositoryObject {
+
+        public StubFolderRepositoryObject(Property prop) {
+            super(prop);
+        }
+
+        @Override
+        public List<IRepositoryViewObject> getChildren() {
+            return super.getChildren();
+        }
+    }
+
     @Before
     public void setUp() throws Exception {
         ResourceBundle rb = mock(ResourceBundle.class);
@@ -548,8 +560,7 @@ public class RepositoryResourceUtilTest {
         List<IRepositoryViewObject> children = new ArrayList<IRepositoryViewObject>();
         List<IRepositoryViewObject> spychildren = PowerMockito.spy(children);
 
-        FolderRepositoryObject mockParentFolderObject = mock(FolderRepositoryObject.class);
-        assertEquals(folderName, mockParentFolderObject.getClass().getName());// ///to print if is a mock object
+        StubFolderRepositoryObject mockParentFolderObject = mock(StubFolderRepositoryObject.class);
         when(mockParentFolderObject.getChildren()).thenReturn(spychildren);
 
         PowerMockito.mockStatic(ContainerCacheService.class);
