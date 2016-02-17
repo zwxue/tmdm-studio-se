@@ -2,17 +2,16 @@ package org.talend.mdm.repository.ui.actions.process;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.*;
+import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.*;
 
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.resource.JFaceResources;
-import org.junit.Rule;
 import org.junit.Test;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.rule.PowerMockRule;
 import org.powermock.reflect.Whitebox;
 import org.talend.core.model.properties.Item;
 import org.talend.core.model.properties.ItemState;
@@ -28,22 +27,24 @@ import org.talend.mdm.repository.ui.actions.AbstractSimpleAddActionTest;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 import org.talend.repository.ProjectManager;
 
+import com.amalto.workbench.MDMWorbenchPlugin;
 import com.amalto.workbench.exadapter.ExAdapterManager;
 import com.amalto.workbench.image.ImageCache;
 
 @PrepareForTest({ ImageDescriptor.class, JFaceResources.class, ImageCache.class, ItemState.class, CoreRuntimePlugin.class,
         ProjectManager.class, RepositoryNodeConfigurationManager.class, ProxyRepositoryFactory.class,
-        RepositoryResourceUtil.class, ExAdapterManager.class, MdmpropertiesFactoryImpl.class })
+        RepositoryResourceUtil.class, ExAdapterManager.class, MdmpropertiesFactoryImpl.class,
+        MDMWorbenchPlugin.class })
 public class NewProcessActionTest extends AbstractSimpleAddActionTest {
-
-    @Rule
-    public PowerMockRule powerMockRule = new PowerMockRule();
 
     @Test
     public void testCreateServerObject() throws Exception {
         //
         ContainerItem newItem = MdmpropertiesFactory.eINSTANCE.createContainerItem();
         ContainerItem mockContainerItem = spy(newItem);
+
+        PowerMockito.mockStatic(MDMWorbenchPlugin.class);
+        when(MDMWorbenchPlugin.getImageDescriptor(anyString())).thenReturn(mock(ImageDescriptor.class));
 
         NewProcessAction action = new NewProcessAction();
         NewProcessAction spyAction = spy(action);

@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2015 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2016 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -405,6 +405,15 @@ public class DataModelMainPage extends EditorPart implements ModifyListener, IGo
             }
         });
 
+    }
+
+    public void firePropertyChange() {
+        Display.getDefault().asyncExec(new Runnable() {
+
+            public void run() {
+                firePropertyChange(PROP_DIRTY);
+            }
+        });
     }
 
     private void doSetDirty(boolean dirty) {

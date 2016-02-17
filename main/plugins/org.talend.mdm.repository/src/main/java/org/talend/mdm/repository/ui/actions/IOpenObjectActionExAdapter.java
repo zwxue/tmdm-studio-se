@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2015 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2016 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -12,6 +12,8 @@
 // ============================================================================
 package org.talend.mdm.repository.ui.actions;
 
+import org.eclipse.ui.progress.UIJob;
+
 import com.amalto.workbench.exadapter.IExAdapter;
 
 /**
@@ -20,5 +22,5 @@ import com.amalto.workbench.exadapter.IExAdapter;
  */
 public interface IOpenObjectActionExAdapter extends IExAdapter<OpenObjectAction> {
 
-    void doOpen();
+    void beforeRun(UIJob openJob);
 }

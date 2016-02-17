@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2015 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2016 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -14,8 +14,14 @@ package org.talend.mdm.repository.ui.actions;
 
 import java.util.List;
 
+import org.apache.log4j.Logger;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.talend.core.model.properties.Item;
 import org.talend.core.model.repository.IRepositoryViewObject;
+import org.talend.core.repository.model.ProxyRepositoryFactory;
 import org.talend.mdm.repository.core.AbstractRepositoryAction;
 import org.talend.mdm.repository.core.IRepositoryViewGlobalActionHandler;
 import org.talend.mdm.repository.i18n.Messages;
@@ -29,19 +35,68 @@ import com.amalto.workbench.image.ImageCache;
  */
 public class RefreshAction extends AbstractRepositoryAction {
 
+    private static Logger log = Logger.getLogger(RefreshAction.class);
+
+    private boolean refreshAll;
     /**
      * DOC hbhong RefreshAction constructor comment.
      * 
      * @param text
      */
-    public RefreshAction() {
+    public RefreshAction(boolean refreshAll) {
         super(Messages.RefreshAction_Refresh);
+        if (refreshAll) {
+            String title = Messages.RefreshAction_Refresh_All;
+            setText(title);
+            setToolTipText(Messages.RefreshAction_Refresh_All_tooltip);
+        }
         setImageDescriptor(ImageCache.getImage(EImage.REFRESH.getPath()));
         this.setId(IRepositoryViewGlobalActionHandler.REFRESH);
         this.setActionDefinitionId(IRepositoryViewGlobalActionHandler.REFRESH);
+        this.refreshAll = refreshAll;
     }
 
+    @Override
+    public void run() {
+        updateProject();
+
+        super.run();
+    }
+
+    private void updateProject() {
+        final ProxyRepositoryFactory factory = ProxyRepositoryFactory.getInstance();
+
+        try {
+            if (!factory.isLocalConnectionProvider()) {
+
+                factory.initialize();
+
+                ResourcesPlugin.getWorkspace().getRoot().refreshLocal(IResource.DEPTH_INFINITE, new NullProgressMonitor());
+            }
+        } catch (CoreException e) {
+            log.error(e.getMessage(), e);
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+        }
+    }
+
+    @Override
     protected void doRun() {
+        if (refreshAll) {
+            refreshAll();
+        } else {
+            refreshSelection();
+        }
+    }
+
+    private void refreshAll() {
+        Object input = commonViewer.getInput();
+        for (IRepositoryViewObject viewObj : (IRepositoryViewObject[]) input) {
+            commonViewer.refresh(viewObj);
+        }
+    }
+
+    private void refreshSelection() {
         List<Object> selectedObject = getSelectedObject();
         if (!selectedObject.isEmpty()) {
             Object obj = selectedObject.get(0);
@@ -54,11 +109,6 @@ public class RefreshAction extends AbstractRepositoryAction {
         }
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.talend.mdm.repository.core.AbstractRepositoryAction#getGroupName()
-     */
     @Override
     public String getGroupName() {
         return GROUP_COMMON;

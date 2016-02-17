@@ -2,7 +2,7 @@
 //
 // Talend Community Edition
 //
-// Copyright (C) 2006-2015 Talend �C www.talend.com
+// Copyright (C) 2006-2016 Talend Inc. - www.talend.com
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
@@ -27,10 +27,12 @@ import java.util.Properties;
 
 import org.apache.log4j.Logger;
 import org.eclipse.core.resources.IMarker;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorReference;
 import org.eclipse.ui.IWorkbenchPage;
@@ -39,6 +41,7 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.intro.IIntroSite;
 import org.eclipse.ui.intro.config.IIntroAction;
+import org.eclipse.ui.progress.UIJob;
 import org.talend.commons.exception.PersistenceException;
 import org.talend.commons.runtime.model.repository.ERepositoryStatus;
 import org.talend.core.GlobalServiceRegister;
@@ -89,11 +92,6 @@ public class OpenObjectAction extends AbstractRepositoryAction implements IIntro
         this.selObjects = selObjects;
     }
 
-    /**
-     * DOC hbhong OpenObjectAction constructor comment.
-     * 
-     * @param text
-     */
     public OpenObjectAction() {
         super(Messages.OpenObjectAction_open);
         setId(IRepositoryViewGlobalActionHandler.OPEN);
@@ -106,6 +104,12 @@ public class OpenObjectAction extends AbstractRepositoryAction implements IIntro
     IProxyRepositoryFactory factory = CoreRuntimePlugin.getInstance().getProxyRepositoryFactory();
 
     private IMarker marker;
+
+    private IEditorPart activeEditor;
+
+    public IEditorPart getOpenedEditor() {
+        return this.activeEditor;
+    }
 
     @Override
     protected boolean isLocked() {
@@ -154,65 +158,87 @@ public class OpenObjectAction extends AbstractRepositoryAction implements IIntro
         editorInput.setVersion(version);
     }
 
+    class OpenJob extends UIJob {
+
+        public OpenJob() {
+            super("Open Object"); //$NON-NLS-1$
+            setUser(true);
+        }
+
+        @Override
+        public IStatus runInUIThread(IProgressMonitor monitor) {
+
+            doOpen();
+
+            monitor.done();
+            return Status.OK_STATUS;
+        }
+
+    }
+
     @Override
     protected void doRun() {
-        if (exAdapter != null) {
-            exAdapter.doOpen();
-        } else {
-            doOpen();
-        }
+        new Thread(new Runnable() {
+
+            public void run() {
+                UIJob openJob = new OpenJob();
+                if (exAdapter != null) {
+                    exAdapter.beforeRun(openJob);
+                }
+                openJob.schedule();
+            }
+
+        }).start();
+
     }
 
     public void doOpen() {
-        Display.getDefault().syncExec(new Runnable() {
 
-            public void run() {
-                List<Object> sels = getSelectedObject();
-                if (selObjects != null) {
-                    sels = selObjects;
-                }
-                if (sels.isEmpty()) {
-                    return;
-                }
-                Object obj = sels.get(0);
-                if (obj instanceof IRepositoryViewObject) {
-                    if (obj instanceof WSRootRepositoryObject) {
+        List<Object> sels = getSelectedObject();
+        if (selObjects != null) {
+            sels = selObjects;
+        }
+        if (sels.isEmpty()) {
+            return;
+        }
+        Object obj = sels.get(0);
+        if (obj instanceof IRepositoryViewObject) {
+            if (obj instanceof WSRootRepositoryObject) {
+                return;
+            }
+            IRepositoryViewObject viewObject = (IRepositoryViewObject) obj;
+
+            Item item = viewObject.getProperty().getItem();
+            if (item instanceof ContainerItem) {
+                if (viewObject.getRepositoryObjectType().equals(IServerObjectRepositoryType.TYPE_SERVICECONFIGURATION)) {// service
+                    boolean checkMissingJar = MissingJarService.getInstance().checkMissingJar(true);
+                    if (!checkMissingJar) {
                         return;
                     }
-                    IRepositoryViewObject viewObject = (IRepositoryViewObject) obj;
-
-                    Item item = viewObject.getProperty().getItem();
-                    if (item instanceof ContainerItem) {
-                        if (viewObject.getRepositoryObjectType().equals(IServerObjectRepositoryType.TYPE_SERVICECONFIGURATION)) {// service
-                            boolean checkMissingJar = MissingJarService.getInstance().checkMissingJar(true);
-                            if (!checkMissingJar) {
-                                return;
-                            }
-                            // configuration
-                            MDMServerDef serverDef = openServerDialog(null);
-                            openServiceConfig(serverDef);
-                        } else {
-                            getCommonViewer().expandToLevel(obj, 1);
-                        }
-                    } else {
-                        IEditorReference editorRef = RepositoryResourceUtil.isOpenedInEditor(viewObject);
-                        if (editorRef != null) {
-                            if (page == null) {
-                                page = getCommonViewer().getCommonNavigator().getSite().getWorkbenchWindow().getActivePage();
-                            }
-                            if (page != null) {
-                                page.bringToTop(editorRef.getPart(false));
-                            }
-                            if (marker != null) {
-                                IDE.gotoMarker(editorRef.getEditor(true), marker);
-                            }
-                        } else {
-                            openItem(viewObject);
-                        }
+                    // configuration
+                    MDMServerDef serverDef = openServerDialog(null);
+                    openServiceConfig(serverDef);
+                } else {
+                    getCommonViewer().expandToLevel(obj, 1);
+                }
+            } else {
+                IEditorReference editorRef = RepositoryResourceUtil.isOpenedInEditor(viewObject);
+                if (editorRef != null) {
+                    if (page == null) {
+                        page = getCommonViewer().getCommonNavigator().getSite().getWorkbenchWindow().getActivePage();
                     }
+                    if (page != null) {
+                        page.bringToTop(editorRef.getPart(false));
+                    }
+                    if (marker != null) {
+                        IDE.gotoMarker(editorRef.getEditor(true), marker);
+                    }
+                } else {
+                    openItem(viewObject);
                 }
             }
-        });
+        }
+ 
 
     }
 
@@ -269,9 +295,9 @@ public class OpenObjectAction extends AbstractRepositoryAction implements IIntro
                             editorInput.setReadOnly(item.getState().isDeleted());
                         }
                         updateEditorInputVersionInfo(editorInput, viewObject);
-                        IEditorPart editor = this.page.openEditor(editorInput, editorInput.getEditorId());
+                        activeEditor = this.page.openEditor(editorInput, editorInput.getEditorId());
                         if (marker != null) {
-                            IDE.gotoMarker(editor, marker);
+                            IDE.gotoMarker(activeEditor, marker);
                         }
                     } catch (PartInitException e) {
                         log.error(e.getMessage(), e);

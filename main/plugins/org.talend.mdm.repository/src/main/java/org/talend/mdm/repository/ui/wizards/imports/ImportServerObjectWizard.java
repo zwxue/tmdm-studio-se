@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2015 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2016 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -261,7 +261,7 @@ public class ImportServerObjectWizard extends Wizard {
                         .append(serverDef.getHost())
                         .append(":").append(serverDef.getPort()) //$NON-NLS-1$ 
                         .append(Util.getContextPath(serverDef.getPath()))
-                        .append("/imageserver/upload/").append(encodedDirName).append("/").append(fileQName).append(".").append(fileExtension); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+                        .append("/services/imageserver/upload/").append(encodedDirName).append("/").append(fileQName).append(".").append(fileExtension); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
                 String url = strBuf.toString();
                 byte[] bytes = HttpClientUtil.downloadFile(url, serverDef.getUser(), serverDef.getPasswd());
                 resource.setFileContent(bytes);
@@ -319,7 +319,7 @@ public class ImportServerObjectWizard extends Wizard {
     }
 
     public List<String> doImport(Object[] objs, IProgressMonitor monitor) {
-        monitor.beginTask(Messages.Import_Objects, IProgressMonitor.UNKNOWN);
+        monitor.beginTask(Messages.Import_Objects, objs.length);
         List<String> importedIds = new LinkedList<String>();
         ImportService.setImporting(true);
 
@@ -416,6 +416,7 @@ public class ImportServerObjectWizard extends Wizard {
             } catch (IOException e) {
                 log.error(e.getMessage(), e);
             }
+            monitor.worked(1);
         }
         ImportService.setImporting(false);
         monitor.done();
@@ -593,18 +594,13 @@ public class ImportServerObjectWizard extends Wizard {
 
     class ImportProcess implements IRunnableWithProgress {
 
-        /*
-         * (non-Javadoc)
-         * 
-         * @see org.eclipse.jface.operation.IRunnableWithProgress#run(org.eclipse.core.runtime.IProgressMonitor)
-         */
-        public void run(IProgressMonitor arg0) throws InvocationTargetException, InterruptedException {
+        public void run(final IProgressMonitor wizardMonitor) throws InvocationTargetException, InterruptedException {
             UIJob job = new UIJob(Messages.Import_Objects) {
 
                 @Override
                 public IStatus runInUIThread(IProgressMonitor monitor) {
                     // isOverrideAll = btnOverwrite.getSelection();
-                    List<String> importedIds = doImport(selectedObjects, monitor);
+                    List<String> importedIds = doImport(selectedObjects, wizardMonitor);
                     commonViewer.refresh();
                     if (exAdapter != null) {
 

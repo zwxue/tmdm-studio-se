@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2015 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2016 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -43,6 +43,7 @@ import org.talend.mdm.repository.core.service.DeployService;
 import org.talend.mdm.repository.core.service.IModelValidationService;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
+import org.talend.mdm.repository.ui.actions.IPostOpenAction;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 import org.talend.repository.RepositoryWorkUnit;
 
@@ -57,7 +58,7 @@ import com.amalto.workbench.utils.Util;
 /**
  * DOC hbhong class global comment. Detailled comment
  */
-public class XSDEditor2 extends XSDEditor implements ISvnHistory {
+public class XSDEditor2 extends XSDEditor implements ISvnHistory, IPostOpenAction {
 
     public static final String EDITOR_ID = "org.talend.mdm.repository.ui.editors.XSDEditor2"; //$NON-NLS-1$
 
@@ -268,8 +269,14 @@ public class XSDEditor2 extends XSDEditor implements ISvnHistory {
         return super.getAdapter(type);
     }
 
-    public void updateTabPageLabel(int index, String label) {
-        setPageText(index, label);
+    public void updateTabPageLabel(final int index, final String label) {
+        Display.getDefault().asyncExec(new Runnable() {
+
+            public void run() {
+                setPageText(index, label);
+            }
+        });
+
     }
 
     @Override
@@ -283,7 +290,7 @@ public class XSDEditor2 extends XSDEditor implements ISvnHistory {
     }
 
     public void fireDirtyPropChange() {
-        firePropertyChange(PROP_DIRTY);
+        getdMainPage().firePropertyChange();
     }
 
     private boolean isEE() {
@@ -340,6 +347,12 @@ public class XSDEditor2 extends XSDEditor implements ISvnHistory {
                 }
             }
 
+        }
+    }
+
+    public void doPostOpen() {
+        if (exAdapter != null) {
+            exAdapter.doPostOpen();
         }
     }
 

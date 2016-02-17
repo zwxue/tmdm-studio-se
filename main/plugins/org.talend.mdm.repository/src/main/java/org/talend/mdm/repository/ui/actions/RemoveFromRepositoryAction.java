@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2015 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2016 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -66,8 +66,13 @@ public class RemoveFromRepositoryAction extends AbstractRepositoryAction {
      * @param text
      */
     public RemoveFromRepositoryAction() {
-        super(Messages.RemoveFromRepositoryAction_removeFromRepository);
+        super(""); //$NON-NLS-1$
         setImageDescriptor(ImageCache.getImage(EImage.DELETE_OBJ.getPath()));
+    }
+
+    @Override
+    public String getText() {
+        return Messages.RemoveFromRepositoryAction_removeFromRepository;
     }
 
     @Override
@@ -86,16 +91,10 @@ public class RemoveFromRepositoryAction extends AbstractRepositoryAction {
         int size = selectedObject.size();
         if (size > 0) {
             if (hasOpenedObject(selectedObject)) {
-                MessageDialog
-                        .openWarning(
-                                getShell(),
-                                Messages.RemoveFromRepositoryAction_Title,
-                                Messages.RemoveFromRepositoryAction_CanNotDeleteFolder);
+                warn();
                 return;
             }
-            if (!MessageDialog.openConfirm(getShell(), Messages.RemoveFromRepositoryAction_Title, Messages.bind(
-                    Messages.RemoveFromRepositoryAction_confirm, size, size > 1 ? Messages.RemoveFromRepositoryAction_instances
-                            : Messages.RemoveFromRepositoryAction_instance))) {
+            if (!confirm(size)) {
                 return;
             }
 
@@ -130,6 +129,20 @@ public class RemoveFromRepositoryAction extends AbstractRepositoryAction {
         if (lockedObjs.size() > 0) {
             MessageDialog.openError(getShell(), Messages.AbstractRepositoryAction_lockedObjTitle, getAlertMsg());
         }
+    }
+
+    private void warn() {
+        MessageDialog
+        .openWarning(
+                getShell(),
+                Messages.RemoveFromRepositoryAction_Title,
+                Messages.RemoveFromRepositoryAction_CanNotDeleteFolder);
+    }
+
+    private boolean confirm(int size) {
+        return MessageDialog.openConfirm(getShell(), Messages.RemoveFromRepositoryAction_Title, Messages.bind(
+                Messages.RemoveFromRepositoryAction_confirm, size, size > 1 ? Messages.RemoveFromRepositoryAction_instances
+                        : Messages.RemoveFromRepositoryAction_instance));
     }
 
 

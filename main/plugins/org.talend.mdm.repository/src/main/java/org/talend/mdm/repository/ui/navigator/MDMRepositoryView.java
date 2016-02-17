@@ -2,7 +2,7 @@
 //
 // Talend Community Edition
 //
-// Copyright (C) 2006-2015 Talend �C www.talend.com
+// Copyright (C) 2006-2016 Talend Inc. - www.talend.com
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
@@ -98,7 +98,7 @@ import org.talend.mdm.repository.ui.actions.DeployAllAction;
 import org.talend.mdm.repository.ui.actions.ExportObjectAction;
 import org.talend.mdm.repository.ui.actions.ImportObjectAction;
 import org.talend.mdm.repository.ui.actions.ImportServerObjectAction;
-import org.talend.mdm.repository.ui.actions.RefreshViewAction;
+import org.talend.mdm.repository.ui.actions.RefreshAction;
 import org.talend.mdm.repository.ui.dialogs.SwitchPerspectiveDialog;
 import org.talend.mdm.repository.ui.editors.IRepositoryViewEditorInput;
 import org.talend.mdm.repository.ui.preferences.PreferenceConstants;
@@ -179,7 +179,7 @@ public class MDMRepositoryView extends CommonNavigator implements ITabbedPropert
     }
 
     private void fillLocalToolBar(IToolBarManager manager) {
-        RefreshViewAction refreshViewAction = new RefreshViewAction();
+        RefreshAction refreshViewAction = new RefreshAction(true);
         refreshViewAction.initCommonViewer(((CommonNavigator) this).getCommonViewer());
         manager.add(new Separator());
         manager.add(refreshViewAction);

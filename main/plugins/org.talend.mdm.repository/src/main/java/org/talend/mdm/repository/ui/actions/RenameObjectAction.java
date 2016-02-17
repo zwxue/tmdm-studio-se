@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2015 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2016 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -55,13 +55,18 @@ public class RenameObjectAction extends AbstractRepositoryAction {
      * @param text
      */
     public RenameObjectAction() {
-        super(Messages.RenameObjectAction_rename);
+        super(""); //$NON-NLS-1$
         setImageDescriptor(ImageCache.getImage(EImage.RENAME.getPath()));
     }
 
     @Override
     public String getGroupName() {
         return GROUP_EDIT;
+    }
+
+    @Override
+    public String getText() {
+        return Messages.RenameObjectAction_rename;
     }
 
     @Override

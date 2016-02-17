@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2015 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2016 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -41,8 +41,6 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import com.amalto.workbench.models.TreeObject;
-import com.amalto.workbench.models.TreeParent;
 import com.amalto.workbench.webservices.WSRoutingRuleExpression;
 import com.amalto.workbench.webservices.WSRoutingRuleOperator;
 import com.amalto.workbench.webservices.WSStringPredicate;
@@ -56,24 +54,6 @@ public class UtilTest {
     @Before
     public void setUp() throws Exception {
         initSchema();
-    }
-
-    private TreeParent getServerRoot() {
-        String serverName = "localhost"; //$NON-NLS-1$
-        String universe = "";
-        String username = "username"; //$NON-NLS-1$
-        String password = "passwd"; //$NON-NLS-1$
-        String endpointaddress = "http://localhost"; //$NON-NLS-1$
-        TreeParent serverRoot = new TreeParent(serverName, null, TreeObject._SERVER_, endpointaddress, ("".equals(universe) ? ""//$NON-NLS-1$//$NON-NLS-2$
-                : universe + "/") + username + ":" + (password == null ? "" : password));//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
-        UserInfo user = new UserInfo();
-        user.setUsername(username);
-        user.setPassword(password);
-        user.setServerUrl(endpointaddress);
-        user.setUniverse(universe);
-
-        serverRoot.setUser(user);
-        return serverRoot;
     }
 
     private void initSchema() throws Exception {
@@ -259,7 +239,7 @@ public class UtilTest {
 
     @Test
     public void testConvertWhereCondition() {
-        WSWhereCondition wc = new WSWhereCondition("Entity/Id", WSWhereOperator.CONTAINS, "id1", WSStringPredicate.OR, false); //$NON-NLS-1$ //$NON-NLS-2$
+        WSWhereCondition wc = new WSWhereCondition("Entity/Id", WSWhereOperator.CONTAINS, "id1", false, WSStringPredicate.OR); //$NON-NLS-1$ //$NON-NLS-2$
         String[] lines = Util.convertWhereCondition(wc);
         assertEquals(lines.length, 4);
         assertEquals(lines[0], "Entity/Id"); //$NON-NLS-1$
@@ -270,7 +250,7 @@ public class UtilTest {
 
     @Test
     public void testConvertRouteCondition() {
-        WSRoutingRuleExpression wr = new WSRoutingRuleExpression("name", "Entity/Id", WSRoutingRuleOperator.CONTAINS, "value"); //$NON-NLS-1$ //$NON-NLS-2$
+        WSRoutingRuleExpression wr = new WSRoutingRuleExpression("name", "value", WSRoutingRuleOperator.CONTAINS, "Entity/Id"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         String[] lines = Util.convertRouteCondition(wr);
         assertEquals(lines.length, 4);
         assertEquals(lines[0], "Entity/Id"); //$NON-NLS-1$

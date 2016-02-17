@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2015 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2016 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -60,7 +60,7 @@ public class CommandManager implements IMementoAware {
 
     IProxyRepositoryFactory factory = CoreRuntimePlugin.getInstance().getProxyRepositoryFactory();
 
-    private Map<String, CommandStack> map = new HashMap<String, CommandStack>();
+    protected Map<String, CommandStack> map = new HashMap<String, CommandStack>();
 
     public CommandStack findCommandStack(String id) {
         if (id == null) {

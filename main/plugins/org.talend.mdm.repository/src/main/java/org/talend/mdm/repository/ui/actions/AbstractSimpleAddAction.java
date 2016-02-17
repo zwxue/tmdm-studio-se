@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2015 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2016 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -38,7 +38,7 @@ import com.amalto.workbench.image.ImageCache;
  */
 public abstract class AbstractSimpleAddAction extends AbstractRepositoryAction {
 
-    private static Logger log = Logger.getLogger(AbstractSimpleAddAction.class);
+    protected static Logger log = Logger.getLogger(AbstractSimpleAddAction.class);
 
     /**
      * DOC hbhong AddMenu constructor comment.

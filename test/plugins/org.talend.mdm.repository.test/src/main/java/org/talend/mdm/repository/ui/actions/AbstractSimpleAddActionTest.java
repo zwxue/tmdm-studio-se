@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2015 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2016 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -19,7 +19,6 @@ import static org.powermock.api.support.membermodification.MemberModifier.*;
 
 import java.util.ResourceBundle;
 
-import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.jface.resource.JFaceResources;
 import org.junit.Before;
@@ -44,7 +43,6 @@ import org.talend.repository.ProjectManager;
 import org.talend.repository.model.IProxyRepositoryFactory;
 
 import com.amalto.workbench.exadapter.ExAdapterManager;
-import com.amalto.workbench.image.ImageCache;
 
 /**
  * DOC hbhong class global comment. Detailled comment
@@ -62,11 +60,6 @@ public class AbstractSimpleAddActionTest {
         PowerMockito.mockStatic(JFaceResources.class);
         ImageRegistry registry = mock(ImageRegistry.class);
         when(JFaceResources.getImageRegistry()).thenReturn(registry);
-
-        PowerMockito.mockStatic(ImageCache.class);
-        ImageDescriptor imgDesc = mock(ImageDescriptor.class);
-        when(ImageCache.getImage(anyString())).thenReturn(imgDesc);
-        //
 
         PowerMockito.mockStatic(CoreRuntimePlugin.class);
         CoreRuntimePlugin coreRuntimePlugin = mock(CoreRuntimePlugin.class);

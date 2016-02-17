@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2015 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2016 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -1079,6 +1079,8 @@ public class ComplexTableViewer {
             if (context) {
                 XpathSelectDialog.setContext(null);
             }
+
+            restoreIfInvalid();
             return xpath.getText();
         }
 
@@ -1101,10 +1103,14 @@ public class ComplexTableViewer {
 
         @Override
         protected void focusLost() {
+            restoreIfInvalid();
+            super.focusLost();
+        }
+
+        private void restoreIfInvalid() {
             if (validator != null && !validator.validate(xpath.getText())) {
                 xpath.setText(oldPath);
             }
-            super.focusLost();
         }
     }
 

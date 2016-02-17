@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2015 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2016 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -49,6 +49,7 @@ import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IPropertyListener;
 import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
@@ -215,19 +216,20 @@ public class XSDEditor extends MultiPageEditorPart implements IServerObjectEdito
             return;
         }
         try {
-            if (getSelectedPage() instanceof DataModelMainPage) {
+            if (newPageIndex == MODEL_PAGE_INDEX) {
                 DataModelMainPage mainPage = getDataModelEditorPage();
-                if (mainPage != null && lastPageIndex == SOURCE_PAGE_INDEX) {
-                    validateXsdSourceEditor();
-                    if (!hasXSDErrors) {
-                        String xsd = getSourcePageDocument();
-                        XSDSchema schema = Util.createXsdSchema(xsd, xobject);
-                        mainPage.setXsdSchema(schema);
-                        mainPage.refresh();
-
-                        //
-                        expandHelper.recoverExpandState(mainPage);
+                if (mainPage != null) {
+                    if (lastPageIndex == SOURCE_PAGE_INDEX) {
+                        validateXsdSourceEditor();
+                        if (!hasXSDErrors) {
+                            String xsd = getSourcePageDocument();
+                            XSDSchema schema = Util.createXsdSchema(xsd, xobject);
+                            mainPage.setXsdSchema(schema);
+                        }
                     }
+                    mainPage.refresh();
+                    //
+                    expandHelper.recoverExpandState(mainPage);
                 }
             } else if (newPageIndex == SOURCE_PAGE_INDEX) {
                 if (hasXSDErrors) {
@@ -236,7 +238,7 @@ public class XSDEditor extends MultiPageEditorPart implements IServerObjectEdito
                 // save DataModelMainPage's contents to file
                 DataModelMainPage mainPage = getDataModelEditorPage();
                 expandHelper.recordExpandState(mainPage);
-                if (mainPage != null && mainPage.isDirty()) {
+                if (mainPage != null && this.isDirty()) {
                     String xsd = mainPage.getXSDSchemaString();
                     xsd = Util.formatXsdSource(xsd);
                     WSDataModel wsDataModel = (WSDataModel) xobject.getWsObject();
@@ -469,8 +471,9 @@ public class XSDEditor extends MultiPageEditorPart implements IServerObjectEdito
             // view). We don't want to be selecting
             // and unselecting things in the source when editing in the source!!
             boolean isSourcePage = false;
-            if (PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage() != null) {
-                IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+            IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
+            if (window != null && window.getActivePage() != null) {
+                IWorkbenchPage page = window.getActivePage();
                 if (page.getActivePart() instanceof XSDEditor) {
                     if (getActiveEditor() instanceof StructuredTextEditor) {
                         isSourcePage = true;
