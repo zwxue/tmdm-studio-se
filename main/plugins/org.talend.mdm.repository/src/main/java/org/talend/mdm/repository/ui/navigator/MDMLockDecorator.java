@@ -12,10 +12,12 @@
 // ============================================================================
 package org.talend.mdm.repository.ui.navigator;
 
+import org.apache.log4j.Logger;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.IDecoration;
 import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.jface.viewers.ILightweightLabelDecorator;
+import org.talend.commons.exception.PersistenceException;
 import org.talend.commons.runtime.model.repository.ERepositoryStatus;
 import org.talend.core.context.Context;
 import org.talend.core.context.RepositoryContext;
@@ -36,6 +38,8 @@ import com.amalto.workbench.exadapter.ExAdapterManager;
  */
 public class MDMLockDecorator implements ILightweightLabelDecorator {
 
+    private static Logger log = Logger.getLogger(MDMLockDecorator.class);
+
     IProxyRepositoryFactory factory = CoreRuntimePlugin.getInstance().getProxyRepositoryFactory();
 
     private boolean editableAsReadOnly;
@@ -43,9 +47,7 @@ public class MDMLockDecorator implements ILightweightLabelDecorator {
     private IMDMLockDecoratorExAdapter exAdapter;
 
     public MDMLockDecorator() {
-        Context ctx = CoreRuntimePlugin.getInstance().getContext();
-        RepositoryContext rc = (RepositoryContext) ctx.getProperty(Context.REPOSITORY_CONTEXT_KEY);
-        this.editableAsReadOnly = rc.isEditableAsReadOnly();
+        isEditableAsReadOnly();
 
         exAdapter = ExAdapterManager.getAdapter(this, IMDMLockDecoratorExAdapter.class);
     }
@@ -57,6 +59,13 @@ public class MDMLockDecorator implements ILightweightLabelDecorator {
         Item item = RepositoryResourceUtil.getItemFromRepViewObj(element);
         if (item != null) {
             if (item instanceof MDMServerObjectItem || item instanceof TDQMatchRuleItem) {
+                try {
+                    if (!factory.isLocalConnectionProvider()) {
+                        isEditableAsReadOnly();
+                    }
+                } catch (PersistenceException e) {
+                    log.error(e.getMessage(), e);
+                }
                 decorateLockImage((IRepositoryViewObject) element, decoration);
             }
         }
@@ -64,7 +73,6 @@ public class MDMLockDecorator implements ILightweightLabelDecorator {
     }
 
     private void decorateLockImage(IRepositoryViewObject viewObj, IDecoration decoration) {
-
         ERepositoryStatus status = factory.getStatus(viewObj.getProperty().getItem());
         if (editableAsReadOnly) {
             if (status == ERepositoryStatus.LOCK_BY_USER) {
@@ -83,6 +91,13 @@ public class MDMLockDecorator implements ILightweightLabelDecorator {
                 }
             }
         }
+    }
+
+    private void isEditableAsReadOnly() {
+        Context ctx = CoreRuntimePlugin.getInstance().getContext();
+        RepositoryContext rc = (RepositoryContext) ctx.getProperty(Context.REPOSITORY_CONTEXT_KEY);
+
+        editableAsReadOnly = rc.isEditableAsReadOnly();
     }
 
     // //////////////////
