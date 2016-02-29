@@ -2516,8 +2516,6 @@ public class Util {
             operator = ">";//$NON-NLS-1$
         } else if (wc.getOperator().equals(WSWhereOperator.GREATER_THAN_OR_EQUAL)) {
             operator = ">=";//$NON-NLS-1$
-        } else if (wc.getOperator().equals(WSWhereOperator.CONTAINS_TEXT_OF)) {
-            operator = "Contains Text Of";//$NON-NLS-1$
         } else if (wc.getOperator().equals(WSWhereOperator.JOIN)) {
             operator = "Join With";//$NON-NLS-1$
         } else if (wc.getOperator().equals(WSWhereOperator.LOWER_THAN)) {
@@ -2528,8 +2526,6 @@ public class Util {
             operator = "!=";//$NON-NLS-1$
         } else if (wc.getOperator().equals(WSWhereOperator.STARTSWITH)) {
             operator = "Starts With";//$NON-NLS-1$
-        } else if (wc.getOperator().equals(WSWhereOperator.STRICTCONTAINS)) {
-            operator = "Strict Contains";//$NON-NLS-1$
         } else if (wc.getOperator().equals(WSWhereOperator.EMPTY_NULL)) {
             operator = "Is Empty Or Null";//$NON-NLS-1$
         }
@@ -2627,8 +2623,6 @@ public class Util {
         WSWhereOperator operator = null;
         if (values[1].equals("Contains")) { //$NON-NLS-1$
             operator = WSWhereOperator.CONTAINS;
-        } else if (values[1].equals("Contains Text Of")) { //$NON-NLS-1$
-            operator = WSWhereOperator.CONTAINS_TEXT_OF;
         } else if (values[1].equals("Join With")) {//$NON-NLS-1$
             operator = WSWhereOperator.JOIN;
         } else if (values[1].equals("=")) { //$NON-NLS-1$
@@ -2645,8 +2639,6 @@ public class Util {
             operator = WSWhereOperator.NOT_EQUALS;
         } else if (values[1].equals("Starts With")) { //$NON-NLS-1$
             operator = WSWhereOperator.STARTSWITH;
-        } else if (values[1].equals("Strict Contains")) { //$NON-NLS-1$
-            operator = WSWhereOperator.STRICTCONTAINS;
         } else if (values[1].equals("Is Empty Or Null")) { //$NON-NLS-1$
             operator = WSWhereOperator.EMPTY_NULL;
         }
