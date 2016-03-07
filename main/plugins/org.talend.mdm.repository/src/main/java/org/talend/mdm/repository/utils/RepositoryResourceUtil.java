@@ -538,6 +538,7 @@ public class RepositoryResourceUtil {
             //
             rootViewObj = null;
             Property prop = PropertiesFactory.eINSTANCE.createProperty();
+            prop.setId(EcoreUtil.generateUUID());
 
             ItemState state = PropertiesFactory.eINSTANCE.createItemState();
             WorkspaceRootItem item = MdmpropertiesFactory.eINSTANCE.createWorkspaceRootItem();
