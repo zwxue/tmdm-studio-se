@@ -29,7 +29,7 @@ public class DefaultXPathValidator implements IXPathValidator {
         if (xpath.length() == 0) {
             return true;
         }
-        Pattern pattern = Pattern.compile("\\.|([a-zA-Z]|\\d|\\/)+"); //$NON-NLS-1$
+        Pattern pattern = Pattern.compile("\\.|([a-zA-Z]|\\d|\\/|@|:)+"); //$NON-NLS-1$
         Matcher matcher = pattern.matcher(xpath);
         boolean matches = matcher.matches();
 
