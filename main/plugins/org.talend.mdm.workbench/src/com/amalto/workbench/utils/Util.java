@@ -2535,16 +2535,10 @@ public class Util {
         String predicate = "";//$NON-NLS-1$
         if (wc.getStringPredicate().equals(WSStringPredicate.AND)) {
             predicate = "And";//$NON-NLS-1$
-        } else if (wc.getStringPredicate().equals(WSStringPredicate.EXACTLY)) {
-            predicate = "Exactly";//$NON-NLS-1$
         } else if (wc.getStringPredicate().equals(WSStringPredicate.NONE)) {
             predicate = "";//$NON-NLS-1$
-        } else if (wc.getStringPredicate().equals(WSStringPredicate.NOT)) {
-            predicate = "Not";//$NON-NLS-1$
         } else if (wc.getStringPredicate().equals(WSStringPredicate.OR)) {
             predicate = "Or";//$NON-NLS-1$
-        } else if (wc.getStringPredicate().equals(WSStringPredicate.STRICTAND)) {
-            predicate = "Strict And";//$NON-NLS-1$
         }
         list.add(predicate);
         return list.toArray(new String[list.size()]);
@@ -2652,15 +2646,6 @@ public class Util {
         }
         if (values[3].equals("And")) { //$NON-NLS-1$
             predicate = WSStringPredicate.AND;
-        }
-        if (values[3].equals("Strict And")) { //$NON-NLS-1$
-            predicate = WSStringPredicate.STRICTAND;
-        }
-        if (values[3].equals("Exactly")) { //$NON-NLS-1$
-            predicate = WSStringPredicate.EXACTLY;
-        }
-        if (values[3].equals("Not")) { //$NON-NLS-1$
-            predicate = WSStringPredicate.NOT;
         }
         wc.setStringPredicate(predicate);
 

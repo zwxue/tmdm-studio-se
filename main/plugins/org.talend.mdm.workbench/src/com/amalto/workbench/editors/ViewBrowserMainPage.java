@@ -189,16 +189,10 @@ public class ViewBrowserMainPage extends AMainPage implements IXObjectModelListe
                     text += " ";//$NON-NLS-1$
                     if (wc.getStringPredicate().equals(WSStringPredicate.AND)) {
                         text += "[and]";//$NON-NLS-1$
-                    } else if (wc.getStringPredicate().equals(WSStringPredicate.EXACTLY)) {
-                        text += "[exactly]";//$NON-NLS-1$
                     } else if (wc.getStringPredicate().equals(WSStringPredicate.NONE)) {
                         text += "";//$NON-NLS-1$
-                    } else if (wc.getStringPredicate().equals(WSStringPredicate.NOT)) {
-                        text += "[not]";//$NON-NLS-1$
                     } else if (wc.getStringPredicate().equals(WSStringPredicate.OR)) {
                         text += "[or]";//$NON-NLS-1$
-                    } else if (wc.getStringPredicate().equals(WSStringPredicate.STRICTAND)) {
-                        text += "[strict and]";//$NON-NLS-1$
                     }
                     return text;
                 }
