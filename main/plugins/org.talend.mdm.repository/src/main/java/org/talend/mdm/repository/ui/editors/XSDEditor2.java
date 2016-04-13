@@ -19,6 +19,8 @@ import org.apache.log4j.Logger;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.emf.common.command.AbstractCommand;
+import org.eclipse.emf.transaction.TransactionalEditingDomain;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorInput;
@@ -207,12 +209,40 @@ public class XSDEditor2 extends XSDEditor implements ISvnHistory, IPostOpenActio
         CoreRuntimePlugin.getInstance().getProxyRepositoryFactory().executeRepositoryWorkUnit(repositoryWorkUnit);
     }
 
-    private void innerSave(IProgressMonitor monitor) {
+    private void doSave(Item item, IProgressMonitor monitor) {
         super.doSave(monitor);
-        IRepositoryViewObject viewObject = getCurrentViewObject();
-        Item item = viewObject.getProperty().getItem();
+
         if (isEE()) {
             exAdapter.doSave(item, dMainPage, monitor);
+        }
+    }
+
+    private void innerSave(final IProgressMonitor monitor) {
+        IRepositoryViewObject viewObject = getCurrentViewObject();
+        final Item item = viewObject.getProperty().getItem();
+        int activePage = getActivePage();
+        //
+        final TransactionalEditingDomain editingDomain = (TransactionalEditingDomain) getAdapter(TransactionalEditingDomain.class);
+        if (editingDomain != null && (activePage != MODEL_PAGE_INDEX && activePage != SOURCE_PAGE_INDEX)) {
+
+            editingDomain.getCommandStack().execute(new AbstractCommand() {
+
+                @Override
+                public boolean canExecute() {
+                    return true;
+                }
+
+                public void redo() {
+                    // do nothing
+                }
+
+                public void execute() {
+                    doSave(item, monitor);
+                }
+            });
+
+        } else {
+            doSave(item, monitor);
         }
 
         DeployService deployService = DeployService.getInstance();
