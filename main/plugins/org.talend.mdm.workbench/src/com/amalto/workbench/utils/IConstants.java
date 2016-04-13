@@ -15,11 +15,12 @@ package com.amalto.workbench.utils;
 public interface IConstants {
 
     /* Conditions operator */
-    static final String[] COMPOSITE_VIEW_CONDITION_OPERATORS = { "Contains", "Join With", "Starts With",//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
-        "Is Empty Or Null", "=", "!=", ">", ">=", "<", "<=" };//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$//$NON-NLS-5$//$NON-NLS-6$//$NON-NLS-7$
+    static final String[] COMPOSITE_VIEW_CONDITION_OPERATORS = { "Contains", "contains the sentence", "Join With", "Starts With",//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$ //$NON-NLS-4$
+        "Is Empty Or Null", "whole content contains", "=", "!=", ">", ">=", "<", "<=" };//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$//$NON-NLS-5$//$NON-NLS-6$//$NON-NLS-7$ //$NON-NLS-8$
 
-    static final String[] VIEW_CONDITION_OPERATORS = { "Contains", "Starts With", "Is Empty Or Null", "=",//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$
-        "!=", ">", ">=", "<", "<=" };//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$//$NON-NLS-5$
+    static final String[] VIEW_CONDITION_OPERATORS = {
+            "Contains", "contains the sentence", "Starts With", "Is Empty Or Null", "whole content contains", "=",//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$
+        "!=", ">", ">=", "<", "<=" };//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$//$NON-NLS-5$ 
 
     static final String[] ROUTE_CONDITION_OPERATORS = { "Contains", "Matches", "Starts With", "Is Null", "Is Not Null", "=",//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$//$NON-NLS-5$//$NON-NLS-6$
         "!=", ">", ">=", "<", "<=" };//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$//$NON-NLS-5$

@@ -159,6 +159,8 @@ public class ViewBrowserMainPage extends AMainPage implements IXObjectModelListe
                     String text = wc.getLeftPath() + " ";//$NON-NLS-1$
                     if (wc.getOperator().equals(WSWhereOperator.CONTAINS)) {
                         text += "Contains";//$NON-NLS-1$
+                    } else if (wc.getOperator().equals(WSWhereOperator.CONTAINS_SENTENCE)) {
+                        text += "contains the sentence";//$NON-NLS-1$
                     } else if (wc.getOperator().equals(WSWhereOperator.EQUALS)) {
                         text += "=";//$NON-NLS-1$
                     } else if (wc.getOperator().equals(WSWhereOperator.GREATER_THAN)) {
@@ -177,6 +179,8 @@ public class ViewBrowserMainPage extends AMainPage implements IXObjectModelListe
                         text += "Starts With";//$NON-NLS-1$
                     } else if (wc.getOperator().equals(WSWhereOperator.EMPTY_NULL)) {
                         text += "Is Empty Or Null";//$NON-NLS-1$
+                    } else if (wc.getOperator().equals(WSWhereOperator.FULLTEXTSEARCH)) {
+                        text += "whole content contains";//$NON-NLS-1$
                     }
                     text += " ";//$NON-NLS-1$
                     if (!wc.getOperator().equals(WSWhereOperator.JOIN)) {

@@ -2510,6 +2510,8 @@ public class Util {
         String operator = "";//$NON-NLS-1$
         if (wc.getOperator().equals(WSWhereOperator.CONTAINS)) {
             operator = "Contains";//$NON-NLS-1$
+        } else if (wc.getOperator().equals(WSWhereOperator.CONTAINS_SENTENCE)) {
+            operator = "contains the sentence";//$NON-NLS-1$
         } else if (wc.getOperator().equals(WSWhereOperator.EQUALS)) {
             operator = "=";//$NON-NLS-1$
         } else if (wc.getOperator().equals(WSWhereOperator.GREATER_THAN)) {
@@ -2528,6 +2530,8 @@ public class Util {
             operator = "Starts With";//$NON-NLS-1$
         } else if (wc.getOperator().equals(WSWhereOperator.EMPTY_NULL)) {
             operator = "Is Empty Or Null";//$NON-NLS-1$
+        } else if (wc.getOperator().equals(WSWhereOperator.FULLTEXTSEARCH)) {
+            operator = "whole content contains";//$NON-NLS-1$
         }
         list.add(operator);
         list.add(wc.getRightValueOrPath());
@@ -2617,6 +2621,8 @@ public class Util {
         WSWhereOperator operator = null;
         if (values[1].equals("Contains")) { //$NON-NLS-1$
             operator = WSWhereOperator.CONTAINS;
+        } else if (values[1].equals("contains the sentence")) {//$NON-NLS-1$
+            operator = WSWhereOperator.CONTAINS_SENTENCE;
         } else if (values[1].equals("Join With")) {//$NON-NLS-1$
             operator = WSWhereOperator.JOIN;
         } else if (values[1].equals("=")) { //$NON-NLS-1$
@@ -2635,6 +2641,8 @@ public class Util {
             operator = WSWhereOperator.STARTSWITH;
         } else if (values[1].equals("Is Empty Or Null")) { //$NON-NLS-1$
             operator = WSWhereOperator.EMPTY_NULL;
+        } else if (values[1].equals("whole content contains")) { //$NON-NLS-1$
+            operator = WSWhereOperator.FULLTEXTSEARCH;
         }
         wc.setOperator(operator);
         wc.setRightValueOrPath(values[2]);
