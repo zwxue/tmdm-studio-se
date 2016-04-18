@@ -611,6 +611,14 @@
                   name="Remove MDM Reference Item Name"
                   version="6.0.0">
             </projecttask>
+            <projecttask
+                  beforeLogon="true"
+                  breaks="6.2.0"
+                  class="org.talend.mdm.repository.core.migrate.UpdateOperatorMigrationTask"
+                  id="org.talend.mdm.repository.core.migrate.UpdateOperatorMigrationTask"
+                  name="Update Operator MigrationTask"
+                  version="6.2.0">
+            </projecttask>
       
    </extension>
    <extension
@@ -681,7 +689,7 @@
                class="org.talend.mdm.repository.ui.wizards.imports.handlers.CommonMdmImportHandler">
             <parameter
                   name="type"
-                  value="MDM.Role,MDM.Menu,MDM.DataCluster,MDM.StoredProcedure,MDM.RoutingRule,MDM.EventManager,MDM.ServiceConfiguration,MDM.Resource,MDM.CustomForm,MDM.ServerDef">
+                  value="MDM.Menu,MDM.DataCluster,MDM.StoredProcedure,MDM.RoutingRule,MDM.EventManager,MDM.ServiceConfiguration,MDM.Resource,MDM.CustomForm,MDM.ServerDef">
             </parameter>
          </importItemsHandler>
       </importItemsProvider>

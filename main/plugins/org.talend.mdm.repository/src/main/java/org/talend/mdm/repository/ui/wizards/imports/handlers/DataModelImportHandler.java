@@ -13,7 +13,10 @@
 package org.talend.mdm.repository.ui.wizards.imports.handlers;
 
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.talend.commons.exception.PersistenceException;
 import org.talend.core.model.properties.Item;
+import org.talend.core.model.repository.IRepositoryViewObject;
+import org.talend.mdm.repository.ui.wizards.imports.OperatorUpdatorProvider;
 import org.talend.repository.items.importexport.handlers.model.ImportItem;
 import org.talend.repository.items.importexport.manager.ResourcesManager;
 
@@ -38,6 +41,13 @@ public class DataModelImportHandler extends CommonMdmImportHandler {
             exAdapter.handleDataModelItem(item);
         }
         super.afterImportingItems(monitor, resManager, selectedImportItem);
+    }
+
+    @Override
+    protected void update(IRepositoryViewObject object, ImportItem selectedImportItem) throws PersistenceException {
+        OperatorUpdatorProvider.instance().updateOperator(object.getProperty().getItem());
+
+        super.update(object, selectedImportItem);
     }
 
 }
