@@ -105,6 +105,14 @@ import com.amalto.workbench.webservices.WSDataModel;
 public class XSDEditor extends MultiPageEditorPart implements IServerObjectEditorState, ITabbedPropertySheetPageContributor,
         IPropertyListener {
 
+    public static final String MSG_OMIT[] = {
+            "XSD: The value '1' of attribute 'maxOccurs' must be one of  as constrained by 'http://www.w3.org/2001/XMLSchema#maxOccurs_._type'", //$NON-NLS-1$
+            "XSD: The attribute may not have duplicate name and target namespace", //$NON-NLS-1$
+            "XSD: The type may not have duplicate name and target namespace", //$NON-NLS-1$
+            "XSD: The attribute group may not have duplicate name and target namespace", //$NON-NLS-1$
+            "The complex type may not have duplicate name", //$NON-NLS-1$
+            "XSD: An element reference may only have an id, minOccurs, or maxOccurs" }; //$NON-NLS-1$
+
     private static Log log = LogFactory.getLog(XSDEditor.class);
 
     public static final String CONTRUIBUTIONID_DATAMODELPAGE = "org.talend.mdm.workbench.propertyContributor.datamodel";//$NON-NLS-1$
@@ -628,7 +636,6 @@ public class XSDEditor extends MultiPageEditorPart implements IServerObjectEdito
      * @return
      */
     private String validateDiagnoses(XSDSchema xsdSchema) {
-        String msg_omit[] = { Messages.XsdOmit1, Messages.XsdOmit2, Messages.XsdOmit3, Messages.XsdOmit4, Messages.XsdOmit5 };
         xsdSchema.clearDiagnostics();
         xsdSchema.getAllDiagnostics().clear();
         xsdSchema.validate();
@@ -640,7 +647,7 @@ public class XSDEditor extends MultiPageEditorPart implements IServerObjectEdito
             XSDDiagnosticSeverity servity = dia.getSeverity();
             if (servity == XSDDiagnosticSeverity.ERROR_LITERAL || servity == XSDDiagnosticSeverity.FATAL_LITERAL) {
                 boolean omit = false;
-                for (String msg : msg_omit) {
+                for (String msg : MSG_OMIT) {
                     if (dia.getMessage().indexOf(msg) != -1) {
                         omit = true;
                         break;

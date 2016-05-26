@@ -574,19 +574,18 @@ public class DataModelMainPage extends EditorPart implements ModifyListener, IGo
     }
 
     public void validateSchema() throws IllegalAccessException {
-        final String msg_omit[] = { Messages.XsdOmit1, Messages.XsdOmit2, Messages.XsdOmit3, Messages.XsdOmit4, Messages.XsdOmit5 };
 
         final String msg_shouldRefresh[] = { Messages.XsdRefresh };
 
         // do not force to refresh every time just when an error throws.
-        String error = validateDiagnoses(msg_omit);
+        String error = validateDiagnoses(XSDEditor.MSG_OMIT);
         for (String msg : msg_shouldRefresh) {
             if (error.indexOf(msg) != -1) {
                 refreshModelPageSchema();
             }
         }
         // refreshModelPageSchema and validate again
-        error = validateDiagnoses(msg_omit);
+        error = validateDiagnoses(XSDEditor.MSG_OMIT);
 
         if (!error.equals("")) {//$NON-NLS-1$
             IllegalAccessException illegalAccessException = new IllegalAccessException(error);

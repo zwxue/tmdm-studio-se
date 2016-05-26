@@ -1393,16 +1393,6 @@ public class Messages extends NLS {
 
     public static String ImportingXSDSchemaFailed;
 
-    public static String XsdOmit2;
-
-    public static String XsdOmit1;
-
-    public static String XsdOmit3;
-
-    public static String XsdOmit4;
-
-    public static String XsdOmit5;
-
     public static String XsdRefresh;
 
     public static String DataModelEntities;
