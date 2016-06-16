@@ -30,7 +30,7 @@ public interface IConstants {
     /* Operate Type */
     static final String[] OPERATE_TYPES = { "UPDATE", "CREATE", "DELETE" };//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
 
-    static final String[] PREDICATES = { "", "Or", "And" };//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
+    static final String[] PREDICATES = { "", "Or", "And", "Not" };//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$ //$NON-NLS-4$
 
     static final String TALEND = "Talend MDM Studio";//$NON-NLS-1$
 

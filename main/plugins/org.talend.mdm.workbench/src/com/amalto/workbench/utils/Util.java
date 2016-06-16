@@ -141,8 +141,6 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXParseException;
 
-import sun.misc.BASE64Encoder;
-
 import com.amalto.workbench.editors.DataModelMainPage;
 import com.amalto.workbench.editors.xsdeditor.XSDEditor;
 import com.amalto.workbench.i18n.Messages;
@@ -176,6 +174,8 @@ import com.amalto.workbench.webservices.WSWhereOperator;
 import com.sun.org.apache.xpath.internal.XPathAPI;
 import com.sun.org.apache.xpath.internal.objects.XObject;
 import com.sun.xml.internal.ws.wsdl.parser.InaccessibleWSDLException;
+
+import sun.misc.BASE64Encoder;
 
 /**
  * @author bgrieder
@@ -2543,7 +2543,10 @@ public class Util {
             predicate = "";//$NON-NLS-1$
         } else if (wc.getStringPredicate().equals(WSStringPredicate.OR)) {
             predicate = "Or";//$NON-NLS-1$
+        } else if (wc.getStringPredicate().equals(WSStringPredicate.NOT)) {
+            predicate = "Not";//$NON-NLS-1$
         }
+
         list.add(predicate);
         return list.toArray(new String[list.size()]);
     }
@@ -2654,6 +2657,10 @@ public class Util {
         }
         if (values[3].equals("And")) { //$NON-NLS-1$
             predicate = WSStringPredicate.AND;
+        }
+
+        if (values[3].equals("Not")) { //$NON-NLS-1$
+            predicate = WSStringPredicate.NOT;
         }
         wc.setStringPredicate(predicate);
 
