@@ -23,6 +23,7 @@ package org.talend.mdm.repository.ui.actions.datamodel;
 
 import java.util.Properties;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -60,12 +61,15 @@ import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 import org.talend.mdm.repository.utils.ServiceUtil;
 import org.talend.repository.model.IProxyRepositoryFactory;
 
+import com.amalto.workbench.exadapter.ExAdapterManager;
+
 /**
  * DOC hbhong class global comment. Detailled comment <br/>
  * 
  */
 public class NewDataModelAction extends AbstractSimpleAddAction implements IIntroAction {
 
+    private INewDataModelActionExAdapter exAdapter;
     /**
      * DOC hbhong NewDataModelAction constructor comment.
      * 
@@ -73,6 +77,7 @@ public class NewDataModelAction extends AbstractSimpleAddAction implements IIntr
      */
     public NewDataModelAction() {
         super();
+        exAdapter = ExAdapterManager.getAdapter(this, INewDataModelActionExAdapter.class);
     }
 
     boolean needCreateDataContainer;
@@ -108,6 +113,8 @@ public class NewDataModelAction extends AbstractSimpleAddAction implements IIntr
         if (parentItem != null) {
             item.getState().setPath(parentItem.getState().getPath());
             RepositoryResourceUtil.createItem(item, key);
+
+            createERDocument(item);
             createMatchRuleMapInfo(item);
         }
 
@@ -115,6 +122,13 @@ public class NewDataModelAction extends AbstractSimpleAddAction implements IIntr
             createDataContainerObject(key);
         }
         return item;
+    }
+
+    private void createERDocument(WSDataModelItem item) {
+        if (exAdapter != null) {
+            IFile xsdFile = RepositoryResourceUtil.findReferenceFile(IServerObjectRepositoryType.TYPE_DATAMODEL, item, "xsd"); //$NON-NLS-1$
+            exAdapter.createERDocument(xsdFile);
+        }
     }
 
     private void createMatchRuleMapInfo(WSDataModelItem item) {
