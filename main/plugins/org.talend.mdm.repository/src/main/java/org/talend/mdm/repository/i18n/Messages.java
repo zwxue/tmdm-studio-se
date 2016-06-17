@@ -82,8 +82,6 @@ public class Messages extends NLS {
 
     public static String _ErrorStatusMsg2;
 
-    public static String _LoggingSmtpDesc;
-
     public static String _OkStatusMsg;
 
     public static String _OkDeleteStatusMsg;
@@ -897,38 +895,6 @@ public class Messages extends NLS {
     public static String MultiStatusDialog_MultiStatus_Messages;
 
     public static String Server_cannot_connected;
-
-    public static String SmtpGetDocument_Desc0;
-
-    public static String SmtpGetDocument_Desc1;
-
-    public static String SmtpGetDocument_Desc10;
-
-    public static String SmtpGetDocument_Desc11;
-
-    public static String SmtpGetDocument_Desc12;
-
-    public static String SmtpGetDocument_Desc13;
-
-    public static String SmtpGetDocument_Desc2;
-
-    public static String SmtpGetDocument_Desc3;
-
-    public static String SmtpGetDocument_Desc4;
-
-    public static String SmtpGetDocument_Desc5;
-
-    public static String SmtpGetDocument_Desc6;
-
-    public static String SmtpGetDocument_Desc7;
-
-    public static String SmtpGetDocument_Desc8;
-
-    public static String SmtpGetDocument_Desc9;
-
-    public static String SVNGetDocument_SVNGetDocumentA;
-
-    public static String SVNGetDocument_SVNGetDocumentB;
 
     public static String SwitchPerspectiveDialog_message;
 

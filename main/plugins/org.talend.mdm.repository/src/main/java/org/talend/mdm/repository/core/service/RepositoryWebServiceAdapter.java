@@ -29,9 +29,6 @@ import org.talend.mdm.repository.core.service.wsimpl.servicedoc.DumpToConsoleGet
 import org.talend.mdm.repository.core.service.wsimpl.servicedoc.ItemDispatcherGetDocument;
 import org.talend.mdm.repository.core.service.wsimpl.servicedoc.JdbcGetDocument;
 import org.talend.mdm.repository.core.service.wsimpl.servicedoc.LoggingGetDocument;
-import org.talend.mdm.repository.core.service.wsimpl.servicedoc.LoggingSmtpGetDocument;
-import org.talend.mdm.repository.core.service.wsimpl.servicedoc.SVNGetDocument;
-import org.talend.mdm.repository.core.service.wsimpl.servicedoc.SmtpGetDocument;
 import org.talend.mdm.repository.core.service.wsimpl.servicedoc.WorkflowContextGetDocument;
 import org.talend.mdm.repository.core.service.wsimpl.servicedoc.WorkflowGetDocument;
 import org.talend.mdm.repository.core.service.wsimpl.transformplugin.AbstractPluginDetail;
@@ -163,9 +160,6 @@ public class RepositoryWebServiceAdapter {
             addGetDoc(documentServiceMap, new ItemDispatcherGetDocument(twoLettersLanguageCode));
             addGetDoc(documentServiceMap, new JdbcGetDocument(twoLettersLanguageCode));
             addGetDoc(documentServiceMap, new LoggingGetDocument(twoLettersLanguageCode));
-            addGetDoc(documentServiceMap, new LoggingSmtpGetDocument(twoLettersLanguageCode));
-            addGetDoc(documentServiceMap, new SmtpGetDocument(twoLettersLanguageCode));
-            addGetDoc(documentServiceMap, new SVNGetDocument(twoLettersLanguageCode));
             addGetDoc(documentServiceMap, new WorkflowGetDocument(twoLettersLanguageCode));
             addGetDoc(documentServiceMap, new WorkflowContextGetDocument(twoLettersLanguageCode));
         }
