@@ -80,16 +80,18 @@ public abstract class AbstractDeployCommand extends AbstractCommand {
         String[] exceptionMsgs = UserExceptionStackFilter.filterExceptionMsg(msg);
 
         IStatus status = null;
-        if (exceptionMsgs.length == 1) {
+        if (exceptionMsgs.length == 0) {
+            String errorMsg = msg != null && !msg.trim().isEmpty() ? msg
+                    : Messages.bind(Messages.Deploy_fail_text, typeLabel, objectName);
+            status = DeployStatus.getErrorStatus(this, errorMsg, null);
+        } else if (exceptionMsgs.length == 1) {
             status = DeployStatus.getErrorStatus(this, Messages.bind(bindMsg, typeLabel, objectName, exceptionMsgs[0]), e);
-
-            return status;
-        }
-
-        status = new MultiStatus(RepositoryPlugin.PLUGIN_ID, Status.ERROR, exceptionMsgs[0], null);
-        for (int i = 1; i < exceptionMsgs.length; i++) {
-            DeployStatus errorStatus = DeployStatus.getErrorStatus(this, exceptionMsgs[i]);
-            ((MultiStatus) status).add(errorStatus);
+        } else {
+            status = new MultiStatus(RepositoryPlugin.PLUGIN_ID, Status.ERROR, exceptionMsgs[0], null);
+            for (int i = 1; i < exceptionMsgs.length; i++) {
+                DeployStatus errorStatus = DeployStatus.getErrorStatus(this, exceptionMsgs[i]);
+                ((MultiStatus) status).add(errorStatus);
+            }
         }
 
         return status;
