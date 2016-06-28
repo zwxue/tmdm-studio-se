@@ -141,6 +141,17 @@ public class XSDEditor2 extends XSDEditor implements ISvnHistory, IPostOpenActio
     }
 
     @Override
+    public String getContributorId() {
+        if (exAdapter != null) {
+            String contributorId = exAdapter.getContributorId();
+            if (contributorId != null) {
+                return contributorId;
+            }
+        }
+        return super.getContributorId();
+    }
+
+    @Override
     public void propertyChanged(Object source, int propId) {
 
         super.propertyChanged(source, propId);
@@ -232,10 +243,12 @@ public class XSDEditor2 extends XSDEditor implements ISvnHistory, IPostOpenActio
                     return true;
                 }
 
+                @Override
                 public void redo() {
                     // do nothing
                 }
 
+                @Override
                 public void execute() {
                     doSave(item, monitor);
                 }
@@ -259,6 +272,7 @@ public class XSDEditor2 extends XSDEditor implements ISvnHistory, IPostOpenActio
     private void validateModel(final IRepositoryViewObject viewObject) {
         Display.getDefault().asyncExec(new Runnable() {
 
+            @Override
             public void run() {
                 IModelValidationService service = (IModelValidationService) GlobalServiceRegister.getDefault().getService(
                         IModelValidationService.class);
@@ -302,6 +316,7 @@ public class XSDEditor2 extends XSDEditor implements ISvnHistory, IPostOpenActio
     public void updateTabPageLabel(final int index, final String label) {
         Display.getDefault().asyncExec(new Runnable() {
 
+            @Override
             public void run() {
                 setPageText(index, label);
             }
@@ -380,6 +395,7 @@ public class XSDEditor2 extends XSDEditor implements ISvnHistory, IPostOpenActio
         }
     }
 
+    @Override
     public void doPostOpen() {
         if (exAdapter != null) {
             exAdapter.doPostOpen();

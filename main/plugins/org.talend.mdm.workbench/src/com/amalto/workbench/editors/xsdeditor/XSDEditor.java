@@ -663,10 +663,14 @@ public class XSDEditor extends MultiPageEditorPart implements IServerObjectEdito
     }
 
     public String getContributorId() {
-        if (getActiveEditor() instanceof DataModelMainPage) {
-            return CONTRUIBUTIONID_DATAMODELPAGE;
+
+        int activePageIndex = getActivePage();
+        if (activePageIndex == SOURCE_PAGE_INDEX) {
+            return "org.eclipse.wst.xsd.ui.internal.editor"; //$NON-NLS-1$;
         }
-        return "org.eclipse.wst.xsd.ui.internal.editor"; //$NON-NLS-1$;
+
+        return CONTRUIBUTIONID_DATAMODELPAGE;
+
     }
 
     @Override

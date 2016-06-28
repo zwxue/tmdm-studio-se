@@ -39,4 +39,6 @@ public interface IXSDEditor2ExAdapter extends IExAdapter<XSDEditor2>, IPostOpenA
     void addPage(IFile xsdFile);
 
     void doPageChanged(int newPageIndex, int lastPageIndex);
+
+    String getContributorId();
 }
