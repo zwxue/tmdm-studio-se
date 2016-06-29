@@ -141,6 +141,8 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXParseException;
 
+import sun.misc.BASE64Encoder;
+
 import com.amalto.workbench.editors.DataModelMainPage;
 import com.amalto.workbench.editors.xsdeditor.XSDEditor;
 import com.amalto.workbench.i18n.Messages;
@@ -174,8 +176,6 @@ import com.amalto.workbench.webservices.WSWhereOperator;
 import com.sun.org.apache.xpath.internal.XPathAPI;
 import com.sun.org.apache.xpath.internal.objects.XObject;
 import com.sun.xml.internal.ws.wsdl.parser.InaccessibleWSDLException;
-
-import sun.misc.BASE64Encoder;
 
 /**
  * @author bgrieder
@@ -385,8 +385,8 @@ public class Util {
         return mdmService;
     }
 
-    public static TMDMService getMDMService(URL url, final String username, final String password,
-            boolean showMissingJarDialog) throws XtentisException {
+    public static TMDMService getMDMService(URL url, final String username, final String password, boolean showMissingJarDialog)
+            throws XtentisException {
         url = checkAndAddSuffix(url);
 
         boolean needCheck = true;
@@ -501,8 +501,7 @@ public class Util {
         return webServceHook;
     }
 
-    public static List<WSDataModelPK> getAllDataModelPKs(URL url, String username, String password)
-            throws XtentisException {
+    public static List<WSDataModelPK> getAllDataModelPKs(URL url, String username, String password) throws XtentisException {
         try {
             TMDMService port = Util.getMDMService(url, username, password);
             return port.getDataModelPKs(new WSRegexDataModelPKs("*")).getWsDataModelPKs();//$NON-NLS-1$
@@ -512,8 +511,7 @@ public class Util {
         }
     }
 
-    public static List<WSDataClusterPK> getAllDataClusterPKs(URL url, String username, String password)
-            throws XtentisException {
+    public static List<WSDataClusterPK> getAllDataClusterPKs(URL url, String username, String password) throws XtentisException {
         try {
             TMDMService port = Util.getMDMService(url, username, password);
             return port.getDataClusterPKs(new WSRegexDataClusterPKs("*")).getWsDataClusterPKs();//$NON-NLS-1$
@@ -523,8 +521,7 @@ public class Util {
         }
     }
 
-    public static List<WSViewPK> getAllViewPKs(URL url, String username, String password, String regex)
-            throws XtentisException {
+    public static List<WSViewPK> getAllViewPKs(URL url, String username, String password, String regex) throws XtentisException {
         try {
             if ((regex == null) || ("".equals(regex))) {
                 regex = "*";//$NON-NLS-1$
@@ -1137,7 +1134,7 @@ public class Util {
                                         return decl;
                                     }
                                 }
-                                ArrayList<String> complexTypes = new ArrayList<String>();
+                                Set<XSDConcreteComponent> complexTypes = new HashSet<XSDConcreteComponent>();
                                 XSDElementDeclaration spec = findOutSpecialSonElement((XSDElementDeclaration) pt.getContent(),
                                         elem, complexTypes);
                                 if (spec != null) {
@@ -1161,7 +1158,7 @@ public class Util {
                                 }
                             }
                             if (pt.getContent() instanceof XSDElementDeclaration) {
-                                ArrayList<String> complexTypes = new ArrayList<String>();
+                                Set<XSDConcreteComponent> complexTypes = new HashSet<XSDConcreteComponent>();
                                 XSDElementDeclaration spec = findOutSpecialSonElement((XSDElementDeclaration) pt.getContent(),
                                         elem, complexTypes);
                                 if (spec != null) {
@@ -1328,7 +1325,7 @@ public class Util {
     }
 
     private static XSDElementDeclaration findOutSpecialSonElement(XSDElementDeclaration parent, XSDElementDeclaration son,
-            ArrayList<String> complexTypes) {
+            Set<XSDConcreteComponent> complexTypes) {
         ArrayList<XSDElementDeclaration> particleElemList = findOutAllSonElements(parent, complexTypes);
         XSDElementDeclaration specialParent = null;
         for (XSDElementDeclaration e : particleElemList) {
@@ -1350,12 +1347,11 @@ public class Util {
     }
 
     private static ArrayList<XSDElementDeclaration> findOutAllSonElements(XSDElementDeclaration decl,
-            ArrayList<String> complexTypes) {
+            Set<XSDConcreteComponent> complexTypes) {
         ArrayList<XSDElementDeclaration> holder = new ArrayList<XSDElementDeclaration>();
         if (decl.getTypeDefinition() instanceof XSDComplexTypeDefinition) {
             XSDComplexTypeDefinition type = (XSDComplexTypeDefinition) decl.getTypeDefinition();
-            String typeDesc = type.getTargetNamespace() + " : " + type.getName();//$NON-NLS-1$
-            if (complexTypes.indexOf(typeDesc) != -1) {
+            if (complexTypes.contains(type)) {
                 return holder;
             }
             if (type.getContent() instanceof XSDParticle) {
@@ -1368,7 +1364,7 @@ public class Util {
                         if (pt.getContent() instanceof XSDElementDeclaration) {
                             XSDElementDeclaration elem = (XSDElementDeclaration) pt.getContent();
                             if (!addComplexType) {
-                                complexTypes.add(typeDesc);
+                                complexTypes.add(type);
                                 addComplexType = true;
                             }
                             if (StringUtils.equals(elem.getName(), decl.getName())) {
@@ -1931,43 +1927,11 @@ public class Util {
         }
         if (Util.getParent(decl) instanceof XSDElementDeclaration) {
             XSDElementDeclaration parent = (XSDElementDeclaration) Util.getParent(decl);
-            // XSDComplexTypeDefinition compx = (XSDComplexTypeDefinition) parent.getTypeDefinition();
-            // XSDParticleImpl partCnt = (XSDParticleImpl) compx.getContent();
-            // XSDModelGroupImpl mdlGrp = (XSDModelGroupImpl) partCnt.getTerm();
-            //
-            // if ((maxOccurs > 1 || maxOccurs == -1) && mdlGrp.getCompositor() != XSDCompositor.SEQUENCE_LITERAL) {
-            // // change the parent element to xsd:sequence
-            // if (!MessageDialog.openConfirm(null, "Change to sequence type",
-            // "The complex type will be changed to sequence in response to the maxOccurs value change")) {
-            // return Status.CANCEL_STATUS;
-            // }
-            //
-            // mdlGrp.setCompositor(XSDCompositor.SEQUENCE_LITERAL);
-            // partCnt.getElement().getAttributeNode("maxOccurs").setNodeValue("unbounded");
-            // partCnt.setMinOccurs(0);
-            // parent.updateElement();
-            // }
+
             return doChangeElementTypeToSequence((XSDComplexTypeDefinition) parent.getTypeDefinition(), maxOccurs);
 
-        }
-        // add by ymli; fix the bug:0012278;
-        else {
+        } else {
             if (Util.getParent(decl) instanceof XSDComplexTypeDefinition) {
-                // XSDComplexTypeDefinition compx = (XSDComplexTypeDefinition) Util.getParent(decl);
-                // XSDParticleImpl partCnt = (XSDParticleImpl) compx.getContent();
-                // XSDModelGroupImpl mdlGrp = (XSDModelGroupImpl) partCnt.getTerm();
-                // if ((maxOccurs > 1 || maxOccurs == -1) && mdlGrp.getCompositor() != XSDCompositor.SEQUENCE_LITERAL) {
-                // // change the parent element to xsd:sequence
-                // if (!MessageDialog.openConfirm(null, "Change to sequence type",
-                // "The complex type will be changed to sequence in response to the maxOccurs value change")) {
-                // return Status.CANCEL_STATUS;
-                // }
-                //
-                // mdlGrp.setCompositor(XSDCompositor.SEQUENCE_LITERAL);
-                // partCnt.getElement().getAttributeNode("maxOccurs").setNodeValue("unbounded");
-                // partCnt.setMinOccurs(0);
-                // compx.updateElement();
-                // }
                 return doChangeElementTypeToSequence((XSDComplexTypeDefinition) Util.getParent(decl), maxOccurs);
             }
         }
