@@ -23,7 +23,6 @@ package org.talend.mdm.repository.ui.actions.datamodel;
 
 import java.util.Properties;
 
-import org.eclipse.core.resources.IFile;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -126,8 +125,7 @@ public class NewDataModelAction extends AbstractSimpleAddAction implements IIntr
 
     private void createERDocument(WSDataModelItem item) {
         if (exAdapter != null) {
-            IFile xsdFile = RepositoryResourceUtil.findReferenceFile(IServerObjectRepositoryType.TYPE_DATAMODEL, item, "xsd"); //$NON-NLS-1$
-            exAdapter.createERDocument(xsdFile);
+            exAdapter.createERDocument(item);
         }
     }
 
