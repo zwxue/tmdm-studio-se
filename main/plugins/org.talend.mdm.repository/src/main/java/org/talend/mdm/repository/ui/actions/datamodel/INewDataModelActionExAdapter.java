@@ -12,7 +12,7 @@
 // ============================================================================
 package org.talend.mdm.repository.ui.actions.datamodel;
 
-import org.eclipse.core.resources.IFile;
+import org.talend.core.model.properties.Item;
 
 import com.amalto.workbench.exadapter.IExAdapter;
 
@@ -23,5 +23,5 @@ import com.amalto.workbench.exadapter.IExAdapter;
  */
 public interface INewDataModelActionExAdapter extends IExAdapter<NewDataModelAction> {
 
-    void createERDocument(IFile xsdFile);
+    void createERDocument(Item item);
 }
