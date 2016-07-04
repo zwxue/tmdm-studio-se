@@ -158,7 +158,13 @@ public class OpenObjectAction extends AbstractRepositoryAction implements IIntro
         editorInput.setVersion(version);
     }
 
-    class OpenJob extends UIJob {
+    public class OpenJob extends UIJob {
+
+        boolean isOpened = false;
+
+        public boolean isOpened() {
+            return this.isOpened;
+        }
 
         public OpenJob() {
             super("Open Object"); //$NON-NLS-1$
@@ -168,7 +174,7 @@ public class OpenObjectAction extends AbstractRepositoryAction implements IIntro
         @Override
         public IStatus runInUIThread(IProgressMonitor monitor) {
 
-            doOpen();
+            isOpened = doOpen();
 
             monitor.done();
             return Status.OK_STATUS;
@@ -180,6 +186,7 @@ public class OpenObjectAction extends AbstractRepositoryAction implements IIntro
     protected void doRun() {
         new Thread(new Runnable() {
 
+            @Override
             public void run() {
                 UIJob openJob = new OpenJob();
                 if (exAdapter != null) {
@@ -192,19 +199,19 @@ public class OpenObjectAction extends AbstractRepositoryAction implements IIntro
 
     }
 
-    public void doOpen() {
+    public boolean doOpen() {
 
         List<Object> sels = getSelectedObject();
         if (selObjects != null) {
             sels = selObjects;
         }
         if (sels.isEmpty()) {
-            return;
+            return false;
         }
         Object obj = sels.get(0);
         if (obj instanceof IRepositoryViewObject) {
             if (obj instanceof WSRootRepositoryObject) {
-                return;
+                return false;
             }
             IRepositoryViewObject viewObject = (IRepositoryViewObject) obj;
 
@@ -213,7 +220,7 @@ public class OpenObjectAction extends AbstractRepositoryAction implements IIntro
                 if (viewObject.getRepositoryObjectType().equals(IServerObjectRepositoryType.TYPE_SERVICECONFIGURATION)) {// service
                     boolean checkMissingJar = MissingJarService.getInstance().checkMissingJar(true);
                     if (!checkMissingJar) {
-                        return;
+                        return false;
                     }
                     // configuration
                     MDMServerDef serverDef = openServerDialog(null);
@@ -221,6 +228,7 @@ public class OpenObjectAction extends AbstractRepositoryAction implements IIntro
                 } else {
                     getCommonViewer().expandToLevel(obj, 1);
                 }
+
             } else {
                 IEditorReference editorRef = RepositoryResourceUtil.isOpenedInEditor(viewObject);
                 if (editorRef != null) {
@@ -233,13 +241,14 @@ public class OpenObjectAction extends AbstractRepositoryAction implements IIntro
                     if (marker != null) {
                         IDE.gotoMarker(editorRef.getEditor(true), marker);
                     }
+                    return false;
                 } else {
                     openItem(viewObject);
+                    return true;
                 }
             }
         }
- 
-
+        return true;
     }
 
     private void openServiceConfig(MDMServerDef serverDef) {
@@ -416,6 +425,7 @@ public class OpenObjectAction extends AbstractRepositoryAction implements IIntro
         run();
     }
 
+    @Override
     public void run(IIntroSite site, Properties params) {
         PlatformUI.getWorkbench().getIntroManager().closeIntro(PlatformUI.getWorkbench().getIntroManager().getIntro());
         Object id = params.get("nodeId"); //$NON-NLS-1$
