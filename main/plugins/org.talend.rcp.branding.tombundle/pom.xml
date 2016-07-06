@@ -40,11 +40,11 @@
                   <type>txt</type>
                   <classifier>license</classifier>
                 </artifact>
-                <artifact>
+                <!--<artifact>
                   <file>./resources/NOTICE.txt</file>
                   <type>txt</type>
                   <classifier>notice</classifier>
-                </artifact>
+                </artifact>-->
               </artifacts>
             </configuration>
           </execution>
