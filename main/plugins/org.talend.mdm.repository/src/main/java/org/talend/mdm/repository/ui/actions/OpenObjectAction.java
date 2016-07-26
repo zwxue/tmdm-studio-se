@@ -138,10 +138,10 @@ public class OpenObjectAction extends AbstractRepositoryAction implements IIntro
         String version = viewObject.getVersion();
         try {
             if (!factory.isLocalConnectionProvider()) {
-                IMDMSVNProviderService service = (IMDMSVNProviderService) GlobalServiceRegister.getDefault().getService(
-                        IMDMSVNProviderService.class);
-                if (service != null) {
-                    if (service.isProjectInSvnMode()) {
+                if (GlobalServiceRegister.getDefault().isServiceRegistered(IMDMSVNProviderService.class)) {
+                    IMDMSVNProviderService service = (IMDMSVNProviderService) GlobalServiceRegister.getDefault()
+                            .getService(IMDMSVNProviderService.class);
+                    if (service != null && service.isProjectInSvnMode()) {
                         String revisionNumStr = service.getCurrentSVNRevision(viewObject);
                         if (revisionNumStr != null) {
                             revisionNumStr = ".r" + revisionNumStr; //$NON-NLS-1$
@@ -149,7 +149,6 @@ public class OpenObjectAction extends AbstractRepositoryAction implements IIntro
                         }
                     }
                 }
-
             }
         } catch (PersistenceException e) {
             log.error(e.getMessage(), e);
