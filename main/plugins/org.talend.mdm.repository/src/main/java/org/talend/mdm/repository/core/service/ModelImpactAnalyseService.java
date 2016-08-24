@@ -13,6 +13,7 @@
 package org.talend.mdm.repository.core.service;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.HashMap;
@@ -278,8 +279,10 @@ public class ModelImpactAnalyseService {
         Item item = viewObj.getProperty().getItem();
         IFile file = RepositoryResourceUtil.findReferenceFile(IServerObjectRepositoryType.TYPE_DATAMODEL, item, "xsd"); //$NON-NLS-1$
 
+        InputStream xsdFileStream = null;
         try {
-            byte[] bytes = IOUtils.toByteArray(file.getContents());
+            xsdFileStream = file.getContents();
+            byte[] bytes = IOUtils.toByteArray(xsdFileStream);
 
             String xsd = new String(bytes);
             return xsd;
@@ -287,6 +290,14 @@ public class ModelImpactAnalyseService {
             log.error(e.getMessage(), e);
         } catch (CoreException e) {
             log.error(e.getMessage(), e);
+        } finally {
+            if (xsdFileStream != null) {
+                try {
+                    xsdFileStream.close();
+                } catch (IOException e) {
+                    log.error(e.getMessage(), e);
+                }
+            }
         }
         return null;
     }
