@@ -12,6 +12,14 @@
 // ============================================================================
 package org.talend.mdm.repository.ui.actions;
 
+import org.apache.log4j.Logger;
+import org.eclipse.core.resources.IWorkspace;
+import org.eclipse.core.resources.IWorkspaceRunnable;
+import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.core.runtime.jobs.ISchedulingRule;
 import org.eclipse.jface.util.LocalSelectionTransfer;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -21,6 +29,7 @@ import org.eclipse.ui.navigator.INavigatorDnDService;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.AbstractRepositoryAction;
 import org.talend.mdm.repository.core.IRepositoryViewGlobalActionHandler;
+import org.talend.mdm.repository.core.IServerObjectRepositoryType;
 import org.talend.mdm.repository.core.dnd.RepositoryDropAssistant;
 import org.talend.mdm.repository.i18n.Messages;
 
@@ -32,6 +41,7 @@ import com.amalto.workbench.image.ImageCache;
  */
 public class PasteAction extends AbstractRepositoryAction {
 
+    private static Logger log = Logger.getLogger(PasteAction.class);
     /**
      * DOC hbhong PasteAction constructor comment.
      * 
@@ -46,6 +56,31 @@ public class PasteAction extends AbstractRepositoryAction {
 
     public String getGroupName() {
         return GROUP_COMMON;
+    }
+
+    @Override
+    public void run() {
+        IRepositoryViewObject viewObj = getSelectedDragViewObj();
+        if (IServerObjectRepositoryType.TYPE_WORKFLOW == viewObj.getRepositoryObjectType()) {
+            final IWorkspaceRunnable op = new IWorkspaceRunnable() {
+
+                @Override
+                public void run(IProgressMonitor monitor) {
+                    PasteAction.super.run();
+                }
+            };
+
+            IWorkspace workspace = ResourcesPlugin.getWorkspace();
+            try {
+                ISchedulingRule scheduleRule = workspace.getRuleFactory().createRule(workspace.getRoot());
+                workspace.run(op, scheduleRule, IWorkspace.AVOID_UPDATE, new NullProgressMonitor());
+            } catch (CoreException e) {
+                log.error(e.getMessage(), e);
+            }
+
+        } else {
+            super.run();
+        }
     }
 
     protected void doRun() {
