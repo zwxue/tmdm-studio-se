@@ -4,7 +4,7 @@ import static org.junit.Assert.*;
 import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.*;
 import static org.powermock.api.support.membermodification.MemberMatcher.*;
-import static org.powermock.api.support.membermodification.MemberModifier.*;
+import static org.powermock.api.support.membermodification.MemberModifier.stub;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -83,7 +83,8 @@ import com.amalto.workbench.image.ImageCache;
     ImageCache.class, ItemState.class, ProjectManager.class, CoreRuntimePlugin.class, InteractiveService.class,
     ResourceModelUtils.class, FolderType.class, RepositoryNodeConfigurationManager.class, ResourceUtils.class,
     ContainerCacheService.class, RepositoryQueryService.class, RepositoryNodeProviderRegistryReader.class,
-    ServerDefService.class, ERepositoryStatus.class, ExAdapterManager.class, ProxyRepositoryFactory.class,
+        ServerDefService.class, ERepositoryStatus.class, ERepositoryObjectType.class, ExAdapterManager.class,
+        ProxyRepositoryFactory.class,
 })
 public class RepositoryResourceUtilTest {
 
