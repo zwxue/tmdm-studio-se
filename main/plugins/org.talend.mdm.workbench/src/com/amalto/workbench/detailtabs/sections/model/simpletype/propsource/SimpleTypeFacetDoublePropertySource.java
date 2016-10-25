@@ -24,7 +24,7 @@ import com.amalto.workbench.widgets.composites.property.IPropertySource;
 
 public class SimpleTypeFacetDoublePropertySource extends SimpleTypeFacetPropertySource<Double, SimpleTypeDoubleFacetInfo> {
 
-    public SimpleTypeFacetDoublePropertySource(Composite cellEditorParent, String propName, double value) {
+    public SimpleTypeFacetDoublePropertySource(Composite cellEditorParent, String propName, Double value) {
         super(cellEditorParent, new SimpleTypeDoubleFacetInfo(propName, value));
     }
 

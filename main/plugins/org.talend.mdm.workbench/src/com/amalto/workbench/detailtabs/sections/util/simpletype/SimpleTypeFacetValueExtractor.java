@@ -55,8 +55,9 @@ public class SimpleTypeFacetValueExtractor {
 
     public static Integer getIntFacetValue(XSDFacet facet) {
 
-        if (facet == null)
-            return 0;
+        if (facet == null) {
+            return null;
+        }
 
         Integer result = 0;
 
@@ -72,8 +73,9 @@ public class SimpleTypeFacetValueExtractor {
 
     public static Double getDoubleFacetValue(XSDFacet facet) {
 
-        if (facet == null)
-            return 0d;
+        if (facet == null) {
+            return null;
+        }
 
         Double result = 0d;
 
