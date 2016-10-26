@@ -20,13 +20,19 @@ public class SimpleTypeIntegerFacetInfo extends SimpleTypeFacetInfo<Integer> {
 
     @Override
     protected String getValueLabel(Integer value) {
+        if (value == null) {
+            return "";
+        }
         return value.toString();
     }
 
     @Override
     protected Integer parseLabel(String label) {
+        if (label.trim().isEmpty()) {
+            return null;
+        }
 
-        int result = 0;
+        Integer result = null;
 
         try {
             result = Integer.parseInt(label);

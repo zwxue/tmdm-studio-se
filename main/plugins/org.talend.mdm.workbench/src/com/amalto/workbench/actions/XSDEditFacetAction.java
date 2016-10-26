@@ -358,13 +358,18 @@ public class XSDEditFacetAction extends UndoAction {
 
     private void editFractionDigits() {
         XSDFractionDigitsFacet currentValue = std.getFractionDigitsFacet();
-        String stringValue = "0";//$NON-NLS-1$
-        if (currentValue != null)
+        String stringValue = null;
+        if (currentValue != null) {
             stringValue = currentValue.getLexicalValue();
+        }
         dialog = new InputDialog(page.getSite().getShell(), Messages.XSDEditFacetAction_DialogTitle7,
                 Messages.XSDEditFacetAction_DialogTitle7Tip, stringValue == null ? "" : stringValue, new IInputValidator() {//$NON-NLS-1$
 
                     public String isValid(String newText) {
+                        if (newText.trim().isEmpty()) {
+                            return null;
+                        }
+
                         int val;
                         try {
                             val = Integer.parseInt(newText);
@@ -378,167 +383,171 @@ public class XSDEditFacetAction extends UndoAction {
                 });
         dialog.setBlockOnOpen(true);
         int ret = dialog.open();
-        if (ret == Dialog.CANCEL)
+        if (ret == Dialog.CANCEL) {
             return;
+        }
 
-        if (currentValue != null)
+        if (currentValue != null) {
             std.getFacetContents().remove(currentValue);
-        int intValue = Integer.parseInt(((InputDialog) dialog).getValue());
-        if (intValue > 0) {
-            XSDFractionDigitsFacet f = (XSDSchemaBuildingTools.getXSDFactory()).createXSDFractionDigitsFacet();
-            f.setLexicalValue("" + intValue);//$NON-NLS-1$
-            std.getFacetContents().add(f);
+        }
+
+        String input = ((InputDialog) dialog).getValue();
+        if (!input.trim().isEmpty()) {
+            int intValue = Integer.parseInt(input);
+            if (intValue >= 0) {
+                XSDFractionDigitsFacet f = (XSDSchemaBuildingTools.getXSDFactory()).createXSDFractionDigitsFacet();
+                f.setLexicalValue("" + intValue);//$NON-NLS-1$
+                std.getFacetContents().add(f);
+            }
         }
     }
 
     private void editMaxInclusive() {
         XSDMaxInclusiveFacet currentValue = std.getMaxInclusiveFacet();
-        String stringValue = "0";//$NON-NLS-1$
-        if (currentValue != null)
+        String stringValue = null;
+        if (currentValue != null) {
             stringValue = currentValue.getLexicalValue();
+        }
         dialog = new InputDialog(page.getSite().getShell(), Messages.XSDEditFacetAction_DialogTitle8,
                 Messages.XSDEditFacetAction_DialogTitle8Tip, stringValue == null ? "" : stringValue, new IInputValidator() {//$NON-NLS-1$
 
                     public String isValid(String newText) {
-                        // double val;
-                        // try {
-                        // val = Double.parseDouble(newText);
-                        // } catch (Exception e) {
-                        // return "The value must be a non negative double";
-                        // }
-                        // if (val < 0)
-                        // return "The value must be a non negative double";
-                        // return null;
+                        if (newText.trim().isEmpty()) {
+                            return null;
+                        }
+
                         return isValidBoundaryNumber(std, newText);
                     }
                 });
         dialog.setBlockOnOpen(true);
         int ret = dialog.open();
-        if (ret == Dialog.CANCEL)
+        if (ret == Dialog.CANCEL) {
             return;
+        }
 
-        if (currentValue != null)
+        if (currentValue != null) {
             std.getFacetContents().remove(currentValue);
-        // int intValue = Integer.parseInt(((InputDialog) dialog).getValue());
-        if (Double.parseDouble(((InputDialog) dialog).getValue()) > 0) {
-            XSDMaxInclusiveFacet f = (XSDSchemaBuildingTools.getXSDFactory()).createXSDMaxInclusiveFacet();
-            // f.setLexicalValue("" + intValue);
-            f.setLexicalValue("" + getValidBoundaryNumber(std, ((InputDialog) dialog).getValue()));//$NON-NLS-1$
-            std.getFacetContents().add(f);
+        }
+
+        String input = ((InputDialog) dialog).getValue();
+        if (!input.trim().isEmpty()) {
+            if (Double.parseDouble(input) >= 0) {
+                XSDMaxInclusiveFacet f = (XSDSchemaBuildingTools.getXSDFactory()).createXSDMaxInclusiveFacet();
+                f.setLexicalValue("" + getValidBoundaryNumber(std, input));//$NON-NLS-1$
+                std.getFacetContents().add(f);
+            }
         }
     }
 
     private void editMaxExclusive() {
         XSDMaxExclusiveFacet currentValue = std.getMaxExclusiveFacet();
-        String stringValue = "0";//$NON-NLS-1$
-        if (currentValue != null)
+        String stringValue = null;
+        if (currentValue != null) {
             stringValue = currentValue.getLexicalValue();
+        }
         dialog = new InputDialog(page.getSite().getShell(), Messages.XSDEditFacetAction_DialogTitle9,
                 Messages.XSDEditFacetAction_DialogTitle9Tip, stringValue == null ? "" : stringValue, new IInputValidator() {//$NON-NLS-1$
 
                     public String isValid(String newText) {
-                        // double val;
-                        // try {
-                        // val = Double.parseDouble(newText);
-                        // } catch (Exception e) {
-                        // return "The value must be a non negative double";
-                        // }
-                        // if (val < 0)
-                        // return "The value must be a non negative double";
-                        // return null;
+                        if (newText.trim().isEmpty()) {
+                            return null;
+                        }
+
                         return isValidBoundaryNumber(std, newText);
                     }
                 });
         dialog.setBlockOnOpen(true);
         int ret = dialog.open();
-        if (ret == Dialog.CANCEL)
+        if (ret == Dialog.CANCEL) {
             return;
+        }
 
-        if (currentValue != null)
+        if (currentValue != null) {
             std.getFacetContents().remove(currentValue);
-        // double intValue = Double.parseDouble(((InputDialog)dialog).getValue());
-        // int intValue = Integer.parseInt(((InputDialog) dialog).getValue());
-        if (Double.parseDouble(((InputDialog) dialog).getValue()) > 0) {
-            XSDMaxExclusiveFacet f = (XSDSchemaBuildingTools.getXSDFactory()).createXSDMaxExclusiveFacet();
-            // f.setLexicalValue("" + intValue);
-            f.setLexicalValue("" + getValidBoundaryNumber(std, ((InputDialog) dialog).getValue()));//$NON-NLS-1$
-            std.getFacetContents().add(f);
+        }
+
+        String input = ((InputDialog) dialog).getValue();
+        if (!input.trim().isEmpty()) {
+            if (Double.parseDouble(input) >= 0) {
+                XSDMaxExclusiveFacet f = (XSDSchemaBuildingTools.getXSDFactory()).createXSDMaxExclusiveFacet();
+                f.setLexicalValue("" + getValidBoundaryNumber(std, input));//$NON-NLS-1$
+                std.getFacetContents().add(f);
+            }
         }
     }
 
     private void editMinInclusive() {
         XSDMinInclusiveFacet currentValue = std.getMinInclusiveFacet();
-        String stringValue = "0";//$NON-NLS-1$
-        if (currentValue != null)
+        String stringValue = null;
+        if (currentValue != null) {
             stringValue = currentValue.getLexicalValue();
+        }
         dialog = new InputDialog(page.getSite().getShell(), Messages.XSDEditFacetAction_DialogTitle10,
                 Messages.XSDEditFacetAction_DialogTitle10Tip, stringValue == null ? "" : stringValue, new IInputValidator() {//$NON-NLS-1$
 
                     public String isValid(String newText) {
-                        // double val;
-                        // try {
-                        // val = Double.parseDouble(newText);
-                        // } catch (Exception e) {
-                        // return "The value must be a non negative double";
-                        // }
-                        // if (val < 0)
-                        // return "The value must be a non negative double";
-                        // return null;
+                        if (newText.trim().isEmpty()) {
+                            return null;
+                        }
+
                         return isValidBoundaryNumber(std, newText);
                     }
                 });
         dialog.setBlockOnOpen(true);
         int ret = dialog.open();
-        if (ret == Dialog.CANCEL)
+        if (ret == Dialog.CANCEL) {
             return;
+        }
 
-        if (currentValue != null)
+        if (currentValue != null) {
             std.getFacetContents().remove(currentValue);
-        // int intValue = Integer.parseInt(((InputDialog) dialog).getValue());
-        // double intValue = Double.parseDouble(((InputDialog)dialog).getValue());
-        if (Double.parseDouble(((InputDialog) dialog).getValue()) > 0) {
-            XSDMinInclusiveFacet f = (XSDSchemaBuildingTools.getXSDFactory()).createXSDMinInclusiveFacet();
-            // f.setLexicalValue("" + intValue);
-            f.setLexicalValue("" + getValidBoundaryNumber(std, ((InputDialog) dialog).getValue())); //$NON-NLS-1$
-            std.getFacetContents().add(f);
+        }
+
+        String input = ((InputDialog) dialog).getValue();
+
+        if (!input.trim().isEmpty()) {
+            if (Double.parseDouble(input) >= 0) {
+                XSDMinInclusiveFacet f = (XSDSchemaBuildingTools.getXSDFactory()).createXSDMinInclusiveFacet();
+                f.setLexicalValue("" + getValidBoundaryNumber(std, input)); //$NON-NLS-1$
+                std.getFacetContents().add(f);
+            }
         }
     }
 
     private void editMinExclusive() {
         XSDMinExclusiveFacet currentValue = std.getMinExclusiveFacet();
-        String stringValue = "0"; //$NON-NLS-1$
-        if (currentValue != null)
+        String stringValue = null;
+        if (currentValue != null) {
             stringValue = currentValue.getLexicalValue();
+        }
         dialog = new InputDialog(page.getSite().getShell(), Messages.XSDEditFacetAction_DialogTitle11,
                 Messages.XSDEditFacetAction_DialogTitle11Tip, stringValue == null ? "" : stringValue, new IInputValidator() {//$NON-NLS-1$
 
                     public String isValid(String newText) {
-                        // double val;
-                        // try {
-                        // val = Double.parseDouble(newText);
-                        // } catch (Exception e) {
-                        // return "The value must be a non negative double";
-                        // }
-                        // if (val < 0)
-                        // return "The value must be a non negative double";
-                        // return null;
+                        if (newText.trim().isEmpty()) {
+                            return null;
+                        }
+
                         return isValidBoundaryNumber(std, newText);
                     }
                 });
         dialog.setBlockOnOpen(true);
         int ret = dialog.open();
-        if (ret == Dialog.CANCEL)
+        if (ret == Dialog.CANCEL) {
             return;
+        }
 
-        if (currentValue != null)
+        if (currentValue != null) {
             std.getFacetContents().remove(currentValue);
-        // int intValue = Integer.parseInt(((InputDialog) dialog).getValue());
-        // double intValue = Double.parseDouble(((InputDialog)dialog).getValue());
-        if (Double.parseDouble(((InputDialog) dialog).getValue()) > 0) {
-            XSDMinExclusiveFacet f = (XSDSchemaBuildingTools.getXSDFactory()).createXSDMinExclusiveFacet();
-            // f.setLexicalValue("" + intValue);
-            f.setLexicalValue("" + getValidBoundaryNumber(std, ((InputDialog) dialog).getValue())); //$NON-NLS-1$
-            std.getFacetContents().add(f);
+        }
+
+        String input = ((InputDialog) dialog).getValue();
+        if (!input.trim().isEmpty()) {
+            if (Double.parseDouble(input) >= 0) {
+                XSDMinExclusiveFacet f = (XSDSchemaBuildingTools.getXSDFactory()).createXSDMinExclusiveFacet();
+                f.setLexicalValue("" + getValidBoundaryNumber(std, input)); //$NON-NLS-1$
+                std.getFacetContents().add(f);
+            }
         }
     }
 

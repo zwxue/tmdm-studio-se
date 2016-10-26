@@ -20,13 +20,19 @@ public class SimpleTypeDoubleFacetInfo extends SimpleTypeFacetInfo<Double> {
 
     @Override
     protected String getValueLabel(Double value) {
+        if (value == null) {
+            return "";
+        }
         return value.toString();
     }
 
     @Override
     protected Double parseLabel(String label) {
+        if (label.trim().isEmpty()) {
+            return null;
+        }
 
-        double result = 0;
+        Double result = null;
 
         try {
             result = Double.parseDouble(label);

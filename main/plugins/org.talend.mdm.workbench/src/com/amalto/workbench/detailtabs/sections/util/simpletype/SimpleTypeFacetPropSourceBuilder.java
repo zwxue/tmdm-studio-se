@@ -91,8 +91,9 @@ public abstract class SimpleTypeFacetPropSourceBuilder {
 
     protected Double toDoubleQuietly(Object value) {
 
-        if (value == null)
-            return 0d;
+        if (value == null) {
+            return null;
+        }
 
         try {
             return Double.parseDouble(value.toString());

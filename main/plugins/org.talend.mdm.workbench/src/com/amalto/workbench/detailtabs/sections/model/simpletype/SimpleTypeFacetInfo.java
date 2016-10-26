@@ -47,9 +47,6 @@ public abstract class SimpleTypeFacetInfo<T> {
 
         T parsedValue = parseLabel(label);
 
-        if (parsedValue == null)
-            return;
-
         propValue = parsedValue;
 
     }
