@@ -66,7 +66,7 @@ public class CommandManager implements IMementoAware {
 
     ICommandManagerExAdapter exAdapter;
 
-    private CommandManager() {
+    public CommandManager() {
         exAdapter = ExAdapterManager.getAdapter(this, ICommandManagerExAdapter.class);
     }
 
