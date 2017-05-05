@@ -61,6 +61,14 @@ import org.xml.sax.InputSource;
  */
 public class MDM {
 
+	public static final String WS_CLIENT_CONNECTION_TIMEOUT_KEY = "javax.xml.ws.client.connectionTimeout";
+	
+	public static final String WS_CLIENT_RECEIVE_TIMEOUT_KEY = "javax.xml.ws.client.receiveTimeout";
+	
+	public static final String WS_CLIENT_CONNECTION_TIME_VALUE = "ws_client_connection_timeout";
+	
+	public static final String WS_CLIENT_RECEIVE_TIME_VALUE = "ws_client_receive_timeout";
+	
     /**
      * getFK: Return one of the FK component by position in a mangled FK (FKs are mangled in MDM to accommodate for
      * compound keys)
@@ -437,6 +445,60 @@ public class MDM {
         return isoValues.get(iso);
     }
 
+    /**
+     * Get webservice client connection time from jvm param setting
+     *  
+     * {talendTypes} Long
+     * 
+     * {Category} MDM
+     * 
+     * {param} none
+     *  
+     * {example} getWSClientConnectionTimeout() # return 60000
+     */
+    public static Long getWSClientConnectionTimeout() throws Exception {
+    	String defaultTimeout = "60000";
+        String inputTimeout = System.getProperty(WS_CLIENT_CONNECTION_TIME_VALUE);
+        if (inputTimeout != null) {
+            try {
+            	long timeout = Long.parseLong(inputTimeout);
+            	if (timeout > 0) {
+            		return new Long(inputTimeout);
+            	}
+            } catch (Exception exception) {
+                throw new RuntimeException("Webservice client connection timeout value '" + inputTimeout + "' is invalid", exception);
+            }
+        }
+        return new Long(defaultTimeout);
+    }
+    
+    /**
+     * Get webservice client receive time from jvm param setting
+     *  
+     * {talendTypes} Long
+     * 
+     * {Category} MDM
+     * 
+     * {param} none
+     *  
+     * {example} getWSClientReceiveTimeout() # return 60000
+     */
+    public static Long getWSClientReceiveTimeout() throws Exception {
+    	String defaultTimeout = "60000";
+        String inputTimeout = System.getProperty(WS_CLIENT_RECEIVE_TIME_VALUE);
+        if (inputTimeout != null) {
+            try {
+            	long timeout = Long.parseLong(inputTimeout);
+            	if (timeout > 0) {
+            		return new Long(inputTimeout);
+            	}
+            } catch (Exception exception) {
+                throw new RuntimeException("Webservice client receive timeout value '" + inputTimeout + "' is invalid", exception);
+            }
+        }
+        return new Long(defaultTimeout);
+    }
+    
     // Utility methods
     /**
      * Get a nodelist from an xPath
