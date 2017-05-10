@@ -448,7 +448,7 @@ public class MDM {
     /**
      * Get webservice client connection time from jvm param setting
      *  
-     * {talendTypes} Long
+     * {talendTypes} int
      * 
      * {Category} MDM
      * 
@@ -456,26 +456,26 @@ public class MDM {
      *  
      * {example} getWSClientConnectionTimeout() # return 60000
      */
-    public static Long getWSClientConnectionTimeout() throws Exception {
-    	String defaultTimeout = "60000";
+    public static int getWSClientConnectionTimeout() throws Exception {
+    	int defaultTimeout = 60000;
         String inputTimeout = System.getProperty(WS_CLIENT_CONNECTION_TIME_VALUE);
         if (inputTimeout != null) {
             try {
-            	long timeout = Long.parseLong(inputTimeout);
+            	int timeout = Integer.parseInt(inputTimeout);
             	if (timeout > 0) {
-            		return new Long(inputTimeout);
+            		return timeout;
             	}
             } catch (Exception exception) {
                 throw new RuntimeException("Webservice client connection timeout value '" + inputTimeout + "' is invalid", exception);
             }
         }
-        return new Long(defaultTimeout);
+        return defaultTimeout;
     }
     
     /**
      * Get webservice client receive time from jvm param setting
      *  
-     * {talendTypes} Long
+     * {talendTypes} int
      * 
      * {Category} MDM
      * 
@@ -483,20 +483,20 @@ public class MDM {
      *  
      * {example} getWSClientReceiveTimeout() # return 60000
      */
-    public static Long getWSClientReceiveTimeout() throws Exception {
-    	String defaultTimeout = "60000";
+    public static int getWSClientReceiveTimeout() throws Exception {
+    	int defaultTimeout = 60000;
         String inputTimeout = System.getProperty(WS_CLIENT_RECEIVE_TIME_VALUE);
         if (inputTimeout != null) {
             try {
-            	long timeout = Long.parseLong(inputTimeout);
+            	int timeout = Integer.parseInt(inputTimeout);
             	if (timeout > 0) {
-            		return new Long(inputTimeout);
+            		return timeout;
             	}
             } catch (Exception exception) {
                 throw new RuntimeException("Webservice client receive timeout value '" + inputTimeout + "' is invalid", exception);
             }
         }
-        return new Long(defaultTimeout);
+        return defaultTimeout;
     }
     
     // Utility methods
