@@ -64,7 +64,10 @@ public class IOUtil {
     }
 
     public static boolean isExist(String path) {
-        assert (path != null);
+        if (path == null) {
+            return false;
+        }
+
         return new File(path).exists();
     }
 
@@ -76,13 +79,13 @@ public class IOUtil {
      * @return true if the file is in tar format
      */
     public static boolean isZipFile(String fileName) {
-        if (fileName.length() == 0) {
+        if (fileName == null || fileName.trim().length() == 0) {
             return false;
         }
 
         ZipFile zipFile = null;
         try {
-            zipFile = new ZipFile(fileName);
+            zipFile = new ZipFile(fileName.trim());
         } catch (IOException ioException) {
             return false;
         } finally {

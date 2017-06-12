@@ -36,13 +36,13 @@ public class IOUtilExt {
      * @return true if the file is in tar format
      */
     public static boolean isTarFile(String fileName) {
-        if (fileName.length() == 0) {
+        if (fileName == null || fileName.trim().length() == 0) {
             return false;
         }
 
         TarFile tarFile = null;
         try {
-            tarFile = new TarFile(fileName);
+            tarFile = new TarFile(fileName.trim());
         } catch (TarException tarException) {
             return false;
         } catch (IOException ioException) {
@@ -61,6 +61,10 @@ public class IOUtilExt {
     }
 
     public static void extractTarFile(String tarFileName, String targetFolder) throws Exception {
+        if (tarFileName == null || targetFolder == null) {
+            return;
+        }
+
         Exception exception = null;
         byte[] buf = new byte[8192];
         TarFile tarFile = null;
