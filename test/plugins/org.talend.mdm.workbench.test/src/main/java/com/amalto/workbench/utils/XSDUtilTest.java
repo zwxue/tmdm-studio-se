@@ -154,7 +154,7 @@ public class XSDUtilTest {
 
             char[] charArray = candidateChars.toCharArray();
             int randomIntValue = new Double(Math.floor(Math.random() * 100)).intValue();// a int number 0~100
-            int size = randomIntValue % resultMaxLen; // random length
+            int size = randomIntValue % resultMaxLen + 1; // random length, no less that one
             for (int i = 0; i < size; i++) {
                 int index = new Double(Math.floor(Math.random() * wholeLen)).intValue();
                 builder.append(charArray[index]);
