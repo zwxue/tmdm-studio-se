@@ -1216,7 +1216,7 @@ public class Util {
         return null;
     }
 
-    private static String getTopElement(XSDElementDeclaration parent, XSDElementDeclaration son) {
+    public static String getTopElement(XSDElementDeclaration parent, XSDElementDeclaration son) {
         XSDTypeDefinition type = parent.getTypeDefinition();
         if (!(type instanceof XSDComplexTypeDefinition)) {
             return null;

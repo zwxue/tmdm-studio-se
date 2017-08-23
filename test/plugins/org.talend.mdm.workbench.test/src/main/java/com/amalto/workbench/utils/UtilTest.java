@@ -1469,4 +1469,73 @@ public class UtilTest {
         }
     }
 
+    @Test
+    public void testGetTopElement() {
+        try {
+            XSDFactory factory = XSDFactory.eINSTANCE;
+            //
+            XSDElementDeclaration concept = factory.createXSDElementDeclaration();
+            // concept with three children
+            String element1 = "Id"; //$NON-NLS-1$
+            String element2 = "code"; //$NON-NLS-1$
+            String element3 = "address"; //$NON-NLS-1$
+            XSDSchema xsdSchema = factory.createXSDSchema();
+            xsdSchema.getContents().add(concept);
+            XSDComplexTypeDefinition xsdComplexTypeDef = factory.createXSDComplexTypeDefinition();
+            xsdComplexTypeDef.setBaseTypeDefinition(
+                    xsdSchema.resolveComplexTypeDefinition(xsdSchema.getSchemaForSchemaNamespace(), "anyType")); //$NON-NLS-1$
+            xsdSchema.getContents().add(xsdComplexTypeDef);
+            XSDParticle xsdParticle = factory.createXSDParticle();
+            xsdComplexTypeDef.setContent(xsdParticle);
+            XSDModelGroup xsdModelGroup = factory.createXSDModelGroup();
+            xsdParticle.setContent(xsdModelGroup);
+            concept.setAnonymousTypeDefinition(xsdComplexTypeDef);
+
+            XSDParticle childParticle1 = factory.createXSDParticle();
+            XSDElementDeclaration childElement1 = factory.createXSDElementDeclaration();
+            childElement1.setName(element1);
+            childParticle1.setContent(childElement1);
+            XSDParticle childParticle2 = factory.createXSDParticle();
+            XSDElementDeclaration childElement2 = factory.createXSDElementDeclaration();
+            childElement2.setName(element2);
+            childParticle2.setContent(childElement2);
+            XSDParticle childParticle3 = factory.createXSDParticle();
+            XSDElementDeclaration childElement3 = factory.createXSDElementDeclaration();
+            childElement3.setName(element3);
+            childParticle3.setContent(childElement3);
+            xsdModelGroup.getContents().add(childParticle1);
+            xsdModelGroup.getContents().add(childParticle2);
+            xsdModelGroup.getContents().add(childParticle3);
+
+            Object primaryKey = Util.getTopElement(concept, childElement1);
+            assertEquals(element1, primaryKey);
+
+            XSDElementDeclaration elementDecl = factory.createXSDElementDeclaration();
+            elementDecl.setTypeDefinition(factory.createXSDSimpleTypeDefinition());
+            primaryKey = Util.getTopElement(elementDecl, childElement1);
+            assertNull(primaryKey);
+
+            //
+
+            XSDComplexTypeDefinition xsdComplexTypeDef2 = factory.createXSDComplexTypeDefinition();
+            xsdComplexTypeDef2.setBaseTypeDefinition(xsdComplexTypeDef);
+            XSDParticle xsdParticle2 = factory.createXSDParticle();
+            xsdComplexTypeDef2.setContent(xsdParticle2);
+            XSDModelGroup xsdModelGroup2 = factory.createXSDModelGroup();
+            xsdParticle2.setContent(xsdModelGroup2);
+
+            XSDParticle childParticle_2 = factory.createXSDParticle();
+            XSDElementDeclaration childElement_2 = factory.createXSDElementDeclaration();
+            childElement_2.setName(element1);
+            childParticle_2.setContent(childElement_2);
+            xsdModelGroup2.getContents().add(childParticle_2);
+            xsdSchema.getContents().add(xsdComplexTypeDef2);
+            concept.setTypeDefinition(xsdComplexTypeDef2);
+            primaryKey = Util.getTopElement(concept, childElement1);
+            assertEquals(element1, primaryKey);
+
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+        }
+    }
 }
