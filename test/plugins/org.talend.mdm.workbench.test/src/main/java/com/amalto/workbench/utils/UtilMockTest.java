@@ -37,7 +37,6 @@ import org.eclipse.xsd.XSDComplexTypeDefinition;
 import org.eclipse.xsd.XSDConcreteComponent;
 import org.eclipse.xsd.XSDElementDeclaration;
 import org.eclipse.xsd.XSDFactory;
-import org.eclipse.xsd.XSDIdentityConstraintDefinition;
 import org.eclipse.xsd.XSDImport;
 import org.eclipse.xsd.XSDModelGroup;
 import org.eclipse.xsd.XSDParticle;
@@ -45,27 +44,22 @@ import org.eclipse.xsd.XSDSchema;
 import org.eclipse.xsd.XSDSchemaContent;
 import org.eclipse.xsd.XSDSimpleTypeDefinition;
 import org.eclipse.xsd.XSDTypeDefinition;
-import org.eclipse.xsd.XSDXPathDefinition;
 import org.eclipse.xsd.util.XSDConstants;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.powermock.api.mockito.PowerMockito;
-import org.powermock.core.classloader.annotations.PowerMockIgnore;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-import com.amalto.workbench.i18n.Messages;
-
 /**
  * 
  */
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({ Util.class })
-@PowerMockIgnore("org.eclipse.osgi.util.*")
 public class UtilMockTest {
 
     private Logger log = Logger.getLogger(UtilMockTest.class);
@@ -847,67 +841,6 @@ public class UtilMockTest {
         isAImporedElement = Util.IsAImporedElement(pelement, anotherSchema);
         assertTrue(isAImporedElement);
 
-    }
-
-    @Test
-    public void testGetComponentName() {
-        String methodToExecute = "getComponentName"; //$NON-NLS-1$
-        String prefix = "name=\"", suffix = "\""; //$NON-NLS-1$ //$NON-NLS-2$
-        String[] objNames = { "product_elementdeclaration", "product_particle", "p_complextype", "p_simpletype", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-                "product_identityconstraintdef", "p_xpathdef" }; //$NON-NLS-1$ //$NON-NLS-2$
-        String[] expectedObjNames = new String[objNames.length];
-        for (int i = 0; i < objNames.length - 1; i++) {
-            expectedObjNames[i] = prefix + objNames[i] + suffix;
-        }
-        expectedObjNames[objNames.length - 1] = Messages.Util_42 + objNames[objNames.length - 1] + suffix;
-
-        XSDFactory factory = XSDFactory.eINSTANCE;
-
-        PowerMockito.mockStatic(Util.class);
-        try {
-            PowerMockito.when(Util.class, methodToExecute, any()).thenCallRealMethod();
-
-            XSDElementDeclaration xsdElementDeclaration = factory.createXSDElementDeclaration();
-            xsdElementDeclaration.setName(objNames[0]);
-
-            XSDParticle xsdParticle = factory.createXSDParticle();
-            XSDElementDeclaration xsdParticleDeclaration = factory.createXSDElementDeclaration();
-            xsdParticleDeclaration.setName(objNames[1]);
-            xsdParticle.setTerm(xsdParticleDeclaration);
-
-            XSDComplexTypeDefinition xsdComplexTypeDefinition = factory.createXSDComplexTypeDefinition();
-            xsdComplexTypeDefinition.setName(objNames[2]);
-
-            XSDSimpleTypeDefinition xsdSimpleTypeDefinition = factory.createXSDSimpleTypeDefinition();
-            xsdSimpleTypeDefinition.setName(objNames[3]);
-
-            XSDIdentityConstraintDefinition xsdIdConsDef = factory.createXSDIdentityConstraintDefinition();
-            xsdIdConsDef.setName(objNames[4]);
-
-            XSDXPathDefinition xsdPathDefinition = factory.createXSDXPathDefinition();
-            xsdPathDefinition.setValue(objNames[5]);
-
-            String name = Whitebox.invokeMethod(Util.class, methodToExecute, xsdElementDeclaration);
-            assertEquals(expectedObjNames[0], name);
-
-            name = Whitebox.invokeMethod(Util.class, methodToExecute, xsdParticle);
-            assertEquals(expectedObjNames[1], name);
-
-            name = Whitebox.invokeMethod(Util.class, methodToExecute, xsdComplexTypeDefinition);
-            assertEquals(expectedObjNames[2], name);
-
-            name = Whitebox.invokeMethod(Util.class, methodToExecute, xsdSimpleTypeDefinition);
-            assertEquals(expectedObjNames[3], name);
-
-            name = Whitebox.invokeMethod(Util.class, methodToExecute, xsdIdConsDef);
-            assertEquals(expectedObjNames[4], name);
-
-            name = Whitebox.invokeMethod(Util.class, methodToExecute, xsdPathDefinition);
-            assertEquals(expectedObjNames[5], name);
-
-        } catch (Exception e) {
-            log.error(e.getMessage(), e);
-        }
     }
 
     @Test

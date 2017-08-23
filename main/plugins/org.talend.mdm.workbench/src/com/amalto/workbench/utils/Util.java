@@ -1543,15 +1543,8 @@ public class Util {
                 e.getChildNodes().item(0).setNodeValue(build.toString());
 
             } else {
-                boolean changed = false;
-                if (nodeValue.contains("/")) { //$NON-NLS-1$
-                    changed = nodeValue.startsWith(oldValue + "/"); //$NON-NLS-1$
-                } else {
-                    changed = nodeValue.startsWith(oldValue);
-                }
-                if (changed) {
-                    nodeValue = nodeValue.replaceFirst(oldValue, newValue);
-                    e.getChildNodes().item(0).setNodeValue(nodeValue);
+                if (nodeValue.equals(oldValue)) {
+                    e.getChildNodes().item(0).setNodeValue(newValue);
                 }
             }
 
@@ -2051,7 +2044,7 @@ public class Util {
         return true;
     }
 
-    private static String getComponentName(Object component) {
+    public static String getComponentName(Object component) {
         if (component instanceof XSDElementDeclaration) {
             XSDElementDeclaration decl = (XSDElementDeclaration) component;
             return Messages.Util_34 + decl.getName() + Messages.Util_35;

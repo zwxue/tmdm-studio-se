@@ -1411,4 +1411,62 @@ public class UtilTest {
         contextPath = Util.getContextPath(urlPath);
         assertEquals(expectedContextPath, contextPath);
     }
+
+    @Test
+    public void testGetComponentName() {
+        String prefix = "name=\"", suffix = "\""; //$NON-NLS-1$ //$NON-NLS-2$
+        String[] objNames = { "product_elementdeclaration", "product_particle", "p_complextype", "p_simpletype", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+                "product_identityconstraintdef", "p_xpathdef" }; //$NON-NLS-1$ //$NON-NLS-2$
+        String[] expectedObjNames = new String[objNames.length];
+        for (int i = 0; i < objNames.length - 1; i++) {
+            expectedObjNames[i] = prefix + objNames[i] + suffix;
+        }
+        expectedObjNames[objNames.length - 1] = "xpath=\"" + objNames[objNames.length - 1] + suffix; //$NON-NLS-1$
+
+        XSDFactory factory = XSDFactory.eINSTANCE;
+
+        try {
+            XSDElementDeclaration xsdElementDeclaration = factory.createXSDElementDeclaration();
+            xsdElementDeclaration.setName(objNames[0]);
+
+            XSDParticle xsdParticle = factory.createXSDParticle();
+            XSDElementDeclaration xsdParticleDeclaration = factory.createXSDElementDeclaration();
+            xsdParticleDeclaration.setName(objNames[1]);
+            xsdParticle.setTerm(xsdParticleDeclaration);
+
+            XSDComplexTypeDefinition xsdComplexTypeDefinition = factory.createXSDComplexTypeDefinition();
+            xsdComplexTypeDefinition.setName(objNames[2]);
+
+            XSDSimpleTypeDefinition xsdSimpleTypeDefinition = factory.createXSDSimpleTypeDefinition();
+            xsdSimpleTypeDefinition.setName(objNames[3]);
+
+            XSDIdentityConstraintDefinition xsdIdConsDef = factory.createXSDIdentityConstraintDefinition();
+            xsdIdConsDef.setName(objNames[4]);
+
+            XSDXPathDefinition xsdPathDefinition = factory.createXSDXPathDefinition();
+            xsdPathDefinition.setValue(objNames[5]);
+
+            String name = Util.getComponentName(xsdElementDeclaration);
+            assertEquals(expectedObjNames[0], name);
+
+            name = Util.getComponentName(xsdParticle);
+            assertEquals(expectedObjNames[1], name);
+
+            name = Util.getComponentName(xsdComplexTypeDefinition);
+            assertEquals(expectedObjNames[2], name);
+
+            name = Util.getComponentName(xsdSimpleTypeDefinition);
+            assertEquals(expectedObjNames[3], name);
+
+            name = Util.getComponentName(xsdIdConsDef);
+            assertEquals(expectedObjNames[4], name);
+
+            name = Util.getComponentName(xsdPathDefinition);
+            assertEquals(expectedObjNames[5], name);
+
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+        }
+    }
+
 }
