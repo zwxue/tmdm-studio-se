@@ -55,6 +55,7 @@ import org.eclipse.xsd.XSDTypeDefinition;
 import org.eclipse.xsd.XSDXPathDefinition;
 import org.junit.Before;
 import org.junit.Test;
+import org.talend.mdm.commmon.util.workbench.ZipToFile;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -1350,11 +1351,12 @@ public class UtilTest {
     public void testUnZipFile() {
         String usrDir = System.getProperty("java.io.tmpdir");//$NON-NLS-1$
 
-        File zipFolder = new File(usrDir + File.separator + System.currentTimeMillis());
+        long currentTimeMillis = System.currentTimeMillis();
+        File zipFolder = new File(usrDir + File.separator + currentTimeMillis);
         if (!zipFolder.exists()) {
             zipFolder.mkdirs();
         }
-        File unzipFolder = new File(usrDir + File.separator + System.currentTimeMillis());
+        File unzipFolder = new File(usrDir + File.separator + currentTimeMillis + 1);
         if (!unzipFolder.exists()) {
             unzipFolder.mkdirs();
         }
@@ -1370,6 +1372,12 @@ public class UtilTest {
 
         } catch (IOException e) {
             log.error(e.getMessage(), e);
+        } finally {
+            try {
+                ZipToFile.deleteDirectory(zipFolder);
+                ZipToFile.deleteDirectory(unzipFolder);
+            } catch (Exception e) {
+            }
         }
     }
 
