@@ -103,6 +103,7 @@ public class XSDUtilTest {
 
     @Test
     public void testIsValidatedXSDName() {
+        int resultMaxLen = 10;
         String xsdname = null;
         boolean isValid = XSDUtil.isValidatedXSDName(xsdname);
         assertFalse(isValid);
@@ -116,27 +117,33 @@ public class XSDUtilTest {
         assertFalse(isValid);
 
         String str = new String("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"); //$NON-NLS-1$
-        xsdname = buildArbitraryString(str, 10);
+        xsdname = buildArbitraryString(str, resultMaxLen);
         isValid = XSDUtil.isValidatedXSDName(xsdname);
         assertTrue(isValid);
 
-        String others = "-._012346789"; //$NON-NLS-1$
-        String xsdname2 = xsdname + buildArbitraryString(others, 10);
+        String others1 = "-."; //$NON-NLS-1$
+        String others2 = "_012346789"; //$NON-NLS-1$
+        String allValidChars = str + others2;
+        int randomIndex1 = getRandomIndex(str);
+        int randomIndex2 = getRandomIndex(allValidChars);
+        String xsdname2 = str.substring(randomIndex1, randomIndex1 + 1)
+                + buildArbitraryString(str + others1 + others2, resultMaxLen)
+                + allValidChars.substring(randomIndex2, randomIndex2 + 1);
         isValid = XSDUtil.isValidatedXSDName(xsdname2);
         assertTrue(isValid);
 
-        xsdname2 = others + xsdname;
+        xsdname2 = buildArbitraryString(others1 + others2, resultMaxLen) + xsdname2;
         isValid = XSDUtil.isValidatedXSDName(xsdname2);
         assertFalse(isValid);
 
-        String[] invalidChars = { "~", "`", "!", "#", "$", "%", "^", "&", "*", "(", ")", "-", "_", "+", "=", "[", "]", "{", "}", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$ //$NON-NLS-9$ //$NON-NLS-10$ //$NON-NLS-11$ //$NON-NLS-12$ //$NON-NLS-13$ //$NON-NLS-14$ //$NON-NLS-15$ //$NON-NLS-16$ //$NON-NLS-17$ //$NON-NLS-18$ //$NON-NLS-19$
-                "|", "\\", ";", "'", "\"", "<", ">", ",", "?", " ", "   " }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$ //$NON-NLS-9$ //$NON-NLS-10$ //$NON-NLS-11$
+        String[] invalidChars = { "~", "`", "!", "#", "$", "%", "^", "&", "*", "(", ")", "+", "=", "[", "]", "{", "}", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$ //$NON-NLS-9$ //$NON-NLS-10$ //$NON-NLS-11$ //$NON-NLS-12$ //$NON-NLS-13$ //$NON-NLS-14$ //$NON-NLS-15$ //$NON-NLS-16$ //$NON-NLS-17$
+                "\\", ";", "'", "\"", "<", ">", ",", "?", " ", "   " }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$ //$NON-NLS-9$ //$NON-NLS-10$
         String joinedStr = StringUtils.join(invalidChars, ""); //$NON-NLS-1$
-        xsdname2 = xsdname + buildArbitraryString(joinedStr, 10);
-        isValid = XSDUtil.isValidatedXSDName(xsdname2);
+        String xsdname3 = xsdname + buildArbitraryString(joinedStr, resultMaxLen) + xsdname;
+        isValid = XSDUtil.isValidatedXSDName(xsdname3);
         assertFalse(isValid);
 
-        xsdname2 = buildArbitraryString(str + joinedStr, 10);
+        xsdname2 = buildArbitraryString(joinedStr, resultMaxLen) + xsdname + buildArbitraryString(joinedStr, resultMaxLen);
         isValid = XSDUtil.isValidatedXSDName(xsdname2);
         assertFalse(isValid);
     }
@@ -148,7 +155,6 @@ public class XSDUtilTest {
         StringBuilder builder = new StringBuilder();
 
         if (candidateChars != null) {
-            int wholeLen = candidateChars.length();
             if (resultMaxLen < 1) {
                 resultMaxLen = 10;// set default
             }
@@ -157,12 +163,18 @@ public class XSDUtilTest {
             int randomIntValue = new Double(Math.floor(Math.random() * 100)).intValue();// a int number 0~100
             int size = randomIntValue % resultMaxLen + 1; // random length, no less that one
             for (int i = 0; i < size; i++) {
-                int index = new Double(Math.floor(Math.random() * wholeLen)).intValue();
+                int index = getRandomIndex(candidateChars);
                 builder.append(charArray[index]);
             }
         }
 
         return builder.toString();
+    }
+
+    private int getRandomIndex(String candidateChars) {
+        int wholeLen = candidateChars.length();
+        int index = new Double(Math.floor(Math.random() * wholeLen)).intValue();
+        return index;
     }
 
     @Test
