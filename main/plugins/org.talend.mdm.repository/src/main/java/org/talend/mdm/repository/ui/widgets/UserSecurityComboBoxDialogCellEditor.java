@@ -56,8 +56,7 @@ public class UserSecurityComboBoxDialogCellEditor extends EditableComboBoxDialog
 
     private static Logger log = Logger.getLogger(UserSecurityComboBoxDialogCellEditor.class);
 
-    private static final List<String> SPECIAL_FIELDS = Arrays.asList("roles", "applications", "properties"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-
+    private static final List<String> SPECIAL_FIELDS = Arrays.asList("properties"); //$NON-NLS-1$
     private IWorkbenchPartSite site;
 
     private String dataModelName = "PROVISIONING"; //$NON-NLS-1$
@@ -236,4 +235,5 @@ public class UserSecurityComboBoxDialogCellEditor extends EditableComboBoxDialog
 
         return null;
     }
+    
 }
