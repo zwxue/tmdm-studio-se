@@ -390,10 +390,11 @@ public class RepositoryResourceUtil {
 
         String fileName = ResourceFilenameHelper.getExpectedFileName(property.getLabel(), property.getVersion()) + DOT
                 + (fileExtension != null ? fileExtension : ""); //$NON-NLS-1$
-        if(type == IServerObjectRepositoryType.TYPE_WORKFLOW && exAdapter != null && fileExtension != null && fileExtension.equals("conf")) { //$NON-NLS-1$
+        if (type == IServerObjectRepositoryType.TYPE_WORKFLOW && exAdapter != null && fileExtension != null
+                && fileExtension.equals("conf")) { //$NON-NLS-1$
             fileName = exAdapter.getWorkflowConfigFilename(item);
         }
-        IFile file = fileName != null?folder.getFile(fileName):null;
+        IFile file = fileName != null ? folder.getFile(fileName) : null;
         return file;
     }
 
