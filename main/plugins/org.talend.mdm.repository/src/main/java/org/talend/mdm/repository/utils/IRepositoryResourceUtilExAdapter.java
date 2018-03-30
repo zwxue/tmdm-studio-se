@@ -26,5 +26,12 @@ public interface IRepositoryResourceUtilExAdapter extends IExAdapter<RepositoryR
 
     IEditorReference getOpenedWFEditor(IRepositoryViewObject viewObj, IEditorReference ref);
 
+    /**
+     * This method is only defined for importing workflow.<br><br>
+     * It relys on implementation of IProcessService to get config file name with file extension, which config file name is stored during workflow migration.<br>
+     * 
+     * <b>Runtime Exception</b> will be thrown when IProcessService implementation is not registered.<br>
+     * <b>Null</b> will be returned when there is no config file recorded during migration.
+     */
     String getWorkflowConfigFilename(Item item);
 }
