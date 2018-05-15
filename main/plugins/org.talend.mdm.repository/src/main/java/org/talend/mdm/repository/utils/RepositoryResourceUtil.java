@@ -415,6 +415,26 @@ public class RepositoryResourceUtil {
         return objectFolder;
     }
 
+    public static boolean isSystemViewObject(IRepositoryViewObject viewObj) {
+        if (viewObj.getProperty() != null && viewObj.getProperty().getItem() != null) {
+            return isSystemViewItem(viewObj.getProperty().getItem());
+        }
+
+        return false;
+    }
+
+    public static boolean isSystemViewItem(Item item) {
+        String path = item.getState().getPath();
+        if (path != null) {
+            path = path.toLowerCase();
+            if (path.startsWith("system") || path.startsWith("/system")) { //$NON-NLS-1$ //$NON-NLS-2$
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     private static boolean isSystemFolder(Item pItem, String folderName) {
         if (pItem instanceof ContainerItem) {
             return ((ContainerItem) pItem).getType().equals(FolderType.SYSTEM_FOLDER_LITERAL)
