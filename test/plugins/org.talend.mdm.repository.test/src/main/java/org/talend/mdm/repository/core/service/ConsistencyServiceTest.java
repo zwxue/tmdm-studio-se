@@ -336,7 +336,7 @@ public class ConsistencyServiceTest {
             mockCService.updateCurrentDigestValue(mockViewObj);
 
             Mockito.verify(mockCService, Mockito.atLeastOnce()).calculateDigestValue(mockItem, mockType);
-            PowerMockito.verifyPrivate(mockCService, atLeastOnce()).invoke("updateLocalDigestValue", mockItem, digestValue); //$NON-NLS-1$
+            PowerMockito.verifyPrivate(mockCService, atLeastOnce()).invoke("updateLocalDigestValue", mockItem, eq(digestValue)); //$NON-NLS-1$
         } catch (Exception e) {
             log.error(e.getMessage(), e);
         }
@@ -352,7 +352,7 @@ public class ConsistencyServiceTest {
         Mockito.when(mockViewObj.getProperty()).thenReturn(mockProperty);
         Mockito.when(mockViewObj.getRepositoryObjectType()).thenReturn(mockType);
 
-        ConsistencyService mockCService = Mockito.mock(ConsistencyService.class);
+        ConsistencyService mockCService = PowerMockito.mock(ConsistencyService.class);
         String digestValue = "myDigestValue"; //$NON-NLS-1$
         try {
             Mockito.when(mockCService.calculateDigestValue(mockItem, mockType)).thenReturn(digestValue);
@@ -360,7 +360,7 @@ public class ConsistencyServiceTest {
             mockCService.updateCurrentDigestValue(mockViewObj);
 
             Mockito.verify(mockCService, Mockito.atLeastOnce()).calculateDigestValue(mockItem, mockType);
-            PowerMockito.verifyPrivate(mockCService, atLeastOnce()).invoke("updateCurrentDigestValue", mockItem, digestValue); //$NON-NLS-1$
+            PowerMockito.verifyPrivate(mockCService, atLeastOnce()).invoke("updateCurrentDigestValue", mockItem, eq(digestValue)); //$NON-NLS-1$
         } catch (Exception e) {
             log.error(e.getMessage(), e);
         }
