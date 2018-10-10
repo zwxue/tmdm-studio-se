@@ -36,121 +36,117 @@ import com.amalto.workbench.i18n.Messages;
 
 public class FKIntegrityComposite extends Composite {
 
-	private static final String X_FK_INTEGRITY_OVERRIDE = "X_FKIntegrity_Override"; //$NON-NLS-1$
+    private static final String X_FK_INTEGRITY_OVERRIDE = "X_FKIntegrity_Override"; //$NON-NLS-1$
 
-	private static final String X_FK_INTEGRITY = "X_FKIntegrity"; //$NON-NLS-1$
+    private static final String X_FK_INTEGRITY = "X_FKIntegrity"; //$NON-NLS-1$
 
-	private final Button btnAllowFkIntegrity;
+    private final Button btnAllowFkIntegrity;
 
-	private final Button btnEnforceFkIntegrity;
+    private final Button btnEnforceFkIntegrity;
 
-	private final ViewRefreshAdapter refreshAdapter = new ViewRefreshAdapter();
+    private final ViewRefreshAdapter refreshAdapter = new ViewRefreshAdapter();
 
-	private XSDElementDeclaration xsdComponent;
+    private XSDElementDeclaration xsdComponent;
 
-	private ElementFKSection elementFKSection;
+    private ElementFKSection elementFKSection;
 
-	/**
-	 * Create the composite.
-	 *
-	 * @param parent
-	 * @param style
-	 * @param elementFKSection
-	 * @param curXSDComponent
-	 * @param xsdElementDeclaration
-	 */
-	public FKIntegrityComposite(Composite parent, int style,
-			XSDComponent xsdComponent, ElementFKSection elementFKSection) {
-		super(parent, style);
+    /**
+     * Create the composite.
+     *
+     * @param parent
+     * @param style
+     * @param elementFKSection
+     * @param curXSDComponent
+     * @param xsdElementDeclaration
+     */
+    public FKIntegrityComposite(Composite parent, int style, XSDComponent xsdComponent, ElementFKSection elementFKSection) {
+        super(parent, style);
 
-		GridLayout gridLayout = new GridLayout(1, false);
+        GridLayout gridLayout = new GridLayout(1, false);
         gridLayout.marginWidth = 0;
         gridLayout.marginHeight = 0;
-		gridLayout.horizontalSpacing = 10;
-		setLayout(gridLayout);
+        gridLayout.horizontalSpacing = 10;
+        setLayout(gridLayout);
 
-		btnEnforceFkIntegrity = new Button(this, SWT.FLAT | SWT.CHECK);
-		btnEnforceFkIntegrity.setText(Messages.FKIntegrityComposite_EnforceFKIntegrity);
-		btnEnforceFkIntegrity.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				boolean enforceFK = btnEnforceFkIntegrity.getSelection();
-				btnAllowFkIntegrity.setEnabled(enforceFK);
-				if (!enforceFK) {
-					// Disable allow fk override once fk integrity is disabled.
-					btnAllowFkIntegrity.setSelection(false);
-				}
+        btnEnforceFkIntegrity = new Button(this, SWT.FLAT | SWT.CHECK);
+        btnEnforceFkIntegrity.setText(Messages.FKIntegrityComposite_EnforceFKIntegrity);
+        btnEnforceFkIntegrity.addSelectionListener(new SelectionAdapter() {
+
+            @Override
+            public void widgetSelected(SelectionEvent e) {
+                boolean enforceFK = btnEnforceFkIntegrity.getSelection();
+                btnAllowFkIntegrity.setEnabled(enforceFK);
+                if (!enforceFK) {
+                    // Disable allow fk override once fk integrity is disabled.
+                    btnAllowFkIntegrity.setSelection(false);
+                }
                 updateModel();
-			}
-		});
-		btnEnforceFkIntegrity.setLayoutData(new GridData(SWT.FILL, SWT.FILL,
-				false, false, 1, 1));
-		btnEnforceFkIntegrity.setSelection(true);
+            }
+        });
+        btnEnforceFkIntegrity.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
+        btnEnforceFkIntegrity.setSelection(true);
 
-		btnAllowFkIntegrity = new Button(this, SWT.CHECK);
-		btnAllowFkIntegrity.setText(Messages.FKIntegrityComposite_AllowFKIntergrityOverride);
-		btnAllowFkIntegrity.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				updateModel();
-			}
-		});
-		btnAllowFkIntegrity.setLayoutData(new GridData(SWT.FILL, SWT.FILL,
-				false, false, 1, 1));
-		btnAllowFkIntegrity.setSelection(false);
+        btnAllowFkIntegrity = new Button(this, SWT.CHECK);
+        btnAllowFkIntegrity.setText(Messages.FKIntegrityComposite_AllowFKIntergrityOverride);
+        btnAllowFkIntegrity.addSelectionListener(new SelectionAdapter() {
 
-		this.elementFKSection = elementFKSection;
-	}
+            @Override
+            public void widgetSelected(SelectionEvent e) {
+                updateModel();
+            }
+        });
+        btnAllowFkIntegrity.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
+        btnAllowFkIntegrity.setSelection(false);
 
-	@Override
-	protected void checkSubclass() {
-		// Disable the check that prevents subclassing of SWT components
-	}
+        this.elementFKSection = elementFKSection;
+    }
 
-	@Override
-	public void dispose() {
-		super.dispose();
-		// Remove listener on disposal (no more need to keep view in sync with
-		// model)
-		xsdComponent.eAdapters().remove(refreshAdapter);
-	}
+    @Override
+    protected void checkSubclass() {
+        // Disable the check that prevents subclassing of SWT components
+    }
 
-	private void refresh() {
-		XSDAnnotation annotation = xsdComponent.getAnnotation();
-		if (annotation == null) {
-			annotation = XSDFactory.eINSTANCE.createXSDAnnotation();
-		}
+    @Override
+    public void dispose() {
+        // Remove listener on disposal (no more need to keep view in sync with model)
+        xsdComponent.eAdapters().remove(refreshAdapter);
+        super.dispose();
+    }
 
-		Element fkIntegrityElement = null;
-		Element fkIntegrityOverrideElement = null;
+    private void refresh() {
+        XSDAnnotation annotation = xsdComponent.getAnnotation();
+        if (annotation == null) {
+            annotation = XSDFactory.eINSTANCE.createXSDAnnotation();
+        }
 
-		EList<Element> appInfo = annotation.getApplicationInformation();
-		for (Element currentElement : appInfo) {
-			String source = currentElement.getAttribute("source"); //$NON-NLS-1$
-			if (X_FK_INTEGRITY.endsWith(source)) {
-				fkIntegrityElement = currentElement;
-			} else if (X_FK_INTEGRITY_OVERRIDE.endsWith(source)) {
-				fkIntegrityOverrideElement = currentElement;
-			}
-		}
+        Element fkIntegrityElement = null;
+        Element fkIntegrityOverrideElement = null;
 
-		if (fkIntegrityElement != null) {
-			String textContent = fkIntegrityElement.getTextContent();
-			boolean enabled = textContent == null ? true : Boolean
-					.valueOf(textContent);
-			btnEnforceFkIntegrity.setSelection(enabled);
-		} else {
-			btnEnforceFkIntegrity.setSelection(true); // default is true
-		}
+        EList<Element> appInfo = annotation.getApplicationInformation();
+        for (Element currentElement : appInfo) {
+            String source = currentElement.getAttribute("source"); //$NON-NLS-1$
+            if (X_FK_INTEGRITY.endsWith(source)) {
+                fkIntegrityElement = currentElement;
+            } else if (X_FK_INTEGRITY_OVERRIDE.endsWith(source)) {
+                fkIntegrityOverrideElement = currentElement;
+            }
+        }
 
-		if (fkIntegrityOverrideElement != null) {
-			String textContent = fkIntegrityOverrideElement.getTextContent();
-			boolean enabled = textContent == null ? true : Boolean
-					.valueOf(textContent);
-			btnAllowFkIntegrity.setSelection(enabled);
-		} else {
-			btnAllowFkIntegrity.setSelection(false); // default is false for override
-		}
+        if (fkIntegrityElement != null) {
+            String textContent = fkIntegrityElement.getTextContent();
+            boolean enabled = textContent == null ? true : Boolean.valueOf(textContent);
+            btnEnforceFkIntegrity.setSelection(enabled);
+        } else {
+            btnEnforceFkIntegrity.setSelection(true); // default is true
+        }
+
+        if (fkIntegrityOverrideElement != null) {
+            String textContent = fkIntegrityOverrideElement.getTextContent();
+            boolean enabled = textContent == null ? true : Boolean.valueOf(textContent);
+            btnAllowFkIntegrity.setSelection(enabled);
+        } else {
+            btnAllowFkIntegrity.setSelection(false); // default is false for override
+        }
 
         // refresh buttion enabled
         if (xsdComponent.getAnnotation() == null) {
@@ -160,102 +156,101 @@ public class FKIntegrityComposite extends Composite {
             btnEnforceFkIntegrity.setEnabled(true);
             btnAllowFkIntegrity.setEnabled(btnEnforceFkIntegrity.getSelection());
         }
-	}
+    }
 
-	private void updateModel() {
-		XSDAnnotation annotation = xsdComponent.getAnnotation();
-		if (annotation == null) {
-			annotation = XSDFactory.eINSTANCE.createXSDAnnotation();
-			xsdComponent.setAnnotation(annotation);
-		}
+    private void updateModel() {
+        XSDAnnotation annotation = xsdComponent.getAnnotation();
+        if (annotation == null) {
+            annotation = XSDFactory.eINSTANCE.createXSDAnnotation();
+            xsdComponent.setAnnotation(annotation);
+        }
 
-		Element fkIntegrityElement = null;
-		Element fkIntegrityOverrideElement = null;
-		EList<Element> appInfo = annotation.getApplicationInformation();
-		for (Element currentElement : appInfo) {
-			String source = currentElement.getAttribute("source"); //$NON-NLS-1$
-			if (X_FK_INTEGRITY.endsWith(source)) {
-				fkIntegrityElement = currentElement;
-			} else if (X_FK_INTEGRITY_OVERRIDE.endsWith(source)) {
-				fkIntegrityOverrideElement = currentElement;
-			}
-		}
+        Element fkIntegrityElement = null;
+        Element fkIntegrityOverrideElement = null;
+        EList<Element> appInfo = annotation.getApplicationInformation();
+        for (Element currentElement : appInfo) {
+            String source = currentElement.getAttribute("source"); //$NON-NLS-1$
+            if (X_FK_INTEGRITY.endsWith(source)) {
+                fkIntegrityElement = currentElement;
+            } else if (X_FK_INTEGRITY_OVERRIDE.endsWith(source)) {
+                fkIntegrityOverrideElement = currentElement;
+            }
+        }
 
-		updateModelElement(xsdComponent, fkIntegrityElement, X_FK_INTEGRITY,
-				btnEnforceFkIntegrity.getSelection());
-		updateModelElement(xsdComponent, fkIntegrityOverrideElement,
-				X_FK_INTEGRITY_OVERRIDE, btnAllowFkIntegrity.getSelection());
-		this.elementFKSection.autoCommit();
-	}
+        updateModelElement(xsdComponent, fkIntegrityElement, X_FK_INTEGRITY, btnEnforceFkIntegrity.getSelection());
+        updateModelElement(xsdComponent, fkIntegrityOverrideElement, X_FK_INTEGRITY_OVERRIDE, btnAllowFkIntegrity.getSelection());
+        this.elementFKSection.autoCommit();
+    }
 
-	private static void updateModelElement(XSDElementDeclaration xsdComponent,
-			Element property, String type, boolean value) {
-		Element xsdDeclarationDomElement = xsdComponent.getElement();
+    private static void updateModelElement(XSDElementDeclaration xsdComponent, Element property, String type, boolean value) {
+        Element xsdDeclarationDomElement = xsdComponent.getElement();
 
-		if (property == null) {
-			Document ownerDocument = xsdDeclarationDomElement
-					.getOwnerDocument();
-			property = ownerDocument.createElementNS(
-					xsdDeclarationDomElement.getNamespaceURI(), "appinfo"); //$NON-NLS-1$
-			property.setPrefix("xsd"); //$NON-NLS-1$
-			property.setAttribute("source", type); //$NON-NLS-1$
-			property.setTextContent(Boolean.toString(value));
+        if (property == null) {
+            Document ownerDocument = xsdDeclarationDomElement.getOwnerDocument();
+            property = ownerDocument.createElementNS(xsdDeclarationDomElement.getNamespaceURI(), "appinfo"); //$NON-NLS-1$
+            property.setPrefix("xsd"); //$NON-NLS-1$
+            property.setAttribute("source", type); //$NON-NLS-1$
+            property.setTextContent(Boolean.toString(value));
 
-			xsdComponent.getAnnotation().getApplicationInformation()
-					.add(property);
-			xsdComponent.getAnnotation().getElement().appendChild(property);
-		} else {
-			xsdComponent.getAnnotation().getApplicationInformation()
-					.remove(property);
-			property.setTextContent(Boolean.toString(value));
-			xsdComponent.getAnnotation().getApplicationInformation()
-					.add(property);
-		}
-	}
+            xsdComponent.getAnnotation().getApplicationInformation().add(property);
+            xsdComponent.getAnnotation().getElement().appendChild(property);
+        } else {
+            xsdComponent.getAnnotation().getApplicationInformation().remove(property);
+            property.setTextContent(Boolean.toString(value));
+            xsdComponent.getAnnotation().getApplicationInformation().add(property);
+        }
+    }
 
-	private class ViewRefreshAdapter implements Adapter {
-		private Notifier notifier;
+    private class ViewRefreshAdapter implements Adapter {
 
-		public void setTarget(Notifier notifier) {
-			this.notifier = notifier;
-		}
+        private Notifier notifier;
 
-		public void notifyChanged(Notification event) {
-			if (!event.isTouch()) {
-				refresh();
-			}
-		}
+        @Override
+        public void setTarget(Notifier notifier) {
+            this.notifier = notifier;
+        }
 
-		public boolean isAdapterForType(Object obj) {
-			return obj instanceof XSDElementDeclaration;
-		}
+        @Override
+        public void notifyChanged(Notification event) {
+            if (!event.isTouch()) {
+                refresh();
+            }
+        }
 
-		public Notifier getTarget() {
-			return notifier;
-		}
-	}
+        @Override
+        public boolean isAdapterForType(Object obj) {
+            return obj instanceof XSDElementDeclaration;
+        }
 
-	public void setXSDComponent(XSDComponent xsdComponent) {
-		if (xsdComponent == null) {
-			throw new IllegalArgumentException(
-					Messages.FKIntegrityComposite_ArgCannotbeNull);
-		}
-		if (!(xsdComponent instanceof XSDParticle)) {
+        @Override
+        public Notifier getTarget() {
+            return notifier;
+        }
+    }
+
+    public void setXSDComponent(XSDComponent xsdComponent) {
+        if (xsdComponent == null) {
+            throw new IllegalArgumentException(Messages.FKIntegrityComposite_ArgCannotbeNull);
+        }
+        if (!(xsdComponent instanceof XSDParticle)) {
             throw new IllegalArgumentException(Messages.bind(Messages.FKIntegrityComposite_ExceptionInfo,
                     XSDElementDeclaration.class.getName(), xsdComponent.getClass().getName()));
-		}
+        }
 
-		// Take into account only component change
-		if (xsdComponent != this.xsdComponent) {
-			if (this.xsdComponent != null) {
-				this.xsdComponent.eAdapters().remove(refreshAdapter);
-			}
-			this.xsdComponent = (XSDElementDeclaration) ((XSDParticle) xsdComponent)
-					.getContent();
-			this.xsdComponent.eAdapters().add(refreshAdapter);
-		}
+        // Take into account only component change
+        if (xsdComponent != this.xsdComponent) {
+            removeRefreshAdapter();
+            this.xsdComponent = (XSDElementDeclaration) ((XSDParticle) xsdComponent).getContent();
+            this.xsdComponent.eAdapters().add(refreshAdapter);
+        }
 
-		// Update UI with the information in the XSDComponent
-		refresh();
-	}
+        // Update UI with the information in the XSDComponent
+        refresh();
+    }
+
+    public void removeRefreshAdapter() {
+        if (this.xsdComponent != null && refreshAdapter != null) {
+            this.xsdComponent.eAdapters().remove(refreshAdapter);
+        }
+    }
 }
