@@ -226,7 +226,6 @@
       <plugin id="org.talend.libraries.jdbc.hsql"/>
       <plugin id="org.talend.libraries.jdbc.informix"/>
       <plugin id="org.talend.libraries.jdbc.ingres"/>
-      <plugin id="org.talend.libraries.jdbc.jtds"/>
       <plugin id="org.talend.libraries.jdbc.mysql"/>
       <plugin id="org.talend.libraries.jdbc.oracle"/>
       <plugin id="org.talend.libraries.jdbc.postgresql"/>
