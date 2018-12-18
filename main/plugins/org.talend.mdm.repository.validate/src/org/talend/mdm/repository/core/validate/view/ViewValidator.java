@@ -1,9 +1,22 @@
+// ============================================================================
+//
+// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+//
+// This source code is available under agreement available at
+// %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
+//
+// You should have received a copy of the agreement
+// along with this program; if not, write to Talend SA
+// 9 rue Pages 92150 Suresnes, France
+//
+// ============================================================================
 package org.talend.mdm.repository.core.validate.view;
 
 import java.io.InputStream;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.wst.validation.internal.provisional.core.IValidatorJob;
 import org.eclipse.wst.xml.core.internal.validation.core.AbstractNestedValidator;
@@ -18,6 +31,9 @@ import org.talend.mdm.repository.model.mdmserverobject.WSViewE;
 import org.talend.mdm.repository.model.mdmserverobject.WSWhereConditionE;
 import org.talend.mdm.repository.ui.widgets.UserVarValueValidator;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
+
+import com.amalto.workbench.utils.Util;
+import com.amalto.workbench.webservices.WSWhereOperator;
 
 
 public class ViewValidator extends AbstractNestedValidator implements IValidatorJob {
@@ -38,10 +54,17 @@ public class ViewValidator extends AbstractNestedValidator implements IValidator
             EList<WSWhereConditionE> whereConditions = view.getWhereConditions();
             if(whereConditions != null && whereConditions.size() >0) {
                 for (WSWhereConditionE conditionE : whereConditions) {
+                    String operator = conditionE.getOperator().getValue();
                     String userVarValue = conditionE.getRightValueOrPath();
-                    boolean isValid = UserVarValueValidator.validate(userVarValue);
-                    if(!isValid) {
-                        String validateMsg = Messages.bind(Messages.ViewValidator_error, userVarValue,viewName);
+                    if (WSWhereOperator.EMPTY_NULL.name().equals(operator)) {
+                        if (userVarValue.length() > 0) {
+                            String validateMsg = Messages.bind(Messages.ViewValidator_EmptyNullOperatorValue_error, viewName,
+                                    conditionE.getLeftPath(), Util.toReadable(WSWhereOperator.fromValue(operator)));
+                            viewValidationReport.addValidationMessage(new ValidationMessage(validateMsg, -1, -1));
+                        }
+                    } else if (StringUtils.isBlank(userVarValue) || !UserVarValueValidator.validate(userVarValue)) {
+                        String validateMsg = Messages.bind(Messages.ViewValidator_error, viewName, conditionE.getLeftPath(),
+                                Util.toReadable(WSWhereOperator.fromValue(operator)), userVarValue);
                         viewValidationReport.addValidationMessage(new ValidationMessage(validateMsg, -1, -1));
                     }
                 }
