@@ -36,8 +36,6 @@ import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathFactory;
 import javax.xml.xpath.XPathFactoryConfigurationException;
-
-import org.talend.commons.exception.ExceptionHandler;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -488,11 +486,7 @@ public class MDM {
             }
         }
         XPathFactory factory = XPathFactory.newInstance();
-        try {
-            factory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
-        } catch (XPathFactoryConfigurationException e) {
-            ExceptionHandler.process(e);
-        }
+        factory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
         XPath xpath = factory.newXPath();
         XPathExpression expr = xpath.compile(xPath);
 
