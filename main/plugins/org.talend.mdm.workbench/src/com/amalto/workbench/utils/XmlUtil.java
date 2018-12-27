@@ -42,6 +42,7 @@ import org.dom4j.io.DocumentSource;
 import org.dom4j.io.OutputFormat;
 import org.dom4j.io.SAXReader;
 import org.dom4j.io.XMLWriter;
+import org.talend.utils.xml.XmlUtils;
 
 import com.amalto.workbench.actions.XSDGetXPathAction;
 import com.amalto.workbench.i18n.Messages;
@@ -352,7 +353,7 @@ public final class XmlUtil {
     public static Document styleDocument(Document document, String stylesheet) throws Exception {
 
         // load the transformer using JAXP
-        TransformerFactory factory = TransformerFactory.newInstance();
+        TransformerFactory factory = XmlUtils.getXmlSecureTransformerFactory();
         Transformer transformer = factory.newTransformer(new StreamSource(stylesheet));
 
         // now lets style the given document

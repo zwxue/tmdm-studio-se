@@ -134,6 +134,7 @@ import org.talend.mdm.commmon.util.core.ICoreConstants;
 import org.talend.mdm.commmon.util.webapp.XSystemObjects;
 import org.talend.mdm.commmon.util.workbench.Version;
 import org.talend.mdm.commmon.util.workbench.ZipToFile;
+import org.talend.utils.xml.XmlUtils;
 import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -630,7 +631,7 @@ public class Util {
      */
     public static String nodeToString(Node n) throws Exception {
         StringWriter sw = new StringWriter();
-        Transformer transformer = TransformerFactory.newInstance().newTransformer();
+        Transformer transformer = XmlUtils.getXmlSecureTransform();
         transformer.setOutputProperty("omit-xml-declaration", "yes");//$NON-NLS-1$//$NON-NLS-2$
         transformer.setOutputProperty("indent", "yes");//$NON-NLS-1$//$NON-NLS-2$
         transformer.transform(new DOMSource(n), new StreamResult(sw));

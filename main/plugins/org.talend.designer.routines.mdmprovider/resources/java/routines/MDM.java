@@ -27,7 +27,6 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.xpath.XPath;
@@ -35,6 +34,7 @@ import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathFactory;
 
+import org.talend.utils.xml.XmlUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -517,7 +517,7 @@ public class MDM {
      */
     private static String nodeToString(Node n, boolean omitXMLDeclaration) throws TransformerException {
         StringWriter sw = new StringWriter();
-        Transformer transformer = TransformerFactory.newInstance().newTransformer();
+        Transformer transformer = XmlUtils.getXmlSecureTransform();
         if (omitXMLDeclaration) {
             transformer.setOutputProperty("omit-xml-declaration", "yes"); //$NON-NLS-1$ //$NON-NLS-2$
         } else {
