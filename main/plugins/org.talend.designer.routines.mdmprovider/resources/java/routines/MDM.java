@@ -519,7 +519,9 @@ public class MDM {
      */
     private static String nodeToString(Node n, boolean omitXMLDeclaration) throws TransformerException {
         StringWriter sw = new StringWriter();
-        Transformer transformer = TransformerFactory.newInstance().newTransformer();
+        TransformerFactory transFactory = TransformerFactory.newInstance();
+        transFactory.setFeature(javax.xml.XMLConstants.FEATURE_SECURE_PROCESSING, Boolean.TRUE);
+        Transformer transformer = transFactory.newTransformer();
         if (omitXMLDeclaration) {
             transformer.setOutputProperty("omit-xml-declaration", "yes"); //$NON-NLS-1$ //$NON-NLS-2$
         } else {

@@ -40,7 +40,6 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
@@ -68,6 +67,7 @@ import org.eclipse.xsd.impl.XSDSchemaImpl;
 import org.eclipse.xsd.util.XSDConstants;
 import org.eclipse.xsd.util.XSDResourceFactoryImpl;
 import org.eclipse.xsd.util.XSDResourceImpl;
+import org.talend.utils.xml.XmlUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -282,9 +282,7 @@ public class XSDParser {
             if (markup.length() > 0) {
                 ByteArrayOutputStream out = new ByteArrayOutputStream();
                 try {
-                    TransformerFactory transformerFactory = TransformerFactory.newInstance();
-                    Transformer transformer = transformerFactory.newTransformer();
-
+                    Transformer transformer = XmlUtils.getXmlSecureTransform();
                     transformer.setOutputProperty(OutputKeys.INDENT, "yes"); //$NON-NLS-1$
                     transformer.setOutputProperty(OutputKeys.METHOD, "xml"); //$NON-NLS-1$
                     transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes"); //$NON-NLS-1$
