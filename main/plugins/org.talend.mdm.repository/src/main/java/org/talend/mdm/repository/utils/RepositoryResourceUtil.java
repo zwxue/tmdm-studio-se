@@ -28,6 +28,7 @@ import java.util.Map;
 import java.util.regex.Pattern;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
@@ -744,6 +745,36 @@ public class RepositoryResourceUtil {
                 }
             }
         }
+        return null;
+    }
+
+    public static IRepositoryViewObject findViewObjectByVersion(ERepositoryObjectType type, String version,
+            IRepositoryViewObject originalViewObject, List<String> versions) {
+        if (originalViewObject != null && StringUtils.isNotBlank(version)) {
+            IRepositoryViewObject viewObject = null;
+
+            IProxyRepositoryFactory factory = CoreRuntimePlugin.getInstance().getProxyRepositoryFactory();
+            Project project = ProjectManager.getInstance().getCurrentProject();
+            List<IRepositoryViewObject> allVersion = null;
+            try {
+                allVersion = factory.getAllVersion(project, originalViewObject.getId(),
+                        originalViewObject.getProperty().getItem().getState().getPath(), type);
+
+                if (allVersion != null) {
+                    for (IRepositoryViewObject viewObj : allVersion) {
+                        versions.add(viewObj.getVersion());
+                        if (viewObj.getVersion().equals(version.trim())) {
+                            viewObject = viewObj;
+                        }
+                    }
+                }
+
+                return viewObject;
+            } catch (PersistenceException e) {
+                log.error(e.getMessage(), e);
+            }
+        }
+
         return null;
     }
 
