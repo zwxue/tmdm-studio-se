@@ -20,6 +20,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
@@ -52,11 +53,12 @@ import com.amalto.workbench.actions.XSDGetXPathAction;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.providers.ISchemaContentProvider;
 import com.amalto.workbench.utils.DataModelFilter;
+import com.amalto.workbench.utils.IXMLConstants;
 import com.amalto.workbench.utils.Util;
 
 public class SchemaTreeContentProvider implements ITreeContentProvider, ISchemaContentProvider {
 
-    private static Log log = LogFactory.getLog(XSDGetXPathAction.class);
+    private static final Log LOG = LogFactory.getLog(XSDGetXPathAction.class);
 
     protected XSDSchema xsdSchema;
 
@@ -69,12 +71,15 @@ public class SchemaTreeContentProvider implements ITreeContentProvider, ISchemaC
         this.xsdSchema = invisibleRoot;
     }
 
+    @Override
     public void inputChanged(Viewer v, Object oldInput, Object newInput) {
     }
 
+    @Override
     public void dispose() {
     }
 
+    @Override
     public Object[] getElements(Object parent) {
         if (parent.equals(site)) {
             return getChildren(xsdSchema);
@@ -82,13 +87,16 @@ public class SchemaTreeContentProvider implements ITreeContentProvider, ISchemaC
         return getChildren(parent);
     }
 
+    @Override
     public Object getParent(Object child) {
         return null;
     }
 
+    @Override
     public void setFilter(DataModelFilter filter) {
     }
 
+    @Override
     public Object[] getChildren(Object parent) {
 
         if (parent == null) {
@@ -140,23 +148,26 @@ public class SchemaTreeContentProvider implements ITreeContentProvider, ISchemaC
         return new Object[0];
     }
 
+    @Override
     public boolean hasChildren(Object parent) {
         return getChildren(parent).length > 0;
     }
 
+    @Override
     public XSDSchema getXsdSchema() {
         return xsdSchema;
     }
 
+    @Override
     public void setXsdSchema(String xsd) {
         try {
             xsdSchema = Util.createXsdSchema(xsd, treeObj);
         } catch (Exception e) {
-
-            log.error(e.getMessage(), e);
+            LOG.error(e.getMessage(), e);
         }
     }
 
+    @Override
     public void setXsdSchema(XSDSchema xsdSchema) {
         this.xsdSchema = xsdSchema;
     }
@@ -180,24 +191,26 @@ public class SchemaTreeContentProvider implements ITreeContentProvider, ISchemaC
         return schema;
     }
 
-    public XSDSchema createSchema(String location){
-		InputStream stream = null;
-    	try {
-			stream = new FileInputStream(location);
-			DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
-			documentBuilderFactory.setNamespaceAware(true);
-			documentBuilderFactory.setValidating(false);
-			DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
-			Document document = documentBuilder.parse(stream);
-			return XSDSchemaImpl.createSchema(document.getDocumentElement());
-		} catch (Exception e) {
-			log.error(e.getMessage());
-			return null;
-		}finally{
-			IOUtils.closeQuietly(stream);
-		}
-
+    public XSDSchema createSchema(String location) {
+        InputStream stream = null;
+        try {
+            stream = new FileInputStream(location);
+            DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
+            documentBuilderFactory.setNamespaceAware(true);
+            documentBuilderFactory.setValidating(false);
+            documentBuilderFactory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+            documentBuilderFactory.setFeature(IXMLConstants.DISALLOW_DOCTYPE_DECL, true);
+            DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
+            Document document = documentBuilder.parse(stream);
+            return XSDSchemaImpl.createSchema(document.getDocumentElement());
+        } catch (Exception e) {
+            LOG.error(e.getMessage(), e);
+            return null;
+        } finally {
+            IOUtils.closeQuietly(stream);
+        }
     }
+
     protected void addElementDeclarationFromSchema(XSDSchema schema,Collection<XSDElementDeclaration> declarations){
     	EList<XSDElementDeclaration> elementDeclarations = schema.getElementDeclarations();
     	for(XSDElementDeclaration declaration:elementDeclarations) {

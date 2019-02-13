@@ -62,14 +62,16 @@ import org.xml.sax.InputSource;
  */
 public class MDM {
 
-	public static final String WS_CLIENT_CONNECTION_TIMEOUT_KEY = "javax.xml.ws.client.connectionTimeout";
-	
-	public static final String WS_CLIENT_RECEIVE_TIMEOUT_KEY = "javax.xml.ws.client.receiveTimeout";
-	
-	public static final String WS_CLIENT_CONNECTION_TIME_VALUE = "ws_client_connection_timeout";
-	
-	public static final String WS_CLIENT_RECEIVE_TIME_VALUE = "ws_client_receive_timeout";
-	
+    public static final String WS_CLIENT_CONNECTION_TIMEOUT_KEY = "javax.xml.ws.client.connectionTimeout"; //$NON-NLS-1$
+
+    public static final String WS_CLIENT_RECEIVE_TIMEOUT_KEY = "javax.xml.ws.client.receiveTimeout"; //$NON-NLS-1$
+
+    public static final String WS_CLIENT_CONNECTION_TIME_VALUE = "ws_client_connection_timeout"; //$NON-NLS-1$
+
+    public static final String WS_CLIENT_RECEIVE_TIME_VALUE = "ws_client_receive_timeout"; //$NON-NLS-1$
+
+    public static final String DISALLOW_DOCTYPE_DECL = "http://apache.org/xml/features/disallow-doctype-decl"; //$NON-NLS-1$
+
     /**
      * getFK: Return one of the FK component by position in a mangled FK (FKs are mangled in MDM to accommodate for
      * compound keys)
@@ -448,13 +450,13 @@ public class MDM {
 
     /**
      * Get webservice client timeout information from jvm param setting
-     *  
+     * 
      * {talendTypes} int
      * 
      * {Category} MDM
      * 
      * {param} String property: timeout property
-     *  
+     * 
      * {example} getWSClientTimeout(String property) # return 60000
      */
     public static int getWSClientTimeout(String property) throws Exception {
@@ -505,6 +507,8 @@ public class MDM {
     private static Node parse(String xml) throws Exception {
         DocumentBuilderFactory domFactory = DocumentBuilderFactory.newInstance();
         domFactory.setNamespaceAware(true); // never forget this!
+        domFactory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+        domFactory.setFeature(DISALLOW_DOCTYPE_DECL, true);
         DocumentBuilder builder = domFactory.newDocumentBuilder();
         Document doc = builder.parse(new InputSource(new StringReader(xml)));
         return doc.getDocumentElement();
