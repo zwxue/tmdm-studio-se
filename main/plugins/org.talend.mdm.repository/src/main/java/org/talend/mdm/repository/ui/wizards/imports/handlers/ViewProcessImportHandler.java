@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -18,7 +18,7 @@ import org.talend.mdm.repository.core.impl.transformerV2.ITransformerV2NodeConsD
 import org.talend.mdm.repository.core.impl.view.IViewNodeConstDef;
 import org.talend.mdm.repository.model.mdmproperties.WSTransformerV2Item;
 import org.talend.mdm.repository.model.mdmproperties.WSViewItem;
-import org.talend.mdm.repository.ui.wizards.imports.OperatorUpdatorProvider;
+import org.talend.mdm.repository.ui.wizards.imports.UpdatorProvider;
 import org.talend.mdm.repository.utils.RepositoryTransformUtil;
 import org.talend.repository.items.importexport.handlers.model.ImportItem;
 
@@ -43,7 +43,7 @@ public class ViewProcessImportHandler extends CommonMdmImportHandler {
                     item.getState().setPath(IPath.SEPARATOR + IViewNodeConstDef.PATH_SEARCHFILTER + statePath);
                 }
             }
-            OperatorUpdatorProvider.instance().updateOperator(item);
+            UpdatorProvider.instance().updateOperator(item);
         }
 
         if (item instanceof WSTransformerV2Item) {

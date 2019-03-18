@@ -19,19 +19,18 @@ import org.talend.core.model.migration.AbstractItemMigrationTask;
 import org.talend.core.model.properties.Item;
 import org.talend.mdm.repository.ui.wizards.imports.UpdatorProvider;
 
-
-public class UpdateOperatorMigrationTask extends AbstractItemMigrationTask {
+public class DataModelMigrationTask extends AbstractItemMigrationTask {
 
     @Override
     public Date getOrder() {
-        GregorianCalendar gc = new GregorianCalendar(2016, 4, 15, 0, 0, 0);
+        GregorianCalendar gc = new GregorianCalendar(2019, 3, 7, 0, 0, 0);
         return gc.getTime();
     }
 
     @Override
     public ExecutionResult execute(Item item) {
-        UpdatorProvider.instance().updateOperator(item);
-
+        UpdatorProvider.instance().updateDataModelSchema(item);
         return ExecutionResult.SUCCESS_NO_ALERT;
     }
+
 }
