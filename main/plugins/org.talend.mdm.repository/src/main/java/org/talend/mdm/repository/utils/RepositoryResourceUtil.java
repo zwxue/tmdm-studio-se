@@ -131,7 +131,7 @@ public class RepositoryResourceUtil {
 
     private static final String UNDERLINE = "_"; //$NON-NLS-1$
 
-    static Logger log = Logger.getLogger(RepositoryResourceUtil.class);
+    private static final Logger LOG = Logger.getLogger(RepositoryResourceUtil.class);
 
     private static IRepositoryResourceUtilExAdapter exAdapter;
 
@@ -145,7 +145,7 @@ public class RepositoryResourceUtil {
             ServerDefService.checkMDMConnection(serverDef);
             return true;
         } catch (Exception e) {
-            log.debug(e.getMessage(), e);
+            LOG.debug(e.getMessage(), e);
             if (shell != null) {
                 String url = serverDef.getProtocol() + serverDef.getHost() + ":" + serverDef.getPort() //$NON-NLS-1$
                         + serverDef.getPath();
@@ -203,20 +203,21 @@ public class RepositoryResourceUtil {
                 item = assertItem(item);
                 factory.save(item, !triggerEvent);
             } catch (PersistenceException e) {
-                log.error(e);
+                LOG.error(e);
             }
         }
     }
 
     public static boolean createItem(Item item, String propLabel, String version) {
-        return createItem(item, propLabel, version, true);
+        return createItem(item, propLabel, version, null, true);
     }
 
-    public static boolean createItem(Item item, String propLabel, String version, boolean pushCommandStack) {
-        return createItem(item, propLabel, version, pushCommandStack, true);
+    public static boolean createItem(Item item, String propLabel, String version, String propertyId, boolean pushCommandStack) {
+        return createItem(item, propLabel, version, propertyId, pushCommandStack, true);
     }
 
-    public static boolean createItem(Item item, String propLabel, String version, boolean pushCommandStack, boolean triggerEvent) {
+    public static boolean createItem(Item item, String propLabel, String version, String propertyId, boolean pushCommandStack,
+            boolean triggerEvent) {
         String name = propLabel;
         IProxyRepositoryFactory factory = CoreRuntimePlugin.getInstance().getProxyRepositoryFactory();
         RepositoryContext context = factory.getRepositoryContext();
@@ -225,6 +226,9 @@ public class RepositoryResourceUtil {
         item.setProperty(prop);
         try {
             String nextId = factory.getNextId();
+            if (!StringUtils.isBlank(propertyId)) {
+                nextId = propertyId;
+            }
             Property property = item.getProperty();
             property.setId(nextId);
             property.setVersion(version);
@@ -244,7 +248,7 @@ public class RepositoryResourceUtil {
                 try {
                     factory.unlock(item);
                 } catch (LoginException e) {
-                    log.error(e.getMessage(), e);
+                    LOG.error(e.getMessage(), e);
                 }
 
             }
@@ -253,7 +257,7 @@ public class RepositoryResourceUtil {
             }
             return true;
         } catch (PersistenceException e) {
-            log.error(e.getMessage(), e);
+            LOG.error(e.getMessage(), e);
         }
         return false;
     }
@@ -339,7 +343,7 @@ public class RepositoryResourceUtil {
 
             return fsProject.getFolder(path);
         } catch (PersistenceException e) {
-            log.error(e.getMessage(), e);
+            LOG.error(e.getMessage(), e);
         }
         return null;
     }
@@ -362,7 +366,7 @@ public class RepositoryResourceUtil {
             return os.toString(encode);
 
         } catch (IOException e) {
-            log.error(e.getMessage(), e);
+            LOG.error(e.getMessage(), e);
         } finally {
             IOUtils.closeQuietly(inputStream);
             IOUtils.closeQuietly(os);
@@ -410,7 +414,7 @@ public class RepositoryResourceUtil {
 
             objectFolder = ResourceUtils.getFolder(fsProject, ERepositoryObjectType.getFolderName(type), true);
         } catch (PersistenceException e) {
-            log.error(e.getMessage(), e);
+            LOG.error(e.getMessage(), e);
         }
 
         return objectFolder;
@@ -487,7 +491,7 @@ public class RepositoryResourceUtil {
                 itemState.setPath(folderName);
             }
         } catch (PersistenceException e) {
-            log.error(e.getMessage(), e);
+            LOG.error(e.getMessage(), e);
         }
         FolderRepositoryObject containerRepositoryObject = new FolderRepositoryObject(prop);
         //
@@ -614,6 +618,18 @@ public class RepositoryResourceUtil {
         return containerObject;
     }
 
+    public static List<IRepositoryViewObject> findAllVersionViewObjects(IRepositoryViewObject viewObj) {
+        List<IRepositoryViewObject> allVersionObjs = null;
+        try {
+            IProxyRepositoryFactory factory = CoreRuntimePlugin.getInstance().getProxyRepositoryFactory();
+            allVersionObjs = factory.getAllVersion(viewObj.getProperty().getId(), "", viewObj.getRepositoryObjectType());
+        } catch (Exception e) {
+            LOG.error("Error occurred while retrieving all version of workflow " + viewObj.getLabel(), e);
+        }
+
+        return allVersionObjs;
+    }
+
     public static List<IRepositoryViewObject> findAllViewObjects(ERepositoryObjectType type) {
         return findAllViewObjects(type, true);
     }
@@ -657,7 +673,7 @@ public class RepositoryResourceUtil {
                 }
             }
         } catch (PersistenceException e) {
-            log.error(e.getMessage(), e);
+            LOG.error(e.getMessage(), e);
         }
     }
 
@@ -681,7 +697,7 @@ public class RepositoryResourceUtil {
             factory.deleteObjectPhysical(viewObj, version);
 
         } catch (PersistenceException e) {
-            log.error(e.getMessage(), e);
+            LOG.error(e.getMessage(), e);
         }
     }
 
@@ -713,13 +729,13 @@ public class RepositoryResourceUtil {
                             viewObjects.add(viewObj);
                         }
                     } catch (Exception e) {
-                        log.error(e.getMessage(), e);
+                        LOG.error(e.getMessage(), e);
                     }
                 }
             }
             return viewObjects;
         } catch (PersistenceException e) {
-            log.error(e.getMessage(), e);
+            LOG.error(e.getMessage(), e);
         }
         return null;
     }
@@ -771,7 +787,7 @@ public class RepositoryResourceUtil {
 
                 return viewObject;
             } catch (PersistenceException e) {
-                log.error(e.getMessage(), e);
+                LOG.error(e.getMessage(), e);
             }
         }
 
@@ -791,7 +807,7 @@ public class RepositoryResourceUtil {
                 }
 
             } catch (PersistenceException e) {
-                log.error(e.getMessage(), e);
+                LOG.error(e.getMessage(), e);
             }
         }
         return viewObject;
@@ -846,6 +862,37 @@ public class RepositoryResourceUtil {
                     }
                     if (fileName != null && fileName.equals(name)) {
                         return viewObj;
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+    public static IRepositoryViewObject findViewObjectByReferenceResourceInAllVersion(ERepositoryObjectType type, IFile file) {
+        String name = file.getName();
+        String ext = file.getFileExtension();
+        List<IRepositoryViewObject> viewObjects = findAllViewObjectsWithDeleted(type);
+        if (viewObjects != null) {
+            IProxyRepositoryFactory factory = CoreRuntimePlugin.getInstance().getProxyRepositoryFactory();
+            for (IRepositoryViewObject viewObj : viewObjects) {
+                List<IRepositoryViewObject> allVersionObjs = findAllVersionViewObjects(viewObj);
+
+                if (allVersionObjs != null) {
+                    for (IRepositoryViewObject vobj : allVersionObjs) {
+                        Property property = vobj.getProperty();
+                        if (property != null) {
+                            String fileName = ResourceFilenameHelper.getExpectedFileName(property.getLabel(),
+                                    property.getVersion()) + DOT + ext;
+                            // patch for Bontia 6.X, the proc is using "-" as separator
+                            if (IServerObjectRepositoryType.TYPE_WORKFLOW == type) {
+                                int index = fileName.length() - (property.getVersion().length() + ext.length() + 2);
+                                fileName = fileName.substring(0, index) + "-" + fileName.substring(index + 1); //$NON-NLS-1$
+                            }
+                            if (fileName != null && fileName.equals(name)) {
+                                return vobj;
+                            }
+                        }
                     }
                 }
             }
@@ -925,7 +972,7 @@ public class RepositoryResourceUtil {
                 return findViewObjects(type, parentItem, folder, useRepositoryViewObject, withDeleted);
             }
         } catch (PersistenceException e) {
-            log.error(e.getMessage(), e);
+            LOG.error(e.getMessage(), e);
         }
         return Collections.EMPTY_LIST;
 
@@ -958,7 +1005,7 @@ public class RepositoryResourceUtil {
                 viewObjects.addAll(children);
 
             } catch (CoreException e) {
-                log.error(e.getMessage(), e);
+                LOG.error(e.getMessage(), e);
             }
         }
         // ((ContainerRepositoryObject) parentItem.getParent()).getChildren().addAll(viewObjects);
@@ -1036,7 +1083,7 @@ public class RepositoryResourceUtil {
                                 property = factory.reload(property);
                                 newViewObj = new RepositoryViewObject(property);
                             } else {
-                                log.error("Can not reload property " + property.getLabel() //$NON-NLS-1$
+                                LOG.error("Can not reload property " + property.getLabel() //$NON-NLS-1$
                                         + ", because property.eResource is null or eResource.getURI is null"); //$NON-NLS-1$
                             }
                         }
@@ -1046,7 +1093,7 @@ public class RepositoryResourceUtil {
                         return newViewObj;
                     }
                 } catch (PersistenceException e) {
-                    log.error(e.getMessage(), e);
+                    LOG.error(e.getMessage(), e);
                 }
             }
         }
@@ -1079,7 +1126,7 @@ public class RepositoryResourceUtil {
                     ContainerCacheService.put(newViewObj);
                     return newViewObj.getProperty().getItem();
                 } catch (PersistenceException e) {
-                    log.error(e.getMessage(), e);
+                    LOG.error(e.getMessage(), e);
                 }
             }
         }
@@ -1106,7 +1153,7 @@ public class RepositoryResourceUtil {
             ContainerCacheService.put(viewObjs);
             return viewObjs;
         } catch (PersistenceException e) {
-            log.error(e.getMessage(), e);
+            LOG.error(e.getMessage(), e);
         }
         return Collections.EMPTY_LIST;
 
@@ -1255,7 +1302,7 @@ public class RepositoryResourceUtil {
                         }
                     }
                 } catch (PartInitException e) {
-                    log.error(e.getMessage(), e);
+                    LOG.error(e.getMessage(), e);
                 }
             }
         }
@@ -1281,6 +1328,7 @@ public class RepositoryResourceUtil {
     public static void closeEditor(IRepositoryViewObject viewObj, boolean save) {
         IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
         IEditorReference[] editorReferences = activePage.getEditorReferences();
+
         for (IEditorReference ref : editorReferences) {
             if (ref != null) {
                 try {
@@ -1295,7 +1343,7 @@ public class RepositoryResourceUtil {
                         }
                     }
                 } catch (PartInitException e) {
-                    log.error(e.getMessage(), e);
+                    LOG.error(e.getMessage(), e);
                 }
             }
         }
@@ -1306,9 +1354,9 @@ public class RepositoryResourceUtil {
         try {
             progressService.run(true, true, initializeProcess);
         } catch (InvocationTargetException e) {
-            log.error(e.getMessage(), e);
+            LOG.error(e.getMessage(), e);
         } catch (InterruptedException e) {
-            log.error(e.getMessage(), e);
+            LOG.error(e.getMessage(), e);
         }
 
     }
@@ -1321,7 +1369,7 @@ public class RepositoryResourceUtil {
                 final ProxyRepositoryFactory factory = ProxyRepositoryFactory.getInstance();
                 factory.initialize();
             } catch (PersistenceException e) {
-                log.error(e.getMessage(), e);
+                LOG.error(e.getMessage(), e);
             }
 
         }
@@ -1504,7 +1552,7 @@ public class RepositoryResourceUtil {
                     }
                 }
             } catch (Exception e) {
-                log.error(e.getMessage(), e);
+                LOG.error(e.getMessage(), e);
             }
         }
         return null;
@@ -1545,7 +1593,7 @@ public class RepositoryResourceUtil {
                 }
             }
         } catch (PersistenceException e) {
-            log.error(e.getMessage(), e);
+            LOG.error(e.getMessage(), e);
         }
         return null;
     }
