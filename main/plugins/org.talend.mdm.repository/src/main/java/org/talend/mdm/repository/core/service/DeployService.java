@@ -69,14 +69,6 @@ import com.amalto.workbench.utils.XtentisException;
  */
 public class DeployService {
 
-    private static final int PHASE_ABOUT_TO = 1;
-
-    private static final int PHASE_DEPLOYING = 2;
-
-    private static final int PHASE_END = 4;
-
-    private int deployPhase = PHASE_END;
-
     private static Logger log = Logger.getLogger(DeployService.class);
 
     public static class DeployCategoryStatus extends MultiStatus {
@@ -137,18 +129,6 @@ public class DeployService {
 
     public static DeployService getInstance() {
         return instance;
-    }
-
-    public void aboutToDeploy() {
-        this.deployPhase = PHASE_ABOUT_TO;
-    }
-
-    public boolean isAboutToDeploy() {
-        return this.deployPhase == PHASE_ABOUT_TO;
-    }
-
-    public void postDeploying() {
-        this.deployPhase = PHASE_END;
     }
 
     class DeployProcess implements IRunnableWithProgress {

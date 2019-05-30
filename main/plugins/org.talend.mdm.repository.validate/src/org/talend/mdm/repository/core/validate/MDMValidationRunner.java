@@ -23,14 +23,10 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.resources.WorkspaceJob;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.ICoreRunnable;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.jobs.IJobChangeEvent;
-import org.eclipse.core.runtime.jobs.IJobChangeListener;
-import org.eclipse.core.runtime.jobs.JobChangeAdapter;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IWorkbenchPage;
@@ -46,7 +42,6 @@ import org.talend.core.model.properties.Item;
 import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.IServerObjectRepositoryType;
-import org.talend.mdm.repository.core.service.DeployService;
 import org.talend.mdm.repository.core.service.IModelValidationService;
 import org.talend.mdm.repository.core.service.IModelValidationService.IModelValidateResult;
 import org.talend.mdm.repository.core.validate.i18n.Messages;
@@ -61,11 +56,9 @@ import org.talend.repository.ProjectManager;
  * created by HHB on 2013-1-23 Detailled comment
  * 
  */
-public class MDMValidationRunner extends WorkspaceJob {
+public class MDMValidationRunner implements ICoreRunnable {
 
-    static Logger log = Logger.getLogger(MDMValidationRunner.class);
-
-    private static boolean running = false;
+    private static final Logger LOG = Logger.getLogger(MDMValidationRunner.class);
 
     private final IValidationPreference validationPref;
 
@@ -76,6 +69,8 @@ public class MDMValidationRunner extends WorkspaceJob {
     private int returnCode = IDialogConstants.OK_ID;
 
     private IModelValidateResult validateResult = null;
+
+    private Boolean showAfterSavingResultDialog;
 
     /**
      * Sets the validateResult.
@@ -116,47 +111,23 @@ public class MDMValidationRunner extends WorkspaceJob {
      * @param name
      */
     public MDMValidationRunner(List<IRepositoryViewObject> viewObjs, IValidationPreference validationPref,
-            Boolean forbidShowResultDialog) {
-        super("MDM Validation"); //$NON-NLS-1$
+            Boolean forbidShowResultDialog, Boolean showAfterSavingResultDialog) {
         this.validationPref = validationPref;
         this.forbidShowResultDialog = forbidShowResultDialog;
+        this.showAfterSavingResultDialog = showAfterSavingResultDialog;
         init(viewObjs);
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.eclipse.core.runtime.jobs.Job#shouldSchedule()
-     */
-    @Override
-    public boolean shouldSchedule() {
-        return !running;
-
-    }
-
     public static IModelValidateResult validate(List<IRepositoryViewObject> viewObjs, IValidationPreference validationPref,
-            boolean forbidShowResultDialog) {
-        MDMValidationRunner runner = new MDMValidationRunner(viewObjs, validationPref, forbidShowResultDialog);
-        IJobChangeListener listener = new JobChangeAdapter() {
-
-            @Override
-            public void aboutToRun(IJobChangeEvent event) {
-                running = true;
-            }
-
-            @Override
-            public void done(IJobChangeEvent event) {
-                running = false;
-            }
-
-        };
-        runner.addJobChangeListener(listener);
-        runner.schedule();
+            boolean forbidShowResultDialog, Boolean showAfterSavingResultDialog) {
+        MDMValidationRunner runner = new MDMValidationRunner(viewObjs, validationPref, forbidShowResultDialog,
+                showAfterSavingResultDialog);
         try {
-            runner.join();
-        } catch (InterruptedException e) {
-            log.error(e.getMessage(), e);
+            ResourcesPlugin.getWorkspace().run(runner, new NullProgressMonitor());
+        } catch (Exception e) {
+            LOG.error("Failed to validate objects.", e);
         }
+
         return runner.validateResult;
     }
 
@@ -209,82 +180,67 @@ public class MDMValidationRunner extends WorkspaceJob {
      */
     @SuppressWarnings({ "restriction", "hiding" })
     @Override
-    public IStatus runInWorkspace(IProgressMonitor monitor) throws CoreException {
-        Display newDisplay = new Display();
-        try {
-            if (UIUtil.isWorkInUI() && lockDirtyDialog.needShowDialog()) {
-                newDisplay.syncExec(new Runnable() {
+    public void run(IProgressMonitor monitor) throws CoreException {
+        if (UIUtil.isWorkInUI() && lockDirtyDialog != null && lockDirtyDialog.needShowDialog()) {
+            Display.getDefault().syncExec(new Runnable() {
 
-                    @Override
-                    public void run() {
-                        if (lockDirtyDialog.open() == IDialogConstants.CANCEL_ID) {
-                            setReturnCode(IDialogConstants.CANCEL_ID);
-                        } else {
-                            DeployService.getInstance().aboutToDeploy();
-                            Display.getDefault().syncExec(new Runnable() {
-                                @Override
-                                public void run() {
-                                    lockDirtyDialog.saveDirtyObjects();
-                                }
-                            });
-                            DeployService.getInstance().postDeploying();
-                        }
+                @Override
+                public void run() {
+                    if (lockDirtyDialog.open() == IDialogConstants.CANCEL_ID) {
+                        setReturnCode(IDialogConstants.CANCEL_ID);
+                    } else {
+                        Display.getDefault().syncExec(new Runnable() {
 
+                            @Override
+                            public void run() {
+                                lockDirtyDialog.saveDirtyObjects();
+                            }
+                        });
                     }
-                });
-                if (getReturnCode() == IDialogConstants.CANCEL_ID) {
-                    setValidateResult(new MDMValidationService.ModelValidateResult());
-                    return Status.CANCEL_STATUS;
                 }
-            }
-
-            final ValOperation vo = ValidationRunner.validate(toValidate, ValType.Manual, monitor, false);
-            if (vo.isCanceled()) {
+            });
+            if (getReturnCode() == IDialogConstants.CANCEL_ID) {
                 setValidateResult(new MDMValidationService.ModelValidateResult());
-                return Status.CANCEL_STATUS;
-            }
-            final ValidationResultSummary result = vo.getResult();
-            final IModelValidateResult validateResult = new MDMValidationService.ModelValidateResult(viewObjMap);
-            if (needShowValidationResults(result)) {
-                final Set<IResource> resources = toValidate.values().iterator().next();
-                newDisplay.syncExec(new Runnable() {
-
-                    @Override
-                    public void run() {
-
-                        ValidationResultDialog d = new ValidationResultDialog(newDisplay.getActiveShell(), result, validationPref,
-                                viewObjMap);
-                        int code = d.open();
-                        validateResult.setSelectedButton(code);
-                        setValidateResult(validateResult);
-                    }
-                });
-            } else {
-                setValidateResult(validateResult);
-                if (validateResult.hasErrOrWarning()) {
-                    int code = ValidationPreferenceService.getInstance().getDeployActionWhenValidateFail();
-                    validateResult.setSelectedButton(code);
-                } else {
-                    validateResult.setSelectedButton(IModelValidationService.BUTTON_OK);
-                }
-            }
-            activeProblemView(result);
-        } finally {
-            if (newDisplay != null && !newDisplay.isDisposed()) {
-                newDisplay.dispose();
+                return;
             }
         }
-        return Status.OK_STATUS;
+
+        final ValOperation vo = ValidationRunner.validate(toValidate, ValType.Manual, monitor, false);
+        if (vo.isCanceled()) {
+            setValidateResult(new MDMValidationService.ModelValidateResult());
+            return;
+        }
+        final ValidationResultSummary result = vo.getResult();
+        final IModelValidateResult validateResult = new MDMValidationService.ModelValidateResult(viewObjMap);
+        if (needShowValidationResults(result)) {
+            final Set<IResource> resources = toValidate.values().iterator().next();
+            Display.getDefault().syncExec(new Runnable() {
+
+                @Override
+                public void run() {
+
+                    ValidationResultDialog d = new ValidationResultDialog(Display.getDefault().getActiveShell(), result,
+                            validationPref, viewObjMap);
+                    int code = d.open();
+                    validateResult.setSelectedButton(code);
+                    setValidateResult(validateResult);
+                }
+            });
+        } else {
+            setValidateResult(validateResult);
+            if (validateResult.hasErrOrWarning()) {
+                int code = ValidationPreferenceService.getInstance().getDeployActionWhenValidateFail();
+                validateResult.setSelectedButton(code);
+            } else {
+                validateResult.setSelectedButton(IModelValidationService.BUTTON_OK);
+            }
+        }
+        activeProblemView(result);
     }
 
     private boolean needShowValidationResults(final ValidationResultSummary result) {
-       if( !forbidShowResultDialog && UIUtil.isWorkInUI() && validationPref.shouldShowResults(result)){
-           if(validationPref.getValidationCondition() == IModelValidationService.VALIDATE_AFTER_SAVE) {
-                return !DeployService.getInstance().isAboutToDeploy();
-           }
-           return true;
-       }
-       return false;
+        return !forbidShowResultDialog && UIUtil.isWorkInUI() && validationPref.shouldShowResults(result)
+                && (showAfterSavingResultDialog == null || showAfterSavingResultDialog);
     }
 
     private void activeProblemView(ValidationResultSummary result) {
@@ -304,7 +260,7 @@ public class MDMValidationRunner extends WorkspaceJob {
                                     page.activate(activepart);
                                 }
                             } catch (PartInitException e) {
-                                log.error(e.getMessage(), e);
+                                LOG.error(e.getMessage(), e);
                             }
                         }
 
