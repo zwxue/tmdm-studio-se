@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -42,7 +42,7 @@ public abstract class AbstractInteractiveHandler implements IInteractiveHandler 
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.talend.mdm.repository.core.service.IInteractiveHandler#convert(org.talend.core.model.properties.Item,
      * org.talend.mdm.repository.model.mdmserverobject.MDMServerObject)
      */
@@ -65,7 +65,7 @@ public abstract class AbstractInteractiveHandler implements IInteractiveHandler 
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * org.talend.mdm.repository.core.service.IInteractiveHandler#deploy(com.amalto.workbench.webservices.XtentisPort,
      * org.talend.core.model.properties.Item, org.talend.mdm.repository.model.mdmserverobject.MDMServerObject)

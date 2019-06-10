@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -107,7 +107,7 @@ public abstract class AMainPage extends AFormPage implements ModifyListener {
 
     /**
      * The composite containing the actual characteristics form By default its layout is GridLayout of 2 columns
-     * 
+     *
      * @param charSection
      */
     protected abstract void createCharacteristicsContent(FormToolkit toolkit, Composite charSection);

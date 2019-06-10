@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -77,7 +77,7 @@ public class XPathTreeContentProvider extends XSDTreeContentProvider {
 
         /*
          * if (parent instanceof XSDTypeDefinition) {
-         * 
+         *
          * if (parent instanceof XSDSimpleTypeDefinition) { XSDSimpleTypeDefinition std = (XSDSimpleTypeDefinition)
          * parent; if (std.getVariety().equals(XSDVariety.ATOMIC_LITERAL)) { ArrayList list = new ArrayList(); //add
          * Base Type if not a pre-defined type if (!
@@ -89,29 +89,29 @@ public class XPathTreeContentProvider extends XSDTreeContentProvider {
          * (std.getMemberTypeDefinitions().toArray(new XSDSimpleTypeDefinition[std.getMemberTypeDefinitions().size()]));
          * //return new Object[]{std.getBaseTypeDefinition()}; } if (parent instanceof XSDComplexTypeDefinition) {
          * XSDComplexTypeContent xsdComplexTypeContent = ((XSDComplexTypeDefinition) parent).getContent();
-         * 
+         *
          * ArrayList<Object> list = new ArrayList<Object>();
          * list.addAll(((XSDComplexTypeDefinition)parent).getAttributeContents());
-         * 
+         *
          * if (xsdComplexTypeContent == null) { XSDComplexTypeDefinition ctd = (XSDComplexTypeDefinition) parent;
          * list.add(ctd.getBaseTypeDefinition()); return list.toArray(new Object[list.size()]); } else { if
          * (xsdComplexTypeContent instanceof XSDSimpleTypeDefinition) { list.add(xsdComplexTypeContent); return
          * list.toArray(new Object[list.size()]); } if (xsdComplexTypeContent instanceof XSDParticle) return
          * getXSDParticleChildren((XSDParticle)xsdComplexTypeContent); //return children
          * list.add(((XSDComplexTypeDefinition) parent).getContent()); return list.toArray(new Object[list.size()]); } }
-         * 
+         *
          * }
          */
 
         /*
          * if (parent instanceof XSDElementDeclaration) { ArrayList<Object> list = new ArrayList<Object>();
-         * 
+         *
          * //handle extensions and retrictions directly XSDTypeDefinition typeDefinition =
          * ((XSDElementDeclaration)parent).getTypeDefinition(); if (typeDefinition instanceof XSDComplexTypeDefinition)
          * { XSDComplexTypeDefinition complexTypeDefinition = (XSDComplexTypeDefinition) typeDefinition; if
          * (complexTypeDefinition.getContent() == null) list.add(complexTypeDefinition.getBaseTypeDefinition()); else
          * list.add(complexTypeDefinition); } else { list.add(((XSDElementDeclaration)parent).getTypeDefinition()); }
-         * 
+         *
          * list.addAll(((XSDElementDeclaration)parent).getIdentityConstraintDefinitions()); return list.toArray(new
          * Object[list.size()]); }
          */

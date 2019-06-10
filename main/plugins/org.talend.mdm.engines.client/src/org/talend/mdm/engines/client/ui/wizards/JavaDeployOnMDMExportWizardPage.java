@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -27,10 +27,10 @@ import org.talend.repository.documentation.ExportFileResource;
 
 /**
  * Publish SpagoBI Export Wizard. <br/>
- * 
+ *
  * @referto WizardArchiveFileResourceExportPage1 $Id: JavaDeployOnMDMExportWizardPage.java 1 2007-04-27 12:00:07
  * cantoine
- * 
+ *
  */
 public class JavaDeployOnMDMExportWizardPage extends DeployOnMDMExportWizardPage {
 
@@ -56,7 +56,7 @@ public class JavaDeployOnMDMExportWizardPage extends DeployOnMDMExportWizardPage
 
     /**
      * Create an instance of this class.
-     * 
+     *
      * @param selection the selection
      */
     public JavaDeployOnMDMExportWizardPage(IStructuredSelection selection, SpagoBiServer mdmserver) {
@@ -65,7 +65,7 @@ public class JavaDeployOnMDMExportWizardPage extends DeployOnMDMExportWizardPage
 
     /**
      * Returns resources to be exported. This returns file - for just the files use getSelectedResources.
-     * 
+     *
      * @return a collection of resources currently selected for export (element type: <code>IResource</code>)
      */
     protected List<ExportFileResource> getExportResources() {

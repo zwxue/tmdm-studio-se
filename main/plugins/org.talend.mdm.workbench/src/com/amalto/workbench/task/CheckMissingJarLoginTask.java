@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -22,13 +22,13 @@ import com.amalto.workbench.service.MissingJarService;
 
 /**
  * created by HHB on 2013-11-01 Detailled comment
- * 
+ *
  */
 public class CheckMissingJarLoginTask extends AbstractLoginTask implements IRunnableWithProgress {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.eclipse.jface.operation.IRunnableWithProgress#run(org.eclipse.core.runtime.IProgressMonitor)
      */
     public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {

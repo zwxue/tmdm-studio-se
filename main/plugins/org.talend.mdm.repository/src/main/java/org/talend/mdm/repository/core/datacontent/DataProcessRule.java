@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -17,7 +17,7 @@ import java.util.List;
 
 /**
  * created by HHB on 2012-10-8 Detailled comment
- * 
+ *
  */
 public class DataProcessRule {
 
@@ -25,7 +25,7 @@ public class DataProcessRule {
 
     /**
      * Getter for entityUnits.
-     * 
+     *
      * @return the entityUnits
      */
     public List<DataEntityUnit> getEntityUnits() {
@@ -37,7 +37,7 @@ public class DataProcessRule {
 
     /**
      * Sets the entityUnits.
-     * 
+     *
      * @param entityUnits the entityUnits to set
      */
     public void setEntityUnits(List<DataEntityUnit> entityUnits) {

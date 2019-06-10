@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -66,15 +66,15 @@ public class ValidationRuleDialog extends Dialog {
     String pattern;
 
     XSDAnnotationsStructure struc;
-    
+
     private ComplexTableViewerColumn[] columns;
 
     String conceptName;
 
     String name = "";//$NON-NLS-1$
 
-    String ckName = ""; //$NON-NLS-1$ 
-    
+    String ckName = ""; //$NON-NLS-1$
+
     private Text text;
 
     public ValidationRuleDialog(Shell parentShell, String title, String pattern, DataModelMainPage page, String conceptName) {
@@ -84,7 +84,7 @@ public class ValidationRuleDialog extends Dialog {
         this.title = title;
         this.conceptName = conceptName;
     }
-    
+
     public ValidationRuleDialog(Shell parentShell, String title, String pattern, DataModelMainPage page, String conceptName,XSDAnnotationsStructure struc) {
         super(parentShell);
         this.pattern = pattern;
@@ -93,9 +93,9 @@ public class ValidationRuleDialog extends Dialog {
         this.conceptName = conceptName;
         this.struc = struc;
     }
-    
-    
-    
+
+
+
 
     @Override
     protected Control createDialogArea(Composite parent) {
@@ -132,7 +132,7 @@ public class ValidationRuleDialog extends Dialog {
       //The ending| bug:21784
         viewer.setXpath(true);
         // viewer.setMainPage(page);
-        
+
         String modelName = page.getDataModel().getName();
         viewer.setDatamodelName(modelName);
         viewer.setConceptName(conceptName);
@@ -155,20 +155,20 @@ public class ValidationRuleDialog extends Dialog {
         return new TisTableViewer(columns, toolkit, parent);
     }
     private boolean doCheck() {
-        
-        
+
+
         if(checkNameIsDuplicated(struc,name)){
-            MessageDialog.openWarning(page.getSite().getShell(),Messages.Warning,Messages.ValidationRuleDialog_InputDuplicateName); 
+            MessageDialog.openWarning(page.getSite().getShell(),Messages.Warning,Messages.ValidationRuleDialog_InputDuplicateName);
             return false;
         }
-        
+
         if(name == null || name.trim().equals("")){ //$NON-NLS-1$
-            MessageDialog.openWarning(page.getSite().getShell(),Messages.Warning,Messages.ValidationRuleDialog_InputBlankName); 
+            MessageDialog.openWarning(page.getSite().getShell(),Messages.Warning,Messages.ValidationRuleDialog_InputBlankName);
             return false;
         }
         return true;
-        
-        
+
+
     }
 
     @Override
@@ -195,7 +195,7 @@ public class ValidationRuleDialog extends Dialog {
             name = e.getAttributes().getNamedItem("name").getTextContent();//$NON-NLS-1$
         }
         text.setText("Product Type".equals(name) ? "" : name);//$NON-NLS-1$//$NON-NLS-2$
-        
+
         ckName = name;
         NodeList rulelist = e.getElementsByTagName("rule");//$NON-NLS-1$
         for (int i = 0; i < rulelist.getLength(); i++) {
@@ -225,7 +225,7 @@ public class ValidationRuleDialog extends Dialog {
                 return;
             }
         }
-        
+
         XpathSelectDialog.setContext(null);
         deactiveAllCellEditors();
         getValidationRules();
@@ -293,19 +293,19 @@ public class ValidationRuleDialog extends Dialog {
     public String getName() {
         return name;
     }
-    
-    
+
+
     // add by xie
-    private  String  getValidationRuleName(String primary){ 
+    private  String  getValidationRuleName(String primary){
         String splitcontent ="<pattern name=\""; //$NON-NLS-1$
         if(primary.indexOf(splitcontent) != -1 ){
             String part[] = primary.split(splitcontent);
             String nameString []= part[1].split("\""); //$NON-NLS-1$
             return nameString[0];
         }
-        return ""; //$NON-NLS-1$ 
+        return ""; //$NON-NLS-1$
     }
-    
+
     private boolean checkNameIsDuplicated(XSDAnnotationsStructure struc, String inputName){
         for (String eachValidationRule : struc.getSchematrons().values()){
             String name = getValidationRuleName(eachValidationRule);
@@ -315,5 +315,5 @@ public class ValidationRuleDialog extends Dialog {
             }
         }
         return false;
-    } 
+    }
 }

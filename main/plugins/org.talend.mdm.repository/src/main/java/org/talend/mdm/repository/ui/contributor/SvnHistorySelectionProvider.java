@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -33,7 +33,7 @@ public class SvnHistorySelectionProvider implements ISelectionProvider {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.eclipse.jface.viewers.ISelectionProvider#addSelectionChangedListener(org.eclipse.jface.viewers.
      * ISelectionChangedListener)
      */
@@ -44,7 +44,7 @@ public class SvnHistorySelectionProvider implements ISelectionProvider {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.eclipse.jface.viewers.ISelectionProvider#getSelection()
      */
     public ISelection getSelection() {
@@ -58,7 +58,7 @@ public class SvnHistorySelectionProvider implements ISelectionProvider {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.eclipse.jface.viewers.ISelectionProvider#removeSelectionChangedListener(org.eclipse.jface.viewers.
      * ISelectionChangedListener)
      */
@@ -69,7 +69,7 @@ public class SvnHistorySelectionProvider implements ISelectionProvider {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.eclipse.jface.viewers.ISelectionProvider#setSelection(org.eclipse.jface.viewers.ISelection)
      */
     public void setSelection(ISelection selection) {

@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -30,7 +30,7 @@ import org.eclipse.jface.text.contentassist.IContextInformationValidator;
 public class DataModelContentAssisProcessor implements IContentAssistProcessor {
 
     /**
-     * 
+     *
      */
     private static final char START = '<';
 
@@ -42,7 +42,7 @@ public class DataModelContentAssisProcessor implements IContentAssistProcessor {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * org.eclipse.jface.text.contentassist.IContentAssistProcessor#computeCompletionProposals(org.eclipse.jface.text
      * .ITextViewer, int)
@@ -69,7 +69,7 @@ public class DataModelContentAssisProcessor implements IContentAssistProcessor {
                     for (int i = 0; i < keyWords.length; i++) {
                         String entityName = keyWords[i];
                         if (showAll || entityName.toLowerCase().startsWith(input)) {
-                            String replacementString = START + entityName + "></" + entityName + ">"; //$NON-NLS-1$ //$NON-NLS-2$  
+                            String replacementString = START + entityName + "></" + entityName + ">"; //$NON-NLS-1$ //$NON-NLS-2$
                             CompletionProposal proposal = new CompletionProposal(replacementString, offset - len - 1, len + 1,
                                     entityName.length() + 2);
                             proposals.add(proposal);
@@ -101,7 +101,7 @@ public class DataModelContentAssisProcessor implements IContentAssistProcessor {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * org.eclipse.jface.text.contentassist.IContentAssistProcessor#computeContextInformation(org.eclipse.jface.text
      * .ITextViewer, int)
@@ -112,7 +112,7 @@ public class DataModelContentAssisProcessor implements IContentAssistProcessor {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.eclipse.jface.text.contentassist.IContentAssistProcessor#getCompletionProposalAutoActivationCharacters()
      */
     public char[] getCompletionProposalAutoActivationCharacters() {
@@ -121,7 +121,7 @@ public class DataModelContentAssisProcessor implements IContentAssistProcessor {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.eclipse.jface.text.contentassist.IContentAssistProcessor#getContextInformationAutoActivationCharacters()
      */
     public char[] getContextInformationAutoActivationCharacters() {
@@ -130,7 +130,7 @@ public class DataModelContentAssisProcessor implements IContentAssistProcessor {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.eclipse.jface.text.contentassist.IContentAssistProcessor#getErrorMessage()
      */
     public String getErrorMessage() {
@@ -139,7 +139,7 @@ public class DataModelContentAssisProcessor implements IContentAssistProcessor {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.eclipse.jface.text.contentassist.IContentAssistProcessor#getContextInformationValidator()
      */
     public IContextInformationValidator getContextInformationValidator() {

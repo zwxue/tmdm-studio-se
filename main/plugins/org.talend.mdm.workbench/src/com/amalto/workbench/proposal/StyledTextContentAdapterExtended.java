@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -18,9 +18,9 @@ import org.eclipse.swt.widgets.Control;
 
 /**
  * DOC amaumont class global comment. Detailled comment <br/>
- * 
+ *
  * $Id: StyledTextContentAdapterExtended.java 7038 2007-11-15 14:05:48Z plegall $
- * 
+ *
  */
 public class StyledTextContentAdapterExtended extends StyledTextContentAdapter implements
         IControlContentAdapterExtended {
@@ -29,7 +29,7 @@ public class StyledTextContentAdapterExtended extends StyledTextContentAdapter i
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.talend.designer.mapper.ui.proposal.expression.IControlContentAdapterExtended#getFilterValue()
      */
     public String getFilterValue(Control control) {
@@ -88,7 +88,7 @@ public class StyledTextContentAdapterExtended extends StyledTextContentAdapter i
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.talend.commons.ui.swt.proposal.IControlContentAdapterExtended#setUsedFilterValue(java.lang.String)
      */
     public void setUsedFilterValue(String filterValue) {

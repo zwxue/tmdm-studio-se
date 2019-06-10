@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -792,7 +792,7 @@ public class DataModelMainPage extends EditorPart implements IGotoMarker {
 
         /*
          * (non-Javadoc)
-         * 
+         *
          * @see org.eclipse.jface.viewers.IElementComparer#equals(java.lang.Object, java.lang.Object)
          */
         @Override
@@ -807,7 +807,7 @@ public class DataModelMainPage extends EditorPart implements IGotoMarker {
 
         /*
          * (non-Javadoc)
-         * 
+         *
          * @see org.eclipse.jface.viewers.IElementComparer#hashCode(java.lang.Object)
          */
         @Override
@@ -1679,7 +1679,7 @@ public class DataModelMainPage extends EditorPart implements IGotoMarker {
 
     /**
      * check whether the model field is UUID or AUTO_INCREMENT type.
-     * 
+     *
      * @param obj
      * @return
      */
@@ -1815,7 +1815,7 @@ public class DataModelMainPage extends EditorPart implements IGotoMarker {
 
     /**
      * Returns and XSDSchema Object from an xsd
-     * 
+     *
      * @param schema
      * @return
      * @throws Exception
@@ -3030,7 +3030,7 @@ public class DataModelMainPage extends EditorPart implements IGotoMarker {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.eclipse.ui.ide.IGotoMarker#gotoMarker(org.eclipse.core.resources.IMarker)
      */
     @Override

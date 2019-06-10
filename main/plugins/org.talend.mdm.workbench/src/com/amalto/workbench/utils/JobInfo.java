@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -24,22 +24,22 @@ public class JobInfo {
 
     String path;
 
- 
+
     public String getPath() {
         return this.path;
     }
 
- 
+
     public void setPath(String path) {
         this.path = path;
     }
 
-  
+
     public String getLastServerName() {
         return this.lastServerName;
     }
 
- 
+
     public void setLastServerName(String lastServerName) {
         this.lastServerName = lastServerName;
     }

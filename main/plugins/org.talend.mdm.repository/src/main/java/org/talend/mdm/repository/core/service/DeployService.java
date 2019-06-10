@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -89,7 +89,7 @@ public class DeployService {
 
         /**
          * DOC hbhong DeployStatus constructor comment.
-         * 
+         *
          * @param severity
          * @param pluginId
          * @param message
@@ -317,7 +317,7 @@ public class DeployService {
 
     /**
      * work for updater server operation.
-     * 
+     *
      * @param serverDef
      * @param viewObjs
      * @param selectededCommands

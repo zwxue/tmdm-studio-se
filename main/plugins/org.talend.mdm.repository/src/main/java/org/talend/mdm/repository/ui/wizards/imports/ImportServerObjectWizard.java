@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -129,7 +129,7 @@ public class ImportServerObjectWizard extends Wizard {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.eclipse.jface.wizard.Wizard#performFinish()
      */
     @Override
@@ -185,7 +185,7 @@ public class ImportServerObjectWizard extends Wizard {
 
     /**
      * DOC hbhong Comment method "getFileInfo".
-     * 
+     *
      * @param input
      * @return // dirName result[0] // fileQName result[1] // fileExtension result[2] // fileName result[3] // version
      * result[4]
@@ -233,7 +233,7 @@ public class ImportServerObjectWizard extends Wizard {
 
     /**
      * DOC hbhong Comment method "handlePictureResourceObject".
-     * 
+     *
      * @param treeObj
      * @throws IOException
      */
@@ -258,7 +258,7 @@ public class ImportServerObjectWizard extends Wizard {
                 StringBuffer strBuf = new StringBuffer();
                 strBuf.append(serverDef.getProtocol())
                         .append(serverDef.getHost())
-                        .append(":").append(serverDef.getPort()) //$NON-NLS-1$ 
+                        .append(":").append(serverDef.getPort()) //$NON-NLS-1$
                         .append(Util.getContextPath(serverDef.getPath()))
                         .append("/services/imageserver/upload/").append(encodedDirName).append("/").append(fileQName).append(".").append(fileExtension); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
                 String url = strBuf.toString();
@@ -424,7 +424,7 @@ public class ImportServerObjectWizard extends Wizard {
 
     /**
      * DOC jsxie Comment method "caculatePath". if it is process or trigger ,cut the path prefix.
-     * 
+     *
      * @param treeObj
      * @return the tree object path.
      */
@@ -536,7 +536,7 @@ public class ImportServerObjectWizard extends Wizard {
 
     /**
      * DOC hbhong Comment method "getVersion".
-     * 
+     *
      * @param treeObj
      * @return
      */
@@ -556,7 +556,7 @@ public class ImportServerObjectWizard extends Wizard {
 
     /**
      * DOC hbhong Comment method "getUniqueName".
-     * 
+     *
      * @param treeObj
      * @return
      */
@@ -580,7 +580,7 @@ public class ImportServerObjectWizard extends Wizard {
 
     /**
      * DOC hbhong Comment method "handlePath".
-     * 
+     *
      * @param itemState
      * @param type
      */
@@ -623,13 +623,13 @@ public class ImportServerObjectWizard extends Wizard {
 
         /*
          * (non-Javadoc)
-         * 
+         *
          * @see org.eclipse.jface.operation.IRunnableWithProgress#run(org.eclipse.core.runtime.IProgressMonitor)
          */
         @Override
         public void run(IProgressMonitor m) throws InvocationTargetException, InterruptedException {
 
-            String url = serverDef.getProtocol() + serverDef.getHost() + ":" + serverDef.getPort() //$NON-NLS-1$ 
+            String url = serverDef.getProtocol() + serverDef.getHost() + ":" + serverDef.getPort() //$NON-NLS-1$
                     + serverDef.getPath();
             final XtentisServerObjectsRetriever retriever = new XtentisServerObjectsRetriever(serverDef.getName(), url,
                     serverDef.getUser(), serverDef.getPasswd());
@@ -745,7 +745,7 @@ public class ImportServerObjectWizard extends Wizard {
 
                 /*
                  * (non-Javadoc)
-                 * 
+                 *
                  * @see org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.swt.events.SelectionEvent)
                  */
                 @Override

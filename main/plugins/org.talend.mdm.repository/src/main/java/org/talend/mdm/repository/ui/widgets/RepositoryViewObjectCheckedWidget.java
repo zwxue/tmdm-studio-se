@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -148,7 +148,7 @@ public class RepositoryViewObjectCheckedWidget extends Composite {
 
     /**
      * if type==null, return all type
-     * 
+     *
      * @param parent
      * @param type
      * @param commands
@@ -272,7 +272,7 @@ public class RepositoryViewObjectCheckedWidget extends Composite {
 
     /**
      * DOC hbhong Comment method "initInput".
-     * 
+     *
      * @param type
      * @return
      */

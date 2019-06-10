@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -49,7 +49,7 @@ import com.amalto.workbench.exadapter.ExAdapterManager;
 public class CommandManager implements IMementoAware {
 
     /**
-     * 
+     *
      */
 
     private static CommandManager instance = new CommandManager();
@@ -308,7 +308,7 @@ public class CommandManager implements IMementoAware {
 
     /**
      * DOC hbhong Comment method "getDeployCommands".
-     * 
+     *
      * @param viewObjs
      * @param defaultCmdType if none then assign -1
      * @return

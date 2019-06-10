@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -69,7 +69,7 @@ import com.amalto.workbench.webservices.WSDataClusterPK;
 
 /**
  * DOC hbhong class global comment. Detailled comment <br/>
- * 
+ *
  */
 public class OpenObjectAction extends AbstractRepositoryAction implements IIntroAction {
 
@@ -355,7 +355,7 @@ public class OpenObjectAction extends AbstractRepositoryAction implements IIntro
         String serverName = serverDef.getName();
         String username = serverDef.getUser();
         String password = serverDef.getPasswd();
-        String endpointaddress = serverDef.getProtocol() + serverDef.getHost() + ":" + serverDef.getPort() //$NON-NLS-1$ 
+        String endpointaddress = serverDef.getProtocol() + serverDef.getHost() + ":" + serverDef.getPort() //$NON-NLS-1$
                 + serverDef.getPath();
         TreeParent serverRoot = new TreeParent(serverName, null, TreeObject._SERVER_, endpointaddress, username
                 + ":" + (password == null ? "" : password));//$NON-NLS-1$//$NON-NLS-2$
@@ -404,7 +404,7 @@ public class OpenObjectAction extends AbstractRepositoryAction implements IIntro
 
     /**
      * return a decrypted server def
-     * 
+     *
      * @param serverObject
      * @return a decrypted server def
      */

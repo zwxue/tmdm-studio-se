@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -63,7 +63,7 @@ public class DeployAllDialog extends Dialog {
 
     /**
      * Create contents of the dialog.
-     * 
+     *
      * @param parent
      */
     @Override
@@ -207,7 +207,7 @@ public class DeployAllDialog extends Dialog {
         errorLabelLayoutData.exclude = isServerOk;
         errorLabel.setVisible(!isServerOk);
         if (!isServerOk) {
-            String url = serverDef.getProtocol() + serverDef.getHost() + ":" + serverDef.getPort() //$NON-NLS-1$ 
+            String url = serverDef.getProtocol() + serverDef.getHost() + ":" + serverDef.getPort() //$NON-NLS-1$
                     + serverDef.getPath();
             errorLabel.setText(Messages.bind(Messages.UnableConnectToServer, url));
         }
@@ -216,7 +216,7 @@ public class DeployAllDialog extends Dialog {
 
     /**
      * Create contents of the button bar.
-     * 
+     *
      * @param parent
      */
     @Override

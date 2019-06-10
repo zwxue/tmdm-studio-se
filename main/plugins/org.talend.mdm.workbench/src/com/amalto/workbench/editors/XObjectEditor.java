@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -62,7 +62,7 @@ public class XObjectEditor extends FormEditor implements IXObjectModelListener, 
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.eclipse.ui.forms.editor.FormEditor#addPages()
      */
     @Override
@@ -97,7 +97,7 @@ public class XObjectEditor extends FormEditor implements IXObjectModelListener, 
 
     /**
      * DOC hbhong Comment method "addPageForXObject".
-     * 
+     *
      * @throws PartInitException
      */
     protected void addPageForXObject(TreeObject xobject) {
@@ -184,7 +184,7 @@ public class XObjectEditor extends FormEditor implements IXObjectModelListener, 
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.eclipse.ui.ISaveablePart#doSave(org.eclipse.core.runtime.IProgressMonitor)
      */
     @Override
@@ -216,7 +216,7 @@ public class XObjectEditor extends FormEditor implements IXObjectModelListener, 
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.eclipse.ui.ISaveablePart#isSaveAsAllowed()
      */
     @Override
@@ -370,7 +370,7 @@ public class XObjectEditor extends FormEditor implements IXObjectModelListener, 
 
     /**
      * DOC bzhou Comment method "getToolBar".
-     * 
+     *
      * @return
      */
     public TdEditorToolBar getToolBar() {
@@ -437,7 +437,7 @@ public class XObjectEditor extends FormEditor implements IXObjectModelListener, 
         }
 
         /**
-         * 
+         *
          * DOC mzhao TdEditorToolBar class global comment. Detailled comment
          */
         private class RefreshSectionAction extends Action {

@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -109,10 +109,10 @@ class UserVariableDialog extends Dialog {
     private ILabelProvider getLabelProvider() {
         return new CustomLabelProvider();
     }
-    
+
     class CustomLabelProvider extends LabelProvider implements IColorProvider {
         Image IMG = EclipseResourceManager.getImage(RepositoryPlugin.PLUGIN_ID, "icons/methpub_obj.gif"); //$NON-NLS-1$;
-        
+
         @Override
         public Image getImage(Object element) {
             if (USER.equals(element)) {
@@ -198,7 +198,7 @@ class UserVariableDialog extends Dialog {
 
         };
     }
-    
+
     private List<String> getUserFields() {
         try {
             if (schema != null) {

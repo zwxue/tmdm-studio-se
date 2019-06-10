@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -23,13 +23,13 @@ import org.talend.mdm.repository.i18n.Messages;
 
 /**
  * created by HHB on 2013-1-24 Detailled comment
- * 
+ *
  */
 public class ValidateAction extends AbstractRepositoryAction {
 
     /**
      * DOC HHB ValidateDataModelAction constructor comment.
-     * 
+     *
      * @param text
      */
     public ValidateAction() {
@@ -38,7 +38,7 @@ public class ValidateAction extends AbstractRepositoryAction {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.talend.mdm.repository.core.AbstractRepositoryAction#getGroupName()
      */
     @Override

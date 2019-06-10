@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -35,7 +35,7 @@ public class LanguageInfoModifier implements ICellModifier {
     private List<String> allLanguages = new ArrayList<String>();
 
     private TreeViewer viewer;
-    
+
     protected BasePropertySection section;
     public LanguageInfoModifier(TreeViewer viewer, List<LanguageInfo> allLanguageInfos, List<String> allLanguages,BasePropertySection section) {
     	this(viewer,allLanguageInfos,allLanguages);

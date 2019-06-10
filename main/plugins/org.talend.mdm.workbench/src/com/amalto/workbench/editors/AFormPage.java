@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -65,7 +65,7 @@ public abstract class AFormPage extends FormPage {
 
     /**
      * Called by The main Editor
-     * 
+     *
      */
     public void refreshPage() {
         this.refreshing = true;
@@ -83,19 +83,19 @@ public abstract class AFormPage extends FormPage {
 
     /**
      * Refresh the form with the model content
-     * 
+     *
      */
     protected abstract void refreshData();
 
     /**
      * Commit the form content to the model
-     * 
+     *
      */
     protected abstract void commit();
 
     /**
      * Commit changes back to the model - must be called by the listeners
-     * 
+     *
      * @param onSave
      */
     protected void commitChanges() {
@@ -122,7 +122,7 @@ public abstract class AFormPage extends FormPage {
 
     /**
      * Called at time of the page creation
-     * 
+     *
      */
     protected abstract void createActions();
 

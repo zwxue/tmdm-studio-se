@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -24,11 +24,11 @@ import org.eclipse.core.runtime.Platform;
 public class AvailableModelUtil {
 
     /**
-     * 
+     *
      */
     private static final String CLASS = "class"; //$NON-NLS-1$
 
-    private static final String MODEL_TYPE = "modelType"; //$NON-NLS-1$  
+    private static final String MODEL_TYPE = "modelType"; //$NON-NLS-1$
 
     private static final String TYPE_ALL = "All"; //$NON-NLS-1$
 
@@ -37,7 +37,7 @@ public class AvailableModelUtil {
     private static final String TYPE_REPOSITORY = "Repository"; //$NON-NLS-1$
 
     /**
-     * 
+     *
      */
     private static final String EXTENSION_POINT = "org.talend.mdm.workbench.AvailableModel"; //$NON-NLS-1$
 

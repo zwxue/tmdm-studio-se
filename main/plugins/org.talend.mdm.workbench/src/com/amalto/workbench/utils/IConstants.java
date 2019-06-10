@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -20,7 +20,7 @@ public interface IConstants {
 
     static final String[] VIEW_CONDITION_OPERATORS = {
             "Contains", "contains the sentence", "Starts With", "Is Empty Or Null", "whole content contains", "=",//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$
-        "!=", ">", ">=", "<", "<=" };//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$//$NON-NLS-5$ 
+        "!=", ">", ">=", "<", "<=" };//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$//$NON-NLS-5$
 
     static final String[] ROUTE_CONDITION_OPERATORS = { "Contains", "Matches", "Starts With", "Is Null", "Is Not Null", "=",//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$//$NON-NLS-5$//$NON-NLS-6$
         "!=", ">", ">=", "<", "<=" };//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$//$NON-NLS-5$

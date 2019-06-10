@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -408,11 +408,11 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
         private String getAutoIncrementRecord(final TMDMService service) {
             String record = emptyRecord();
 
-            WSBoolean existsItem = service.existsItem(new WSExistsItem(new WSItemPK("AutoIncrement", //$NON-NLS-1$ 
+            WSBoolean existsItem = service.existsItem(new WSExistsItem(new WSItemPK("AutoIncrement", //$NON-NLS-1$
                     Arrays.asList(new String[] { "AutoIncrement" }), new WSDataClusterPK("CONF")))); //$NON-NLS-1$ //$NON-NLS-2$
             if (existsItem.isTrue()) {
 
-                WSItem wsItem = service.getItem(new WSGetItem(new WSItemPK("AutoIncrement", //$NON-NLS-1$ 
+                WSItem wsItem = service.getItem(new WSGetItem(new WSItemPK("AutoIncrement", //$NON-NLS-1$
                         Arrays.asList(new String[] { "AutoIncrement" }), new WSDataClusterPK("CONF")))); //$NON-NLS-1$
                 if (wsItem != null) {
                     record = wsItem.getContent();

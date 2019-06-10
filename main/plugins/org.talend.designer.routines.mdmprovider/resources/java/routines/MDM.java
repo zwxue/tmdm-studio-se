@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -45,19 +45,19 @@ import org.xml.sax.InputSource;
 /*
  * user specification: the function's comment should contain keys as follows: 1. write about the function's comment.but
  * it must be before the "{talendTypes}" key.
- * 
+ *
  * 2. {talendTypes} 's value must be talend Type, it is required . its value should be one of: String, char | Character,
  * long | Long, int | Integer, boolean | Boolean, byte | Byte, Date, double | Double, float | Float, Object, short |
  * Short
- * 
+ *
  * 3. {Category} define a category for the Function. it is required. its value is user-defined .
- * 
+ *
  * 4. {param} 's format is: {param} <type>[(<default value or closed list values>)] <name>[ : <comment>]
- * 
+ *
  * <type> 's value should be one of: string, int, list, double, object, boolean, long, char, date. <name>'s value is the
  * Function's parameter name. the {param} is optional. so if you the Function without the parameters. the {param} don't
  * added. you can have many parameters for the Function.
- * 
+ *
  * 5. {example} gives a example for the Function. it is optional.
  */
 public class MDM {
@@ -75,16 +75,16 @@ public class MDM {
     /**
      * getFK: Return one of the FK component by position in a mangled FK (FKs are mangled in MDM to accommodate for
      * compound keys)
-     * 
-     * 
+     *
+     *
      * {talendTypes} String
-     * 
+     *
      * {Category} MDM
-     * 
+     *
      * {param} string(FKs) mangledFK: original mangled FK.
-     * 
+     *
      * {param} int(0) pos: key position (starts at 0)
-     * 
+     *
      * {example} getFK(FKs,0) # 12345
      */
     public static String getFK(String mangledFK, int pos) {
@@ -107,15 +107,15 @@ public class MDM {
     /**
      * createFK: Returns the mangled FK string of a given key (FKs are mangled in MDM to accommodate for compound keys).
      * Returns null if key is null.
-     * 
-     * 
+     *
+     *
      * {talendTypes} String
-     * 
+     *
      * {Category} MDM
-     * 
+     *
      * {param} string singleKey: original key.
-     * 
-     * 
+     *
+     *
      * {example} createFK("0") # return "[0]"
      */
     public static String createFK(String singleKey) {
@@ -129,15 +129,15 @@ public class MDM {
     /**
      * createFK: Returns the mangled FK string of a given array of keys (FKs are mangled in MDM to accommodate for
      * compound keys). Returns null if one of the keys is null.
-     * 
-     * 
+     *
+     *
      * {talendTypes} String
-     * 
+     *
      * {Category} MDM
-     * 
+     *
      * {param} string singleKey: original key array.
-     * 
-     * 
+     *
+     *
      * {example} createFK({"0","1"}) # return "[0][1]"
      */
     public static String createFK(String[] keys) {
@@ -153,15 +153,15 @@ public class MDM {
 
     /**
      * get repeating element in xmlString according to the xpath & position
-     * 
+     *
      * {talendTypes} String
-     * 
+     *
      * {Category} MDM
-     * 
+     *
      * {param} string(xml) xml: xml
-     * 
+     *
      * {param} string(xpath) xpath: xpath.
-     * 
+     *
      * {param} int(0) position: position.
      */
     public static String getRepeatingElement(String xml, String xpath, int position) throws Exception {
@@ -179,15 +179,15 @@ public class MDM {
 
     /**
      * check repeating elements in xmlString according to xpath & text
-     * 
+     *
      * {talendTypes} Boolean
-     * 
+     *
      * {Category} MDM
-     * 
+     *
      * {param} string(xml) xml: xml.
-     * 
+     *
      * {param} string(xpath) xpath: xpath.
-     * 
+     *
      * {param} String(text) text: text.
      */
     public static boolean hasRepeatingElement(String xml, String xpath, String text) throws Exception {
@@ -204,15 +204,15 @@ public class MDM {
 
     /**
      * list repeating elements in xmlString according to xpath & delimiter
-     * 
+     *
      * {talendTypes} String
-     * 
+     *
      * {Category} MDM
-     * 
+     *
      * {param} string(xml) xml: xml.
-     * 
+     *
      * {param} string(xpath) xpath: xpath.
-     * 
+     *
      * {param} char(delimiter) delimiter: delimiter.
      */
     public static String listRepeatingElement(String xml, String xpath, char delimiter) throws Exception {
@@ -232,15 +232,15 @@ public class MDM {
 
     /**
      * add repeating elements in xmlString according to xpath & text
-     * 
+     *
      * {talendTypes} String
-     * 
+     *
      * {Category} MDM
-     * 
+     *
      * {param} string(xml) xml: xml
-     * 
+     *
      * {param} string(xpath) xpath: xpath
-     * 
+     *
      * {param} String(text) text: text
      */
     public static String addRepeatingElement(String xml, String xpath, String text) throws Exception {
@@ -261,16 +261,16 @@ public class MDM {
 
     /**
      * @deprecated Generate an <error code="X">msg</error> fragment
-     * 
-     * 
+     *
+     *
      * {talendTypes} String
-     * 
+     *
      * {Category} MDM
-     * 
+     *
      * {param} string msg: error message.
-     * 
+     *
      * {param} int(0) code: error code, (1:ERROR, 0:NORMAL)
-     * 
+     *
      * {example} genErrMsg("test message",0) # return <error code="0">test message</error>
      */
     @Deprecated
@@ -280,16 +280,16 @@ public class MDM {
 
     /**
      * Generate an <report><message type="X">msg</message><report> fragment
-     * 
-     * 
+     *
+     *
      * {talendTypes} String
-     * 
+     *
      * {Category} MDM
-     * 
+     *
      * {param} string msg: error message.
-     * 
+     *
      * {param} String(0) type: error code, (info|error)
-     * 
+     *
      * {example} genErrMsg("test message",0) # return <error code="0">test message</error>
      */
     public static String createReturnMessage(String msg, String type) {
@@ -298,18 +298,18 @@ public class MDM {
 
     /**
      * Add or update an ISO variant to the multi-lingual text value
-     * 
-     * 
+     *
+     *
      * {talendTypes} String
-     * 
+     *
      * {Category} MDM
-     * 
+     *
      * {param} string(iso) iso: iso
-     * 
+     *
      * {param} string(value) value: value
-     * 
+     *
      * {param} string(rawValue) rawValue: rawValue
-     * 
+     *
      * {example} setLanguageVariant("EN","abc","[EN:ab][FR:ab_fr]") # return [EN:abc][FR:ab_fr]
      */
     public static String setLanguageVariant(String iso, String value, String rawValue) {
@@ -321,21 +321,21 @@ public class MDM {
     /**
      * Add or update an ISO variant to the multi-lingual text value with defaultIso and sort option (For the legacy
      * value which do not follow the multi-lingual field syntax, it will be adapted to defaultIso)
-     * 
+     *
      * {talendTypes} String
-     * 
+     *
      * {Category} MDM
-     * 
+     *
      * {param} string(iso) iso: iso
-     * 
+     *
      * {param} string(value) value: value
-     * 
+     *
      * {param} string(rawValue) rawValue: rawValue
-     * 
+     *
      * {param} string(defaultIso) defaultIso: defaultIso
-     * 
+     *
      * {param} string(sort) sort: sort
-     * 
+     *
      * {example} setLanguageVariant("FR","ab_fr","ab","EN", true) # return [EN:ab][FR:ab_fr]
      */
     public static String setLanguageVariant(String iso, String value, String rawValue, String defaultIso, boolean sort) {
@@ -393,17 +393,17 @@ public class MDM {
 
     /**
      * Give an ISO value from a multi-lingual text value, with default iso fallback
-     * 
+     *
      * {talendTypes} String
-     * 
+     *
      * {Category} MDM
-     * 
+     *
      * {param} string(iso) iso: iso
-     * 
+     *
      * {param} string(defaultIso) defaultIso: Default iso used in case of fallback
-     * 
+     *
      * {param} string(rawValue) rawValue: rawValue
-     * 
+     *
      * {example} getLanguageVariant("DE","EN","[EN:ab][FR:ab_fr]") # return [EN:ab]
      */
     public static String getLanguageVariant(String iso, String defaultIso, String rawValue) {
@@ -418,16 +418,16 @@ public class MDM {
 
     /**
      * Give an ISO value from a multi-lingual text value
-     * 
-     * 
+     *
+     *
      * {talendTypes} String
-     * 
+     *
      * {Category} MDM
-     * 
+     *
      * {param} string(iso) iso: iso
-     * 
+     *
      * {param} string(rawValue) rawValue: rawValue
-     * 
+     *
      * {example} getLanguageVariant("FR","[EN:ab][FR:ab_fr]") # return ab_fr
      */
     public static String getLanguageVariant(String iso, String rawValue) {
@@ -450,13 +450,13 @@ public class MDM {
 
     /**
      * Get webservice client timeout information from jvm param setting
-     * 
+     *
      * {talendTypes} int
-     * 
+     *
      * {Category} MDM
-     * 
+     *
      * {param} String property: timeout property
-     * 
+     *
      * {example} getWSClientTimeout(String property) # return 60000
      */
     public static int getWSClientTimeout(String property) throws Exception {
@@ -474,11 +474,11 @@ public class MDM {
         }
         return defaultTimeout;
     }
-    
+
     // Utility methods
     /**
      * Get a nodelist from an xPath
-     * 
+     *
      * @throws Exception
      */
     private static NodeList getNodeList(Node contextNode, String xPath, boolean isParent) throws Exception {
@@ -499,7 +499,7 @@ public class MDM {
 
     /**
      * parse the xml
-     * 
+     *
      * @param xml
      * @return
      * @throws Exception
@@ -516,7 +516,7 @@ public class MDM {
 
     /**
      * Generates an xml string from a node with or without the xml declaration (not pretty formatted)
-     * 
+     *
      * @param n the node
      * @return the xml string
      * @throws TransformerException

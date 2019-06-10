@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -57,7 +57,7 @@ public class MdmPropertiesWizard extends PropertiesWizard {
 
     /**
      * DOC achen MdmPropertiesWizard constructor comment.
-     * 
+     *
      * @param repositoryViewObject
      * @param path
      * @param useLastVersion
@@ -239,7 +239,7 @@ public class MdmPropertiesWizard extends PropertiesWizard {
 
     /**
      * DOC HHB Comment method "canEditObjectName".
-     * 
+     *
      * @return
      */
     protected boolean canEditObjectName() {

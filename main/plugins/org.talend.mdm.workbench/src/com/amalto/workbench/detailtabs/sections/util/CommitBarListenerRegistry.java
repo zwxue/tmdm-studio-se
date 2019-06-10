@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -29,11 +29,11 @@ public class CommitBarListenerRegistry {
     private static CommitBarListenerRegistry INSTANCE;
 
     private Map<String, List<CommitBarListener>> tabId2Listeners = new HashMap<String, List<CommitBarListener>>();
-    
+
     private List<CommitSection> commitSecs=new ArrayList<CommitSection>();
 
     private Map<String, CommitSection> tabId2CommitSection=new HashMap<String, CommitSection>();
-    
+
     private CommitBarListenerRegistry() {
     }
 
@@ -117,7 +117,7 @@ public class CommitBarListenerRegistry {
             tabId2Listeners.remove(eachNeedRemovedTabId);
         }
     }
-    
+
     public void registCommitSection(CommitSection sec){
     	commitSecs.add(sec);
     }
@@ -128,7 +128,7 @@ public class CommitBarListenerRegistry {
 	public List<CommitSection> getCommitSecs() {
 		return commitSecs;
 	}
-    
+
 	public List<CommitBarListener> getAllRegistedListeners(){
 		 List<CommitBarListener> listeners = new LinkedList<CommitBarListener>();
 		  for (List<CommitBarListener> tabListeners : tabId2Listeners.values()) {
@@ -136,5 +136,5 @@ public class CommitBarListenerRegistry {
 		  }
 		  return listeners;
 	}
-    
+
 }

@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -40,7 +40,7 @@ public class ValidationRuleExcpressDialog extends Dialog {
     protected boolean isSchematron;
 
     protected Composite composite;
-    
+
     public ValidationRuleExcpressDialog(Shell parentShell, TreeParent treeParent,String title, String value, String conceptName) {
         this(parentShell, treeParent, title, value, conceptName, false, true);
     }

@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -16,7 +16,7 @@ import org.talend.commons.ui.runtime.image.IImage;
 
 /**
  * DOC hbhong it works for the common repository view. <br/>
- * 
+ *
  */
 public enum ServerObjectImage implements IImage {
     MENU_ICON("/icons/menu.png"), //$NON-NLS-1$
@@ -43,7 +43,7 @@ public enum ServerObjectImage implements IImage {
 
     /**
      * Getter for path.
-     * 
+     *
      * @return the path
      */
     public String getPath() {
@@ -52,7 +52,7 @@ public enum ServerObjectImage implements IImage {
 
     /**
      * Getter for clazz.
-     * 
+     *
      * @return the clazz
      */
     public Class getLocation() {

@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -17,7 +17,7 @@ import org.w3c.dom.Element;
 
 /**
  * created by HHB on 2013-1-28 Detailled comment
- * 
+ *
  */
 public class ModelValidationMessage extends ValidationMessage {
 
@@ -45,7 +45,7 @@ public class ModelValidationMessage extends ValidationMessage {
 
     /**
      * Getter for path.
-     * 
+     *
      * @return the path
      */
     public String getPath() {
@@ -54,7 +54,7 @@ public class ModelValidationMessage extends ValidationMessage {
 
     /**
      * Sets the path.
-     * 
+     *
      * @param path the path to set
      */
     public void setPath(String path) {
@@ -63,7 +63,7 @@ public class ModelValidationMessage extends ValidationMessage {
 
     /**
      * Getter for domElement.
-     * 
+     *
      * @return the domElement
      */
     public Element getDomElement() {
@@ -72,7 +72,7 @@ public class ModelValidationMessage extends ValidationMessage {
 
     /**
      * Getter for entityName.
-     * 
+     *
      * @return the entityName
      */
     public String getEntityName() {
@@ -81,7 +81,7 @@ public class ModelValidationMessage extends ValidationMessage {
 
     /**
      * Getter for modelType.
-     * 
+     *
      * @return the modelType
      */
     public String getElementType() {
@@ -90,7 +90,7 @@ public class ModelValidationMessage extends ValidationMessage {
 
     /**
      * Sets the domElement.
-     * 
+     *
      * @param domElement the domElement to set
      */
     public void setDomElement(Element domElement) {
@@ -99,7 +99,7 @@ public class ModelValidationMessage extends ValidationMessage {
 
     /**
      * Sets the entityName.
-     * 
+     *
      * @param entityName the entityName to set
      */
     public void setEntityName(String entityName) {
@@ -108,7 +108,7 @@ public class ModelValidationMessage extends ValidationMessage {
 
     /**
      * Sets the modelType.
-     * 
+     *
      * @param elementType the modelType to set
      */
     public void setElementType(String elementType) {
@@ -117,7 +117,7 @@ public class ModelValidationMessage extends ValidationMessage {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.lang.Object#equals(java.lang.Object)
      */
     @Override
@@ -139,7 +139,7 @@ public class ModelValidationMessage extends ValidationMessage {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.lang.Object#hashCode()
      */
     @Override

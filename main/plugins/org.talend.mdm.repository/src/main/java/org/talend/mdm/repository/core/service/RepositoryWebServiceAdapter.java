@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -72,7 +72,7 @@ public class RepositoryWebServiceAdapter {
 
     /**
      * Warning: the param ServerDef must a decrypted serverDef
-     * 
+     *
      * @param serverDef
      * @return
      * @throws XtentisException
@@ -187,9 +187,9 @@ public class RepositoryWebServiceAdapter {
     }
 
     public static String[] getTheObjectsForRole() {
-        String[] objects = new String[] { "Routing Engine V2", "Service", "Routing Rule", //$NON-NLS-1$ //$NON-NLS-2$//$NON-NLS-3$ 
-                "Background Job", "Menu", "Transformer V2", "Stored Procedure", "View", //$NON-NLS-1$ //$NON-NLS-2$//$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ 
-                "Routing Order V2 Failed", "Item", "Data Model", "Routing Order V2 Completed", //$NON-NLS-1$ //$NON-NLS-2$//$NON-NLS-3$ //$NON-NLS-4$ 
+        String[] objects = new String[] { "Routing Engine V2", "Service", "Routing Rule", //$NON-NLS-1$ //$NON-NLS-2$//$NON-NLS-3$
+                "Background Job", "Menu", "Transformer V2", "Stored Procedure", "View", //$NON-NLS-1$ //$NON-NLS-2$//$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+                "Routing Order V2 Failed", "Item", "Data Model", "Routing Order V2 Completed", //$NON-NLS-1$ //$NON-NLS-2$//$NON-NLS-3$ //$NON-NLS-4$
                 "Transformer Plugin V2", "Role", "Data Cluster", "Configuration Info", "Custom Layout" };//$NON-NLS-1$ //$NON-NLS-2$//$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
         return objects;
 
@@ -219,7 +219,7 @@ public class RepositoryWebServiceAdapter {
         String serverName = serverDef.getHost();
         String username = serverDef.getUser();
         String password = serverDef.getPasswd();
-        String endpointaddress = serverDef.getProtocol() + serverDef.getHost() + ":" + serverDef.getPort() //$NON-NLS-1$ 
+        String endpointaddress = serverDef.getProtocol() + serverDef.getHost() + ":" + serverDef.getPort() //$NON-NLS-1$
                 + serverDef.getPath();
         TreeParent serverRoot = new TreeParent(serverName, null, TreeObject._SERVER_, endpointaddress, username
                 + ":" + (password == null ? "" : password));//$NON-NLS-1$//$NON-NLS-2$

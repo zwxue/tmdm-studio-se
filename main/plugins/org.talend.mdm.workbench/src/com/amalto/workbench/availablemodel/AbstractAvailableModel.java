@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -30,37 +30,37 @@ public class AbstractAvailableModel implements IAvailableModel {
     }
 
     public void fillContextMenu(TreeObject xobject, IMenuManager manager) {
-        
+
 
     }
 
     public void addPage(TreeObject xobject, XObjectBrowser editor) {
-        
+
 
     }
 
     public void addPage(TreeObject xobject, XObjectEditor editor) {
-        
+
 
     }
 
     public void menuAboutToShow(IMenuManager manager, DataClusterBrowserMainPage page) {
-        
+
 
     }
 
     public void fillContextMenu(Object obj, IMenuManager manager, DataModelMainPage page, String dataModelName) {
-        
+
 
     }
 
     public void doubleClickOnElement(int type, DataModelMainPage page, String dataModelName) {
-        
+
 
     }
 
     public void deleteTreeObject(TMDMService port, TreeObject xobject) {
-        
+
 
     }
 

@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -74,7 +74,7 @@ public class RepositoryViewFilterDialog extends Dialog {
             if (labelProvider instanceof AbstractLabelProvider)
                 return ((AbstractLabelProvider) ((IRepositoryNodeConfiguration) element).getLabelProvider())
                         .getCategoryImage(null);
-            
+
             return null;
         }
 
@@ -121,7 +121,7 @@ public class RepositoryViewFilterDialog extends Dialog {
 
     /**
      * Create the dialog.
-     * 
+     *
      * @param parentShell
      */
     public RepositoryViewFilterDialog(Shell parentShell) {
@@ -132,7 +132,7 @@ public class RepositoryViewFilterDialog extends Dialog {
 
     /**
      * Create contents of the dialog.
-     * 
+     *
      * @param parent
      */
     @Override
@@ -272,7 +272,7 @@ public class RepositoryViewFilterDialog extends Dialog {
             Item item = conf.getProperty().getItem();
             IRepositoryNodeConfiguration repositoryConf = RepositoryNodeConfigurationManager.getConfiguration(item);
 
-            
+
             if (repositoryConf instanceof EventManagerNodeConfiguration) {
                 exist = true;
                 break;
@@ -340,7 +340,7 @@ public class RepositoryViewFilterDialog extends Dialog {
 
     /**
      * Create contents of the button bar.
-     * 
+     *
      * @param parent
      */
     @Override

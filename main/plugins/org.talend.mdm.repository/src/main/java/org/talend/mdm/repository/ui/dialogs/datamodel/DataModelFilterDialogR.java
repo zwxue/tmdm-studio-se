@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -30,7 +30,7 @@ public class DataModelFilterDialogR extends DataModelFilterDialog {
 
     /**
      * DOC achen DataModelFilterDialogR constructor comment.
-     * 
+     *
      * @param parentShell
      * @param xObject
      * @param dataModelFilter
@@ -44,7 +44,7 @@ public class DataModelFilterDialogR extends DataModelFilterDialog {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see com.amalto.workbench.dialogs.DataModelFilterDialog#getRoles()
      */
     @Override

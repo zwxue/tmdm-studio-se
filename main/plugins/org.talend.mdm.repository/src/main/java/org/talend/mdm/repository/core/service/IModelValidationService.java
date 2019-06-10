@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -20,7 +20,7 @@ import org.talend.core.model.repository.IRepositoryViewObject;
 
 /**
  * created by HHB on 2013-1-23 Detailled comment
- * 
+ *
  */
 public interface IModelValidationService extends IService {
 
@@ -31,14 +31,14 @@ public interface IModelValidationService extends IService {
         public boolean hasErrOrWarning();
 
         /**
-         * 
+         *
          * @return Defined in IModelValidationService BUTTON_xxxx
          */
         public int getSelectedButton();
 
         /**
          * Defined in IModelValidationService BUTTON_xxxx
-         * 
+         *
          * @param selectedButtons
          * @return
          */
@@ -65,7 +65,7 @@ public interface IModelValidationService extends IService {
 
     /**
      * DOC HHB Comment method "validate".
-     * 
+     *
      * @param viewObjs
      * @param condition defined in current interface VALIDATE_XXXX
      * @return TODO

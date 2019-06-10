@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -20,12 +20,12 @@ import org.eclipse.xsd.XSDTypeDefinition;
 
 /**
  * created by HHB on 2013-8-14 Eligible elements are:
- * 
+ *
  * simple type (extension or restriction ok), at any depth, for instance: Customer/Firstname, or Customer/Address/City
  * the selected element must be maxOccurs <= 1 no element in the path to that element must be maxOccurs > 1 e.g. in
  * Customer/Address/City, Address must be maxOccurs <= 1
- * 
- * 
+ *
+ *
  */
 public class MatchRuleSelectionFilter implements IXPathSelectionFilter {
 

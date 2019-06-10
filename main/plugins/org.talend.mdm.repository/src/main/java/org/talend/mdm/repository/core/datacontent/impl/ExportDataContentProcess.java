@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -54,7 +54,7 @@ import com.amalto.workbench.webservices.WSItemPKsByCriteriaResponseResults;
 
 /**
  * created by HHB on 2012-10-9 Detailled comment
- * 
+ *
  */
 public class ExportDataContentProcess extends AbstractDataContentProcess {
 
@@ -77,7 +77,7 @@ public class ExportDataContentProcess extends AbstractDataContentProcess {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * org.talend.mdm.repository.core.datacontent.IDataContentProcess#processDatas(org.eclipse.core.runtime.IProgressMonitor
      * )
@@ -90,7 +90,7 @@ public class ExportDataContentProcess extends AbstractDataContentProcess {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.talend.mdm.repository.core.datacontent.IDataContentProcess#buildRule()
      */
     public DataProcessRule buildRule() throws InvocationTargetException {
@@ -104,7 +104,7 @@ public class ExportDataContentProcess extends AbstractDataContentProcess {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * org.talend.mdm.repository.core.datacontent.IDataContentProcess#tuneRule(org.talend.mdm.repository.core.datacontent
      * .DataProcessRule)
@@ -133,7 +133,7 @@ public class ExportDataContentProcess extends AbstractDataContentProcess {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.talend.mdm.repository.core.datacontent.IDataContentProcess#getResult()
      */
     public MultiStatus getResult() {
@@ -145,7 +145,7 @@ public class ExportDataContentProcess extends AbstractDataContentProcess {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.talend.mdm.repository.core.datacontent.impl.AbstractDataContentProcess#getProcessService()
      */
     @Override
@@ -159,7 +159,7 @@ public class ExportDataContentProcess extends AbstractDataContentProcess {
 
         /**
          * DOC hbhong Comment method "zipFile".
-         * 
+         *
          * @param tempFolderPath
          * @param fPath
          */
@@ -171,7 +171,7 @@ public class ExportDataContentProcess extends AbstractDataContentProcess {
 
         /**
          * DOC hbhong ExprocessContentProcess constructor comment.
-         * 
+         *
          * @param service
          * @param tempFolderPath
          * @param dName

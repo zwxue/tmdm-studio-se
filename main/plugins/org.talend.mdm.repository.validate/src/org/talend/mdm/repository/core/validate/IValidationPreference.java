@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -16,7 +16,7 @@ import org.eclipse.wst.validation.internal.ValidationResultSummary;
 
 /**
  * created by HHB on 2013-1-23 Detailled comment
- * 
+ *
  */
 public interface IValidationPreference {
 
@@ -27,7 +27,7 @@ public interface IValidationPreference {
     public void updateLastSelectedBun(int selectedBun, ValidationResultSummary resultSummary);
 
     /**
-     * 
+     *
      * @return IModelValidationService.VALIDATE_XXX
      */
     public int getValidationCondition();

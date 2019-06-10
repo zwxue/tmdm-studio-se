@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -88,19 +88,19 @@ public class DataClusterMainPage extends AMainPageV2 implements ITextListener {
              * )DataClusterMainPage.this.stemmerGroup.getParent()).setExpanded(DataClusterMainPage.this.useStemming
              * .getSelection()); if (DataClusterMainPage.this.useStemming.getSelection()) {
              * useStemming.setText("Stemming Enabled"); } else { useStemming.setText("Stemming Disabled"); }
-             * 
+             *
              * if (! DataClusterMainPage.this.refreshing) markDirty(); }; });
              */
             /*
              * //Stemmer Characteristics stemmerGroup = this.getNewSectionComposite("Stemmer Characteristics");
              * stemmerGroup.setLayout(new GridLayout(2,true));
-             * 
+             *
              * Label languageLabel = toolkit.createLabel(stemmerGroup, "Language", SWT.NULL);
              * languageLabel.setLayoutData( new GridData(SWT.FILL,SWT.FILL,false,true,1,1) ); languageCombo = new
              * Combo(stemmerGroup,SWT.READ_ONLY |SWT.DROP_DOWN|SWT.SINGLE); languageCombo.setLayoutData( new
              * GridData(SWT.FILL,SWT.FILL,false,false,1,1) ); languageCombo.add("en"); languageCombo.add("fr");
              * languageCombo.addModifyListener(this);
-             * 
+             *
              * singleRoot = toolkit.createButton( stemmerGroup, "Single Root", SWT.CHECK | SWT.LEAD );
              * singleRoot.setLayoutData(new GridData(SWT.FILL,SWT.FILL,false,true,2,1));
              * singleRoot.addSelectionListener(new SelectionListener() { public void
@@ -195,10 +195,10 @@ public class DataClusterMainPage extends AMainPageV2 implements ITextListener {
              * (doStemming) { useStemming.setText("Stemming Enabled"); } else {
              * useStemming.setText("Stemming Disabled"); } stemmerGroup.setEnabled(doStemming);
              * ((Section)DataClusterMainPage.this.stemmerGroup.getParent()).setExpanded(doStemming);
-             * 
+             *
              * String language = wsObject.getStemmer().substring(0,2); if ("fr".equals(language))
              * languageCombo.select(1); else languageCombo.select(0);
-             * 
+             *
              * if (useStemming.getSelection()){ String vals =
              * wsObject.getStemmer().substring(2,wsObject.getStemmer().length()); int val = Integer.parseInt(vals);
              * singleRoot.setSelection((val & (1 << 0)) == (1 << 0)); partOfSpeechSingleWord.setSelection((val & (1 <<
@@ -210,7 +210,7 @@ public class DataClusterMainPage extends AMainPageV2 implements ITextListener {
              * synonymInformation.setSelection((val & (1 << 9)) == (1 << 9)); stopWords.setSelection((val & (1 << 10))
              * == (1 << 10)); typingErrors.setSelection((val & (1 << 11)) == (1 << 11));
              * optimizeQueryResult.setSelection((val & (1 << 12)) == (1 << 12));
-             * 
+             *
              * }
              */
 
@@ -242,7 +242,7 @@ public class DataClusterMainPage extends AMainPageV2 implements ITextListener {
              */
             /*
              * wsObject.setWSDataClusterType(WSDataClusterType.ITEMS);
-             * 
+             *
              * wsObject.setWSSpellerRefreshPeriodInSeconds(0); if (!useStemming.getSelection())
              * wsObject.setStemmer("0100"); else { String s=languageCombo.getText(); int i=0; if
              * (singleRoot.getSelection()) i+=1; if (partOfSpeechSingleWord.getSelection()) i+=2; if
@@ -283,7 +283,7 @@ public class DataClusterMainPage extends AMainPageV2 implements ITextListener {
 
     /*
      * private void hookContextMenu(TreeViewer viewer) { }
-     * 
+     *
      * private void fillContextMenu(IMenuManager manager) { }
      */
 

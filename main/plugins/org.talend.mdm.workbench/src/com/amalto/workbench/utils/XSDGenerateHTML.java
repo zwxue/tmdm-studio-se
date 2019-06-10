@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -14,15 +14,15 @@ package com.amalto.workbench.utils;
 
 /**
  * <copyright>
- * 
+ *
  * Copyright (c) 2002-2004 IBM Corporation and others. All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0 which accompanies this distribution, and is
  * available at http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors: IBM - Initial API and implementation
- * 
+ *
  * </copyright>
- * 
+ *
  * $Id: XSDGenerateHTML.java,v 1.1 2005/11/13 21:54:24 amaltodev Exp $
  */
 
@@ -90,30 +90,30 @@ import org.w3c.dom.Node;
  * {@link #run run}, which is called just like main during headless workbench invocation.
  * <p>
  * You can execute this example by running
- * 
+ *
  * <pre>
  *   xsd-generate-schema-for-schema-html.bat
  * </pre>
- * 
+ *
  * from the directory:
- * 
+ *
  * <pre>
  *   plugins/org.eclipse.xsd.example/data/
  * </pre>
- * 
+ *
  * This script uses the file
- * 
+ *
  * <pre>
  * plugins / org.eclipse.xsd.example / SampleMarkup.xml
  * </pre>
- * 
+ *
  * for annotations. The resultin HTML document is stored in <code>SchemaForSchema.html</code> and an
  * <code>index.html</code> is provided frame-based viewing of the document. The script
- * 
+ *
  * <pre>
  * xsd - generate - html.bat
  * </pre>
- * 
+ *
  * allows you to pass in your own annotations.
  * </p>
  */
@@ -141,7 +141,7 @@ public class XSDGenerateHTML implements IPlatformRunnable {
 
     /**
      * The map from String keys to documentation.
-     * 
+     *
      * @see #readMarkup
      * @see #handleMarkup
      */
@@ -149,7 +149,7 @@ public class XSDGenerateHTML implements IPlatformRunnable {
 
     /**
      * The map from String keys to documentation for {@link XSDElementDeclaration}.
-     * 
+     *
      * @see #readMarkup
      * @see #handleMarkup
      */
@@ -157,7 +157,7 @@ public class XSDGenerateHTML implements IPlatformRunnable {
 
     /**
      * The map from String keys to documentation for {@link XSDAttributeDeclaration}s.
-     * 
+     *
      * @see #readMarkup
      * @see #handleMarkup
      */
@@ -248,7 +248,7 @@ public class XSDGenerateHTML implements IPlatformRunnable {
 
     /**
      * Read the markup from the .xml input.
-     * 
+     *
      * @param fileName the name of an XML file.
      */
     public void readMarkup(String fileName) {
@@ -282,7 +282,7 @@ public class XSDGenerateHTML implements IPlatformRunnable {
 
     /**
      * Handle a markup element by caching information in a map.
-     * 
+     *
      * @param markupMap the map to contain the markup.
      * @param markupElement the element specifying the markup.
      */
@@ -317,7 +317,7 @@ public class XSDGenerateHTML implements IPlatformRunnable {
 
     /**
      * Returns the content documentation associated with the key.
-     * 
+     *
      * @param key the key to look up.
      * @return the associated content documentation.
      * @see #handleMarkup
@@ -335,7 +335,7 @@ public class XSDGenerateHTML implements IPlatformRunnable {
 
     /**
      * Returns the element markup associated with the key.
-     * 
+     *
      * @param key the key to look up.
      * @return the associated element markup.
      * @see #handleMarkup
@@ -353,7 +353,7 @@ public class XSDGenerateHTML implements IPlatformRunnable {
 
     /**
      * Returns the element documentation associated with the key.
-     * 
+     *
      * @param key the key to look up.
      * @return the associated element documentation.
      * @see #handleMarkup
@@ -371,7 +371,7 @@ public class XSDGenerateHTML implements IPlatformRunnable {
 
     /**
      * Returns the attribute markup associated with the key.
-     * 
+     *
      * @param key the key to look up.
      * @return the associated attribute markup.
      * @see #handleMarkup
@@ -389,7 +389,7 @@ public class XSDGenerateHTML implements IPlatformRunnable {
 
     /**
      * Returns the attribute documentation associated with the key.
-     * 
+     *
      * @param key the key to look up.
      * @return the associated attribute documentation.
      * @see #handleMarkup
@@ -407,7 +407,7 @@ public class XSDGenerateHTML implements IPlatformRunnable {
 
     /**
      * Returns an href in Part 1 or Part 2 of the XML specification for the given element.
-     * 
+     *
      * @param xsdElementDeclaration an element declaration in the schema for schema.
      * @return an href.
      */
@@ -428,7 +428,7 @@ public class XSDGenerateHTML implements IPlatformRunnable {
 
     /**
      * Returns an href in Part 1 or Part 2 of the component specification for the given element.
-     * 
+     *
      * @param xsdElementDeclaration a simple type defintion in the schema for schema.
      * @return an href.
      */
@@ -476,7 +476,7 @@ public class XSDGenerateHTML implements IPlatformRunnable {
 
     /**
      * Returns an href in Part 2 of the component specification for the given simple type definition.
-     * 
+     *
      * @param xsdSimpleTypeDefinition an element declaration in the schema for schema.
      * @return an href.
      */
@@ -509,7 +509,7 @@ public class XSDGenerateHTML implements IPlatformRunnable {
 
     /**
      * Returns an anchor that can be used locally for the given element declaration.
-     * 
+     *
      * @param xsdElementDeclaration an element declaration in the schema for schema.
      * @return an anchor.
      */
@@ -529,7 +529,7 @@ public class XSDGenerateHTML implements IPlatformRunnable {
 
     /**
      * Generate HTML annotated documentation that summarizes the built-in simple type hierarchy.
-     * 
+     *
      * @param object an array of Strings.
      * @return <code>0</code> indicating success, or <code>1</code> indicating failure.
      */
@@ -590,7 +590,7 @@ public class XSDGenerateHTML implements IPlatformRunnable {
 
     /**
      * Load the XML Schema file and print the documentation based on it.
-     * 
+     *
      * @param xsdFile the name of an XML Schema file.
      */
     public void loadAndPrint(String xsdFile) throws Exception {
@@ -1127,7 +1127,7 @@ public class XSDGenerateHTML implements IPlatformRunnable {
 
     /**
      * Print a particle with markup for the document.
-     * 
+     *
      * @param xsdParticle a particle.
      * @param rootElementDeclarationMarkup the markup.
      */
@@ -1203,7 +1203,7 @@ public class XSDGenerateHTML implements IPlatformRunnable {
 
     /**
      * Print a simple type definition for the document.
-     * 
+     *
      * @param xsdSimpleTypeDefinition a simple type definition in the schema for schema.
      */
     public void printSimpleTypeDefinition(XSDSimpleTypeDefinition xsdSimpleTypeDefinition) {

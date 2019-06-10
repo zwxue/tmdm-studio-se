@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -288,7 +288,7 @@ public class XSDEditor extends MultiPageEditorPart
 
         /**
          * Determines DOM node based on object (xsd node)
-         * 
+         *
          * @param object
          * @return
          */
@@ -574,10 +574,10 @@ public class XSDEditor extends MultiPageEditorPart
 
             /*
              * **please don't remove this annotation util the problem is really resolve.
-             * 
+             *
              * Here add a property listener to source editor to achieve a effect that when source editor is modified by
              * user, notify the model editor that it should be in dirty state.
-             * 
+             *
              * this is not a perfect resolution of issue TMDM-6403, because we have not find the real reason that lead
              * to that result. the more detailed thing is the variable 'fSynchronizationStamp' in class
              * 'ResourceTextFileBuffer' is updated in some place and this variable finally affect the variable
@@ -638,7 +638,7 @@ public class XSDEditor extends MultiPageEditorPart
 
     /**
      * DOC talend-mdm Comment method "validateDiagnoses".
-     * 
+     *
      * @param xsdSchema
      * @return
      */

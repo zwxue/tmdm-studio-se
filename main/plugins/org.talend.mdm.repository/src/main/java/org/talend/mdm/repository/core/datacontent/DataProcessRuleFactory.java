@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -25,13 +25,13 @@ import com.amalto.workbench.webservices.WSStringArray;
 
 /**
  * created by HHB on 2012-10-8 Detailled comment
- * 
+ *
  */
 public class DataProcessRuleFactory {
 
     /**
      * if using XML DB and the return records exceed limit, it will return null;
-     * 
+     *
      * @param port
      * @param dataClusterName
      * @return

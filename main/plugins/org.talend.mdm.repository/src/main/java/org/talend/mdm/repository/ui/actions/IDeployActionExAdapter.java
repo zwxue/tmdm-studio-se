@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -20,7 +20,7 @@ import com.amalto.workbench.exadapter.IExAdapter;
 
 /**
  * created by HHB on 2014-3-5 Detailled comment
- * 
+ *
  */
 public interface IDeployActionExAdapter<T> extends IExAdapter<T> {
 

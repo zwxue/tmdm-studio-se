@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -56,7 +56,7 @@ public class ViewBrowserMainPage2 extends ViewBrowserMainPage {
     @Override
     protected List<WSDataClusterPK> getDataClusterPKs() throws MalformedURLException, XtentisException {
         MDMServerDef d = getServerDef();
-        return Util.getAllDataClusterPKs(new URL(d.getProtocol() + d.getHost() + ":" + d.getPort() //$NON-NLS-1$ 
+        return Util.getAllDataClusterPKs(new URL(d.getProtocol() + d.getHost() + ":" + d.getPort() //$NON-NLS-1$
                 + d.getPath()), d.getUser(), d.getPasswd());
     }
 

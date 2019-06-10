@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -43,7 +43,7 @@ import com.amalto.workbench.image.ImageCache;
 public class RenameViewDialog extends Dialog implements SelectionListener {
     private final String seprator3 = "#";//$NON-NLS-1$
     private final String blankText = "";//$NON-NLS-1$
-    
+
     private Text entityText;
     private Text filterText;
     protected String value;
@@ -85,10 +85,10 @@ public class RenameViewDialog extends Dialog implements SelectionListener {
     }
 
     protected void createMainPart(Composite container) {
-        
+
         GridLayout gridLayout = (GridLayout) container.getLayout();
         gridLayout.numColumns = 3;
-        
+
         Label label2 = new Label(container, SWT.NONE);
         label2.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
         label2.setText(Messages.RenameViewDialog_Entity);
@@ -103,24 +103,24 @@ public class RenameViewDialog extends Dialog implements SelectionListener {
         openDLG.addSelectionListener(this);
         openDLG.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
         openDLG.setToolTipText(Messages.ViewInputDialog_SelectOneEntity);
-        
+
         Label lblFilterName = new Label(container, SWT.NONE);
         lblFilterName.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
         lblFilterName.setText(Messages.ViewInputDialog_lblFilterName_text);
-        
+
         filterText = new Text(container, SWT.BORDER);
         GridData layoutData2 = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);
         layoutData2.widthHint = 310;
         filterText.setLayoutData(layoutData2);
         filterText.setText(Messages.RenameViewDialog_DefaultFilter);
         new Label(container, SWT.NONE);
-       
+
         final Label internalLabel = new Label(container, SWT.NONE | SWT.WRAP);
         internalLabel.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 3,1));
         internalLabel.setText(Messages.RenameViewDialog_InternalName);
         internalLabel.setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_GRAY));
-        
-        
+
+
         if(value != null) {
             String[] split = value.split(seprator3);
             entityText.setText(split[0]);
@@ -128,14 +128,14 @@ public class RenameViewDialog extends Dialog implements SelectionListener {
                 filterText.setText(blankText);
             else
                 filterText.setText(split[1]);
-            
-            internalLabel.setText(getInternalName()); 
+
+            internalLabel.setText(getInternalName());
         }
-        
+
         filterText.addModifyListener(new ModifyListener() {
             public void modifyText(ModifyEvent e) {
                 updateOkButtonState();
-                
+
                 internalLabel.setText(getInternalName());
             }
         });
@@ -144,11 +144,11 @@ public class RenameViewDialog extends Dialog implements SelectionListener {
 
             public void modifyText(ModifyEvent e) {
                 updateOkButtonState();
-                
+
                 internalLabel.setText(getInternalName());
             }
         });
-       
+
     }
 
     private void createBottom(Composite container) {
@@ -156,19 +156,19 @@ public class RenameViewDialog extends Dialog implements SelectionListener {
         errorMessageText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 3,1));
         errorMessageText.setBackground(Display.getCurrent().getSystemColor(22));
     }
-    
+
     private String getInternalName() {
         String filterPart = blankText;
-        
+
         String filterStr = filterText.getText().trim();
         if(!filterStr.isEmpty())
             filterPart = seprator3 + filterStr;
-        
+
         String entityName = entityText.getText().trim();
-        
+
         String internalName = Messages.bind(Messages.RenameViewDialog_InternalNameX, IViewNodeConstDef.PREFIX_VIEW_UPPER
                 + entityName + filterPart);
-        
+
         return internalName;
     }
     /**
@@ -203,14 +203,14 @@ public class RenameViewDialog extends Dialog implements SelectionListener {
             okBtn.setEnabled(isValid);
         }
     }
-    
+
     protected boolean validInput() {
         String entityName = entityText.getText().trim();
         String filter = filterText.getText().trim();
-        
+
         if(value.equals(entityName + seprator3 + filter))
             return false;
-        
+
         if (validator != null) {
             String prefix = IViewNodeConstDef.PREFIX_VIEW_UPPER;
             if (entityName.isEmpty()) {
@@ -222,7 +222,7 @@ public class RenameViewDialog extends Dialog implements SelectionListener {
             if (filter.isEmpty())
                 suffix = blankText;
 
-            
+
             String validMsg = validator.isValid(prefix + entityName + suffix);
 
             if (validMsg != null) {
@@ -246,7 +246,7 @@ public class RenameViewDialog extends Dialog implements SelectionListener {
     public String getValue() {
         return value;
     }
-    
+
     public void widgetSelected(SelectionEvent e) {
         XpathSelectDialog dlg = new XpathSelectDialog(getShell(), null, Messages.ViewInputDialog_SelectOneEntity, site, false, null);
         dlg.setBlockOnOpen(true);

@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -22,7 +22,7 @@ public class TISCallJobPluginDetail extends AbstractPluginDetail {
 
     /**
      * DOC hbhong ProjectPluginDetail constructor comment.
-     * 
+     *
      * @param twoLetterLanguageCode
      */
     public TISCallJobPluginDetail(String twoLetterLanguageCode) {
@@ -63,7 +63,7 @@ public class TISCallJobPluginDetail extends AbstractPluginDetail {
                 + Messages.TISCallJobPluginDetail_doc_line13 + Messages.TISCallJobPluginDetail_doc_line14
                 + Messages.TISCallJobPluginDetail_doc_line15 + Messages.TISCallJobPluginDetail_doc_line16
                 + Messages.TISCallJobPluginDetail_doc_line17 + Messages.TISCallJobPluginDetail_example1
-                + "   <configuration>" + "\n" //$NON-NLS-1$ //$NON-NLS-2$ 
+                + "   <configuration>" + "\n" //$NON-NLS-1$ //$NON-NLS-2$
                 + "       <url>http://server:port/TISService/TISPort</url>" + "\n" + "       <contextParam>" + "\n" //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
                 + "           <name>firstname</name>" + "\n" + "           <value>jack</value>" + "\n" + "       </contextParam>" //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
                 + "\n" + "       <contextParam>" + "\n" + "           <name>lastname</name>" + "\n" //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
@@ -74,7 +74,7 @@ public class TISCallJobPluginDetail extends AbstractPluginDetail {
                 + "\n" + "             {" + "\n" + "             p1:firstname," + "\n" + "             p2:lastname" + "\n" //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$
                 + "             }" + "\n" + "           </fields>" + "\n" + "       </conceptMapping>" + "\n" //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$
                 + "   </configuration>" + "\n\n" //$NON-NLS-1$ //$NON-NLS-2$
-                + Messages.TISCallJobPluginDetail_example2 + "   <configuration>" + "\n" //$NON-NLS-1$ //$NON-NLS-2$ 
+                + Messages.TISCallJobPluginDetail_example2 + "   <configuration>" + "\n" //$NON-NLS-1$ //$NON-NLS-2$
                 + "       <url>ltj://tiscall_multi_return/0.1</url>" + "\n" + "       <contextParam>" + "\n" //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
                 + "           <name>nb_line</name>" + "\n" + "           <value>5</value>" + "\n" + "       </contextParam>" //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
                 + "\n" + "   </configuration>" + "\n\n"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$

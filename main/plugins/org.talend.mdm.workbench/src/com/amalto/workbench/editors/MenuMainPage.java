@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -303,7 +303,7 @@ public class MenuMainPage extends AMainPageV2 {
 
     /*
      * private void hookContextMenu(TreeViewer viewer) { }
-     * 
+     *
      * private void fillContextMenu(IMenuManager manager) { }
      */
 
@@ -459,7 +459,7 @@ public class MenuMainPage extends AMainPageV2 {
             String label = "";//$NON-NLS-1$
             TreeEntry currentEntry = (TreeEntry) ((IStructuredSelection) viewer.getSelection()).getFirstElement();
 
-            WSMenuEntry wsMenuEntry = new WSMenuEntry("", "", null, null, "", null); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ 
+            WSMenuEntry wsMenuEntry = new WSMenuEntry("", "", null, null, "", null); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
             switch (location) {
             case LOCATION_UNDER:
                 position = currentEntry.getWSMenuEntry().getSubMenus().size();

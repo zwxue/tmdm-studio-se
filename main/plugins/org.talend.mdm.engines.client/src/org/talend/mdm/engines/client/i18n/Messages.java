@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -16,9 +16,9 @@ import org.eclipse.osgi.util.NLS;
 
 /**
  * Default implementation of MessageCore from org.talend.commons plug-in.<br/>
- * 
+ *
  * $Id: Messages.java 3351 2007-05-04 12:14:00Z plegall $
- * 
+ *
  */
 public class Messages extends NLS {
 
@@ -140,7 +140,7 @@ public class Messages extends NLS {
     public static String ZipExport_alreadyExistsError;
 
     public static String ZipExport_mustBeFile;
-    
+
     public static String EditorManager_saveChangesQuestion;
     public static String Save_Resource;
 }

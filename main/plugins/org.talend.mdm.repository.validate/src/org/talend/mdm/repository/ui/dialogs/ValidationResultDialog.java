@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -71,7 +71,7 @@ import org.talend.mdm.repository.ui.markers.datamodel.ModelField;
 
 /**
  * created by Huang Zhenlong on Jan 25, 2013 Detailled comment
- * 
+ *
  */
 @SuppressWarnings("restriction")
 public class ValidationResultDialog extends IconAndMessageDialog {
@@ -86,7 +86,7 @@ public class ValidationResultDialog extends IconAndMessageDialog {
 
         /**
          * Create a MarkerViewLabelProvider on a field.
-         * 
+         *
          * @param field
          */
         MarkerColumnLabelProvider(MarkerField field) {
@@ -98,7 +98,7 @@ public class ValidationResultDialog extends IconAndMessageDialog {
 
         /*
          * (non-Javadoc)
-         * 
+         *
          * @see org.eclipse.jface.viewers.BaseLabelProvider#dispose()
          */
         @Override
@@ -109,7 +109,7 @@ public class ValidationResultDialog extends IconAndMessageDialog {
 
         /*
          * (non-Javadoc)
-         * 
+         *
          * @see org.eclipse.jface.viewers.ColumnLabelProvider#update(org.eclipse.jface.viewers.ViewerCell)
          */
         @Override
@@ -124,7 +124,7 @@ public class ValidationResultDialog extends IconAndMessageDialog {
 
         /*
          * (non-Javadoc)
-         * 
+         *
          * @see org.eclipse.jface.viewers.ViewerComparator#compare(org.eclipse.jface.viewers.Viewer, java.lang.Object,
          * java.lang.Object)
          */
@@ -309,7 +309,7 @@ public class ValidationResultDialog extends IconAndMessageDialog {
 
     /**
      * DOC HHB Comment method "createRadioButtons".
-     * 
+     *
      * @param dialogAreaComposite
      */
     private void createRadioButtons(Composite dialogAreaComposite) {

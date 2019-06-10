@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -34,7 +34,7 @@ class BeanClassUtil {
 
     /**
      * DOC hbhong BeanClassUtil constructor comment.
-     * 
+     *
      * @param mapUtil
      */
     public BeanClassUtil(Bean2EObjUtil mapUtil) {
@@ -241,7 +241,7 @@ class BeanClassUtil {
             System.out.println(cls.getName());
             Map<Object, Method[]> fieldMap = map.get(cls);
             for (Object field : fieldMap.keySet()) {
-                System.out.println("\t|--- " + field); //$NON-NLS-1$ 
+                System.out.println("\t|--- " + field); //$NON-NLS-1$
                 Method[] methods = fieldMap.get(field);
                 System.out.println("\t\t\t" + methods[0].getName()); //$NON-NLS-1$
                 System.out.println("\t\t\t" + methods[1].getName()); //$NON-NLS-1$

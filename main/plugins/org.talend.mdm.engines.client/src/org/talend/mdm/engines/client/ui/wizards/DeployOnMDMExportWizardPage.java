@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -94,9 +94,9 @@ import com.amalto.workbench.utils.Util;
 
 /**
  * Page of the Job Scripts Export Wizard. <br/>
- * 
+ *
  * $Id: DeployOnMDMExportWizardPage.java 1 2007-04-26 11:29:00 cantoine
- * 
+ *
  */
 public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResourceExportPage1 {
 
@@ -150,7 +150,7 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
 
     /**
      * Create an instance of this class.
-     * 
+     *
      * @param name java.lang.String
      */
     protected DeployOnMDMExportWizardPage(String name, IStructuredSelection selection, SpagoBiServer mdmserver) {
@@ -215,7 +215,7 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
 
     /**
      * Create an instance of this class.
-     * 
+     *
      * @param selection the selection
      */
     public DeployOnMDMExportWizardPage(IStructuredSelection selection) {
@@ -260,7 +260,7 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
 
     /**
      * Create the export options specification widgets.
-     * 
+     *
      */
     @Override
     protected void createOptionsGroupButtons(Group optionsGroup) {
@@ -277,7 +277,7 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
 
     /**
      * Create the buttons for the group that determine if the entire or selected directory structure should be created.
-     * 
+     *
      * @param optionsGroup
      * @param font
      */
@@ -725,7 +725,7 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
     /**
      * The Finish button was pressed. Try to do the required work now and answer a boolean indicating success. If false
      * is returned then the wizard will not close.
-     * 
+     *
      * @returns boolean
      */
     @Override
@@ -759,9 +759,9 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
     }
 
     /**
-     * 
+     *
      * DOC aiming Comment method "reBuildJobZipFile".
-     * 
+     *
      */
     private void reBuildJobZipFile(ExportFileResource p) {
         JavaJobExportReArchieveCreator creator = null;
@@ -899,7 +899,7 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
 
     /**
      * Get the export operation.
-     * 
+     *
      * @param resourcesToExport
      * @return
      */
@@ -919,7 +919,7 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
 
     /**
      * Returns the root folder name.
-     * 
+     *
      * @return
      */
     private String getRootFolderName(ExportFileResource p) {
@@ -946,7 +946,7 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
 
     /**
      * Answer the string to display in self as the destination type.
-     * 
+     *
      * @return java.lang.String
      */
     @Override
@@ -956,7 +956,7 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
 
     /**
      * Returns resources to be exported. This returns file - for just the files use getSelectedResources.
-     * 
+     *
      * @return a collection of resources currently selected for export (element type: <code>IResource</code>)
      * @throws ProcessorException
      */
@@ -1091,7 +1091,7 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.eclipse.ui.wizards.datatransfer.WizardFileSystemResourceExportPage1#destinationEmptyMessage()
      */
     @Override
@@ -1125,7 +1125,7 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.eclipse.ui.internal.wizards.datatransfer.WizardFileSystemResourceExportPage1#validateDestinationGroup()
      */
     @Override

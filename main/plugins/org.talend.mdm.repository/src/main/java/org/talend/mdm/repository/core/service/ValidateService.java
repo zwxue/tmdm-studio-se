@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -27,13 +27,13 @@ import com.amalto.workbench.service.IValidateService;
 
 /**
  * created by HHB on 2012-12-6 Detailled comment
- * 
+ *
  */
 public class ValidateService implements IValidateService {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see com.amalto.workbench.service.IValidateService#validateObjectExistence(int, java.lang.String)
      */
     public int validateObjectExistence(int type, String name) {
@@ -46,7 +46,7 @@ public class ValidateService implements IValidateService {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see com.amalto.workbench.service.IValidateService#validateObjectExistence(org.talend.core.model.repository.
      * ERepositoryObjectType, java.lang.String)
      */
@@ -74,7 +74,7 @@ public class ValidateService implements IValidateService {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see com.amalto.workbench.service.IValidateService#validateAndAlertObjectExistence(int, java.lang.String)
      */
     public boolean validateAndAlertObjectExistence(int type, String name) {
@@ -85,7 +85,7 @@ public class ValidateService implements IValidateService {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * com.amalto.workbench.service.IValidateService#validateAndAlertObjectExistence(org.talend.core.model.repository
      * .ERepositoryObjectType, java.lang.String)

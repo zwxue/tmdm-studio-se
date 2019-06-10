@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -18,7 +18,7 @@ import java.util.regex.Pattern;
 public class MDMServerDef {
 
     /**
-     * 
+     *
      */
     private static final String DEFAULT_PROTOCOL = "http://"; //$NON-NLS-1$
 
@@ -28,7 +28,7 @@ public class MDMServerDef {
 
     private String host = "localhost";//$NON-NLS-1$
 
-    private String port = "8180";//$NON-NLS-1$ 
+    private String port = "8180";//$NON-NLS-1$
 
     private String user = "";//$NON-NLS-1$
 
@@ -38,7 +38,7 @@ public class MDMServerDef {
 
     /**
      * Getter for protocol.
-     * 
+     *
      * @return the protocol
      */
     public String getProtocol() {
@@ -47,7 +47,7 @@ public class MDMServerDef {
 
     /**
      * Sets the protocol.
-     * 
+     *
      * @param protocol the protocol to set
      */
     public void setProtocol(String protocol) {

@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -77,7 +77,7 @@ import com.amalto.workbench.webservices.WSDigest;
 
 /**
  * created by HHB on 2013-7-18 Detailled comment
- * 
+ *
  */
 public class ConsistencyConflictDialog extends Dialog {
 
@@ -304,7 +304,7 @@ public class ConsistencyConflictDialog extends Dialog {
 
     /**
      * Create the dialog.
-     * 
+     *
      * @param parentShell
      * @param conflictCount
      * @param viewObCmdOpjMap
@@ -320,7 +320,7 @@ public class ConsistencyConflictDialog extends Dialog {
 
     /**
      * Create contents of the dialog.
-     * 
+     *
      * @param parent
      */
     @Override
@@ -756,7 +756,7 @@ public class ConsistencyConflictDialog extends Dialog {
 
     /**
      * Getter for result.
-     * 
+     *
      * @return the result
      */
     public ConsistencyCheckResult getResult() {

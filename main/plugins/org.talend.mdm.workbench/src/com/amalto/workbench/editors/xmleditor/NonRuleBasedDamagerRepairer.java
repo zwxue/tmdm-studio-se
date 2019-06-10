@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -52,7 +52,7 @@ public class NonRuleBasedDamagerRepairer implements IPresentationDamager, IPrese
     /**
      * Returns the end offset of the line that contains the specified offset or if the offset is inside a line
      * delimiter, the end offset of the next line.
-     * 
+     *
      * @param offset the offset whose line end offset must be computed
      * @return the line end offset for the given offset
      * @exception BadLocationException if offset is invalid in the current document
@@ -109,7 +109,7 @@ public class NonRuleBasedDamagerRepairer implements IPresentationDamager, IPrese
 
     /**
      * Adds style information to the given text presentation.
-     * 
+     *
      * @param presentation the text presentation to be extended
      * @param offset the offset of the range to be styled
      * @param length the length of the range to be styled

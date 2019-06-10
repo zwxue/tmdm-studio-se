@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -41,9 +41,9 @@ import org.eclipse.ui.IWorkbenchWindowActionDelegate;
 
 /**
  * just for test
- * 
+ *
  * @author achen
- * 
+ *
  */
 public class CompareEditorAction implements IWorkbenchWindowActionDelegate {
 
@@ -141,17 +141,17 @@ public class CompareEditorAction implements IWorkbenchWindowActionDelegate {
     }
 
     public void dispose() {
-        
+
 
     }
 
     public void init(IWorkbenchWindow window) {
-        
+
 
     }
 
     public void selectionChanged(IAction action, ISelection selection) {
-        
+
 
     }
 
@@ -179,13 +179,13 @@ public class CompareEditorAction implements IWorkbenchWindowActionDelegate {
 
         @Override
         public void saveChanges(IProgressMonitor monitor) throws CoreException {
-            
+
             super.saveChanges(monitor);
         }
 
         @Override
         public boolean isDirty() {
-            
+
             return super.isDirty();
         }
 

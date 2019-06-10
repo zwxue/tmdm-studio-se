@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -19,9 +19,9 @@ import org.talend.repository.documentation.ExportFileResource;
 
 /**
  * The Job deployment information <br/>
- * 
+ *
  * $Id: talend.epf 55206 2011-02-15 17:32:14Z mhirt $
- * 
+ *
  */
 public class JobDeploymentInfo {
 
@@ -34,13 +34,13 @@ public class JobDeploymentInfo {
     private String jobPurposeDescription;
 
     private String descValue;
-    
+
     private List<ExportFileResource> resourceList = new ArrayList<ExportFileResource>();
-    
+
 
     /**
      * Getter for jobLabelName.
-     * 
+     *
      * @return the jobLabelName
      */
     public String getJobLabelName() {
@@ -49,7 +49,7 @@ public class JobDeploymentInfo {
 
     /**
      * Sets the jobLabelName.
-     * 
+     *
      * @param jobLabelName the jobLabelName to set
      */
     public void setJobLabelName(String jobLabelName) {
@@ -58,7 +58,7 @@ public class JobDeploymentInfo {
 
     /**
      * Getter for jobVersion.
-     * 
+     *
      * @return the jobVersion
      */
     public String getJobVersion() {
@@ -67,7 +67,7 @@ public class JobDeploymentInfo {
 
     /**
      * Sets the jobVersion.
-     * 
+     *
      * @param jobVersion the jobVersion to set
      */
     public void setJobVersion(String jobVersion) {
@@ -76,7 +76,7 @@ public class JobDeploymentInfo {
 
     /**
      * Getter for jobPath.
-     * 
+     *
      * @return the jobPath
      */
     public String getJobPath() {
@@ -85,7 +85,7 @@ public class JobDeploymentInfo {
 
     /**
      * Sets the jobPath.
-     * 
+     *
      * @param jobPath the jobPath to set
      */
     public void setJobPath(String jobPath) {
@@ -94,7 +94,7 @@ public class JobDeploymentInfo {
 
     /**
      * Getter for jobPurposeDescription.
-     * 
+     *
      * @return the jobPurposeDescription
      */
     public String getJobPurposeDescription() {
@@ -103,7 +103,7 @@ public class JobDeploymentInfo {
 
     /**
      * Sets the jobPurposeDescription.
-     * 
+     *
      * @param jobPurposeDescription the jobPurposeDescription to set
      */
     public void setJobPurposeDescription(String jobPurposeDescription) {
@@ -112,7 +112,7 @@ public class JobDeploymentInfo {
 
     /**
      * Getter for descValue.
-     * 
+     *
      * @return the descValue
      */
     public String getDescValue() {
@@ -121,14 +121,14 @@ public class JobDeploymentInfo {
 
     /**
      * Sets the descValue.
-     * 
+     *
      * @param descValue the descValue to set
      */
     public void setDescValue(String descValue) {
         this.descValue = descValue;
     }
 
-    
+
     /**
      * Getter for resourceList.
      * @return the resourceList

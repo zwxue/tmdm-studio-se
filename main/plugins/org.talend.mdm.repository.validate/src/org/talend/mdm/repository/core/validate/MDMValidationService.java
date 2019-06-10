@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -33,7 +33,7 @@ import org.talend.mdm.repository.core.validate.impl.ImmediateValidationPreferenc
 
 /**
  * created by HHB on 2013-1-24 Detailled comment
- * 
+ *
  */
 public class MDMValidationService implements IModelValidationService {
 
@@ -68,7 +68,7 @@ public class MDMValidationService implements IModelValidationService {
 
         /**
          * Sets the selectedButton.
-         * 
+         *
          * @param selectedButton the selectedButton to set
          */
         @Override
@@ -82,7 +82,7 @@ public class MDMValidationService implements IModelValidationService {
 
         /*
          * (non-Javadoc)
-         * 
+         *
          * @see org.talend.mdm.repository.core.service.IModelValidationService.IModelValidateResult#hasErrOrWarning()
          */
         @Override
@@ -170,7 +170,7 @@ public class MDMValidationService implements IModelValidationService {
 
         /*
          * (non-Javadoc)
-         * 
+         *
          * @see
          * org.talend.mdm.repository.core.service.IModelValidationService.IModelValidateResult#getInValidObjects(int)
          */
@@ -199,7 +199,7 @@ public class MDMValidationService implements IModelValidationService {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.talend.mdm.repository.core.service.IValidationService#validate(java.util.List, int)
      */
     @Override

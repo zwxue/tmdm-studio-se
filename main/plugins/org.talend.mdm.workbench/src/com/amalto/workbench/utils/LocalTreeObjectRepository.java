@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -658,7 +658,7 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
     private String transformForXPath(String username) {
         return username.replace("@", "."); //$NON-NLS-1$ //$NON-NLS-2$
     }
-    
+
     private void checkUpAllCategoryForModel(TreeParent model) {
         if (model.getServerRoot() == null) {
             return;

@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -113,7 +113,7 @@ public class CommonMdmImportHandler extends ImportRepTypeHandler implements IImp
         // update cache
         ContainerCacheService.put(object);
     }
-    
+
     @Override
     public void postImport(IProgressMonitor monitor, ResourcesManager resManager, ImportItem[] importedItemRecords) {
         if(importedItemRecords.length > 0) {
@@ -125,16 +125,16 @@ public class CommonMdmImportHandler extends ImportRepTypeHandler implements IImp
                         viewObjs.add(viewObj);
                     }
                 }
-                
+
                 if(!viewObjs.isEmpty()) {
                     Job validationJob = new Job("Do Validation") { //$NON-NLS-1$
-                        
+
                         @Override
                         protected IStatus run(IProgressMonitor monitor) {
                             IModelValidationService service = (IModelValidationService) GlobalServiceRegister.getDefault()
                                     .getService(IModelValidationService.class);
                             service.validate(viewObjs, IModelValidationService.VALIDATE_IMMEDIATE, true);
-                            
+
                             return Status.OK_STATUS;
                         }
                     };
@@ -143,11 +143,11 @@ public class CommonMdmImportHandler extends ImportRepTypeHandler implements IImp
             }
         }
     }
-    
+
     public boolean todoValidate(ImportItem item) {
         return false;
     }
-    
+
     /////////////////////////
     @Override
     public void prePopulate(IProgressMonitor monitor, ResourcesManager resManager) {

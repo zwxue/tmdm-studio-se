@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -48,7 +48,7 @@ import com.amalto.workbench.image.ImageCache;
 
 /**
  * created by HHB on 2013-4-1 Detailled comment
- * 
+ *
  */
 public class DeployStatusDialog extends MultiStatusDialog {
 
@@ -56,7 +56,7 @@ public class DeployStatusDialog extends MultiStatusDialog {
 
     /**
      * DOC HHB DeployStatusDialog constructor comment.
-     * 
+     *
      * @param parentShell
      * @param message
      * @param mutliStatus
@@ -67,7 +67,7 @@ public class DeployStatusDialog extends MultiStatusDialog {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.talend.mdm.repository.ui.dialogs.message.MultiStatusDialog#getMessage()
      */
 
@@ -86,7 +86,7 @@ public class DeployStatusDialog extends MultiStatusDialog {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * org.talend.mdm.repository.ui.dialogs.message.MultiStatusDialog#getStatusLabel(org.eclipse.core.runtime.IStatus)
      */
@@ -104,7 +104,7 @@ public class DeployStatusDialog extends MultiStatusDialog {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.talend.mdm.repository.ui.dialogs.message.MultiStatusDialog#initInput()
      */
     @Override
@@ -148,7 +148,7 @@ public class DeployStatusDialog extends MultiStatusDialog {
 
     /**
      * DOC HHB Comment method "getSummary".
-     * 
+     *
      * @param status
      * @return int[ok,error,cancel]
      */
@@ -266,7 +266,7 @@ public class DeployStatusDialog extends MultiStatusDialog {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.talend.mdm.repository.ui.dialogs.message.MultiStatusDialog#needShowBottomMessage()
      */
     @Override
@@ -276,7 +276,7 @@ public class DeployStatusDialog extends MultiStatusDialog {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.talend.mdm.repository.ui.dialogs.message.MultiStatusDialog#getBottomMessage()
      */
     @Override

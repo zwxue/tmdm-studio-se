@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -33,29 +33,29 @@ public class JobOptionsDialog extends Dialog {
 	private Button btnIntegrated;
 
 	private Button btnContext;
-	
+
 	private Button btnEmbedded;
-	
+
 	private Button btnWebService;
-	
+
 	private Group grpRecord;
-	
+
 	private Group grpExecution;
 
 	private Parameter parameter = Parameter.INTEGRATED;
 
 	private Execution execution = Execution.EMBEDDED;
-	
+
 	public static enum Parameter {
 		INTEGRATED,
 		CONTEXT_VARIABLE
 	}
-	
+
 	public static enum Execution {
 		EMBEDDED,
 		WEB_SERVICE
 	}
-	
+
 	public JobOptionsDialog(Shell parentShell, String title, Execution execution) {
 		super(parentShell);
 		this.execution = execution;
@@ -93,7 +93,7 @@ public class JobOptionsDialog extends Dialog {
 				parameter = Parameter.CONTEXT_VARIABLE;
 			}
 		});
-		
+
 		grpExecution = new Group(composite, SWT.NONE);
 		grpExecution.setLayoutData(new GridData(SWT.FILL, SWT.CENTER,
 				true, true, 1, 1));
@@ -101,7 +101,7 @@ public class JobOptionsDialog extends Dialog {
 		grpExecution.setLayout(new GridLayout(1, false));
 		btnEmbedded = new Button(grpExecution, SWT.RADIO);
 		btnEmbedded.setSize(191, 24);
-		
+
 		btnEmbedded.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -124,7 +124,7 @@ public class JobOptionsDialog extends Dialog {
 
 		// Initial value display
 		doUpdate();
-		
+
 		return composite;
 	}
 
@@ -133,22 +133,22 @@ public class JobOptionsDialog extends Dialog {
 			btnIntegrated.setEnabled(false);
 			btnIntegrated.setSelection(false);
 			btnContext.setSelection(true);
-			
+
 			// When web service is selected, only allowed value for execution is "context"
 			parameter = Parameter.CONTEXT_VARIABLE;
 		}
-		
+
 		if(execution == Execution.EMBEDDED) {
 			btnIntegrated.setEnabled(true);
 		}
-		
+
 		btnIntegrated.setSelection(parameter == Parameter.INTEGRATED);
 		btnContext.setSelection(parameter == Parameter.CONTEXT_VARIABLE);
-		
+
 		btnEmbedded.setSelection(execution == Execution.EMBEDDED);
 		btnWebService.setSelection(execution == Execution.WEB_SERVICE);
 	}
-	
+
 	protected void configureShell(Shell shell) {
 		super.configureShell(shell);
 		if (title != null) {
@@ -168,7 +168,7 @@ public class JobOptionsDialog extends Dialog {
 	public Parameter getParameter() {
 		return parameter;
 	}
-	
+
 	public Execution getExecution() {
 		return execution;
 	}

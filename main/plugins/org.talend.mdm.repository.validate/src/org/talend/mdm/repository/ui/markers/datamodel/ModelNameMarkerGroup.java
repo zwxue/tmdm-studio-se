@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -26,14 +26,14 @@ import org.talend.mdm.repository.core.validate.i18n.Messages;
 
 /**
  * created by HHB on 2013-1-25 Detailled comment
- * 
+ *
  */
 public class ModelNameMarkerGroup extends MarkerGroup {
 
     protected static final String BLANK = ""; //$NON-NLS-1$
 
     /**
-     * 
+     *
      */
     public static final String ID = "org.talend.mdm.error.datamodel.groupby.model"; //$NON-NLS-1$
 
@@ -67,7 +67,7 @@ public class ModelNameMarkerGroup extends MarkerGroup {
 
         /*
          * (non-Javadoc)
-         * 
+         *
          * @see org.eclipse.ui.views.markers.internal.MarkerGroup.GroupMarkerField#compare(org.eclipse.ui.views.markers.
          * MarkerItem, org.eclipse.ui.views.markers.MarkerItem)
          */
@@ -112,7 +112,7 @@ public class ModelNameMarkerGroup extends MarkerGroup {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.eclipse.ui.views.markers.internal.MarkerGroup#getId()
      */
     @Override
@@ -122,7 +122,7 @@ public class ModelNameMarkerGroup extends MarkerGroup {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.eclipse.ui.views.markers.internal.MarkerGroup#getTitle()
      */
     @Override
@@ -132,7 +132,7 @@ public class ModelNameMarkerGroup extends MarkerGroup {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.eclipse.ui.views.markers.internal.MarkerGroup#getEntriesComparator()
      */
     @Override

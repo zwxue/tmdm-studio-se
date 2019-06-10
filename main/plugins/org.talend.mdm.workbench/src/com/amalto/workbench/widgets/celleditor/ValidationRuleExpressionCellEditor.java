@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -26,7 +26,7 @@ public class ValidationRuleExpressionCellEditor extends EditableDialogCellEditor
     // Modified by hbhong,to fix bug 21784|Add a TreeParent parameter to constructor
     protected   TreeParent treeParent;
 
-    
+
     public void setTreeParent(TreeParent treeParent) {
         this.treeParent = treeParent;
     }
@@ -39,7 +39,7 @@ public class ValidationRuleExpressionCellEditor extends EditableDialogCellEditor
 
     @Override
     protected Object openDialogBox(Control cellEditorWindow) {
-        
+
         ValidationRuleExcpressDialog dialog = new ValidationRuleExcpressDialog(cellEditorWindow.getShell(),treeParent,
                 Messages.ValidationRuleXX_DialogTitle, getValue() == null ? "" : getValue().toString(), conceptName, false, true); //$NON-NLS-1$
 
@@ -51,6 +51,6 @@ public class ValidationRuleExpressionCellEditor extends EditableDialogCellEditor
     // The ending| bug:21784
 
     public void setConceptName(String conceptName) {
-        this.conceptName = conceptName;        
+        this.conceptName = conceptName;
     }
 }

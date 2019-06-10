@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -54,7 +54,7 @@ import org.talend.repository.ProjectManager;
 
 /**
  * created by HHB on 2013-1-23 Detailled comment
- * 
+ *
  */
 public class MDMValidationRunner implements ICoreRunnable {
 
@@ -74,7 +74,7 @@ public class MDMValidationRunner implements ICoreRunnable {
 
     /**
      * Sets the validateResult.
-     * 
+     *
      * @param validateResult the validateResult to set
      */
     private void setValidateResult(IModelValidateResult validateResult) {
@@ -87,7 +87,7 @@ public class MDMValidationRunner implements ICoreRunnable {
 
     /**
      * Getter for returnCode.
-     * 
+     *
      * @return the returnCode
      */
     public int getReturnCode() {
@@ -96,7 +96,7 @@ public class MDMValidationRunner implements ICoreRunnable {
 
     /**
      * Sets the returnCode.
-     * 
+     *
      * @param returnCode the returnCode to set
      */
     private void setReturnCode(int returnCode) {
@@ -105,9 +105,9 @@ public class MDMValidationRunner implements ICoreRunnable {
 
     /**
      * DOC HHB ValidationRunner constructor comment.
-     * 
+     *
      * @param allowShowResultDialog
-     * 
+     *
      * @param name
      */
     public MDMValidationRunner(List<IRepositoryViewObject> viewObjs, IValidationPreference validationPref,
@@ -175,7 +175,7 @@ public class MDMValidationRunner implements ICoreRunnable {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.eclipse.core.resources.WorkspaceJob#runInWorkspace(org.eclipse.core.runtime.IProgressMonitor)
      */
     @SuppressWarnings({ "restriction", "hiding" })

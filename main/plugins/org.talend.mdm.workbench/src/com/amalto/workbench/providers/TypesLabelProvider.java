@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -141,9 +141,9 @@ public class TypesLabelProvider extends LabelProvider {
 
         /*
          * if (obj instanceof XSDComplexTypeDefinition) {
-         * 
+         *
          * XSDComplexTypeDefinition ctd = (XSDComplexTypeDefinition)obj;
-         * 
+         *
          * if (ctd.getContent()==null) { if (ctd.getDerivationMethod().equals(XSDDerivationMethod.EXTENSION_LITERAL)) {
          * return "ext ["+ctd.getBaseTypeDefinition().getName()+"]["+ctd.getBaseTypeDefinition()+"]"; } else { return
          * "res ["+ctd.getBaseTypeDefinition().getName()+"]["+ctd.getBaseTypeDefinition()+"]"; } } else { String name =
@@ -476,7 +476,7 @@ public class TypesLabelProvider extends LabelProvider {
 
     /**
      * Print a simple type definition for the document.
-     * 
+     *
      * @param xsdSimpleTypeDefinition a simple type definition in the schema for schema.
      */
     public String getSimpleTypeDefinition(XSDSimpleTypeDefinition xsdSimpleTypeDefinition) {

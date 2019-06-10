@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -33,16 +33,16 @@ public abstract class XSDComponentSection extends CommitBarListenerSection<XSDCo
     protected void initUIContents(XSDComponent editedObj) {
         curXSDComponent = editedObj;
     }
-    
+
     protected String getEntityName(){
     	String entity= getEntity(curXSDComponent);
     	return entity;
     }
-    
+
     private String getEntity(XSDConcreteComponent com){
     	if(com==null) return null;
     	if(com.getContainer() instanceof XSDSchema && com instanceof XSDElementDeclaration){
-    		return ((XSDElementDeclaration)com).getName();   		
+    		return ((XSDElementDeclaration)com).getName();
     	}else{
     		return getEntity(com.getContainer());
     	}

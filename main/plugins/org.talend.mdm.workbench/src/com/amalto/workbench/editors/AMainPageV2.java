@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -111,31 +111,31 @@ public abstract class AMainPageV2 extends AFormPage implements ModifyListener, O
         try {
             /*
              * FormToolkit toolkit = managedForm.getToolkit();
-             * 
+             *
              * final ScrolledForm form = managedForm.getForm(); TableWrapLayout formLayout = new TableWrapLayout();
              * form.getBody().setLayout(formLayout);
-             * 
+             *
              * formLayout.numColumns = 1;
-             * 
+             *
              * //create the FormPart firstSectionPart = new SectionPart( form.getBody(), toolkit,
              * Section.DESCRIPTION|ExpandableComposite.TWISTIE|ExpandableComposite.EXPANDED ) ;
              * managedForm.addPart(firstSectionPart);
-             * 
+             *
              * //Layout the components Section firstSection = firstSectionPart.getSection();
              * firstSection.setText("Characteristics"); firstSection.setLayoutData( new
              * TableWrapData(TableWrapData.FILL_GRAB) );
-             * 
+             *
              * firstSection.addExpansionListener(new ExpansionAdapter() { public void
              * expansionStateChanged(ExpansionEvent e) { form.reflow(true); } });
              * firstSection.setDescription("The main characteristics"); firstSection.setLayout(new GridLayout(1,false));
-             * 
+             *
              * toolkit.createCompositeSeparator(firstSection);
-             * 
-             * 
+             *
+             *
              * Composite charComposite = toolkit.createComposite(firstSection); charComposite.setLayoutData( new
              * GridData(SWT.FILL,SWT.FILL,true,true,1,1) ); GridLayout charLayout = new GridLayout(2,false);
              * charComposite.setLayout(charLayout);
-             * 
+             *
              * firstSection.setClient(charComposite);
              */
             ScrolledForm form = managedForm.getForm();
@@ -183,7 +183,7 @@ public abstract class AMainPageV2 extends AFormPage implements ModifyListener, O
 
     /**
      * The composite containing the actual characteristics form By default its layout is GridLayout of 2 columns
-     * 
+     *
      * @param charSection
      */
     protected abstract void createCharacteristicsContent(FormToolkit toolkit, Composite charSection);

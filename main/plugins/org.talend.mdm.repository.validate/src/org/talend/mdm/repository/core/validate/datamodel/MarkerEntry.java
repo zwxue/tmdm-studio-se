@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -17,7 +17,7 @@ import org.eclipse.ui.views.markers.MarkerItem;
 
 /**
  * created by Huang Zhenlong on Jan 28, 2013 Detailled comment
- * 
+ *
  */
 public class MarkerEntry extends MarkerItem {
 
@@ -29,7 +29,7 @@ public class MarkerEntry extends MarkerItem {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.eclipse.ui.views.markers.MarkerItem#getAttributeValue(java.lang.String, boolean)
      */
     @Override
@@ -39,7 +39,7 @@ public class MarkerEntry extends MarkerItem {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.eclipse.ui.views.markers.MarkerItem#getAttributeValue(java.lang.String, int)
      */
     @Override
@@ -49,7 +49,7 @@ public class MarkerEntry extends MarkerItem {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.eclipse.ui.views.markers.MarkerItem#getAttributeValue(java.lang.String, java.lang.String)
      */
     @Override
@@ -59,7 +59,7 @@ public class MarkerEntry extends MarkerItem {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.eclipse.ui.views.markers.MarkerItem#getPath()
      */
     @Override
@@ -69,7 +69,7 @@ public class MarkerEntry extends MarkerItem {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.eclipse.ui.views.markers.MarkerItem#getMarker()
      */
     @Override

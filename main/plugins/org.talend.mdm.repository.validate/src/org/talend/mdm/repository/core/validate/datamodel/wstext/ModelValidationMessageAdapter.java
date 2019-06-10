@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -18,7 +18,7 @@ import org.w3c.dom.Element;
 
 /**
  * created by HHB on 2013-1-29 Detailled comment
- * 
+ *
  */
 public class ModelValidationMessageAdapter extends ValidationMessage {
 
@@ -26,7 +26,7 @@ public class ModelValidationMessageAdapter extends ValidationMessage {
 
     /**
      * Getter for msgGroup.
-     * 
+     *
      * @return the msgGroup
      */
     public int getMsgGroup() {
@@ -35,7 +35,7 @@ public class ModelValidationMessageAdapter extends ValidationMessage {
 
     /**
      * Getter for path.
-     * 
+     *
      * @return the path
      */
     public String getPath() {
@@ -50,7 +50,7 @@ public class ModelValidationMessageAdapter extends ValidationMessage {
 
     /**
      * Getter for dataModelName.
-     * 
+     *
      * @return the dataModelName
      */
     public String getDataModelName() {
@@ -59,7 +59,7 @@ public class ModelValidationMessageAdapter extends ValidationMessage {
 
     /**
      * Getter for domElement.
-     * 
+     *
      * @return the domElement
      */
     public Element getDomElement() {
@@ -68,7 +68,7 @@ public class ModelValidationMessageAdapter extends ValidationMessage {
 
     /**
      * Getter for entityName.
-     * 
+     *
      * @return the entityName
      */
     public String getEntityName() {
@@ -77,7 +77,7 @@ public class ModelValidationMessageAdapter extends ValidationMessage {
 
     /**
      * Getter for modelType.
-     * 
+     *
      * @return the modelType
      */
     public String getElementType() {

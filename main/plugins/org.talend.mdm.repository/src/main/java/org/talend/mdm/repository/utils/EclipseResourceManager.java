@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -47,7 +47,7 @@ public class EclipseResourceManager extends SWTResourceManager {
 
     /**
      * Returns an image descriptor stored in the file at the specified path relative to the specified class
-     * 
+     *
      * @param clazz Class The class relative to which to find the image descriptor
      * @param path String The path to the image file
      * @return ImageDescriptor The image descriptor stored in the file at the specified path
@@ -59,7 +59,7 @@ public class EclipseResourceManager extends SWTResourceManager {
 
     /**
      * Returns an image descriptor stored in the file at the specified path
-     * 
+     *
      * @param path String The path to the image file
      * @return ImageDescriptor The image descriptor stored in the file at the specified path
      */
@@ -74,7 +74,7 @@ public class EclipseResourceManager extends SWTResourceManager {
 
     /**
      * Returns an image based on the specified image descriptor
-     * 
+     *
      * @param descriptor ImageDescriptor The image descriptor for the image
      * @return Image The image based on the specified image descriptor
      */
@@ -113,7 +113,7 @@ public class EclipseResourceManager extends SWTResourceManager {
 
     /**
      * Retuns an image based on a plugin and file path
-     * 
+     *
      * @param plugin Object The plugin containing the image
      * @param name String The path to th eimage within the plugin
      * @return Image The image stored in the file at the specified path
@@ -144,7 +144,7 @@ public class EclipseResourceManager extends SWTResourceManager {
 
     /**
      * Retuns an image descriptor based on a plugin and file path
-     * 
+     *
      * @param plugin Object The plugin containing the image
      * @param name String The path to th eimage within the plugin
      * @return ImageDescriptor The image descriptor stored in the file at the specified path
@@ -165,7 +165,7 @@ public class EclipseResourceManager extends SWTResourceManager {
 
     /**
      * Retuns an URL based on a plugin and file path
-     * 
+     *
      * @param plugin Object The plugin containing the file path
      * @param name String The file path
      * @return URL The URL representing the file at the specified path
