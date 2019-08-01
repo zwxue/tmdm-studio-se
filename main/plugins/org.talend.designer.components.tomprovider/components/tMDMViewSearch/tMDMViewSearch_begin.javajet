@@ -170,19 +170,41 @@ if ((metadatas != null) && (metadatas.size() > 0)) {
                 java.util.List<org.talend.mdm.webservice.WSWhereItem> conditions_<%=cid %> = new java.util.ArrayList<org.talend.mdm.webservice.WSWhereItem>();
                 <%
                 boolean isOnlyOrPredicate=true;
-                for(int i=0; i < operations.size(); i++){
+                int operationSize = operations.size();
+                Boolean[] orPredicateArray = new Boolean[2];
+                int activeNumber = 0;
+                for(int i=0; i < operationSize; i++){
                     Map<String, String> map= operations.get(i);
+                    String activeValue = map.get("ACTIVE");
+                    String customActiveValue = map.get("CUSTOM_ACTIVE");
+                    Map<String, String> customActiveMap = new java.util.HashMap<String, String>();
+                    if(activeValue.equals("CUSTOM") && customActiveValue != null && !customActiveValue.equals("")){
+                        customActiveMap.put("customActiveValue", customActiveValue);
+                    } else {
+                        customActiveMap.put("customActiveValue", "\"false\"");
+                    }
                     String xpath=map.get("XPATH");
                     String operator=map.get("FUNCTION");
                     String value = map.get("VALUE");
                     String predicate = map.get("PREDICATE");
-                    if((i < operations.size()-1) && (!"OR".equals(predicate))){
+                    if((i < operationSize-1) && (!"OR".equals(predicate)) && ("TRUE".equals(activeValue) || ("CUSTOM".equals(activeValue) && "TRUE".equalsIgnoreCase(customActiveMap.get("customActiveValue"))))){
                         isOnlyOrPredicate = false;
+                        activeNumber++;
+                        if(i < 2){
+                            orPredicateArray[i] = isOnlyOrPredicate;
+                        }
+                    }
+                    if(activeNumber == 2 && i == operationSize-1 && !("TRUE".equals(activeValue) || ("CUSTOM".equals(activeValue) && "TRUE".equalsIgnoreCase(customActiveMap.get("customActiveValue"))))){
+                        if(orPredicateArray[0] == null && orPredicateArray[1] != null){
+                            isOnlyOrPredicate = true;
+                        }
                     }
                     %>
-                    wc_<%=cid %> =new org.talend.mdm.webservice.WSWhereCondition(<%=xpath %>,org.talend.mdm.webservice.WSWhereOperator.<%=operator %>, <%="EMPTY_NULL".equals(operator)? null:value %>, false, org.talend.mdm.webservice.WSStringPredicate.<%=predicate %>);
-                    org.talend.mdm.webservice.WSWhereItem wsItem_<%=i %>=new org.talend.mdm.webservice.WSWhereItem(null,wc_<%=cid %>,null);
-                    conditions_<%=cid %>.add(wsItem_<%=i %>);
+                    if("TRUE".equals("<%=activeValue %>") || ("CUSTOM".equals("<%=activeValue %>") && "TRUE".equalsIgnoreCase(<%=customActiveMap.get("customActiveValue") %>))){
+                      wc_<%=cid %> =new org.talend.mdm.webservice.WSWhereCondition(<%=xpath %>,org.talend.mdm.webservice.WSWhereOperator.<%=operator %>, <%="EMPTY_NULL".equals(operator)? null:value %>, false, org.talend.mdm.webservice.WSStringPredicate.<%=predicate %>);
+                      org.talend.mdm.webservice.WSWhereItem wsItem_<%=i %>=new org.talend.mdm.webservice.WSWhereItem(null,wc_<%=cid %>,null);
+                      conditions_<%=cid %>.add(wsItem_<%=i %>);
+                    }
                 <%
                 }//for
                 %>
