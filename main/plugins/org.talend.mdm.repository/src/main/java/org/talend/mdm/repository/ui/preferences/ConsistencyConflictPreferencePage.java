@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -29,7 +29,7 @@ import org.talend.mdm.repository.plugin.RepositoryPlugin;
 
 /**
  * created by HHB on 2013-7-25 Detailled comment
- * 
+ *
  */
 public class ConsistencyConflictPreferencePage extends PreferencePage implements IWorkbenchPreferencePage {
 
@@ -53,7 +53,7 @@ public class ConsistencyConflictPreferencePage extends PreferencePage implements
 
     /**
      * Create contents of the preference page.
-     * 
+     *
      * @param parent
      */
     @Override
@@ -110,7 +110,7 @@ public class ConsistencyConflictPreferencePage extends PreferencePage implements
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.eclipse.jface.preference.PreferencePage#performDefaults()
      */
     @Override

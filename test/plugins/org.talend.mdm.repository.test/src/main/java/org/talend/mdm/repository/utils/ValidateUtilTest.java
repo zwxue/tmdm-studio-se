@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -205,7 +205,7 @@ public class ValidateUtilTest {
         boolean match1 = ValidateUtil.matchRoleRegex(str + ss[0]);
 
         assertFalse(match1);
-        
+
         String[] sys_buf = buildSystemRole();
 
         for (String sysRole : sys_buf) {
@@ -226,7 +226,7 @@ public class ValidateUtilTest {
                 sys_like += random.nextInt(10);
             }
         }
-        
+
         StringBuffer syslike_buf = new StringBuffer();
         for (int i = 0; i < sys_like.length(); i++) {
             char charA = sys_like.charAt(i);

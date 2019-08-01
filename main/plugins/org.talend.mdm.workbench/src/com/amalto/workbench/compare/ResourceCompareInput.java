@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -15,7 +15,7 @@
  * Copyright (c) 2000, 2007 IBM Corporation and others. All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0 which accompanies this distribution, and is
  * available at http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors: IBM Corporation - initial API and implementation Matt McCutchen (hashproduct+eclipse@gmail.com) - Bug
  * 35390 Three-way compare cannot select (mis-selects) )ancestor resource
  *******************************************************************************/

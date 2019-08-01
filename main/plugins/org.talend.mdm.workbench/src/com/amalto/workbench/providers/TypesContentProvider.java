@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -193,13 +193,13 @@ public class TypesContentProvider implements IStructuredContentProvider, ITreeCo
 
         /*
          * if (parent instanceof XSDElementDeclaration) { ArrayList<Object> list = new ArrayList<Object>();
-         * 
+         *
          * //handle extensions and retrictions directly XSDTypeDefinition typeDefinition =
          * ((XSDElementDeclaration)parent).getTypeDefinition(); if (typeDefinition instanceof XSDComplexTypeDefinition)
          * { XSDComplexTypeDefinition complexTypeDefinition = (XSDComplexTypeDefinition) typeDefinition; if
          * (complexTypeDefinition.getContent() == null) list.add(complexTypeDefinition.getBaseTypeDefinition()); else
          * list.add(complexTypeDefinition); } else { list.add(((XSDElementDeclaration)parent).getTypeDefinition()); }
-         * 
+         *
          * list.addAll(((XSDElementDeclaration)parent).getIdentityConstraintDefinitions()); return list.toArray(new
          * Object[list.size()]); }
          */

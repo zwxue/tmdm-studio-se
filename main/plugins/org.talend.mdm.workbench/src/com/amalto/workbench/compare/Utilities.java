@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -15,7 +15,7 @@
  * Copyright (c) 2000, 2008 IBM Corporation and others. All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0 which accompanies this distribution, and is
  * available at http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors: IBM Corporation - initial API and implementation
  *******************************************************************************/
 
@@ -359,15 +359,15 @@ public class Utilities {
      * public static boolean isSelectionNonOverlapping() throws TeamException { IResource[] resources =
      * getSelectedResources(); // allow operation for non-overlapping resource selections if(resources.length>0) { List
      * validPaths = new ArrayList(2); for (int i = 0; i < resources.length; i++) { IResource resource = resources[i];
-     * 
+     *
      * // only allow cvs resources to be selected if(RepositoryProvider.getProvider(resource.getProject(),
      * CVSProviderPlugin.getTypeId()) == null) { return false; }
-     * 
+     *
      * // check if this resource overlaps other selections IPath resourceFullPath = resource.getFullPath();
      * if(!validPaths.isEmpty()) { for (Iterator it = validPaths.iterator(); it.hasNext();) { IPath path = (IPath)
      * it.next(); if(path.isPrefixOf(resourceFullPath) || resourceFullPath.isPrefixOf(path)) { return false; } } }
      * validPaths.add(resourceFullPath);
-     * 
+     *
      * // ensure that resources are managed ICVSResource cvsResource = CVSWorkspaceRoot.getCVSResourceFor(resource);
      * if(cvsResource.isFolder()) { if( ! ((ICVSFolder)cvsResource).isCVSFolder()) return false; } else { if( !
      * cvsResource.isManaged()) return false; } } return true; } return false; }
@@ -507,7 +507,7 @@ public class Utilities {
     /**
      * Return whether either the left or right sides of the given input represents a hunk. A hunk is a portion of a
      * file.
-     * 
+     *
      * @param input the compare input
      * @return whether the left or right side of the input represents a hunk
      */

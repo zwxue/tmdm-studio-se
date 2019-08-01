@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -72,7 +72,7 @@ import com.amalto.workbench.service.IWebServiceHook;
 /**
  * created by HHB on 2013-6-27 This tool class wrap DefaultHttpClient to provide some methods for other class,for
  * example uploading,downloading,wrap ssl, and so on.
- * 
+ *
  */
 public class HttpClientUtil {
 
@@ -481,7 +481,7 @@ public class HttpClientUtil {
     public static String invokeCreateTDSCampaignService(String protocol, String host, String port, String contextPath,
             String username, String password, String modelName) throws XtentisException {
         try {
-            String url = protocol + host + ":" + port + contextPath + "/services/rest/tds/setup?model=" + modelName; //$NON-NLS-1$ //$NON-NLS-2$ 
+            String url = protocol + host + ":" + port + contextPath + "/services/rest/tds/setup?model=" + modelName; //$NON-NLS-1$ //$NON-NLS-2$
 
             DefaultHttpClient httpClient = wrapAuthClient(url, username, password);
 

@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -89,7 +89,7 @@ public class DeployService {
 
         /**
          * DOC hbhong DeployStatus constructor comment.
-         * 
+         *
          * @param severity
          * @param pluginId
          * @param message
@@ -317,7 +317,7 @@ public class DeployService {
 
     /**
      * work for updater server operation.
-     * 
+     *
      * @param serverDef
      * @param viewObjs
      * @param selectededCommands
@@ -338,7 +338,7 @@ public class DeployService {
     }
 
     public IModelValidateResult validateModel(List<IRepositoryViewObject> viewObjs) {
-        IModelValidationService service = (IModelValidationService) GlobalServiceRegister.getDefault().getService(
+        IModelValidationService service = GlobalServiceRegister.getDefault().getService(
                 IModelValidationService.class);
 
         IModelValidateResult validateResult = service.validate(viewObjs, IModelValidationService.VALIDATE_BEFORE_DEPLOY, false);
@@ -480,6 +480,7 @@ public class DeployService {
     }
 
     public IStatus runCommands(List<AbstractDeployCommand> commands, MDMServerDef serverDef) {
+        filterInvalidCommands(commands);
         reorderCommandObjects(commands);
 
         CommandManager manager = CommandManager.getInstance();
@@ -502,6 +503,18 @@ public class DeployService {
 
         }
         return Status.CANCEL_STATUS;
+    }
+
+    private void filterInvalidCommands(List<AbstractDeployCommand> commands) {
+        if (commands != null) {
+            Iterator<AbstractDeployCommand> iterator = commands.iterator();
+            while (iterator.hasNext()) {
+                AbstractDeployCommand cmd = iterator.next();
+                if (cmd.getViewObject() == null) {
+                    iterator.remove();
+                }
+            }
+        }
     }
 
     private void reorderCommandObjects(List<AbstractDeployCommand> commands) {

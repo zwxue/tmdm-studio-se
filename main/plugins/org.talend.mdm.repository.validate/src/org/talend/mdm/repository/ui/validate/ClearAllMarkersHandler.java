@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -26,7 +26,7 @@ import org.talend.repository.ProjectManager;
 
 /**
  * created by HHB on 2013-1-31 Detailled comment
- * 
+ *
  */
 public class ClearAllMarkersHandler extends MarkerViewHandler {
 
@@ -34,7 +34,7 @@ public class ClearAllMarkersHandler extends MarkerViewHandler {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.eclipse.core.commands.IHandler#execute(org.eclipse.core.commands.ExecutionEvent)
      */
     @Override

@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -65,7 +65,7 @@ public class LanguageInfoComposite extends Composite {
 
 	private List<LanguageInfo> infos = new ArrayList<LanguageInfo>();
 	protected BasePropertySection section;
- 
+
 	public LanguageInfoComposite(Composite parent, int style,BasePropertySection section) {
 		super(parent, style);
 		this.section=section;
@@ -200,7 +200,7 @@ public class LanguageInfoComposite extends Composite {
 				new TextCellEditor(tvInfos.getTree()) });
 		LanguageInfoModifier modifier=new LanguageInfoModifier(tvInfos, infos,
 				allLanguages,section);
-		
+
 		tvInfos.setCellModifier(modifier);
 	}
 

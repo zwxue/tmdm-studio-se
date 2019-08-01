@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -24,21 +24,21 @@ public class MultilingualDescParser {
 
     /**
      * Parse a multiple language string.
-     * 
+     *
      * s is expected to be in the following format:
-     * 
+     *
      * [en:...][fr:...][zh:...]
-     * 
+     *
      * Characters ] and \ can be escaped in these using backslash escapes, for example
-     * 
+     *
      * [en: a message with a \] character in the middle]
-     * 
+     *
      * A message for a language can also be embedded anywhere in the string, for example
-     * 
+     *
      * abcd[en:...]abcd[fr:...]abcd
-     * 
+     *
      * The map between language code and message is stored in m.
-     * 
+     *
      * @param msg Multiple language message string to be parsed
      * @param msgMap Map between language codes and messages in which to store results
      */
@@ -130,7 +130,7 @@ public class MultilingualDescParser {
     /**
      * Encode multi-language message as a string using format [cc:mmm][cc:mmm] where cc is the language code and mmm is
      * the user specified message. ']' and '\' are automatically backslash escaped.
-     * 
+     *
      * @param msgMap Map between two letter language code and message in that language
      * @return Multi-language message encoded as a string, with ']' and '\' escaped
      */

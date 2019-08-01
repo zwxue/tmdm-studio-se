@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -67,7 +67,7 @@ public class DeployAllAction extends AbstractDeployAction {
     }
 
     @Override
-    protected void doRun() {
+    protected void _doRun() {
         boolean checkMissingJar = MissingJarService.getInstance().checkMissingJar(true);
         if (!checkMissingJar) {
             return;
@@ -150,8 +150,8 @@ public class DeployAllAction extends AbstractDeployAction {
                     }
                     // add canceled object to status
                     deployService.generateValidationFailedDeployStatus(status, invalidObjects);
-                    deployService.generateConsistencyCancelDeployStatus(status, consistencyCheckResult.getToSkipObjects()
-                            .toArray(new IRepositoryViewObject[0]));
+                    deployService.generateConsistencyCancelDeployStatus(status,
+                            consistencyCheckResult.getToSkipObjects().toArray(new IRepositoryViewObject[0]));
                     for (AbstractDeployCommand cmd : canceledCommandAfterImpactAnalysis) {
                         deployService.generateConsistencyCancelDeployStatus(status, cmd.getViewObject());
                     }
@@ -162,7 +162,7 @@ public class DeployAllAction extends AbstractDeployAction {
                     }
                     updateLastServer(status, new NullProgressMonitor());
                 } catch (Exception e) {
-                    String url = serverDef.getProtocol() + serverDef.getHost() + ":" + serverDef.getPort() //$NON-NLS-1$ 
+                    String url = serverDef.getProtocol() + serverDef.getHost() + ":" + serverDef.getPort() //$NON-NLS-1$
                             + serverDef.getPath();
                     String title = Messages.bind(Messages.Server_cannot_connected, url);
                     MessageDialog.openError(getShell(), title, Messages.AbstractDataClusterAction_ConnectFailed);

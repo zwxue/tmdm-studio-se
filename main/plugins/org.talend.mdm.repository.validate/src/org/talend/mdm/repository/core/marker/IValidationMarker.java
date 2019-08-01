@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -14,7 +14,7 @@ package org.talend.mdm.repository.core.marker;
 
 /**
  * created by HHB on 2013-1-31 Detailled comment
- * 
+ *
  */
 public interface IValidationMarker {
 
@@ -23,8 +23,8 @@ public interface IValidationMarker {
     public static final String MARKER_DATA_MODEL = "org.talend.mdm.error.datamodel.model"; //$NON-NLS-1$
 
     public static final String MARKER_XSD_ERR = "org.eclipse.xsd.diagnostic"; //$NON-NLS-1$
-    
+
     public static final String MARKER_VIEW = "org.talend.mdm.viewmarker"; //$NON-NLS-1$
-    
+
     public static final String MARKER_WORKFLOW = "org.talend.mdm.workflowmarker"; //$NON-NLS-1$
 }

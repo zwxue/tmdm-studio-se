@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -47,12 +47,12 @@ import com.amalto.workbench.service.IValidateService;
 import com.amalto.workbench.webservices.WSTransformerVariablesMapping;
 
 /**
- * 
+ *
  */
 public class GenerateJobTransformerAction extends AbstractRepositoryAction {
 
     /**
-     * 
+     *
      */
     private static final String PREFIX = "CallJob_"; //$NON-NLS-1$
 
@@ -67,7 +67,7 @@ public class GenerateJobTransformerAction extends AbstractRepositoryAction {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.talend.mdm.repository.core.AbstractRepositoryAction#getGroupName()
      */
     @Override
@@ -157,7 +157,7 @@ public class GenerateJobTransformerAction extends AbstractRepositoryAction {
             switch (executionParameter) {
             case CONTEXT_VARIABLE:
                 String itemstr = "<xsl:stylesheet xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\"  xmlns:mdm=\"java:com.amalto.core.plugin.base.xslt.MdmExtension\" version=\"1.0\"> <xsl:output method=\"xml\" indent=\"yes\" omit-xml-declaration=\"yes\" /> <xsl:template match=\"/\" priority=\"1\">\n" //$NON-NLS-1$
-                        + "<exchange> <report>\n <xsl:copy-of select=\"Update\"/> </report>  <item><xsl:copy-of select='mdm:getItemProjection(Update/RevisionID,Update/DataCluster,Update/Concept,Update/Key)'/></item></exchange> "//$NON-NLS-1$ 
+                        + "<exchange> <report>\n <xsl:copy-of select=\"Update\"/> </report>  <item><xsl:copy-of select='mdm:getItemProjection(Update/RevisionID,Update/DataCluster,Update/Concept,Update/Key)'/></item></exchange> "//$NON-NLS-1$
                         + "</xsl:template> </xsl:stylesheet>\n";//$NON-NLS-1$
 
                 WSTransformerProcessStepE steps1 = MdmserverobjectFactory.eINSTANCE.createWSTransformerProcessStepE();
@@ -197,10 +197,10 @@ public class GenerateJobTransformerAction extends AbstractRepositoryAction {
                 outputLine2.setPipelineVariable("decode_xml");//$NON-NLS-1$
                 outputLine2.setPluginVariable("codec_text");//$NON-NLS-1$
                 outItems2.add(outputLine2);
-                steps2.setPluginJNDI("amalto/local/transformer/plugin/codec");//$NON-NLS-1$ 
+                steps2.setPluginJNDI("amalto/local/transformer/plugin/codec");//$NON-NLS-1$
                 steps2.setDescription("Escape the item XML"); //$NON-NLS-1$
-                String parameter = "<parameters>\n" + "<method>DECODE</method>\n" + "<algorithm>XMLESCAPE</algorithm>\n"//$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ 
-                        + "</parameters>\n";//$NON-NLS-1$ 
+                String parameter = "<parameters>\n" + "<method>DECODE</method>\n" + "<algorithm>XMLESCAPE</algorithm>\n"//$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+                        + "</parameters>\n";//$NON-NLS-1$
 
                 steps2.setParameters(parameter);
                 steps2.getInputMappings().addAll(inItems2);
@@ -222,22 +222,22 @@ public class GenerateJobTransformerAction extends AbstractRepositoryAction {
                 outputLine3.setPipelineVariable("output");//$NON-NLS-1$
                 outputLine3.setPluginVariable("result");//$NON-NLS-1$
                 outItems3.add(outputLine3);
-                steps3.setPluginJNDI("amalto/local/transformer/plugin/callJob");//$NON-NLS-1$ 
+                steps3.setPluginJNDI("amalto/local/transformer/plugin/callJob");//$NON-NLS-1$
                 steps3.setDescription("Invoke the job"); //$NON-NLS-1$
 
                 input = new WSTransformerVariablesMapping[1];
-                input[0] = new WSTransformerVariablesMapping(null, "_DEFAULT_", "xml");//$NON-NLS-1$ //$NON-NLS-2$ 
+                input[0] = new WSTransformerVariablesMapping(null, "_DEFAULT_", "xml");//$NON-NLS-1$ //$NON-NLS-2$
                 output = new WSTransformerVariablesMapping[1];
-                output[0] = new WSTransformerVariablesMapping(null, "item_xml", "text");//$NON-NLS-1$ //$NON-NLS-2$ 
+                output[0] = new WSTransformerVariablesMapping(null, "item_xml", "text");//$NON-NLS-1$ //$NON-NLS-2$
 
                 steps3.setParameters(parameter);
                 steps3.getInputMappings().addAll(inItems3);
                 steps3.getOutputMappings().addAll(outItems3);
                 steps3.setDisabled(false);
 
-                parameter = "<configuration>\n" + "<url>" + url + "</url>\n" + "<contextParam>\n"//$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ 
-                        + "<name>xmlInput</name>\n" + "<value>{decode_xml}</value>\n" + "</contextParam>\n"//$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ 
-                        + "</configuration>\n";//$NON-NLS-1$ 
+                parameter = "<configuration>\n" + "<url>" + url + "</url>\n" + "<contextParam>\n"//$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+                        + "<name>xmlInput</name>\n" + "<value>{decode_xml}</value>\n" + "</contextParam>\n"//$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+                        + "</configuration>\n";//$NON-NLS-1$
                 steps3.setParameters(parameter);
 
                 steps.add(steps1);
@@ -261,7 +261,7 @@ public class GenerateJobTransformerAction extends AbstractRepositoryAction {
                 step1.setPluginJNDI("amalto/local/transformer/plugin/callJob"); //$NON-NLS-1$
                 step1.setDescription("Invoke the job"); //$NON-NLS-1$
                 step1.setParameters("<configuration>\n" + "<url>" + url + "</url>\n" //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-                        + "</configuration>\n"); //$NON-NLS-1$ 
+                        + "</configuration>\n"); //$NON-NLS-1$
                 step1.getInputMappings().addAll(inItems);
                 step1.getOutputMappings().addAll(outItems);
                 step1.setDisabled(false);
@@ -295,7 +295,7 @@ public class GenerateJobTransformerAction extends AbstractRepositoryAction {
 
     /**
      * DOC jsxie Comment method "AttachToProcessView".
-     * 
+     *
      * @param filename
      * @param transformer
      */

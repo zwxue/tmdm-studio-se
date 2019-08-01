@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -28,7 +28,7 @@ public interface IAvailableModel {
 
     /**
      * add treeobjects when refresh the serverroot treenode
-     * 
+     *
      * @param service
      * @param monitor
      * @param serverRoot
@@ -39,7 +39,7 @@ public interface IAvailableModel {
 
     /**
      * Fill the context menu when right click the object in the server tree
-     * 
+     *
      * @param xobject
      * @param manager
      */
@@ -47,28 +47,28 @@ public interface IAvailableModel {
 
     /**
      * XObjectBrowser to add page
-     * 
+     *
      * @param editor
      */
     void addPage(TreeObject xobject, XObjectBrowser editor);
 
     /**
      * XObjectEditor to add page
-     * 
+     *
      * @param editor
      */
     void addPage(TreeObject xobject, XObjectEditor editor);
 
     /**
      * Browse datacluster menuAboutToShow
-     * 
+     *
      * @param manager
      */
     void menuAboutToShow(IMenuManager manager, DataClusterBrowserMainPage page);
 
     /**
      * Fill the context menu when right click the object in the datamodel tree
-     * 
+     *
      * @param obj
      * @param manager
      */
@@ -76,7 +76,7 @@ public interface IAvailableModel {
 
     /**
      * double click on the element of datamodel tree
-     * 
+     *
      * @param type
      * @param page
      * @param dataModelName
@@ -85,7 +85,7 @@ public interface IAvailableModel {
 
     /**
      * Import the object that was exported
-     * 
+     *
      * @param obj
      * @param filename
      * @return

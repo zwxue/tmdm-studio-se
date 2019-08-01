@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -41,9 +41,9 @@ import com.amalto.workbench.image.ImageCache;
 /**
  * This class is meant to work out a composite populated with label, button, text which stand next to each other the
  * composite will in the parent composite holder
- * 
+ *
  * @author fliu
- * 
+ *
  */
 
 public class DescAnnotationComposite implements SelectionListener {

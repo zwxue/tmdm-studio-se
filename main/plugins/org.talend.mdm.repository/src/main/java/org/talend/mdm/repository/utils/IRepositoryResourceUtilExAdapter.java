@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -20,7 +20,7 @@ import com.amalto.workbench.exadapter.IExAdapter;
 
 /**
  * created by HHB on 2014-1-13 Detailled comment
- * 
+ *
  */
 public interface IRepositoryResourceUtilExAdapter extends IExAdapter<RepositoryResourceUtil> {
 
@@ -29,7 +29,7 @@ public interface IRepositoryResourceUtilExAdapter extends IExAdapter<RepositoryR
     /**
      * This method is only defined for importing workflow.<br><br>
      * It relys on implementation of IProcessService to get config file name with file extension, which config file name is stored during workflow migration.<br>
-     * 
+     *
      * <b>Runtime Exception</b> will be thrown when IProcessService implementation is not registered.<br>
      * <b>Null</b> will be returned when there is no config file recorded during migration.
      */

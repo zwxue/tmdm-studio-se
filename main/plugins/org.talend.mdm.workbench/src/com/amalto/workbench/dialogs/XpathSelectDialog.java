@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -90,7 +90,7 @@ public class XpathSelectDialog extends Dialog {
     protected Text xpathText;
 
     private Text filterText;
-    
+
     private boolean keepFilterContent;
 
     protected Button add;
@@ -99,7 +99,7 @@ public class XpathSelectDialog extends Dialog {
 
     // TODO:check This two static String and there related static methods may cause some problems.
     public String dataModelName;
-    
+
     protected boolean keepOneDatamodel;
 
     private String xpath = "";//$NON-NLS-1$
@@ -442,7 +442,7 @@ public class XpathSelectDialog extends Dialog {
     public void setConceptName(String conceptName) {
         this.conceptName = conceptName;
     }
-    
+
     public void setKeepFilterContent(boolean keepFilterContent) {
         this.keepFilterContent = keepFilterContent;
     }

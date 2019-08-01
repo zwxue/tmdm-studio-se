@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -26,9 +26,9 @@ import com.amalto.workbench.i18n.Messages;
 
 /**
  * DOC qian class global comment. A global service register provides the service registration and acquirement. <br/>
- * 
+ *
  * $Id: talend-code-templates.xml 1 2006-09-29 17:06:40 +0000 () nrousseau $
- * 
+ *
  */
 public class GlobalServiceRegister {
 
@@ -52,7 +52,7 @@ public class GlobalServiceRegister {
 
     /**
      * DOC qian Comment method "getService".Gets the specific IService.
-     * 
+     *
      * @param klass the Service type you want to get
      * @return IService IService
      */
@@ -70,7 +70,7 @@ public class GlobalServiceRegister {
 
     /**
      * DOC qian Comment method "findService".Finds the specific service from the list.
-     * 
+     *
      * @param klass the interface type want to find.
      * @return IService
      */

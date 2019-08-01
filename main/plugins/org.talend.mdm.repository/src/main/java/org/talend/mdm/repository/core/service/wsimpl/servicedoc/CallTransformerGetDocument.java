@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -24,7 +24,7 @@ public class CallTransformerGetDocument extends AbstractGetDocument {
     private static final String Param_Transformer_Name = "process"; //$NON-NLS-1$
     /**
      * DOC hbhong CallTransformerGetDocument constructor comment.
-     * 
+     *
      * @param twoLettersLanguageCode
      */
     public CallTransformerGetDocument(String twoLettersLanguageCode) {

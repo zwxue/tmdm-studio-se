@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -19,7 +19,7 @@ public class WorkflowInfo {
     private String version = "";//$NON-NLS-1$
 
     private String poolName;
-    
+
     public WorkflowInfo(String name, String version) {
         this.name = name;
         this.poolName = name;
@@ -31,7 +31,7 @@ public class WorkflowInfo {
     	this.poolName = poolName;
         this.version = version;
     }
-    
+
     public String getName() {
         return name;
     }

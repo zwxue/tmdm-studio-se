@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -14,7 +14,7 @@ package org.talend.mdm.repository.core.validate;
 
 /**
  * created by HHB on 2013-1-28 Detailled comment
- * 
+ *
  */
 public class ValidationMessage {
 
@@ -22,7 +22,7 @@ public class ValidationMessage {
 
     /**
      * DOC HHB ValidationMessage constructor comment.
-     * 
+     *
      * @param severity
      * @param message
      * @param key
@@ -59,7 +59,7 @@ public class ValidationMessage {
 
     /**
      * Getter for columnNumber.
-     * 
+     *
      * @return the columnNumber
      */
     public int getColumnNumber() {
@@ -68,7 +68,7 @@ public class ValidationMessage {
 
     /**
      * Getter for key.
-     * 
+     *
      * @return the key
      */
     public String getKey() {
@@ -77,7 +77,7 @@ public class ValidationMessage {
 
     /**
      * Getter for lineNumber.
-     * 
+     *
      * @return the lineNumber
      */
     public int getLineNumber() {
@@ -86,7 +86,7 @@ public class ValidationMessage {
 
     /**
      * Getter for message.
-     * 
+     *
      * @return the message
      */
     public String getMessage() {
@@ -95,7 +95,7 @@ public class ValidationMessage {
 
     /**
      * Getter for msgGroup.
-     * 
+     *
      * @return the msgGroup
      */
     public int getMsgGroup() {
@@ -104,7 +104,7 @@ public class ValidationMessage {
 
     /**
      * Getter for name.
-     * 
+     *
      * @return the name
      */
     public String getName() {
@@ -113,7 +113,7 @@ public class ValidationMessage {
 
     /**
      * Getter for severity.
-     * 
+     *
      * @return the severity
      */
     public int getSeverity() {
@@ -122,7 +122,7 @@ public class ValidationMessage {
 
     /**
      * Sets the columnNumber.
-     * 
+     *
      * @param columnNumber the columnNumber to set
      */
     public void setColumnNumber(int columnNumber) {
@@ -131,7 +131,7 @@ public class ValidationMessage {
 
     /**
      * Sets the key.
-     * 
+     *
      * @param key the key to set
      */
     public void setKey(String key) {
@@ -140,7 +140,7 @@ public class ValidationMessage {
 
     /**
      * Sets the lineNumber.
-     * 
+     *
      * @param lineNumber the lineNumber to set
      */
     public void setLineNumber(int lineNumber) {
@@ -149,7 +149,7 @@ public class ValidationMessage {
 
     /**
      * Sets the message.
-     * 
+     *
      * @param message the message to set
      */
     public void setMessage(String message) {
@@ -158,7 +158,7 @@ public class ValidationMessage {
 
     /**
      * Sets the msgGroup.
-     * 
+     *
      * @param msgGroup the msgGroup to set
      */
     public void setMsgGroup(int msgGroup) {
@@ -167,7 +167,7 @@ public class ValidationMessage {
 
     /**
      * Sets the name.
-     * 
+     *
      * @param name the name to set
      */
     public void setName(String name) {
@@ -176,7 +176,7 @@ public class ValidationMessage {
 
     /**
      * Sets the severity.
-     * 
+     *
      * @param severity the severity to set
      */
     public void setSeverity(int severity) {

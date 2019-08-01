@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -587,7 +587,7 @@ public class XSDTreeLabelProvider extends LabelProvider implements ITreePathLabe
              * s+= "("; } for (Iterator enumerators = value.iterator(); enumerators.hasNext();) { String enumerator =
              * enumerators.next().toString(); s+= enumerator; if (enumerators.hasNext()) { s+= " | ;"; } } if
              * (value.size() > 1) { s+= ")";
-             * 
+             *
              * }
              */
             s += xsdSimpleTypeDefinition.getName() != null ? xsdSimpleTypeDefinition.getName() : xsdSimpleTypeDefinition
@@ -655,7 +655,7 @@ public class XSDTreeLabelProvider extends LabelProvider implements ITreePathLabe
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.eclipse.jface.viewers.IColorProvider#getForeground(java.lang.Object)
      */
     @Override
@@ -675,7 +675,7 @@ public class XSDTreeLabelProvider extends LabelProvider implements ITreePathLabe
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.eclipse.jface.viewers.IColorProvider#getBackground(java.lang.Object)
      */
     @Override

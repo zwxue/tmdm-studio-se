@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -275,7 +275,7 @@ public class XSDEditor2 extends XSDEditor implements ISvnGitHistory, IPostOpenAc
 
             @Override
             public void run() {
-                IModelValidationService service = (IModelValidationService) GlobalServiceRegister.getDefault().getService(
+                IModelValidationService service = GlobalServiceRegister.getDefault().getService(
                         IModelValidationService.class);
                 List<IRepositoryViewObject> viewObjs = new ArrayList<IRepositoryViewObject>();
                 viewObjs.add(viewObject);

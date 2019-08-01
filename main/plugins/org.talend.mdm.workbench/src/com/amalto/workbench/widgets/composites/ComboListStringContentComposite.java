@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -34,7 +34,7 @@ public abstract class ComboListStringContentComposite extends ListStringContents
 
     public ComboListStringContentComposite(Composite parent, int style, Object[] initParas,BasePropertySection section) {
         super(parent, style, initParas,section);
-    }        
+    }
 
     @Override
     protected void createCandidateInfoUIArea(Composite parent) {
@@ -49,7 +49,7 @@ public abstract class ComboListStringContentComposite extends ListStringContents
 
     @Override
     protected void initUIListeners() {
-        initListenerForInfosCombo();        
+        initListenerForInfosCombo();
         super.initUIListeners();
     }
 

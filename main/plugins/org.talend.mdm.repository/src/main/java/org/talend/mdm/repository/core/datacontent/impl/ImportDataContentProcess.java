@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -62,7 +62,7 @@ import com.amalto.workbench.webservices.WSItem;
 
 /**
  * created by HHB on 2012-10-9 Detailled comment
- * 
+ *
  */
 public class ImportDataContentProcess extends AbstractDataContentProcess {
 
@@ -85,7 +85,7 @@ public class ImportDataContentProcess extends AbstractDataContentProcess {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.talend.mdm.repository.core.datacontent.IDataContentProcess#buildRule()
      */
     public DataProcessRule buildRule() throws InvocationTargetException {
@@ -119,7 +119,7 @@ public class ImportDataContentProcess extends AbstractDataContentProcess {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * org.talend.mdm.repository.core.datacontent.IDataContentProcess#tuneRule(org.talend.mdm.repository.core.datacontent
      * .DataProcessRule)
@@ -135,7 +135,7 @@ public class ImportDataContentProcess extends AbstractDataContentProcess {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.talend.mdm.repository.core.datacontent.IDataContentProcess#getResult()
      */
     public MultiStatus getResult() {
@@ -148,7 +148,7 @@ public class ImportDataContentProcess extends AbstractDataContentProcess {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.talend.mdm.repository.core.datacontent.IDataContentProcess#processDatas(org.talend.mdm.repository.core.
      * datacontent.DataProcessRule, org.eclipse.core.runtime.IProgressMonitor)
      */
@@ -161,7 +161,7 @@ public class ImportDataContentProcess extends AbstractDataContentProcess {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.talend.mdm.repository.core.datacontent.impl.AbstractDataContentProcess#getProcessService()
      */
     @Override
@@ -175,7 +175,7 @@ public class ImportDataContentProcess extends AbstractDataContentProcess {
 
         /**
          * DOC hbhong ExportContentProcess constructor comment.
-         * 
+         *
          * @param serverDef
          * @param dName
          * @param path
@@ -197,7 +197,7 @@ public class ImportDataContentProcess extends AbstractDataContentProcess {
 
             /*
              * (non-Javadoc)
-             * 
+             *
              * @see java.io.FilenameFilter#accept(java.io.File, java.lang.String)
              */
             public boolean accept(File dir, String name) {
@@ -313,7 +313,7 @@ public class ImportDataContentProcess extends AbstractDataContentProcess {
                         }
                         manager.notify();
                     }
-                    
+
                     checkFailureReport(manager);
                 } catch (Exception e) {
                     String msg = Messages.bind(Messages.ImportDataClusterAction_importErrorMsg, concept, dName,

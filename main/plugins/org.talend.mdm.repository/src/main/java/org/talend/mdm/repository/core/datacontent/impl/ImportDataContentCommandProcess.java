@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -19,13 +19,13 @@ import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 
 /**
  * created by HHB on 2012-10-10 Detailled comment
- * 
+ *
  */
 public class ImportDataContentCommandProcess extends ImportDataContentProcess {
 
     /**
      * DOC HHB ImportDataContentCommandProcess constructor comment.
-     * 
+     *
      * @param serverDef
      * @param dName
      * @param tmpPath
@@ -41,7 +41,7 @@ public class ImportDataContentCommandProcess extends ImportDataContentProcess {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * org.talend.mdm.repository.core.datacontent.impl.ImportDataContentProcess#tuneRule(org.talend.mdm.repository.core
      * .datacontent.DataProcessRule)

@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -22,9 +22,9 @@ import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
 
 
 public class SortOrderFactory {
-    
+
     private static Map<String, ISortOrder> orders = new HashMap<String, ISortOrder>();
-    
+
     private static ISortOrder getSortOrder(ERepositoryObjectType type) {
         if(orders.get(type.getType()) == null)
         {
@@ -36,18 +36,18 @@ public class SortOrderFactory {
                 order = new ProcessCategoryOrder();
                 orders.put(type.getType(), order);
             }
-            
+
         }
-        
+
         return orders.get(type.getType());
     }
-    
+
     public static int getOrder(ContainerItem item) {
         ISortOrder sortOrder = getSortOrder(item.getRepObjType());
         if(sortOrder != null) {
             return sortOrder.getOrder(item);
         }
-        
+
         int typeValue = item.getType().getValue();
         return (typeValue == FolderType.STABLE_SYSTEM_FOLDER) ? -2 : -1;
     }

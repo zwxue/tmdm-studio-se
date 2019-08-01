@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -28,7 +28,7 @@ public class SchematronExpressBuilderR extends SchematronExpressBuilder {
 
     /**
      * DOC achen SchematronExpressBuilderR constructor comment.
-     * 
+     *
      * @param parent
      * @param value
      * @param conceptName
@@ -37,14 +37,14 @@ public class SchematronExpressBuilderR extends SchematronExpressBuilder {
         super(parent, value, conceptName);
         // TODO Auto-generated constructor stub
     }
-    
+
     /**
      * DOC achen SchematronExpressBuilderR constructor comment.
-     * 
+     *
      * @param parent
      * @param value
      * @param conceptName
-     * @param page 
+     * @param page
      */
     public SchematronExpressBuilderR(Composite parent, String value, String conceptName, boolean isAbsoluteXPath,
             boolean isSchematron) {

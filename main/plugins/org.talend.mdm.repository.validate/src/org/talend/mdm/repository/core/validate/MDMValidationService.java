@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -33,7 +33,7 @@ import org.talend.mdm.repository.core.validate.impl.ImmediateValidationPreferenc
 
 /**
  * created by HHB on 2013-1-24 Detailled comment
- * 
+ *
  */
 public class MDMValidationService implements IModelValidationService {
 
@@ -44,6 +44,8 @@ public class MDMValidationService implements IModelValidationService {
     private IValidationPreference afterSavingPref = new AfterSavingValidationPreference();
 
     private IValidationPreference beforeDeployingPref = new BeforeDeployingValidationPreference();
+
+    private Boolean showAfterSavingResultDialog = null;
 
     public static class ModelValidateResult implements IModelValidateResult {
 
@@ -66,7 +68,7 @@ public class MDMValidationService implements IModelValidationService {
 
         /**
          * Sets the selectedButton.
-         * 
+         *
          * @param selectedButton the selectedButton to set
          */
         @Override
@@ -80,7 +82,7 @@ public class MDMValidationService implements IModelValidationService {
 
         /*
          * (non-Javadoc)
-         * 
+         *
          * @see org.talend.mdm.repository.core.service.IModelValidationService.IModelValidateResult#hasErrOrWarning()
          */
         @Override
@@ -168,7 +170,7 @@ public class MDMValidationService implements IModelValidationService {
 
         /*
          * (non-Javadoc)
-         * 
+         *
          * @see
          * org.talend.mdm.repository.core.service.IModelValidationService.IModelValidateResult#getInValidObjects(int)
          */
@@ -197,7 +199,7 @@ public class MDMValidationService implements IModelValidationService {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.talend.mdm.repository.core.service.IValidationService#validate(java.util.List, int)
      */
     @Override
@@ -205,11 +207,12 @@ public class MDMValidationService implements IModelValidationService {
         if (viewObjs != null && viewObjs.size() > 0) {
             switch (condition) {
             case VALIDATE_IMMEDIATE:
-                return MDMValidationRunner.validate(viewObjs, immediatePref, forbidShowResultDialog);
+                return MDMValidationRunner.validate(viewObjs, immediatePref, forbidShowResultDialog, true);
             case VALIDATE_AFTER_SAVE:
-                return MDMValidationRunner.validate(viewObjs, afterSavingPref, forbidShowResultDialog);
+                return MDMValidationRunner.validate(viewObjs, afterSavingPref, forbidShowResultDialog,
+                        showAfterSavingResultDialog);
             case VALIDATE_BEFORE_DEPLOY:
-                return MDMValidationRunner.validate(viewObjs, beforeDeployingPref, forbidShowResultDialog);
+                return MDMValidationRunner.validate(viewObjs, beforeDeployingPref, forbidShowResultDialog, true);
             default:
                 break;
             }
@@ -217,4 +220,8 @@ public class MDMValidationService implements IModelValidationService {
         return null;
     }
 
+    @Override
+    public void setShowAfterSavingResultDialog(Boolean show) {
+        this.showAfterSavingResultDialog = show;
+    }
 }

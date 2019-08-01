@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -43,7 +43,7 @@ public class RenameViewDialog2 extends RenameViewDialog {
     protected void createMainPart(Composite container) {
         GridLayout gridLayout = (GridLayout) container.getLayout();
         gridLayout.numColumns = 3;
-        
+
         Label label2 = new Label(container, SWT.NONE);
         label2.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
         label2.setText(Messages.RenameViewDialog2_Name);
@@ -52,27 +52,27 @@ public class RenameViewDialog2 extends RenameViewDialog {
         gd_text.widthHint = 400;
         entityText.setLayoutData(gd_text);
         new Label(container, SWT.NONE);
-        
+
         final Label internalLabel = new Label(container, SWT.NONE | SWT.WRAP);
         internalLabel.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 3,1));
         internalLabel.setText(Messages.RenameViewDialog2_InternalName);
         internalLabel.setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_GRAY));
-        
+
         if(value != null) {
             entityText.setText(value);
             internalLabel.setText(Messages.bind(Messages.RenameViewDialog2_InternalNameX, value));
         }
-        
+
         entityText.addModifyListener(new ModifyListener() {
-            
+
             public void modifyText(ModifyEvent e) {
                 updateOkButtonState();
-                
+
                 internalLabel.setText(Messages.bind(Messages.RenameViewDialog2_InternalNameX, entityText.getText()));
             }
         });
     }
-    
+
     private void updateOkButtonState() {
         if(okBtn != null) {
             if(validInput())
@@ -82,13 +82,13 @@ public class RenameViewDialog2 extends RenameViewDialog {
             }
         }
     }
-    
+
     protected boolean validInput() {
         String entityName = entityText.getText().trim();
-        
+
         if(entityName.equals(value))
             return false;
-        
+
         if(validator != null)
         {
             String validMsg = validator.isValid(entityName);
@@ -96,13 +96,13 @@ public class RenameViewDialog2 extends RenameViewDialog {
                 errorMessageText.setText(validMsg);
                 return false;
             }
-            
+
             errorMessageText.setText(""); //$NON-NLS-1$
         }
-        
+
         return true;
     }
-    
+
     @Override
     protected void saveDatas() {
         value = entityText.getText();

@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -30,7 +30,7 @@ import com.amalto.workbench.webservices.TMDMService;
 
 /**
  * created by HHB on 2012-11-19 Detailled comment
- * 
+ *
  */
 public class DataContainerDOMViewDialog extends DOMViewDialog {
 
@@ -42,7 +42,7 @@ public class DataContainerDOMViewDialog extends DOMViewDialog {
 
     /**
      * DOC HHB DataContainerDOMViewDialog constructor comment.
-     * 
+     *
      * @param parentShell
      * @param service
      * @param node
@@ -59,7 +59,7 @@ public class DataContainerDOMViewDialog extends DOMViewDialog {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see com.amalto.workbench.dialogs.DOMViewDialog#createDialogArea(org.eclipse.swt.widgets.Composite)
      */
     @Override

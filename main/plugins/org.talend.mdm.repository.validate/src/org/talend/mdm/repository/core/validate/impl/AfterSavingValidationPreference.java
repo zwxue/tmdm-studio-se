@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -20,7 +20,7 @@ import org.talend.mdm.repository.ui.preferences.IValidationPerferenceConstant;
 
 /**
  * created by HHB on 2013-2-18 Detailled comment
- * 
+ *
  */
 public class AfterSavingValidationPreference implements IValidationPreference, IValidationPerferenceConstant {
 
@@ -28,7 +28,7 @@ public class AfterSavingValidationPreference implements IValidationPreference, I
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.talend.mdm.repository.core.validate.IValidationPreference#shouldShowResults()
      */
     @Override
@@ -40,7 +40,7 @@ public class AfterSavingValidationPreference implements IValidationPreference, I
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.talend.mdm.repository.core.validate.IValidationPreference#setShowResults(java.lang.Boolean)
      */
     @Override
@@ -50,7 +50,7 @@ public class AfterSavingValidationPreference implements IValidationPreference, I
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.talend.mdm.repository.core.validate.IValidationPreference#updateLastSelectedBun(int)
      */
     @Override
@@ -60,7 +60,7 @@ public class AfterSavingValidationPreference implements IValidationPreference, I
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.talend.mdm.repository.core.validate.IValidationPreference#getValidationCondition()
      */
     @Override

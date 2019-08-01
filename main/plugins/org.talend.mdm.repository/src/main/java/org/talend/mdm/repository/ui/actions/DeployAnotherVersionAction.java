@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -39,7 +39,7 @@ public class DeployAnotherVersionAction extends AbstractDeployAction {
     }
 
     @Override
-    protected void doRun() {
+    protected void _doRun() {
         boolean checkMissingJar = MissingJarService.getInstance().checkMissingJar(true);
         if (!checkMissingJar) {
             return;
@@ -51,8 +51,8 @@ public class DeployAnotherVersionAction extends AbstractDeployAction {
 
         String originVersion = viewObjs.get(0).getProperty().getVersion();
         // open the version dialog
-        SelectVersionDialog versionDialog = new SelectVersionDialog(getShell(),
-                Messages.DeployAnotherVersionAction_selectAnother, viewObjs.get(0));
+        SelectVersionDialog versionDialog = new SelectVersionDialog(getShell(), Messages.DeployAnotherVersionAction_selectAnother,
+                viewObjs.get(0));
         versionDialog.create();
         if (versionDialog.open() == IDialogConstants.OK_ID) {
             if (versionDialog.getSelection() != null) {
@@ -64,6 +64,7 @@ public class DeployAnotherVersionAction extends AbstractDeployAction {
 
             SelectServerDefDialog dialog = new SelectServerDefDialog(getShell());
             if (dialog.open() == IDialogConstants.OK_ID) {
+                DeployService deployService = DeployService.getInstance();
                 // save editors
                 LockedDirtyObjectDialog lockDirtyDialog = new LockedDirtyObjectDialog(getShell(),
                         Messages.AbstractDeployAction_promptToSaveEditors, viewObjs);
@@ -74,7 +75,7 @@ public class DeployAnotherVersionAction extends AbstractDeployAction {
                 // deploy
                 MDMServerDef serverDef = dialog.getSelectedServerDef();
                 if (doCheckServerConnection(serverDef)) {
-                    IStatus status = DeployService.getInstance().deployAnotherVersion(serverDef, viewObjs);
+                    IStatus status = deployService.deployAnotherVersion(serverDef, viewObjs);
                     if (status.isMultiStatus()) {
                         showDeployStatus(status);
                     }

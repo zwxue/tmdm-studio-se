@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -24,9 +24,9 @@ import org.talend.mdm.engines.client.i18n.Messages;
 
 /**
  * @deprecated Preference for the MDMServer values.
- * 
+ *
  * $Id: MDMPreferencePage.java 2738 2007-04-26 13:12:27Z cantoine $
- * 
+ *
  */
 @Deprecated
 public class MDMPreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
@@ -41,9 +41,9 @@ public class MDMPreferencePage extends FieldEditorPreferencePage implements IWor
 
     /**
      * MDMPreferencePage.
-     * 
+     *
      * $Id: MDMPreferencePage.java 2738 2007-04-26 13:12:27Z cantoine $
-     * 
+     *
      */
 
     public MDMPreferencePage() {
@@ -125,7 +125,7 @@ public class MDMPreferencePage extends FieldEditorPreferencePage implements IWor
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.eclipse.jface.preference.FieldEditorPreferencePage#performDefaults()
      */
     @Override

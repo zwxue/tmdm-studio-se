@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -29,7 +29,7 @@ public class IOUtilTest {
 
     /**
      * Test method for {@link org.talend.mdm.repository.utils.IOUtil#getTempFolder()}
-     * 
+     *
      */
     @Test
     public void testGetTempFolder() {
@@ -40,7 +40,7 @@ public class IOUtilTest {
 
     /**
      * Test method for {@link org.talend.mdm.repository.utils.IOUtil#cleanFolder(java.io.File folder)}
-     * 
+     *
      */
     @Test
     public void testCleanFolder() {

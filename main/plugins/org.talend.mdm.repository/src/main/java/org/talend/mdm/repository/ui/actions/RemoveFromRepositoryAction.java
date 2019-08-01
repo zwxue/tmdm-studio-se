@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -62,7 +62,7 @@ public class RemoveFromRepositoryAction extends AbstractRepositoryAction {
 
     /**
      * DOC hbhong RemoveFromRepositoryAction constructor comment.
-     * 
+     *
      * @param text
      */
     public RemoveFromRepositoryAction() {
@@ -127,8 +127,12 @@ public class RemoveFromRepositoryAction extends AbstractRepositoryAction {
         removed.clear();
 
         if (lockedObjs.size() > 0) {
-            MessageDialog.openError(getShell(), Messages.AbstractRepositoryAction_lockedObjTitle, getAlertMsg());
+            error();
         }
+    }
+
+    private void error() {
+        MessageDialog.openError(getShell(), Messages.AbstractRepositoryAction_lockedObjTitle, getAlertMsg());
     }
 
     private void warn() {

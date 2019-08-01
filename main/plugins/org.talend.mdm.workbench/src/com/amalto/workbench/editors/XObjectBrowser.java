@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -62,7 +62,7 @@ public class XObjectBrowser extends FormEditor implements IXObjectModelListener 
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.eclipse.ui.forms.editor.FormEditor#addPages()
      */
     @Override
@@ -168,7 +168,7 @@ public class XObjectBrowser extends FormEditor implements IXObjectModelListener 
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.eclipse.ui.ISaveablePart#doSave(org.eclipse.core.runtime.IProgressMonitor)
      */
     @Override
@@ -178,7 +178,7 @@ public class XObjectBrowser extends FormEditor implements IXObjectModelListener 
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.eclipse.ui.ISaveablePart#isSaveAsAllowed()
      */
     @Override

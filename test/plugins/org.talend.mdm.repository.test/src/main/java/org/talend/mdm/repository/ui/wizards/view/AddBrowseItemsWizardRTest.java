@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -34,7 +34,7 @@ public class AddBrowseItemsWizardRTest {
      * Test method for
      * {@link org.talend.mdm.repository.ui.wizards.view.AddBrowseItemsWizardR#getKeysForViewElements(org.eclipse.xsd.XSDElementDeclaration)}
      * .
-     * 
+     *
      * @throws Exception
      */
     @Test
@@ -60,8 +60,8 @@ public class AddBrowseItemsWizardRTest {
                 "</xsd:unique>" + //$NON-NLS-1$
                 "</xsd:element>" + //$NON-NLS-1$
                 "</xsd:schema>";//$NON-NLS-1$
-        
-        
+
+
         schema = Util.getXSDSchema(xsd);
         schema.getElementDeclarations();
         XSDElementDeclaration decl = schema.getElementDeclarations().get(0);
@@ -93,7 +93,7 @@ public class AddBrowseItemsWizardRTest {
                 continue;
             }
         }
-        
+
     }
 
 }

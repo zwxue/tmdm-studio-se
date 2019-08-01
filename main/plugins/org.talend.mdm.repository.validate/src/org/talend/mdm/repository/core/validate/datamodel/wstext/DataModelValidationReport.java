@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -22,7 +22,7 @@ import org.talend.mdm.repository.core.validate.datamodel.validator.ModelValidati
 
 /**
  * created by HHB on 2013-1-8 Detailled comment
- * 
+ *
  */
 public class DataModelValidationReport implements ValidationReport {
 
@@ -36,7 +36,7 @@ public class DataModelValidationReport implements ValidationReport {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.eclipse.wst.xml.core.internal.validation.core.ValidationReport#getFileURI()
      */
     @Override
@@ -46,7 +46,7 @@ public class DataModelValidationReport implements ValidationReport {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.eclipse.wst.xml.core.internal.validation.core.ValidationReport#isValid()
      */
     @Override
@@ -56,7 +56,7 @@ public class DataModelValidationReport implements ValidationReport {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.eclipse.wst.xml.core.internal.validation.core.ValidationReport#getValidationMessages()
      */
     @Override
@@ -67,7 +67,7 @@ public class DataModelValidationReport implements ValidationReport {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.eclipse.wst.xml.core.internal.validation.core.ValidationReport#getNestedMessages()
      */
     @Override

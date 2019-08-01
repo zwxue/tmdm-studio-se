@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -28,13 +28,13 @@ public class ProcessCategoryOrder implements ISortOrder {
             IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_OTHER);
 
     public int getOrder(Item item) {
-        
+
         if(item instanceof FolderItem) {
             String path0 = item.getState().getPath();
             if(!path0.isEmpty() && path0.lastIndexOf("/") == 0)
                 return folders.indexOf(path0);
         }
-        
+
         return -1;
     }
 }

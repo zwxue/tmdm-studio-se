@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -92,20 +92,20 @@ public class SimpleTypeWrapper implements ISubmittable {
 
         xsdSimpleType.setName(getNewTypeName().trim());
         xsdSimpleType.updateElement();
-        
+
         IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-        IEditorPart activeEditor = activePage.getActiveEditor();        
+        IEditorPart activeEditor = activePage.getActiveEditor();
         if(activeEditor instanceof XSDEditor) {
             XSDEditor editor = (XSDEditor) activeEditor;
             DataModelMainPage page = editor.getdMainPage();
             IStructuredContentProvider provider = (IStructuredContentProvider) page.getSchemaContentProvider();
-            
+
             Util.updateReferenceToXSDTypeDefinition(page.getSite(), xsdSimpleType, provider);
         }
 
         return true;
     }
-    
+
     public boolean isBaseTypeExists() {
         return newBaseTypeName.equals(newBaseType.getName());
     }

@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -17,9 +17,9 @@ import java.util.Map;
 
 /**
  * Using enum to list all image resources in workbench
- * 
+ *
  * @author liyanmei
- * 
+ *
  */
 public enum EImage {
     DEFAULT("icons/appli_16x16.gif"), //$NON-NLS-1$
@@ -297,7 +297,7 @@ public enum EImage {
     SCHEMAELEMENT("icons/schema_element.png"), //$NON-NLS-1$
     EXPAND("icons/expand.png"), //$NON-NLS-1$
     COLLAPSE("icons/collapse.png"), //$NON-NLS-1$
-    REGISTER_WIZ("icons/register_wiz.png"), //$NON-NLS-1$ 
+    REGISTER_WIZ("icons/register_wiz.png"), //$NON-NLS-1$
     BROWSE_MENU("icons/browse_menu.png"), //$NON-NLS-1$
     CROSSREF("icons/crossref.png"), //$NON-NLS-1$
     HIER_VIEW("icons/hier_view.gif"), //$NON-NLS-1$

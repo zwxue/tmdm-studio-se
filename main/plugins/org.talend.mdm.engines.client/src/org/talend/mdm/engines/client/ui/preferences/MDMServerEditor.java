@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -33,16 +33,16 @@ import org.talend.mdm.engines.client.ui.wizards.MDMServerHelper;
 
 /**
  * @deprecated DOC cantoine class global comment. Detailled comment <br/>
- * 
+ *
  * $Id: MDMServerEditor.java 2738 2007-04-27 13:12:27Z cantoine $
- * 
+ *
  */
 @Deprecated
 public class MDMServerEditor extends TableEditor {
 
     /**
      * DOC tguiu MDMServerEditor constructor comment.
-     * 
+     *
      * @param name
      * @param labelText
      * @param parent
@@ -166,7 +166,7 @@ public class MDMServerEditor extends TableEditor {
 
     /**
      * DOC tguiu Comment method "computeCodeList".
-     * 
+     *
      * @return
      */
     private List computeCodeList() {

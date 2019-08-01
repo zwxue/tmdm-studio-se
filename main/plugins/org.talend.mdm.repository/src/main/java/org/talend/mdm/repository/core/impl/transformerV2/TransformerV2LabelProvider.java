@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -26,7 +26,7 @@ import org.talend.mdm.repository.utils.RepositoryTransformUtil;
 
 /**
  * DOC hbhong class global comment. Detailled comment <br/>
- * 
+ *
  */
 public class TransformerV2LabelProvider extends AbstractLabelProvider {
 
@@ -62,7 +62,7 @@ public class TransformerV2LabelProvider extends AbstractLabelProvider {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.talend.mdm.repository.core.impl.AbstractLabelProvider#getText(org.talend.core.model.properties.Item)
      */
     @Override

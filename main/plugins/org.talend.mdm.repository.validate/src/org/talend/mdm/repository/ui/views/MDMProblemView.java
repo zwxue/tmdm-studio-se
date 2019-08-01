@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -16,9 +16,11 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.apache.log4j.Logger;
 import org.eclipse.core.resources.IMarker;
@@ -71,7 +73,7 @@ import org.talend.repository.ProjectManager;
 
 /**
  * created by HHB on 2013-1-5 Detailled comment
- * 
+ *
  */
 public class MDMProblemView extends MarkerSupportView implements IValidationMarker {
 
@@ -85,7 +87,7 @@ public class MDMProblemView extends MarkerSupportView implements IValidationMark
 
     /**
      * DOC HHB MDMProblemView constructor comment.
-     * 
+     *
      * @param contentGeneratorId
      */
     public MDMProblemView() {
@@ -153,14 +155,14 @@ public class MDMProblemView extends MarkerSupportView implements IValidationMark
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.eclipse.ui.internal.views.markers.ExtendedMarkersView#init(org.eclipse.ui.IViewSite,
      * org.eclipse.ui.IMemento)
      */
     @Override
     public void init(IViewSite site, IMemento memento) throws PartInitException {
         super.init(site, memento);
-        IMenuService menuService = (IMenuService) site.getService(IMenuService.class);
+        IMenuService menuService = site.getService(IMenuService.class);
 
         hookModelGroup();
     }
@@ -229,12 +231,16 @@ public class MDMProblemView extends MarkerSupportView implements IValidationMark
     }
 
     private void updateSelectedResource(MarkerContentGenerator generator, Object[] selectedElements, boolean forceUpdate) {
+        if (selectedElements == null) {
+            return;
+        }
         try {
             Method method = MarkerContentGenerator.class.getDeclaredMethod(
                     "updateSelectedResource", Object[].class, boolean.class); //$NON-NLS-1$
             if (method != null) {
                 method.setAccessible(true);
-                Object param = selectedElements;
+                Object param = Arrays.asList(selectedElements).stream().filter(e -> e != null)
+                        .collect(Collectors.toList()).toArray();
                 method.invoke(generator, param, forceUpdate);
             }
         } catch (SecurityException e) {
@@ -405,7 +411,7 @@ public class MDMProblemView extends MarkerSupportView implements IValidationMark
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * org.eclipse.ui.internal.views.markers.ExtendedMarkersView#createPartControl(org.eclipse.swt.widgets.Composite)
      */

@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -24,7 +24,7 @@ import org.talend.mdm.repository.core.impl.view.IViewNodeConstDef;
 public class ViewCategoryOrder implements ISortOrder {
 
     private static List<String> folders = Arrays.asList(IPath.SEPARATOR + IViewNodeConstDef.PATH_WEBFILTER, IPath.SEPARATOR + IViewNodeConstDef.PATH_SEARCHFILTER);
-    
+
     public int getOrder(Item item) {
         if(item instanceof FolderItem) {
             String path = item.getState().getPath();
@@ -32,7 +32,7 @@ public class ViewCategoryOrder implements ISortOrder {
                 return folders.indexOf(path);
             }
         }
-        
+
         return -1;
     }
 

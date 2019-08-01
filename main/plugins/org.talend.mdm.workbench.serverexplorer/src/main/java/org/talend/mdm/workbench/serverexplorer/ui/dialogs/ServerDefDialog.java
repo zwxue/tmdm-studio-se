@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -46,7 +46,7 @@ import com.amalto.workbench.utils.XtentisException;
 
 /**
  * DOC hbhong class global comment. Detailled comment <br/>
- * 
+ *
  */
 public class ServerDefDialog extends TitleAreaDialog {
 
@@ -88,7 +88,7 @@ public class ServerDefDialog extends TitleAreaDialog {
 
     /**
      * Create the dialog.
-     * 
+     *
      * @param parentShell
      */
     public ServerDefDialog(Shell parentShell, MDMServerDef serverDef) {
@@ -107,7 +107,7 @@ public class ServerDefDialog extends TitleAreaDialog {
 
     /**
      * Create contents of the dialog.
-     * 
+     *
      * @param parent
      */
     @Override
@@ -345,7 +345,7 @@ public class ServerDefDialog extends TitleAreaDialog {
 
     /**
      * Create contents of the button bar.
-     * 
+     *
      * @param parent
      */
     @Override

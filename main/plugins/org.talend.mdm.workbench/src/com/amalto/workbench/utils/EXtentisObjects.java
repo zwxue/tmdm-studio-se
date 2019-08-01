@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -19,9 +19,9 @@ import com.amalto.workbench.models.TreeObject;
 
 /**
  * The XtentisObjects
- * 
+ *
  * @author aiming
- * 
+ *
  */
 public enum EXtentisObjects {
     DataCluster("Data Container", "Data Cluster", TreeObject.DATA_CLUSTER, false), //$NON-NLS-1$//$NON-NLS-2$

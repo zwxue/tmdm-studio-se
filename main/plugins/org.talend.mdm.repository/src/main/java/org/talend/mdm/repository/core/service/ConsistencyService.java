@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -87,7 +87,7 @@ import com.amalto.workbench.webservices.WSLong;
 
 /**
  * created by HHB on 2013-7-18 Detailled comment
- * 
+ *
  */
 public class ConsistencyService {
 
@@ -579,7 +579,7 @@ public class ConsistencyService {
 
     /**
      * DOC HHB Comment method "getCompareResult".
-     * 
+     *
      * @param cd current digest value
      * @param ld local digest value
      * @param rd remote digest value
@@ -844,7 +844,7 @@ public class ConsistencyService {
 
     /**
      * caculate and update local digest value
-     * 
+     *
      * @param viewObj
      */
     public void updateLocalDigestValue(IRepositoryViewObject viewObj) {

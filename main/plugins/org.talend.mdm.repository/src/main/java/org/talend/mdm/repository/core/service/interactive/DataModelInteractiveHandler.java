@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -46,12 +46,12 @@ import com.amalto.workbench.webservices.WSPutDataModel;
 public class DataModelInteractiveHandler extends AbstractInteractiveHandler {
 
     /**
-     * 
+     *
      */
     private static final String ENCODE = "UTF-8"; //$NON-NLS-1$
 
     /**
-     * 
+     *
      */
     private static final String FILE_EXTENSION = "xsd"; //$NON-NLS-1$
 

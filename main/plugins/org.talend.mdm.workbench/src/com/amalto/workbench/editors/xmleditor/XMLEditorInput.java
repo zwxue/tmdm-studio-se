@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -36,32 +36,32 @@ public class XMLEditorInput implements IEditorInput {
     }
 
     public boolean exists() {
-        
+
         return true;
     }
 
     public ImageDescriptor getImageDescriptor() {
-        
+
         return null;
     }
 
     public String getName() {
-        
+
         return Messages.XMLEditorInput_Document;
     }
 
     public IPersistableElement getPersistable() {
-        
+
         return null;
     }
 
     public String getToolTipText() {
-        
+
         return Messages.XMLEditorInput_Tooltip;
     }
 
     public Object getAdapter(Class adapter) {
-        
+
         return null;
     }
 

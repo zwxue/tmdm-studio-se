@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -75,7 +75,7 @@ public class ImportExchangeOptionsDialog extends Dialog implements SelectionList
     private boolean export = true;
 
     private boolean radioEnable;
-    
+
     private JSONObject[] dataContent = null;
 
     private String revision;
@@ -99,11 +99,11 @@ public class ImportExchangeOptionsDialog extends Dialog implements SelectionList
         this.toolkit = toolkit;
         this.zipFileRepository = zipFileRepository;
     }
-    
+
 	public boolean chooseExport() {
 		return exportsBtn.getSelection();
 	}
-    
+
     public void setRadioEnable(boolean radioEnable) {
 		this.radioEnable = radioEnable;
 	}
@@ -300,7 +300,7 @@ public class ImportExchangeOptionsDialog extends Dialog implements SelectionList
 
     public void fillInTable() {
         clearTable();
-        String url = EXCHANGE_DOWNLOAD_URL + "version=" + revision + "&categories=" + (exportsBtn.getSelection() ? "2" : "1");//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$        
+        String url = EXCHANGE_DOWNLOAD_URL + "version=" + revision + "&categories=" + (exportsBtn.getSelection() ? "2" : "1");//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$
         try {
             String out = HttpClientUtil.getStringContentByHttpget(url);
             if (StringUtils.isEmpty(out)) {

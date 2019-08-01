@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -35,12 +35,12 @@ import com.amalto.workbench.utils.XSDUtil;
 public class XSDSkipToFKAction extends Action {
 
     /**
-     * 
+     *
      */
     private static final String FK_SEPERATOR = "/"; //$NON-NLS-1$
 
     /**
-     * 
+     *
      */
     private static final String X_FOREIGN_KEY = "X_ForeignKey"; //$NON-NLS-1$
 

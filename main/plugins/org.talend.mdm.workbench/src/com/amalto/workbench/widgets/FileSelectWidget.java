@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -46,9 +46,9 @@ public class FileSelectWidget {
     boolean isFile;
 
     private Button button;
-    
+
     int type;
-    
+
     public FileSelectWidget(Composite parent, String label, String[] fileExtents, String filename, boolean isFile, int type) {
         this.label = label;
         this.filename = filename;
@@ -97,7 +97,7 @@ public class FileSelectWidget {
         button.addSelectionListener(new SelectionListener() {
 
             public void widgetDefaultSelected(SelectionEvent e) {
-                
+
 
             }
 

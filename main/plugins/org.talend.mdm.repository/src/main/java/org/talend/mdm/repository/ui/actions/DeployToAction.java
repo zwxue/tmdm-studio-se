@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -50,7 +50,7 @@ public class DeployToAction extends AbstractDeployAction {
     }
 
     @Override
-    protected void doRun() {
+    protected void _doRun() {
         boolean checkMissingJar = MissingJarService.getInstance().checkMissingJar(true);
         if (!checkMissingJar) {
             return;
@@ -82,7 +82,6 @@ public class DeployToAction extends AbstractDeployAction {
                 doPostDeploy(status);
             }
         }
-
     }
 
     protected List<IRepositoryViewObject> doCheckDependency(List<IRepositoryViewObject> viewObjs) {
@@ -122,7 +121,7 @@ public class DeployToAction extends AbstractDeployAction {
 
     /**
      * set the default selection in SelectServerDefDialog
-     * 
+     *
      * @param viewObjs current selected view objects
      * @param dialog
      */

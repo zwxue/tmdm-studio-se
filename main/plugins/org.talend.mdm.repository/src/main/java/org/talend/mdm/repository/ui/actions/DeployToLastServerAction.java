@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -48,7 +48,7 @@ public class DeployToLastServerAction extends AbstractDeployAction {
     }
 
     @Override
-    protected void doRun() {
+    protected void _doRun() {
         boolean checkMissingJar = MissingJarService.getInstance().checkMissingJar(true);
         if (!checkMissingJar) {
             return;
@@ -63,6 +63,7 @@ public class DeployToLastServerAction extends AbstractDeployAction {
             viewObjs = getSelectedRepositoryViewObject(viewObjs);
             filterMatchRuleObjs(viewObjs);
         }
+
         LockedDirtyObjectDialog lockDirtyDialog = new LockedDirtyObjectDialog(getShell(),
                 Messages.AbstractDeployAction_promptToSaveEditors, viewObjs);
         if (lockDirtyDialog.needShowDialog() && lockDirtyDialog.open() == IDialogConstants.CANCEL_ID) {

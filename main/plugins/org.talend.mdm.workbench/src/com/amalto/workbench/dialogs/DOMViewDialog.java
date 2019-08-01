@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -420,9 +420,9 @@ public class DOMViewDialog extends Dialog implements IKeyWordProvider {
 
     /**
      * DOM Tree Content Provider
-     * 
+     *
      * @author bgrieder
-     * 
+     *
      */
     class DOMTreeContentProvider implements IStructuredContentProvider, ITreeContentProvider {
 
@@ -490,9 +490,9 @@ public class DOMViewDialog extends Dialog implements IKeyWordProvider {
 
     /**
      * DOM Tree Label Provider
-     * 
+     *
      * @author bgrieder
-     * 
+     *
      */
     class DOMTreeLabelProvider extends LabelProvider {
 

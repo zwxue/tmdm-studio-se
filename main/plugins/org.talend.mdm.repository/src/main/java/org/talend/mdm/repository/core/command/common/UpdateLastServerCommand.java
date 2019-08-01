@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -79,7 +79,7 @@ public class UpdateLastServerCommand extends AbstractCommand {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.talend.mdm.repository.core.command.AbstractCommand#getCommandType()
      */
     @Override
@@ -89,7 +89,7 @@ public class UpdateLastServerCommand extends AbstractCommand {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.talend.mdm.repository.core.command.AbstractCommand#execute(java.lang.Object,
      * org.eclipse.core.runtime.IProgressMonitor)
      */
@@ -122,7 +122,7 @@ public class UpdateLastServerCommand extends AbstractCommand {
                 log.error(e.getMessage(), e);
             }
         }
-        
+
         RepositoryResourceUtil.setLastServerDef(item, serverDef);
 
         if (!(item instanceof ProcessItem)) {

@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -35,11 +35,10 @@ public class RemoveFromServerAction extends AbstractDeployAction {
 
     public RemoveFromServerAction() {
         super(Messages.RemoveFromServerAction_removeFromServer);
-
     }
 
-    protected void doRun() {
-
+    @Override
+    protected void _doRun() {
         SelectServerDefDialog dialog = new SelectServerDefDialog(getShell());
         if (dialog.open() == IDialogConstants.OK_ID) {
             // save editors
@@ -65,7 +64,5 @@ public class RemoveFromServerAction extends AbstractDeployAction {
                 showDeployStatus(status);
             }
         }
-
     }
-
 }

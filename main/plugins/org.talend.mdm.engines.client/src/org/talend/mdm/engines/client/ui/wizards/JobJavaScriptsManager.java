@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -26,7 +26,7 @@ import org.talend.core.model.properties.ProcessItem;
 
 /**
  * DOC smallet class global comment. Detailled comment <br/>
- * 
+ *
  */
 public class JobJavaScriptsManager extends org.talend.repository.ui.wizards.exportjob.scriptsmanager.JobJavaScriptsManager {
 
@@ -55,7 +55,7 @@ public class JobJavaScriptsManager extends org.talend.repository.ui.wizards.expo
 
     /**
      * DOC Administrator Comment method "createLauncherFile".
-     * 
+     *
      * @param process
      * @param list
      * @param cmdPrimary

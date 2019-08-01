@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -476,7 +476,7 @@ public class ItemsTrashBrowserMainPage extends AMainPage implements IXObjectMode
 
     /***************************************************************
      * Display Dropped Item Action
-     * 
+     *
      ***************************************************************/
     class DisplayDroppedItemAction extends Action {
 
@@ -557,7 +557,7 @@ public class ItemsTrashBrowserMainPage extends AMainPage implements IXObjectMode
 
     /***************************************************************
      * Restore Dropped Item Action
-     * 
+     *
      ***************************************************************/
     class RestoreAction extends Action {
 
@@ -613,7 +613,7 @@ public class ItemsTrashBrowserMainPage extends AMainPage implements IXObjectMode
 
     /***************************************************************
      * Delete Dropped Item Action
-     * 
+     *
      ***************************************************************/
     class RemoveAction extends Action {
 
@@ -675,7 +675,7 @@ public class ItemsTrashBrowserMainPage extends AMainPage implements IXObjectMode
 
     /***************************************************************
      * Table Label Provider
-     * 
+     *
      ***************************************************************/
     class ClusterTableLabelProvider implements ITableLabelProvider {
 
@@ -718,7 +718,7 @@ public class ItemsTrashBrowserMainPage extends AMainPage implements IXObjectMode
 
     /***************************************************************
      * Table Sorter
-     * 
+     *
      ***************************************************************/
     class TableSorter extends ViewerSorter {
 
@@ -770,7 +770,7 @@ public class ItemsTrashBrowserMainPage extends AMainPage implements IXObjectMode
 
     /***************************************************************
      * A Line Item Bean
-     * 
+     *
      ***************************************************************/
     class LineItem {
 

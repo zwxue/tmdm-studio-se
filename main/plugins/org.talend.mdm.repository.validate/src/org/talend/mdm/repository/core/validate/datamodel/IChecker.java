@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -19,7 +19,7 @@ import org.talend.mdm.repository.core.validate.ValidationMessage;
 
 /**
  * Interface for all operations that validates MDM repository objects.
- * 
+ *
  * @param <T>
  */
 public interface IChecker<T extends ValidationMessage> {
@@ -27,7 +27,7 @@ public interface IChecker<T extends ValidationMessage> {
     /**
      * Checks the content in <code>file</code> and returns all warning/error messages or empty list if there's no
      * error/warning to report.
-     * 
+     *
      * @param file A file that must exists.
      * @return A list of warning/error or empty list if nothing to report.
      */

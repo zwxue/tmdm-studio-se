@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -47,7 +47,7 @@ public class XSDDeleteElementAction extends UndoAction {
     /**
      * Author: Fiu this function is meant to support deletion on key press which can pass a specific object to be
      * deleted
-     * 
+     *
      * @param toDel
      */
     public void run(Object toDel) {

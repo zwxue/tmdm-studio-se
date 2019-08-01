@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -19,13 +19,13 @@ import com.amalto.workbench.webservices.TMDMService;
 
 /**
  * created by HHB on 2012-10-10 Detailled comment
- * 
+ *
  */
 public class ExportDataContentCommandProcess extends ExportDataContentProcess {
 
     /**
      * DOC HHB ExportDataContentCommandProcess constructor comment.
-     * 
+     *
      * @param port
      * @param tempFolderPath
      * @param dName
@@ -37,7 +37,7 @@ public class ExportDataContentCommandProcess extends ExportDataContentProcess {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.talend.mdm.repository.core.datacontent.impl.ExportDataContentProcess#getProcessService()
      */
     @Override

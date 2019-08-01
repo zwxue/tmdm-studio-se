@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -60,7 +60,7 @@ import com.amalto.workbench.i18n.Messages;
 /**
  * Modification from eclipse built-in class FilteredTree. A simple control that provides a text widget and a tree
  * viewer. The contents of the text widget are used to drive a PatternFilter that is on the viewer.
- * 
+ *
  */
 public class FilteredCheckboxTree extends Composite {
 
@@ -105,7 +105,7 @@ public class FilteredCheckboxTree extends Composite {
 
     /**
      * The parent composite of the filtered tree.
-     * 
+     *
      * @since 3.3
      */
     protected Composite parent;
@@ -114,7 +114,7 @@ public class FilteredCheckboxTree extends Composite {
      * Whether or not to show the filter controls (text and clear button). The default is to show these controls. This
      * can be overridden by providing a setting in the product configuration file. The setting to add to not show these
      * controls is:
-     * 
+     *
      * org.eclipse.ui/SHOW_FILTERED_TEXTS=false
      */
     protected boolean showFilterControls;
@@ -145,11 +145,11 @@ public class FilteredCheckboxTree extends Composite {
      */
     static {
         ImageDescriptor descriptor = AbstractUIPlugin.imageDescriptorFromPlugin(PlatformUI.PLUGIN_ID,
-                "$nl$/icons/full/etool16/clear_co.gif"); //$NON-NLS-1$
+                "$nl$/icons/full/etool16/clear_co.png"); //$NON-NLS-1$
         if (descriptor != null) {
             JFaceResources.getImageRegistry().put(CLEAR_ICON, descriptor);
         }
-        descriptor = AbstractUIPlugin.imageDescriptorFromPlugin(PlatformUI.PLUGIN_ID, "$nl$/icons/full/dtool16/clear_co.gif"); //$NON-NLS-1$
+        descriptor = AbstractUIPlugin.imageDescriptorFromPlugin(PlatformUI.PLUGIN_ID, "$nl$/icons/full/dtool16/clear_co.png"); //$NON-NLS-1$
         if (descriptor != null) {
             JFaceResources.getImageRegistry().put(DCLEAR_ICON, descriptor);
         }
@@ -161,7 +161,7 @@ public class FilteredCheckboxTree extends Composite {
 
     /**
      * Create a new instance of the receiver.
-     * 
+     *
      * @param parent the parent <code>Composite</code>
      * @param treeStyle the style bits for the <code>Tree</code>
      * @param filter the filter to be used
@@ -176,10 +176,10 @@ public class FilteredCheckboxTree extends Composite {
      * Create a new instance of the receiver. Subclasses that wish to override the default creation behavior may use
      * this constructor, but must ensure that the <code>init(composite, int, PatternFilter)</code> method is called in
      * the overriding constructor.
-     * 
+     *
      * @param parent the parent <code>Composite</code>
      * @see #init(int, PatternFilter)
-     * 
+     *
      * @since 3.3
      */
     protected FilteredCheckboxTree(Composite parent) {
@@ -189,10 +189,10 @@ public class FilteredCheckboxTree extends Composite {
 
     /**
      * Create the filtered tree.
-     * 
+     *
      * @param treeStyle the style bits for the <code>Tree</code>
      * @param filter the filter to be used
-     * 
+     *
      * @since 3.3
      */
     protected void init(int treeStyle, PatternFilter filter) {
@@ -206,7 +206,7 @@ public class FilteredCheckboxTree extends Composite {
 
     /**
      * Create the filtered tree's controls. Subclasses should override.
-     * 
+     *
      * @param parent
      * @param treeStyle
      */
@@ -242,7 +242,7 @@ public class FilteredCheckboxTree extends Composite {
     /**
      * Create the filter controls. By default, a text and corresponding tool bar button that clears the contents of the
      * text is created. Subclasses may override.
-     * 
+     *
      * @param parent parent <code>Composite</code> of the filter controls
      * @return the <code>Composite</code> that contains the filter controls
      */
@@ -261,7 +261,7 @@ public class FilteredCheckboxTree extends Composite {
      * Creates and set up the tree and tree viewer. This method calls {@link #doCreateTreeViewer(Composite, int)} to
      * create the tree viewer. Subclasses should override {@link #doCreateTreeViewer(Composite, int)} instead of
      * overriding this method.
-     * 
+     *
      * @param parent parent <code>Composite</code>
      * @param style SWT style bits used to create the tree
      * @return the tree
@@ -274,7 +274,7 @@ public class FilteredCheckboxTree extends Composite {
 
             /*
              * (non-Javadoc)
-             * 
+             *
              * @see org.eclipse.swt.events.DisposeListener#widgetDisposed(org.eclipse.swt.events.DisposeEvent)
              */
             public void widgetDisposed(DisposeEvent e) {
@@ -288,11 +288,11 @@ public class FilteredCheckboxTree extends Composite {
 
     /**
      * Creates the tree viewer. Subclasses may override.
-     * 
+     *
      * @param parent the parent composite
      * @param style SWT style bits used to create the tree viewer
      * @return the tree viewer
-     * 
+     *
      * @since 3.3
      */
     protected CheckboxTreeViewer doCreateTreeViewer(Composite parent, int style) {
@@ -301,7 +301,7 @@ public class FilteredCheckboxTree extends Composite {
 
     /**
      * Return the first item in the tree that matches the filter pattern.
-     * 
+     *
      * @param items
      * @return the first matching TreeItem
      */
@@ -318,14 +318,14 @@ public class FilteredCheckboxTree extends Composite {
 
     /**
      * Create the refresh job for the receiver.
-     * 
+     *
      */
     private void createRefreshJob() {
         refreshJob = new WorkbenchJob("Refresh Filter") {//$NON-NLS-1$
 
             /*
              * (non-Javadoc)
-             * 
+             *
              * @see org.eclipse.ui.progress.UIJob#runInUIThread(org.eclipse.core.runtime.IProgressMonitor)
              */
             @Override
@@ -401,7 +401,7 @@ public class FilteredCheckboxTree extends Composite {
 
             /**
              * Returns true if the job should be canceled (because of timeout or actual cancellation).
-             * 
+             *
              * @param items
              * @param provider
              * @param monitor
@@ -447,7 +447,7 @@ public class FilteredCheckboxTree extends Composite {
      * Creates the filter text and adds listeners. This method calls {@link #doCreateFilterText(Composite)} to create
      * the text control. Subclasses should override {@link #doCreateFilterText(Composite)} instead of overriding this
      * method.
-     * 
+     *
      * @param parent <code>Composite</code> of the filter text
      */
     protected void createFilterText(Composite parent) {
@@ -456,7 +456,7 @@ public class FilteredCheckboxTree extends Composite {
 
             /*
              * (non-Javadoc)
-             * 
+             *
              * @see
              * org.eclipse.swt.accessibility.AccessibleListener#getName(org.eclipse.swt.accessibility.AccessibleEvent)
              */
@@ -475,7 +475,7 @@ public class FilteredCheckboxTree extends Composite {
 
             /*
              * (non-Javadoc)
-             * 
+             *
              * @see org.eclipse.swt.events.FocusListener#focusLost(org.eclipse.swt.events.FocusEvent)
              */
             @Override
@@ -502,7 +502,7 @@ public class FilteredCheckboxTree extends Composite {
 
             /*
              * (non-Javadoc)
-             * 
+             *
              * @see org.eclipse.swt.events.KeyAdapter#keyReleased(org.eclipse.swt.events.KeyEvent)
              */
             @Override
@@ -546,7 +546,7 @@ public class FilteredCheckboxTree extends Composite {
 
             /*
              * (non-Javadoc)
-             * 
+             *
              * @see org.eclipse.swt.events.ModifyListener#modifyText(org.eclipse.swt.events.ModifyEvent)
              */
             public void modifyText(ModifyEvent e) {
@@ -565,10 +565,10 @@ public class FilteredCheckboxTree extends Composite {
 
     /**
      * Creates the text control for entering the filter text. Subclasses may override.
-     * 
+     *
      * @param parent the parent composite
      * @return the text widget
-     * 
+     *
      * @since 3.3
      */
     protected Text doCreateFilterText(Composite parent) {
@@ -636,7 +636,7 @@ public class FilteredCheckboxTree extends Composite {
 
     /**
      * DOC hcw Comment method "isNodeCollectable".
-     * 
+     *
      * @param item
      * @return
      */
@@ -661,7 +661,7 @@ public class FilteredCheckboxTree extends Composite {
 
     /**
      * Set the background for the widgets that support the filter text area.
-     * 
+     *
      * @param background background <code>Color</code> to set
      */
     @Override
@@ -677,7 +677,7 @@ public class FilteredCheckboxTree extends Composite {
 
     /**
      * Create the button that clears the text.
-     * 
+     *
      * @param parent parent <code>Composite</code> of toolbar button
      */
     private void createClearText(Composite parent) {
@@ -690,7 +690,7 @@ public class FilteredCheckboxTree extends Composite {
 
                 /*
                  * (non-Javadoc)
-                 * 
+                 *
                  * @see org.eclipse.jface.action.Action#run()
                  */
                 @Override
@@ -718,7 +718,7 @@ public class FilteredCheckboxTree extends Composite {
 
     /**
      * Set the text in the filter control.
-     * 
+     *
      * @param string
      */
     protected void setFilterText(String string) {
@@ -730,7 +730,7 @@ public class FilteredCheckboxTree extends Composite {
 
     /**
      * Returns the pattern filter used by this tree.
-     * 
+     *
      * @return The pattern filter; never <code>null</code>.
      */
     public final PatternFilter getPatternFilter() {
@@ -739,7 +739,7 @@ public class FilteredCheckboxTree extends Composite {
 
     /**
      * Get the tree viewer of the receiver.
-     * 
+     *
      * @return the tree viewer
      */
     public CheckboxTreeViewer getViewer() {
@@ -748,7 +748,7 @@ public class FilteredCheckboxTree extends Composite {
 
     /**
      * Get the filter text for the receiver, if it was created. Otherwise return <code>null</code>.
-     * 
+     *
      * @return the filter Text, or null if it was not created
      */
     public Text getFilterControl() {
@@ -758,7 +758,7 @@ public class FilteredCheckboxTree extends Composite {
     /**
      * Convenience method to return the text of the filter control. If the text widget is not created, then null is
      * returned.
-     * 
+     *
      * @return String in the text, or null if the text does not exist
      */
     protected String getFilterString() {
@@ -768,7 +768,7 @@ public class FilteredCheckboxTree extends Composite {
     /**
      * Set the text that will be shown until the first focus. A default value is provided, so this method only need be
      * called if overriding the default initial text is desired.
-     * 
+     *
      * @param text initial text to appear in text field
      */
     public void setInitialText(String text) {
@@ -779,7 +779,7 @@ public class FilteredCheckboxTree extends Composite {
 
     /**
      * Select all text in the filter text field.
-     * 
+     *
      */
     protected void selectAll() {
         if (filterText != null) {
@@ -789,7 +789,7 @@ public class FilteredCheckboxTree extends Composite {
 
     /**
      * Get the initial text for the receiver.
-     * 
+     *
      * @return String
      */
     protected String getInitialText() {
@@ -799,11 +799,11 @@ public class FilteredCheckboxTree extends Composite {
     /**
      * Return a bold font if the given element matches the given pattern. Clients can opt to call this method from a
      * Viewer's label provider to get a bold font for which to highlight the given element in the tree.
-     * 
+     *
      * @param element element for which a match should be determined
      * @param tree FilteredTree in which the element resides
      * @param filter PatternFilter which determines a match
-     * 
+     *
      * @return bold font
      */
     public static Font getBoldFont(Object element, FilteredCheckboxTree tree, PatternFilter filter) {

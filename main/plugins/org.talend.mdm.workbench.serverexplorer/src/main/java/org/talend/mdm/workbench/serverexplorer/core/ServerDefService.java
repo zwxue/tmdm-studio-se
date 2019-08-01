@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -47,7 +47,7 @@ import com.amalto.workbench.webservices.WSPing;
 
 /**
  * DOC hbhong class global comment. Detailled comment <br/>
- * 
+ *
  */
 public class ServerDefService implements ILegendServerDefService {
 
@@ -82,7 +82,7 @@ public class ServerDefService implements ILegendServerDefService {
 
     /**
      * Warning: the return result is a encrypted List
-     * 
+     *
      * @return
      */
     public static List<IRepositoryViewObject> getAllServerDefViewObjects(boolean includeDisabledServer) {
@@ -118,7 +118,7 @@ public class ServerDefService implements ILegendServerDefService {
 
     /**
      * Warning: the return result is a decrypted serverDef
-     * 
+     *
      * @return
      */
     public static List<MDMServerDef> getAllServerDefs() {
@@ -143,7 +143,7 @@ public class ServerDefService implements ILegendServerDefService {
 
     /**
      * DOC hbhong Comment method "deleteServerDef".
-     * 
+     *
      * @param viewObject
      */
     public static boolean deleteServerDef(IRepositoryViewObject viewObject) {
@@ -177,7 +177,7 @@ public class ServerDefService implements ILegendServerDefService {
     }
 
     /**
-     * 
+     *
      * @param name
      * @return a decrypted serverDef
      */
@@ -246,7 +246,7 @@ public class ServerDefService implements ILegendServerDefService {
 
     /**
      * check connection
-     * 
+     *
      * @param serverDef need a decrypted serverDef
      * @return
      * @throws Exception
@@ -281,7 +281,7 @@ public class ServerDefService implements ILegendServerDefService {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see com.amalto.workbench.service.ILegendServerDefService#getLegendServerDefs()
      */
     public List<com.amalto.workbench.utils.MDMServerDef> getLegendServerDefs() {
@@ -290,7 +290,7 @@ public class ServerDefService implements ILegendServerDefService {
 
         if (servers != null) {
             for (MDMServerDef serverDef : servers) {
-                String url = serverDef.getProtocol() + serverDef.getHost() + ":" + serverDef.getPort() //$NON-NLS-1$ 
+                String url = serverDef.getProtocol() + serverDef.getHost() + ":" + serverDef.getPort() //$NON-NLS-1$
                         + serverDef.getPath();
                 com.amalto.workbench.utils.MDMServerDef legendDef = com.amalto.workbench.utils.MDMServerDef.parse(
                         serverDef.getProtocol(), url, serverDef.getUser(), serverDef.getPasswd(), serverDef.getName());

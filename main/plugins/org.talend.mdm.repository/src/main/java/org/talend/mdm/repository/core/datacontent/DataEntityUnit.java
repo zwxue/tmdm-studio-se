@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -18,12 +18,12 @@ import java.beans.PropertyChangeSupport;
 
 /**
  * created by HHB on 2012-10-8 Detailled comment
- * 
+ *
  */
 public class DataEntityUnit implements PropertyChangeListener {
 
     /**
-     * 
+     *
      */
     private static final String PROP_SELECTED = "selected"; //$NON-NLS-1$
 
@@ -56,7 +56,7 @@ public class DataEntityUnit implements PropertyChangeListener {
 
     /**
      * Getter for dataModelName.
-     * 
+     *
      * @return the dataModelName
      */
     public String getDataModelName() {
@@ -65,7 +65,7 @@ public class DataEntityUnit implements PropertyChangeListener {
 
     /**
      * Sets the dataModelName.
-     * 
+     *
      * @param dataModelName the dataModelName to set
      */
     public void setDataModelName(String dataModelName) {
@@ -74,7 +74,7 @@ public class DataEntityUnit implements PropertyChangeListener {
 
     /**
      * Getter for selected.
-     * 
+     *
      * @return the selected
      */
     public boolean isSelected() {
@@ -83,7 +83,7 @@ public class DataEntityUnit implements PropertyChangeListener {
 
     /**
      * Sets the selected.
-     * 
+     *
      * @param selected the selected to set
      */
     public void setSelected(boolean selected) {
@@ -92,7 +92,7 @@ public class DataEntityUnit implements PropertyChangeListener {
 
     /**
      * Getter for entityName.
-     * 
+     *
      * @return the entityName
      */
     public String getEntityName() {
@@ -101,7 +101,7 @@ public class DataEntityUnit implements PropertyChangeListener {
 
     /**
      * Sets the entityName.
-     * 
+     *
      * @param entityName the entityName to set
      */
     public void setEntityName(String entityName) {
@@ -110,7 +110,7 @@ public class DataEntityUnit implements PropertyChangeListener {
 
     /**
      * Getter for count.
-     * 
+     *
      * @return the count
      */
     public long getCount() {
@@ -119,7 +119,7 @@ public class DataEntityUnit implements PropertyChangeListener {
 
     /**
      * Sets the count.
-     * 
+     *
      * @param count the count to set
      */
     public void setCount(long count) {
@@ -133,7 +133,7 @@ public class DataEntityUnit implements PropertyChangeListener {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.beans.PropertyChangeListener#propertyChange(java.beans.PropertyChangeEvent)
      */
     public void propertyChange(PropertyChangeEvent evt) {

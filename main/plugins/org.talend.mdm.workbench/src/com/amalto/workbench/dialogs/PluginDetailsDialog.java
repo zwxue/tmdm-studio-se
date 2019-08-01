@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -119,12 +119,12 @@ public class PluginDetailsDialog extends Dialog {
             /*
              * TabItem parametersTI = new TabItem(tabFolder,SWT.NULL); parametersTI.setText("Parameters");
              * parametersTI.setToolTipText("Display the plugin description and documentation");
-             * 
+             *
              * Composite parametersC = new Composite(tabFolder,SWT.NULL); parametersC.setLayout(new GridLayout(1,true));
-             * 
+             *
              * Label paramsValue = new Label(parametersC, SWT.WRAP); paramsValue.setLayoutData( new
              * GridData(SWT.FILL,SWT.CENTER,true,false,1,1) ); paramsValue.setText(parametersSchema);
-             * 
+             *
              * parametersTI.setControl(parametersC);
              */
 

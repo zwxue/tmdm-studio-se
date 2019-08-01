@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -47,24 +47,24 @@ public class TypesTreeContentProvider extends SchemaTreeContentProvider {
 
         List<Object> list = new ArrayList<Object>();
         list.addAll(parent.getAttributeContents());
-        
+
         EList<XSDAnnotation> annotations = parent.getAnnotations();
         if (annotations != null)
             list.addAll(Arrays.asList(annotations.toArray()));
-        
+
         if (parent.getContent() == null) {
             list.add(parent.getBaseTypeDefinition());
         } else if (parent.getContent() instanceof XSDSimpleTypeDefinition) {
             list.add(parent.getContent());
         } else if (parent.getContent() instanceof XSDParticle) {
             list.removeAll(parent.getAttributeContents());
-            
+
             Object[] xsdParticleChildren = getXSDParticleChildren((XSDParticle) parent.getContent());
             list.addAll(Arrays.asList(xsdParticleChildren));
         } else {
             list.add(parent.getContent());
         }
-        
+
         return list.toArray();
     }
 
@@ -83,10 +83,10 @@ public class TypesTreeContentProvider extends SchemaTreeContentProvider {
                 resultList.addAll(Arrays.asList(annotations.toArray()));
             }
         }
-        
+
         Object[] xsdSimpleTypeDefinition = super.getXSDSimpleTypeDefinitionChildren(parent);
         resultList.addAll(Arrays.asList(xsdSimpleTypeDefinition));
-        
+
         return resultList.toArray();
     }
 }

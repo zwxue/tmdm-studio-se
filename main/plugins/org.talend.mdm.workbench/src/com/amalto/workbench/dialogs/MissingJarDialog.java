@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -39,7 +39,7 @@ import com.amalto.workbench.i18n.Messages;
 
 /**
  * created by HHB on 2013-9-23 Detailled comment
- * 
+ *
  */
 public class MissingJarDialog extends Dialog {
 
@@ -51,7 +51,7 @@ public class MissingJarDialog extends Dialog {
 
     /**
      * Create the dialog.
-     * 
+     *
      * @param parentShell
      */
     public MissingJarDialog(Shell parentShell, List<String> missingJars) {
@@ -73,7 +73,7 @@ public class MissingJarDialog extends Dialog {
 
     /**
      * Create contents of the dialog.
-     * 
+     *
      * @param parent
      */
     @Override
@@ -140,7 +140,7 @@ public class MissingJarDialog extends Dialog {
 
     /**
      * Create contents of the button bar.
-     * 
+     *
      * @param parent
      */
     @Override

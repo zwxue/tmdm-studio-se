@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -24,7 +24,7 @@ import org.eclipse.core.resources.ResourcesPlugin;
 public class IOUtil {
 
     /**
-     * 
+     *
      */
     private static final String TEMP_Folder_NAME = "temp"; //$NON-NLS-1$
 
@@ -74,7 +74,7 @@ public class IOUtil {
 
     /**
      * Determine whether the file with the given filename is in .zip or .jar format.
-     * 
+     *
      * @param fileName file to test
      * @return true if the file is in tar format
      */

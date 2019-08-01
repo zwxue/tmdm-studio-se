@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -110,7 +110,7 @@ public class XObjectEditorInput2 extends XObjectEditorInput implements IReposito
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see com.amalto.workbench.providers.XObjectEditorInput#getAdapter(java.lang.Class)
      */
     @Override

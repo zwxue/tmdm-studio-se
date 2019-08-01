@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -362,7 +362,7 @@ public class TransformerMainPage extends AMainPageV2 {
                                     /*
                                      * ProcessResultsPage page = new ProcessResultsPage(editor,pipeline);
                                      * parent.editor.addPage(page); parent.editor.setActivePage(page.getId());
-                                     * 
+                                     *
                                      * parent.editor.getEditorSite().getShell()
                                      */
                                     // Shell shell = new Shell(SWT.DIALOG_TRIM | SWT.RESIZE | SWT.MAX | SWT.MIN);

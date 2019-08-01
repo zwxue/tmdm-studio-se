@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -82,8 +82,9 @@ public class MDMOpenExistVersionProcessWizard extends OpenExistVersionProcessWiz
 
     @Override
     protected void openAnotherVersion(final RepositoryNode node, final boolean readonly) {
-        Display.getCurrent().asyncExec(new Runnable() {
+        Display.getDefault().asyncExec(new Runnable() {
 
+            @Override
             public void run() {
 
                 final IRepositoryViewObject viewObj = node.getObject();
@@ -148,7 +149,7 @@ public class MDMOpenExistVersionProcessWizard extends OpenExistVersionProcessWiz
         try {
             IProxyRepositoryFactory factory = CoreRuntimePlugin.getInstance().getProxyRepositoryFactory();
             if (!factory.isLocalConnectionProvider()) {
-                IMDMSVNProviderService service = (IMDMSVNProviderService) GlobalServiceRegister.getDefault().getService(
+                IMDMSVNProviderService service = GlobalServiceRegister.getDefault().getService(
                         IMDMSVNProviderService.class);
                 if (service != null) {
                     if (service.isProjectInSvnMode()) {
@@ -212,7 +213,7 @@ public class MDMOpenExistVersionProcessWizard extends OpenExistVersionProcessWiz
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.talend.designer.core.ui.wizards.OpenExistVersionProcessWizard#performFinish()
      */
     @Override

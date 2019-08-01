@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -28,7 +28,7 @@ import org.talend.mdm.repository.ui.views.MDMProblemView;
 
 /**
  * created by HHB on 2013-4-8 only work for data model
- * 
+ *
  */
 public class JumpToSourceLineHandler extends MarkerViewHandler {
 
@@ -38,7 +38,7 @@ public class JumpToSourceLineHandler extends MarkerViewHandler {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.eclipse.core.commands.IHandler#execute(org.eclipse.core.commands.ExecutionEvent)
      */
     @Override
@@ -51,7 +51,7 @@ public class JumpToSourceLineHandler extends MarkerViewHandler {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.eclipse.core.commands.AbstractHandler#isEnabled()
      */
     @Override
@@ -79,7 +79,7 @@ public class JumpToSourceLineHandler extends MarkerViewHandler {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.eclipse.core.commands.AbstractHandler#setEnabled(java.lang.Object)
      */
     @Override

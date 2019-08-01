@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -25,7 +25,7 @@ import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 
 /**
  * DOC hbhong class global comment. Detailled comment <br/>
- * 
+ *
  */
 public class MenuActionProvider extends RepositoryNodeActionProviderAdapter {
 
@@ -47,7 +47,7 @@ public class MenuActionProvider extends RepositoryNodeActionProviderAdapter {
         if (RepositoryResourceUtil.hasContainerItem(viewObj, FolderType.SYSTEM_FOLDER_LITERAL, FolderType.FOLDER_LITERAL)) {
             addAction(actions, addAction, viewObj);
         }
-        
+
         if (viewObj.getProperty().getItem() instanceof MDMServerObjectItem) {
             addAction(actions, renameAction, viewObj);
             // deploy
