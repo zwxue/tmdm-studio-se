@@ -171,13 +171,15 @@ if ((metadatas != null) && (metadatas.size() > 0)) {
                 <%
                 boolean isOnlyOrPredicate=true;
                 int operationSize = operations.size();
-                Boolean[] orPredicateArray = new Boolean[2];
+                Map<Integer, Boolean> onlyOrPredicateMap = new java.util.HashMap<Integer,Boolean>();
                 int activeNumber = 0;
                 for(int i=0; i < operationSize; i++){
                     Map<String, String> map= operations.get(i);
                     String activeValue = map.get("ACTIVE");
                     String customActiveValue = map.get("CUSTOM_ACTIVE");
                     Map<String, String> customActiveMap = new java.util.HashMap<String, String>();
+                    // if Active select "TRUE/FALSE", the customActiveValue set to "false"
+                    // Use Map to store customActiveValue to suit the active operaction logic
                     if(activeValue.equals("CUSTOM") && customActiveValue != null && !customActiveValue.equals("")){
                         customActiveMap.put("customActiveValue", customActiveValue);
                     } else {
@@ -187,15 +189,17 @@ if ((metadatas != null) && (metadatas.size() > 0)) {
                     String operator=map.get("FUNCTION");
                     String value = map.get("VALUE");
                     String predicate = map.get("PREDICATE");
-                    if((i < operationSize-1) && (!"OR".equals(predicate)) && ("TRUE".equals(activeValue) || ("CUSTOM".equals(activeValue) && "TRUE".equalsIgnoreCase(customActiveMap.get("customActiveValue"))))){
-                        isOnlyOrPredicate = false;
+                    boolean active = "TRUE".equals(activeValue) || ("CUSTOM".equals(activeValue) && "TRUE".equalsIgnoreCase(customActiveMap.get("customActiveValue")));
+                    if (active){
                         activeNumber++;
-                        if(i < 2){
-                            orPredicateArray[i] = isOnlyOrPredicate;
-                        }
                     }
-                    if(activeNumber == 2 && i == operationSize-1 && !("TRUE".equals(activeValue) || ("CUSTOM".equals(activeValue) && "TRUE".equalsIgnoreCase(customActiveMap.get("customActiveValue"))))){
-                        if(orPredicateArray[0] == null && orPredicateArray[1] != null){
+                    if ((i < operationSize-1) && (!"OR".equals(predicate)) && active){
+                        isOnlyOrPredicate = false;
+                        onlyOrPredicateMap.put(activeNumber, false);
+                    }
+                    // if only two active operation and the last operation is non-active, it need the first operaction's predicate.
+                    if (activeNumber == 2 && i == operationSize-1 && !active){
+                        if(!onlyOrPredicateMap.containsKey(1)){
                             isOnlyOrPredicate = true;
                         }
                     }
