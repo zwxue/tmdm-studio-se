@@ -137,6 +137,15 @@
                     <ITEM NAME="NOT" VALUE="NOT" />
                 </ITEMS>
             </ITEM>
+            <ITEM NAME="ACTIVE" FIELD="CLOSED_LIST">
+              <ITEMS DEFAULT="TRUE">
+                <ITEM NAME="TRUE"  VALUE="TRUE"/>
+                <ITEM NAME="FALSE"  VALUE="FALSE"/>
+                <ITEM NAME="CUSTOM" VALUE="CUSTOM" />
+              </ITEMS>
+            </ITEM>
+
+            <ITEM NAME="CUSTOM_ACTIVE" FIELD="TEXT"/>
           </ITEMS>
         </PARAMETER>
 
