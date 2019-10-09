@@ -25,20 +25,22 @@ public class PasswordUtil {
 
     public static final String ALGORITHM_COMMON_V2 = "CommonV2"; //$NON-NLS-1$
 
+    public static final String ALGORITHM_COMMON_V3 = "CommonV3"; //$NON-NLS-1$
+
     public static String decryptPassword(String encodedPassword, String algorithm) {
         if (encodedPassword == null) {
             throw new IllegalArgumentException();
         }
         if (algorithm != null) {
-            if (algorithm.equals(ALGORITHM_COMMON_V2)) {
+            if (algorithm.equals(ALGORITHM_COMMON_V3)) {
                 try {
                     String decryptedPassword = CryptoMigrationUtil.decrypt(encodedPassword);
                     return decryptedPassword;
                 } catch (Exception e) {
                     LOGGER.error(e.getMessage(), e);
                 }
-            } else if (algorithm.equals(ALGORITHM_COMMON)) {
-                // not support ALGORITHM_COMMON ,it will be upgraded by migration task
+            } else if (algorithm.equals(ALGORITHM_COMMON) || algorithm.equals(ALGORITHM_COMMON_V2)) {
+                // not support ALGORITHM_COMMON and ALGORITHM_COMMON_V2 ,it will be upgraded by migration task
                 return null;
             }
         }
@@ -46,7 +48,7 @@ public class PasswordUtil {
     }
 
     public static String decryptPassword(String encodedPassword) {
-        return decryptPassword(encodedPassword, ALGORITHM_COMMON_V2);
+        return decryptPassword(encodedPassword, ALGORITHM_COMMON_V3);
     }
 
     public static String decryptPasswordBase64(String encodedPassword) {
@@ -64,14 +66,14 @@ public class PasswordUtil {
             throw new IllegalArgumentException();
         }
         if (algorithm != null) {
-            if (algorithm.equals(ALGORITHM_COMMON_V2)) {
+            if (algorithm.equals(ALGORITHM_COMMON_V3)) {
                 try {
                     return CryptoMigrationUtil.encrypt(plainPassword);
                 } catch (Exception e) {
                     LOGGER.error(e.getMessage(), e);
                 }
-            } else if (algorithm.equals(ALGORITHM_COMMON)) {
-                // not support ALGORITHM_COMMON ,it will be upgraded by migration task
+            } else if (algorithm.equals(ALGORITHM_COMMON) || algorithm.equals(ALGORITHM_COMMON_V2)) {
+                // not support ALGORITHM_COMMON and ALGORITHM_COMMON_V2,it will be upgraded by migration task
                 return null;
             }
         }
@@ -81,7 +83,7 @@ public class PasswordUtil {
     }
 
     public static String encryptPassword(String plainPassword) {
-        return encryptPassword(plainPassword, ALGORITHM_COMMON_V2);
+        return encryptPassword(plainPassword, ALGORITHM_COMMON_V3);
     }
 
     public static String encryptPasswordBase64(String plainPassword) {
