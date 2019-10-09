@@ -14,12 +14,12 @@ package com.amalto.workbench.utils;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.log4j.Logger;
-import org.talend.daikon.security.CryptoHelper;
+import org.talend.utils.security.CryptoMigrationUtil;
 
 
 public class PasswordUtil {
 
-    private static Logger log = Logger.getLogger(PasswordUtil.class);
+    private static final Logger LOGGER = Logger.getLogger(PasswordUtil.class);
 
     public static final String ALGORITHM_COMMON = "Common"; //$NON-NLS-1$
 
@@ -32,10 +32,10 @@ public class PasswordUtil {
         if (algorithm != null) {
             if (algorithm.equals(ALGORITHM_COMMON_V2)) {
                 try {
-                    String decryptedPassword = CryptoHelper.getDefault().decrypt(encodedPassword);
+                    String decryptedPassword = CryptoMigrationUtil.decrypt(encodedPassword);
                     return decryptedPassword;
                 } catch (Exception e) {
-                    log.error(e.getMessage(), e);
+                    LOGGER.error(e.getMessage(), e);
                 }
             } else if (algorithm.equals(ALGORITHM_COMMON)) {
                 // not support ALGORITHM_COMMON ,it will be upgraded by migration task
@@ -66,9 +66,9 @@ public class PasswordUtil {
         if (algorithm != null) {
             if (algorithm.equals(ALGORITHM_COMMON_V2)) {
                 try {
-                    return CryptoHelper.getDefault().encrypt(plainPassword);
+                    return CryptoMigrationUtil.encrypt(plainPassword);
                 } catch (Exception e) {
-                    log.error(e.getMessage(), e);
+                    LOGGER.error(e.getMessage(), e);
                 }
             } else if (algorithm.equals(ALGORITHM_COMMON)) {
                 // not support ALGORITHM_COMMON ,it will be upgraded by migration task

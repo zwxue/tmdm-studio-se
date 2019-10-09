@@ -19,12 +19,11 @@ import org.talend.commons.exception.ExceptionHandler;
 import org.talend.commons.utils.PasswordEncryptUtil;
 import org.talend.core.model.properties.Item;
 import org.talend.core.model.repository.ERepositoryObjectType;
-import org.talend.daikon.security.CryptoHelper;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerDefItem;
 import org.talend.mdm.workbench.serverexplorer.core.ServerDefService;
 import org.talend.repository.model.migration.UnifyPasswordEncryption4ItemMigrationTask;
-
+import org.talend.utils.security.CryptoMigrationUtil;
 
 import com.amalto.workbench.utils.PasswordUtil;
 
@@ -51,7 +50,7 @@ public class UnifyPasswordEncryption4MDMServerDefMigrationTask extends UnifyPass
                 } catch (Exception e) {
                     return ExecutionResult.FAILURE;
                 }
-                serverDef.setPasswd(CryptoHelper.getDefault().encrypt(decryptedPassword));
+                serverDef.setPasswd(CryptoMigrationUtil.encrypt(decryptedPassword));
                 serverDef.setAlgorithm(PasswordUtil.ALGORITHM_COMMON_V2);
                 try {
                     factory.save(item, true);
