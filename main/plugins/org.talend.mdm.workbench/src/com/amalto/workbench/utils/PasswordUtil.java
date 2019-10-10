@@ -14,7 +14,7 @@ package com.amalto.workbench.utils;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.log4j.Logger;
-import org.talend.utils.security.CryptoMigrationUtil;
+import org.talend.utils.security.StudioEncryption;
 
 
 public class PasswordUtil {
@@ -34,7 +34,8 @@ public class PasswordUtil {
         if (algorithm != null) {
             if (algorithm.equals(ALGORITHM_COMMON_V3)) {
                 try {
-                    String decryptedPassword = CryptoMigrationUtil.decrypt(encodedPassword);
+                    String decryptedPassword = StudioEncryption.getStudioEncryption(StudioEncryption.EncryptionKeyName.SYSTEM)
+                            .decrypt(encodedPassword);
                     return decryptedPassword;
                 } catch (Exception e) {
                     LOGGER.error(e.getMessage(), e);
@@ -68,7 +69,8 @@ public class PasswordUtil {
         if (algorithm != null) {
             if (algorithm.equals(ALGORITHM_COMMON_V3)) {
                 try {
-                    return CryptoMigrationUtil.encrypt(plainPassword);
+                    return StudioEncryption.getStudioEncryption(StudioEncryption.EncryptionKeyName.SYSTEM)
+                            .encrypt(plainPassword);
                 } catch (Exception e) {
                     LOGGER.error(e.getMessage(), e);
                 }
