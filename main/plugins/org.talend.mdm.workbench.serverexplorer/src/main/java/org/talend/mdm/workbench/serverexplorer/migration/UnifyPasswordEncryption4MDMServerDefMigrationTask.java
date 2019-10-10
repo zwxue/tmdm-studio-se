@@ -43,35 +43,38 @@ public class UnifyPasswordEncryption4MDMServerDefMigrationTask extends UnifyPass
         if (item != null && item instanceof MDMServerDefItem) {
             MDMServerDef serverDef = ((MDMServerDefItem) item).getServerDef();
             String algorithm = serverDef.getAlgorithm();
-            if (algorithm != null && algorithm.equals(PasswordUtil.ALGORITHM_COMMON)) {
-                String decryptedPassword = serverDef.getPasswd();
-                try {
-                    decryptedPassword = PasswordEncryptUtil.decryptPassword(serverDef.getPasswd());
-                } catch (Exception e) {
-                    return ExecutionResult.FAILURE;
+            if (algorithm != null) {
+                String decryptedPassword = null;
+                if (algorithm.equals(PasswordUtil.ALGORITHM_COMMON)) {
+                    try {
+                        decryptedPassword = PasswordEncryptUtil.decryptPassword(serverDef.getPasswd());
+                    } catch (Exception e) {
+                        return ExecutionResult.FAILURE;
+                    }
                 }
-                serverDef.setPasswd(CryptoMigrationUtil.encrypt(decryptedPassword));
-                serverDef.setAlgorithm(PasswordUtil.ALGORITHM_COMMON_V2);
-                try {
-                    factory.save(item, true);
-                    return ExecutionResult.SUCCESS_NO_ALERT;
-                } catch (Exception e) {
-                    ExceptionHandler.process(e);
-                    return ExecutionResult.FAILURE;
+                if (algorithm.equals(PasswordUtil.ALGORITHM_COMMON_V2)) {
+                    try {
+                        decryptedPassword = CryptoMigrationUtil.decrypt(serverDef.getPasswd());
+                    } catch (Exception e) {
+                        return ExecutionResult.FAILURE;
+                    }
+                }
+
+                if (decryptedPassword != null) {
+                    serverDef.setPasswd(PasswordUtil.encryptPassword(decryptedPassword));
+                    serverDef.setAlgorithm(PasswordUtil.ALGORITHM_COMMON_V3);
+                    try {
+                        factory.save(item, true);
+                        return ExecutionResult.SUCCESS_NO_ALERT;
+                    } catch (Exception e) {
+                        ExceptionHandler.process(e);
+                        return ExecutionResult.FAILURE;
+                    }
                 }
             }
         }
 
         return ExecutionResult.NOTHING_TO_DO;
-        // if (modified) {
-        // factory.save(item, true);
-        // return ExecutionResult.SUCCESS_NO_ALERT;
-        // }
-        // } catch (Exception e) {
-        // ExceptionHandler.process(e);
-        // return ExecutionResult.FAILURE;
-        // }
-        // return ExecutionResult.NOTHING_TO_DO;
     }
 
 }
