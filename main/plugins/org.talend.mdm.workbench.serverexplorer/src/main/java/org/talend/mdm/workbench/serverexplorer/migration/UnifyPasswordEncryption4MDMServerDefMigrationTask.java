@@ -13,6 +13,8 @@
 package org.talend.mdm.workbench.serverexplorer.migration;
 
 import java.util.Collections;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import org.talend.commons.exception.ExceptionHandler;
@@ -36,6 +38,18 @@ public class UnifyPasswordEncryption4MDMServerDefMigrationTask extends UnifyPass
     @Override
     public List<ERepositoryObjectType> getTypes() {
         return Collections.singletonList(ServerDefService.REPOSITORY_TYPE_SERVER_DEF);
+    }
+
+    @Override
+    public String getId() {
+        // change the task id to distinguish old stale task that had already executed
+        return super.getId() + "2019-10-10";
+    }
+
+    @Override
+    public Date getOrder() {
+        GregorianCalendar gc = new GregorianCalendar(2019, 10, 10, 12, 0, 0);
+        return gc.getTime();
     }
 
     @Override

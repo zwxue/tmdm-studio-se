@@ -126,7 +126,7 @@
         point="org.talend.core.migrationTask">
      <projecttask
            beforeLogon="false"
-           breaks="6.0.0"
+           breaks="7.3.1"
            class="org.talend.mdm.workbench.serverexplorer.migration.UnifyPasswordEncryption4MDMServerDefMigrationTask"
            description="Unify the entryption for pass fields of parameters of MDM Server Definition"
            id="org.talend.mdm.workbench.serverexplorer.migration.UnifyPasswordEncryption4MDMServerDefMigrationTask"
